@@ -50,6 +50,7 @@ fn main() {
     assert(memory_read<u16>(a, OFFSET_ALIAS + 8, ENDIAN_ALIAS) == VALUE_ALIAS);
     let first = if build::BIG_ENDIAN { (build::VALUE >> 8) as! u8 } else { build::VALUE as! u8 };
     assert(memory_read<u8>(a, build::OFFSET, false) == first);
+    assert(memory_read<u8>(a, OFFSET_ALIAS + 8, false) == first);
     shared_release(a);
     check_atomic(token32);
     check_atomic(token64);
