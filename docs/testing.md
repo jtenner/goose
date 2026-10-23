@@ -307,6 +307,12 @@ The runner checks more than exit status and runtime output:
 | `packages_git.py` | Besides the fetches, `goose check --offline` rejects a package not in the cache at its import, naming `goose fetch`, without fetching, and accepts it once fetched. |
 | `diagnostics_json.py` | `goose check --diagnostics json` prints an array with one object per error or warning, whose `text` is what the text mode printed on stderr, with the progress lines on stderr instead of stdout. A lexer error is at its caret's column, one byte wide, and the errors after a `"""` string the lexer rejected are at their own lines; a typecheck error ranges over the node it is at, with its instantiation chain's entries at the calls they name; a warning has a range too; an import error covers the whole import; a `checkfree` function's kept checks are several errors at once; an error with no place in the program is its text alone. |
 
+`const_if_diagnostics.py`, called by `diagnostics_json.py`, checks exact file,
+line, column, range and source context for invalid build-definition conditions
+at O0/O2: functions, fields, constructors and nested conditions, aliases and
+imports, repeated uses of one definition, authored literals and valid typed
+controls. Its standalone entry point retains exact subprocess results.
+
 ## Fixture audit
 
 The fixture audit retained the small lifetime, optional-narrowing, alias-cycle,
