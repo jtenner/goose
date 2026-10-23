@@ -908,7 +908,7 @@ inline FnSpec *TypeCheck::UserFormatIn(Call *c, TypeExpr *t, string_view ns,
 }
 
 // The literal a compile-time string argument stands for: a string literal,
-// or a let or const global initialized with one, named directly or through
+// a native build definition, or a let or const global initialized with one, named directly or through
 // other such globals -- a named constant, as an array size may use (§11.1).
 // Null for anything else, a local, type parameter or nested function of the
 // name included, which hides the global. Unlike an integer one
@@ -919,9 +919,11 @@ inline StrLit *TypeCheck::ConstStrLit(Node *n) {
     if (auto s = Is<StrLit>(n)) return s;
     auto id = Is<Ident>(n);
     if (!id) return nullptr;
+    if (auto value = ast.LookupBuildDefinition(id->name, id->ns)) return Is<StrLit>(value);
     if (auto vd = LookupVar(id->name, id->ns); !vd || !vd->isglobal) return nullptr;
     set<VarDecl *> visiting;
     for (;;) {
+        if (auto value = ast.LookupBuildDefinition(id->name, id->ns)) return Is<StrLit>(value);
         auto g = ast.LookupGlobal(id->name, id->ns);
         if (!g || g->isvar || g->inits.size() != 1 || !visiting.insert(g).second) return nullptr;
         if (auto s = Is<StrLit>(g->inits[0])) return s;
