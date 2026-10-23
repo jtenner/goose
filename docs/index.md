@@ -17,6 +17,9 @@ library, the tools and the compiler.
 
 ## Library and tools
 
+* [Native memory](native_memory.md): explicit shared owners and views, checked
+  range borrows, typed native atomics, and worker lifetimes.
+
 * [Standard library](stdlib.md): the sixteen modules, `std`, `dictionary`,
   `vec`, `math`, `os`, `ffi`, `binary`, `base64`, `csv`, `json`, `regex`,
   `exception`, and `gfx`, `audio`, `physics` and `ui` for graphics, sound,

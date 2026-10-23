@@ -22,6 +22,110 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
         Error(c, cat(d.name, " takes ", (int64_t)d.minargs,
                      d.minargs == d.maxargs ? string() : cat("-", (int64_t)d.maxargs),
                      " argument(s), ", (int64_t)args.size(), " given"));
+    if (d.kind >= B_SHARED_ALLOC && d.kind <= B_MEMORY_COPY) {
+        auto captype = [&](NativeKind k) {
+            auto t = ast.NewType(TY_NATIVE, c->line); t->nativekind = k; return t;
+        };
+        auto cap = [&](size_t i, NativeKind k) {
+            auto v = CheckValue(args[i], nullptr);
+            if (v.type->kind != TY_NATIVE || v.type->nativekind != k)
+                Error(c, cat(d.name, " requires ", NativeName(k), " for argument ", i + 1));
+        };
+        auto number = [&](size_t i) { CheckIntAny(args[i]); };
+        auto result = [&](TypeExpr *t, bool ok = false) {
+            Val v; v.type = t; c->rettypes.push_back(t);
+            if (ok) {
+                Val b; b.type = ast.booltype;
+                c->rettypes.push_back(b.type); lastcallrets = {v, b};
+            }
+            return v;
+        };
+        switch (d.kind) {
+            case B_SHARED_ALLOC:
+                number(0); return result(captype(NK_OWNER), true);
+            case B_SHARED_VIEW:
+                cap(0, NK_OWNER); number(1); number(2); return result(captype(NK_VIEW));
+            case B_SHARED_CLOSE:
+                cap(0, NK_OWNER); return result(ast.booltype);
+            case B_SHARED_SIZE: {
+                auto v = CheckValue(args[0], nullptr);
+                if (v.type->kind != TY_NATIVE || v.type->nativekind > NK_ACCESS)
+                    Error(c, "shared_size requires an owner, view, or access");
+                return result(ast.inttypes[IS_U64]);
+            }
+            case B_SHARED_BORROW:
+                cap(0, NK_VIEW); return result(captype(NK_ACCESS));
+            case B_SHARED_RELEASE:
+                cap(0, NK_ACCESS); return VoidVal();
+            case B_MEMORY_READ: case B_MEMORY_WRITE: {
+                if (c->tyargs.size() != 1) Error(c, "memory scalar access needs exactly one type argument");
+                auto t = Subst(c->tyargs[0]);
+                if (!IsIntT(t) || t->ix) Error(c, "memory scalar type must be i/u8/16/32/64");
+                c->qtype = t;
+                cap(0, NK_ACCESS); number(1);
+                if (d.kind == B_MEMORY_WRITE) CheckArg(args[2], t);
+                CheckArg(args[d.kind == B_MEMORY_READ ? 2 : 3], ast.booltype);
+                return d.kind == B_MEMORY_READ ? result(t) : VoidVal();
+            }
+            case B_MEMORY_COPY:
+                cap(0, NK_ACCESS); number(1); cap(2, NK_ACCESS); number(3); number(4);
+                return VoidVal();
+            default: assert(false);
+        }
+    }
+    if (d.kind >= B_SHARED_ATOMIC32 && d.kind <= B_ATOMIC_CAS) {
+        auto native = [&](size_t i, NativeKind k) {
+            auto v = CheckValue(args[i], nullptr);
+            if (v.type->kind != TY_NATIVE || v.type->nativekind != k)
+                Error(c, cat(d.name, " requires ", NativeName(k)));
+        };
+        auto result = [&](TypeExpr *t, bool second = false) {
+            Val v; v.type = t; c->rettypes.push_back(t);
+            if (second) { Val b; b.type = ast.booltype; c->rettypes.push_back(b.type); lastcallrets = {v, b}; }
+            return v;
+        };
+        auto nt = [&](NativeKind k) { auto t = ast.NewType(TY_NATIVE, c->line); t->nativekind = k; return t; };
+        if (d.kind <= B_SHARED_ATOMIC_ARRAY64) {
+            bool u32 = d.kind == B_SHARED_ATOMIC32 || d.kind == B_SHARED_ATOMIC_ARRAY32;
+            native(0, NK_OWNER); CheckIntAny(args[1]);
+            bool array = d.kind >= B_SHARED_ATOMIC_ARRAY32;
+            if (array) CheckIntAny(args[2]);
+            CheckArg(args[array ? 3 : 2], ast.inttypes[u32 ? IS_U32 : IS_U64]);
+            return result(nt(array ? NK_VIEW : u32 ? NK_ATOMIC_U32 : NK_ATOMIC_U64));
+        }
+        if (d.kind == B_SHARED_ATOMIC_VIEW32 || d.kind == B_SHARED_ATOMIC_VIEW64) {
+            native(0, NK_VIEW); CheckIntAny(args[1]);
+            return result(nt(d.kind == B_SHARED_ATOMIC_VIEW32 ? NK_ATOMIC_U32 : NK_ATOMIC_U64));
+        }
+        auto v = CheckValue(args[0], nullptr);
+        if (v.type->kind != TY_NATIVE || (v.type->nativekind != NK_ATOMIC_U32 && v.type->nativekind != NK_ATOMIC_U64))
+            Error(c, cat(d.name, " requires SharedAtomicU32 or SharedAtomicU64"));
+        auto scalar = ast.inttypes[v.type->nativekind == NK_ATOMIC_U32 ? IS_U32 : IS_U64];
+        c->qtype = scalar;
+        if (d.kind == B_ATOMIC_LOCKFREE) return result(ast.booltype);
+        if (d.kind != B_ATOMIC_LOAD) CheckArg(args[1], scalar);
+        if (d.kind == B_ATOMIC_CAS) CheckArg(args[2], scalar);
+        auto order = [&](size_t i) {
+            auto lit = ConstStrLit(args[i]);
+            if (!lit) Error(c, "memory order must be a compile-time string");
+            CheckArg(args[i], cu8slice);
+            static const char *names[] = {"Relaxed", "Acquire", "Release", "AcqRel", "SeqCst"};
+            static const int codes[] = {0, 2, 3, 4, 5};
+            for (int k = 0; k < 5; k++) if (lit->val == names[k]) return codes[k];
+            Error(c, cat("unknown memory order: ", lit->val));
+        };
+        auto oi = d.kind == B_ATOMIC_LOAD ? 1 : d.kind == B_ATOMIC_CAS ? 3 : 2;
+        c->memory_order = order(oi);
+        auto o = c->memory_order;
+        if (d.kind == B_ATOMIC_LOAD && (o == 3 || o == 4)) Error(c, "invalid memory order for atomic load");
+        if (d.kind == B_ATOMIC_STORE && (o == 2 || o == 4)) Error(c, "invalid memory order for atomic store");
+        if (d.kind == B_ATOMIC_CAS) {
+            auto f = c->failure_order = order(4);
+            if (f == 3 || f == 4 || (f == 5 && o != 5) || (f == 2 && o != 2 && o != 4 && o != 5))
+                Error(c, "invalid compare_exchange failure order");
+        }
+        return d.kind == B_ATOMIC_STORE ? VoidVal() : result(scalar, d.kind == B_ATOMIC_CAS);
+    }
     // The fully custom builtins first.
     switch (d.kind) {
         case B_PRINT:
