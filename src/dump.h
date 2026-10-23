@@ -625,7 +625,17 @@ inline void IncDec::Dump(string &s, int ind) const {
 inline void DumpFields(string &s, const vector<Field> &fields, int ind) {
     for (auto &f : fields) {
         NL(s, ind + 1);
-        if (f.ispad) {
+        if (f.condition) {
+            s += "const if ";
+            f.condition->Dump(s, ind + 1);
+            s += " {";
+            DumpFields(s, f.thenfields, ind + 1);
+            NL(s, ind + 1);
+            s += "} else {";
+            DumpFields(s, f.elsefields, ind + 1);
+            NL(s, ind + 1);
+            s += "}";
+        } else if (f.ispad) {
             s += "pad";
             if (f.padsize >= 0) Append(s, " ", f.padsize);
         } else {
@@ -700,7 +710,7 @@ inline void StructDecl::Dump(string &s, int ind) const {
     Append(s, "struct ", st->qname);
     DumpGenerics(s, st->generics);
     s += " {";
-    DumpFields(s, st->fields, ind);
+    DumpFields(s, st->declfields.empty() ? st->fields : st->declfields, ind);
     NL(s, ind);
     s += "}";
 }
@@ -714,7 +724,7 @@ inline void EnumDecl::Dump(string &s, int ind) const {
         s += v.name;
         if (v.has_payload) {
             s += " {";
-            DumpFields(s, v.fields, ind + 1);
+            DumpFields(s, v.declfields.empty() ? v.fields : v.declfields, ind + 1);
             NL(s, ind + 1);
             s += "}";
         }
