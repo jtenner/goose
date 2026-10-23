@@ -197,19 +197,16 @@ int main(void) {
     int64_t id = gs_thread_spawn(wait_gate, &view, sizeof view, 0);
     check(!gs_shared_close(owner, __FILE__, __LINE__), "pre-start lease prevents close");
     open_gate(); joined(id, 1);
-    gs_shared_cap hot_view = gs_shared_view(owner, 1, 8, __FILE__, __LINE__);
-    gs_shared_cap warm = gs_shared_borrow(hot_view, __FILE__, __LINE__);
-    gs_shared_release(warm, __FILE__, __LINE__);
     uint64_t highwater = gs_shared_highwater;
     for (int i = 0; i < 100000; i++) {
-        gs_shared_cap access = gs_shared_borrow(hot_view, __FILE__, __LINE__);
+        gs_shared_cap access = gs_shared_borrow_range(view, 1, 8, __FILE__, __LINE__);
         uint64_t n = (uint64_t)i, out;
         gs_shared_write(access, 0, &n, 8, 1, __FILE__, __LINE__);
         gs_shared_read(access, 0, &out, 8, 1, __FILE__, __LINE__);
         check(n == out, "unaligned scalar roundtrip");
         gs_shared_release(access, __FILE__, __LINE__);
     }
-    check(gs_shared_highwater == highwater, "released borrows reuse descriptors");
+    check(gs_shared_highwater == highwater, "bounded borrows reuse descriptors");
     check(gs_shared_close(owner, __FILE__, __LINE__), "main close");
     baseline(allocations, regions);
     puts("shared runtime lifecycle ok"); return 0;
