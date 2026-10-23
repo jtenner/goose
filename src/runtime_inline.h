@@ -894,8 +894,13 @@ GS_API void gs_free_msg(uint8_t *msg);
 /* Opaque capabilities have no user-visible fields or byte image. Stable
    metadata slabs retain tombstones so stale values never dereference freed
    metadata. Only live allocation leases authorize worker atomic access. */
+/* Goose values may start at any byte address (packed fields and worker
+   packets). Pack only the copied value wrappers, never registry metadata or
+   the mapped atomic cells. Both caller and runtime use this exact ABI. */
+#pragma pack(push, 1)
 typedef struct { uint64_t slot, generation; } gs_shared_cap;
 typedef struct { uint64_t slot, generation, index; } gs_shared_atomic_cap;
+#pragma pack(pop)
 GS_API gs_shared_cap gs_shared_atomic_region(gs_shared_cap owner, uint64_t offset,
     uint64_t count, int width, uint64_t initial, const char *file, int line);
 #define GS_SHARED_SLAB_SIZE 256
@@ -1061,14 +1066,14 @@ static int64_t gs_uleb_read(const uint8_t *p) {
 static int64_t gs_uleb_size(const uint8_t *p) {
     const uint8_t *q = p;
     while (*q & 0x80) q++;
-    return (int64_t)(q - p) + 1;
+)GSRT"
+R"GSRT(    return (int64_t)(q - p) + 1;
 }
 
 /* An inline array's length prefix is one byte unless the array holds 128
    elements or more, so the two macros below are what the compiler emits for
    it: a load, a test, and the byte. The continuation is a call the caller's
-)GSRT"
-R"GSRT(   loop does not contain, and reaching it means there is a large array to
+   loop does not contain, and reaching it means there is a large array to
    walk, against which the call costs nothing. Both read the pointer twice,
    which the emitting sites already assume (they form the element address
    from the same text). A varint *value*, by contrast, is whatever the
