@@ -93,6 +93,36 @@ with tempfile.TemporaryDirectory(prefix="goose-definitions-") as directory:
     helper.write_text('fn configured<T>(value: T) -> i64 { build::COUNT }\n')
     source.write_text('import helper; fn main() { print(configured(1), " ", configured(true)); }\n')
     invoke(["run", "-O2", "--define", "COUNT=9", source], contains="9 9")
+    # Native strings are constants for compile-time APIs too, directly and
+    # through immutable global aliases. Relative paths belong to the source.
+    payload = root / "native_definition_payload.bin"
+    payload.write_bytes(b"embedded native definition")
+    path_definition = ["--define", 'FILE="native_definition_payload.bin"']
+    for level in ("-O0", "-O2"):
+        source.write_text('fn main() { print(embed_file(build::FILE)); }\n')
+        invoke(["run", level, *path_definition, source], contains="embedded native definition")
+        invoke(["--roundtrip", "--check", level, *path_definition, source])
+        invoke([level, *path_definition, source, "-o", generated])
+        assert payload.name not in generated.read_text()
+        source.write_text('let FILE = build::FILE; let ALIAS = FILE;\n'
+                          'fn main() { print(embed_file(ALIAS)); }\n')
+        invoke(["run", level, *path_definition, source], contains="embedded native definition")
+        source.write_text('let FILE = build::FILE; let ALIAS = FILE;\n'
+                          'fn main() { let FILE = "other.bin"; print(embed_file(ALIAS)); }\n')
+        invoke(["run", level, *path_definition, source], contains="embedded native definition")
+        # Local shadowing and mutable globals retain the existing restriction.
+        source.write_text('let FILE = build::FILE;\n'
+                          'fn main() { let FILE = "other.bin"; embed_file(FILE); }\n')
+        invoke(["check", level, *path_definition, source], ok=False, contains="embed_file takes")
+        source.write_text('var FILE = build::FILE;\nfn main() { embed_file(FILE); }\n')
+        invoke(["check", level, *path_definition, source], ok=False, contains="embed_file takes")
+        source.write_text('fn main() { embed_file(build::FILE); }\n')
+        invoke(["check", level, "--define", "FILE=true", source], ok=False, contains="embed_file takes")
+        source.write_text('fn main() { let shader = embed_shader(build::STAGE, build::GLSL); '
+                          'print(shader.len > 0); }\n')
+        invoke(["run", level, "--define", 'STAGE="frag"', "--define",
+                'GLSL="layout(location = 0) out vec4 result; void main() { result = vec4(1.0); }"',
+                source], contains="true")
     # The editor must report the same configuration and expose read-only symbols.
     text = 'fn main() { print(build::COUNT); }\n'
     source.write_text(text)
