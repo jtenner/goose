@@ -19,6 +19,10 @@
 
 namespace goose {
 
+// Implemented with the constant evaluator in typecheck_expansion.h. This
+// runs after unconditional names/aliases resolve, before field validation.
+inline void SelectConditionalFields(Ast &ast);
+
 inline void ResolveTypeNames(Ast &ast, const vector<TypeExpr *> *activated = nullptr) {
     if (!activated) BindExpansionNames(ast);
     auto &types = activated ? *activated : ast.alltypes;
@@ -212,6 +216,7 @@ inline void ResolveTypeNames(Ast &ast, const vector<TypeExpr *> *activated = nul
     }
 
     if (!activated) {
+        SelectConditionalFields(ast);
         for (auto st : ast.structs)
             for (auto &f : st->fields) unknownin(f.type, &st->generics);
         for (auto en : ast.enums)
