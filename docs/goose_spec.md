@@ -35,6 +35,8 @@ other than the one it was written with, no dangling references into freed or
 retyped memory. It does *not* mean Rust-style aliasing control; type-safe
 reuse of an element (reading a valid but logically stale value) is permitted
 where explicitly noted.
+These guarantees apply to safe Goose operations; explicit raw-pointer interop
+and C foreign calls have the caller obligations specified in §7.10.
 
 ---
 
@@ -54,7 +56,7 @@ A compound type's class is the max over its parts (fixed < variable <
 resizable), subject to the placement rules in §3.4.
 
 Additionally, a type is **flat** if it contains no references, slices,
-relative references or native capabilities (§11.4) at any depth. Ordinary
+relative references, native capabilities (§11.4), or `UnsafePtr` (§7.10) at any depth. Ordinary
 thread arguments and queue elements must be flat (§11.2); explicit native
 view/atomic worker arguments follow §11.4 instead.
 
@@ -3151,11 +3153,12 @@ declaration. A parameter of reference or slice type is as writable as its
 type says (§9.5): passing a read-only argument requires the parameter to be
 declared `const`.
 
-C must preserve the types and lifetimes of borrowed storage, must not
-retain a borrowed argument beyond the call, and may only append to a
-builder. The compiler assumes an extern may write through its arguments
-but does not mutate unrelated Goose globals; C code is responsible for
-honoring those obligations.
+C must preserve the types and lifetimes of borrowed storage, and may only
+append to a builder. Ordinary borrowed arguments must not be retained beyond
+the call. The explicit raw-pointer interop below permits a caller-managed
+escape with its own lifetime obligations. Extern calls have conservative
+unknown write effects: current arguments need not describe addresses retained
+by earlier raw interop.
 
 **Binding from a shared library.** An `extern` block names a shared
 library and declares functions that are bound from it by name when the
@@ -3229,6 +3232,48 @@ runtime chooses the spelling, and a program whose only C is such libraries
 runs under the in-process backend with no C toolchain installed.
 Conventions for declaring a real library's functions under these shapes
 are in docs/reference.md §24.
+
+#### Explicitly unsafe object-pointer interop
+
+`UnsafePtr` is a fixed-size opaque native object-pointer type, distinct from
+integers, references and safe native capabilities. The root type name is
+reserved; lexical user types and bound generic parameters retain priority,
+and `::UnsafePtr` selects the native type. There is no implicit constructor,
+default value, numeric cast, serialization, queue form or worker transfer.
+Safe native capabilities cannot convert to or from raw pointers or handles.
+A direct extern parameter or result of `UnsafePtr` has C `void *` ABI.
+
+The builtins are `unsafe_ptr_from_handle(u64) -> UnsafePtr`,
+`unsafe_handle_from_ptr(UnsafePtr) -> u64`,
+`unsafe_ptr_add(UnsafePtr, i64) -> UnsafePtr`,
+`unsafe_load<T>(UnsafePtr, bool) -> T`, and
+`unsafe_store<T>(UnsafePtr, T, bool)`. `T` is exactly an i/u8/16/32/64 scalar;
+the boolean selects little endian (`false`) or big endian (`true`), independent
+of host order. Handle zero and null convert to each other. Null accesses and
+additions abort. Signed byte-offset arithmetic, target address width and the
+complete scalar address range are checked without truncation, in every build.
+Scalar copies use unaligned byte access without a typed scalar dereference.
+
+These operations are explicitly **not memory-safe**. The caller guarantees
+object provenance, lifetime, full object bounds, same-object arithmetic,
+write permission, effective type/aliasing, foreign object alignment, and
+synchronization. Raw interop may expose a live writable Goose scalar to C;
+retaining that raw address beyond the call requires caller-managed lifetime.
+Unknown raw stores, C calls and worker/queue synchronization invalidate
+reachable bounds facts, including effects propagated from non-inlined callees.
+Previously evaluated operands retain their values. An integer handle sent to
+a worker and explicitly reconstructed there creates a further unsafe boundary;
+it supplies neither an ownership lease nor synchronization.
+
+The current C backend requires conventional 64-bit object pointers, checks
+`UINTPTR_MAX == UINT64_MAX` and pointer sizes, and rejects other targets. Its
+pointer typedef has one-byte storage alignment under GCC/Clang, preserving
+eight-byte size and C `void *` scalar ABI in ordinary packed layouts, including
+arrays, field references, copies and returns. TinyCC and frontends without
+the required typedef alignment extension are explicitly unsupported for
+`UnsafePtr`; alignment checks must not be disabled to admit packed storage.
+Foreign ABI parameters retain their own alignment requirements. See also
+[native memory](native_memory.md#explicitly-unsafe-c-pointer-interoperability).
 
 ### 7.11 Exporting Goose functions to C
 
