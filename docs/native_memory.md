@@ -265,7 +265,8 @@ pointer or a reference retained by an earlier call even when its current
 signature has no reference argument. Previously evaluated operands keep their
 snapshotted values; later reads observe the write. The alias regressions in
 `test/unsafe_pointer_alias.py` exercise these cases as part of the matrix.
-Worker spawn/wait and queue synchronization also invalidate reachable facts:
+Native atomic operations, worker spawn/wait and queue synchronization also
+invalidate reachable facts:
 an explicitly transferred numeric handle can let a worker reconstruct a raw
 alias, write it, and publish that write before an ordinary read in its owner.
 This still requires the caller to guarantee object lifetime and synchronize
