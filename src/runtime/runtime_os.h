@@ -749,3 +749,98 @@ GS_API uint64_t gs_os_random_u64(void) {
     seed = gs_os_mix64(seed ^ (uint64_t)(uintptr_t)&counter);
     return gs_os_mix64(seed ^ count);
 }
+
+#if GS_NEED_THREADS
+/* Explicit-size readonly mapping. The caller must keep the file from being
+   truncated while mapped: an external truncation can raise an OS fault. */
+GS_API gs_shared_cap gs_shared_map_readonly(const uint8_t *path, int64_t pathlen,
+                                            uint64_t size, uint8_t *ok) {
+    gs_shared_cap invalid = {0, 0}; *ok = 0;
+    if (!size || size > SIZE_MAX || size > INT64_MAX || pathlen < 0) return invalid;
+    gs_os_char native[GS_OS_PATH_MAX]; sl_u8 name = {(uint8_t *)path, pathlen};
+    if (gs_os_native(name, native) < 0) return invalid;
+    uint8_t *data;
+#ifdef _WIN32
+    HANDLE file = CreateFileW(native, GENERIC_READ,
+        FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, NULL, OPEN_EXISTING,
+        FILE_ATTRIBUTE_NORMAL, NULL);
+    if (file == INVALID_HANDLE_VALUE) return invalid;
+    LARGE_INTEGER length;
+    if (!GetFileSizeEx(file, &length) || length.QuadPart < 0 || (uint64_t)length.QuadPart < size) {
+        CloseHandle(file); return invalid;
+    }
+    HANDLE mapping = CreateFileMappingW(file, NULL, PAGE_READONLY, 0, 0, NULL);
+    if (!mapping) { CloseHandle(file); return invalid; }
+    data = (uint8_t *)MapViewOfFile(mapping, FILE_MAP_READ, 0, 0, (SIZE_T)size);
+    CloseHandle(mapping); CloseHandle(file);
+    if (!data) return invalid;
+#else
+    int fd = open(native, O_RDONLY);
+    if (fd < 0) return invalid;
+    struct stat st;
+    if (fstat(fd, &st) || !S_ISREG(st.st_mode) || st.st_size < 0 || (uint64_t)st.st_size < size) {
+        close(fd); return invalid;
+    }
+    data = (uint8_t *)mmap(NULL, (size_t)size, PROT_READ, MAP_PRIVATE, fd, 0);
+    close(fd);
+    if (data == MAP_FAILED) return invalid;
+#endif
+    gs_mutex_lock(&gs_shared_mutex);
+    uint64_t i = gs_shared_slot();
+    if (i == UINT64_MAX) {
+        gs_mutex_unlock(&gs_shared_mutex);
+#ifdef _WIN32
+        UnmapViewOfFile(data);
+#else
+        munmap(data, (size_t)size);
+#endif
+        return invalid;
+    }
+    gs_shared_record *r = gs_shared_at(i);
+    r->allocation = i; r->size = size; r->data = data; r->actor = gs_current_thread_id;
+    r->readonly = r->filemap = 1;
+    gs_shared_cap cap = gs_shared_finish(i, GS_SH_OWNER);
+    gs_mutex_unlock(&gs_shared_mutex); *ok = 1; return cap;
+}
+/* Result: 0 unsupported, 1 supported but refused/failed, 2 applied. Advice
+   may cover surrounding pages, but anonymous bytes are never discarded. */
+GS_API int gs_shared_page_advice(gs_shared_cap view, uint64_t offset, uint64_t size,
+                                  int advice, const char *file, int line) {
+    gs_mutex_lock(&gs_shared_mutex);
+    gs_shared_record *r = gs_shared_get(view, file, line);
+    if (r->kind != GS_SH_VIEW && r->kind != GS_SH_ATOMIC32 && r->kind != GS_SH_ATOMIC64)
+        gs_shared_bad("page advice requires a shared view", file, line);
+    gs_shared_bounds(offset, size, r->size, file, line);
+#ifdef _WIN32
+    (void)advice;
+    gs_mutex_unlock(&gs_shared_mutex); return 0;
+#else
+    int native = -1;
+#ifdef MADV_NORMAL
+    if (advice == 0) native = MADV_NORMAL;
+#endif
+#ifdef MADV_SEQUENTIAL
+    if (advice == 1) native = MADV_SEQUENTIAL;
+#endif
+#ifdef MADV_RANDOM
+    if (advice == 2) native = MADV_RANDOM;
+#endif
+#ifdef MADV_WILLNEED
+    if (advice == 3) native = MADV_WILLNEED;
+#endif
+#ifdef MADV_DONTNEED
+    if (advice == 4) native = MADV_DONTNEED;
+#endif
+    if (native < 0) { gs_mutex_unlock(&gs_shared_mutex); return 0; }
+    if (advice == 4 && !r->readonly) { gs_mutex_unlock(&gs_shared_mutex); return 1; }
+    if (!size) { gs_mutex_unlock(&gs_shared_mutex); return 2; }
+    long page = sysconf(_SC_PAGESIZE);
+    if (page <= 0) { gs_mutex_unlock(&gs_shared_mutex); return 1; }
+    uintptr_t begin = (uintptr_t)(r->data + offset);
+    uintptr_t aligned = begin - begin % (uintptr_t)page;
+    uint64_t length = size + (uint64_t)(begin - aligned);
+    int result = length <= SIZE_MAX && madvise((void *)aligned, (size_t)length, native) == 0;
+    gs_mutex_unlock(&gs_shared_mutex); return result ? 2 : 1;
+#endif
+}
+#endif /* GS_NEED_THREADS */
