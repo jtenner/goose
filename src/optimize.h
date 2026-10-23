@@ -224,7 +224,8 @@ struct Optimizer {
             // Preserve source precision before the use can widen its type.
             auto v = IsF32(lit->exprtype) ? (double)(float)f->val : f->val;
             r = ast.New<FltLit>(lit->line, v, f->text);
-        } else r = ast.New<BoolLit>(lit->line, ((BoolLit *)lit)->val);
+        } else if (auto s = Is<StrLit>(lit)) r = ast.New<StrLit>(lit->line, s->val, s->multiline);
+        else r = ast.New<BoolLit>(lit->line, ((BoolLit *)lit)->val);
         r->exprtype = usetype ? usetype : lit->exprtype;
         return r;
     }
@@ -898,6 +899,7 @@ inline Node *Continue::Cp1(Inliner &inl) const { return inl.ast.New<Continue>(li
 inline Node *Defer::Cp1(Inliner &inl) const { return inl.ast.New<Defer>(line, inl.CpBlock(body)); }
 
 inline Node *Ident::Cp1(Inliner &inl) const {
+    if (buildvalue) return inl.o.CloneLit(buildvalue, exprtype);
     if (vdef) {
         // A parameter bound to a constant argument substitutes right here.
         auto it = inl.subst.find(vdef);
@@ -1134,6 +1136,7 @@ inline Node *Defer::Opt(Optimizer &o) {
 inline Node *FnDecl::Opt(Optimizer &) { return this; }   // Inert statement.
 
 inline Node *Ident::Opt(Optimizer &o) {
+    if (buildvalue) return o.CloneLit(buildvalue, exprtype);
     if (vdef) {
         auto it = o.consts.find(vdef);
         if (it != o.consts.end()) {
