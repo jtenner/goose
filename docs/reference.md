@@ -2673,6 +2673,28 @@ fn main() {
 
 (`count` wrapped to 0 after 256 increments, as a `u8` does.) Spec §6.5.
 
+### `const if`: select at specialization time
+
+`const if condition { ... } else { ... }` parses both branches and checks and
+emits only the selected one, even at `-O0`. Conditions are bool constants:
+literals, immutable global constants, native `build::NAME` definitions, `!`,
+`&&`, `||`, bool/string equality, and comparisons of supported integer constant expressions. Locals,
+parameters and calls cannot be conditions. Both operands must be valid even
+when `&&` or `||` already determines the result. Each selected body has an
+ordinary lexical scope; it also works in generic functions and `const for`
+expansions. Syntax errors in excluded branches still fail compilation.
+
+```goose
+fn main() {
+    const if 2 * 3 == 6 { print("selected"); }
+    else { unavailable(); }
+}
+```
+
+```text
+selected
+```
+
 ### `const for`: expansion at specialization time
 
 `const for` specializes a fragment once per entry of a compile-time

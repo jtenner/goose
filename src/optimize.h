@@ -988,6 +988,8 @@ inline Node *IfExpr::Cp1(Inliner &inl) const {
     auto c = inl.ast.New<IfExpr>(line, inl.Cp(cond), inl.CpBlock(thenb),
                                  elseb ? inl.Cp(elseb) : nullptr);
     c->flat = flat;
+    c->isconst = isconst;
+    c->selected = selected;
     return c;
 }
 
