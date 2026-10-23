@@ -1,3 +1,4 @@
+// no-jit: UnsafePtr requires packed pointer typedef support.
 import unsafe_pointer_ns.types;
 fn identity<UnsafePtr>(x: UnsafePtr) -> UnsafePtr { x }
 fn main() {
