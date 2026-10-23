@@ -32,14 +32,14 @@ the unmodified compiler rejected the first invocation with `unknown option:
 --define`. Run the focused tests with
 `python3 test/cli_definitions.py build/goose`.
 
-## Integrated extension validation
+## Initial integrated extension validation (historical)
 
 Claude and DeepSeek reviewed `102c0df53d8369325f7c33c3ae6ca308615a4b89`.
 The independent parent reviewed the diagnostic-only follow-up `61587de3`:
 synthetic definition errors now use the real condition location without
 mutating immutable values. Compiler source subtree after that correction:
-`2049b52b10eaf0192e66514fbac40bf5e2d0d3ec`. After that correction, final Release and
-assertions-enabled Debug each pass **5,125 reported section checks**, in
+`2049b52b10eaf0192e66514fbac40bf5e2d0d3ec`. After that correction, the initial
+stack's Release and assertions-enabled Debug each pass **5,125 reported section checks**, in
 separate sequential runs (118 s and 123 s). Both include the native example group and expanded
 library-header regression. The final 3,000-job Wasm acceptance also passes
 normally and with ThreadSanitizer (Clang 23); these are correctness runs.
@@ -107,6 +107,42 @@ emitted byte and claim/publication state across serial and 1/2/4/8 workers,
 including 3,000 jobs, malformed inputs, cancellation and cleanup. Native builds
 are used for threads; embedded TinyCC execution is not used for native memory.
 
+## Deferred-state journal validation (current)
+
+The performance correction is frozen at compiler source
+`41dc6eb30e9363f1f97a51aeb047aad18d96746c`, `src` tree
+`741cbecbd8b0f95e4ab9148161a5af870cb3ca12`. It replaces exhaustive deferred-state
+snapshots with first-write journals while retaining unused-function checks,
+rollback of earlier live proofs and quarantine of speculative cache products.
+Structural work regressions were committed first in `755dc3d2`. The
+[design audit](design/const_if_deferred_state.md) describes the mutation barriers,
+ownership rules and exhaustive testing oracle. The independent parent reviewed
+this correction separately from the historical model reviews above.
+
+Author Release (`GCC 14.2.0 -O3 -DNDEBUG`) and assertions-enabled Debug each
+pass **5,127 reported section checks**, with `GOOSE_DEFERRED_VERIFY=1` throughout
+the full baseline suite. The focused const-if driver passes 825 checks and the
+new deterministic work driver passes 52, without timing thresholds.
+
+The Clang 23 ASan/UBSan compiler passes the full sanitizer profile's **4,354
+reported section checks**, with the exhaustive oracle, compiler alignment
+sanitization and `detect_leaks=1` enabled. The raw initial run's shader leaks
+were reproduced on the pre-fix compiler. The passing rerun uses addr2line
+symbols and the repository's narrow exclusions for four unchanged CuteSpirv
+allocation functions; it does not disable leak detection globally. Sanitized
+compiler work/marks/transaction drivers also pass 52/245/357 checks. The native
+profile's inherited packed-scalar alignment limits and TinyCC leak limits
+remain as documented below and in [testing](testing.md).
+
+The [measured correction](../bench/shared_native/results/deferred-state-2026-10-23/README.md)
+retains all 684 successful check processes, exact source/compiler/harness hashes,
+wall/RSS samples and median/MAD/min/max. Ordinary 1,000-function O2 checking
+improves from **346.469 to 32.559 ms** against the merged pre-fix fork. The
+separate upstream control is 32.670 versus 31.580 ms at O2; upstream/corrected
+differences at both O0/O2 overlap the observed time and RSS ranges. Larger
+sizes, std imports, generic calls, deferred stores and the real parallel Wasm
+source are included; the results do not claim whole-compiler linearity.
+
 ## Platform and validation limits
 
 | Target | Status |
@@ -134,13 +170,15 @@ Compiler-only sanitized const-if checks and the tested native programs pass;
 these results do not establish a compiler-wide or TinyCC-wide leak-free claim.
 Optional multimedia/device tests retain upstream environment skips.
 
-Measured native costs and the synthetic compiler regression, with raw samples,
-flags, hashes, variation and limits, are recorded next to the
-[benchmark](../bench/shared_native/results/README.md).
-The roughly 10.5x compiler slowdown is measured only at 500 globals and 1,000
-unreached functions. Deferred-state bookkeeping grows with unreached functions
-times live variable definitions, potentially quadratically as both grow, so
-larger codebases can regress further. This is a known performance limitation,
-not a fixed overhead bound. Four/eight-worker start/join costs are 1.20x/1.21x
-the weaker C baseline; the 40.32x source write/readback ratio uses a largely
-optimized-away C loop and is not a physical-operation latency ratio.
+Measured native costs and the historical synthetic compiler regression, with
+raw samples, flags, hashes, variation and limits, remain in the
+[benchmark record](../bench/shared_native/results/README.md). The roughly 10.5x
+slowdown at 500 globals and 1,000 unreached functions describes the initial
+feature stack's exhaustive snapshots, before the journal correction above.
+The current compiler still scans global flow per root (O(U×G)), retains O(G²)
+global setup work, and has separate name lookup, provenance, large touched-record
+and quarantine-memory costs. Removing full snapshots does not bound those
+costs or establish linear compilation. The native runtime measurements are
+unchanged: four/eight-worker start/join costs are 1.20x/1.21x the weaker C
+baseline; the 40.32x source write/readback ratio uses a largely optimized-away
+C loop and is not a physical-operation latency ratio.
