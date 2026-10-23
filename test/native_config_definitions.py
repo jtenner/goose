@@ -99,7 +99,8 @@ def main():
                         assert has_advice_code(c, advice), (profile['ADVICE'], advice)
                         for native in ('-O0','-O2'):
                             app = root / 'native'
-                            run([ns.cc,native,'-std=c11','-pthread',generated,'-lm','-o',app],timeout=600)
+                            run([ns.cc,native,'-std=c11','-pthread','-fsanitize=alignment',
+                                 '-fno-sanitize-recover=all',generated,'-lm','-o',app],timeout=600)
                             result = run([app,root/'mapping.bin'])
                             assert result.stdout == f'native config ok {str(alias).lower()} {str(endian).lower()}\n'
                             configurations += 1
@@ -118,7 +119,8 @@ def main():
                 run([goose,'--standalone',level,*args,selected,'-o',generated])
                 for native in ('-O0','-O2'):
                     app = root / 'selected'
-                    run([ns.cc,native,'-std=c11','-pthread',generated,'-lm','-o',app],timeout=600)
+                    run([ns.cc,native,'-std=c11','-pthread','-fsanitize=alignment',
+                         '-fno-sanitize-recover=all',generated,'-lm','-o',app],timeout=600)
                     run([app])
                     configurations += 1
             result = run([goose,'check',level,*flags(dict(SELECT_INVALID=True,ORDER='Release')),selected],ok=False)
