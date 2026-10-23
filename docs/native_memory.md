@@ -74,6 +74,9 @@ released on close; the slabs retain generation tombstones and grow only with
 peak simultaneous descriptor usage. Routine scalar accesses allocate no heap
 memory. Borrow creation, view creation and worker handoff are setup operations.
 
+See [the shared job sample](../samples/32_shared_jobs.goose) for a complete
+worker pool with indexed completion flags and disjoint result ranges.
+
 ## Atomic regions and indexed job tables
 
 `shared_atomic_u32(owner, offset, initial)` and `shared_atomic_u64` register
