@@ -104,12 +104,12 @@ struct TypeCheck {
     // Deterministic transaction work, for scaling tests without wall clocks.
     // Opt-in stderr JSON also works for CLI errors and editor compilations.
     struct DeferredWork {
-        size_t roots = 0, deferrals = 0, variables = 0, arrays = 0, typevisits = 0;
+        size_t roots = 0, deferrals = 0, variables = 0, arrays = 0, typevisits = 0, auxiliary = 0;
         ~DeferredWork() {
             if (getenv("GOOSE_DEFERRED_WORK"))
                 fprintf(stderr, "GOOSE_DEFERRED_WORK {\"roots\":%zu,\"deferrals\":%zu,"
-                        "\"variables\":%zu,\"arrays\":%zu,\"typevisits\":%zu}\n",
-                        roots, deferrals, variables, arrays, typevisits);
+                        "\"variables\":%zu,\"arrays\":%zu,\"typevisits\":%zu,\"auxiliary\":%zu}\n",
+                        roots, deferrals, variables, arrays, typevisits, auxiliary);
         }
     } deferredwork;
     StableTypeGraph stabletypes;
@@ -843,7 +843,7 @@ struct TypeCheck {
         if (a->size < 0 && a->sizeexpr) {
             auto v = ConstIntOrError(a->sizeexpr, "array size");
             if (v < 0) Error(a->sizeexpr, "array size cannot be negative");
-            a->size = v;
+            Writing(a)->size = v;
         }
         return a->size;
     }
@@ -1470,7 +1470,7 @@ struct TypeCheck {
     void MergeFlow(const FlowState &a, const FlowState &b);
     void NarrowCond(Node *cond, bool sense);
 
-    void KillNarrow(VarDef *vd) { vd->narrowed = nullptr; }
+    void KillNarrow(VarDef *vd) { if (vd->narrowed) Writing(vd)->narrowed = nullptr; }
     // The join of two states over the variables in scope, without changing
     // the live checker state: a fact holds iff it
     // holds in every reachable one, and a variable may be assigned iff it
@@ -1632,6 +1632,7 @@ struct TypeCheck {
         FnSpec *spec;
         Node *at;
         VarDef *var;
+        bool operator==(const NamedResultUse &) const = default;
     };
     vector<NamedResultUse> namedresultuses;
     bool AllowNamedResult(Ident *id, TypeExpr *t);
@@ -1787,6 +1788,7 @@ struct TypeCheck {
     // of anything else at the class takes the mark away, which the loop
     // feeds back as it does a new root (Roots::Add).
     void AddContents(VarDef *x, const RootAlt &a, bool classread, const VarDef *src) {
+        Writing(x);
         auto held = a.classread || (classread && src == a.root);
         if (x->contents.Add({ a.root, a.exact, a.from, a.slotread, held }))
             NoteFact(x, ActivationFloor(a.root));
@@ -1798,6 +1800,7 @@ struct TypeCheck {
     // learning where it points at the call (ApplyCalleeStores). Returns
     // whether the binding changed.
     bool AddBinding(VarDef *vd, const Roots &rv) {
+        Writing(vd);
         auto changed = rv.unknown && !vd->ref.unknown;
         vd->ref.unknown = vd->ref.unknown || rv.unknown;
         auto floor = changed ? 0 : (int)scopes.size();
@@ -2303,6 +2306,7 @@ struct TypeCheck {
         // at one exactly: in every activation it points into storage that
         // class leads to, though not into the same part of it.
         bool bounded = false;
+        bool operator==(const ThreadedClass &) const = default;
     };
     unordered_map<VarDef *, ThreadedClass> threadedclasses;
     void ValidateThreadArgs(FnSpec *spec, vector<Val> &argvals, Node *callnode);
@@ -2526,6 +2530,7 @@ struct TypeCheck {
         Roots roots;               // Where the argument may point (ClassArgRoots).
         VarDef *src = nullptr;     // The container a holder argument is a copy of.
         bool byteview = false;
+        bool operator==(const ClassUse &) const = default;
     };
     map<VarDef *, vector<ClassUse>> classuses;
     void NoteClassUses(FnSpec *spec, const vector<Val> &argvals);
@@ -2845,39 +2850,139 @@ struct TypeCheck {
         };
         struct DeferredState {
             vector<Reuse> reused;
-            vector<StoreEvent> stores, made;
-            map<VarDef *, vector<ClassUse>> classes;
-            unordered_map<VarDef *, ThreadedClass> threaded;
-            // EnvRead models call-site flow, not a transaction snapshot: it
-            // deliberately omits persistent proofs, reference/use sites and
-            // their metadata. Restore the complete preexisting record, while
-            // retaining its identity for cached bodies and type references.
-            vector<pair<VarDef *, VarDef>> variables;
-            vector<pair<TypeArray *, TypeArray>> arrays;
+            unordered_map<size_t, StoreEvent> stores;
+            unordered_map<VarDef *, optional<size_t>> classes;
+            unordered_map<VarDef *, optional<ThreadedClass>> threaded;
+            // First-write undo records, including every persistent proof and
+            // its location. Identity stays fixed for cached bodies and types.
+            unordered_map<VarDef *, VarDef> variables;
+            unordered_map<TypeArray *, TypeArray> arrays;
+            unordered_map<TypeStruct *, StructInst *> structlinks;
+            unordered_map<TypeEnum *, EnumInst *> enumlinks;
             map<TypeExpr *, VarDef *> pending;
-            vector<NamedResultUse> namedresults;
-            size_t literals, shrinks, grows, casts, types;
+            optional<vector<NamedResultUse>> namedresults;
+            size_t literals, shrinks, grows, casts, types, varcount, varserial, detailserial,
+                   storecount, madecount, namedcount;
+            bool rolledback = false;
+            bool verify = false;
+            // Exhaustive oracle for mutation-barrier tests, never enabled by
+            // default and deliberately excluded from production work counts.
+            vector<pair<VarDef *, VarDef>> verifyvars;
+            map<TypeArray *, TypeArray> verifyarrays;
+            map<TypeStruct *, StructInst *> verifystructs;
+            map<TypeEnum *, EnumInst *> verifyenums;
+            vector<StoreEvent> verifystores, verifymade;
+            map<VarDef *, vector<ClassUse>> verifyclasses;
+            unordered_map<VarDef *, ThreadedClass> verifythreaded;
+            map<TypeExpr *, VarDef *> verifypending;
+            vector<NamedResultUse> verifynamed;
             DeferredState(TypeCheck &t)
-                : stores(t.storeevents), made(t.madestores), classes(t.classuses),
-                  threaded(t.threadedclasses), pending(t.pendingpools), namedresults(t.namedresultuses),
-                  literals(t.litchecks.size()), shrinks(t.globalshrinks.size()),
-                  grows(t.growconflicts.size()), casts(t.castverdicts.size()), types(t.ast.alltypes.size()) {
+                : literals(t.litchecks.size()), shrinks(t.globalshrinks.size()),
+                  grows(t.growconflicts.size()), casts(t.castverdicts.size()), types(t.ast.alltypes.size()),
+                  varcount(t.ast.vardefs.size()), varserial(t.ast.varserials.size()),
+                  detailserial(t.ast.typedetails.size()), storecount(t.storeevents.size()),
+                  madecount(t.madestores.size()), namedcount(t.namedresultuses.size()) {
                 t.deferredwork.roots++;
-                for (auto v : t.ast.vardefs) {
-                    variables.push_back({ v, *v });
-                    t.deferredwork.variables++;
-                }
-                set<TypeArray *> seen;
-                for (auto type : t.ast.alltypes) {
-                    t.deferredwork.typevisits++;
-                    if (type->kind == TY_ARRAY && seen.insert(type->arr).second) {
-                        arrays.push_back({ type->arr, *type->arr });
-                        t.deferredwork.arrays++;
+                if ((verify = getenv("GOOSE_DEFERRED_VERIFY") != nullptr)) {
+                    verifystores = t.storeevents;
+                    verifymade = t.madestores;
+                    verifyclasses = t.classuses;
+                    verifythreaded = t.threadedclasses;
+                    verifypending = t.pendingpools;
+                    verifynamed = t.namedresultuses;
+                    for (auto v : t.ast.vardefs) verifyvars.push_back({ v, *v });
+                    for (auto type : t.ast.alltypes) {
+                        if (type->kind == TY_ARRAY) verifyarrays.try_emplace(type->arr, *type->arr);
+                        if (type->kind == TY_STRUCT) verifystructs.try_emplace(type->struc, type->struc->inst);
+                        if (type->kind == TY_ENUM) verifyenums.try_emplace(type->enu, type->enu->inst);
                     }
                 }
             }
+            static bool SameVariable(const VarDef &a, const VarDef &b) {
+                // Analysis values include NaNs and signed zero. Check their
+                // representation, then normalize NaNs for defaulted member
+                // equality (which keeps future VarDef members in the oracle).
+                if (memcmp(&a.constfval, &b.constfval, sizeof(double))) return false;
+                if (a.constfval == a.constfval) return a == b;
+                auto left = a, right = b;
+                left.constfval = right.constfval = 0;
+                return left == right;
+            }
+            void KeepNewAnnotations(TypeCheck &t) {
+                if (!verify) return;
+                for (size_t i = varcount; i < t.ast.vardefs.size(); i++) {
+                    auto v = t.ast.vardefs[i];
+                    verifyvars.push_back({ v, *v });
+                }
+                // Unlike entry-state records, these must keep the metadata
+                // they have NOW, for editor queries into quarantined checks.
+                for (auto type : t.ast.alltypes) {
+                    if (type->kind == TY_ARRAY && t.ast.detailserials.at(type->arr) >= detailserial)
+                        verifyarrays.try_emplace(type->arr, *type->arr);
+                    // Instance links, including new details published on
+                    // resolved source signatures, MUST be revoked separately.
+                }
+            }
+            void Verify(TypeCheck &t) {
+                if (!verify) return;
+                auto require = [](bool covered, const char *kind) {
+                    if (covered) return;
+                    fprintf(stderr, "unlogged deferred-state mutation: %s\n", kind);
+                    abort();
+                };
+                for (auto &[v, old] : verifyvars) {
+                    auto saved = rolledback ? variables.end() : variables.find(v);
+                    require(SameVariable(saved == variables.end() ? *v : saved->second, old), "VarDef");
+                }
+                for (auto &[a, old] : verifyarrays) {
+                    auto saved = rolledback ? arrays.end() : arrays.find(a);
+                    auto &value = saved == arrays.end() ? *a : saved->second;
+                    require(value.sub == old.sub && value.akind == old.akind && value.sizeexpr == old.sizeexpr &&
+                            value.lenstorage == old.lenstorage && value.size == old.size, "TypeArray");
+                }
+                for (auto [t, old] : verifystructs) {
+                    auto saved = rolledback ? structlinks.end() : structlinks.find(t);
+                    require((saved == structlinks.end() ? t->inst : saved->second) == old, "TypeStruct::inst");
+                }
+                for (auto [t, old] : verifyenums) {
+                    auto saved = rolledback ? enumlinks.end() : enumlinks.find(t);
+                    require((saved == enumlinks.end() ? t->inst : saved->second) == old, "TypeEnum::inst");
+                }
+                auto oldstores = t.storeevents;
+                auto oldmade = t.madestores;
+                auto oldclasses = t.classuses;
+                auto oldthreaded = t.threadedclasses;
+                auto oldpending = t.pendingpools;
+                auto oldnamed = t.namedresultuses;
+                if (!rolledback) {
+                    oldstores.resize(storecount);
+                    for (auto &[i, old] : stores) oldstores[i] = old;
+                    oldmade.resize(madecount);
+                    for (auto [v, old] : classes) {
+                        if (old) oldclasses.at(v).resize(*old);
+                        else oldclasses.erase(v);
+                    }
+                    for (auto &[v, old] : threaded) {
+                        if (old) oldthreaded[v] = *old;
+                        else oldthreaded.erase(v);
+                    }
+                    for (auto [type, old] : pending) {
+                        if (old) oldpending[type] = old;
+                        else oldpending.erase(type);
+                    }
+                    if (namedresults) oldnamed = *namedresults;
+                    else oldnamed.resize(namedcount);
+                }
+                require(oldstores == verifystores, "storeevents");
+                require(oldmade == verifymade, "madestores");
+                require(oldclasses == verifyclasses, "classuses");
+                require(oldthreaded == verifythreaded, "threadedclasses");
+                require(oldpending == verifypending, "pendingpools");
+                require(oldnamed == verifynamed, "namedresultuses");
+            }
         };
         unique_ptr<DeferredState> deferred;
+        ~Checkpoint() { if (deferred) deferred->Verify(tc); }
         struct GlobalFlow { VarDef *v; bool assigned, maybeassigned; TypeExpr *narrowed; };
         vector<GlobalFlow> globals;
         Checkpoint(TypeCheck &t)
@@ -2894,18 +2999,23 @@ struct TypeCheck {
             if (!deferred || sp->id >= (int)fnspecs) return;
             for (auto &r : deferred->reused) if (r.spec == sp) return;
             deferred->reused.push_back({ sp, sp->roots, sp->views, sp->neededges.size(), sp->storesout });
+            tc.deferredwork.auxiliary += 1 + sp->roots.size() + sp->views.size();
         }
         void Defer() {
             assert(deferred);
             tc.deferredwork.deferrals++;
+            deferred->Verify(tc);
+            deferred->KeepNewAnnotations(tc);
             // A completed cycle member can still contain a back edge to an
             // incomplete member. Quarantine the ENTIRE transaction, not just
             // the frames left active when the missing caller was discovered.
             set<FnSpec *> discarded;
             for (auto i = fnspecs; i < tc.ast.fnspecs.size(); i++)
                 discarded.insert(tc.ast.fnspecs[i]);
-            for (auto sf : tc.ast.functions)
-                erase_if(sf->specs, [&](FnSpec *sp) { return discarded.count(sp); });
+            set<SFunction *> functions;
+            for (auto sp : discarded) functions.insert(sp->sf);
+            for (auto sf : functions)
+                while (!sf->specs.empty() && discarded.count(sf->specs.back())) sf->specs.pop_back();
             tc.ast.deferredspecs.insert(tc.ast.deferredspecs.end(),
                                        tc.ast.fnspecs.begin() + fnspecs, tc.ast.fnspecs.end());
             tc.ast.fnspecs.resize(fnspecs);
@@ -2914,15 +3024,16 @@ struct TypeCheck {
             set<StructInst *> structs(tc.ast.structinsts.begin() + structinsts,
                                       tc.ast.structinsts.end());
             set<EnumInst *> enums(tc.ast.enuminsts.begin() + enuminsts, tc.ast.enuminsts.end());
-            for (auto st : tc.ast.structs)
-                erase_if(st->insts, [&](StructInst *i) { return structs.count(i); });
-            for (auto en : tc.ast.enums)
-                erase_if(en->insts, [&](EnumInst *i) { return enums.count(i); });
-            for (auto type : tc.ast.alltypes) {
-                tc.deferredwork.typevisits++;
-                if (type->kind == TY_STRUCT && structs.count(type->struc->inst)) type->struc->inst = nullptr;
-                if (type->kind == TY_ENUM && enums.count(type->enu->inst)) type->enu->inst = nullptr;
-            }
+            set<SStruct *> structdecls;
+            for (auto i : structs) structdecls.insert(i->st);
+            set<SEnum *> enumdecls;
+            for (auto i : enums) enumdecls.insert(i->en);
+            for (auto st : structdecls)
+                while (!st->insts.empty() && structs.count(st->insts.back())) st->insts.pop_back();
+            for (auto en : enumdecls)
+                while (!en->insts.empty() && enums.count(en->insts.back())) en->insts.pop_back();
+            for (auto [t, inst] : deferred->structlinks) t->inst = inst;
+            for (auto [t, inst] : deferred->enumlinks) t->inst = inst;
             tc.ast.deferredstructinsts.insert(tc.ast.deferredstructinsts.end(),
                                             tc.ast.structinsts.begin() + structinsts, tc.ast.structinsts.end());
             tc.ast.deferredenuminsts.insert(tc.ast.deferredenuminsts.end(),
@@ -2932,15 +3043,18 @@ struct TypeCheck {
             // Whole-AST passes also enumerate variables and types directly.
             // Their usable registries must not expose quarantined products.
             tc.ast.deferredvardefs.insert(tc.ast.deferredvardefs.end(),
-                                         tc.ast.vardefs.begin() + deferred->variables.size(), tc.ast.vardefs.end());
-            tc.ast.vardefs.resize(deferred->variables.size());
+                                         tc.ast.vardefs.begin() + deferred->varcount, tc.ast.vardefs.end());
+            tc.ast.vardefs.resize(deferred->varcount);
             tc.ast.deferredtypes.insert(tc.ast.deferredtypes.end(),
                                        tc.ast.alltypes.begin() + deferred->types, tc.ast.alltypes.end());
             tc.ast.alltypes.resize(deferred->types);
             // Array details are shared by aliases and qualifications. Restore
             // inferred elements and evaluated extents along with the VarDef.
             for (auto &[array, saved] : deferred->arrays) *array = std::move(saved);
-            tc.pendingpools = std::move(deferred->pending);
+            for (auto [t, old] : deferred->pending) {
+                if (old) tc.pendingpools[t] = old;
+                else tc.pendingpools.erase(t);
+            }
             tc.stabletypes.known.clear();
             tc.arrayelements.clear();
             tc.cancontain.clear();
@@ -2951,16 +3065,25 @@ struct TypeCheck {
                 r.spec->neededges.resize(r.neededges);
                 r.spec->storesout = r.storesout;
             }
-            tc.storeevents = std::move(deferred->stores);
-            tc.madestores = std::move(deferred->made);
-            tc.classuses = std::move(deferred->classes);
-            tc.threadedclasses = std::move(deferred->threaded);
+            tc.storeevents.resize(deferred->storecount);
+            for (auto &[i, old] : deferred->stores) tc.storeevents[i] = std::move(old);
+            tc.madestores.resize(deferred->madecount);
+            for (auto [v, old] : deferred->classes) {
+                if (old) tc.classuses.at(v).resize(*old);
+                else tc.classuses.erase(v);
+            }
+            for (auto &[v, old] : deferred->threaded) {
+                if (old) tc.threadedclasses[v] = std::move(*old);
+                else tc.threadedclasses.erase(v);
+            }
             tc.litchecks.resize(deferred->literals);
-            tc.namedresultuses = std::move(deferred->namedresults);
+            if (deferred->namedresults) tc.namedresultuses = std::move(*deferred->namedresults);
+            else tc.namedresultuses.resize(deferred->namedcount);
             tc.globalshrinks.resize(deferred->shrinks);
             tc.growconflicts.resize(deferred->grows);
             tc.castverdicts.resize(deferred->casts);
             for (auto &[v, saved] : deferred->variables) *v = std::move(saved);
+            deferred->rolledback = true;
         }
         void Restore() {
             tc.frames.resize(frames);
@@ -2996,6 +3119,75 @@ struct TypeCheck {
         }
     };
     Checkpoint *rootcheckpoint = nullptr;
+
+    // All checker mutations of variable state go through this barrier,
+    // including aggregate resets, provenance mutators and flow replay. Only
+    // preexisting records are restored: new quarantined records retain their
+    // annotations for editor queries. Allocation serials live outside records
+    // so ResetLocal and shared type-detail copies cannot overwrite them.
+    VarDef *Writing(VarDef *v) {
+        if (rootcheckpoint && rootcheckpoint->deferred &&
+            ast.varserials.at(v) < rootcheckpoint->deferred->varserial &&
+            rootcheckpoint->deferred->variables.try_emplace(v, *v).second)
+            deferredwork.variables++;
+        return v;
+    }
+    TypeArray *Writing(TypeArray *a) {
+        if (rootcheckpoint && rootcheckpoint->deferred &&
+            ast.detailserials.at(a) < rootcheckpoint->deferred->detailserial &&
+            rootcheckpoint->deferred->arrays.try_emplace(a, *a).second)
+            deferredwork.arrays++;
+        return a;
+    }
+    void Publishing(TypeStruct *t) {
+        if (rootcheckpoint && rootcheckpoint->deferred &&
+            rootcheckpoint->deferred->structlinks.try_emplace(t, t->inst).second)
+            deferredwork.auxiliary++;
+    }
+    void Publishing(TypeEnum *t) {
+        if (rootcheckpoint && rootcheckpoint->deferred &&
+            rootcheckpoint->deferred->enumlinks.try_emplace(t, t->inst).second)
+            deferredwork.auxiliary++;
+    }
+    StoreEvent &WritingStore(size_t i) {
+        if (rootcheckpoint && rootcheckpoint->deferred) {
+            auto &d = *rootcheckpoint->deferred;
+            if (i < d.storecount && d.stores.try_emplace(i, storeevents[i]).second)
+                deferredwork.auxiliary++;
+        }
+        return storeevents[i];
+    }
+    void UsingClass(VarDef *v) {
+        if (!rootcheckpoint || !rootcheckpoint->deferred) return;
+        auto &d = *rootcheckpoint->deferred;
+        if (d.classes.count(v)) return;
+        auto found = classuses.find(v);
+        d.classes.emplace(v, found == classuses.end() ? optional<size_t>() : found->second.size());
+        deferredwork.auxiliary++;
+    }
+    void WritingThread(VarDef *v) {
+        if (!rootcheckpoint || !rootcheckpoint->deferred) return;
+        auto &d = *rootcheckpoint->deferred;
+        if (d.threaded.count(v)) return;
+        auto found = threadedclasses.find(v);
+        d.threaded.emplace(v, found == threadedclasses.end() ? optional<ThreadedClass>() : found->second);
+        deferredwork.auxiliary++;
+    }
+    void WritingPending(TypeExpr *t) {
+        if (!rootcheckpoint || !rootcheckpoint->deferred) return;
+        auto found = pendingpools.find(t);
+        if (rootcheckpoint->deferred->pending.try_emplace(t, found == pendingpools.end() ? nullptr : found->second).second)
+            deferredwork.auxiliary++;
+    }
+    void RemovingNamedResult(size_t i) {
+        if (!rootcheckpoint || !rootcheckpoint->deferred) return;
+        auto &d = *rootcheckpoint->deferred;
+        if (i >= d.namedcount || d.namedresults) return;
+        // Until an old entry is erased, the old prefix is still intact:
+        // earlier erases could only have removed newly appended entries.
+        d.namedresults.emplace(namedresultuses.begin(), namedresultuses.begin() + d.namedcount);
+        deferredwork.auxiliary += d.namedcount;
+    }
 
     // Checks one root of the program -- a global's initializer, main, a
     // thread entry, a function nothing reached, an export, a whole-program

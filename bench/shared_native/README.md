@@ -86,3 +86,12 @@ and verifies that workload sources stayed unchanged. It rejects a changing
 compiler/source snapshot; equal version strings alone do not establish the
 same compiler. Whole-binary and generated-C hashes identify the actual built
 workloads even when the source checkout has uncommitted edits.
+
+Compiler-check scaling uses `compiler_check.py`. Its default invocation prints
+only a plan and launches no compiler. `--globals`, `--functions` or `--sizes`,
+repeated `--case ordinary/calls/arrays/stores/deferred/deferred-stores`,
+`--stdlib`, and `--named-return` select generated cases; repeated `--source`
+selects existing programs. `--samples` and `--warmups` control repetition.
+Only parent-coordinated `--run --baseline ... --extended ... --output ...`
+performs timings. The structural work contract and remaining compiler costs
+are documented in [the transaction audit](../../docs/design/const_if_deferred_state.md).

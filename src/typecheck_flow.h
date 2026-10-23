@@ -471,6 +471,7 @@ inline Prov TypeCheck::SlotView(const Prov &p, TypeExpr *slice) {
 // Bound to places at the classes of an activation only, it is a fact for
 // that activation's loops and rounds, as a rebind is (AddBinding).
 inline void TypeCheck::BindProv(VarDef *vd, const Prov &p) {
+    Writing(vd);
     vd->ref = p;
     vd->ref.reached = nullptr;
     if (!vd->type || !CarriesPool(vd->type)) vd->ref.reusable = 0;
@@ -488,6 +489,7 @@ inline void TypeCheck::BindRefProvenance(VarDef *vd, const Val &v) {
     if (v.isnull) return;
     if (v.None()) {
         if (vd->refrootknown && vd->ref.Unknown()) return;   // As it was.
+        Writing(vd);
         vd->ref.SetUnknown();
         vd->refrootknown = true;
         NoteFact(vd);
@@ -566,6 +568,7 @@ inline Prov TypeCheck::RefProvOf(VarDef *vd) {
 
 inline VarDef *TypeCheck::ResetLocal(VarDef *previous) {
     if (!previous) return ast.NewVarDef();
+    Writing(previous);
     // Cached nested specializations capture this identity. Recompute its
     // checking state, but retain the capture discovered on an earlier pass,
     // and the marks no pass may lose (a nested function checked once set
@@ -619,7 +622,7 @@ inline VarDef *TypeCheck::LookupVar(string_view name, string_view ns, Node *use)
             Error(use, cat(fn, " names ", v->name, " (bound at ", Where(v->line),
                            "), whose scope has ended where ", fn, " is called (§7.5)"));
         }
-        v->captured = true;
+        if (!v->captured) Writing(v)->captured = true;
         found = v;
         return true;
     });
@@ -846,13 +849,14 @@ inline TypeCheck::FlowState TypeCheck::SaveFlow() {
 inline void TypeCheck::RestoreFlow(const FlowState &f) {
     for (auto &e : f.locals) {
         if (!InScope(e.var, e.index)) continue;
+        Writing(e.var);
         e.var->assigned = e.state.assigned;
         e.var->maybeassigned = e.state.maybeassigned;
         e.var->narrowed = e.state.narrowed;
     }
     for (auto g : ast.globals)
-        for (auto v : g->defs) v->narrowed = nullptr;
-    for (auto [v, narrowed] : f.globals) v->narrowed = narrowed;
+        for (auto v : g->defs) KillNarrow(v);
+    for (auto [v, narrowed] : f.globals) Writing(v)->narrowed = narrowed;
     reachable = f.reachable;
     cur.kills = f.kills;
 }
@@ -917,7 +921,7 @@ inline void TypeCheck::NarrowCond(Node *cond, bool sense) {
         if (!id->vdef) return;
         auto t = id->vdef->type;
         if (t && t->kind == TY_REF && t->ref->optional && sense && !id->vdef->narrowed)
-            id->vdef->narrowed = NarrowedRef(t, cond->line);
+            Writing(id->vdef)->narrowed = NarrowedRef(t, cond->line);
         return;
     }
     if (auto u = Is<Unary>(cond)) {
@@ -927,7 +931,7 @@ inline void TypeCheck::NarrowCond(Node *cond, bool sense) {
     if (auto b = Is<Binary>(cond)) {
         if ((b->op == T_ANDAND && sense) || (b->op == T_OROR && !sense)) {
             NarrowCond(b->left, sense);
-            for (auto v : b->rightkills) v->narrowed = nullptr;
+            for (auto v : b->rightkills) KillNarrow(v);
             NarrowCond(b->right, sense);
             return;
         }
@@ -2248,7 +2252,10 @@ inline void TypeCheck::CheckVarDecl(VarDecl *vd, bool global) {
                                   "elements (§5.4)"));
             // `= []` leaves the element to what first goes into the pool
             // (§4.2), which CompletePending judges.
-            if (IsPendingArray(t)) pendingpools[t] = d;
+            if (IsPendingArray(t)) {
+                WritingPending(t);
+                pendingpools[t] = d;
+            }
         }
         if (!global) {
             CheckCycleInit(d, fi, calls);
@@ -2612,7 +2619,7 @@ inline void TypeCheck::CheckAssign(Assign *a) {
             if (!lv.var->refrootknown || lv.var->ref.Unknown()) BindRefProvenance(lv.var, v);
             else CheckRefRebindRoot(a, lv.var, v);
         }
-        lv.var->assigned = lv.var->maybeassigned = true;
+        Writing(lv.var)->assigned = lv.var->maybeassigned = true;
         KillNarrow(lv.var);
     }
 }
@@ -2661,7 +2668,7 @@ inline void TypeCheck::CheckRebind(Assign *a, LVal &lv) {
         NoLetReassign(a, lv.var, "rebind", "bound");
         if (!lv.var->refrootknown || lv.var->ref.Unknown()) BindRefProvenance(lv.var, v);
         else if (!v.isnull) CheckRefRebindRoot(a, lv.var, v);
-        lv.var->assigned = lv.var->maybeassigned = true;
+        Writing(lv.var)->assigned = lv.var->maybeassigned = true;
         // Rebinding an optional settles its nullness — narrowed only when
         // the new value is provably non-null (a plain reference).
         if (target->ref->optional) {
@@ -2760,6 +2767,7 @@ inline bool TypeCheck::RebindSliceVar(Node *at, VarDef *sv, const Val &v, const 
 // the binding changed.
 inline bool TypeCheck::CheckRefRebindRoot(Node *at, VarDef *vd, const Val &rv,
                                           const string &via) {
+    Writing(vd);
     auto changed = false;
     if (rv.byteview && !vd->ref.byteview) {
         vd->ref.byteview = true;
