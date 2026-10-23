@@ -170,7 +170,10 @@ inline bool TypeCheck::ConstBool(Node *n, set<VarDecl *> &visiting, ConstUse *us
             default: break;
         }
     }
-    Error(n, "const if requires a bool constant expression (literals, global constants, build definitions, !, &&, || and comparisons)");
+    // Build-definition literals have no source location. Diagnose their
+    // condition use (also through aliases) without changing the shared value.
+    auto at = !n->line.line && use && use->at ? use->at : n;
+    Error(at, "const if requires a bool constant expression (literals, global constants, build definitions, !, &&, || and comparisons)");
 }
 
 inline bool TypeCheck::ConstIfCondition(Node *condition) {
