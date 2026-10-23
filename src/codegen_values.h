@@ -47,6 +47,7 @@ inline CodeGen::Loc CodeGen::BytesLoc(const string &ptr, TypeExpr *t, const Loc 
     l.t = t;
     l.stk = from.stk;
     l.lenlv = from.lenlv;
+    l.lenhdr = from.lenhdr.empty() ? from.hdr : from.lenhdr;
     l.fl = from.fl;
     l.flstk = from.flstk;
     l.viaref = from.viaref || t->kind == TY_REF;
