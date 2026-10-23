@@ -16,7 +16,15 @@ inline void CodeGen::EmitUnsafePtrType() {
         "#endif\n"
         "typedef char gs_unsafe_pointer_width_check[(sizeof(void *) == 8 && "
         "sizeof(uintptr_t) == 8) ? 1 : -1];\n"
-        "typedef void *gs_unsafe_ptr;\n\n";
+        "/* UnsafePtr packed storage: the scalar retains C void* ABI. */\n"
+        "#if defined(__TINYC__)\n"
+        "#error \"UnsafePtr packed storage requires GCC or Clang; TinyCC unsupported\"\n"
+        "#elif defined(__GNUC__) || defined(__clang__)\n"
+        "typedef void *gs_unsafe_ptr __attribute__((aligned(1)));\n"
+        "typedef char gs_unsafe_pointer_alignment_check[(__alignof__(gs_unsafe_ptr) == 1) ? 1 : -1];\n"
+        "#else\n"
+        "#error \"UnsafePtr packed storage requires GCC or Clang aligned typedef support\"\n"
+        "#endif\n\n";
 }
 
 inline vector<string> CodeGen::EmitUnsafeBuiltin(Call *c) {
