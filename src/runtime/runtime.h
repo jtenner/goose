@@ -878,6 +878,9 @@ GS_API void gs_free_msg(uint8_t *msg);
    metadata slabs retain tombstones so stale values never dereference freed
    metadata. Only live allocation leases authorize worker atomic access. */
 typedef struct { uint64_t slot, generation; } gs_shared_cap;
+typedef struct { uint64_t slot, generation, index; } gs_shared_atomic_cap;
+GS_API gs_shared_cap gs_shared_atomic_region(gs_shared_cap owner, uint64_t offset,
+    uint64_t count, int width, uint64_t initial, const char *file, int line);
 #define GS_SHARED_SLAB_SIZE 256
 #define GS_SHARED_SLABS 4096
 #define GS_SHARED_MAX (GS_SHARED_SLAB_SIZE * GS_SHARED_SLABS)
