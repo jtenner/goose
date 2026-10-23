@@ -121,10 +121,20 @@ def main():
         for workers in (0, 8):
             jobs, _ = parse(execute(module([deep, too_deep]), workers).stdout)
             assert jobs == [(0, 2, 1, deep_native), (1, 3, 1, "")]
-        # Repeated pool startup/shutdown, including more workers than work.
-        for _ in range(12):
-            jobs, summary = parse(execute(module([valid[0][0]]), 8).stdout)
-            assert jobs == [(0, 2, 1, valid[0][1])] and summary == (1, 1, 0)
+        # Reuse a parent process/module across 12 pool lifecycles; extra workers.
+        repeated = execute(module([valid[0][0]]), 8, "repeat").stdout
+        block, rounds = [], 0
+        for line in repeated.splitlines():
+            block.append(line)
+            if line.startswith("summary "):
+                jobs, summary = parse("\n".join(block))
+                assert jobs == [(0, 2, 1, valid[0][1])] and summary == (1, 1, 0)
+                block = []
+                rounds += 1
+        assert rounds == 12 and not block
+        for data in (b"\0asm\1\0\0\0", module([])):
+            jobs, summary = parse(execute(data, 8).stdout)
+            assert jobs == [] and summary == (0, 0, 0)
         # Random malformed/unsupported bodies are framed in real Wasm sections.
         bad = [b"\0\x6a\x0b", b"\0\x41\x80", b"\0\x42\0\x0b", b"\0\x0b",
                b"\0\x41\xff\xff\xff\xff\x0f\x0b", b"\0\x41\0\x0b\0",
