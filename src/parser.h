@@ -575,12 +575,25 @@ struct Parser {
 
     // `kept`, where given, is moved past each whole field (ParseMembers).
     void ParseFieldList(vector<Field> &fields, const char *context,
-                        Ast::DeclMark *kept = nullptr) {
+                        Ast::DeclMark *kept = nullptr, bool conditional = false) {
         while (lex.tok != T_RCURLY) {
             Field f;
             f.line = CurLine();
             f.doc = lex.doc;
-            if (IsNext(T_PAD)) {
+            if (lex.tok == T_CONST && lex.PeekTok() == T_IF) {
+                lex.Next(); lex.Next();
+                f.condition = ParseScrutinee();
+                auto branch = [&](vector<Field> &out) {
+                    auto first = ast.alltypes.size(), firstfn = ast.functions.size();
+                    Expect(T_LCURLY, "conditional fields");
+                    ParseFieldList(out, "conditional fields", nullptr, true);
+                    Expect(T_RCURLY, "conditional fields");
+                    for (auto i = first; i < ast.alltypes.size(); i++) ast.alltypes[i]->conditional = true;
+                    for (auto i = firstfn; i < ast.functions.size(); i++) ast.functions[i]->conditional = true;
+                };
+                branch(f.thenfields);
+                if (IsNext(T_ELSE)) branch(f.elsefields);
+            } else if (IsNext(T_PAD)) {
                 f.ispad = true;
                 if (lex.tok == T_INTLIT) {
                     f.padsize = lex.ival;
@@ -593,7 +606,7 @@ struct Parser {
                 f.line = CurLine();
                 f.name = ExpectIdent(context);
                 for (auto &prev : fields)
-                    if (!prev.ispad && prev.name == f.name)
+                    if (!conditional && !prev.condition && !prev.ispad && prev.name == f.name)
                         Error(cat("duplicate field name: ", f.name));
                 Expect(T_COLON, context);
                 f.type = ParseType();
@@ -1194,6 +1207,12 @@ struct Parser {
     Node *ParseExpr() {
         auto line = CurLine();
         switch (lex.tok) {
+            case T_CONST: {
+                if (lex.PeekTok() != T_IF) Error("expected if after const in expression");
+                auto e = ParseConstIf();
+                if (stmt_level) stmt_ended = true;
+                return e;
+            }
             case T_IF: {
                 auto e = ParseIf();
                 if (stmt_level) stmt_ended = true;
@@ -1276,15 +1295,45 @@ struct Parser {
         return ParseExpr();
     }
 
-    Node *ParseIf() {
+    // Syntax is always parsed, including types and nested signatures. Their
+    // semantic work waits until specialization chooses this arm.
+    Block *ParseConditionalBlock(const char *context) {
+        auto first = ast.alltypes.size(), firstfn = ast.functions.size();
+        auto b = ParseBlockExpr(context);
+        for (auto i = first; i < ast.alltypes.size(); i++) ast.alltypes[i]->conditional = true;
+        for (auto i = firstfn; i < ast.functions.size(); i++) ast.functions[i]->conditional = true;
+        return b;
+    }
+
+    Node *ParseConstIf() {
+        auto line = CurLine();
+        Expect(T_CONST, "const if");
+        Expect(T_IF, "const if");
+        auto cond = ParseScrutinee();
+        auto thenb = ParseConditionalBlock("const if body");
+        Node *elseb = nullptr;
+        if (IsNext(T_ELSE)) {
+            if (lex.tok == T_IF) elseb = ParseIf(true);
+            else if (lex.tok == T_CONST) elseb = ParseConstIf();
+            else elseb = ParseConditionalBlock("const if else body");
+        }
+        auto x = Finish(New<IfExpr>(line, cond, thenb, elseb));
+        x->isconst = true;
+        return x;
+    }
+
+    Node *ParseIf(bool compiletime = false) {
         auto line = CurLine();
         lex.Next();
         auto cond = ParseScrutinee();
-        auto thenb = ParseBlockExpr("if body");
+        auto thenb = compiletime ? ParseConditionalBlock("const if body") : ParseBlockExpr("if body");
         Node *elseb = nullptr;
         if (IsNext(T_ELSE))
-            elseb = lex.tok == T_IF ? ParseIf() : ParseBlockExpr("else body");
-        return Finish(New<IfExpr>(line, cond, thenb, elseb));
+            elseb = lex.tok == T_IF ? ParseIf(compiletime)
+                    : compiletime ? ParseConditionalBlock("const if else body") : ParseBlockExpr("else body");
+        auto x = Finish(New<IfExpr>(line, cond, thenb, elseb));
+        x->isconst = compiletime;
+        return x;
     }
 
     Node *ParseFor() {
@@ -1803,6 +1852,24 @@ struct Parser {
         return Finish(cf);
     }
 
+    ConstInitIf *ParseConstInitIf() {
+        auto line = CurLine();
+        Expect(T_CONST, "const if initializers");
+        Expect(T_IF, "const if initializers");
+        auto condition = ParseScrutinee();
+        auto ci = New<ConstInitIf>(line, condition);
+        auto branch = [&](int index) {
+            auto first = ast.alltypes.size(), firstfn = ast.functions.size();
+            bool defaults = false;
+            ParseInitList(ci->branches[index], defaults, true);
+            for (auto i = first; i < ast.alltypes.size(); i++) ast.alltypes[i]->conditional = true;
+            for (auto i = firstfn; i < ast.functions.size(); i++) ast.functions[i]->conditional = true;
+        };
+        branch(0);
+        if (IsNext(T_ELSE)) branch(1);
+        return Finish(ci);
+    }
+
     void ParseInitList(vector<FieldInit> &inits, bool &defaultall, bool fragment = false) {
         if (lex.tok == T_LCURLY) Role(R_LIST);
         Expect(T_LCURLY, "constructor initializers");
@@ -1810,13 +1877,13 @@ struct Parser {
         while (lex.tok != T_RCURLY) {
             // A trailing `..` fills in every field not given (§4.2).
             if (IsNext(T_DOTDOT)) {
-                if (fragment) Error("trailing .. belongs to the whole constructor, not a const for fragment");
+                if (fragment) Error("trailing .. belongs to the whole constructor, not an initializer fragment");
                 defaultall = true;
                 break;
             }
             FieldInit fi;
-            if (lex.tok == T_CONST && lex.PeekTok() == T_FOR) {
-                fi.val = ParseConstFor(true);
+            if (lex.tok == T_CONST && (lex.PeekTok() == T_FOR || lex.PeekTok() == T_IF)) {
+                fi.val = lex.PeekTok() == T_FOR ? (Node *)ParseConstFor(true) : ParseConstInitIf();
                 inits.push_back(fi);
                 if (!IsNext(T_COMMA)) break;
                 continue;
@@ -1842,7 +1909,7 @@ struct Parser {
         auto named = 0;
         for (auto &fi : sl->inits) {
             // Empty expansions may disappear; mixed-form checks follow flattening.
-            if (Is<ConstFor>(fi.val)) return sl;
+            if (Is<ConstFor>(fi.val) || Is<ConstInitIf>(fi.val)) return sl;
             named += !fi.name.empty();
         }
         if (named && named != (int)sl->inits.size())
@@ -1957,6 +2024,7 @@ struct Parser {
                     b->stmts.push_back(ParseConstFor(false));
                     return true;
                 }
+                if (lex.tok == T_CONST && lex.PeekTok() == T_IF) break;
                 auto vd = ParseVarDecl(false);
                 Expect(T_SEMI, "variable declaration");
                 b->stmts.push_back(vd);

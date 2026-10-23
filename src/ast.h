@@ -325,6 +325,8 @@ struct TypeExpr {
     // sizes name what they name where the alias is declared, at top level,
     // whatever scope the use is in (TypeCheck::ConstNamesIn).
     bool aliasuse = false;
+    // A type in an unselected const-if arm: resolve only when activated.
+    bool conditional = false;
     // On a TY_INT: an index or bound type (TypeIndex). Outside the union,
     // since intstorage is the member a TY_INT uses.
     TypeIndex *ix = nullptr;
@@ -411,6 +413,10 @@ struct Param {
 };
 
 struct Field {
+    // Parse-level field fragment; ordinary fields have no condition. Flattened
+    // before declaration validation, instantiation, layout or reflection.
+    Node *condition = nullptr;
+    vector<Field> thenfields, elsefields;
     string_view name;
     Line line;                  // Of the name, or of `pad`.
     string_view doc;            // The comment lines above it (Lexer::doc).
@@ -839,6 +845,7 @@ enum NodeKind : uint8_t {
     NK_LoopExpr,
     NK_ForLoop,
     NK_ConstFor,
+    NK_ConstInitIf,
     NK_Return,
     NK_Break,
     NK_Continue,
@@ -1250,6 +1257,8 @@ NODE(Block)
 NODE_END
 
 NODE(IfExpr)
+    bool isconst = false;
+    bool selected = false;       // Specialization clone has discarded the other arm.
     BCE_WALK
     Node *cond;
     Block *thenb;
@@ -1367,6 +1376,12 @@ NODE(ConstFor)
     bool armfragments = false;      // Its fragments are match arms (in a match's arm list).
     vector<MatchArm> arms;
     ConstFor(Line l) : Node(l, NKind) {}
+NODE_END
+
+NODE(ConstInitIf)
+    Node *cond;
+    vector<FieldInit> branches[2];   // 0 true, 1 false; source order preserved.
+    ConstInitIf(Line l, Node *condition) : Node(l, NKind), cond(condition) {}
 NODE_END
 
 NODE(Return)
@@ -1490,6 +1505,7 @@ struct SFunction {
     // of its cached tops before the call (CodeGen::CollectSpecs, SyncReach).
     bool readsalltops = false;
     bool isnested = false;
+    bool conditional = false;   // Signature is inside a deferred const-if arm.
     SFunction *outer = nullptr;     // The function a nested one is declared in.
     Block *body = nullptr;
     // The body lost a statement to a parse error, or holds an incomplete
@@ -1522,6 +1538,7 @@ struct SStruct {
     string_view doc;            // As SFunction::doc.
     vector<GenericParam> generics;
     vector<Field> fields;
+    vector<Field> declfields;   // Original conditional declaration for tooling/dumps.
     vector<StructInst *> insts;  // Instantiations (typecheck), owned by Ast.
     // The declaration lost a field to a parse error (Parser::ParseMembers):
     // its fields are those parsed before the error, and a name it lacks is
@@ -1540,6 +1557,7 @@ struct SVariant {
     Line line;                  // Of the name.
     string_view doc;            // As SFunction::doc.
     vector<Field> fields;
+    vector<Field> declfields;
     bool has_payload = false;   // Distinguishes "Point" from "Point {}".
 };
 

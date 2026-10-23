@@ -1769,7 +1769,7 @@ int Main(int argc, char **argv) {
         }
         includes = includenames;
         if (verb == "build") {
-            builddir = ProgramBuildDir(file);
+            builddir = ProgramBuildDir(file, builddefines);
             std::error_code ec;
             filesystem::create_directories(filesystem::path(builddir), ec);
             if (ec) {
@@ -1788,6 +1788,12 @@ int Main(int argc, char **argv) {
         nativepkgs.clear();
         found.clear();
         auto attempt = [&]() -> int {
+            // Hold through writing C and linking. Even a directory-key collision
+            // cannot let another configuration replace this build's input.
+            optional<FileLock> programlock;
+            if (verb == "build")
+                programlock.emplace(cat(builddir, "/program.lock"),
+                                    "waiting for another goose building this program");
             // The compile has a thread of its own. The program a JIT run
             // starts runs back on this one, the main thread, which a window
             // on macOS has to be made on, and whose stack the link reserves
