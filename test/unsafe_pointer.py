@@ -2,8 +2,10 @@
 """Standalone unsafe pointer regression matrix, including full alignment UBSan.
 
 Run after building Goose: python3 test/unsafe_pointer.py --exe build/goose.
-Uses real libc malloc/free declarations in the Goose fixture, not C adapters.
+The primary scalar fixture calls real libc malloc/free directly; the alias
+suite uses a test-only C adapter to expose live ordinary scalar objects.
 Artifacts are retained under build/gen/unsafe-pointer for review.
+Also runs the ordinary-scalar alias/effect regression matrix.
 """
 import argparse
 import os
@@ -11,6 +13,7 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -106,7 +109,9 @@ def main():
                  "-fno-sanitize-recover=all", "-fno-omit-frame-pointer", c,
                  "-o", binary, "-lm", "-pthread", "-ldl"])
             run([binary], error=error, output=expected)
-    print(f"unsafe pointer: {checks} checks passed (GCC, Clang, debug/release, ASan/UBSan)")
+    print(f"unsafe pointer: {checks} checks passed (GCC, Clang, debug/release, ASan/UBSan)", flush=True)
+    subprocess.run([sys.executable, ROOT / "test/unsafe_pointer_alias.py", "--exe", goose],
+                   cwd=ROOT, env=env, check=True)
 
 
 if __name__ == "__main__":

@@ -51,7 +51,7 @@ def main():
             c = out / f"{source.stem}-O{level}.c"
             run([goose, f"-O{level}", "--bce-test", "--standalone", "--include",
                  fixtures / "adapter.h", "-o", c, source])
-            error = None if source.stem == "values" else "index out of bounds"
+            error = None if source.stem == "values" else "index 2 out of bounds (length 2)"
             output = "unsafe alias values ok" if source.stem == "values" else ""
             for name, compiler in compilers:
                 for native_level in (0, 2):
