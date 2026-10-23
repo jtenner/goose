@@ -261,8 +261,12 @@ fn main() {
     for job in jobs {
         let flag = shared_atomic_view_u32(statuses, job.index as u64);
         var status = atomic_load(flag, "Acquire"); // publication before result reads
-        if status == 1 { status = 4; } // contained abort left a RUNNING job
-        if status == 0 { status = 5; } // shutdown or last worker failed
+        if status == 1 { // contained abort left a RUNNING job
+            status = 4; atomic_store(flag, status, "Release");
+        }
+        if status == 0 { // shutdown or last worker failed
+            status = 5; atomic_store(flag, status, "Release");
+        }
         let visits = memory_read<u32>(results, job.output + 8, false);
         claimed += visits;
         let n = memory_read<u64>(results, job.output, false);
