@@ -47,6 +47,7 @@ inline CodeGen::Loc CodeGen::BytesLoc(const string &ptr, TypeExpr *t, const Loc 
     l.t = t;
     l.stk = from.stk;
     l.lenlv = from.lenlv;
+    l.lenhdr = from.lenhdr.empty() ? from.hdr : from.lenhdr;
     l.fl = from.fl;
     l.flstk = from.flstk;
     l.viaref = from.viaref || t->kind == TY_REF;
@@ -756,6 +757,7 @@ inline void CodeGen::EmitHoistedCheck(Index *ta, Index *ea, const string &c) {
 inline CodeGen::Loc CodeGen::GenLoc(Node *n) {
     if (auto it = fillvalues.find(n); it != fillvalues.end()) return it->second;
     if (auto id = Is<Ident>(n)) {
+        if (id->buildvalue) return GenLoc(id->buildvalue);
         assert(id->vdef);
         return VarLoc(id->vdef);
     }

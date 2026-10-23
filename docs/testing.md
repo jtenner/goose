@@ -160,6 +160,12 @@ the current C backend deliberately performs unaligned packed accesses. The C++
 compiler retains alignment checking. ASan observes C allocations, but does not
 know logical object boundaries inside Goose's custom virtual-memory arenas.
 
+The focused `builder_return_alignment` check enables alignment explicitly in
+both profiles on GCC/Clang-style toolchains, at Goose and native C O0/O2.
+Its byte-only payloads isolate hidden result-length channels from raw packed
+scalar accesses: a byte global before a builder forces an unaligned header
+member, which must receive the result through an aligned scalar temporary.
+
 Generated C is built as `goose -o` writes it, against the separate runtime
 (`docs/implementation.md` §7). `GooseRuntime` (`scripts/toolchain.py`) has
 the compiler under test write the runtime's C (`--emit-runtime`) once per
@@ -437,6 +443,12 @@ The sweep fails if the server exits, returns an error, takes over 2 s for a
 request, or stops responding. It prints the slowest files and requests.
 `--quick` checks a handful of files in a second or two. The baseline is in
 `docs/design/language_server.md` §12.
+
+`const_if_diagnostics.py`, called by `diagnostics_json.py`, checks exact file,
+line, column, range and source context for invalid build-definition conditions
+at O0/O2: functions, fields, constructors and nested conditions, aliases and
+imports, repeated uses of one definition, authored literals and valid typed
+controls. Its standalone entry point retains exact subprocess results.
 
 ## Fixture audit
 
