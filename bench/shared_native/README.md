@@ -26,7 +26,7 @@ reduces the plan to 144 processes. `--plan` reports counts for selected cases.
 
 All workloads run sequentially, with a process lock preventing another copy
 of this harness. That lock cannot stop unrelated compilers or experiments;
-the parent coordinates those. There are no committed timing results. Results
+the parent coordinates those. Recorded measurements and regressions are in [results/README.md](results/README.md). Results
 are performance measurements, never correctness evidence. Acceptance tests
 are in `test/parallel_wasm.py` and `test/jit_clobbers.py`.
 
