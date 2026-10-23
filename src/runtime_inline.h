@@ -962,6 +962,9 @@ GS_API void gs_free_msg(uint8_t *msg);
    metadata slabs retain tombstones so stale values never dereference freed
    metadata. Only live allocation leases authorize worker atomic access. */
 typedef struct { uint64_t slot, generation; } gs_shared_cap;
+typedef struct { uint64_t slot, generation, index; } gs_shared_atomic_cap;
+GS_API gs_shared_cap gs_shared_atomic_region(gs_shared_cap owner, uint64_t offset,
+    uint64_t count, int width, uint64_t initial, const char *file, int line);
 #define GS_SHARED_SLAB_SIZE 256
 #define GS_SHARED_SLABS 4096
 #define GS_SHARED_MAX (GS_SHARED_SLAB_SIZE * GS_SHARED_SLABS)
@@ -1132,11 +1135,11 @@ static int64_t gs_uleb_size(const uint8_t *p) {
 /* An inline array's length prefix is one byte unless the array holds 128
    elements or more, so the two macros below are what the compiler emits for
    it: a load, a test, and the byte. The continuation is a call the caller's
-   loop does not contain, and reaching it means there is a large array to
+)GSRT"
+R"GSRT(   loop does not contain, and reaching it means there is a large array to
    walk, against which the call costs nothing. Both read the pointer twice,
    which the emitting sites already assume (they form the element address
-)GSRT"
-R"GSRT(   from the same text). A varint *value*, by contrast, is whatever the
+   from the same text). A varint *value*, by contrast, is whatever the
    program stored, so scalar fields and relative offsets keep the loop above
    inline, where the compilers peel the first byte themselves. */
 
@@ -3740,6 +3743,43 @@ GS_API void gs_shared_worker_cleanup(void *leases, int64_t actor) {
     gs_mutex_unlock(&gs_shared_mutex);
 }
 #endif /* GS_NEED_THREADS */
+
+#if GS_NEED_THREADS
+GS_API gs_shared_cap gs_shared_atomic_region(gs_shared_cap owner, uint64_t offset,
+    uint64_t count, int width, uint64_t initial, const char *file, int line) {
+    gs_mutex_lock(&gs_shared_mutex);
+    gs_shared_record *r = gs_shared_get(owner, file, line);
+    if (r->kind != GS_SH_OWNER || r->actor != gs_current_thread_id)
+        gs_shared_bad("shared owner belongs to another thread", file, line);
+    if (r->readonly) gs_shared_bad("atomic storage in readonly shared memory", file, line);
+    if ((width != 4 && width != 8) || !count || count > UINT64_MAX / (uint64_t)width)
+        gs_shared_bad("invalid shared atomic region size", file, line);
+    uint64_t size = count * (uint64_t)width;
+    gs_shared_bounds(offset, size, r->size, file, line);
+    if (((uintptr_t)r->data + offset) % (uint64_t)width)
+        gs_shared_bad("shared atomic alignment", file, line);
+    for (uint64_t i = 0; i < gs_shared_highwater; i++) {
+        gs_shared_record *v = gs_shared_at(i);
+        if (v->kind >= GS_SH_ACCESS && v->allocation == owner.slot &&
+            gs_shared_overlap(v->offset, v->size, offset, size))
+            gs_shared_bad("conflicting shared atomic range", file, line);
+    }
+    uint64_t i = gs_shared_slot();
+    if (i == UINT64_MAX) gs_shared_bad("out of memory registering shared atomic range", file, line);
+    gs_shared_record *a = gs_shared_at(i);
+    a->allocation = owner.slot; a->offset = offset; a->size = size; a->data = r->data + offset;
+    /* Registration excludes every ordinary borrow/atomic range first. These
+       initialization writes happen before publication and worker handoff. */
+    if (width == 4) {
+        uint32_t v = (uint32_t)initial;
+        for (uint64_t n = 0; n < count; n++) memcpy(a->data + n * 4, &v, 4);
+    } else {
+        for (uint64_t n = 0; n < count; n++) memcpy(a->data + n * 8, &initial, 8);
+    }
+    gs_shared_cap cap = gs_shared_finish(i, width == 4 ? GS_SH_ATOMIC32 : GS_SH_ATOMIC64);
+    gs_mutex_unlock(&gs_shared_mutex); return cap;
+}
+#endif
 )GSRT"
     ) },
     { "runtime_ext.h", string_view(

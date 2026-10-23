@@ -69,3 +69,46 @@ Capability records occupy stable reusable metadata slabs. Mapping storage is
 released on close; the slabs retain generation tombstones and grow only with
 peak simultaneous descriptor usage. Routine scalar accesses allocate no heap
 memory. Borrow creation, view creation and worker handoff are setup operations.
+
+## Atomic regions and indexed job tables
+
+`shared_atomic_u32(owner, offset, initial)` and `shared_atomic_u64` register
+one aligned atomic slot. `shared_atomic_array_u32(owner, offset, count, initial)`
+and its u64 counterpart register and initialize a whole typed region, returning
+a `SharedView` for that region. Workers obtain an existing slot with
+`shared_atomic_view_u32(region, index)` or `shared_atomic_view_u64`. Derivation
+checks width, generation and index inline; it allocates no metadata or heap.
+This permits one worker argument to carry thousands of completion slots.
+
+Registration rejects read-only storage, out-of-bounds or unaligned ranges,
+any overlapping ordinary borrow, and any previously registered atomic bytes.
+Atomic ranges remain permanently unavailable to ordinary borrows until close,
+even when the atomic capability is no longer used. U32 and u64 regions cannot
+partially overlap. Native atomics use host integer representation; endian
+scalar conversion does not apply to an atomic range.
+
+`atomic_load(a, order)`, `atomic_store(a, value, order)`,
+`atomic_exchange(a, value, order)`, and
+`atomic_fetch_add/sub/and/or/xor(a, value, order)` use exactly the handle's
+unsigned width. Fetch operations return the old value and arithmetic wraps at
+that width. `atomic_compare_exchange(a, expected, desired, success, failure)`
+returns `(observed, exchanged)`: on failure, observed is the actual old value.
+CAS is strong, with no spurious failures.
+
+Orders are compile-time string literals or named global string constants:
+`"Relaxed"`, `"Acquire"`, `"Release"`, `"AcqRel"`, `"SeqCst"`.
+Loads reject Release/AcqRel, stores reject Acquire/AcqRel, and CAS failure orders
+must be load orders no stronger than success. Every invalid combination is a
+compiler error. `atomic_is_lock_free(a)` explicitly reports the supported width.
+The current atomic backend requires an always-lock-free native GCC/Clang width;
+TinyCC/JIT and MSVC produce an explicit C compilation capability error. There
+is no mutex fallback disguised as lock-free behavior.
+
+Routine atomic operations consist of inline generation/kind/alignment/bounds
+checks followed directly by a GCC/Clang atomic builtin with a constant order.
+They take no central mutex, call no ordinary application helper and allocate
+nothing. The owner thread alone may close, and every worker's allocation lease
+prevents close/unmap until worker cleanup. Descriptor generations are published
+atomically and stable slabs keep stale handles safe to reject. This lifetime
+protocol pins storage through the actual atomic instruction, rather than
+merely validating a token before an unprotected access.
