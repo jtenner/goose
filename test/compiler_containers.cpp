@@ -165,6 +165,18 @@ static void FlatMap() {
     for (int i = 0; i < 100; i++)
         for (int j = 0; j < 100; j++) assert(*pm.find({ key(i), key(j) }) == ((i + j) % 3 == 0));
     assert(!pm.find({ key(100), key(0) }));
+    // A query-cache transaction can discard every entry after both growth
+    // and erasure, then rebuild from fresh type identities.
+    m.erase(key(5000));
+    m.clear();
+    assert(m.empty() && m.size() == 0 && !m.find(key(5000)));
+    for (int i = 0; i < 5001; i++) assert(!m.find(key(i)));
+    for (int i = 0; i < 1000; i++) m[key(i)] = i + 3;
+    for (int i = 0; i < 1000; i++) assert(*m.find(key(i)) == i + 3);
+    pm.clear();
+    assert(pm.empty() && !pm.find({ key(0), key(0) }));
+    pm[{ key(0), key(0) }] = true;
+    assert(*pm.find({ key(0), key(0) }));
 
     // An erased key's value cell goes to a key added later, reset: keys
     // erased and added in turn keep to one cell, and at random take no more

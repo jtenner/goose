@@ -1,5 +1,9 @@
 # The Goose Language Reference
 
+The fork adds [native compiler definitions](compiler-definitions.md):
+`goose build --define DEBUG=true main.goose` supplies the immutable Goose
+value `build::DEBUG`. `check`, `run`, and `lsp` accept the same definitions.
+
 <details>
 <summary>Table of contents</summary>
 
@@ -2635,6 +2639,43 @@ fn main() {
 ```
 
 (`count` wrapped to 0 after 256 increments, as a `u8` does.) Spec §6.5.
+
+### `const if`: select at specialization time
+
+`const if condition { ... } else { ... }` parses both branches and checks and
+emits only the selected one, even at `-O0`. Conditions are bool constants:
+literals, immutable global constants, native `build::NAME` definitions, `!`,
+`&&`, `||`, bool/string equality, and comparisons of supported integer constant expressions. Locals,
+parameters and calls cannot be conditions. Both operands must be valid even
+when `&&` or `||` already determines the result. Each selected body has an
+ordinary lexical scope; it also works in generic functions and `const for`
+expansions. Syntax errors in excluded branches still fail compilation.
+
+```goose
+fn main() {
+    const if 2 * 3 == 6 { print("selected"); }
+    else { unavailable(); }
+}
+```
+
+```text
+selected
+```
+
+Constructor initializer lists also accept nested `const if` fragments. Their
+selected named or positional entries undergo the normal checks against the
+effective fields, including defaults, missing fields and duplicate names.
+A trailing `..` belongs to the whole constructor.
+
+Struct field lists can also contain `const if` blocks. Selected fields,
+qualifiers, defaults and explicit pads become the effective declaration before
+checking or layout. Excluded fields occupy zero bytes and are absent from
+`fields<T>` reflection. Conditions may depend on configuration in a generic
+struct, but cannot depend on its type parameters. Layout stays packed, with no
+automatic padding; an empty effective struct remains one byte. Configurations
+that select different fields are ABI incompatible: use matching definitions
+for all consumers and validate a format version or layout fingerprint when
+exchanging serialized data. See [native const if](design/const_if.md).
 
 ### `const for`: expansion at specialization time
 

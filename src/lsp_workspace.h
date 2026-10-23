@@ -48,6 +48,7 @@ struct Workspace {
     Transport &rpc;
     string exe;
     vector<string> stdlibdirs;
+    vector<string> builddefines;
     map<string, Document> open;     // By PathKey.
     vector<unique_ptr<Root>> roots;
     // The commands the client runs itself, which code lenses may name: the
@@ -276,6 +277,7 @@ struct Workspace {
                 // The parser and the checker go on past the errors they
                 // recover from, which the sink collects; the passes after
                 // the check want a program without any.
+                AddBuildDefinitions(ast, builddefines);
                 ParseProgram(ast, r.path, stdlibdirs, DirOf(exe), sources);
                 ResolveTypeNames(ast);
                 an->parsed = true;
