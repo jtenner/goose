@@ -1,0 +1,181 @@
+{
+  "platform": "Linux-7.2.8-9-omarchy-x86_64-with-glibc2.41",
+  "affinity": [
+    0
+  ],
+  "globals": 500,
+  "unused_functions": 1000,
+  "samples": 7,
+  "warmups": 2,
+  "measure": "process wall seconds for check; no C generation",
+  "baseline": {
+    "path": "/tmp/goose-upstream-baseline",
+    "sha256": "f56ac3c31d3bbc1c200efc65d908063b9de9d4ae4127032c22f5432e9e8a5280",
+    "version": "goose runtime a5dbd11b6309"
+  },
+  "extended": {
+    "path": "/home/dev/Projects/goose/build/goose",
+    "sha256": "5c9a0df6f5b1090acd02113aa1137c73b83d23aa2212398110a4c890b6cac60c",
+    "version": "goose runtime 3a21ace949ed"
+  },
+  "results": [
+    {
+      "implementation": "baseline",
+      "goose_optimization": "-O0",
+      "median_seconds": 0.033292205014731735,
+      "seconds_mad": 0.0010845070064533502,
+      "seconds_min": 0.032207698008278385,
+      "seconds_max": 0.03650521099916659,
+      "median_peak_rss_kib": 13192,
+      "samples": [
+        {
+          "seconds": 0.03650521099916659,
+          "process_peak_rss_kib": 13024
+        },
+        {
+          "seconds": 0.032207698008278385,
+          "process_peak_rss_kib": 13216
+        },
+        {
+          "seconds": 0.03296972898533568,
+          "process_peak_rss_kib": 13224
+        },
+        {
+          "seconds": 0.03528856497723609,
+          "process_peak_rss_kib": 13244
+        },
+        {
+          "seconds": 0.03515976300695911,
+          "process_peak_rss_kib": 12948
+        },
+        {
+          "seconds": 0.03316694000386633,
+          "process_peak_rss_kib": 13192
+        },
+        {
+          "seconds": 0.033292205014731735,
+          "process_peak_rss_kib": 13036
+        }
+      ]
+    },
+    {
+      "implementation": "extended",
+      "goose_optimization": "-O0",
+      "median_seconds": 0.3491562780109234,
+      "seconds_mad": 0.0014458259975071996,
+      "seconds_min": 0.3477104520134162,
+      "seconds_max": 0.3555818070017267,
+      "median_peak_rss_kib": 14916,
+      "samples": [
+        {
+          "seconds": 0.3555818070017267,
+          "process_peak_rss_kib": 14620
+        },
+        {
+          "seconds": 0.3477104520134162,
+          "process_peak_rss_kib": 15000
+        },
+        {
+          "seconds": 0.35297479102155194,
+          "process_peak_rss_kib": 14908
+        },
+        {
+          "seconds": 0.3532131389947608,
+          "process_peak_rss_kib": 14916
+        },
+        {
+          "seconds": 0.3485815080057364,
+          "process_peak_rss_kib": 15044
+        },
+        {
+          "seconds": 0.3491562780109234,
+          "process_peak_rss_kib": 15196
+        },
+        {
+          "seconds": 0.34819651499856263,
+          "process_peak_rss_kib": 14776
+        }
+      ]
+    },
+    {
+      "implementation": "baseline",
+      "goose_optimization": "-O2",
+      "median_seconds": 0.03287069400539622,
+      "seconds_mad": 0.0006077820144128054,
+      "seconds_min": 0.03213433100609109,
+      "seconds_max": 0.03664787899469957,
+      "median_peak_rss_kib": 13116,
+      "samples": [
+        {
+          "seconds": 0.03226291199098341,
+          "process_peak_rss_kib": 13096
+        },
+        {
+          "seconds": 0.03234710998367518,
+          "process_peak_rss_kib": 13132
+        },
+        {
+          "seconds": 0.036249409982701764,
+          "process_peak_rss_kib": 13100
+        },
+        {
+          "seconds": 0.033157341997139156,
+          "process_peak_rss_kib": 13176
+        },
+        {
+          "seconds": 0.03664787899469957,
+          "process_peak_rss_kib": 13116
+        },
+        {
+          "seconds": 0.03287069400539622,
+          "process_peak_rss_kib": 13060
+        },
+        {
+          "seconds": 0.03213433100609109,
+          "process_peak_rss_kib": 13380
+        }
+      ]
+    },
+    {
+      "implementation": "extended",
+      "goose_optimization": "-O2",
+      "median_seconds": 0.3491211640066467,
+      "seconds_mad": 0.0012915469997096807,
+      "seconds_min": 0.3475469450058881,
+      "seconds_max": 0.35740819000056945,
+      "median_peak_rss_kib": 14960,
+      "samples": [
+        {
+          "seconds": 0.3475469450058881,
+          "process_peak_rss_kib": 14872
+        },
+        {
+          "seconds": 0.3476004459953401,
+          "process_peak_rss_kib": 14972
+        },
+        {
+          "seconds": 0.34782961700693704,
+          "process_peak_rss_kib": 15040
+        },
+        {
+          "seconds": 0.35740819000056945,
+          "process_peak_rss_kib": 14960
+        },
+        {
+          "seconds": 0.34952827799133956,
+          "process_peak_rss_kib": 15000
+        },
+        {
+          "seconds": 0.3491211640066467,
+          "process_peak_rss_kib": 14888
+        },
+        {
+          "seconds": 0.3499249730084557,
+          "process_peak_rss_kib": 14932
+        }
+      ]
+    }
+  ],
+  "source_generator": "let g{i}:i64={i}; for i in range(500), then fn check_fn_{i}()->i64{var x:i64=g{i%500};x+=1;return x;} for i in range(1000), then fn main(){}; each declaration on its own line",
+  "source_sha256": "a5651ebb828c481d1380c54201dcc08452aa92f8da6a727e05e705bf3ac5934b"
+}
