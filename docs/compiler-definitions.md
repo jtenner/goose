@@ -27,6 +27,11 @@ specialization. Every multi-test compilation and language-server analysis gets
 a fresh symbol table. The compiler has no persisted type-layout or specialization
 cache. Generated programs are regenerated on every build; the native runtime
 and package caches contain C services, not Goose specializations.
+Native intermediates have a configuration-specific subdirectory; definition
+order does not change its identity. Builds sharing one directory serialize
+the generated-C write and native link, preventing concurrent configurations
+from compiling each other's source. Output executable paths remain the
+caller's responsibility: use distinct `-o` paths for concurrent deliverables.
 
 Start an editor server with the same configuration, for example
 `goose lsp --define DEBUG=true --define WORKERS=8`. Restart it to change that
