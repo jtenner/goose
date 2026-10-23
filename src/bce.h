@@ -3184,13 +3184,17 @@ struct BCE {
     // Effect summaries for every live specialization, to a fixpoint: a
     // body's summary only grows as its callees' do, so a round that changes
     // nothing is the answer, and recursion converges the same way from
-    // empty. An extern fn (§7.10) has no body to walk: it may resize or
-    // write whatever it is handed by reference, and reaches nothing else.
+    // empty. An extern fn (§7.10) has no body or purity contract to inspect.
+    // Besides its current arguments, C can write through a raw pointer or a
+    // reference retained by an earlier call. Its effects are therefore opaque.
     void ComputeEffects() {
         for (auto sp : ast.fnspecs) {
             if (!sp->live) continue;
             auto &e = effects[sp];
             if (sp->body) continue;
+            if (sp->sf->isextern) {
+                e.opaque = e.intopaque = true;
+            }
             for (size_t j = 0; j < sp->argtypes.size(); j++)
                 if (sp->argtypes[j]->kind == TY_REF) {
                     e.params.insert((int)j);
@@ -3609,6 +3613,13 @@ inline bool Call::BceWalk(BCE &b) {
         auto arg0 = recv ? (args.empty() ? nullptr : args[0])
                          : (args.size() > 1 ? args[1] : nullptr);
         switch (builtin) {
+            case B_UNSAFE_STORE:
+                // UnsafePtr deliberately carries no Goose root identity. A
+                // valid raw store can alias an ordinary writable scalar or
+                // other address-exposed storage. Kill reachable facts here
+                // and record opaque effects for non-inlined callers too.
+                b.KillByCall();
+                break;
             case B_PUSH:
                 if (recvmoved) b.GrowShrinkKill(rn, 0);
                 else b.GrowShrinkKill(rn, 1, 1);
