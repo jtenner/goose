@@ -524,8 +524,10 @@ inline string CodeGen::CT(TypeExpr *t) {
         case TY_INT:  assert(t->intstorage != IS_VARINT); return IntCT(t->intstorage);
         case TY_FLT:  return t->fltstorage == FS_F32 ? "float" : "double";
         case TY_BOOL: return "uint8_t";
-        case TY_NATIVE: return t->nativekind == NK_UNSAFE_PTR ? 8
-            : t->nativekind == NK_ATOMIC_U32 || t->nativekind == NK_ATOMIC_U64 ? 24 : 16;
+        case TY_NATIVE:
+            if (t->nativekind == NK_UNSAFE_PTR) { EmitUnsafePtrType(); return "gs_unsafe_ptr"; }
+            return t->nativekind == NK_ATOMIC_U32 || t->nativekind == NK_ATOMIC_U64
+                ? "gs_shared_atomic_cap" : "gs_shared_cap";
         case TY_VOID: return "void";
         case TY_REF: {
             auto &r = *t->ref;
