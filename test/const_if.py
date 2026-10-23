@@ -221,6 +221,15 @@ with tempfile.TemporaryDirectory(prefix='goose-const-if-') as directory:
     recovery = invoke(['check', source], ok=False)
     assert 'unknown function: missing' in recovery.stderr and 'unknown function: other' in recovery.stderr, recovery.stderr
 
+    source.write_text('let LIVE = "live_global_sentinel"; '
+                      'fn startup() -> i64 { print("startup ", LIVE); 1 } '
+                      'let SIDE_EFFECT = startup(); fn main() { print("ok"); }')
+    for level in ('-O0', '-O2'):
+        execution = invoke(['run', level, source])
+        assert execution.stdout == 'startup live_global_sentinel\nok\n', execution.stdout
+        invoke([level, source, '-o', cfile])
+        assert 'live_global_sentinel' in cfile.read_text()
+
     if not CORE_ONLY:
         # Excluded names remain quiet in editor analysis; malformed excluded
         # syntax still reports, and a subsequent edit recovers selected fields.
