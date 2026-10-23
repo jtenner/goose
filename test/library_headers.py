@@ -112,9 +112,13 @@ int main(int argc, char **argv) {
     return 0;
 }
 '''
+    from library_header_variants import variant_cases
+    variant_sources, variant_bodies = variant_cases(base)
+    bodies.update(variant_bodies)
+    sources = sorted((ROOT / "test/library_headers/fixtures").glob("*.goose")) + variant_sources
     try:
         for level in (0, 2):
-            for source in sorted((ROOT / "test/library_headers/fixtures").glob("*.goose")):
+            for source in sources:
                 # UnsafePtr explicitly requires GCC/Clang typedef alignment.
                 if cc.style == "msvc" and source.stem.endswith("raw"):
                     continue
@@ -130,6 +134,9 @@ int main(int argc, char **argv) {
                     failures.append(f"{header}: private implementation types leaked")
                 if source.stem == "private_raw" and "gs_unsafe_ptr" in decls:
                     failures.append(f"{header}: private UnsafePtr leaked")
+                if source in variant_sources and source.stem != "variant_whole_enum":
+                    if any(n in decls for n in ("Hidden", "gs_unsafe_ptr", "UINTPTR_MAX")):
+                        failures.append(f"{header}: unrelated enum sibling/target guard leaked")
                 obj = base / f"{stem}.o"
                 compile_flags = (["/nologo", "/c", f"/Fo:{obj}"] if cc.style == "msvc" else
                                  ["-std=c11", f"-O{level}", "-c", "-o", obj])
@@ -160,12 +167,14 @@ int main(int argc, char **argv) {
             # crash. Cover all five kinds directly and inside public shapes.
             for kind in ("SharedOwner", "SharedView", "SharedAccess",
                          "SharedAtomicU32", "SharedAtomicU64"):
-                for shape in (kind, kind + "&", kind + "[:]", "Hidden", "Hidden&", "Hidden[1]"):
+                for shape in (kind, kind + "&", kind + "[:]", "Hidden", "Hidden&", "Hidden[1]",
+                              "HiddenChoice"):
                     for boundary in ("export", "extern"):
                         name = f"reject-{kind}-{len(results)}.goose"
                         source = base / name
                         body = " {}" if boundary == "export" else ";"
                         tc.write_text(source, f"struct Hidden {{ value: {kind} }}\n"
+                                      f"enum HiddenChoice {{ Public {{ value: u32 }}, Private {{ token: {kind} }} }}\n"
                                       f"{boundary} fn reject(value: {shape}){body}\nfn main() {{}}\n")
                         run([exe, f"-O{level}", "--check", source], expected=1,
                             diagnostic="cannot cross to C")
