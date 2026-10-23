@@ -69,6 +69,11 @@ inline int RecvKindOf(TypeExpr *t) {
 
 //        enum            name                min max  args  rets recv            grows          flags
 #define BUILTINS \
+    F(B_UNSAFE_PTR_FROM_HANDLE, "unsafe_ptr_from_handle", 1, 1, "", "", 0, "", 0) \
+    F(B_UNSAFE_HANDLE_FROM_PTR, "unsafe_handle_from_ptr", 1, 1, "", "", 0, "", 0) \
+    F(B_UNSAFE_PTR_ADD, "unsafe_ptr_add", 2, 2, "", "", 0, "", 0) \
+    F(B_UNSAFE_LOAD, "unsafe_load", 2, 2, "", "", 0, "", BF_TYARGS) \
+    F(B_UNSAFE_STORE, "unsafe_store", 3, 3, "", "", 0, "", BF_TYARGS) \
     F(B_SHARED_ALLOC, "shared_alloc", 1, 1, "", "", 0, "", 0) \
     F(B_SHARED_VIEW, "shared_view", 3, 3, "", "", 0, "", 0) \
     F(B_SHARED_CLOSE, "shared_close", 1, 1, "", "", 0, "", 0) \

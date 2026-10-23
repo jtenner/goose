@@ -62,6 +62,7 @@ add_executable(goose
     src/codegen_construct.h
     src/codegen_stmts.h
     src/codegen_calls.h
+    src/codegen_unsafe.h
     src/codegen_builtins.h
     src/codegen_render.h
     src/codegen_emit.h
