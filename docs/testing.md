@@ -533,3 +533,21 @@ cached-call path, which could otherwise mask a missing propagation step.
 CI uses four jobs to cover these configurations without testing every
 combination of platform, sanitizer, optimization level, and runtime mode.
 Benchmarks run separately from CI.
+
+## Native compiler examples and cross-feature configuration
+
+Linux native baseline runs also register the standalone Wasm compiler with
+64 jobs, the clobber matrix, the conditional/shared-layout matrix with
+alignment instrumentation enabled, native CLI configuration operands, and
+read-only benchmark plan/hash/statistics checks. These are independent of
+TinyCC availability. The other platforms/profiles and runs without a native
+GCC/Clang backend skip this group. The runner registration contract itself
+is checked on every platform without compiling programs.
+
+Run `python3 test/parallel_wasm.py /path/to/goose` explicitly for the full
+3,000-job stress. Native configuration sources live in nested fixture
+directories because their explicit definitions are provided by their Python
+acceptance scripts. See
+[test/memory/conditional_shared_layout](../test/memory/conditional_shared_layout/README.md)
+and [native_config_definitions](../test/memory/native_config_definitions/README.md)
+for the exact matrices. The baseline group never runs benchmark timings.
