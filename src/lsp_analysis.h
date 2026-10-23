@@ -347,13 +347,21 @@ struct Analysis {
                     if (end >= (int64_t)o.len) add(o, fileidx, end - (int64_t)o.len);
                 }
             } else if (auto sl = Is<StructLit>(n)) {
-                for (size_t i = 0; i < sl->inits.size(); i++) {
-                    if (sl->inits[i].name.empty()) continue;
-                    auto o = decl(Occurrence::INIT);
-                    o.node = n;
-                    o.index = (int)i;
-                    view(o, fileidx, sl->inits[i].name);
-                }
+                function<void(const vector<FieldInit> &)> inits = [&](const vector<FieldInit> &entries) {
+                    for (size_t i = 0; i < entries.size(); i++) {
+                        auto &entry = entries[i];
+                        if (!entry.name.empty()) {
+                            auto o = decl(Occurrence::INIT);
+                            o.node = n;
+                            o.index = (int)i;
+                            view(o, fileidx, entry.name);
+                        }
+                        if (auto ci = Is<ConstInitIf>(entry.val))
+                            for (auto &branch : ci->branches) inits(branch);
+                        if (auto cf = Is<ConstFor>(entry.val)) inits(cf->inits);
+                    }
+                };
+                inits(sl->inits);
             } else if (auto vd = Is<VarDecl>(n)) {
                 if (!vd->isglobal && !vd->results)
                     for (size_t i = 0; i < vd->names.size(); i++) {
