@@ -71,14 +71,19 @@ def check_marks(exe, root, core_only=False, fields_only=False):
                 for order in (False, True):
                     api = 'export fn api()->i64{' + ('let s=' + literal + ';' if live else '') + 'let r=&N;1}'
                     text = 'let N=2;' + declaration + (api + helper if order else helper + api) + 'fn outer()->i64{0}'
+                    # An earlier real writable binding must also survive: the
+                    # helper's incompatible layout proof then fails before it
+                    # can reach NeedsCaller. Ordinary foreign-return scanning
+                    # skips that helper without starting such a transaction.
+                    bad = live or (order and not ordinary)
                     for level in ('-O0', '-O2'):
                         source.write_text(text + 'fn main(){}')
-                        p = invoke(['check', level, source], ok=not live)
-                        if live:
+                        p = invoke(['check', level, source], ok=not bad)
+                        if bad:
                             assert 'writable reference' in p.stderr, p.stderr
                         source.write_text(text)
-                        p = invoke([level, '--standalone', '--header', header, source, '-o', cfile], ok=not live)
-                        if live:
+                        p = invoke([level, '--standalone', '--header', header, source, '-o', cfile], ok=not bad)
+                        if bad:
                             assert 'writable reference' in p.stderr, p.stderr
     for name, globals_, helper, api in cases:
         text = globals_ + helper + '\nfn outer()->i64{0}\nexport fn api()->i64{' + api + '}\n'
