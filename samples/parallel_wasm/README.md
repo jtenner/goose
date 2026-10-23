@@ -64,6 +64,9 @@ release, readonly writes, and close while borrowed. Allocation failures
 unwind owners allocated so far. The file must remain unchanged while mapped;
 this sample does not snapshot a concurrently rewritten/truncated file.
 
+The Linux native baseline runs this acceptance with 64 jobs; the script default
+runs the explicit full 3000-job stress. Neither run is a benchmark.
+
 Acceptance covers thousands of varied functions, serial/pool equality,
 zero jobs, excess workers, repeated starts, malformed framing, malformed and
 unsupported instructions, aborted workers and shutdown. It compares the
