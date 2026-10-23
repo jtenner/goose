@@ -85,6 +85,63 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
             default: assert(false);
         }
     }
+    if (c->builtin >= B_SHARED_ATOMIC32 && c->builtin <= B_ATOMIC_CAS) {
+        usesthreads = true;
+        auto bk = c->builtin;
+        bool u32 = bk == B_SHARED_ATOMIC32 || bk == B_SHARED_ATOMIC_ARRAY32 || bk == B_SHARED_ATOMIC_VIEW32 ||
+                   (bk >= B_ATOMIC_LOCKFREE && c->qtype->intstorage == IS_U32);
+        int width = u32 ? 4 : 8;
+        bool &usedwidth = u32 ? shared_atomic32 : shared_atomic64;
+        if (!usedwidth) {
+            usedwidth = true;
+            Append(head, "\n#if defined(__TINYC__) || (!defined(__GNUC__) && !defined(__clang__))\n"
+                         "#error Native shared atomics require GCC or Clang; this backend is unsupported\n#endif\n");
+            Append(head, "#if ", u32 ? "__GCC_ATOMIC_INT_LOCK_FREE" : "__GCC_ATOMIC_LLONG_LOCK_FREE",
+                   " != 2\n#error Native shared atomic width is not always lock-free on this target\n#endif\n");
+        }
+        vector<string> a;
+        size_t nargs = bk == B_ATOMIC_LOAD || bk == B_ATOMIC_LOCKFREE ? 1 : bk == B_ATOMIC_CAS ? 3
+                      : bk >= B_ATOMIC_STORE ? 2 : an.size();
+        for (size_t i = 0; i < nargs; i++) a.push_back(Snapshot(an[i]->exprtype, GenPure(an[i])));
+        if (bk <= B_SHARED_ATOMIC_ARRAY64) {
+            bool array = bk >= B_SHARED_ATOMIC_ARRAY32;
+            auto region = T();
+            L("gs_shared_cap ", region, " = gs_shared_atomic_region(", a[0], ", ", a[1], ", ",
+              array ? a[2] : "1", ", ", width, ", ", a[array ? 3 : 2], ", ", LocArgs(ln), ");");
+            if (array) return {region};
+            auto t = T(); L("gs_shared_atomic_cap ", t, " = {", region, ".slot, ", region, ".generation, 0};");
+            return {t};
+        }
+        bool derive = bk == B_SHARED_ATOMIC_VIEW32 || bk == B_SHARED_ATOMIC_VIEW64;
+        auto index = derive ? a[1] : cat(a[0], ".index");
+        auto rec = T(); L("gs_shared_record *", rec, " = NULL;");
+        auto msg = "invalid, closed, misaligned, or out-of-bounds shared atomic capability";
+        L("if (!", a[0], ".generation || ", a[0], ".slot >= GS_SHARED_MAX || ",
+          "!gs_shared_slabs[", a[0], ".slot / GS_SHARED_SLAB_SIZE] || ",
+          "!(", rec, " = &gs_shared_slabs[", a[0], ".slot / GS_SHARED_SLAB_SIZE][", a[0], ".slot % GS_SHARED_SLAB_SIZE]) || ",
+          "__atomic_load_n(&", rec, "->generation, __ATOMIC_ACQUIRE) != ", a[0], ".generation || ",
+          rec, "->kind != ", u32 ? 4 : 5, " || ", index, " >= ", rec, "->size / ", width,
+          " || ((uintptr_t)", rec, "->data & ", width - 1, ")) ",
+          "gs_abort_msg((const uint8_t *)\"", msg, "\", ", strlen(msg), ", ", LocArgs(ln), ");");
+        if (derive) {
+            auto t = T(); L("gs_shared_atomic_cap ", t, " = {", a[0], ".slot, ", a[0], ".generation, ", index, "};"); return {t};
+        }
+        if (bk == B_ATOMIC_LOCKFREE) return {cat("__atomic_always_lock_free(", width, ", 0)")};
+        auto ptr = T(); L(u32 ? "uint32_t *" : "uint64_t *", ptr, " = (", u32 ? "uint32_t" : "uint64_t", " *)(", rec, "->data + ", index, " * ", width, ");");
+        static const char *orders[] = {"__ATOMIC_RELAXED", "", "__ATOMIC_ACQUIRE", "__ATOMIC_RELEASE", "__ATOMIC_ACQ_REL", "__ATOMIC_SEQ_CST"};
+        auto order = orders[c->memory_order];
+        if (bk == B_ATOMIC_STORE) { L("__atomic_store_n(", ptr, ", ", a[1], ", ", order, ");"); return {}; }
+        if (bk == B_ATOMIC_CAS) {
+            auto ok = T(); L("uint8_t ", ok, " = __atomic_compare_exchange_n(", ptr, ", &", a[1], ", ", a[2],
+                            ", 0, ", order, ", ", orders[c->failure_order], ");"); return {a[1], ok};
+        }
+        const char *op = bk == B_ATOMIC_LOAD ? "load" : bk == B_ATOMIC_EXCHANGE ? "exchange"
+                         : bk == B_ATOMIC_ADD ? "fetch_add" : bk == B_ATOMIC_SUB ? "fetch_sub"
+                         : bk == B_ATOMIC_AND ? "fetch_and" : bk == B_ATOMIC_OR ? "fetch_or" : "fetch_xor";
+        auto t = T(); L(CT(c->qtype), " ", t, " = __atomic_", op,
+                       bk == B_ATOMIC_LOAD || bk == B_ATOMIC_EXCHANGE ? "_n" : "", "(", ptr,
+                       bk == B_ATOMIC_LOAD ? "" : cat(", ", a[1]), ", ", order, ");"); return {t};
+    }
     switch ((BuiltinKind)c->builtin) {
         case B_PRINT: {
             // The whole line, newline included, is rendered before any of
@@ -1082,7 +1139,7 @@ inline vector<string> CodeGen::EmitThreadSpawn(Call *c, vector<Node *> &an) {
     }
     // Emitted here, not returned as text: a discarded result would drop the spawn.
     for (auto &cap : sharedcaps)
-        L("gs_shared_handoff(", cap, ", ", LocArgs(c->line), ");");
+        L("gs_shared_handoff((gs_shared_cap){", cap, ".slot, ", cap, ".generation}, ", LocArgs(c->line), ");");
     auto id = T();
     L("int64_t ", id, " = gs_thread_spawn(", thunk, ", ", base, ", ", Top(stk), " - ", base,
       c->builtin == B_THREAD_SPAWN_CONTAINED ? ", 1);" : ", 0);");
