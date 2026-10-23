@@ -8,6 +8,10 @@
 
 namespace goose {
 
+inline string ConstInitIf::CgX(CodeGen &cg) { cg.Fail(line, "internal: unexpanded const if initializers"); }
+inline void ConstInitIf::CgAny(CodeGen &cg, const Dst &) { cg.Fail(line, "internal: unexpanded const if initializers"); }
+inline void ConstInitIf::CgStmt(CodeGen &cg) { cg.Fail(line, "internal: unexpanded const if initializers"); }
+
 inline string ConstFor::CgX(CodeGen &cg) { cg.Fail(line, "internal: unexpanded const for"); }
 inline void ConstFor::CgAny(CodeGen &cg, const Dst &) { cg.Fail(line, "internal: unexpanded const for"); }
 inline void ConstFor::CgStmt(CodeGen &cg) { cg.Fail(line, "internal: unexpanded const for"); }
@@ -55,6 +59,7 @@ inline string StrLit::CgX(CodeGen &cg) {
 }
 
 inline string Ident::CgX(CodeGen &cg) {
+    if (buildvalue) return cg.GenX(buildvalue);
     assert(vdef);   // Named-function values never reach runtime.
     auto x = cg.LoadLoc(cg.VarLoc(vdef), exprtype, line);
     // A literal parameter (§7.7) is passed at its nominal type and read at
@@ -414,6 +419,7 @@ inline void Block::CgAny(CodeGen &cg, const Dst &d) {
 }
 
 inline void IfExpr::CgAny(CodeGen &cg, const Dst &d) {
+    if (isconst) { cg.GenAny(thenb, d); return; }
     // Both arms starting with the same bounds check (same array, same index,
     // nothing before it): one check ahead of the branch, after the
     // condition, reporting the line of the arm that is taken. The arms'
@@ -851,9 +857,16 @@ inline void Assign::CgStmt(CodeGen &cg) {
         cg.L("uint8_t *", p, " = ", lv.s, ";");
         lv.s = p;
     } else if (lv.viaref && !lv.lenlv.empty()) {
+        // Keep the original count owner across RHS rebinding. Its packed
+        // member is addressable through gs_rhdr, but not through int64_t*.
+        // A bytes tail can share this count while starting past the header's
+        // base, so only pin its count here; the data address is used below
+        // before the RHS runs.
+        auto hdr = lv.hdr.empty() ? lv.lenhdr : lv.hdr;
+        assert(!hdr.empty());
         auto p = cg.T();
-        cg.L("int64_t *", p, " = &(", lv.lenlv, ");");
-        lv.lenlv = cat("(*", p, ")");
+        cg.L("gs_rhdr *", p, " = &(", hdr, ");");
+        lv.lenlv = cat(p, "->len");
     }
     if (lv.viaref && cg.IsResz(lv.t) && !lv.stk.empty() && !cg.CacheableStk(lv.stk)) {
         auto s = cg.T();

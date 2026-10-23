@@ -325,6 +325,8 @@ struct TypeExpr {
     // sizes name what they name where the alias is declared, at top level,
     // whatever scope the use is in (TypeCheck::ConstNamesIn).
     bool aliasuse = false;
+    // A type in an unselected const-if arm: resolve only when activated.
+    bool conditional = false;
     // On a TY_INT: an index or bound type (TypeIndex). Outside the union,
     // since intstorage is the member a TY_INT uses.
     TypeIndex *ix = nullptr;
@@ -411,6 +413,10 @@ struct Param {
 };
 
 struct Field {
+    // Parse-level field fragment; ordinary fields have no condition. Flattened
+    // before declaration validation, instantiation, layout or reflection.
+    Node *condition = nullptr;
+    vector<Field> thenfields, elsefields;
     string_view name;
     Line line;                  // Of the name, or of `pad`.
     string_view doc;            // The comment lines above it (Lexer::doc).
@@ -839,6 +845,7 @@ enum NodeKind : uint8_t {
     NK_LoopExpr,
     NK_ForLoop,
     NK_ConstFor,
+    NK_ConstInitIf,
     NK_Return,
     NK_Break,
     NK_Continue,
@@ -996,6 +1003,7 @@ NODE(Ident)
                                     // namespace of the declaration this was written in.
     // Filled by typecheck: exactly one of these.
     VarDef *vdef = nullptr;         // A variable.
+    Node *buildvalue = nullptr;     // Compiler-provided literal; never runtime storage.
     SFunction *fnref = nullptr;     // A named function used as a function value.
     Ident(Line l, string_view _name, string_view _ns = {}) : Node(l, NKind), name(_name), ns(_ns) {}
 NODE_END
@@ -1250,6 +1258,8 @@ NODE(Block)
 NODE_END
 
 NODE(IfExpr)
+    bool isconst = false;
+    bool selected = false;       // Specialization clone has discarded the other arm.
     BCE_WALK
     Node *cond;
     Block *thenb;
@@ -1367,6 +1377,12 @@ NODE(ConstFor)
     bool armfragments = false;      // Its fragments are match arms (in a match's arm list).
     vector<MatchArm> arms;
     ConstFor(Line l) : Node(l, NKind) {}
+NODE_END
+
+NODE(ConstInitIf)
+    Node *cond;
+    vector<FieldInit> branches[2];   // 0 true, 1 false; source order preserved.
+    ConstInitIf(Line l, Node *condition) : Node(l, NKind), cond(condition) {}
 NODE_END
 
 NODE(Return)
@@ -1502,6 +1518,7 @@ struct SFunction {
     // of its cached tops before the call (CodeGen::CollectSpecs, SyncReach).
     bool readsalltops = false;
     bool isnested = false;
+    bool conditional = false;   // Signature is inside a deferred const-if arm.
     SFunction *outer = nullptr;     // The function a nested one is declared in.
     Block *body = nullptr;
     // The body lost a statement to a parse error, or holds an incomplete
@@ -1534,6 +1551,7 @@ struct SStruct {
     string_view doc;            // As SFunction::doc.
     vector<GenericParam> generics;
     vector<Field> fields;
+    vector<Field> declfields;   // Original conditional declaration for tooling/dumps.
     vector<StructInst *> insts;  // Instantiations (typecheck), owned by Ast.
     // The declaration lost a field to a parse error (Parser::ParseMembers):
     // its fields are those parsed before the error, and a name it lacks is
@@ -1552,6 +1570,7 @@ struct SVariant {
     Line line;                  // Of the name.
     string_view doc;            // As SFunction::doc.
     vector<Field> fields;
+    vector<Field> declfields;
     bool has_payload = false;   // Distinguishes "Point" from "Point {}".
 };
 
@@ -2485,6 +2504,8 @@ struct Ast {
     vector<int> filepkg;                                // Per source, its package.
 
     vector<Node *> allnodes;
+    // Evaluated conditions retained only for source tooling, never runtime walks.
+    vector<Node *> constantconditions;
     vector<TypeExpr *> alltypes;
     vector<TypeDetail *> typedetails;
     vector<SFunction *> functions;
@@ -2504,6 +2525,13 @@ struct Ast {
     // The specializations exemplar checks made (FnSpec::exemplar), which
     // only the language server reads.
     vector<FnSpec *> exemplarspecs;
+    // Products of deferred standalone transactions. Kept alive for pointers
+    // in discarded checked trees, absent from every usable specialization cache.
+    vector<FnSpec *> deferredspecs;
+    vector<StructInst *> deferredstructinsts;
+    vector<EnumInst *> deferredenuminsts;
+    vector<VarDef *> deferredvardefs;
+    vector<TypeExpr *> deferredtypes;
 
     vector<Node *> topdecls;                        // In source/import order.
     vector<VarDecl *> globals;                      // Initialization order.
@@ -2524,6 +2552,7 @@ struct Ast {
     // Declarations, by namespace. Qualified spellings (`ns::name`) are
     // interned here: the lexer delivers their parts as separate tokens.
     map<string_view, Namespace> namespaces;
+    map<string_view, Node *> builddefinitions; // Immutable, local to this compilation.
     deque<string> interned;
 
     // Shared instances of the primitive types.
@@ -2548,6 +2577,7 @@ struct Ast {
     ~Ast() {
         for (auto n : allnodes) delete n;
         for (auto t : alltypes) delete t;
+        for (auto t : deferredtypes) delete t;
         for (auto d : typedetails) delete d;
         for (auto f : functions) delete f;
         for (auto s : structs) delete s;
@@ -2555,11 +2585,15 @@ struct Ast {
         for (auto e : enums) delete e;
         for (auto a : aliases) delete a;
         for (auto v : vardefs) delete v;
+        for (auto v : deferredvardefs) delete v;
         for (auto i : structinsts) delete i;
         for (auto i : enuminsts) delete i;
         for (auto sp : fnspecs) delete sp;
         for (auto sp : fvenvs) delete sp;
         for (auto sp : exemplarspecs) delete sp;
+        for (auto sp : deferredspecs) delete sp;
+        for (auto i : deferredstructinsts) delete i;
+        for (auto i : deferredenuminsts) delete i;
     }
 
     TypeExpr *NewType(TypeKind kind, Line line) {
@@ -2816,6 +2850,12 @@ struct Ast {
     VarDecl *LookupGlobal(string_view name, string_view usens) {
         auto p = Lookup(&Namespace::globalmap, name, usens);
         return p ? *p : nullptr;
+    }
+    Node *LookupBuildDefinition(string_view name, string_view usens) {
+        auto ref = SplitName(name, usens);
+        if (ref.ns != "build") return nullptr;
+        auto it = builddefinitions.find(ref.leaf);
+        return it == builddefinitions.end() ? nullptr : it->second;
     }
     // A function name's overload set: that of the first namespace in lookup
     // order that declares the name at all. Sets never merge across namespaces.

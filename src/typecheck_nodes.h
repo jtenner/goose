@@ -81,8 +81,13 @@ inline Val StrLit::Check(TypeCheck &tc, TypeExpr *expected) {
     return v;
 }
 
-inline Val Ident::Check(TypeCheck &tc, TypeExpr *) {
+inline Val Ident::Check(TypeCheck &tc, TypeExpr *expected) {
     if (!expansionerror.empty()) tc.Error(this, string(expansionerror));
+    if (auto value = tc.ast.LookupBuildDefinition(name, ns)) {
+        buildvalue = value->Clone(tc.ast);
+        buildvalue->line = line;
+        return tc.CheckV(buildvalue, expected);
+    }
     if (auto vd = tc.LookupVar(name, ns, this)) {
         vdef = vd;
         if (tc.deferbodies) tc.NoteDeferMention(vd);
@@ -571,6 +576,10 @@ inline Val AsCast::Check(TypeCheck &tc, TypeExpr *) {
 
 inline Val RangeExpr::Check(TypeCheck &tc, TypeExpr *) {
     tc.Error(this, "range expressions are only valid in for headers");
+}
+
+inline Val ConstInitIf::Check(TypeCheck &tc, TypeExpr *) {
+    tc.Error(this, "const if initializer fragment is only valid inside a constructor");
 }
 
 inline Val ConstFor::Check(TypeCheck &tc, TypeExpr *) {
