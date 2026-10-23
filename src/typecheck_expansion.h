@@ -39,8 +39,15 @@ inline bool TypeCheck::IsValuelessTail(const Node *n) {
         // Normal expansion diagnoses an oversized reachable source. The
         // shape walk must stay bounded even for a tail never reached.
         if (++visited > ExpansionClone::MAXNODES) return false;
-        if (auto fi = Is<IfExpr>(x))
+        if (auto fi = Is<IfExpr>(x)) {
+            if (fi->isconst) {
+                // A source-shape walk runs before nested block scopes or
+                // reachability exist. Selection belongs to CheckIf, where
+                // locals shadow globals and unreachable tails are gone.
+                return fi->selected && (!fi->thenb->tail || walk(fi->thenb));
+            }
             return !fi->elseb || walk(fi->thenb) || walk(fi->elseb);
+        }
         if (auto m = Is<MatchExpr>(x)) return arms(m->arms);
         if (auto cf = Is<ConstFor>(x)) {
             auto entry = [&](TypeExpr *t = nullptr) {
@@ -74,6 +81,137 @@ inline bool TypeCheck::IsValuelessTail(const Node *n) {
         return false;
     };
     return walk(n);
+}
+
+// A deliberately small evaluator: boolean structure plus the existing typed
+// integer constant evaluator. Both operands are validated, even for && / ||;
+// only bodies, never condition operands, are conditionally excluded.
+inline bool TypeCheck::ConstBool(Node *n, set<VarDecl *> &visiting, ConstUse *use) {
+    if (auto b = Is<BoolLit>(n)) return b->val;
+    if (auto id = Is<Ident>(n)) {
+        if (auto value = ast.LookupBuildDefinition(id->name, id->ns))
+            return ConstBool(value, visiting, use);
+        auto g = ast.LookupGlobal(id->name, id->ns);
+        if (g && !g->isvar && g->inits.size() == 1 && (!g->type || g->type->kind == TY_BOOL)) {
+            if (!visiting.insert(g).second) Error(n, "cycle in const if constant initializer");
+            if (use && !g->defs.empty()) {
+                if (!use->named) use->named = g->defs[0];
+                RelyOnConstant(*use, g->defs[0]);
+            }
+            auto value = ConstBool(g->inits[0], visiting, use);
+            visiting.erase(g);
+            return value;
+        }
+    }
+    if (auto u = Is<Unary>(n); u && u->op == T_NOT) return !ConstBool(u->child, visiting, use);
+    if (auto b = Is<Binary>(n)) {
+        if (b->op == T_ANDAND || b->op == T_OROR) {
+            auto left = ConstBool(b->left, visiting, use);
+            auto right = ConstBool(b->right, visiting, use);
+            return b->op == T_ANDAND ? left && right : left || right;
+        }
+        switch (b->op) {
+            case T_EQ: case T_NEQ: case T_LT: case T_LTEQ: case T_GT: case T_GTEQ: {
+                Val l, r;
+                bool llit, rlit;
+                if (ConstIntValue(b->left, l, llit, visiting, use) &&
+                    ConstIntValue(b->right, r, rlit, visiting, use)) {
+                    auto lf = l, rf = r;
+                    if (!llit) lf.ck = CK_NONE;
+                    if (!rlit) rf.ck = CK_NONE;
+                    lf.flexint = lf.flexint || lf.notconst;
+                    rf.flexint = rf.flexint || rf.notconst;
+                    lf.nonneg = !l.uns && l.ival >= 0;
+                    rf.nonneg = !r.uns && r.ival >= 0;
+                    auto t = UnifyNumeric(n, b->op, lf, rf, l.type, r.type, true);
+                    if (l.notconst) l.ival = WrapStorage(l.ival, t->intstorage);
+                    if (r.notconst) r.ival = WrapStorage(r.ival, t->intstorage);
+                    auto uns = IsUnsigned(t->intstorage);
+                    auto cmp = uns ? ((uint64_t)l.ival < (uint64_t)r.ival ? -1 : l.ival == r.ival ? 0 : 1)
+                                   : (l.ival < r.ival ? -1 : l.ival == r.ival ? 0 : 1);
+                    switch (b->op) {
+                        case T_EQ: return cmp == 0;
+                        case T_NEQ: return cmp != 0;
+                        case T_LT: return cmp < 0;
+                        case T_LTEQ: return cmp <= 0;
+                        case T_GT: return cmp > 0;
+                        case T_GTEQ: return cmp >= 0;
+                        default: break;
+                    }
+                }
+                if (b->op == T_EQ || b->op == T_NEQ) {
+                    function<optional<string_view>(Node *)> stringconstant = [&](Node *x) -> optional<string_view> {
+                        if (auto str = Is<StrLit>(x)) return str->val;
+                        if (auto id = Is<Ident>(x)) {
+                            if (auto value = ast.LookupBuildDefinition(id->name, id->ns)) return stringconstant(value);
+                            auto g = ast.LookupGlobal(id->name, id->ns);
+                            if (g && !g->isvar && g->inits.size() == 1 &&
+                                (!g->type || (g->type->kind == TY_SLICE && IsU8(g->type->sub)))) {
+                                if (!visiting.insert(g).second) Error(x, "cycle in const if string constant");
+                                if (use && !g->defs.empty()) {
+                                    if (!use->named) use->named = g->defs[0];
+                                    RelyOnConstant(*use, g->defs[0]);
+                                }
+                                auto value = stringconstant(g->inits[0]);
+                                visiting.erase(g);
+                                return value;
+                            }
+                        }
+                        return nullopt;
+                    };
+                    auto ls = stringconstant(b->left), rs = stringconstant(b->right);
+                    if (ls && rs) return b->op == T_EQ ? *ls == *rs : *ls != *rs;
+                    auto left = ConstBool(b->left, visiting, use);
+                    auto right = ConstBool(b->right, visiting, use);
+                    return b->op == T_EQ ? left == right : left != right;
+                }
+                break;
+            }
+            default: break;
+        }
+    }
+    Error(n, "const if requires a bool constant expression (literals, global constants, build definitions, !, &&, || and comparisons)");
+}
+
+inline bool TypeCheck::ConstIfCondition(Node *condition) {
+    ConstNames(condition, "const if condition");
+    ConstUse use { condition, "const if condition" };
+    set<VarDecl *> visiting;
+    auto result = ConstBool(condition, visiting, &use);
+    if (ast.exemplars) {
+        // These names are compile-time uses. Retain checked bindings for
+        // navigation without putting the discarded condition in runtime ASTs.
+        function<void(Node *)> bind = [&](Node *n) {
+            if (auto id = Is<Ident>(n)) {
+                auto global = ast.LookupGlobal(id->name, id->ns);
+                if (global && !global->defs.empty()) id->vdef = global->defs[0];
+            }
+            n->Children(bind);
+        };
+        bind(condition);
+        ast.constantconditions.push_back(condition);
+    }
+    return result;
+}
+
+inline void TypeCheck::SelectConstIf(IfExpr *x) {
+    if (x->selected) return;
+    auto take = ConstIfCondition(x->cond);
+    Node *body = take ? (Node *)x->thenb : x->elseb;
+    auto chosen = Is<Block>(body);
+    if (!chosen) {
+        chosen = ast.New<Block>(x->line);
+        // Else-if chains are const-if expressions in their own scope.
+        if (body) chosen->tail = body;
+    }
+    ResolveConditionalBody(ast, chosen);
+    ResolvePools();
+    ResolveIndexTypes();
+    x->thenb = chosen;
+    x->elseb = nullptr;
+    x->cond = ast.New<BoolLit>(x->cond->line, true);
+    x->cond->exprtype = ast.booltype;
+    x->selected = true;
 }
 
 inline Node *TypeCheck::ExpansionConstant(Node *n, set<VarDecl *> &visiting) {

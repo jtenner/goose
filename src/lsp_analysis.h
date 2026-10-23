@@ -510,6 +510,7 @@ struct Analysis {
             n->Children(mark);
         };
         for (auto sp : a.fnspecs) if (sp->body) mark(sp->body);
+        for (auto condition : a.constantconditions) mark(condition);
         for (auto g : a.globals) {
             for (auto init : g->inits) mark(init);
             for (size_t i = 0; i < g->defs.size() && i < g->names.size(); i++) {
