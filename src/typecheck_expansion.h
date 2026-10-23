@@ -41,9 +41,10 @@ inline bool TypeCheck::IsValuelessTail(const Node *n) {
         if (++visited > ExpansionClone::MAXNODES) return false;
         if (auto fi = Is<IfExpr>(x)) {
             if (fi->isconst) {
-                auto selected = const_cast<IfExpr *>(fi);
-                SelectConstIf(selected);
-                return !selected->thenb->tail || walk(selected->thenb);
+                // A source-shape walk runs before nested block scopes or
+                // reachability exist. Selection belongs to CheckIf, where
+                // locals shadow globals and unreachable tails are gone.
+                return fi->selected && (!fi->thenb->tail || walk(fi->thenb));
             }
             return !fi->elseb || walk(fi->thenb) || walk(fi->elseb);
         }
@@ -118,7 +119,13 @@ inline bool TypeCheck::ConstBool(Node *n, set<VarDecl *> &visiting, ConstUse *us
                     auto lf = l, rf = r;
                     if (!llit) lf.ck = CK_NONE;
                     if (!rlit) rf.ck = CK_NONE;
-                    auto t = UnifyNumeric(n, b->op, lf, rf, l.type, r.type);
+                    lf.flexint = lf.flexint || lf.notconst;
+                    rf.flexint = rf.flexint || rf.notconst;
+                    lf.nonneg = !l.uns && l.ival >= 0;
+                    rf.nonneg = !r.uns && r.ival >= 0;
+                    auto t = UnifyNumeric(n, b->op, lf, rf, l.type, r.type, true);
+                    if (l.notconst) l.ival = WrapStorage(l.ival, t->intstorage);
+                    if (r.notconst) r.ival = WrapStorage(r.ival, t->intstorage);
                     auto uns = IsUnsigned(t->intstorage);
                     auto cmp = uns ? ((uint64_t)l.ival < (uint64_t)r.ival ? -1 : l.ival == r.ival ? 0 : 1)
                                    : (l.ival < r.ival ? -1 : l.ival == r.ival ? 0 : 1);
@@ -133,6 +140,27 @@ inline bool TypeCheck::ConstBool(Node *n, set<VarDecl *> &visiting, ConstUse *us
                     }
                 }
                 if (b->op == T_EQ || b->op == T_NEQ) {
+                    function<optional<string_view>(Node *)> stringconstant = [&](Node *x) -> optional<string_view> {
+                        if (auto str = Is<StrLit>(x)) return str->val;
+                        if (auto id = Is<Ident>(x)) {
+                            if (auto value = ast.LookupBuildDefinition(id->name, id->ns)) return stringconstant(value);
+                            auto g = ast.LookupGlobal(id->name, id->ns);
+                            if (g && !g->isvar && g->inits.size() == 1 &&
+                                (!g->type || (g->type->kind == TY_SLICE && IsU8(g->type->sub)))) {
+                                if (!visiting.insert(g).second) Error(x, "cycle in const if string constant");
+                                if (use && !g->defs.empty()) {
+                                    if (!use->named) use->named = g->defs[0];
+                                    RelyOnConstant(*use, g->defs[0]);
+                                }
+                                auto value = stringconstant(g->inits[0]);
+                                visiting.erase(g);
+                                return value;
+                            }
+                        }
+                        return nullopt;
+                    };
+                    auto ls = stringconstant(b->left), rs = stringconstant(b->right);
+                    if (ls && rs) return b->op == T_EQ ? *ls == *rs : *ls != *rs;
                     auto left = ConstBool(b->left, visiting, use);
                     auto right = ConstBool(b->right, visiting, use);
                     return b->op == T_EQ ? left == right : left != right;
@@ -214,7 +242,6 @@ inline void TypeCheck::SelectConstIf(IfExpr *x) {
         if (body) chosen->tail = body;
     }
     ResolveConditionalBody(ast, chosen);
-    if (!ast.errors.empty()) throw Abandoned {};
     ResolvePools();
     ResolveIndexTypes();
     x->thenb = chosen;
@@ -409,8 +436,7 @@ inline void TypeCheck::ExpandInitializers(vector<FieldInit> &inits) {
             auto take = ConstIfCondition(ci->cond);
             auto selected = ci->branches[take ? 0 : 1];
             for (auto &entry : selected) ResolveConditionalBody(ast, entry.val);
-            if (!ast.errors.empty()) throw Abandoned {};
-            ResolvePools();
+                    ResolvePools();
             ResolveIndexTypes();
             ExpandInitializers(selected);
             flat.insert(flat.end(), selected.begin(), selected.end());
