@@ -894,8 +894,13 @@ GS_API void gs_free_msg(uint8_t *msg);
 /* Opaque capabilities have no user-visible fields or byte image. Stable
    metadata slabs retain tombstones so stale values never dereference freed
    metadata. Only live allocation leases authorize worker atomic access. */
+/* Goose values may start at any byte address (packed fields and worker
+   packets). Pack only the copied value wrappers, never registry metadata or
+   the mapped atomic cells. Both caller and runtime use this exact ABI. */
+#pragma pack(push, 1)
 typedef struct { uint64_t slot, generation; } gs_shared_cap;
 typedef struct { uint64_t slot, generation, index; } gs_shared_atomic_cap;
+#pragma pack(pop)
 GS_API gs_shared_cap gs_shared_atomic_region(gs_shared_cap owner, uint64_t offset,
     uint64_t count, int width, uint64_t initial, const char *file, int line);
 #define GS_SHARED_SLAB_SIZE 256
@@ -1048,7 +1053,8 @@ GS_API int64_t gs_spans_regrow(uint8_t *base, int64_t *n, uint8_t **top, int64_t
    the freelist. */
 GS_API void gs_spans_free(uint8_t *base, int64_t *n, uint8_t **top, int64_t idx, int64_t cnt);
 
-/* ---------------------------------------------------------------------------
+)GSRT"
+R"GSRT(/* ---------------------------------------------------------------------------
    varint (§3.6): ULEB128; struct/payload/offset values additionally zigzag. */
 
 static int64_t gs_uleb_read(const uint8_t *p) {
@@ -1056,8 +1062,7 @@ static int64_t gs_uleb_read(const uint8_t *p) {
     int shift = 0;
     for (;;) {
         uint8_t b = *p++;
-)GSRT"
-R"GSRT(        v |= (uint64_t)(b & 0x7f) << shift;
+        v |= (uint64_t)(b & 0x7f) << shift;
         if (!(b & 0x80)) return (int64_t)v;
         shift += 7;
     }

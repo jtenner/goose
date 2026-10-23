@@ -142,6 +142,13 @@ static void baseline(long allocations, long regions) {
 }
 int main(void) {
     gs_rt_init(0, NULL, 1, 1, 1);
+#ifdef _MSC_VER
+    check(__alignof(gs_shared_cap) == 1 && __alignof(gs_shared_atomic_cap) == 1, "packed capability ABI");
+    check(__alignof(gs_shared_record) >= 8, "naturally aligned atomic metadata");
+#else
+    check(_Alignof(gs_shared_cap) == 1 && _Alignof(gs_shared_atomic_cap) == 1, "packed capability ABI");
+    check(_Alignof(gs_shared_record) >= 8, "naturally aligned atomic metadata");
+#endif
     uint8_t ok;
     long before = counter_add(&live_regions, 0);
     fail_next_calloc = 1;
