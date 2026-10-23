@@ -68,6 +68,7 @@ int main(int argc, char **argv) {
     assert(argc == 5); n = strtoull(argv[2], NULL, 10); uint64_t workers = strtoull(argv[3], NULL, 10);
     assert(n > 0 && workers >= 1 && workers <= 8); const char *which = argv[1];
     uint64_t operations = n, checksum = 0; pthread_t threads[8]; struct args args[8];
+    if (!strncmp(which,"scalar_",7)) for (uint64_t i = 0; i < 8192; i++) write64(i * 8,(i + 1) % 8192);
     const double start = now();
     if (!strcmp(which,"atomics_uncontended") || !strcmp(which,"atomics_contended") || !strcmp(which,"claims")) {
         mode = !strcmp(which,"claims") ? 2 : !strcmp(which,"atomics_uncontended") ? 0 : 1;
@@ -101,7 +102,6 @@ int main(int argc, char **argv) {
     } else if (!strcmp(which,"checks_disabled") || !strcmp(which,"checks_enabled")) {
         struct check_state s = {0}; for (uint64_t i = 0; i < n; i++) checked_emit(&s,i & 65535); checksum = s.value;
     } else {
-        for (uint64_t i = 0; i < 8192; i++) write64(i * 8,(i + 1) % 8192);
         if (!strcmp(which,"scalar_read_latency")) { for (uint64_t i = 0; i < n; i++) checksum = read64(checksum * 8); }
         else if (!strcmp(which,"scalar_write_latency")) { for (uint64_t i = 0; i < n; i++) { write64(0,checksum + 1); checksum = read64(0); atomic_signal_fence(memory_order_seq_cst); } }
         else if (!strcmp(which,"scalar_read_throughput")) {
