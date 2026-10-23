@@ -93,5 +93,13 @@ repeated `--case ordinary/calls/arrays/stores/deferred/deferred-stores`,
 `--stdlib`, and `--named-return` select generated cases; repeated `--source`
 selects existing programs. `--samples` and `--warmups` control repetition.
 Only parent-coordinated `--run --baseline ... --extended ... --output ...`
-performs timings. The structural work contract and remaining compiler costs
+performs timings. Measured runs also require `--baseline-source-ref`,
+`--extended-source-ref`, `--build-compiler`, `--build-cxxflags`, and a common
+`GOOSE_STDLIB` environment value. `--cpu 0` pins the harness and children;
+instrumentation/oracle environment variables are removed from both compiler
+processes. Reports retain executable/harness hashes, source commits and `src`
+trees, effective affinity/environment, every wall/RSS sample and both spreads.
+Build-toolchain/flag labels come from the coordinator's verified build records.
+`test/compiler_check_provenance.py` validates these contracts without timing.
+The structural work contract and remaining compiler costs
 are documented in [the transaction audit](../../docs/design/const_if_deferred_state.md).
