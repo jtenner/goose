@@ -9,7 +9,7 @@ var global_value: i64 = 3;
 fn main() {
     var value: i64 = 1;
     let alias = &value;
-    let p = unsafe_capture(&value);
+    let p = unsafe_capture(value);
     let old_plus_zero = value + unsafe_write(p, 7);
     assert(old_plus_zero == 1);
     assert(value == 7 && alias == 7);
@@ -23,8 +23,14 @@ fn main() {
     assert(value == 8 && alias == 8); // Compound assignment retained its old operand.
     let loaded = unsafe_load<i64>(p, { unsafe_store<i64>(p, 9, false); false });
     assert(loaded == 9 && value == 9);
-    let gp = unsafe_capture(&global_value);
+    let gp = unsafe_capture(global_value);
     unsafe_store<i64>(gp, 4, false);
     assert(global_value == 4);
+    var index: i64 = 0;
+    let ip = unsafe_capture(index);
+    let a: i64[2] = [11, 22];
+    assert(index >= 0 && index < a.len);
+    let selected = a[index + unsafe_write(ip, 2)];
+    assert(selected == 11 && index == 2); // The old index is an evaluated value.
     print("unsafe alias values ok");
 }
