@@ -24,7 +24,6 @@ claims = json.loads(run(["python3", HARNESS, "--plan", "--case", "claims"]).stdo
 assert claims["cases"] == ["claims"] and claims["total_workload_processes"] == 144
 # No toolchain required to review the experiment; invocation without --run is read-only.
 assert json.loads(run(["python3", HARNESS]).stdout) == plan
-print("benchmark harness plan acceptance passed (no timings run)")
 
 # Synthetic samples verify reported variation/medians without running workloads.
 spec = importlib.util.spec_from_file_location("shared_native_bench", HARNESS)
@@ -49,3 +48,5 @@ with tempfile.TemporaryDirectory(prefix="goose-benchmark-hash-") as directory:
 provenance = module.source_provenance()
 assert {"main.goose", "baseline.c", "run.py"} == set(provenance["files"])
 assert all(len(value) == 64 for value in provenance["files"].values())
+
+print("benchmark harness plan/hash/statistics acceptance passed (no timings run)")
