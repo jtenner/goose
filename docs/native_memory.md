@@ -232,6 +232,14 @@ The current C backend lays out pointers in eight bytes. Generated code checks
 rejects other targets explicitly instead of narrowing addresses or silently
 changing packed layouts. This requires the target's conventional flat-address
 object-pointer/integer roundtrip ABI. Address conversion never truncates.
+GCC and Clang lower the alignment of the pointer typedef to one byte, while
+retaining the C `void *` scalar ABI. This supports pointers stored after
+four-byte array headers and in packed fields, including references, copies
+and returns. It does not lower foreign objects' own C alignment requirements.
+TinyCC ignores the required typedef alignment reduction and is explicitly
+rejected for `UnsafePtr`; other frontends without this extension are rejected
+too. Ordinary packed layouts gain no padding, and alignment sanitizers remain
+enabled.
 
 Safe owners, views, accesses and atomic capabilities cannot convert to or from
 raw pointers, handles, integer casts, byte images or extern signatures. The
@@ -257,6 +265,11 @@ pointer or a reference retained by an earlier call even when its current
 signature has no reference argument. Previously evaluated operands keep their
 snapshotted values; later reads observe the write. The alias regressions in
 `test/unsafe_pointer_alias.py` exercise these cases as part of the matrix.
+Worker spawn/wait and queue synchronization also invalidate reachable facts:
+an explicitly transferred numeric handle can let a worker reconstruct a raw
+alias, write it, and publish that write before an ordinary read in its owner.
+This still requires the caller to guarantee object lifetime and synchronize
+every access; no raw pointer or capability is implicitly transferred.
 
 The pre-existing `stdlib/ffi.goose` `cstr` and `bytes` helpers still accept
 opaque `u64` addresses and trust C pointer/length validity. They copy results
