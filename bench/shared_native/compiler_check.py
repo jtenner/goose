@@ -11,17 +11,17 @@ import subprocess
 import tempfile
 import time
 
-CASES = ('ordinary', 'calls', 'arrays', 'deferred')
+CASES = ('ordinary', 'calls', 'arrays', 'stores', 'deferred', 'deferred-stores')
 
 
 def source_for(globals_count, functions_count, case='ordinary', stdlib=False, named_return=False):
     source = 'import std;\n' if stdlib else ''
     source += ''.join(f'let g{i}:i64={i};\n' for i in range(globals_count))
-    if named_return or case == 'deferred':
+    if named_return or case.startswith('deferred'):
         source += 'fn destination()->i64{0}\nfn unused_return(){return 7 from destination;}\n'
     if case == 'calls':
         source += 'fn compute<T>(v:T)->T{var x:T=v;x+=1;return x;}\n'
-    if case == 'deferred':
+    if case.startswith('deferred'):
         source += 'let FLAG=true;\n'
     for i in range(functions_count):
         value = f'g{i % globals_count}' if globals_count else str(i)
@@ -30,9 +30,13 @@ def source_for(globals_count, functions_count, case='ordinary', stdlib=False, na
             body = f'var x=compute({value});x+=compute(1);return x;'
         elif case == 'arrays':
             body = f'let a:i64[2]=[{value},{i}];return a[0]+a[1];'
-        elif case == 'deferred':
+        elif case == 'stores':
+            body = f'let a:i64[2]=[{value},{i}];let s=a[..];let h=[s];return h[0][0];'
+        elif case.startswith('deferred'):
             body = f'let r=&FLAG;var x:i64={value};x+=1;const if true{{return 7 from destination;}}'
-        source += f'fn check_fn_{i}()' + ('' if case == 'deferred' else '->i64') + '{' + body + '}\n'
+            if case == 'deferred-stores':
+                body = f'let a:i64[2]=[{value},{i}];let h=[a[..]];' + body
+        source += f'fn check_fn_{i}()' + ('' if case.startswith('deferred') else '->i64') + '{' + body + '}\n'
     return source + 'fn main(){}\n'
 
 

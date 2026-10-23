@@ -26,6 +26,8 @@ for item in plan['sources']:
     assert text.count('fn check_fn_') == item['unused_functions']
 assert 'g0' not in bench.source_for(0, 2)
 assert 'i64[2]' in bench.source_for(0, 2, 'arrays')
+assert 'let h=[s]' in bench.source_for(0, 2, 'stores')
+assert 'let h=[a[..]]' in bench.source_for(0, 2, 'deferred-stores')
 with tempfile.TemporaryDirectory() as directory:
     source = Path(directory) / 'real.goose'
     source.write_text('fn main(){}\n')
