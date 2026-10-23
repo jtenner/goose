@@ -13,6 +13,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / 'scripts'))
 from lsp_protocol import Client
 from const_if_editor import check_editor
 from const_if_transactions import check_transactions
+from const_if_marks import check_marks
 
 EXE = pathlib.Path(sys.argv[1]).resolve()
 CORE_ONLY = '--core-only' in sys.argv[2:]
@@ -277,6 +278,7 @@ with tempfile.TemporaryDirectory(prefix='goose-const-if-') as directory:
                 result = subprocess.run([str(native)], capture_output=True, text=True)
                 assert result.returncode == 0, result
     CHECKS += check_transactions(EXE, root, CORE_ONLY, FIELDS_ONLY)
+    CHECKS += check_marks(EXE, root, CORE_ONLY, FIELDS_ONLY)
     CHECKS += check_editor(EXE, root, CORE_ONLY, FIELDS_ONLY)
 
     # Excluded names remain quiet in editor analysis; malformed excluded
