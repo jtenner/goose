@@ -311,6 +311,8 @@ struct TypeExpr {
     // sizes name what they name where the alias is declared, at top level,
     // whatever scope the use is in (TypeCheck::ConstNamesIn).
     bool aliasuse = false;
+    // A type in an unselected const-if arm: resolve only when activated.
+    bool conditional = false;
     // On a TY_INT: an index or bound type (TypeIndex). Outside the union,
     // since intstorage is the member a TY_INT uses.
     TypeIndex *ix = nullptr;
@@ -1231,6 +1233,8 @@ NODE(Block)
 NODE_END
 
 NODE(IfExpr)
+    bool isconst = false;
+    bool selected = false;       // Specialization clone has discarded the other arm.
     BCE_WALK
     Node *cond;
     Block *thenb;
@@ -1483,6 +1487,7 @@ struct SFunction {
     // of its cached tops before the call (CodeGen::CollectSpecs, SyncReach).
     bool readsalltops = false;
     bool isnested = false;
+    bool conditional = false;   // Signature is inside a deferred const-if arm.
     SFunction *outer = nullptr;     // The function a nested one is declared in.
     Block *body = nullptr;
     // The body lost a statement to a parse error, or holds an incomplete
@@ -2242,6 +2247,9 @@ struct FnSpec {
     // call that would reuse it ends its own root silently, as a
     // consequence of the error reported (TypeCheck::GetOrCreateSpec).
     bool failed = false;
+    // A standalone check needed an enclosing caller absent from that root.
+    // Its incomplete record is never a reusable specialization or an error.
+    bool needscaller = false;
     // Made by the exemplar check of this generic function, which nothing
     // instantiated (TypeCheck::CheckExemplar): its types are the opaque
     // bindings', and it is in Ast::exemplarspecs, not fnspecs.
@@ -2466,6 +2474,8 @@ struct Ast {
     vector<int> filepkg;                                // Per source, its package.
 
     vector<Node *> allnodes;
+    // Evaluated conditions retained only for source tooling, never runtime walks.
+    vector<Node *> constantconditions;
     vector<TypeExpr *> alltypes;
     vector<TypeDetail *> typedetails;
     vector<SFunction *> functions;

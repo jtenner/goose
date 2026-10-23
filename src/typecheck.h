@@ -348,6 +348,10 @@ struct TypeCheck {
     void CheckStmts(Block *b);
     size_t expansionsize = 0;
     Node *ExpansionConstant(Node *n, set<VarDecl *> &visiting);
+    struct ConstUse;
+    bool ConstIfCondition(Node *condition);
+    bool ConstBool(Node *n, set<VarDecl *> &visiting, ConstUse *use = nullptr);
+    void SelectConstIf(IfExpr *x);
     void ExpandConstFor(ConstFor *cf, const function<void(ExpansionClone &)> &emit);
     Block *ExpandStatements(ConstFor *cf);
     void ExpandInitializers(vector<FieldInit> &inits);
@@ -2116,7 +2120,7 @@ struct TypeCheck {
     Val TempCopy(Val v);
     Node *WholeSlice(Node *n);
     Val CheckIf(IfExpr *x, TypeExpr *expected, bool wantvalue);
-    Val CheckBlockVal(Block *b, TypeExpr *expected, bool wantvalue);
+    Val CheckBlockVal(Block *b, TypeExpr *expected, bool wantvalue, bool constbody = false);
     Val CheckMatch(MatchExpr *m, TypeExpr *expected, bool wantvalue);
     Val CheckEarlyBlock(EarlyBlock *x, TypeExpr *expected, bool wantvalue);
     void CheckLoopBody(Block *body);
@@ -2874,8 +2878,9 @@ struct TypeCheck {
     // thread entry, a function nothing reached, an export, a whole-program
     // fixup, an exemplar -- and goes on past its error: a CompileError is
     // reported (Ast::Report) unless `report` is off, an Abandoned is a
-    // consequence of one reported before, and either returns the checker
-    // to the root's entry (Checkpoint). Returns whether the root completed.
+    // consequence of one reported before, and NeedsCaller defers an
+    // unreached helper until an actual call supplies its enclosing context.
+    // Each returns to the root's entry (Checkpoint). Returns whether the root completed.
     template<typename F> bool CheckRoot(F f, bool report = true) {
         Checkpoint cp(*this);
         try {
@@ -2884,6 +2889,12 @@ struct TypeCheck {
         } catch (CompileError &e) {
             if (report) ReportError(e);
         } catch (Abandoned &) {
+        } catch (NeedsCaller &) {
+            // Every incomplete caller on this path depended on the missing
+            // enclosing activation. Keep these records out of future cache
+            // matches, while Checkpoint closes their scopes/partial checks.
+            for (auto &frame : frames)
+                if (frame.spec && frame.spec->inprogress) frame.spec->needscaller = true;
         }
         cp.Restore();
         return false;
@@ -2960,7 +2971,8 @@ struct TypeCheck {
             if (en->generics.empty()) GetEnumInst(ast.EnumOf(en, {}, true, en->line));
         // And the sizes in every function's signature, for its parameters' and
         // type parameters' names, and in every generic type's fields.
-        for (auto sf : ast.functions) SignatureNames(sf->params, sf->rets, sf->generics);
+        for (auto sf : ast.functions)
+            if (!sf->conditional) SignatureNames(sf->params, sf->rets, sf->generics);
         for (auto st : ast.structs)
             for (auto &fld : st->fields)
                 if (fld.type) TypeParamSizes(fld.type, st->generics);
@@ -2989,6 +3001,7 @@ struct TypeCheck {
         // Concrete ones only; a pointee still spelled with a type parameter
         // gets here again once a specialization substitutes it.
         for (auto t : ast.alltypes) {
+            if (t->conditional) continue;
             if (t->kind == TY_REF && t->ref->pool && !HasGenerics(t->ref->sub)) ValidatePool(t);
             if (IsIndexT(t)) ValidateIndexType(t);
         }
@@ -3099,6 +3112,8 @@ struct TypeCheck {
         }
     }
 
+    struct NeedsCaller {};
+    FnSpec *standaloneroot = nullptr;
     void CheckUnreached(SFunction *sf) {
         if (!sf->specs.empty() || sf->isthread || sf->isnested || sf->brokensig) return;
         if (sf->IsGeneric()) return;
@@ -3109,6 +3124,7 @@ struct TypeCheck {
         auto spec = ast.NewFnSpec();
         spec->sf = sf;
         for (auto &p : sf->params) spec->argtypes.push_back(Subst(p.type));
+        Saved<FnSpec *> standalone(standaloneroot, spec);
         CheckStandalone(spec);
     }
 
@@ -3320,6 +3336,8 @@ struct TypeCheck {
     // Does the body contain `return ... from f` for an f not declared within?
     void ScanForeignFrom(Node *n, set<string_view> &names, bool &foreign) {
         if (!n || foreign) return;
+        // Source scans cannot select before lexical scopes/expansion exist.
+        if (auto x = Is<IfExpr>(n); x && x->isconst && !x->selected) return;
         if (auto r = Is<Return>(n)) {
             if (!r->from.empty() && !names.count(r->from)) foreign = true;
         } else if (auto fd = Is<FnDecl>(n)) {

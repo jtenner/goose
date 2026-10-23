@@ -189,8 +189,11 @@ inline Node *Block::Clone1(Ast &ast) const {
 }
 
 inline Node *IfExpr::Clone1(Ast &ast) const {
-    return ast.New<IfExpr>(line, cond->Clone(ast), (Block *)thenb->Clone(ast),
-                           CloneOrNull(ast, elseb));
+    auto x = ast.New<IfExpr>(line, cond->Clone(ast), (Block *)thenb->Clone(ast),
+                             CloneOrNull(ast, elseb));
+    x->isconst = isconst;
+    x->selected = selected;
+    return x;
 }
 
 // An arm as written: a variants<E> binding in its pattern becomes the

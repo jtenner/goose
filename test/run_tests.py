@@ -2255,6 +2255,13 @@ def main():
             else:
                 r.ok(out.strip())
         r.show_task(cli_definitions)
+        def const_if():
+            code, out, err = tc.run_capture([sys.executable, HERE / "const_if.py", exe, "--core-only"])
+            if code:
+                r.fail("native const if", out + err)
+            else:
+                r.ok(out.strip())
+        r.show_task(const_if)
 
     def compiler_discovery():
         import unittest
