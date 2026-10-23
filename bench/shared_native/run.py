@@ -51,6 +51,9 @@ def describe_binary(binary, generated=None):
         assembly = command(["objdump", "-d", binary]).stdout
         result["instruction_count_whole_binary"] = len(re.findall(r"^\s*[0-9a-f]+:\s", assembly, re.M))
         result["ownership_validation_symbol"] = "validate_register_ownership" in assembly
+        functions = re.findall(r"^[0-9a-f]+ <([^>]+)>:\n(.*?)(?=^[0-9a-f]+ <|\Z)", assembly, re.M | re.S)
+        result["application_instructions"] = {name: len(re.findall(r"^\s*[0-9a-f]+:\s", body, re.M))
+            for name, body in functions if name in ("main", "main_g", "checked_emit", "checked_emit_g")}
     if generated:
         c = generated.read_text()
         result.update(generated_c_bytes=len(c.encode()),
@@ -107,6 +110,7 @@ def aggregate(values):
     return {"median_seconds": center, "median_units_per_second": statistics.median(rates),
             "median_ns_per_unit": statistics.median(v["ns_per_unit"] for v in values),
             "seconds_mad": statistics.median(abs(v-center) for v in seconds),
+            "seconds_mad_percent": statistics.median(abs(v-center) for v in seconds) * 100 / center,
             "seconds_min": min(seconds), "seconds_max": max(seconds), "samples": values}
 
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Phase11 structural harness contract; does NOT run timing workloads."""
+import importlib.util
 import json
 from pathlib import Path
 from native_examples_support import ROOT, run
@@ -16,3 +17,17 @@ assert plan["run_requires_explicit_flag"] is True
 # No toolchain required to review the experiment; invocation without --run is read-only.
 assert json.loads(run(["python3", HARNESS]).stdout) == plan
 print("benchmark harness plan acceptance passed (no timings run)")
+
+# Synthetic samples verify reported variation/medians without running workloads.
+spec = importlib.util.spec_from_file_location("shared_native_bench", HARNESS)
+module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(module)
+values = [{"seconds": t, "units_per_second": 100 / t, "ns_per_unit": t * 1e7}
+          for t in (1, 2, 3, 4, 100)]
+summary = module.aggregate(values)
+assert summary["median_seconds"] == 3 and summary["seconds_mad"] == 1
+assert summary["seconds_min"] == 1 and summary["seconds_max"] == 100
+assert summary["median_units_per_second"] == 100 / 3
+assert summary["samples"] == values
+run(["python3", HARNESS, "--prepare"], ok=False)
+run(["python3", HARNESS, "--plan", "--samples", 4], ok=False)

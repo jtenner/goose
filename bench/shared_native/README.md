@@ -34,9 +34,9 @@ fence has no hardware instruction cost but can limit C optimization.
 Cases and units:
 
 - Uncontended atomics use one counter per worker; contended atomics use one
-  counter. Units are completed fetch-adds. Counters are eight bytes apart,
-  so the uncontended case can include cache-line false sharing; it is not
-  a cache-line-padded scalability claim.
+  counter. Units are completed fetch-adds. Independent counters are 64 bytes
+  apart, with a 64-byte-aligned region, to avoid false sharing on typical
+  x86-64 cache lines. Record the host before interpreting scalability.
 - Claims share a Relaxed fetch-add index with a bound, as in the example.
   Units are useful jobs, excluding final out-of-range claims.
 - Scalar read latency follows a dependent 8,192-element ring. Write latency

@@ -86,6 +86,7 @@ def main():
             return run([app, fixture, len(data), workers, mode], ok=ok)
         valid = [expression([rng.randint(-2147483648, 2147483647) for _ in range(rng.randint(1, 24))], i % 2 == 0)
                  for i in range(ns.jobs)]
+        valid[:6] = [expression(x) for x in ([0], [-1], [2147483647], [-2147483648], [64, -65], [-1, 1])]
         for count in (0, 1, 3, ns.jobs):
             cases = valid[:count]
             data = module([x[0] for x in cases])
@@ -119,7 +120,7 @@ def main():
                    b"\0asm\1\0\0\0\x01\xff\xff\xff\xff\x7f",
                    b"\0asm\1\0\0\0" + section(3, b"\1\1"),
                    b"\0asm\1\0\0\0" + section(10, b"\1\xff\xff\xff\xff\x0f"),
-                   b"\0asm\1\0\0\0" + section(0, b"\1\xff")]
+                   b"\0asm\1\0\0\0" + section(0, b"\1\xff"), module([b"\0" * 4097])]
         for data in invalid:
             execute(data, 4, ok=False)
         fixture.write_bytes(good)
@@ -130,9 +131,13 @@ def main():
         jobs, summary = parse(execute(module([b for b, _ in valid[:40]]), 4, "abort").stdout)
         assert jobs[0][1:3] == (4, 1) and summary[2] == 1, (jobs[:1], summary)
         assert all(j[2] == 1 and j[1] in (2, 4) for j in jobs)
+        jobs, summary = parse(execute(module([b for b, _ in valid[:40]]), 1, "abort").stdout)
+        assert jobs[0][1:3] == (4, 1) and all(j[1:3] == (5, 0) for j in jobs[1:])
+        assert summary == (40, 1, 1)
         # Shutdown is gated before claims, so zero published results is deterministic.
-        jobs, summary = parse(execute(module([valid[0][0]] * 40), 8, "cancel").stdout)
-        assert all(j[1:3] == (5, 0) for j in jobs) and summary == (40, 0, 0)
+        for workers in (0, 1, 2, 4, 8):
+            jobs, summary = parse(execute(module([valid[0][0]] * 40), workers, "cancel").stdout)
+            assert all(j[1:3] == (5, 0) for j in jobs) and summary == (40, 0, 0)
         assert execute(module([]), 2, "faults").stdout.strip() == "faults ok"
     print("parallel Wasm acceptance passed")
 
