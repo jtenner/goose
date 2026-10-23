@@ -8,6 +8,10 @@
 
 namespace goose {
 
+inline string ConstInitIf::CgX(CodeGen &cg) { cg.Fail(line, "internal: unexpanded const if initializers"); }
+inline void ConstInitIf::CgAny(CodeGen &cg, const Dst &) { cg.Fail(line, "internal: unexpanded const if initializers"); }
+inline void ConstInitIf::CgStmt(CodeGen &cg) { cg.Fail(line, "internal: unexpanded const if initializers"); }
+
 inline string ConstFor::CgX(CodeGen &cg) { cg.Fail(line, "internal: unexpanded const for"); }
 inline void ConstFor::CgAny(CodeGen &cg, const Dst &) { cg.Fail(line, "internal: unexpanded const for"); }
 inline void ConstFor::CgStmt(CodeGen &cg) { cg.Fail(line, "internal: unexpanded const for"); }
@@ -414,6 +418,7 @@ inline void Block::CgAny(CodeGen &cg, const Dst &d) {
 }
 
 inline void IfExpr::CgAny(CodeGen &cg, const Dst &d) {
+    if (isconst) { cg.GenAny(thenb, d); return; }
     // Both arms starting with the same bounds check (same array, same index,
     // nothing before it): one check ahead of the branch, after the
     // condition, reporting the line of the arm that is taken. The arms'
