@@ -2187,6 +2187,14 @@ def main():
             else:
                 r.fail(f"goose {what}", text)
     r.show_task(driver_verbs)
+    if cc and jit:
+        def cli_definitions():
+            code, out, err = tc.run_capture([sys.executable, HERE / "cli_definitions.py", exe])
+            if code:
+                r.fail("native CLI definitions", out + err)
+            else:
+                r.ok(out.strip())
+        r.show_task(cli_definitions)
 
     def compiler_discovery():
         import unittest

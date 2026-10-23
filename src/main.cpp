@@ -490,8 +490,10 @@ void ParseProgram(Ast &ast, const string &rootpath, const vector<string> &stdlib
 // that gives back the same text: what `goose --dump` of the dump written to a
 // file would print. `path` is where the dump's diagnostics say they are.
 void CheckRoundtrip(const string &dumped, const string &path,
-                    const vector<string> &stdlibdirs, const string &exedir) {
+                    const vector<string> &stdlibdirs, const string &exedir,
+                    const vector<string> &builddefines) {
     Ast again;
+    AddBuildDefinitions(again, builddefines);
     try {
         ParseProgram(again, path, stdlibdirs, exedir,
                      [&](const string &p) -> const string * { return p == path ? &dumped : nullptr; });
@@ -1616,7 +1618,7 @@ int Main(int argc, char **argv) {
         // it would without --roundtrip.
         if (roundtrip) {
             CheckRoundtrip(dumped, dumpfile.empty() ? cat(filename, ".dump") : dumpfile,
-                           stdlibdirs, DirOf(exe));
+                           stdlibdirs, DirOf(exe), builddefines);
             if (!quiet) fprintf(msgs, "roundtrip ok: %d bytes of dump\n", (int)dumped.size());
         }
         if (parseonly) return 0;

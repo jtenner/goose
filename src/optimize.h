@@ -221,6 +221,7 @@ struct Optimizer {
                                 it == IS_U64 && v < 0);
         } else if (i) r = ast.New<IntLit>(lit->line, i->val, i->text, i->uns);
         else if (auto f = Is<FltLit>(lit)) r = ast.New<FltLit>(lit->line, f->val, f->text);
+        else if (auto s = Is<StrLit>(lit)) r = ast.New<StrLit>(lit->line, s->val, s->multiline);
         else r = ast.New<BoolLit>(lit->line, ((BoolLit *)lit)->val);
         r->exprtype = usetype ? usetype : lit->exprtype;
         return r;
@@ -869,6 +870,7 @@ inline Node *SelfRef::Cp1(Inliner &inl) const { return inl.ast.New<SelfRef>(line
 inline Node *Continue::Cp1(Inliner &inl) const { return inl.ast.New<Continue>(line); }
 
 inline Node *Ident::Cp1(Inliner &inl) const {
+    if (buildvalue) return inl.o.CloneLit(buildvalue, exprtype);
     if (vdef) {
         // A parameter bound to a constant argument substitutes right here.
         auto it = inl.subst.find(vdef);
@@ -1097,6 +1099,7 @@ inline Node *Continue::Opt(Optimizer &) { return this; }
 inline Node *FnDecl::Opt(Optimizer &) { return this; }   // Inert statement.
 
 inline Node *Ident::Opt(Optimizer &o) {
+    if (buildvalue) return o.CloneLit(buildvalue, exprtype);
     if (vdef) {
         auto it = o.consts.find(vdef);
         if (it != o.consts.end()) {
