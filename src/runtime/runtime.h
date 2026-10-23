@@ -917,7 +917,12 @@ GS_API gs_shared_cap gs_shared_atomic_region(gs_shared_cap owner, uint64_t offse
 #define GS_SHARED_SLAB_SIZE 256
 #define GS_SHARED_SLABS 4096
 #define GS_SHARED_MAX (GS_SHARED_SLAB_SIZE * GS_SHARED_SLABS)
-typedef struct gs_shared_record {
+#ifdef _MSC_VER
+#define GS_SHARED_ALIGN8 __declspec(align(8))
+#else
+#define GS_SHARED_ALIGN8 __attribute__((aligned(8)))
+#endif
+typedef struct GS_SHARED_ALIGN8 gs_shared_record {
     uint64_t generation, allocation, offset, size, identity;
     uint8_t *data;
     int64_t actor;
