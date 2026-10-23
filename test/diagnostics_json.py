@@ -171,3 +171,6 @@ def check_diagnostics_json(exe, base):
                                         cwd=root)
         require(code == 1 and "--diagnostics takes json or text" in err, "--diagnostics yaml",
                 out + err)
+
+    from const_if_diagnostics import check_const_if_diagnostics
+    check_const_if_diagnostics(exe, base / "const-if-diagnostics")
