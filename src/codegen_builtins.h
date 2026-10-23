@@ -927,7 +927,10 @@ inline void CodeGen::EmitRzImage(Loc src, TypeExpr *t, const string &stk, Line l
     if (IsFrameObj(t)) {
         if (!src.val) src = FoView(src);
         auto th = FoTailHdr(t, src.s);
-        EmitValStore(stk, ast.inttypes[IS_I64], cat(th, ".len"));
+        auto cnt = T();
+        L("int64_t ", cnt, " = ", th, ".len;");
+        L("GS_MEMCPY(", Top(stk), ", &", cnt, ", 8);");
+        Bump(stk, "8");
         auto pre = FoPrefixSize(t);
         L("GS_MEMCPY(", Top(stk), ", &", src.s, ", ", pre, ");");
         Bump(stk, pre);
@@ -935,12 +938,12 @@ inline void CodeGen::EmitRzImage(Loc src, TypeExpr *t, const string &stk, Line l
         return;
     }
     auto cntp = T();
-    L("int64_t *", cntp, " = (int64_t *)", Top(stk), ";");
+    L("uint8_t *", cntp, " = ", Top(stk), ";");
     auto lenv = T();
     L("int64_t ", lenv, ";");
-    EmitValStore(stk, ast.inttypes[IS_I64], "0");
+    Bump(stk, "8");
     EmitRzCopy(src, t, stk, lenv, ln);
-    L("*", cntp, " = ", lenv, ";");
+    L("GS_MEMCPY(", cntp, ", &", lenv, ", 8);");
 }
 
 // The globals a thread program can name (CheckThreadGlobals admits flat
@@ -986,17 +989,28 @@ inline vector<string> CodeGen::EmitThreadSpawn(Call *c, vector<Node *> &an) {
     for (size_t i = 0; i < sp->argtypes.size(); i++) {
         auto pt = sp->argtypes[i];
         if (!IsResz(pt)) {
-            GenConstruct(an[1 + i], stk, pt);
+            if (!IsBytesT(pt) &&
+                (pt->kind == TY_INT || pt->kind == TY_FLT || pt->kind == TY_BOOL)) {
+                // Scalar arguments can follow a byte-sized argument too.
+                auto v = T();
+                FixedLocal(pt, v, GenXD(an[1 + i], pt));
+                L("GS_MEMCPY(", Top(stk), ", &", v, ", ", FixedSize(pt), ");");
+                Bump(stk, cat(FixedSize(pt)));
+            } else GenConstruct(an[1 + i], stk, pt);
             continue;
         }
         // Resizable values have an out-of-line header. Transfer a flat
         // image with its count, never a pointer into the spawning instance.
+        // Packet metadata is byte packed: keep counts in scalar locals and
+        // copy them to/from saved byte addresses, without adding padding.
         auto szp = T();
-        L("int64_t *", szp, " = (int64_t *)", Top(stk), ";");
+        L("uint8_t *", szp, " = ", Top(stk), ";");
         Bump(stk, "8");
         auto cntp = T();
-        L("int64_t *", cntp, " = (int64_t *)", Top(stk), ";");
-        EmitValStore(stk, ast.inttypes[IS_I64], "0");
+        L("uint8_t *", cntp, " = ", Top(stk), ";");
+        Bump(stk, "8");
+        auto cnt = T();
+        L("int64_t ", cnt, " = 0;");
         if (IsFrameObj(pt)) {
             // Reserve the packed prefix, construct directly into the
             // packet, then save only the header's count and fixed fields.
@@ -1005,16 +1019,19 @@ inline vector<string> CodeGen::EmitThreadSpawn(Call *c, vector<Node *> &an) {
             Bump(stk, pre);
             L(CT(pt), " ", h, ";");
             GenConstruct(an[1 + i], stk, pt, h);
-            L("*", cntp, " = ", FoTailHdr(pt, h), ".len;");
+            L(cnt, " = ", FoTailHdr(pt, h), ".len;");
             L("GS_MEMCPY(", pp, ", &", h, ", ", pre, ");");
         } else {
-            GenConstruct(an[1 + i], stk, pt, cat("(*", cntp, ")"));
+            GenConstruct(an[1 + i], stk, pt, cnt);
         }
-        L("*", szp, " = ", Top(stk), " - (uint8_t *)(", szp, " + 1);");
+        L("GS_MEMCPY(", cntp, ", &", cnt, ", 8);");
+        auto sz = T();
+        L("int64_t ", sz, " = ", Top(stk), " - (", szp, " + 8);");
+        L("GS_MEMCPY(", szp, ", &", sz, ", 8);");
     }
     for (auto d : ThreadGlobals(sp)) {
         auto szp = T();
-        L("int64_t *", szp, " = (int64_t *)", Top(stk), ";");
+        L("uint8_t *", szp, " = ", Top(stk), ";");
         Bump(stk, "8");
         auto lv = VarLoc(d);
         if (IsResz(d->type)) {
@@ -1023,7 +1040,10 @@ inline vector<string> CodeGen::EmitThreadSpawn(Call *c, vector<Node *> &an) {
                 // The pool's freelist follows: its count, then its entries.
                 auto &p = gpools[d];
                 auto flsz = FlEntrySize(d);
-                EmitValStore(stk, ast.inttypes[IS_I64], cat(p.first, ".len"));
+                auto cnt = T();
+                L("int64_t ", cnt, " = ", p.first, ".len;");
+                L("GS_MEMCPY(", Top(stk), ", &", cnt, ", 8);");
+                Bump(stk, "8");
                 L("GS_MEMCPY(", Top(stk), ", ", p.first, ".base, (size_t)(", p.first,
                   ".len * ", flsz, "));");
                 Bump(stk, cat(p.first, ".len * ", flsz));
@@ -1037,7 +1057,9 @@ inline vector<string> CodeGen::EmitThreadSpawn(Call *c, vector<Node *> &an) {
             L("GS_MEMCPY(", Top(stk), ", &", lv.s, ", ", FixedSize(d->type), ");");
             Bump(stk, cat(FixedSize(d->type)));
         }
-        L("*", szp, " = ", Top(stk), " - (uint8_t *)(", szp, " + 1);");
+        auto sz = T();
+        L("int64_t ", sz, " = ", Top(stk), " - (", szp, " + 8);");
+        L("GS_MEMCPY(", szp, ", &", sz, ", 8);");
     }
     // Emitted here, not returned as text: a discarded result would drop the spawn.
     auto id = T();
@@ -1077,13 +1099,13 @@ inline void CodeGen::EmitThreadThunk(FnSpec *sp, int64_t stacks) {
             regions++;
             Append(b, "    gs_stack ", stk, "; gs_stack_init(&", stk, ");\n",
                    "    ", RzCT(pt), " ", a, ";\n",
-                   "    {\n        int64_t sz = *(int64_t *)p; p += 8;\n");
+                   "    {\n        int64_t sz; GS_MEMCPY(&sz, p, 8); p += 8;\n");
             auto pre = IsFrameObj(pt) ? FoPrefixSize(pt) : string("0");
             auto hdr = IsFrameObj(pt) ? FoTailHdr(pt, a) : a;
             if (IsFrameObj(pt))
                 Append(b, "        GS_MEMCPY(&", a, ", p + 8, ", pre, ");\n");
             Append(b, "        ", hdr, ".base = ", stk, ".top;\n",
-                   "        ", hdr, ".len = *(int64_t *)p;\n",
+                   "        GS_MEMCPY(&", hdr, ".len, p, 8);\n",
                    "        GS_MEMCPY(", stk, ".top, p + 8 + ", pre,
                    ", (size_t)(sz - 8 - ", pre, "));\n",
                    "        ", stk, ".top += sz - 8 - ", pre, "; p += sz;\n    }\n");
@@ -1106,8 +1128,8 @@ inline void CodeGen::EmitThreadThunk(FnSpec *sp, int64_t stacks) {
             Append(b, "    ", CT(pt), " a", i, " = {0};\n");
             args.push_back(cat("a", i));
         } else {
-            Append(b, "    ", CT(pt), " a", i, " = *(", CT(pt), " *)p; p += ",
-                   FixedSize(pt), ";\n");
+            Append(b, "    ", CT(pt), " a", i, "; GS_MEMCPY(&a", i, ", p, ",
+                   FixedSize(pt), "); p += ", FixedSize(pt), ";\n");
             PushArg(args, pt, IsPoolParam(sp, i), cat("a", i));
         }
     }
@@ -1117,7 +1139,7 @@ inline void CodeGen::EmitThreadThunk(FnSpec *sp, int64_t stacks) {
               "    if (!gs_gl) gs_panic(\"out of memory copying globals\");\n");
     for (auto d : ThreadGlobals(sp)) {
         auto gn = gnames[d];
-        Append(b, "    {\n        int64_t sz = *(int64_t *)p; p += 8; uint8_t *img = p; p += sz;\n");
+        Append(b, "    {\n        int64_t sz; GS_MEMCPY(&sz, p, 8); p += 8; uint8_t *img = p; p += sz;\n");
         if (IsResz(d->type)) {
             auto stk = gstks[d];
             regions++;
@@ -1127,7 +1149,7 @@ inline void CodeGen::EmitThreadThunk(FnSpec *sp, int64_t stacks) {
                 auto pre = FoPrefixSize(d->type);
                 Append(b, "        GS_MEMCPY(&", gn, ", img + 8, ", pre, ");\n",
                        "        ", th, ".base = ", stk, "->top;\n",
-                       "        ", th, ".len = *(int64_t *)img;\n",
+                       "        GS_MEMCPY(&", th, ".len, img, 8);\n",
                        "        GS_MEMCPY(", stk, "->top, img + 8 + ", pre, ", (size_t)(sz - 8 - ",
                        pre, "));\n",
                        "        ", stk, "->top += sz - 8 - ", pre, ";\n");
@@ -1138,20 +1160,21 @@ inline void CodeGen::EmitThreadThunk(FnSpec *sp, int64_t stacks) {
                 auto esz = FixedSize(d->type->arr->sub);
                 auto flsz = FlEntrySize(d);
                 regions++;
-                Append(b, "        int64_t cnt = *(int64_t *)img, ebytes = cnt * ", esz, ";\n",
+                Append(b, "        int64_t cnt; GS_MEMCPY(&cnt, img, 8);\n",
+                       "        int64_t ebytes = cnt * ", esz, ";\n",
                        "        ", gn, ".base = ", stk, "->top;\n",
                        "        ", gn, ".len = cnt;\n",
                        "        GS_MEMCPY(", stk, "->top, img + 8, (size_t)ebytes);\n",
                        "        ", stk, "->top += ebytes;\n",
                        "        gs_stack_init(", p.second, ");\n",
                        "        ", p.first, ".base = ", p.second, "->top;\n",
-                       "        ", p.first, ".len = *(int64_t *)(img + 8 + ebytes);\n",
+                       "        GS_MEMCPY(&", p.first, ".len, img + 8 + ebytes, 8);\n",
                        "        GS_MEMCPY(", p.second, "->top, img + 16 + ebytes, (size_t)(",
                        p.first, ".len * ", flsz, "));\n",
                        "        ", p.second, "->top += ", p.first, ".len * ", flsz, ";\n");
             } else {
                 Append(b, "        ", gn, ".base = ", stk, "->top;\n",
-                       "        ", gn, ".len = *(int64_t *)img;\n",
+                       "        GS_MEMCPY(&", gn, ".len, img, 8);\n",
                        "        GS_MEMCPY(", stk, "->top, img + 8, (size_t)(sz - 8));\n",
                        "        ", stk, "->top += sz - 8;\n");
             }
