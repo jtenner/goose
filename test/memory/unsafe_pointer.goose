@@ -1,4 +1,4 @@
-// runtime-debug
+// no-jit runtime-debug: TinyCC cannot lower the alignment of pointer typedefs.
 // These are real libc objects; no application allocation/read/write helpers.
 extern fn unsafe_test_malloc(n: u64) -> UnsafePtr = "malloc";
 extern fn unsafe_test_free(p: UnsafePtr) = "free";

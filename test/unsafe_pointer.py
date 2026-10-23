@@ -32,7 +32,12 @@ def main():
 
     def run(argv, error=None, output=None):
         nonlocal checks
-        result = subprocess.run([str(x) for x in argv], cwd=ROOT, env=env,
+        call_env = env
+        if Path(str(argv[0])).name == "gcc":
+            # A separately installed Clang can put its linker ahead of GCC's
+            # own tools on PATH, breaking GCC sanitizer runtime dependencies.
+            call_env = dict(env, PATH=str(Path(argv[0]).resolve().parent) + os.pathsep + env.get("PATH", ""))
+        result = subprocess.run([str(x) for x in argv], cwd=ROOT, env=call_env,
                                 capture_output=True, text=True, timeout=120)
         text = result.stdout + result.stderr
         if error is not None:
@@ -41,6 +46,9 @@ def main():
             assert result.returncode == 0, (argv, result.returncode, text)
         if output is not None:
             assert result.stdout.strip() == output, (argv, text)
+        for diagnostic in ("ERROR: AddressSanitizer", "ERROR: LeakSanitizer",
+                           "SUMMARY: UndefinedBehaviorSanitizer", "AddressSanitizer:DEADLYSIGNAL"):
+            assert diagnostic not in text, (argv, text)
         checks += 1
         return text
 
@@ -70,7 +78,10 @@ def main():
     }
     names = ROOT / "test/memory/unsafe_pointer_names.goose"
     run([goose, "--roundtrip", "--check", names])
-    sources = [(fixture, "unsafe pointer ok", None), (names, "unsafe pointer names ok", None)]
+    packed = ROOT / "test/memory/unsafe_pointer_packed.goose"
+    run([goose, "--roundtrip", "--check", packed])
+    sources = [(fixture, "unsafe pointer ok", None), (names, "unsafe pointer names ok", None),
+               (packed, "packed pointers ok", None)]
     for name, (statement, error) in errors.items():
         source = out / (name + ".goose")
         source.write_text("fn main() { " + statement + " }\n")
@@ -88,7 +99,7 @@ def main():
                 # Exercise the explicit target rejection without depending on
                 # the host having a complete 32-bit libc/toolchain installed.
                 start = generated.index("#if !defined(UINTPTR_MAX)")
-                stop = generated.index("typedef void *gs_unsafe_ptr;", start)
+                stop = generated.index("/* UnsafePtr packed storage", start)
                 guard = generated[start:stop]
                 for width in ("UINT32_MAX", None):
                     rejected = out / f"unsupported-{width}-O{level}.c"
@@ -109,6 +120,19 @@ def main():
                  "-fno-sanitize-recover=all", "-fno-omit-frame-pointer", c,
                  "-o", binary, "-lm", "-pthread", "-ldl"])
             run([binary], error=error, output=expected)
+            if source == packed:
+                # Verify pointer objects in Goose's packed layouts, not only
+                # the foreign bytes unsafe_load/store operate on. Enable the
+                # alignment sanitizer on both C frontends and both C levels.
+                for name, compiler in compilers:
+                    for native_level in (0, 2):
+                        binary = out / f"packed-g{level}-{name}-O{native_level}-sanitize"
+                        run([compiler, f"-O{native_level}", "-g", "-DGS_DEBUG=1",
+                             "-fsanitize=address,undefined", "-fno-sanitize-recover=all",
+                             "-fno-omit-frame-pointer", c, "-o", binary, "-lm", "-pthread", "-ldl"])
+                        run([binary], output=expected)
+                run([goose, f"-O{level}", "--jit", packed],
+                    error="UnsafePtr packed storage requires GCC or Clang; TinyCC unsupported")
     print(f"unsafe pointer: {checks} checks passed (GCC, Clang, debug/release, ASan/UBSan)", flush=True)
     subprocess.run([sys.executable, ROOT / "test/unsafe_pointer_alias.py", "--exe", goose],
                    cwd=ROOT, env=env, check=True)

@@ -1,4 +1,4 @@
-// runtime-debug: internal packed pointer storage must also support alignment 1.
+// no-jit runtime-debug: internal packed pointer storage must support alignment 1.
 extern fn unsafe_packed_malloc(n: u64) -> UnsafePtr = "malloc";
 extern fn unsafe_packed_free(p: UnsafePtr) = "free";
 struct UnsafePointerHolder { prefix: u8, pointer: UnsafePtr }
