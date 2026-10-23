@@ -1912,6 +1912,28 @@ def main():
             r.show_task(clang_simd, "stdlib_base64", HERE / "stdlib" / "stdlib_base64.goose",
                         clang_simd_named("base64_encode", "base64_decode"))
 
+    def builder_return_alignment():
+        from builder_return_alignment import check_builder_return_alignment
+        try:
+            check_builder_return_alignment(exe, cc, gendir, runtime=r.runtime, extra=extra)
+            r.ok("builder return channels: alignment enabled, Goose/C O0/O2")
+        except RuntimeError as e:
+            r.fail("builder return alignment", str(e))
+    if cc and cc.style == "gcc":
+        r.section("builder return alignment")
+        r.show_task(builder_return_alignment)
+
+    def worker_packet_alignment():
+        from worker_packet_alignment import check_worker_packet_alignment
+        try:
+            check_worker_packet_alignment(exe, cc, gendir, runtime=r.runtime, extra=extra)
+            r.ok("worker packets: alignment enabled, Goose/C O0/O2, release/debug")
+        except RuntimeError as e:
+            r.fail("worker packet alignment", str(e))
+    if cc and cc.style == "gcc":
+        r.section("worker packet alignment")
+        r.show_task(worker_packet_alignment)
+
     def library_headers():
         from library_headers import check_library_headers
         try:
@@ -2103,6 +2125,21 @@ def main():
                 r.fail(f"goose {what}", text)
     r.section("driver verbs")
     r.show_task(driver_verbs)
+    if cc and jit:
+        def cli_definitions():
+            code, out, err = tc.run_capture([sys.executable, HERE / "cli_definitions.py", exe])
+            if code:
+                r.fail("native CLI definitions", out + err)
+            else:
+                r.ok(out.strip())
+        r.show_task(cli_definitions)
+        def const_if():
+            code, out, err = tc.run_capture([sys.executable, HERE / "const_if.py", exe])
+            if code:
+                r.fail("native const if", out + err)
+            else:
+                r.ok(out.strip())
+        r.show_task(const_if)
 
     def cli_paths():
         from cli_paths import check_cli_paths

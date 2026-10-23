@@ -299,6 +299,22 @@ inline void StructLit::Dump(string &s, int ind) const {
 
 inline void DumpArms(string &s, const vector<MatchArm> &arms, int ind);
 
+inline void ConstInitIf::Dump(string &s, int ind) const {
+    s += "const if ";
+    cond->Dump(s, ind);
+    for (int i = 0; i < 2; i++) {
+        s += i ? " else {" : " {";
+        for (auto &entry : branches[i]) {
+            NL(s, ind + 1);
+            if (!entry.name.empty()) Append(s, entry.name, ": ");
+            entry.val->Dump(s, ind + 1);
+            s += ",";
+        }
+        NL(s, ind);
+        s += "}";
+    }
+}
+
 inline void ConstFor::Dump(string &s, int ind) const {
     s += "const for <";
     for (size_t i = 0; i < names.size(); i++) {
@@ -434,7 +450,7 @@ inline void RangeExpr::Dump(string &s, int ind) const {
 }
 
 inline void IfExpr::Dump(string &s, int ind) const {
-    s += "if ";
+    s += isconst ? "const if " : "if ";
     DumpOperand(s, cond, ind);
     s += " ";
     thenb->Dump(s, ind);
@@ -611,7 +627,17 @@ inline void IncDec::Dump(string &s, int ind) const {
 inline void DumpFields(string &s, const vector<Field> &fields, int ind) {
     for (auto &f : fields) {
         NL(s, ind + 1);
-        if (f.ispad) {
+        if (f.condition) {
+            s += "const if ";
+            f.condition->Dump(s, ind + 1);
+            s += " {";
+            DumpFields(s, f.thenfields, ind + 1);
+            NL(s, ind + 1);
+            s += "} else {";
+            DumpFields(s, f.elsefields, ind + 1);
+            NL(s, ind + 1);
+            s += "}";
+        } else if (f.ispad) {
             s += "pad";
             if (f.padsize >= 0) Append(s, " ", f.padsize);
         } else {
@@ -686,7 +712,7 @@ inline void StructDecl::Dump(string &s, int ind) const {
     Append(s, "struct ", st->qname);
     DumpGenerics(s, st->generics);
     s += " {";
-    DumpFields(s, st->fields, ind);
+    DumpFields(s, st->declfields.empty() ? st->fields : st->declfields, ind);
     NL(s, ind);
     s += "}";
 }
@@ -700,7 +726,7 @@ inline void EnumDecl::Dump(string &s, int ind) const {
         s += v.name;
         if (v.has_payload) {
             s += " {";
-            DumpFields(s, v.fields, ind + 1);
+            DumpFields(s, v.declfields.empty() ? v.fields : v.declfields, ind + 1);
             NL(s, ind + 1);
             s += "}";
         }

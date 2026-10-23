@@ -238,6 +238,7 @@ struct Server {
 // `goose lsp [--stdlib dir]`, or `goose lsp --probe`.
 inline int RunLsp(const string &exe, const vector<string> &args) {
     string stdlib;
+    vector<string> builddefines;
     for (size_t i = 0; i < args.size(); i++) {
         if (args[i] == "--probe") {
             printf("goose lsp %s\n", LSP_VERSION);
@@ -245,6 +246,10 @@ inline int RunLsp(const string &exe, const vector<string> &args) {
         }
         if (args[i] == "--stdlib" && i + 1 < args.size()) {
             stdlib = args[++i];
+            continue;
+        }
+        if (args[i] == "--define" && i + 1 < args.size()) {
+            builddefines.push_back(args[++i]);
             continue;
         }
         // The one transport there is, which clients (vscode-languageclient
@@ -258,6 +263,15 @@ inline int RunLsp(const string &exe, const vector<string> &args) {
     // error at its import.
     package_nofetch = true;
     Server server(exe, stdlib);
+    // Validate before the protocol loop, then give every fresh analysis its own symbols.
+    try {
+        Ast config;
+        AddBuildDefinitions(config, builddefines);
+    } catch (CompileError &e) {
+        fprintf(stderr, "%s\n", e.msg.c_str());
+        return 1;
+    }
+    server.ws.builddefines = std::move(builddefines);
     auto code = server.Run();
     // The reader thread is still blocked in fgetc on stdin, holding the
     // stream's lock, which glibc's exit waits for while it closes the
