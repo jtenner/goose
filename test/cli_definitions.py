@@ -5,6 +5,9 @@ import subprocess
 import sys
 import tempfile
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent / "scripts"))
+from lsp_protocol import Client
+
 EXE = pathlib.Path(sys.argv[1]).resolve()
 CHECKS = 0
 
@@ -61,5 +64,63 @@ with tempfile.TemporaryDirectory(prefix="goose-definitions-") as directory:
     invoke(["check", "--define", "FLAG=true", source], ok=False)
     source.write_text('fn main() { var a: u8[build::COUNT] = [0; build::COUNT]; print(a.len); }\n')
     invoke(["run", "--define", "COUNT=8", source], contains="8")
+    source.write_text('fn defined() -> i64 { build::COUNT }\n'
+                      'fn main() { let a: u8[3] = build::TEXT; '
+                      'print(a, " ", build::TEXT[0], " ", build::TEXT[1..], " ", defined()); }\n')
+    for level in ("-O0", "-O2"):
+        invoke(["run", level, "--define", 'TEXT="abc"', "--define", "COUNT=8", source],
+               contains="abc 97 bc 8")
+    source.write_text('fn main() { build::TEXT[0] = 1; }\n')
+    invoke(["check", "--define", 'TEXT="abc"', source], ok=False)
+    source.write_text('let ALIAS = build::TEXT;\n'
+                      'struct Buffer { bytes: u8[build::TEXT.len] }\n'
+                      'fn main() { var a: u8[ALIAS.len] = [1; ALIAS.len]; '
+                      'print(a.len, " ", match 3 { build::COUNT => "yes", _ => "no" }); }\n')
+    for level in ("-O0", "-O2"):
+        invoke(["run", level, "--roundtrip", "--define", 'TEXT="abc"', "--define", "COUNT=3", source],
+               contains="3 yes")
+    source.write_text('fn main() { print(build::COUNT); }\n')
+    second = root / "second.goose"
+    second.write_text(source.read_text())
+    invoke(["--multi-test", "--check", "--define", "COUNT=3", source, second])
+    invoke(["--define", "COUNT=3", "--define", "FLAG=true", source, "-o", generated])
+    first_c = generated.read_text()
+    invoke(["--define", "FLAG=true", "--define", "COUNT=3", source, "-o", generated])
+    assert generated.read_text() == first_c
+    # Imports and generic specializations use the same typed configuration.
+    helper = root / "helper.goose"
+    helper.write_text('fn configured<T>(value: T) -> i64 { build::COUNT }\n')
+    source.write_text('import helper; fn main() { print(configured(1), " ", configured(true)); }\n')
+    invoke(["run", "-O2", "--define", "COUNT=9", source], contains="9 9")
+    # The editor must report the same configuration and expose read-only symbols.
+    text = 'fn main() { print(build::COUNT); }\n'
+    source.write_text(text)
+    uri = source.as_uri()
+    client = Client(str(EXE), root, ["--define", "COUNT=3"])
+    try:
+        client.request("initialize", {"processId": None, "rootUri": root.as_uri(),
+                                      "capabilities": {},
+                                      "initializationOptions": {"entryFiles": [str(source)]}})
+        client.send("initialized", {}, request=False)
+        client.send("textDocument/didOpen", {"textDocument": {"uri": uri, "languageId": "goose",
+                                                              "version": 1, "text": text}}, request=False)
+        diagnostics = client.diagnostics_for(uri)
+        assert diagnostics == [], diagnostics
+        doc = {"textDocument": {"uri": uri}}
+        position = {"line": 0, "character": text.index("COUNT") + 1}
+        hover = client.request("textDocument/hover", {**doc, "position": position})
+        assert "i64" in str(hover) and "--define" in str(hover), hover
+        completion = client.request("textDocument/completion", {**doc, "position": position})
+        assert any(item["label"] == "COUNT" and item["kind"] == 21 for item in completion["items"]), completion
+        tokens = client.request("textDocument/semanticTokens/full", doc)["data"]
+        assert any((tokens[i + 4] & 6) == 6 for i in range(0, len(tokens), 5)), tokens
+        assert client.request("textDocument/definition", {**doc, "position": position}) is None
+        client.request("shutdown", {})
+        client.send("exit", {}, request=False)
+        client.p.wait(timeout=10)
+    finally:
+        if client.p.poll() is None:
+            client.p.kill()
+            client.p.wait()
 
 print(f"CLI definitions: {CHECKS} checks passed")

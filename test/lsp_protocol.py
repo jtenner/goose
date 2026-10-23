@@ -38,8 +38,8 @@ def uri_of(path):
 
 
 class Client:
-    def __init__(self, exe, cwd):
-        self.p = subprocess.Popen([exe, "lsp"], cwd=cwd, stdin=subprocess.PIPE,
+    def __init__(self, exe, cwd, args=()):
+        self.p = subprocess.Popen([exe, "lsp", *args], cwd=cwd, stdin=subprocess.PIPE,
                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         self.seq = 0
         self.pending = []    # Notifications read while waiting for a reply.
