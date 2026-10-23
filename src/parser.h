@@ -370,6 +370,7 @@ struct Parser {
             curns = name;
             name = ExpectIdent(context);
         }
+        if (curns == "build") Error("namespace build is reserved for compiler definitions");
         return name;
     }
 
