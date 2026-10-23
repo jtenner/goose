@@ -77,6 +77,8 @@ def main():
     ap.add_argument("goose", type=Path)
     ap.add_argument("--jobs", type=int, default=3000)
     ns = ap.parse_args()
+    if ns.jobs < 40:
+        ap.error("--jobs must be at least 40 for abort/shutdown coverage")
     rng = random.Random(901)
     with tempfile.TemporaryDirectory(prefix="goose-wasm-") as directory:
         root = Path(directory)

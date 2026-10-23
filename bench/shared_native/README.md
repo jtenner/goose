@@ -1,5 +1,7 @@
 # Native shared memory experiment
 
+The harness and C baseline target Linux/POSIX (pthread, mmap and flock).
+
 `python3 bench/shared_native/run.py` prints the plan and does no compilation
 or timing. `--prepare --goose /path/to/goose --directory /tmp/goose-bench`
 compiles only and reports generated C and binary size/instruction inspection.
