@@ -394,6 +394,10 @@ struct Param {
 };
 
 struct Field {
+    // Parse-level field fragment; ordinary fields have no condition. Flattened
+    // before declaration validation, instantiation, layout or reflection.
+    Node *condition = nullptr;
+    vector<Field> thenfields, elsefields;
     string_view name;
     Line line;                  // Of the name, or of `pad`.
     string_view doc;            // The comment lines above it (Lexer::doc).
@@ -822,6 +826,7 @@ enum NodeKind : uint8_t {
     NK_LoopExpr,
     NK_ForLoop,
     NK_ConstFor,
+    NK_ConstInitIf,
     NK_Return,
     NK_Break,
     NK_Continue,
@@ -1353,6 +1358,12 @@ NODE(ConstFor)
     ConstFor(Line l) : Node(l, NKind) {}
 NODE_END
 
+NODE(ConstInitIf)
+    Node *cond;
+    vector<FieldInit> branches[2];   // 0 true, 1 false; source order preserved.
+    ConstInitIf(Line l, Node *condition) : Node(l, NKind), cond(condition) {}
+NODE_END
+
 NODE(Return)
     BCE_WALK
     vector<Node *> vals;
@@ -1507,6 +1518,7 @@ struct SStruct {
     string_view doc;            // As SFunction::doc.
     vector<GenericParam> generics;
     vector<Field> fields;
+    vector<Field> declfields;   // Original conditional declaration for tooling/dumps.
     vector<StructInst *> insts;  // Instantiations (typecheck), owned by Ast.
     // The declaration lost a field to a parse error (Parser::ParseMembers):
     // its fields are those parsed before the error, and a name it lacks is
@@ -1525,6 +1537,7 @@ struct SVariant {
     Line line;                  // Of the name.
     string_view doc;            // As SFunction::doc.
     vector<Field> fields;
+    vector<Field> declfields;
     bool has_payload = false;   // Distinguishes "Point" from "Point {}".
 };
 
