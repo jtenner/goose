@@ -814,6 +814,9 @@ struct CodeGen {
         bool viaref = false;
         string stk, lenlv, fl, flstk;
         string hdr;            // The resizable's own header/frame-object lvalue, when it has one.
+        // A bytes subvalue can share its owner's count without having its
+        // own header (a variable-prefix record's resizable tail, for example).
+        string lenhdr;         // The packed header owning that inherited lenlv.
         // A loop-hoisted view of the array behind this reference (see `views`):
         // set on the reference by VarLoc, and, for the length, carried across
         // the deref to the pointee, where ArrayView reads it instead of memory.
@@ -1287,6 +1290,7 @@ struct CodeGen {
     vector<Node *> CallArgNodes(Call *c, size_t nparams);
     void EmitArg(FnSpec *sp, size_t i, Node *node, vector<string> &args, bool later);
     void EmitFvArg(const VarDef *fv, vector<string> &args);
+    string LengthResult(const string &lenlv, vector<pair<string, string>> &copies);
     vector<string> EmitSpecCall(Call *c, FnSpec *sp, Dst d0, vector<Dst> *alldst);
     bool NeedsReprefix(const Dst &d, TypeExpr *rt);
     void EmitReprefix(FnSpec *sp, const Dst &dd, const string &base, const string &cnt);
