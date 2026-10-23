@@ -34,6 +34,20 @@ let ENABLED = !false && (3 * 2 == 6);
 let BYTEMAX: u8 = 255;
 let POSITIVE: i64 = 1;
 let LARGE: u64 = 18446744073709551615;
+let EXCLUDED_MESSAGE = "excluded_global_data_sentinel";
+let C = 1;
+fn match_selected() {
+    match 0 {
+        const for <C> in [0, 1] { C => const if C == 0 { 7 } else { 9 }, },
+        _ => 11,
+    }
+}
+fn move_result() -> i64[>..] {
+    var a: i64[>..] = [1, 2, 3];
+    const if true { a } else { a }
+}
+fn move_inner() -> i64[>..] { const if true { var a: i64[>..] = [1, 2, 3]; a } }
+export fn api() -> i64 { const if false { return 1 from outside; } else { 7 } }
 enum Mode { Ok }
 type Number = u32;
 fn excluded_call() { print("excluded_call_sentinel"); }
@@ -50,6 +64,7 @@ fn main() {
     }
     const if false {
         excluded_call();
+        print(EXCLUDED_MESSAGE);
         let bad: ns::Unknown = ns::Unknown {};
         let e: Mode.Missing = Mode.Missing {};
         let badalias: Number<ns::Missing> = 1;
@@ -58,6 +73,11 @@ fn main() {
     const if false {} else {}
     print(chosen(9));
     stopped(true);
+    assert(match_selected() == 7);
+    let moved = move_result();
+    assert(moved.len == 3);
+    let inner = move_inner();
+    assert(inner.len == 3);
     const if !(1 < 2 && 2 <= 2 && 3 > 2 && 3 >= 3 && true != false && !false == true) { unknown(); }
     const if POSITIVE < LARGE {} else { unknown(); }
     const if ~0 == BYTEMAX { } else { unknown(); }
@@ -155,6 +175,7 @@ with tempfile.TemporaryDirectory(prefix='goose-const-if-') as directory:
                 # Separate ASTs in one compiler process reuse the same config.
                 invoke(['--multi-test', '--check', *definitions, source, source])
                 c = cfile.read_text()
+                assert 'excluded_global_data_sentinel' not in c
                 assert 'excluded_call_sentinel' not in c and 'excluded_call(' not in c
                 assert 'ns_Unknown' not in c and 'ns_Missing' not in c
 
@@ -172,6 +193,9 @@ with tempfile.TemporaryDirectory(prefix='goose-const-if-') as directory:
         ('enum E { A } fn main() { const if true { let bad: E.Missing = E.Missing {}; } }', 'variant'),
         ('fn main() { const if true || MISSING {} }', 'constant'),
         ('fn main() { const if false && 4 {} }', 'bool'),
+        ('fn unused() { const if false { return from missing; } else { unrelated(); } } fn main() {}', 'unrelated'),
+        ('let N = 2; fn main() { const if true { fn inner<N>(x: u8[N]) {} } }', 'type parameter'),
+        ('let FLAG = true; fn f() -> i64 { { let FLAG = false; const if FLAG { 1 } else { 2 } } } fn main() { print(f()); }', 'local'),
         ('let FLAG = true; fn main() { if true { let FLAG = false; const if FLAG {} } else {} }', 'local'),
         ('let N = 2; fn main() { const if true { fn inner(N: i64, x: u8[N]) {} } }', 'parameter'),
     ]
@@ -193,10 +217,15 @@ with tempfile.TemporaryDirectory(prefix='goose-const-if-') as directory:
         source.write_text(code)
         invoke(['check', source], ok=False, contains=diagnostic)
 
+    source.write_text('fn main() { missing(); } fn later() { const if true { other(); } }')
+    recovery = invoke(['check', source], ok=False)
+    assert 'unknown function: missing' in recovery.stderr and 'unknown function: other' in recovery.stderr, recovery.stderr
+
     if not CORE_ONLY:
         # Excluded names remain quiet in editor analysis; malformed excluded
         # syntax still reports, and a subsequent edit recovers selected fields.
-        text = ("struct S { const if build::DEBUG { enabled: u32 = 1, } "
+        text = ("fn unused<T>(v: T) { const if true { let x: ns::Missing = ns::Missing {}; } }\n"
+                "struct S { const if build::DEBUG { enabled: u32 = 1, } "
                 "else { disabled: u32 = 2, } }\n"
                 "fn main() { const if build::DEBUG { let bad: ns::Unknown = ns::Unknown {}; } "
                 "else { let x = S {}; print(x.disabled); } }\n")
@@ -211,7 +240,7 @@ with tempfile.TemporaryDirectory(prefix='goose-const-if-') as directory:
                                                                 'version': 1, 'text': text}}, request=False)
             diagnostics = client.diagnostics_for(uri)
             assert diagnostics == [], diagnostics
-            position = {'line': 1, 'character': text.splitlines()[1].index('x.disabled') + 2}
+            position = {'line': 2, 'character': text.splitlines()[2].index('x.disabled') + 2}
             doc = {'textDocument': {'uri': uri}, 'position': position}
             items = client.request('textDocument/completion', doc)['items']
             labels = [item['label'] for item in items]
