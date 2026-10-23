@@ -27,10 +27,11 @@ fn c_offset() -> u32 {
     const if build::DEBUG { return 12; } else { return 4; }
 }
 fn layout_id() -> u32 { return 0x48440000 + header_size(); }
-fn names<T>() -> u8[>..] {
+fn check_names<T>(expected: u8[:]) {
     var out: u8[>..] = [];
     const for <N, A> in fields<T> { format(out, N, ","); }
-    return out;
+    assert(out == expected);
+    return;
 }
 fn make32(token: SharedAtomicU32) -> Packed32 {
     return Packed32 { prefix: 7,
@@ -50,14 +51,15 @@ fn private_capabilities(owner: SharedOwner) {
     let y = bounce64(make64(token64));
     assert(x.prefix == 7 && x.tail == 9 && y.prefix == 11 && y.tail == 13);
     const if build::DEBUG {
-        assert(names<Packed32>() == "prefix,conditional_token32,tail,");
-        assert(names<Packed64>() == "prefix,conditional_token64,tail,");
+        check_names<Packed32>("prefix,conditional_token32,tail,");
+        check_names<Packed64>("prefix,conditional_token64,tail,");
         assert(atomic_fetch_add(x.conditional_token32, 2, "AcqRel") == 10);
         assert(atomic_fetch_add(y.conditional_token64, 3, "AcqRel") == 20);
         assert(atomic_load(token32, "Acquire") == 12);
         assert(atomic_load(token64, "Acquire") == 23);
     } else {
-        assert(names<Packed32>() == "prefix,tail," && names<Packed64>() == "prefix,tail,");
+        check_names<Packed32>("prefix,tail,");
+        check_names<Packed64>("prefix,tail,");
         var private32: Packed32[1] = [x];
         var private64: Packed64[1] = [y];
         assert(bytes_of(private32).len == 2 && bytes_of(private64).len == 2);
@@ -120,8 +122,8 @@ fn local(mode: u8[:], path: u8[:]) {
     var private: Header[1] = [Header { a: 7,
         const if build::DEBUG { debug: 99, } else {}, c: 287454020 }];
     assert(bytes_of(private).len == header_size());
-    const if build::DEBUG { assert(names<Header>() == "a,debug,c,"); }
-    else { assert(names<Header>() == "a,c,"); }
+    const if build::DEBUG { check_names<Header>("a,debug,c,"); }
+    else { check_names<Header>("a,c,"); }
     let owner, ok = shared_alloc(128); assert(ok);
     private_capabilities(owner);
     for width in [32, 64] {
