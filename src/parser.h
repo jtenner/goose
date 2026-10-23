@@ -1149,6 +1149,12 @@ struct Parser {
     Node *ParseExpr() {
         auto line = CurLine();
         switch (lex.tok) {
+            case T_CONST: {
+                if (lex.PeekTok() != T_IF) Error("expected if after const in expression");
+                auto e = ParseConstIf();
+                if (stmt_level) stmt_ended = true;
+                return e;
+            }
             case T_IF: {
                 auto e = ParseIf();
                 if (stmt_level) stmt_ended = true;
@@ -1231,15 +1237,45 @@ struct Parser {
         return ParseExpr();
     }
 
-    Node *ParseIf() {
+    // Syntax is always parsed, including types and nested signatures. Their
+    // semantic work waits until specialization chooses this arm.
+    Block *ParseConditionalBlock(const char *context) {
+        auto first = ast.alltypes.size(), firstfn = ast.functions.size();
+        auto b = ParseBlockExpr(context);
+        for (auto i = first; i < ast.alltypes.size(); i++) ast.alltypes[i]->conditional = true;
+        for (auto i = firstfn; i < ast.functions.size(); i++) ast.functions[i]->conditional = true;
+        return b;
+    }
+
+    Node *ParseConstIf() {
+        auto line = CurLine();
+        Expect(T_CONST, "const if");
+        Expect(T_IF, "const if");
+        auto cond = ParseScrutinee();
+        auto thenb = ParseConditionalBlock("const if body");
+        Node *elseb = nullptr;
+        if (IsNext(T_ELSE)) {
+            if (lex.tok == T_IF) elseb = ParseIf(true);
+            else if (lex.tok == T_CONST) elseb = ParseConstIf();
+            else elseb = ParseConditionalBlock("const if else body");
+        }
+        auto x = Finish(New<IfExpr>(line, cond, thenb, elseb));
+        x->isconst = true;
+        return x;
+    }
+
+    Node *ParseIf(bool compiletime = false) {
         auto line = CurLine();
         lex.Next();
         auto cond = ParseScrutinee();
-        auto thenb = ParseBlockExpr("if body");
+        auto thenb = compiletime ? ParseConditionalBlock("const if body") : ParseBlockExpr("if body");
         Node *elseb = nullptr;
         if (IsNext(T_ELSE))
-            elseb = lex.tok == T_IF ? ParseIf() : ParseBlockExpr("else body");
-        return Finish(New<IfExpr>(line, cond, thenb, elseb));
+            elseb = lex.tok == T_IF ? ParseIf(compiletime)
+                    : compiletime ? ParseConditionalBlock("const if else body") : ParseBlockExpr("else body");
+        auto x = Finish(New<IfExpr>(line, cond, thenb, elseb));
+        x->isconst = compiletime;
+        return x;
     }
 
     Node *ParseFor() {
@@ -1868,6 +1904,7 @@ struct Parser {
                     b->stmts.push_back(ParseConstFor(false));
                     return true;
                 }
+                if (lex.tok == T_CONST && lex.PeekTok() == T_IF) break;
                 auto vd = ParseVarDecl(false);
                 Expect(T_SEMI, "variable declaration");
                 b->stmts.push_back(vd);

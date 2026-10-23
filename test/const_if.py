@@ -28,7 +28,7 @@ def invoke(args, *, ok=True, contains=None):
 CORE = '''
 let ENABLED = !false && (3 * 2 == 6);
 enum Mode { Ok }
-alias Number = u32;
+type Number = u32;
 fn excluded_call() { print("excluded_call_sentinel"); }
 fn chosen<T>(x: T) -> T {
     const if ENABLED && build::COUNT >= 2 { x } else { missing(x); }

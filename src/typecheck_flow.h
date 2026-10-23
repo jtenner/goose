@@ -1316,6 +1316,12 @@ template<typename F> Val TypeCheck::CheckJoin(Node *x, TypeExpr *expected, F che
 }
 
 inline Val TypeCheck::CheckIf(IfExpr *x, TypeExpr *expected, bool wantvalue) {
+    if (x->isconst) {
+        SelectConstIf(x);
+        PathScope ps(*this, argpath == x ? x->thenb : nullptr);
+        JoinPathScope js(*this, joinpath == x ? x->thenb : nullptr);
+        return CheckBlockVal(x->thenb, expected, wantvalue);
+    }
     auto onpath = argpath == x;
     auto onjoin = joinpath == x;
     CheckCond(x->cond);
