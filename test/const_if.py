@@ -9,8 +9,13 @@ import subprocess
 import sys
 import tempfile
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / 'scripts'))
+from lsp_protocol import Client
+from const_if_editor import check_editor
+
 EXE = pathlib.Path(sys.argv[1]).resolve()
 CORE_ONLY = '--core-only' in sys.argv[2:]
+FIELDS_ONLY = '--fields-only' in sys.argv[2:]
 CHECKS = 0
 
 
@@ -27,9 +32,31 @@ def invoke(args, *, ok=True, contains=None):
 
 CORE = '''
 let ENABLED = !false && (3 * 2 == 6);
+let BYTEMAX: u8 = 255;
+let POSITIVE: i64 = 1;
+let LARGE: u64 = 18446744073709551615;
+let EXCLUDED_MESSAGE = "excluded_global_data_sentinel";
+let C = 1;
+fn match_selected() {
+    match 0 {
+        const for <C> in [0, 1] { C => const if C == 0 { 7 } else { 9 }, },
+        _ => 11,
+    }
+}
+fn move_result() -> i64[>..] {
+    var a: i64[>..] = [1, 2, 3];
+    const if true { a } else { a }
+}
+fn move_inner() -> i64[>..] { const if true { var a: i64[>..] = [1, 2, 3]; a } }
+export fn api() -> i64 { const if false { return 1 from outside; } else { 7 } }
 enum Mode { Ok }
-alias Number = u32;
+type Number = u32;
 fn excluded_call() { print("excluded_call_sentinel"); }
+fn stopped(b: bool) { if b { return; const if MISSING {} } else {} }
+fn void_tail(b: bool) { const if build::DEBUG { if b { abort("REGISTER_CLOBBER_SENTINEL"); } } }
+fn known_void_tail(b: bool) { if b { return; } const if build::DEBUG { if b { abort("known"); } } }
+fn nested_void_tail(b: bool) { const if build::DEBUG { if b { const if true { if b { abort("nested"); } } } else {} } }
+fn expanded_void_tail(b: bool) { const for <K> in [true, false] { const if K { if b { abort("expanded"); } } } }
 fn chosen<T>(x: T) -> T {
     const if ENABLED && build::COUNT >= 2 { x } else { missing(x); }
 }
@@ -42,13 +69,31 @@ fn main() {
     }
     const if false {
         excluded_call();
+        print(EXCLUDED_MESSAGE);
         let bad: ns::Unknown = ns::Unknown {};
         let e: Mode.Missing = Mode.Missing {};
         let badalias: Number<ns::Missing> = 1;
         fn nested(v: ns::Missing) { unknown(); }
     } else { let local = 5; print(local); }
     const if false {} else {}
+    const if true {} else if missing<ns::Bad>() {}
+    const if true {} else const if missing<ns::Bad>() {}
+    const if true {} else if (1 as ns::Bad) == 1 {}
+    const if true {} else const if (1 as ns::Bad) == 1 {}
     print(chosen(9));
+    stopped(true);
+    void_tail(false); known_void_tail(false); nested_void_tail(false); expanded_void_tail(false);
+    assert(match_selected() == 7);
+    let moved = move_result();
+    assert(moved.len == 3);
+    let inner = move_inner();
+    assert(inner.len == 3);
+    const if !(1 < 2 && 2 <= 2 && 3 > 2 && 3 >= 3 && true != false && !false == true) { unknown(); }
+    const if POSITIVE < LARGE {} else { unknown(); }
+    const if ~0 == BYTEMAX { } else { unknown(); }
+    const for <C> in [1, 2] { const if C == 1 {} else {} }
+    const for <N> in ["keep", "drop"] { const if N == "keep" {} else {} }
+    const if true {} else if false { unknown(); } else { unknown(); }
     const for <N> in [true, false] {
         const if N { print("yes"); } else { print("no"); }
     }
@@ -79,7 +124,8 @@ fn show<T>(x: T) {
 fn main() {
     let x = S<u32> {};
     show(x);
-    let image = bytes_of([x]);
+    let values = [x];
+    let image = bytes_of(values);
     // Size and offsets are an application layout fingerprint, independent
     // of natural alignment: z starts at 4 (release) or 12 (debug).
     print(image.len, " ", image[0], " ", image[4], " ", image[image.len - 4]);
@@ -119,9 +165,11 @@ with tempfile.TemporaryDirectory(prefix='goose-const-if-') as directory:
                 cases += [(FIELDS, 'a=1\n' + ('b=2\n' if debug == 'true' else '') + 'z=3\n' +
                            ('16 1 2 3\n10\n2\n' if debug == 'true' else '8 1 3 3\n4\n2\n')),
                           (CONSTRUCTORS, 'true\n3\n7\n9\n2\n')]
+            if FIELDS_ONLY:
+                cases = cases[:2]
             for code, expected in cases:
                 source.write_text(code)
-                invoke(['check', level, *definitions, source])
+                invoke(['check', '--roundtrip', level, *definitions, source])
                 # Parse-level dump retains both arms and reparses unchanged.
                 dump = invoke(['--dump', source]).stdout
                 dumped = root / 'dumped.goose'
@@ -130,7 +178,14 @@ with tempfile.TemporaryDirectory(prefix='goose-const-if-') as directory:
                 result = invoke(['run', level, *definitions, source])
                 assert result.stdout == expected, (expected, result.stdout)
                 invoke([level, *definitions, source, '-o', cfile])
+                native = root / 'native'
+                invoke(['build', level, *definitions, source, '-o', native])
+                execution = subprocess.run([str(native)], capture_output=True, text=True, timeout=30)
+                assert execution.returncode == 0 and execution.stdout == expected, execution
+                # Separate ASTs in one compiler process reuse the same config.
+                invoke(['--multi-test', '--check', *definitions, source, source])
                 c = cfile.read_text()
+                assert 'excluded_global_data_sentinel' not in c
                 assert 'excluded_call_sentinel' not in c and 'excluded_call(' not in c
                 assert 'ns_Unknown' not in c and 'ns_Missing' not in c
 
@@ -148,6 +203,11 @@ with tempfile.TemporaryDirectory(prefix='goose-const-if-') as directory:
         ('enum E { A } fn main() { const if true { let bad: E.Missing = E.Missing {}; } }', 'variant'),
         ('fn main() { const if true || MISSING {} }', 'constant'),
         ('fn main() { const if false && 4 {} }', 'bool'),
+        ('fn unused() { const if false { return from missing; } else { unrelated(); } } fn main() {}', 'unrelated'),
+        ('let N = 2; fn main() { const if true { fn inner<N>(x: u8[N]) {} } }', 'type parameter'),
+        ('let FLAG = true; fn f() -> i64 { { let FLAG = false; const if FLAG { 1 } else { 2 } } } fn main() { print(f()); }', 'local'),
+        ('let FLAG = true; fn main() { if true { let FLAG = false; const if FLAG {} } else {} }', 'local'),
+        ('let N = 2; fn main() { const if true { fn inner(N: i64, x: u8[N]) {} } }', 'parameter'),
     ]
     if not CORE_ONLY:
         failures += [
@@ -161,8 +221,77 @@ with tempfile.TemporaryDirectory(prefix='goose-const-if-') as directory:
             ('struct S { a: u32 } fn main() { let s = S { const if false { a: 1, }, }; }', 'missing'),
             ('struct S { a: u32 } fn main() { let s = S { const if true { absent: 1, }, }; }', 'field'),
         ]
+    if FIELDS_ONLY:
+        failures = failures[:-4]
     for code, diagnostic in failures:
         source.write_text(code)
         invoke(['check', source], ok=False, contains=diagnostic)
+
+    source.write_text('fn main() { missing(); } fn later() { const if true { other(); } }')
+    recovery = invoke(['check', source], ok=False)
+    assert 'unknown function: missing' in recovery.stderr and 'unknown function: other' in recovery.stderr, recovery.stderr
+
+    source.write_text('let LIVE = "live_global_sentinel"; '
+                      'fn startup() -> i64 { print("startup ", LIVE); 1 } '
+                      'let SIDE_EFFECT = startup(); fn main() { print("ok"); }')
+    for level in ('-O0', '-O2'):
+        execution = invoke(['run', level, source])
+        assert execution.stdout == 'startup live_global_sentinel\nok\n', execution.stdout
+        invoke([level, source, '-o', cfile])
+        assert 'live_global_sentinel' in cfile.read_text()
+
+    free_bodies = ['fn stop(){const if true {return 7 from outer;}}']
+    if not CORE_ONLY and not FIELDS_ONLY:
+        free_bodies += ['struct S{a:i64} fn stop(){let s=S{const if true {a:{return 7 from outer;0},},};}']
+    for body in free_bodies:
+        source.write_text(body + ' fn outer()->i64{const if build::CALL {stop();} 0} fn main(){print(outer());}')
+        for level in ('-O0', '-O2'):
+            for call in ('false', 'true'):
+                result = invoke(['run', level, '--define', 'CALL=' + call, source])
+                assert result.stdout == ('7\n' if call == 'true' else '0\n'), result.stdout
+    CHECKS += check_editor(EXE, root, CORE_ONLY, FIELDS_ONLY)
+
+    # Excluded names remain quiet in editor analysis; malformed excluded
+    # syntax still reports, and a subsequent edit recovers selected fields.
+    text = ("fn unused<T>(v: T) { const if true { let x: ns::Missing = ns::Missing {}; } }\n"
+            "struct S { const if build::DEBUG { enabled: u32 = 1, } "
+            "else { disabled: u32 = 2, } }\n"
+            "fn main() { const if build::DEBUG { let bad: ns::Unknown = ns::Unknown {}; } "
+            "else { let x = S {}; print(x.disabled); } }\n")
+    if CORE_ONLY:
+        text = ("fn unused<T>(v: T) { const if true { let x: ns::Missing = ns::Missing {}; } }\n"
+                "fn main() { const if build::DEBUG { let bad: ns::Unknown = ns::Unknown {}; } "
+                "else { print(1); } }\n")
+    source.write_text(text)
+    uri = source.as_uri()
+    client = Client(str(EXE), root, ['--define', 'DEBUG=false'])
+    try:
+        client.request('initialize', {'processId': None, 'rootUri': root.as_uri(), 'capabilities': {},
+                                     'initializationOptions': {'entryFiles': [str(source)]}})
+        client.send('initialized', {}, request=False)
+        client.send('textDocument/didOpen', {'textDocument': {'uri': uri, 'languageId': 'goose',
+                                                            'version': 1, 'text': text}}, request=False)
+        diagnostics = client.diagnostics_for(uri)
+        assert diagnostics == [], diagnostics
+        if not CORE_ONLY:
+            position = {'line': 2, 'character': text.splitlines()[2].index('x.disabled') + 2}
+            doc = {'textDocument': {'uri': uri}, 'position': position}
+            items = client.request('textDocument/completion', doc)['items']
+            labels = [item['label'] for item in items]
+            assert 'disabled' in labels and 'enabled' not in labels, labels
+        broken = text.replace('let bad: ns::Unknown', 'let bad:')
+        for version, changed, expect_error in ((2, broken, True), (3, text, False)):
+            client.send('textDocument/didChange', {'textDocument': {'uri': uri, 'version': version},
+                                                  'contentChanges': [{'text': changed}]}, request=False)
+            diagnostics = client.diagnostics_for(uri, accept=lambda ds: bool(ds) == expect_error)
+            assert bool(diagnostics) == expect_error, diagnostics
+        client.request('shutdown', {})
+        client.send('exit', {}, request=False)
+        assert client.p.wait(timeout=10) == 0
+        CHECKS += 4
+    finally:
+        if client.p.poll() is None:
+            client.p.kill()
+            client.p.wait()
 
 print(f'const if: {CHECKS} checks passed')
