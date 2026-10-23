@@ -1776,19 +1776,37 @@ struct Parser {
         return Finish(cf);
     }
 
+    ConstInitIf *ParseConstInitIf() {
+        auto line = CurLine();
+        Expect(T_CONST, "const if initializers");
+        Expect(T_IF, "const if initializers");
+        auto condition = ParseScrutinee();
+        auto ci = New<ConstInitIf>(line, condition);
+        auto branch = [&](int index) {
+            auto first = ast.alltypes.size(), firstfn = ast.functions.size();
+            bool defaults = false;
+            ParseInitList(ci->branches[index], defaults, true);
+            for (auto i = first; i < ast.alltypes.size(); i++) ast.alltypes[i]->conditional = true;
+            for (auto i = firstfn; i < ast.functions.size(); i++) ast.functions[i]->conditional = true;
+        };
+        branch(0);
+        if (IsNext(T_ELSE)) branch(1);
+        return Finish(ci);
+    }
+
     void ParseInitList(vector<FieldInit> &inits, bool &defaultall, bool fragment = false) {
         Expect(T_LCURLY, "constructor initializers");
         auto sub = Sub();
         while (lex.tok != T_RCURLY) {
             // A trailing `..` fills in every field not given (§4.2).
             if (IsNext(T_DOTDOT)) {
-                if (fragment) Error("trailing .. belongs to the whole constructor, not a const for fragment");
+                if (fragment) Error("trailing .. belongs to the whole constructor, not an initializer fragment");
                 defaultall = true;
                 break;
             }
             FieldInit fi;
-            if (lex.tok == T_CONST && lex.PeekTok() == T_FOR) {
-                fi.val = ParseConstFor(true);
+            if (lex.tok == T_CONST && (lex.PeekTok() == T_FOR || lex.PeekTok() == T_IF)) {
+                fi.val = lex.PeekTok() == T_FOR ? (Node *)ParseConstFor(true) : ParseConstInitIf();
                 inits.push_back(fi);
                 if (!IsNext(T_COMMA)) break;
                 continue;
@@ -1814,7 +1832,7 @@ struct Parser {
         auto named = 0;
         for (auto &fi : sl->inits) {
             // Empty expansions may disappear; mixed-form checks follow flattening.
-            if (Is<ConstFor>(fi.val)) return sl;
+            if (Is<ConstFor>(fi.val) || Is<ConstInitIf>(fi.val)) return sl;
             named += !fi.name.empty();
         }
         if (named && named != (int)sl->inits.size())
