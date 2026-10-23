@@ -67,6 +67,7 @@ template<typename Inst> Inst *Reused(Inst *inst) {
 inline StructInst *TypeCheck::GetStructInst(TypeExpr *t) {
     auto st = t->struc->st;
     if (t->struc->inst) return Reused(t->struc->inst);
+    Publishing(t->struc);
     for (auto inst : st->insts)
         if (TypeArgsEq(inst->args, t->struc->args)) return Reused(t->struc->inst = inst);
     LimitNestedInsts(t);
@@ -130,6 +131,7 @@ inline StructInst *TypeCheck::GetStructInst(TypeExpr *t) {
 inline EnumInst *TypeCheck::GetEnumInst(TypeExpr *t) {
     auto en = t->enu->en;
     if (t->enu->inst) return Reused(t->enu->inst);
+    Publishing(t->enu);
     for (auto inst : en->insts)
         if (TypeArgsEq(inst->args, t->enu->args)) return Reused(t->enu->inst = inst);
     LimitNestedInsts(t);
@@ -571,7 +573,7 @@ inline TypeExpr *TypeCheck::PendingElemFromSeq(const Val &av, Node *at) {
 }
 
 inline void TypeCheck::CompletePending(TypeExpr *arrt, TypeExpr *elem, Line l) {
-    arrt->arr->sub = elem;
+    Writing(arrt->arr)->sub = elem;
     ValidateType(arrt, l, VT_LOCAL);
     auto pool = pendingpools.find(arrt);
     if (pool != pendingpools.end() && ClassOf(elem) != SC_FIXED)
@@ -940,6 +942,7 @@ inline void TypeCheck::CheckNamedResultUses(FnSpec *spec) {
             i++;
             continue;
         }
+        RemovingNamedResult(i);
         namedresultuses.erase(namedresultuses.begin() + (ptrdiff_t)i);
         if (!found) {
             named = NamedResultOf(spec);

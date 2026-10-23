@@ -86,3 +86,20 @@ and verifies that workload sources stayed unchanged. It rejects a changing
 compiler/source snapshot; equal version strings alone do not establish the
 same compiler. Whole-binary and generated-C hashes identify the actual built
 workloads even when the source checkout has uncommitted edits.
+
+Compiler-check scaling uses `compiler_check.py`. Its default invocation prints
+only a plan and launches no compiler. `--globals`, `--functions` or `--sizes`,
+repeated `--case ordinary/calls/arrays/stores/deferred/deferred-stores`,
+`--stdlib`, and `--named-return` select generated cases; repeated `--source`
+selects existing programs. `--samples` and `--warmups` control repetition.
+Only parent-coordinated `--run --baseline ... --extended ... --output ...`
+performs timings. Measured runs also require `--baseline-source-ref`,
+`--extended-source-ref`, `--build-compiler`, `--build-cxxflags`, and a common
+`GOOSE_STDLIB` environment value. `--cpu 0` pins the harness and children;
+instrumentation/oracle environment variables are removed from both compiler
+processes. Reports retain executable/harness hashes, source commits and `src`
+trees, effective affinity/environment, every wall/RSS sample and both spreads.
+Build-toolchain/flag labels come from the coordinator's verified build records.
+`test/compiler_check_provenance.py` validates these contracts without timing.
+The structural work contract and remaining compiler costs
+are documented in [the transaction audit](../../docs/design/const_if_deferred_state.md).
