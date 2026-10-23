@@ -692,6 +692,7 @@ inline void TypeCheck::DefaultScopeName(string_view name, Node *at, bool fnonly)
 // the same parameter types the latest declared at or before this point
 // wins, then the first after it (LookupLocalFns).
 inline void TypeCheck::DeclareLocalFn(FnDecl *fd) {
+    SignatureNames(fd->sf->params, fd->sf->rets, fd->sf->generics);
     for (auto &p : fd->sf->params)
         if (p.type) ConstNamesIn(p.type);
     for (auto t : fd->sf->rets) ConstNamesIn(t);
@@ -1301,6 +1302,14 @@ template<typename F> Val TypeCheck::CheckJoin(Node *x, TypeExpr *expected, F che
 }
 
 inline Val TypeCheck::CheckIf(IfExpr *x, TypeExpr *expected, bool wantvalue) {
+    if (x->isconst) {
+        SelectConstIf(x);
+        PathScope ps(*this, argpath == x ? x->thenb : nullptr);
+        JoinPathScope js(*this, joinpath == x ? x->thenb : nullptr);
+        auto v = CheckBlockVal(x->thenb, expected, wantvalue);
+        if (!wantvalue) return VoidVal();
+        return joinpath == x ? v : TempCopy(v);
+    }
     auto onpath = argpath == x;
     auto onjoin = joinpath == x;
     CheckCond(x->cond);

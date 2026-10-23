@@ -348,6 +348,10 @@ struct TypeCheck {
     void CheckStmts(Block *b);
     size_t expansionsize = 0;
     Node *ExpansionConstant(Node *n, set<VarDecl *> &visiting);
+    struct ConstUse;
+    bool ConstIfCondition(Node *condition);
+    bool ConstBool(Node *n, set<VarDecl *> &visiting, ConstUse *use = nullptr);
+    void SelectConstIf(IfExpr *x);
     void ExpandConstFor(ConstFor *cf, const function<void(ExpansionClone &)> &emit);
     Block *ExpandStatements(ConstFor *cf);
     void ExpandInitializers(vector<FieldInit> &inits);
@@ -2921,7 +2925,7 @@ struct TypeCheck {
     // (RequireAssigned).
     set<VarDef *> failedglobals;
 
-    TypeCheck(Ast &_ast, bool _library = false, bool _nomain = false) : ast(_ast), library(_library), nomain(_nomain) {
+    TypeCheck(Ast &_ast, bool _library = false, bool _nomain = false, bool prepareonly = false) : ast(_ast), library(_library), nomain(_nomain) {
         // A checked program records values for about two thirds as many
         // nodes as it parsed to, clones included, so this is the size the
         // table grows to anyway.
@@ -2941,6 +2945,7 @@ struct TypeCheck {
         // Global VarDefs exist up front so names resolve in any order; reads
         // before their initializer ran are caught by the assigned flag.
         for (auto g : ast.globals) {
+            if (!g->defs.empty()) continue;
             for (auto name : g->names) {
                 auto vd = ast.NewVarDef();
                 vd->name = name;
@@ -2951,6 +2956,7 @@ struct TypeCheck {
                 g->defs.push_back(vd);
             }
         }
+        if (prepareonly) return;
         ResolvePools();
         ResolveIndexTypes();
         // Validate all non-generic type declarations up front: clearer errors
@@ -2961,7 +2967,8 @@ struct TypeCheck {
             if (en->generics.empty()) GetEnumInst(ast.EnumOf(en, {}, true, en->line));
         // And the sizes in every function's signature, for its parameters' and
         // type parameters' names, and in every generic type's fields.
-        for (auto sf : ast.functions) SignatureNames(sf->params, sf->rets, sf->generics);
+        for (auto sf : ast.functions)
+            if (!sf->conditional) SignatureNames(sf->params, sf->rets, sf->generics);
         for (auto st : ast.structs)
             for (auto &fld : st->fields)
                 if (fld.type) TypeParamSizes(fld.type, st->generics);
@@ -2990,6 +2997,7 @@ struct TypeCheck {
         // Concrete ones only; a pointee still spelled with a type parameter
         // gets here again once a specialization substitutes it.
         for (auto t : ast.alltypes) {
+            if (t->conditional) continue;
             if (t->kind == TY_REF && t->ref->pool && !HasGenerics(t->ref->sub)) ValidatePool(t);
             if (IsIndexT(t)) ValidateIndexType(t);
         }
@@ -3321,6 +3329,12 @@ struct TypeCheck {
     // Does the body contain `return ... from f` for an f not declared within?
     void ScanForeignFrom(Node *n, set<string_view> &names, bool &foreign) {
         if (!n || foreign) return;
+        // Source scans may not evaluate a condition before its lexical
+        // scopes or const-for bindings exist. Checked clones retain only
+        // their selected arm. CheckUnreached checks the deferred program;
+        // exports scan that checked specialization below.
+        if (auto x = Is<IfExpr>(n); x && x->isconst && !x->selected) return;
+        if (Is<ConstInitIf>(n)) return;
         if (auto r = Is<Return>(n)) {
             if (!r->from.empty() && !names.count(r->from)) foreign = true;
         } else if (auto fd = Is<FnDecl>(n)) {
