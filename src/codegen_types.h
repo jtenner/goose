@@ -550,7 +550,10 @@ inline string CodeGen::CT(TypeExpr *t) {
     // A variant's struct is a member of its enum's union. Emitting the enum
     // emits each variant's body ahead of the enum's own, also where a payload
     // names the enum again (through a slice), so a variant starts there.
-    if (t->kind == TY_VARIANT && EIVar(t)->allfixed) {
+    // A flat exported payload needs only its own fields. Its owning enum
+    // and siblings may be entirely private (including native capabilities).
+    // Keep them out of the API snapshot; emit the enum later if code needs it.
+    if (t->kind == TY_VARIANT && EIVar(t)->allfixed && !emittingexporttypes) {
         CT(t->var->adt);
         if (cdefined.count(m)) return name;
     }
