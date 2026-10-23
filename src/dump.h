@@ -433,7 +433,7 @@ inline void RangeExpr::Dump(string &s, int ind) const {
 }
 
 inline void IfExpr::Dump(string &s, int ind) const {
-    s += "if ";
+    s += isconst ? "const if " : "if ";
     DumpOperand(s, cond, ind);
     s += " ";
     thenb->Dump(s, ind);
