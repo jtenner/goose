@@ -919,6 +919,55 @@ GS_API uint8_t gs_thread_wait(int64_t id, uint8_t **msg, int64_t *len,
                                const char *file, int line);
 GS_API void gs_free_msg(uint8_t *msg);
 
+/* Opaque capabilities have no user-visible fields or byte image. Stable
+   metadata slabs retain tombstones so stale values never dereference freed
+   metadata. Only live allocation leases authorize worker atomic access. */
+/* Goose values may start at any byte address (packed fields and worker
+   packets). Pack only the copied value wrappers, never registry metadata or
+   the mapped atomic cells. Both caller and runtime use this exact ABI. */
+#pragma pack(push, 1)
+typedef struct { uint64_t slot, generation; } gs_shared_cap;
+typedef struct { uint64_t slot, generation, index; } gs_shared_atomic_cap;
+#pragma pack(pop)
+GS_API gs_shared_cap gs_shared_atomic_region(gs_shared_cap owner, uint64_t offset,
+    uint64_t count, int width, uint64_t initial, const char *file, int line);
+#define GS_SHARED_SLAB_SIZE 256
+#define GS_SHARED_SLABS 4096
+#define GS_SHARED_MAX (GS_SHARED_SLAB_SIZE * GS_SHARED_SLABS)
+#ifdef _MSC_VER
+#define GS_SHARED_ALIGN8 __declspec(align(8))
+#else
+#define GS_SHARED_ALIGN8 __attribute__((aligned(8)))
+#endif
+typedef struct GS_SHARED_ALIGN8 gs_shared_record {
+    uint64_t generation, allocation, offset, size, identity;
+    uint8_t *data;
+    int64_t actor;
+    uint64_t workers;
+    int kind, readonly, filemap, orphan;
+} gs_shared_record;
+GS_API gs_shared_record *gs_shared_slabs[GS_SHARED_SLABS];
+GS_API gs_shared_cap gs_shared_map_readonly(const uint8_t *path, int64_t pathlen, uint64_t size, uint8_t *ok);
+GS_API int gs_shared_page_advice(gs_shared_cap view, uint64_t offset, uint64_t size, int advice, const char *file, int line);
+GS_API gs_shared_cap gs_shared_borrow_range(gs_shared_cap view, uint64_t offset, uint64_t size, const char *file, int line);
+GS_API void gs_shared_bytes(gs_shared_cap access, uint64_t offset, void *bytes, uint64_t size, int write, const char *file, int line);
+GS_API gs_shared_cap gs_shared_alloc(uint64_t size, uint8_t *ok);
+GS_API gs_shared_cap gs_shared_view(gs_shared_cap owner, uint64_t offset, uint64_t size,
+                                    const char *file, int line);
+GS_API uint8_t gs_shared_close(gs_shared_cap owner, const char *file, int line);
+GS_API uint64_t gs_shared_size(gs_shared_cap cap, const char *file, int line);
+GS_API gs_shared_cap gs_shared_borrow(gs_shared_cap view, const char *file, int line);
+GS_API void gs_shared_release(gs_shared_cap access, const char *file, int line);
+GS_API void gs_shared_read(gs_shared_cap access, uint64_t offset, void *out, size_t size,
+                            int big, const char *file, int line);
+GS_API void gs_shared_write(gs_shared_cap access, uint64_t offset, const void *value, size_t size,
+                             int big, const char *file, int line);
+GS_API void gs_shared_copy(gs_shared_cap dst, uint64_t doff, gs_shared_cap src, uint64_t soff,
+                            uint64_t size, const char *file, int line);
+GS_API void gs_shared_handoff(gs_shared_cap cap, const char *file, int line);
+GS_API void *gs_shared_pending_take(void);
+GS_API void gs_shared_worker_cleanup(void *leases, int64_t actor);
+
 /* One queue per flat element type the program uses (the compiler emits a
    gs_queue global per type, which main sets up before anything can use it).
    Values are contiguous byte images: gs_qget, gs_qwait and gs_qpoll return a
@@ -1034,7 +1083,8 @@ GS_API int64_t gs_spans_alloc(uint8_t *base, int64_t *n, uint8_t **top, int64_t 
 GS_API int64_t gs_spans_regrow(uint8_t *base, int64_t *n, uint8_t **top, int64_t len,
                                int64_t idx, int64_t ol, int64_t cnt);
 /* free_slice, and what realloc_slice lets go of: [idx, idx + cnt) back on
-   the freelist. */
+)GSRT"
+R"GSRT(   the freelist. */
 GS_API void gs_spans_free(uint8_t *base, int64_t *n, uint8_t **top, int64_t idx, int64_t cnt);
 
 /* ---------------------------------------------------------------------------
@@ -3148,6 +3198,7 @@ typedef struct gs_thread {
     void (*entry)(uint8_t *args);
     uint8_t *args;
     int contained;
+    void *shared_leases;
 } gs_thread;
 
 static gs_thread *gs_threads;
@@ -3219,6 +3270,7 @@ static void *gs_thread_main(void *p)
     gs_contained contain;
     if (t->contained) aborted = gs_run_contained(t, &contain);
     else t->run(t->entry, t->args);
+    gs_shared_worker_cleanup(t->shared_leases, t->id);
     t->release();
     free(t->args);
     gs_release_regions();
@@ -3230,10 +3282,10 @@ static void *gs_thread_main(void *p)
     gs_thread **slot = &gs_threads;
     while (*slot != t) slot = &(*slot)->next;
     *slot = t->next;
-    if (aborted) gs_aborted_add(t->id, contain.msg, contain.len);
-    free(t);
 )GSRT"
-R"GSRT(    gs_cond_broadcast(&gs_threads_done);
+R"GSRT(    if (aborted) gs_aborted_add(t->id, contain.msg, contain.len);
+    free(t);
+    gs_cond_broadcast(&gs_threads_done);
     gs_mutex_unlock(&gs_threads_mutex);
     #ifdef _WIN32
         return 0;
@@ -3259,6 +3311,7 @@ GS_API int64_t gs_thread_start(void (*run)(void (*)(uint8_t *), uint8_t *),
         gs_panic("out of memory spawning thread");
     }
     if (argsize) memcpy(t->args, args, (size_t)argsize);
+    t->shared_leases = gs_shared_pending_take();
     gs_mutex_lock(&gs_threads_mutex);
     if (gs_numthreads == INT64_MAX) gs_panic("thread id space exhausted");
     int64_t id = gs_numthreads++;
@@ -3286,6 +3339,7 @@ GS_API int64_t gs_thread_start(void (*run)(void (*)(uint8_t *), uint8_t *),
         gs_threads = t->next;
         --gs_numthreads;
         gs_mutex_unlock(&gs_threads_mutex);
+        gs_shared_worker_cleanup(t->shared_leases, INT64_MIN);
         free(t->args);
         free(t);
         gs_panic("cannot create thread");
@@ -3458,6 +3512,351 @@ GS_API void gs_qlimit(gs_queue *q, int64_t n, const char *file, int line) {
 }
 
 #endif  /* GS_NEED_THREADS */
+
+/* Native shared memory. Registry mutation is serialized. Descriptors live in
+   stable reusable slabs; generation tombstones survive close. Routine atomic
+   operations (emitted by the compiler) never take this mutex. Worker leases
+)GSRT"
+R"GSRT(   are acquired before native spawn and prevent close/reuse through cleanup. */
+#if GS_NEED_THREADS
+#define GS_SH_OWNER 1
+#define GS_SH_VIEW 2
+#define GS_SH_ACCESS 3
+#define GS_SH_ATOMIC32 4
+#define GS_SH_ATOMIC64 5
+#ifdef GS_SEPARATE_RUNTIME
+gs_shared_record *gs_shared_slabs[GS_SHARED_SLABS];
+#endif
+static gs_mutex gs_shared_mutex = GS_MUTEX_INIT;
+static uint64_t gs_shared_serial, gs_shared_highwater;
+typedef struct gs_shared_lease {
+    struct gs_shared_lease *next;
+    uint64_t allocation, generation;
+} gs_shared_lease;
+static GS_TLS gs_shared_lease *gs_shared_pending;
+
+static gs_shared_record *gs_shared_at(uint64_t i) {
+    return &gs_shared_slabs[i / GS_SHARED_SLAB_SIZE][i % GS_SHARED_SLAB_SIZE];
+}
+/* Exchange rather than TinyCC's store_n macro, whose preliminary non-atomic
+   assignment is unsuitable when native inline validators run concurrently. */
+static void gs_shared_publish(gs_shared_record *r, uint64_t generation) {
+#ifdef _MSC_VER
+    InterlockedExchange64((volatile LONG64 *)&r->generation, (LONG64)generation);
+#else
+    __atomic_exchange_n(&r->generation, generation, __ATOMIC_SEQ_CST);
+#endif
+}
+static GS_NORETURN void gs_shared_bad(const char *msg, const char *file, int line) {
+    gs_mutex_unlock(&gs_shared_mutex);
+    gs_abort_msg((const uint8_t *)msg, (int64_t)strlen(msg), file, line);
+}
+static gs_shared_record *gs_shared_get(gs_shared_cap c, const char *file, int line) {
+    if (!c.generation || c.slot >= gs_shared_highwater)
+        gs_shared_bad("invalid shared capability", file, line);
+    gs_shared_record *r = gs_shared_at(c.slot);
+    if (!r->kind || r->generation != c.generation)
+        gs_shared_bad("closed or stale shared capability", file, line);
+    return r;
+}
+static void gs_shared_bounds(uint64_t off, uint64_t n, uint64_t size,
+                              const char *file, int line) {
+    if (off > size || n > size - off) gs_shared_bad("shared memory bounds", file, line);
+}
+static int gs_shared_overlap(uint64_t a, uint64_t an, uint64_t b, uint64_t bn) {
+    return an && bn && (a <= b ? b - a < an : a - b < bn);
+}
+/* Called under the registry lock. No record pointer may be retained across
+   this operation in a moving vector; slabs themselves never move. */
+static uint64_t gs_shared_slot(void) {
+    uint64_t i;
+    for (i = 0; i < gs_shared_highwater; i++) if (!gs_shared_at(i)->kind) break;
+    if (i == GS_SHARED_MAX || gs_shared_serial == UINT64_MAX) return UINT64_MAX;
+    if (!gs_shared_slabs[i / GS_SHARED_SLAB_SIZE]) {
+        gs_shared_record *slab = (gs_shared_record *)calloc(GS_SHARED_SLAB_SIZE, sizeof(*slab));
+        if (!slab) return UINT64_MAX;
+        gs_shared_slabs[i / GS_SHARED_SLAB_SIZE] = slab;
+    }
+    if (i == gs_shared_highwater) gs_shared_highwater++;
+    gs_shared_record *r = gs_shared_at(i);
+    /* Invalidate first, before rewriting fields a stale validator must skip. */
+    gs_shared_publish(r, 0);
+    memset((uint8_t *)r + sizeof(r->generation), 0, sizeof(*r) - sizeof(r->generation));
+    r->identity = ++gs_shared_serial;
+    return i;
+}
+static gs_shared_cap gs_shared_finish(uint64_t i, int kind) {
+    gs_shared_record *r = gs_shared_at(i);
+    r->kind = kind;
+    gs_shared_publish(r, r->identity);
+    gs_shared_cap c = { i, r->identity };
+    return c;
+}
+static void gs_shared_unmap(uint64_t allocation) {
+    gs_shared_record *r = gs_shared_at(allocation);
+#ifdef _WIN32
+    if (r->filemap) UnmapViewOfFile(r->data);
+    else VirtualFree(r->data, 0, MEM_RELEASE);
+#else
+    munmap(r->data, (size_t)r->size);
+#endif
+    for (uint64_t i = 0; i < gs_shared_highwater; i++) {
+        gs_shared_record *v = gs_shared_at(i);
+        if (v->kind && v->allocation == allocation) {
+            gs_shared_publish(v, 0);
+            v->kind = 0;
+        }
+    }
+}
+GS_API gs_shared_cap gs_shared_alloc(uint64_t size, uint8_t *ok) {
+    gs_shared_cap invalid = {0, 0}; *ok = 0;
+    if (!size || size > SIZE_MAX || size > INT64_MAX) return invalid;
+#ifdef _WIN32
+    uint8_t *data = (uint8_t *)VirtualAlloc(NULL, (SIZE_T)size, MEM_RESERVE | MEM_COMMIT,
+                                           PAGE_READWRITE);
+    if (!data) return invalid;
+#else
+    uint8_t *data = (uint8_t *)mmap(NULL, (size_t)size, PROT_READ | PROT_WRITE,
+                                  MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    if (data == MAP_FAILED) return invalid;
+#endif
+    gs_mutex_lock(&gs_shared_mutex);
+    uint64_t i = gs_shared_slot();
+    if (i == UINT64_MAX) {
+        gs_mutex_unlock(&gs_shared_mutex);
+#ifdef _WIN32
+        VirtualFree(data, 0, MEM_RELEASE);
+#else
+        munmap(data, (size_t)size);
+#endif
+        return invalid;
+    }
+    gs_shared_record *r = gs_shared_at(i);
+    r->allocation = i; r->size = size; r->data = data; r->actor = gs_current_thread_id;
+    gs_shared_cap c = gs_shared_finish(i, GS_SH_OWNER);
+    gs_mutex_unlock(&gs_shared_mutex); *ok = 1; return c;
+}
+GS_API gs_shared_cap gs_shared_view(gs_shared_cap owner, uint64_t offset, uint64_t size,
+                                    const char *file, int line) {
+    gs_mutex_lock(&gs_shared_mutex);
+    gs_shared_record *r = gs_shared_get(owner, file, line);
+    if (r->kind != GS_SH_OWNER && r->kind != GS_SH_VIEW &&
+        r->kind != GS_SH_ATOMIC32 && r->kind != GS_SH_ATOMIC64)
+        gs_shared_bad("shared_view requires an owner or view", file, line);
+    if (r->kind == GS_SH_OWNER && r->actor != gs_current_thread_id)
+        gs_shared_bad("shared owner belongs to another thread", file, line);
+    gs_shared_bounds(offset, size, r->size, file, line);
+    int kind = r->kind == GS_SH_OWNER ? GS_SH_VIEW : r->kind;
+    if (kind == GS_SH_ATOMIC32 || kind == GS_SH_ATOMIC64) {
+        uint64_t width = kind == GS_SH_ATOMIC32 ? 4 : 8;
+        if (offset % width || size % width) gs_shared_bad("shared atomic subview alignment", file, line);
+    }
+    uint64_t i = gs_shared_slot();
+    if (i == UINT64_MAX) gs_shared_bad("out of memory creating shared view", file, line);
+    gs_shared_record *v = gs_shared_at(i);
+    v->allocation = r->allocation; v->offset = r->offset + offset; v->size = size;
+    v->data = r->data + offset; v->readonly = r->readonly;
+    gs_shared_cap c = gs_shared_finish(i, kind);
+    gs_mutex_unlock(&gs_shared_mutex); return c;
+}
+GS_API uint8_t gs_shared_close(gs_shared_cap owner, const char *file, int line) {
+    gs_mutex_lock(&gs_shared_mutex);
+    if (!owner.generation || owner.slot >= gs_shared_highwater) {
+        gs_mutex_unlock(&gs_shared_mutex); return 0;
+    }
+    gs_shared_record *r = gs_shared_at(owner.slot);
+    if (r->generation != owner.generation || r->kind != GS_SH_OWNER) {
+        gs_mutex_unlock(&gs_shared_mutex); return 0;
+    }
+    if (r->actor != gs_current_thread_id) gs_shared_bad("shared owner belongs to another thread", file, line);
+    if (r->workers) { gs_mutex_unlock(&gs_shared_mutex); return 0; }
+    for (uint64_t i = 0; i < gs_shared_highwater; i++) {
+        gs_shared_record *v = gs_shared_at(i);
+        if (v->kind == GS_SH_ACCESS && v->allocation == owner.slot) {
+            gs_mutex_unlock(&gs_shared_mutex); return 0;
+        }
+    }
+    gs_shared_unmap(owner.slot);
+    gs_mutex_unlock(&gs_shared_mutex); return 1;
+}
+GS_API uint64_t gs_shared_size(gs_shared_cap cap, const char *file, int line) {
+    gs_mutex_lock(&gs_shared_mutex);
+    gs_shared_record *r = gs_shared_get(cap, file, line);
+    if (r->kind == GS_SH_ACCESS && r->actor != gs_current_thread_id)
+        gs_shared_bad("shared access belongs to another thread", file, line);
+    uint64_t n = r->size; gs_mutex_unlock(&gs_shared_mutex); return n;
+}
+static gs_shared_cap gs_shared_borrow_impl(gs_shared_cap view, uint64_t offset, uint64_t size,
+                                           int whole, const char *file, int line) {
+    gs_mutex_lock(&gs_shared_mutex);
+    gs_shared_record *r = gs_shared_get(view, file, line);
+    if (r->kind != GS_SH_VIEW) gs_shared_bad("shared_borrow requires an ordinary view", file, line);
+    if (whole) size = r->size;
+)GSRT"
+R"GSRT(    gs_shared_bounds(offset, size, r->size, file, line);
+    uint64_t absolute = r->offset + offset;
+    for (uint64_t i = 0; i < gs_shared_highwater; i++) {
+        gs_shared_record *v = gs_shared_at(i);
+        if (v->kind >= GS_SH_ACCESS && v->allocation == r->allocation &&
+            !(v->kind == GS_SH_ACCESS && v->readonly && r->readonly) &&
+            gs_shared_overlap(v->offset, v->size, absolute, size))
+            gs_shared_bad("conflicting shared range access", file, line);
+    }
+    uint64_t i = gs_shared_slot();
+    if (i == UINT64_MAX) gs_shared_bad("out of memory borrowing shared view", file, line);
+    gs_shared_record *a = gs_shared_at(i);
+    a->allocation = r->allocation; a->offset = absolute; a->size = size;
+    a->data = r->data + offset; a->readonly = r->readonly; a->actor = gs_current_thread_id;
+    gs_shared_cap c = gs_shared_finish(i, GS_SH_ACCESS);
+    gs_mutex_unlock(&gs_shared_mutex); return c;
+}
+GS_API gs_shared_cap gs_shared_borrow(gs_shared_cap view, const char *file, int line) {
+    return gs_shared_borrow_impl(view, 0, 0, 1, file, line);
+}
+GS_API gs_shared_cap gs_shared_borrow_range(gs_shared_cap view, uint64_t offset, uint64_t size,
+                                           const char *file, int line) {
+    return gs_shared_borrow_impl(view, offset, size, 0, file, line);
+}
+GS_API void gs_shared_release(gs_shared_cap access, const char *file, int line) {
+    gs_mutex_lock(&gs_shared_mutex);
+    gs_shared_record *r = gs_shared_get(access, file, line);
+    if (r->kind != GS_SH_ACCESS || r->actor != gs_current_thread_id)
+        gs_shared_bad("invalid shared access authorization", file, line);
+    gs_shared_publish(r, 0); r->kind = 0;
+    gs_mutex_unlock(&gs_shared_mutex);
+}
+static gs_shared_record *gs_shared_access(gs_shared_cap c, uint64_t off, uint64_t size,
+                                          int write, const char *file, int line) {
+    gs_shared_record *r = gs_shared_get(c, file, line);
+    if (r->kind != GS_SH_ACCESS || r->actor != gs_current_thread_id)
+        gs_shared_bad("invalid shared access authorization", file, line);
+    gs_shared_bounds(off, size, r->size, file, line);
+    if (write && r->readonly) gs_shared_bad("write to readonly shared memory", file, line);
+    return r;
+}
+GS_API void gs_shared_read(gs_shared_cap access, uint64_t offset, void *out, size_t size,
+                            int big, const char *file, int line) {
+    gs_mutex_lock(&gs_shared_mutex);
+    gs_shared_record *r = gs_shared_access(access, offset, size, 0, file, line);
+    uint8_t bytes[8]; memcpy(bytes, r->data + offset, size);
+    const uint16_t one = 1;
+    if (big == *(const uint8_t *)&one)
+        for (size_t i = 0; i < size / 2; i++) {
+            uint8_t b = bytes[i]; bytes[i] = bytes[size - 1 - i]; bytes[size - 1 - i] = b;
+        }
+    memcpy(out, bytes, size); gs_mutex_unlock(&gs_shared_mutex);
+}
+GS_API void gs_shared_write(gs_shared_cap access, uint64_t offset, const void *value, size_t size,
+                             int big, const char *file, int line) {
+    gs_mutex_lock(&gs_shared_mutex);
+    gs_shared_record *r = gs_shared_access(access, offset, size, 1, file, line);
+    uint8_t bytes[8]; memcpy(bytes, value, size);
+    const uint16_t one = 1;
+    if (big == *(const uint8_t *)&one)
+        for (size_t i = 0; i < size / 2; i++) {
+            uint8_t b = bytes[i]; bytes[i] = bytes[size - 1 - i]; bytes[size - 1 - i] = b;
+        }
+    memcpy(r->data + offset, bytes, size); gs_mutex_unlock(&gs_shared_mutex);
+}
+GS_API void gs_shared_copy(gs_shared_cap dst, uint64_t doff, gs_shared_cap src, uint64_t soff,
+                            uint64_t size, const char *file, int line) {
+    gs_mutex_lock(&gs_shared_mutex);
+    gs_shared_record *d = gs_shared_access(dst, doff, size, 1, file, line);
+    gs_shared_record *s = gs_shared_access(src, soff, size, 0, file, line);
+    memmove(d->data + doff, s->data + soff, (size_t)size);
+    gs_mutex_unlock(&gs_shared_mutex);
+}
+GS_API void gs_shared_handoff(gs_shared_cap cap, const char *file, int line) {
+    gs_mutex_lock(&gs_shared_mutex);
+    gs_shared_record *r = gs_shared_get(cap, file, line);
+    if (r->kind != GS_SH_VIEW && r->kind != GS_SH_ATOMIC32 && r->kind != GS_SH_ATOMIC64)
+        gs_shared_bad("shared capability is not sendable", file, line);
+    gs_shared_record *owner = gs_shared_at(r->allocation);
+    if (owner->workers == UINT64_MAX) gs_shared_bad("shared worker lease overflow", file, line);
+    gs_shared_lease *p = (gs_shared_lease *)malloc(sizeof(*p));
+    if (!p) gs_shared_bad("out of memory retaining shared worker lease", file, line);
+    p->allocation = r->allocation; p->generation = owner->generation;
+    p->next = gs_shared_pending; gs_shared_pending = p; owner->workers++;
+    gs_mutex_unlock(&gs_shared_mutex);
+}
+GS_API void *gs_shared_pending_take(void) {
+    void *p = gs_shared_pending; gs_shared_pending = NULL; return p;
+}
+GS_API void gs_shared_worker_cleanup(void *leases, int64_t actor) {
+    gs_mutex_lock(&gs_shared_mutex);
+    /* Pending handoffs can survive an argument's contained abort. */
+    gs_shared_lease *p = gs_shared_pending;
+    gs_shared_pending = NULL;
+    if (p) { gs_shared_lease *tail = p; while (tail->next) tail = tail->next; tail->next = (gs_shared_lease *)leases; }
+    else p = (gs_shared_lease *)leases;
+    while (p) {
+        gs_shared_lease *next = p->next;
+        gs_shared_record *r = gs_shared_at(p->allocation);
+        if (r->kind != GS_SH_OWNER || r->generation != p->generation || !r->workers)
+            gs_shared_bad("corrupt shared worker lease", "runtime", 0);
+        r->workers--; free(p); p = next;
+    }
+    for (uint64_t i = 0; i < gs_shared_highwater; i++) {
+        gs_shared_record *r = gs_shared_at(i);
+        if (r->kind == GS_SH_ACCESS && r->actor == actor) { gs_shared_publish(r, 0); r->kind = 0; }
+        if (r->kind == GS_SH_OWNER && r->actor == actor) r->orphan = 1;
+    }
+    for (uint64_t i = 0; i < gs_shared_highwater; i++) {
+        gs_shared_record *r = gs_shared_at(i);
+        if (r->kind == GS_SH_OWNER && r->orphan && !r->workers) gs_shared_unmap(i);
+    }
+    gs_mutex_unlock(&gs_shared_mutex);
+}
+#endif /* GS_NEED_THREADS */
+
+#if GS_NEED_THREADS
+GS_API gs_shared_cap gs_shared_atomic_region(gs_shared_cap owner, uint64_t offset,
+    uint64_t count, int width, uint64_t initial, const char *file, int line) {
+    gs_mutex_lock(&gs_shared_mutex);
+    gs_shared_record *r = gs_shared_get(owner, file, line);
+    if (r->kind != GS_SH_OWNER || r->actor != gs_current_thread_id)
+        gs_shared_bad("shared owner belongs to another thread", file, line);
+    if (r->readonly) gs_shared_bad("atomic storage in readonly shared memory", file, line);
+    if ((width != 4 && width != 8) || !count || count > UINT64_MAX / (uint64_t)width)
+        gs_shared_bad("invalid shared atomic region size", file, line);
+    uint64_t size = count * (uint64_t)width;
+    gs_shared_bounds(offset, size, r->size, file, line);
+    if (((uintptr_t)r->data + offset) % (uint64_t)width)
+        gs_shared_bad("shared atomic alignment", file, line);
+    for (uint64_t i = 0; i < gs_shared_highwater; i++) {
+        gs_shared_record *v = gs_shared_at(i);
+        if (v->kind >= GS_SH_ACCESS && v->allocation == owner.slot &&
+            gs_shared_overlap(v->offset, v->size, offset, size))
+            gs_shared_bad("conflicting shared atomic range", file, line);
+    }
+    uint64_t i = gs_shared_slot();
+    if (i == UINT64_MAX) gs_shared_bad("out of memory registering shared atomic range", file, line);
+    gs_shared_record *a = gs_shared_at(i);
+    a->allocation = owner.slot; a->offset = offset; a->size = size; a->data = r->data + offset;
+    /* Registration excludes every ordinary borrow/atomic range first. These
+       initialization writes happen before publication and worker handoff. */
+    if (width == 4) {
+        uint32_t v = (uint32_t)initial;
+        for (uint64_t n = 0; n < count; n++) memcpy(a->data + n * 4, &v, 4);
+    } else {
+)GSRT"
+R"GSRT(        for (uint64_t n = 0; n < count; n++) memcpy(a->data + n * 8, &initial, 8);
+    }
+    gs_shared_cap cap = gs_shared_finish(i, width == 4 ? GS_SH_ATOMIC32 : GS_SH_ATOMIC64);
+    gs_mutex_unlock(&gs_shared_mutex); return cap;
+}
+#endif
+
+#if GS_NEED_THREADS
+GS_API void gs_shared_bytes(gs_shared_cap access, uint64_t offset, void *bytes, uint64_t size,
+                             int write, const char *file, int line) {
+    gs_mutex_lock(&gs_shared_mutex);
+    gs_shared_record *r = gs_shared_access(access, offset, size, write, file, line);
+    if (write) gs_memmove(r->data + offset, bytes, (size_t)size);
+    else gs_memmove(bytes, r->data + offset, (size_t)size);
+    gs_mutex_unlock(&gs_shared_mutex);
+}
+#endif
 )GSRT"
     ) },
     { "runtime_ext.h", string_view(
@@ -4449,6 +4848,101 @@ GS_API uint64_t gs_os_random_u64(void) {
     seed = gs_os_mix64(seed ^ (uint64_t)(uintptr_t)&counter);
     return gs_os_mix64(seed ^ count);
 }
+
+#if GS_NEED_THREADS
+/* Explicit-size readonly mapping. The caller must keep the file from being
+   truncated while mapped: an external truncation can raise an OS fault. */
+GS_API gs_shared_cap gs_shared_map_readonly(const uint8_t *path, int64_t pathlen,
+                                            uint64_t size, uint8_t *ok) {
+    gs_shared_cap invalid = {0, 0}; *ok = 0;
+    if (!size || size > SIZE_MAX || size > INT64_MAX || pathlen < 0) return invalid;
+    gs_os_char native[GS_OS_PATH_MAX]; sl_u8 name = {(uint8_t *)path, pathlen};
+    if (gs_os_native(name, native) < 0) return invalid;
+    uint8_t *data;
+#ifdef _WIN32
+    HANDLE file = CreateFileW(native, GENERIC_READ,
+        FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, NULL, OPEN_EXISTING,
+        FILE_ATTRIBUTE_NORMAL, NULL);
+    if (file == INVALID_HANDLE_VALUE) return invalid;
+    LARGE_INTEGER length;
+    if (!GetFileSizeEx(file, &length) || length.QuadPart < 0 || (uint64_t)length.QuadPart < size) {
+        CloseHandle(file); return invalid;
+    }
+    HANDLE mapping = CreateFileMappingW(file, NULL, PAGE_READONLY, 0, 0, NULL);
+    if (!mapping) { CloseHandle(file); return invalid; }
+    data = (uint8_t *)MapViewOfFile(mapping, FILE_MAP_READ, 0, 0, (SIZE_T)size);
+    CloseHandle(mapping); CloseHandle(file);
+    if (!data) return invalid;
+#else
+    int fd = open(native, O_RDONLY);
+    if (fd < 0) return invalid;
+    struct stat st;
+    if (fstat(fd, &st) || !S_ISREG(st.st_mode) || st.st_size < 0 || (uint64_t)st.st_size < size) {
+        close(fd); return invalid;
+    }
+    data = (uint8_t *)mmap(NULL, (size_t)size, PROT_READ, MAP_PRIVATE, fd, 0);
+    close(fd);
+    if (data == MAP_FAILED) return invalid;
+#endif
+    gs_mutex_lock(&gs_shared_mutex);
+    uint64_t i = gs_shared_slot();
+    if (i == UINT64_MAX) {
+        gs_mutex_unlock(&gs_shared_mutex);
+#ifdef _WIN32
+        UnmapViewOfFile(data);
+#else
+        munmap(data, (size_t)size);
+#endif
+        return invalid;
+    }
+    gs_shared_record *r = gs_shared_at(i);
+    r->allocation = i; r->size = size; r->data = data; r->actor = gs_current_thread_id;
+    r->readonly = r->filemap = 1;
+    gs_shared_cap cap = gs_shared_finish(i, GS_SH_OWNER);
+    gs_mutex_unlock(&gs_shared_mutex); *ok = 1; return cap;
+}
+/* Result: 0 unsupported, 1 supported but refused/failed, 2 applied. Advice
+   may cover surrounding pages, but anonymous bytes are never discarded. */
+GS_API int gs_shared_page_advice(gs_shared_cap view, uint64_t offset, uint64_t size,
+                                  int advice, const char *file, int line) {
+    gs_mutex_lock(&gs_shared_mutex);
+    gs_shared_record *r = gs_shared_get(view, file, line);
+    if (r->kind != GS_SH_VIEW && r->kind != GS_SH_ATOMIC32 && r->kind != GS_SH_ATOMIC64)
+        gs_shared_bad("page advice requires a shared view", file, line);
+    gs_shared_bounds(offset, size, r->size, file, line);
+#ifdef _WIN32
+    (void)advice;
+    gs_mutex_unlock(&gs_shared_mutex); return 0;
+#else
+    int native = -1;
+#ifdef MADV_NORMAL
+    if (advice == 0) native = MADV_NORMAL;
+#endif
+#ifdef MADV_SEQUENTIAL
+    if (advice == 1) native = MADV_SEQUENTIAL;
+#endif
+#ifdef MADV_RANDOM
+    if (advice == 2) native = MADV_RANDOM;
+#endif
+#ifdef MADV_WILLNEED
+    if (advice == 3) native = MADV_WILLNEED;
+#endif
+#ifdef MADV_DONTNEED
+    if (advice == 4) native = MADV_DONTNEED;
+#endif
+    if (native < 0) { gs_mutex_unlock(&gs_shared_mutex); return 0; }
+    if (advice == 4 && !r->readonly) { gs_mutex_unlock(&gs_shared_mutex); return 1; }
+    if (!size) { gs_mutex_unlock(&gs_shared_mutex); return 2; }
+    long page = sysconf(_SC_PAGESIZE);
+    if (page <= 0) { gs_mutex_unlock(&gs_shared_mutex); return 1; }
+    uintptr_t begin = (uintptr_t)(r->data + offset);
+    uintptr_t aligned = begin - begin % (uintptr_t)page;
+    uint64_t length = size + (uint64_t)(begin - aligned);
+    int result = length <= SIZE_MAX && madvise((void *)aligned, (size_t)length, native) == 0;
+    gs_mutex_unlock(&gs_shared_mutex); return result ? 2 : 1;
+#endif
+}
+#endif /* GS_NEED_THREADS */
 )GSRT"
     ) },
     { "goose.h", string_view(
