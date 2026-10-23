@@ -1846,6 +1846,7 @@ def main():
                 if out is not None and r.check_stdout(name, name, out):
                     r.ok(f"runtime {name}")
         r.show_task(runtime_lifecycle, "runtime_threads_lifecycle", "threads")
+        r.show_task(runtime_lifecycle, "runtime_shared_lifecycle", "memory")
         r.show_task(runtime_lifecycle, "runtime_trim_memory", "runtime")
 
         # The same coverage test through clang, release and debug. A compiler
