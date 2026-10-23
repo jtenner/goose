@@ -62,6 +62,12 @@ fn main() {
     let slots = shared_atomic_array_u64(controls, 64, 64, 0);
     var operations: u64 = n;
     var checksum: u64 = 0;
+    if which == "scalar_read_latency" || which == "scalar_write_latency" ||
+       which == "scalar_read_throughput" || which == "scalar_write_throughput" {
+        let init = shared_borrow(data);
+        for i in 8192 { memory_write<u64>(init, i * 8, (i + 1) as u64 % 8192, false); }
+        shared_release(init);
+    }
     let t0 = clock();
     if which == "atomics_uncontended" || which == "atomics_contended" || which == "claims" {
         let mode = if which == "claims" { 2 } else if which == "atomics_uncontended" { 0 } else { 1 };
@@ -109,7 +115,6 @@ fn main() {
     } else {
         let a = shared_borrow(data);
         // Dependency chain for read latency; distinct streams for throughput.
-        for i in 8192 { memory_write<u64>(a, i * 8, (i + 1) as u64 % 8192, false); }
         if which == "scalar_read_latency" {
             for i in n { checksum = memory_read<u64>(a, checksum * 8, false); }
         } else if which == "scalar_write_latency" {
