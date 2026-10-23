@@ -14,6 +14,10 @@ assert {"atomics_uncontended", "atomics_contended", "claims", "scalar_read_laten
         "scheduling", "mmap", "copy", "checks_disabled", "checks_enabled"} <= set(plan["cases"])
 assert set(plan["implementations"]) == {"c_baseline", "goose_native"}
 assert plan["run_requires_explicit_flag"] is True
+assert plan["total_workload_processes"] == 900 and plan["measured_processes"] == 700
+assert plan["warmup_processes"] == 200 and plan["maximum_worker_threads"] == 8
+claims = json.loads(run(["python3", HARNESS, "--plan", "--case", "claims"]).stdout)
+assert claims["cases"] == ["claims"] and claims["total_workload_processes"] == 144
 # No toolchain required to review the experiment; invocation without --run is read-only.
 assert json.loads(run(["python3", HARNESS]).stdout) == plan
 print("benchmark harness plan acceptance passed (no timings run)")

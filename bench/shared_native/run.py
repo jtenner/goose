@@ -28,9 +28,15 @@ def command(argv, **kwargs):
                           text=True, timeout=600, **kwargs)
 
 
-def plan(samples=7, warmups=2):
+def plan(samples=7, warmups=2, cases=None):
+    cases = cases or CASES
+    pairs = 2 * sum(4 if case in PARALLEL else 1 for case in cases)
     return {"samples": samples, "warmups": warmups, "workers": [1, 2, 4, 8],
-            "cases": CASES, "implementations": ["c_baseline", "goose_native"],
+            "cases": cases, "paired_scenarios": pairs,
+            "warmup_processes": pairs * 2 * warmups, "measured_processes": pairs * 2 * samples,
+            "total_workload_processes": pairs * 2 * (samples + warmups),
+            "maximum_worker_threads": 8 if any(c in PARALLEL for c in cases) else 2 if "publication" in cases else 0,
+            "simultaneous_workload_processes": 1, "implementations": ["c_baseline", "goose_native"],
             "native_optimization": ["-O0", "-O2"], "goose_optimization": "-O2",
             "run_requires_explicit_flag": True, "sequential": True}
 
@@ -131,7 +137,7 @@ def main():
     if ns.samples < 5 or ns.warmups < 1 or ns.iterations < 1:
         ap.error("use at least five samples, one warmup and one iteration")
     if ns.plan or not (ns.prepare or ns.run):
-        print(json.dumps(plan(ns.samples, ns.warmups), indent=2)); return
+        print(json.dumps(plan(ns.samples, ns.warmups, ns.case), indent=2)); return
     if not ns.goose:
         ap.error("--goose is required to compile workloads")
     if ns.run and not ns.output:
@@ -150,7 +156,7 @@ def main():
             if Path("/proc/cpuinfo").exists():
                 cpu = next((x.split(":", 1)[1].strip() for x in Path("/proc/cpuinfo").read_text().splitlines()
                             if x.startswith("model name")), cpu)
-            report = {"plan": plan(ns.samples, ns.warmups), "cpu": cpu, "platform": platform.platform(),
+            report = {"plan": plan(ns.samples, ns.warmups, ns.case), "cpu": cpu, "platform": platform.platform(),
                       "affinity": sorted(os.sched_getaffinity(0)) if hasattr(os,"sched_getaffinity") else None,
                       "compiler": command([ns.cc,"--version"]).stdout.splitlines()[0],
                       "goose": command([ns.goose.resolve(),"version"]).stdout.strip(),

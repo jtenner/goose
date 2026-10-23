@@ -15,6 +15,15 @@ python3 bench/shared_native/run.py --run --goose /path/to/goose \
   --output /tmp/goose-shared-results.json
 ```
 
+The default is 900 workload process launches: 700 measured samples plus 200
+warmups, covering 50 C/Goose pairs across cases, worker counts and native
+optimization levels. Only one workload process runs at a time, with at most
+eight workers plus its main thread. Each has 1 MiB scalar storage; the mmap
+case maps an additional 16 MiB without touching pages. Goose also reserves
+its normal per-stack virtual address ranges, so virtual size is not RSS;
+actual resident peaks are measurements, not estimates. `--case claims`
+reduces the plan to 144 processes. `--plan` reports counts for selected cases.
+
 All workloads run sequentially, with a process lock preventing another copy
 of this harness. That lock cannot stop unrelated compilers or experiments;
 the parent coordinates those. There are no committed timing results. Results
