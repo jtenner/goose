@@ -2678,7 +2678,7 @@ fn main() {
 `const if condition { ... } else { ... }` parses both branches and checks and
 emits only the selected one, even at `-O0`. Conditions are bool constants:
 literals, immutable global constants, native `build::NAME` definitions, `!`,
-`&&`, `||`, and comparisons of supported integer constant expressions. Locals,
+`&&`, `||`, bool/string equality, and comparisons of supported integer constant expressions. Locals,
 parameters and calls cannot be conditions. Both operands must be valid even
 when `&&` or `||` already determines the result. Each selected body has an
 ordinary lexical scope; it also works in generic functions and `const for`
