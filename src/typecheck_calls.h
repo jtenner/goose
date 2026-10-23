@@ -1613,9 +1613,10 @@ inline FnSpec *TypeCheck::GetOrCreateSpec(MatchInfo &mi, vector<Val> &argvals, N
         }
     }
     for (auto spec : sf->specs) {
-        // A missing caller is not a diagnosed failed program. The same
-        // arguments under a real caller must be checked from a fresh body.
-        if (spec->needscaller) continue;
+        // Deferred transactions may reuse completed checks, but must not
+        // rewrite a preexisting stale body: rollback owns only fresh bodies.
+        if (rootcheckpoint && rootcheckpoint->deferred &&
+            spec->id < (int)rootcheckpoint->fnspecs && spec->stale) continue;
         // A reuse would merge an exemplar's call into what the real calls
         // agreed on (CheckExemplars).
         if (spec->id < exemplarbase) continue;
@@ -1683,6 +1684,7 @@ inline FnSpec *TypeCheck::GetOrCreateSpec(MatchInfo &mi, vector<Val> &argvals, N
         // another root cut short (FnSpec::failed): what that error reported
         // stands for this call too, and this root ends here, silently.
         if (spec->failed) throw Abandoned {};
+        if (rootcheckpoint) rootcheckpoint->Reusing(spec);
         // Exactness and concreteness are not part of the key, so what the
         // specialization records is what every call site that reaches it
         // agrees on. A back edge with other classes than the key's passes
@@ -2703,10 +2705,7 @@ inline void TypeCheck::CheckExport(SFunction *sf) {
     auto spec = sf->specs[0];
     // Its check failed (FnSpec::failed), which was reported: nothing more
     // can be said of the export.
-    if (spec->failed) {
-        if (ast.errors.empty()) fail("could not check an exported body in its required call context");
-        throw Abandoned {};
-    }
+    if (spec->failed) throw Abandoned {};
     set<string_view> names = { sf->name };
     auto foreign = false;
     if (spec->body) ScanForeignFrom(spec->body, names, foreign);
