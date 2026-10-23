@@ -161,6 +161,14 @@ the current C backend deliberately performs unaligned packed accesses. The C++
 compiler retains alignment checking. ASan observes C allocations, but does not
 know logical object boundaries inside Goose's custom virtual-memory arenas.
 
+On Linux hosts without `llvm-symbolizer`, set
+`ASAN_OPTIONS=allow_addr2line=true:external_symbolizer_path=/usr/bin/addr2line`.
+The existing `test/lsan.supp` excludes only known allocations in the unchanged
+bundled shader compiler, including function matches for line-table stacks
+which name their `ckit.h` allocation sites. Leak detection remains enabled for
+the compiler. `python3 test/sanitizer_suppressions.py <asan-goose>` verifies the
+exact suppression set and a standalone shader compile with leak detection on.
+
 The focused `builder_return_alignment` check enables alignment explicitly in
 both profiles on GCC/Clang-style toolchains, at Goose and native C O0/O2.
 Its byte-only payloads isolate hidden result-length channels from raw packed

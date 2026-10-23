@@ -2245,6 +2245,17 @@ def main():
             else:
                 r.ok(out.strip())
         r.show_task(const_if)
+        def deferred_state_work():
+            for script in ("compiler_check_harness.py", "deferred_state_work.py"):
+                args = [sys.executable, HERE / script]
+                if script == "deferred_state_work.py":
+                    args.append(exe)
+                code, out, err = tc.run_capture(args)
+                if code:
+                    r.fail(script, out + err)
+                else:
+                    r.ok(out.strip())
+        r.show_task(deferred_state_work)
 
     def compiler_discovery():
         import unittest

@@ -1,0 +1,162 @@
+{
+  "platform": "Linux-7.2.8-9-omarchy-x86_64-with-glibc2.41",
+  "affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "samples": 7,
+  "warmups": 2,
+  "run_requires_explicit_flag": true,
+  "requested_cpu": 0,
+  "harness_sha256": "bbfb1dc44ebd012a64ae08a49607a3c2e091f6d3b5378cc2920a1fc90d13bcd4",
+  "requested_source_refs": {
+    "baseline": "8464cc68c3478fcdaf1884c64f13a704264e993c",
+    "extended": "41dc6eb30e9363f1f97a51aeb047aad18d96746c"
+  },
+  "compiler_build": {
+    "compiler": "GCC 14.2.0",
+    "configuration": "Release",
+    "cxxflags": "-O3 -DNDEBUG"
+  },
+  "compiler_environment": {
+    "GOOSE_STDLIB": "/home/dev/Projects/goose/stdlib"
+  },
+  "instrumentation_environment_removed": [],
+  "instrumentation_environment_excluded_prefixes": [
+    "GOOSE_DEFERRED_",
+    "ASAN_",
+    "LSAN_",
+    "UBSAN_",
+    "TSAN_",
+    "MSAN_",
+    "HWASAN_",
+    "DFSAN_",
+    "LLVM_SYMBOLIZER"
+  ],
+  "measure": "process wall seconds for check; no C generation",
+  "sources": [
+    {
+      "case": "ordinary",
+      "globals": 500,
+      "unused_functions": 250,
+      "stdlib": true,
+      "named_return": true,
+      "source_sha256": "4b9ea0656aa1124617600a7652e31688a61b4b4005643d31872504ca110c7cd6",
+      "source_bytes": 22156
+    },
+    {
+      "case": "ordinary",
+      "globals": 500,
+      "unused_functions": 500,
+      "stdlib": true,
+      "named_return": true,
+      "source_sha256": "7b1f35deb83e5a6a381ee37d1b327a186757ff15ce9ac9036a0f7cc0516b4d34",
+      "source_bytes": 35656
+    },
+    {
+      "case": "ordinary",
+      "globals": 500,
+      "unused_functions": 1000,
+      "stdlib": true,
+      "named_return": true,
+      "source_sha256": "ce4b460a037668bf6a7c8275c65bffe4208457bc209367000e9e8747090d28dc",
+      "source_bytes": 62546
+    },
+    {
+      "case": "calls",
+      "globals": 500,
+      "unused_functions": 250,
+      "stdlib": true,
+      "named_return": true,
+      "source_sha256": "19be9a50543a43890d779b8cc7ec8026f1dad4c84044951b8155e4ec9d30c6c7",
+      "source_bytes": 25704
+    },
+    {
+      "case": "calls",
+      "globals": 500,
+      "unused_functions": 500,
+      "stdlib": true,
+      "named_return": true,
+      "source_sha256": "01731a9a11bbdd7443efc81a8896867e63b97c26f24285cf52f062957cf771dc",
+      "source_bytes": 42704
+    },
+    {
+      "case": "calls",
+      "globals": 500,
+      "unused_functions": 1000,
+      "stdlib": true,
+      "named_return": true,
+      "source_sha256": "0d2852699b524d0ddab97dc3a03101a82698d847d3087ebbe8c2fa0687259854",
+      "source_bytes": 76594
+    },
+    {
+      "case": "stores",
+      "globals": 500,
+      "unused_functions": 250,
+      "stdlib": true,
+      "named_return": true,
+      "source_sha256": "f66a1ff5141adfc6baeb450ed5f90bb7187adae7b09372f63d1de0ba825162b4",
+      "source_bytes": 30046
+    },
+    {
+      "case": "stores",
+      "globals": 500,
+      "unused_functions": 500,
+      "stdlib": true,
+      "named_return": true,
+      "source_sha256": "f1ee3206107a46d826a539a8e368d24c11bd6dea2aa9ca5caebd9b3223549a14",
+      "source_bytes": 51546
+    },
+    {
+      "case": "stores",
+      "globals": 500,
+      "unused_functions": 1000,
+      "stdlib": true,
+      "named_return": true,
+      "source_sha256": "26899b1f039ea48383fbb35dd75761f005ab8faf32d0833fba293f79edf6aeec",
+      "source_bytes": 94436
+    },
+    {
+      "case": "deferred-stores",
+      "globals": 500,
+      "unused_functions": 250,
+      "stdlib": true,
+      "named_return": true,
+      "source_sha256": "e5fcaf1697eacf19275f0f0c6cb80b17e67cbc21878b56843731f6d07927f188",
+      "source_bytes": 41201
+    },
+    {
+      "case": "deferred-stores",
+      "globals": 500,
+      "unused_functions": 500,
+      "stdlib": true,
+      "named_return": true,
+      "source_sha256": "51aa55318d98f6da50f9c134578dd34ea22659db8d5efd5666b6d98dccf00526",
+      "source_bytes": 73951
+    },
+    {
+      "case": "deferred-stores",
+      "globals": 500,
+      "unused_functions": 1000,
+      "stdlib": true,
+      "named_return": true,
+      "source_sha256": "986b95e4c88d67c497e87e052524ad88366a6834c8177a65272e9d6c975dfd3b",
+      "source_bytes": 139231
+    }
+  ],
+  "results": []
+}

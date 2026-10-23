@@ -7,10 +7,19 @@ proof obligations on globals. Earlier real roots' obligations must survive,
 including their original source locations.
 
 `EnvRead` is a call-replay/flow record, not a complete variable snapshot.
-`DeferredState` therefore copies every preexisting `VarDef` by value and restores
-it into the **same object** on deferral. All 51 current members are accounted
-for below. New variables remain owned by the AST with the quarantined checks;
-they never replace preexisting objects. A successful root commits normally.
+`DeferredState` therefore journals a complete preexisting `VarDef` by value
+before its **first write** in a root and restores it into the **same object**
+on deferral. It does not enumerate earlier roots' variables or types at entry.
+All 51 current members are accounted for below. A successful root commits
+normally; a diagnosed failure follows the ordinary recovery path.
+
+`Ast::varserials` and `detailserials` record allocation order independently of
+analysis records and usable registries. They are populated only by `NewVarDef`
+and `NewDetail`, are never recycled, and include quarantine ownership. The
+root records their boundaries in O(1). `Writing` logs only older variables and
+array details. New objects keep their checked metadata for diagnostics and
+editor queries after quarantine; rollback does not reset them. In particular,
+`ResetLocal` and copying a shared detail cannot overwrite the allocation identity.
 
 | Members | Writers and lifetime | Deferred rollback |
 |---|---|---|
@@ -52,18 +61,25 @@ Two behavioral probes establish the required treatment:
   use followed by a writable reference must reestablish and reject that
   conflict. If no real use exists, the discarded layout must impose no proof.
 
-Rollback therefore restores complete preexisting `TypeArray` details (element,
+The first-write `Writing(TypeArray*)` barrier therefore saves complete
+preexisting `TypeArray` details (element,
 evaluated size, size-expression pointer, kind and length-storage metadata).
-It removes every new struct/enum instance from declaration and AST usable
-caches, clears type-expression links to those instances, and retains ownership
-in quarantine. New variable and type records also leave the usable AST lists:
+Rollback removes every new struct/enum instance from declaration and AST
+usable caches and retains ownership in quarantine. `Publishing` journals
+instance links before `GetStructInst` / `GetEnumInst` populate them. It covers
+**new and old details**: a newly resolved source signature can publish a new
+detail which a future real call can reach. Those links return to their entry
+values instead of scanning all AST types. A link to an older complete instance
+may conservatively return to null too; lookup finds its still-valid declaration
+cache again. Declaration cache removal visits only owners of new products and
+trims their new suffixes, including completed recursive members. New variable and type records also leave the usable AST lists:
 whole-AST consumers such as relative-root sizing enumerate those lists directly,
 so merely removing function/type instances would still expose discarded types.
 Existing complete instances are immutable after validation and
 retain their prior proofs. Shared declaration-field arrays whose size was
 evaluated speculatively are restored too. Derived stable-type, element and
 type-pair query caches are cleared, so none can answer using rolled-back
-inference or quarantined instances. `pendingpools` is restored.
+inference or quarantined instances. `pendingpools` restores touched keys only.
 
 ## Other persistent checker state
 
@@ -71,8 +87,13 @@ inference or quarantined instances. `pendingpools` is restored.
 |---|---|
 | New function specs, including completed recursive members | Remove from every usable function cache; keep AST ownership in quarantine. No active-frame-only invalidation. |
 | Existing complete function specs | Bodies stay read-only. Restore reused root/view metadata, `storesout` and added caller edges. Never rewrite an old stale body in a deferable transaction. |
-| Store events, mapped stores, class uses and threaded classes | Restore the existing whole-root snapshots; these include mutations to old entries, not just appended items. |
-| Literal checks, named-result uses, resize/growth conflicts and delayed cast verdicts | Restore the existing transaction snapshots/prefixes so discarded checks impose no later judgments. |
+| Store events | Record the entry length. `WritingStore` journals a first overwrite of an old entry in `ApplyCalleeStores`; truncate appended events and restore old entries on deferral. |
+| `madestores` | Append-only (`AddStoreEvent`, `NoteGlobalBinding`); restore its entry length. |
+| Class uses | `UsingClass` records whether a touched key existed and its vector length. `NoteClassUse` only appends; restore that length or erase the new key. |
+| Threaded classes | `WritingThread` saves a touched old entry, or absence of a new key, before `NoteThreadedClass`, `ValidateThreadArgs`, `Unthread`, and initial bounded-class setup mutate it or its parent/heirs. |
+| Pending pools | `WritingPending` saves the old non-null value or key absence before the declaration writes it. |
+| Literal checks, resize/growth conflicts and delayed cast verdicts | Restore entry lengths so discarded checks impose no later judgments. |
+| Named-result uses | Restore the entry prefix. Before the first erase of an old entry, `RemovingNamedResult` saves that prefix; append/new-entry erases alone need only an entry length. |
 | Scope/frame/body/loop/type-build stacks and global flow | Existing checkpoint/RAII recovery restores entry state. |
 | `ParamDefaultEnv`, `CheckDefaultInit`, function-value environments | Created for each execution-site check with `NewFunValEnv`; no reusable default-environment cache is published on the declaration. Their AST ownership remains valid, while cached call products are quarantined. Real uses clone/check defaults and captures again. |
 | Type names, `indexarrays`, `poolglobals` | Declaration identity registries from `ResolveIndexTypes` / `ResolvePools`, not inferred variable evidence. Keep resolved identities and declaration restrictions; do not confuse them with `refwrite` or layout-size proofs. |
@@ -86,3 +107,97 @@ fragments, actual writes, defaults, earlier live marks and their original
 locations, shared pending inference, discarded/live generic layout proofs in
 both declaration orders, O0/O2 checking and library emission, native C hosts,
 JSON diagnostics and editor valid/error/repaired transitions.
+
+
+## Mutation barriers and the exhaustive oracle
+
+Initialization of a newly allocated record needs no undo. Rechecking an existing
+local goes through `ResetLocal` before any declaration/parameter/binder setup.
+A stale preexisting specialization is not rechecked in a deferable root. Its
+completed body, parameters, and synthetic class roots remain read-only.
+
+The other writers that can reach preexisting variables use these barriers:
+
+- `LookupVar`: capture discovery.
+- `NoteWritableRef`, `RelyOnNonneg`, `RelyOnConstant`, `RelyOnExtent`,
+  `ResizesToMark`: persistent obligations and original use locations.
+- `AutoRef` / address-taking: slice-slot reference evidence.
+- `BindProv`, `BindRefProvenance`, `AddBinding`, `CheckRefRebindRoot`:
+  complete provenance and binding updates, including `Roots` mutators.
+- `AddContents`, `RecordStore`, `ApplyCalleeStores`, `NoteSlotStore`:
+  holder alternatives, mapped reference stores, and byte-view evidence.
+- `RestoreFlow`, `NarrowCond`, `KillNarrow`, assignment/rebinding,
+  `ReplayEnvExits`, and function exit replay: assigned/narrowed flow.
+  Restoring an already-equal global narrowing does no write and makes no undo
+  copy. The ordinary root checkpoint still restores global flow on errors.
+- `ArraySize` and `CompletePending`: evaluated extents and inferred elements.
+  Other array-detail writes initialize newly allocated details before publication.
+
+`GOOSE_DEFERRED_VERIFY=1` enables an exhaustive testing oracle. It snapshots all
+entry records and auxiliary collections, then checks that sparse undo would
+reconstruct that exact state on success, diagnosed failure, and deferral. It
+compares an undo value with the root-entry value, so a barrier placed *after*
+the first mutation fails too. After rollback it compares restored objects,
+never moved-from undo entries. It also captures new variable/array annotations
+immediately before deferral and checks that quarantine preserves them. Instance
+links have the separate revocation rule above. Floating analysis facts compare
+representation bits (including NaN payloads and signed zero) before defaulted
+member equality; NaNs are normalized for that second comparison. Defaulted
+`VarDef` equality keeps future members in the oracle.
+
+This opt-in oracle deliberately has the old exhaustive cost. It must be absent
+from measurements. It changes no language semantics and is off by default.
+
+## Work bounds and remaining costs
+
+With the oracle disabled, root entry stores lengths and allocation boundaries;
+it does not copy unrelated variables, array details, stores, or maps. Variable
+and array undo cost is proportional to the complete records first written in
+that root, including their vector payloads. Auxiliary undo visits touched keys,
+overwritten old store entries, and reused specialization metadata. Rollback
+also visits the root's new products and published instance links. No whole-
+program return-from scan or guessed call graph is used to elide checking:
+indirect calls, function values, defaults, formatting, overloads, and selected
+branches all follow the same transaction rules.
+
+This does **not** claim that the entire compiler is linear. The inherited
+root/global-flow checkpoint still scans G globals per root (O(U*G), and global
+initialization has O(G²) such work). Existing name/candidate lookup, flow and
+provenance analyses retain their own costs. Repeatedly mutating a single large
+old variable or threaded-class record still copies that record's complete
+payload once per root. Erasing an old pending named-result entry copies the
+old named-result prefix once. Quarantined allocations and allocation-identity
+maps consume memory proportional to owned objects until the AST is destroyed;
+this change introduces no reclamation or runtime behavior.
+
+`test/deferred_state_work.py` uses `GOOSE_DEFERRED_WORK=1` JSON counters for
+copied variable/array records, auxiliary undo records, and transaction-wide
+AST type visits. It checks 0/24/48/96 functions, ordinary computations, generic
+calls, arrays, slice stores, successful/deferred roots, unrelated named returns,
+std imports, growing unrelated globals, prior live proofs, real calls, and the
+floating oracle cases. It runs the exhaustive oracle separately. Bounds concern
+structural work, never wall-clock thresholds. The full runner registers it and
+`test/compiler_check_harness.py`; the existing 825 checks retain behavior,
+layout/cache/proof, CLI/JSON and editor coverage.
+
+The measurement harness prints a read-only plan without launching a compiler:
+
+```sh
+python3 bench/shared_native/compiler_check.py --globals 500 --sizes 250 500 1000 \
+  --case ordinary --case calls --case stores --case deferred-stores \
+  --stdlib --named-return
+```
+
+It also accepts repeated `--source` paths for real projects, and configurable
+samples/warmups. Only explicitly coordinated `--run` launches timing processes;
+it requires baseline/extended binaries and an output path. Each source has a
+hash; compiler identities/hashes are checked before and after measurements.
+No timing result is claimed by the deterministic acceptance tests.
+
+The coordinated [measurement record](../../bench/shared_native/results/deferred-state-2026-10-23/README.md)
+compares frozen pre-fix `8464cc68` and corrected `41dc6eb3` Release compilers.
+It includes ordinary computations through 4,000 unused functions, std imports,
+generic calls, stored slices, deferred roots, an upstream control and the real
+`parallel_wasm` source. Raw wall/RSS samples and provenance remain separate
+from the structural acceptance tests; these measurements do not establish
+whole-compiler linearity.

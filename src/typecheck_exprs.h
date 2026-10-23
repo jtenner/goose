@@ -766,7 +766,7 @@ inline void TypeCheck::SlotRoots(Val &v) {
     v.writable = v.slot.writable;
     v.hasslot = false;
     for (auto &a : v.alts)
-        if (auto sv = SliceVarOf(a.root)) sv->slotref = true;
+        if (auto sv = SliceVarOf(a.root)) Writing(sv)->slotref = true;
 }
 
 // The type of the storage lvalue v denotes, or each branch of a construct v
@@ -1460,7 +1460,7 @@ inline Val TypeCheck::CheckRefOf(Unary *x) {
         v.writable = v.writable && RefProvOf(lv.var).writable;
     v.type->cq = !v.writable;   // `&x` of a const value is a `const T&` (§9.5).
     if (lv.var && v.writable) NoteWritableRef(lv.var, x);
-    if (auto sv = SliceVarOf(lv.var)) sv->slotref = true;
+    if (auto sv = SliceVarOf(lv.var)) Writing(sv)->slotref = true;
     return v;
 }
 
@@ -1473,7 +1473,7 @@ inline Val TypeCheck::CheckRefOf(Unary *x) {
 // is an error (but for a resize, which is merely unbalanced after the
 // reference).
 inline void TypeCheck::NoteWritableRef(VarDef *d, Node *at) {
-    if (!d->refwrite) d->refwrite = at;
+    if (!d->refwrite) Writing(d)->refwrite = at;
     if (d->nonneguse)
         Error(at, cat(d->name, " is bound to a writable reference here, through which it may "
                       "become negative, while the comparison with a u64 at ",
@@ -1507,7 +1507,7 @@ inline void TypeCheck::NoteWritableRef(VarDef *d, Node *at) {
 inline VarDef *TypeCheck::RelyOnNonneg(const Val &v, Node *at) {
     for (auto d = v.nonnegfrom; d; d = d->nonnegfrom) {
         if (d->refwrite) return d;
-        if (!d->nonneguse) d->nonneguse = at;
+        if (!d->nonneguse) Writing(d)->nonneguse = at;
     }
     return nullptr;
 }
@@ -1526,6 +1526,7 @@ inline void TypeCheck::RelyOnConstant(ConstUse &use, VarDef *d) {
                           Where(d->refwrite->line), " may change it (§4.4, §11.1); bind that "
                           "reference to a copy of it, or declare ", d->name, " const"));
     if (!d->constuse) {
+        Writing(d);
         d->constuse = use.at;
         d->constwhat = use.what;
     }
@@ -1579,6 +1580,7 @@ inline void TypeCheck::RelyOnExtent(ConstUse &use, VarDef *d, bool cap) {
                           "that reference to a copy of it, or give ", d->name, " a type that "
                           "fixes its ", what));
     if (!d->extentuse) {
+        Writing(d);
         d->extentuse = use.at;
         d->extentwhat = use.what;
         d->extentcap = cap;
@@ -1822,8 +1824,8 @@ inline Val TypeCheck::CheckLogical(Binary *b) {
             return l.container == k.container && l.base == k.base && l.path == k.path;
         });
     });
-    for (auto kv : b->rightkills) kv->narrowed = nullptr;
-    for (auto v : mayassign) v->maybeassigned = true;
+    for (auto kv : b->rightkills) KillNarrow(kv);
+    for (auto v : mayassign) Writing(v)->maybeassigned = true;
     Val v;
     v.type = ast.booltype;
     return v;
