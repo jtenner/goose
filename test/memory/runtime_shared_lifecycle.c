@@ -140,6 +140,14 @@ static void baseline(long allocations, long regions) {
     check(counter_add(&live_regions, 0) == regions, "shared mapping leak");
     for (uint64_t i = 0; i < gs_shared_highwater; i++) check(!gs_shared_at(i)->kind, "live capability after cleanup");
 }
+#ifdef __linux__
+static long resident_pages(void) {
+    FILE *f = fopen("/proc/self/statm", "r");
+    long total = 0, resident = -1;
+    if (f) { if (fscanf(f, "%ld %ld", &total, &resident) != 2) resident = -1; fclose(f); }
+    return resident;
+}
+#endif
 int main(void) {
     gs_rt_init(0, NULL, 1, 1, 1);
 #ifdef _MSC_VER
@@ -150,11 +158,24 @@ int main(void) {
     check(_Alignof(gs_shared_record) >= 8, "naturally aligned atomic metadata");
 #endif
     uint8_t ok;
+    gs_shared_cap denied = gs_shared_alloc(INT64_MAX, &ok);
+    check(!ok && !denied.generation, "OS refuses impossible address-space allocation");
     long before = counter_add(&live_regions, 0);
     fail_next_calloc = 1;
     gs_shared_cap failed = gs_shared_alloc(4096, &ok);
     check(!ok && !failed.generation, "metadata allocation failure reports false");
     check(counter_add(&live_regions, 0) == before, "failed metadata allocation unmaps transaction");
+#ifdef __linux__
+    long rss_before = resident_pages();
+    gs_shared_cap lazy = gs_shared_alloc(64ull << 20, &ok);
+    if (ok) {
+        long rss_after = resident_pages(), page = sysconf(_SC_PAGESIZE);
+        if (rss_before >= 0 && rss_after >= rss_before && page > 0)
+            check((uint64_t)(rss_after - rss_before) * (uint64_t)page < (8ull << 20),
+                  "allocation does not eagerly touch mapped bytes");
+        check(gs_shared_close(lazy, __FILE__, __LINE__), "lazy allocation close");
+    }
+#endif
     int aborting = 1;
     joined(gs_thread_spawn(owned, &aborting, sizeof aborting, 1), 0);
     long allocations = counter_add(&live_allocations, 0), regions = counter_add(&live_regions, 0);
