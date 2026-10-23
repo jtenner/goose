@@ -1,5 +1,11 @@
 # Measured native-memory and compiler costs
 
+The compiler regression below is a historical pre-fix result. The
+[deferred-state correction](deferred-state-2026-10-23/README.md) records the
+reviewed journal implementation, larger workloads, std-import cases, upstream
+and real-source controls, and all raw samples. Native runtime measurements
+below are unchanged.
+
 Linux x86-64, AMD Ryzen 7 8845HS, Clang 23.1.3 generated C, GCC 14.2
 Release (`-O3 -DNDEBUG`) Goose compiler, runtime `3a21ace949ed`. Source
 `c66e6200fa20327f56dfe1569c26aa147e061123`, compiler SHA256
@@ -123,7 +129,8 @@ counting-only instrumentation (no timing): 250/500/1,000 unreached functions
 with the same 500 globals produced 156,375/375,250/1,000,500 variable-definition
 copies. That identifies scaling in the bookkeeping, without measuring how
 much of elapsed time it causes. No time profile was collected. The
-correctness transaction is retained and this compiler cost is disclosed.
+correctness transaction is retained; the follow-up linked above replaces its
+exhaustive snapshots with mutation journals.
 
 Reproduce the experiments with `run.py --run --samples 7 --warmups 2
 --iterations 200000` and `compiler_check.py --run --baseline /path/to/upstream

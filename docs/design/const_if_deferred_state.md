@@ -193,3 +193,11 @@ samples/warmups. Only explicitly coordinated `--run` launches timing processes;
 it requires baseline/extended binaries and an output path. Each source has a
 hash; compiler identities/hashes are checked before and after measurements.
 No timing result is claimed by the deterministic acceptance tests.
+
+The coordinated [measurement record](../../bench/shared_native/results/deferred-state-2026-10-23/README.md)
+compares frozen pre-fix `8464cc68` and corrected `41dc6eb3` Release compilers.
+It includes ordinary computations through 4,000 unused functions, std imports,
+generic calls, stored slices, deferred roots, an upstream control and the real
+`parallel_wasm` source. Raw wall/RSS samples and provenance remain separate
+from the structural acceptance tests; these measurements do not establish
+whole-compiler linearity.

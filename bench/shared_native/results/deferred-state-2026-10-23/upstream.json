@@ -1,0 +1,243 @@
+{
+  "platform": "Linux-7.2.8-9-omarchy-x86_64-with-glibc2.41",
+  "affinity": [
+    0
+  ],
+  "samples": 7,
+  "warmups": 2,
+  "run_requires_explicit_flag": true,
+  "requested_cpu": 0,
+  "harness_sha256": "45ea33bbad28330174f4f03859a7e5587086e3daad1851d59566d0eea6fc7431",
+  "requested_source_refs": {
+    "baseline": "94cc64daeabcae6f072dc1fe2b864acda5a001bc",
+    "extended": "41dc6eb30e9363f1f97a51aeb047aad18d96746c"
+  },
+  "compiler_build": {
+    "compiler": "GCC 14.2.0",
+    "configuration": "Release",
+    "cxxflags": "-O3 -DNDEBUG"
+  },
+  "compiler_environment": {
+    "GOOSE_STDLIB": "/home/dev/Projects/goose/stdlib"
+  },
+  "instrumentation_environment_removed": [],
+  "instrumentation_environment_excluded_prefixes": [
+    "GOOSE_DEFERRED_",
+    "ASAN_",
+    "LSAN_",
+    "UBSAN_",
+    "TSAN_",
+    "MSAN_",
+    "HWASAN_",
+    "DFSAN_",
+    "LLVM_SYMBOLIZER"
+  ],
+  "measure": "process wall seconds for check; no C generation",
+  "sources": [
+    {
+      "case": "ordinary",
+      "globals": 500,
+      "unused_functions": 1000,
+      "stdlib": false,
+      "named_return": false,
+      "source_sha256": "a5651ebb828c481d1380c54201dcc08452aa92f8da6a727e05e705bf3ac5934b",
+      "source_bytes": 62462
+    }
+  ],
+  "results": [
+    {
+      "implementation": "baseline",
+      "goose_optimization": "-O0",
+      "source_index": 0,
+      "median_seconds": 0.03172022197395563,
+      "seconds_mad": 0.00046226795529946685,
+      "seconds_min": 0.031141133978962898,
+      "seconds_max": 0.034975036018295214,
+      "median_peak_rss_kib": 13124,
+      "peak_rss_mad_kib": 64,
+      "peak_rss_min_kib": 12956,
+      "peak_rss_max_kib": 13436,
+      "samples": [
+        {
+          "seconds": 0.034975036018295214,
+          "process_peak_rss_kib": 12956
+        },
+        {
+          "seconds": 0.03409604501212016,
+          "process_peak_rss_kib": 13140
+        },
+        {
+          "seconds": 0.031141133978962898,
+          "process_peak_rss_kib": 13124
+        },
+        {
+          "seconds": 0.03198472800431773,
+          "process_peak_rss_kib": 13060
+        },
+        {
+          "seconds": 0.03172022197395563,
+          "process_peak_rss_kib": 13232
+        },
+        {
+          "seconds": 0.03147186498972587,
+          "process_peak_rss_kib": 13436
+        },
+        {
+          "seconds": 0.031257954018656164,
+          "process_peak_rss_kib": 13120
+        }
+      ]
+    },
+    {
+      "implementation": "extended",
+      "goose_optimization": "-O0",
+      "source_index": 0,
+      "median_seconds": 0.03198649198748171,
+      "seconds_mad": 8.993802475742996e-05,
+      "seconds_min": 0.031148147012572736,
+      "seconds_max": 0.03219413198530674,
+      "median_peak_rss_kib": 13224,
+      "peak_rss_mad_kib": 96,
+      "peak_rss_min_kib": 12968,
+      "peak_rss_max_kib": 13368,
+      "samples": [
+        {
+          "seconds": 0.03207643001223914,
+          "process_peak_rss_kib": 13224
+        },
+        {
+          "seconds": 0.03198649198748171,
+          "process_peak_rss_kib": 13368
+        },
+        {
+          "seconds": 0.031996441015508026,
+          "process_peak_rss_kib": 13320
+        },
+        {
+          "seconds": 0.03140684301615693,
+          "process_peak_rss_kib": 13116
+        },
+        {
+          "seconds": 0.031148147012572736,
+          "process_peak_rss_kib": 12968
+        },
+        {
+          "seconds": 0.031979398016119376,
+          "process_peak_rss_kib": 13228
+        },
+        {
+          "seconds": 0.03219413198530674,
+          "process_peak_rss_kib": 13208
+        }
+      ]
+    },
+    {
+      "implementation": "baseline",
+      "goose_optimization": "-O2",
+      "source_index": 0,
+      "median_seconds": 0.03267040700302459,
+      "seconds_mad": 0.0013242179702501744,
+      "seconds_min": 0.031282879994250834,
+      "seconds_max": 0.03477216497412883,
+      "median_peak_rss_kib": 13336,
+      "peak_rss_mad_kib": 36,
+      "peak_rss_min_kib": 13148,
+      "peak_rss_max_kib": 13372,
+      "samples": [
+        {
+          "seconds": 0.0313542950025294,
+          "process_peak_rss_kib": 13340
+        },
+        {
+          "seconds": 0.03181828500237316,
+          "process_peak_rss_kib": 13364
+        },
+        {
+          "seconds": 0.03399462497327477,
+          "process_peak_rss_kib": 13284
+        },
+        {
+          "seconds": 0.03477216497412883,
+          "process_peak_rss_kib": 13160
+        },
+        {
+          "seconds": 0.03267040700302459,
+          "process_peak_rss_kib": 13336
+        },
+        {
+          "seconds": 0.03465307201258838,
+          "process_peak_rss_kib": 13372
+        },
+        {
+          "seconds": 0.031282879994250834,
+          "process_peak_rss_kib": 13148
+        }
+      ]
+    },
+    {
+      "implementation": "extended",
+      "goose_optimization": "-O2",
+      "source_index": 0,
+      "median_seconds": 0.03158005900331773,
+      "seconds_mad": 0.00025148302665911615,
+      "seconds_min": 0.03130882899858989,
+      "seconds_max": 0.03211723698768765,
+      "median_peak_rss_kib": 13212,
+      "peak_rss_mad_kib": 240,
+      "peak_rss_min_kib": 12968,
+      "peak_rss_max_kib": 13516,
+      "samples": [
+        {
+          "seconds": 0.03130882899858989,
+          "process_peak_rss_kib": 13204
+        },
+        {
+          "seconds": 0.03132857597665861,
+          "process_peak_rss_kib": 13516
+        },
+        {
+          "seconds": 0.031605124997440726,
+          "process_peak_rss_kib": 13212
+        },
+        {
+          "seconds": 0.03158005900331773,
+          "process_peak_rss_kib": 12968
+        },
+        {
+          "seconds": 0.03189591100090183,
+          "process_peak_rss_kib": 13456
+        },
+        {
+          "seconds": 0.03143709900905378,
+          "process_peak_rss_kib": 13164
+        },
+        {
+          "seconds": 0.03211723698768765,
+          "process_peak_rss_kib": 13452
+        }
+      ]
+    }
+  ],
+  "baseline": {
+    "path": "/tmp/goose-upstream-baseline",
+    "sha256": "f56ac3c31d3bbc1c200efc65d908063b9de9d4ae4127032c22f5432e9e8a5280",
+    "version": "goose runtime a5dbd11b6309"
+  },
+  "extended": {
+    "path": "/home/dev/Projects/goose-const-if/build-perf-release/goose",
+    "sha256": "169c9d41d2506b1c4e302be64cba35941d473d441b5e7debfb4e8c3322ecbcf1",
+    "version": "goose runtime 3a21ace949ed"
+  },
+  "compiler_sources": {
+    "baseline": {
+      "commit": "94cc64daeabcae6f072dc1fe2b864acda5a001bc",
+      "src_tree": "3475e40623430a375683dce0f9bad35ebd7300e4"
+    },
+    "extended": {
+      "commit": "41dc6eb30e9363f1f97a51aeb047aad18d96746c",
+      "src_tree": "741cbecbd8b0f95e4ab9148161a5af870cb3ca12"
+    }
+  },
+  "completed": true,
+  "process_journal": "/home/dev/Projects/goose-const-if/bench/shared_native/results/deferred-state-2026-10-23/upstream.processes.jsonl"
+}
