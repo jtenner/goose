@@ -1982,6 +1982,17 @@ def main():
                         clang_simd_named("base64_encode", "base64_decode"))
             r.show_task(clang_mul_add)
 
+    def worker_packet_alignment():
+        from worker_packet_alignment import check_worker_packet_alignment
+        try:
+            check_worker_packet_alignment(exe, cc, gendir, runtime=r.runtime, extra=extra)
+            r.ok("worker packets: alignment enabled, Goose/C O0/O2, release/debug")
+        except RuntimeError as e:
+            r.fail("worker packet alignment", str(e))
+    if cc and cc.style == "gcc":
+        r.section("worker packet alignment")
+        r.show_task(worker_packet_alignment)
+
     r.section("driver, diagnostics and language server")
 
     def driver_verbs():
