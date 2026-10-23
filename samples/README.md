@@ -176,3 +176,16 @@ pathfinding, directional monster art and the larger weapon set. Unimplemented
 weapon/ammo pickups provide bullets; a chainsaw pickup does the same. The
 WAD's own sprites, font and sounds keep the sample self-contained beyond
 that one asset file.
+
+## Native shared-memory compiler examples
+
+- [Parallel Wasm compiler](parallel_wasm/README.md): a mapped, validated Wasm
+  subset, Relaxed atomic job claims, disjoint native x86-64 emission,
+  Release/Acquire status and contained worker cleanup. Native build only.
+- [Conditional clobber checks](jit_clobbers/README.md): native `--define` and
+  `const if` remove register ownership fields, initializers and validation.
+
+Their dedicated acceptance scripts exercise configurations and failure
+paths; they are not part of the numbered TinyCC sample runner. The
+[benchmark harness](../bench/shared_native/README.md) prepares the corresponding
+performance experiment without running timings by default.

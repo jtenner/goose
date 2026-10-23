@@ -2260,6 +2260,21 @@ def main():
                                                  result.failures) or "no tests ran")
     r.show_task(compiler_discovery)
 
+    # These programs require the native shared-memory backend, irrespective
+    # of whether this compiler also contains TinyCC. The normal suite uses
+    # 64 Wasm jobs; the explicit script default remains the 3000-job stress.
+    def native_example_registration():
+        code, out, err = tc.run_capture([sys.executable, HERE / "native_examples_runner.py"])
+        if code:
+            r.fail("native example registration", out + err)
+        else:
+            r.ok(out.strip())
+    r.section("native example acceptance")
+    r.show_task(native_example_registration)
+    from native_examples import register_acceptance
+    if not register_acceptance(r, exe, cc, args.profile, capture=tc.run_capture):
+        r.show_later(r.say, "skip native example execution (requires Linux native baseline with GCC/Clang)")
+
     def cli_paths():
         from cli_paths import check_cli_paths
         try:
