@@ -3609,6 +3609,10 @@ inline bool Call::BceWalk(BCE &b) {
         auto arg0 = recv ? (args.empty() ? nullptr : args[0])
                          : (args.size() > 1 ? args[1] : nullptr);
         switch (builtin) {
+            case B_MEMORY_READ_BYTES:
+                // This native copy writes into an ordinary writable byte view.
+                b.KillByCall();
+                break;
             case B_PUSH:
                 if (recvmoved) b.GrowShrinkKill(rn, 0);
                 else b.GrowShrinkKill(rn, 1, 1);
