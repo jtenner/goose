@@ -39,6 +39,9 @@ completed recursive members, so later real callers check fresh bodies in their
 own context. An exported entry must supply a valid context itself; its error
 is reported independently of errors in other functions.
 
+The [deferred-state audit](const_if_deferred_state.md) records variable proof
+marks, shared type caches and the corresponding rollback rules.
+
 ## Conditional fields
 
 A struct field list may contain conditional blocks, nested to any supported
