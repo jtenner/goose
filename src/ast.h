@@ -311,6 +311,8 @@ struct TypeExpr {
     // sizes name what they name where the alias is declared, at top level,
     // whatever scope the use is in (TypeCheck::ConstNamesIn).
     bool aliasuse = false;
+    // A type in an unselected const-if arm: resolve only when activated.
+    bool conditional = false;
     // On a TY_INT: an index or bound type (TypeIndex). Outside the union,
     // since intstorage is the member a TY_INT uses.
     TypeIndex *ix = nullptr;
@@ -1230,6 +1232,8 @@ NODE(Block)
 NODE_END
 
 NODE(IfExpr)
+    bool isconst = false;
+    bool selected = false;       // Specialization clone has discarded the other arm.
     BCE_WALK
     Node *cond;
     Block *thenb;
@@ -1470,6 +1474,7 @@ struct SFunction {
     // of its cached tops before the call (CodeGen::CollectSpecs, SyncReach).
     bool readsalltops = false;
     bool isnested = false;
+    bool conditional = false;   // Signature is inside a deferred const-if arm.
     SFunction *outer = nullptr;     // The function a nested one is declared in.
     Block *body = nullptr;
     // The body lost a statement to a parse error, or holds an incomplete
@@ -2452,6 +2457,8 @@ struct Ast {
     vector<int> filepkg;                                // Per source, its package.
 
     vector<Node *> allnodes;
+    // Evaluated conditions retained only for source tooling, never runtime walks.
+    vector<Node *> constantconditions;
     vector<TypeExpr *> alltypes;
     vector<TypeDetail *> typedetails;
     vector<SFunction *> functions;
@@ -2471,6 +2478,13 @@ struct Ast {
     // The specializations exemplar checks made (FnSpec::exemplar), which
     // only the language server reads.
     vector<FnSpec *> exemplarspecs;
+    // Products of deferred standalone transactions. Kept alive for pointers
+    // in discarded checked trees, absent from every usable specialization cache.
+    vector<FnSpec *> deferredspecs;
+    vector<StructInst *> deferredstructinsts;
+    vector<EnumInst *> deferredenuminsts;
+    vector<VarDef *> deferredvardefs;
+    vector<TypeExpr *> deferredtypes;
 
     vector<Node *> topdecls;                        // In source/import order.
     vector<VarDecl *> globals;                      // Initialization order.
@@ -2516,6 +2530,7 @@ struct Ast {
     ~Ast() {
         for (auto n : allnodes) delete n;
         for (auto t : alltypes) delete t;
+        for (auto t : deferredtypes) delete t;
         for (auto d : typedetails) delete d;
         for (auto f : functions) delete f;
         for (auto s : structs) delete s;
@@ -2523,11 +2538,15 @@ struct Ast {
         for (auto e : enums) delete e;
         for (auto a : aliases) delete a;
         for (auto v : vardefs) delete v;
+        for (auto v : deferredvardefs) delete v;
         for (auto i : structinsts) delete i;
         for (auto i : enuminsts) delete i;
         for (auto sp : fnspecs) delete sp;
         for (auto sp : fvenvs) delete sp;
         for (auto sp : exemplarspecs) delete sp;
+        for (auto sp : deferredspecs) delete sp;
+        for (auto i : deferredstructinsts) delete i;
+        for (auto i : deferredenuminsts) delete i;
     }
 
     TypeExpr *NewType(TypeKind kind, Line line) {
