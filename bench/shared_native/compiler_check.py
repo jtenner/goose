@@ -12,6 +12,21 @@ import tempfile
 import time
 
 CASES = ('ordinary', 'calls', 'arrays', 'stores', 'deferred', 'deferred-stores')
+ROOT = Path(__file__).resolve().parents[2]
+INSTRUMENTATION_PREFIXES = ('GOOSE_DEFERRED_', 'ASAN_', 'LSAN_', 'UBSAN_', 'TSAN_',
+                            'MSAN_', 'HWASAN_', 'DFSAN_', 'LLVM_SYMBOLIZER')
+
+
+def timing_environment(environ):
+    removed = sorted(key for key in environ if key.startswith(INSTRUMENTATION_PREFIXES))
+    return {key: value for key, value in environ.items() if key not in removed}, removed
+
+
+def source_identity(ref):
+    def git(value):
+        return subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', value], text=True).strip()
+    commit = git(ref + '^{commit}')
+    return dict(commit=commit, src_tree=git(commit + ':src'))
 
 
 def source_for(globals_count, functions_count, case='ordinary', stdlib=False, named_return=False):
@@ -40,18 +55,21 @@ def source_for(globals_count, functions_count, case='ordinary', stdlib=False, na
     return source + 'fn main(){}\n'
 
 
-def identity(path):
+def identity(path, env=None):
     path = path.resolve()
     return dict(path=str(path), sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
-                version=subprocess.check_output([path, 'version'], text=True).strip())
+                version=subprocess.check_output([path, 'version'], text=True, env=env).strip())
 
 
 def aggregate(data):
     seconds = [x['seconds'] for x in data]
     center = statistics.median(seconds)
+    rss = [x['process_peak_rss_kib'] for x in data]
+    rss_center = statistics.median(rss)
     return dict(median_seconds=center, seconds_mad=statistics.median(abs(x-center) for x in seconds),
                 seconds_min=min(seconds), seconds_max=max(seconds),
-                median_peak_rss_kib=statistics.median(x['process_peak_rss_kib'] for x in data), samples=data)
+                median_peak_rss_kib=rss_center, peak_rss_mad_kib=statistics.median(abs(x-rss_center) for x in rss),
+                peak_rss_min_kib=min(rss), peak_rss_max_kib=max(rss), samples=data)
 
 
 def main():
@@ -69,20 +87,39 @@ def main():
     parser.add_argument('--source', type=Path, action='append', help='measure existing sources instead of generated cases')
     parser.add_argument('--samples', type=int, default=7)
     parser.add_argument('--warmups', type=int, default=2)
+    parser.add_argument('--cpu', type=int, help='pin harness and compiler children to this CPU, only with --run')
+    parser.add_argument('--baseline-source-ref', help='source commit of the supplied baseline binary')
+    parser.add_argument('--extended-source-ref', help='source commit of the supplied extended binary')
+    parser.add_argument('--build-compiler', help='coordinator-supplied compiler build toolchain, e.g. GCC 14.2.0')
+    parser.add_argument('--build-cxxflags', help='coordinator-supplied common Release C++ flags')
     ns = parser.parse_args()
     sizes = ns.sizes or [ns.functions]
     if ns.globals_count < 0 or min(sizes) < 0 or ns.samples < 1 or ns.warmups < 0:
         parser.error('counts must be nonnegative; samples must be positive')
     if ns.run and not (ns.output and ns.baseline and ns.extended):
         parser.error('--run requires --baseline, --extended and --output')
+    env, removed = timing_environment(os.environ)
+    if ns.run:
+        if not (ns.baseline_source_ref and ns.extended_source_ref and ns.build_compiler and ns.build_cxxflags):
+            parser.error('--run requires both source refs and compiler build metadata')
+        if not env.get('GOOSE_STDLIB'):
+            parser.error('--run requires an explicit common GOOSE_STDLIB')
+        if ns.cpu is not None:
+            os.sched_setaffinity(0, {ns.cpu})
     sources = [(dict(case=case, globals=ns.globals_count, unused_functions=size,
                      stdlib=ns.stdlib, named_return=ns.named_return),
                 source_for(ns.globals_count, size, case, ns.stdlib, ns.named_return), None)
                for case in (ns.case or ['ordinary']) for size in sizes]
     if ns.source:
-        sources = [(dict(source=str(path.resolve())), path.read_text(), path.resolve()) for path in ns.source]
+        sources = [(dict(source=str(path.resolve())), path.read_bytes().decode(), path.resolve()) for path in ns.source]
     report = dict(platform=platform.platform(), affinity=sorted(os.sched_getaffinity(0)),
                   samples=ns.samples, warmups=ns.warmups, run_requires_explicit_flag=True,
+                  requested_cpu=ns.cpu, harness_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+                  requested_source_refs=dict(baseline=ns.baseline_source_ref, extended=ns.extended_source_ref),
+                  compiler_build=dict(compiler=ns.build_compiler, configuration='Release', cxxflags=ns.build_cxxflags),
+                  compiler_environment=dict(GOOSE_STDLIB=env.get('GOOSE_STDLIB')),
+                  instrumentation_environment_removed=removed,
+                  instrumentation_environment_excluded_prefixes=INSTRUMENTATION_PREFIXES,
                   measure='process wall seconds for check; no C generation',
                   sources=[dict(**meta, source_sha256=hashlib.sha256(source.encode()).hexdigest(),
                                 source_bytes=len(source.encode())) for meta, source, _ in sources], results=[])
@@ -93,7 +130,9 @@ def main():
         return
     if not Path('/usr/bin/time').exists():
         parser.error('GNU /usr/bin/time is required for RSS')
-    report.update(baseline=identity(ns.baseline), extended=identity(ns.extended))
+    report.update(baseline=identity(ns.baseline, env), extended=identity(ns.extended, env),
+                  compiler_sources=dict(baseline=source_identity(ns.baseline_source_ref),
+                                        extended=source_identity(ns.extended_source_ref)))
     with tempfile.TemporaryDirectory(prefix='goose-compiler-measure-') as directory:
         root = Path(directory)
         for source_index, (_, source, original_path) in enumerate(sources):
@@ -109,7 +148,7 @@ def main():
                         argv = ['/usr/bin/time', '-f', '%M', '-o', str(rss), report[name]['path'],
                                 'check', level, str(input_file)]
                         start = time.perf_counter()
-                        result = subprocess.run(argv, capture_output=True, text=True, timeout=180)
+                        result = subprocess.run(argv, capture_output=True, text=True, timeout=180, env=env)
                         elapsed = time.perf_counter() - start
                         assert result.returncode == 0 and 'typechecked ok' in result.stdout + result.stderr, (
                             name, result.returncode, result.stdout, result.stderr)
@@ -119,8 +158,8 @@ def main():
                     report['results'].append(dict(implementation=name, goose_optimization=level,
                                                   source_index=source_index, **aggregate(data)))
             assert hashlib.sha256(input_file.read_bytes()).hexdigest() == report['sources'][source_index]['source_sha256']
-    assert identity(ns.baseline) == report['baseline']
-    assert identity(ns.extended) == report['extended']
+    assert identity(ns.baseline, env) == report['baseline']
+    assert identity(ns.extended, env) == report['extended']
     ns.output.write_text(json.dumps(report, indent=2) + '\n')
     print(str(ns.output))
 
