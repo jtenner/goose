@@ -43,6 +43,8 @@ def check_marks(exe, root, core_only=False, fields_only=False):
          'fn stop(){touch<u8>();' + tail + '}', 'const if FLAG{1}else{2}'),
         ('struct_default', boolean + 'struct Defaults<T>{v:bool={let r=&FLAG;false}}\n',
          'fn stop(){let s=Defaults<u8>{};' + tail + '}', 'const if FLAG{1}else{2}'),
+        ('captured', boolean, 'fn apply<F>(){F();} fn stop(){var x=0;'
+         'apply(){x=3;let r=&FLAG;};' + tail + '}', 'const if FLAG{1}else{2}'),
     ]
     if not core_only and not fields_only:
         cases += [('constructor', boolean + 'struct S{a:i64}\n',
@@ -61,16 +63,17 @@ def check_marks(exe, root, core_only=False, fields_only=False):
 
     # A retained type cache must not outlive the proof obligations its layout
     # used. Test both unused and reused instances, and both declaration orders.
-    for declaration, literal in [('struct Box<T>{a:T[N]}', 'Box<u8>{[1,2]}'),
-                                 ('enum Box<T>{V{a:T[N]}}', 'Box<u8>.V{[1,2]}'),
-                                 ('struct Box<T>{a:u8[N]}', 'Box<u8>{[1,2]}')]:
+    for constants, declaration, literal in [('let N=2;', 'struct Box<T>{a:T[N]}', 'Box<u8>{[1,2]}'),
+                                            ('let N=2;', 'enum Box<T>{V{a:T[N]}}', 'Box<u8>.V{[1,2]}'),
+                                            ('let N=2;', 'struct Box<T>{a:u8[N]}', 'Box<u8>{[1,2]}'),
+                                            ('let A="ab";let N=A.len;', 'struct Box<T>{a:T[N]}', 'Box<u8>{[1,2]}')]:
         for live in (False, True):
             for ordinary in (False, True):
                 helper = ('fn touch<T>(){let s=' + literal + ';}'
                           'fn stop(){touch<u8>();' + (tail.replace('const if', 'if') if ordinary else tail) + '}')
                 for order in (False, True):
                     api = 'export fn api()->i64{' + ('let s=' + literal + ';' if live else '') + 'let r=&N;1}'
-                    text = 'let N=2;' + declaration + (api + helper if order else helper + api) + 'fn outer()->i64{0}'
+                    text = constants + declaration + (api + helper if order else helper + api) + 'fn outer()->i64{0}'
                     # An earlier real writable binding must also survive: the
                     # helper's incompatible layout proof then fails before it
                     # can reach NeedsCaller. Ordinary foreign-return scanning
