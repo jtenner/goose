@@ -165,3 +165,115 @@ Native type names are reserved at the root for type declarations. A namespaced
 user type and a generic parameter can use the same leaf name with normal
 lexical priority. `::SharedView` unambiguously names the native type, and type
 dumps retain that qualification.
+
+## Explicitly unsafe C pointer interoperability
+
+`UnsafePtr` is an opaque raw object pointer, separate from every safe shared
+capability. These operations are **not memory-safe**. Their names mark the
+unsafe boundary; Goose does not add an `unsafe` block or infer pointer access
+from an integer.
+
+The root type name `UnsafePtr` is reserved, like the safe native type names.
+Namespaced user types and bound generic parameters keep their normal lexical
+priority; `::UnsafePtr` explicitly names the root native type.
+
+| Intrinsic | Result |
+| --- | --- |
+| `unsafe_ptr_from_handle(handle: u64)` | `UnsafePtr`, after an address-width check; zero is null |
+| `unsafe_handle_from_ptr(pointer: UnsafePtr)` | `u64`, zero for null |
+| `unsafe_ptr_add(pointer: UnsafePtr, byte_offset: i64)` | `UnsafePtr`, after checked signed address arithmetic |
+| `unsafe_load<T>(pointer: UnsafePtr, big_endian: bool)` | `T` |
+| `unsafe_store<T>(pointer: UnsafePtr, value: T, big_endian: bool)` | No result |
+
+`T` is exactly `i8/i16/i32/i64/u8/u16/u32/u64`. `false` means little endian;
+`true` means big endian, independently of the host. Loads and stores copy the
+scalar bytes with `memcpy` and assemble/disassemble their bits. Packed,
+unaligned scalar storage is supported; no typed, potentially unaligned C
+lvalue is dereferenced. These operations are ordinary non-atomic copies and
+are unsuitable for volatile device memory or concurrent atomic storage.
+
+The caller must guarantee all of the following for each raw access:
+
+- The pointer has valid provenance from a live C allocation or object, and
+  the complete scalar byte range belongs to that object. An integer address
+  alone does not establish provenance or make storage valid.
+- The object remains alive throughout the access; stores have permission to
+  write every byte. Retaining a pointer or a handle does not retain its object.
+- Object representation, aliasing/effective-type rules and synchronization
+  permit the byte access. Unaligned copies remove the scalar alignment
+  requirement only; they do not remove the object's own alignment or C ABI
+  requirements, data races, borrow conflicts, or lifetime obligations.
+- Pointer arithmetic remains within the same live object (or one past it,
+  without dereferencing there). A numerical overflow check cannot prove this.
+  The computed integer address must convert back to the intended object
+  pointer on the target C implementation. No provenance is fabricated by
+  arithmetic or by a handle conversion.
+
+Null loads, stores and additions abort, including adding zero to null.
+Loads/stores check numerical overflow of the complete scalar address range;
+addition checks underflow and overflow even for `i64.min`. Checks apply in
+release and debug builds. They cannot detect dangling pointers, unmapped
+addresses, object bounds violations, readonly memory, alias violations, or
+races. Violating the caller obligations can crash or cause undefined behavior.
+Converting null to/from handle zero is allowed. There is no implicit default
+constructor for `UnsafePtr`; use the explicit conversion to create null.
+
+The native ABI is C `void *`. A direct extern may accept or return `UnsafePtr`
+for an object-pointer parameter or result; the whole extern call is an unsafe
+C boundary. For example, tests declare libc `malloc`/`free` directly. Match
+all parameters, results, calling conventions, alignment and ownership rules
+against the real C signature. Function pointers and capability pointers are
+not supported. Existing externs returning opaque `u64` object addresses may
+be adapted explicitly with `unsafe_ptr_from_handle`; merely calling a
+returned integer a handle provides no validity guarantee.
+
+The current C backend lays out pointers in eight bytes. Generated code checks
+`UINTPTR_MAX == UINT64_MAX` and the sizes of `void *` and `uintptr_t`, and
+rejects other targets explicitly instead of narrowing addresses or silently
+changing packed layouts. This requires the target's conventional flat-address
+object-pointer/integer roundtrip ABI. Address conversion never truncates.
+GCC and Clang lower the alignment of the pointer typedef to one byte, while
+retaining the C `void *` scalar ABI. This supports pointers stored after
+four-byte array headers and in packed fields, including references, copies
+and returns. It does not lower foreign objects' own C alignment requirements.
+TinyCC ignores the required typedef alignment reduction and is explicitly
+rejected for `UnsafePtr`; other frontends without this extension are rejected
+too. Ordinary packed layouts gain no padding, and alignment sanitizers remain
+enabled.
+
+Safe owners, views, accesses and atomic capabilities cannot convert to or from
+raw pointers, handles, integer casts, byte images or extern signatures. The
+unsafe intrinsics do not expose shared mappings or bypass their registry.
+`UnsafePtr` also cannot use numeric casts, serialization, queues, worker
+arguments (including nested values), or worker globals. A programmer who
+explicitly sends a numeric handle and reconstructs a pointer inside a worker
+has created another unsafe boundary and must arrange lifetime, ownership,
+permissions and synchronization themselves. There is no implicit handoff or
+lease for raw C objects, and no general garbage collector.
+
+The scalar copies and address arithmetic are emitted as compiler intrinsics,
+with no heap allocations, registry calls or application helpers on the hot
+path. Run `python3 test/unsafe_pointer.py --exe build/goose` for the dedicated
+GCC/Clang, debug/release and ASan/UBSan matrix (alignment checking enabled).
+
+A valid raw store may target an ordinary writable Goose scalar whose address
+was exposed to C. The compiler treats `unsafe_store` as an unknown write for
+bounds analysis, including through non-inlined wrappers. It invalidates facts
+about reachable storage instead of retaining bounds established before the
+write. C extern calls have the same conservative effect: a call can use a raw
+pointer or a reference retained by an earlier call even when its current
+signature has no reference argument. Previously evaluated operands keep their
+snapshotted values; later reads observe the write. The alias regressions in
+`test/unsafe_pointer_alias.py` exercise these cases as part of the matrix.
+Native atomic operations, worker spawn/wait and queue synchronization also
+invalidate reachable facts:
+an explicitly transferred numeric handle can let a worker reconstruct a raw
+alias, write it, and publish that write before an ordinary read in its owner.
+This still requires the caller to guarantee object lifetime and synchronize
+every access; no raw pointer or capability is implicitly transferred.
+
+The pre-existing `stdlib/ffi.goose` `cstr` and `bytes` helpers still accept
+opaque `u64` addresses and trust C pointer/length validity. They copy results
+but cannot validate provenance, termination, lifetime or accessible bounds;
+their older names do not make those raw operations memory-safe. The explicit
+pointer API does not change or weaken safe shared-memory operations.

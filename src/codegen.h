@@ -170,6 +170,8 @@ struct CodeGen {
     // Finish writes must agree with: every function is emitted by then.
     size_t dlbinds = 0;
     string code;        // Function bodies, size/eq helpers, thunks, main.
+    string exporttypes; // Only the packed types required by the public API.
+    bool emittingexporttypes = false;
     string exportprotos;
     bool usesthreads = false;
     bool library = false;
@@ -1291,6 +1293,8 @@ struct CodeGen {
     string QueueFor(TypeExpr *t);
     Loc RecvLoc(Node *n);
     string LenCast(const Loc &lv);
+    void EmitUnsafePtrType();
+    vector<string> EmitUnsafeBuiltin(Call *c);
     vector<string> EmitBuiltin(Call *c, Dst d0);
 
     // ------------------------------------------------------------------
@@ -1419,6 +1423,7 @@ struct CodeGen {
     string GlobalLenLv(VarDef *d);
     void InitGlobalStack(VarDef *d);
     void EmitProgramInit();
+    void EmitExportTypes();
     void EmitExports();
     string MainCall();
     void EmitMain();
@@ -1443,6 +1448,7 @@ struct CodeGen {
             if (t->kind == TY_REF && t->ref->pool) poolglobals.insert(t->ref->pool);
         ComputeRelRootMax();
         CollectSpecs();
+        if (library) EmitExportTypes();
         for (auto sp : livespecs)
             for (auto fv : sinfo[sp].freevars) capturedvars.insert(fv);
         // Zero means "no long-distance return in flight", which is also the
