@@ -2319,6 +2319,18 @@ locals, parameters and runtime calls are rejected. Both logical operands must
 be supported constants. Generic functions and const-for entries select after
 specialization/substitution. Excluded types and expressions need only parse.
 
+A struct field list may contain nested `const if c { fields } else { fields }`
+blocks with empty arms, ordinary field qualifiers, defaults and pads. The
+selected fields are flattened in declaration order before type validation,
+instantiation, layout and reflection. Conditions cannot depend on the type's
+generic parameters; build/global conditions in generic structs are supported.
+Duplicate effective fields are errors. Excluded fields have no type, offset,
+bytes or reflection entries. Existing packed-layout and one-byte empty-struct
+rules apply. Different effective field lists are ABI incompatible: exchanging
+modules and serialized formats must agree on configuration, or validate an
+explicit version/layout fingerprint. No padding is inserted to reconcile
+configurations. See [native const if](design/const_if.md).
+
 **Specialization-time expansion.** `const for` specializes a fragment once
 per entry of a compiler-known sequence. Its v1 sources are `fields<T>` with
 two bindings (field name string and field accessor), `variants<E>` with two
