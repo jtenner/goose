@@ -17,7 +17,8 @@
 #ifndef CHECK_REGISTER_CLOBBERS
 #define CHECK_REGISTER_CLOBBERS 0
 #endif
-static _Atomic uint64_t next_job, slots[8];
+static _Alignas(64) _Atomic uint64_t next_job;
+static _Alignas(64) _Atomic uint64_t slots[64];
 static uint8_t data[1048576];
 static uint64_t n;
 static int mode;
@@ -28,7 +29,7 @@ static void write64(size_t off, uint64_t v) { assert(off <= sizeof(data) - 8); m
 static void *atomic_worker(void *opaque) {
     struct args *a = opaque;
     if (mode == 2) { while (atomic_fetch_add_explicit(&next_job, 1, memory_order_relaxed) < n) {} }
-    else for (uint64_t i = 0; i < n; i++) atomic_fetch_add_explicit(&slots[mode == 0 ? a->index : 0], 1, memory_order_relaxed);
+    else for (uint64_t i = 0; i < n; i++) atomic_fetch_add_explicit(&slots[mode == 0 ? a->index * 8 : 0], 1, memory_order_relaxed);
     return NULL;
 }
 static void *empty(void *opaque) { (void)opaque; return NULL; }
