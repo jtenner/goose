@@ -19,8 +19,13 @@
 
 namespace goose {
 
-inline void ResolveTypeNames(Ast &ast) {
-    BindExpansionNames(ast);
+// Implemented with the constant evaluator in typecheck_expansion.h. This
+// runs after unconditional names/aliases resolve, before field validation.
+inline void SelectConditionalFields(Ast &ast);
+
+inline void ResolveTypeNames(Ast &ast, const vector<TypeExpr *> *activated = nullptr) {
+    if (!activated) BindExpansionNames(ast);
+    auto &types = activated ? *activated : ast.alltypes;
     // Once per name as written, however many nodes share its detail (a
     // `const` copy, an alias's uses): `detail` is that detail. Reported in
     // the order of the source at the end, rather than of the steps below.
@@ -59,7 +64,8 @@ inline void ResolveTypeNames(Ast &ast) {
     // Classify every parsed name that is not an alias use. A name's detail
     // may be shared with a `const` copy of its node (Ast::ConstOf), which is
     // classified on its own, so the arguments are copied out of it.
-    for (auto t : ast.alltypes) {
+    for (auto t : types) {
+        if (t->conditional) continue;
         if (t->kind != TY_UNRESOLVED) continue;
         auto nm = t->named;
         int native = NativeKindForName(nm->name);
@@ -130,12 +136,7 @@ inline void ResolveTypeNames(Ast &ast) {
                 default: break;
             }
         };
-    for (auto st : ast.structs)
-        for (auto &f : st->fields) unknownin(f.type, &st->generics);
-    for (auto en : ast.enums)
-        for (auto &v : en->variants)
-            for (auto &f : v.fields) unknownin(f.type, &en->generics);
-    for (auto a : ast.aliases) unknownin(a->type, nullptr);
+    if (!activated) for (auto a : ast.aliases) unknownin(a->type, nullptr);
 
     // Aliases expand structurally, so a cycle is invalid even when it passes
     // through a reference, array, function signature or generic argument.
@@ -180,7 +181,8 @@ inline void ResolveTypeNames(Ast &ast) {
     // type (sharing its detail), keeping its own source line for diagnostics.
     // A `..` on the use gets a fresh detail with the flag set instead. Either
     // way the node is marked as an alias use (TypeExpr::aliasuse).
-    for (auto t : ast.alltypes) {
+    for (auto t : types) {
+        if (t->conditional) continue;
         if (t->kind != TY_UNRESOLVED) continue;
         auto use = t->named;
         // The use names the alias, whatever else it says wrongly.
@@ -220,8 +222,18 @@ inline void ResolveTypeNames(Ast &ast) {
         t->aliasuse = true;
     }
 
+    if (!activated) {
+        SelectConditionalFields(ast);
+        for (auto st : ast.structs)
+            for (auto &f : st->fields) unknownin(f.type, &st->generics);
+        for (auto en : ast.enums)
+            for (auto &v : en->variants)
+                for (auto &f : v.fields) unknownin(f.type, &en->generics);
+    }
+
     // Variant lookup runs last, when every ADT name is resolved.
-    for (auto t : ast.alltypes) {
+    for (auto t : types) {
+        if (t->conditional) continue;
         if (t->kind != TY_VARIANT) continue;
         auto adt = t->var->adt;
         if (adt->kind == TY_STRUCT && adt->struc->st->unknown) {
@@ -246,7 +258,66 @@ inline void ResolveTypeNames(Ast &ast) {
         return tie(a.where.fileidx, a.where.line, a.where.col) <
                tie(b.where.fileidx, b.where.line, b.where.col);
     });
+    if (activated && !errors.empty())
+        throw CompileError { errors.front().message, std::move(errors) };
     for (auto &d : errors) ast.Report(std::move(d));
+}
+
+// Find type templates owned by a selected fragment. Compound templates and
+// const-for copies may be fresh, so collecting from the tree (rather than a
+// parse-time alltypes range) preserves each expansion's substitutions.
+inline void ResolveConditionalBody(Ast &ast, Node *body, TypeExpr *root = nullptr) {
+    vector<TypeExpr *> types;
+    vector<TypeExpr> originals;
+    set<TypeExpr *> seen;
+    function<void(TypeExpr *)> type = [&](TypeExpr *t) {
+        if (!t || !seen.insert(t).second) return;
+        originals.push_back(*t);
+        t->conditional = false;
+        types.push_back(t);
+        auto each = [&](const vector<TypeExpr *> &ts) { for (auto a : ts) type(a); };
+        switch (t->kind) {
+            case TY_UNRESOLVED: case TY_GENERIC: each(t->named->args); break;
+            case TY_STRUCT: each(t->struc->args); break;
+            case TY_ENUM: each(t->enu->args); break;
+            case TY_VARIANT: type(t->var->adt); break;
+            case TY_ARRAY: type(t->arr->sub); break;
+            case TY_REF: type(t->ref->sub); break;
+            case TY_SLICE: type(t->sub); break;
+            case TY_FN: each(t->fn->args); each(t->fn->rets); break;
+            default: break;
+        }
+    };
+    function<void(Node *)> walk = [&](Node *n) {
+        if (!n) return;
+        if (auto x = Is<IfExpr>(n); x && x->isconst && !x->selected) return;
+        if (Is<ConstInitIf>(n)) return;
+        if (auto vd = Is<VarDecl>(n)) type(vd->type);
+        if (auto sl = Is<StructLit>(n)) type(sl->type);
+        if (auto c = Is<Call>(n)) for (auto t : c->tyargs) type(t);
+        if (auto c = Is<AsCast>(n)) type(c->type);
+        if (auto cf = Is<ConstFor>(n)) for (auto t : cf->types) type(t);
+        if (auto fl = Is<ForLoop>(n)) { type(fl->vartype); type(fl->idxtype); }
+        if (auto fv = Is<FunVal>(n)) for (auto &p : fv->params) type(p.type);
+        if (auto fd = Is<FnDecl>(n)) {
+            fd->sf->conditional = false;
+            for (auto &g : fd->sf->generics) type(g.bound);
+            for (auto &p : fd->sf->params) { type(p.type); walk(p.defaultval); }
+            for (auto t : fd->sf->rets) type(t);
+            walk(fd->sf->body);
+        }
+        n->Children(walk);
+    };
+    type(root);
+    walk(body);
+    try {
+        ResolveTypeNames(ast, &types);
+    } catch (CompileError &) {
+        // Speculative checks must not poison shared templates with unknown
+        // placeholder types: another specialization may select this arm.
+        for (size_t i = 0; i < types.size(); i++) *types[i] = originals[i];
+        throw;
+    }
 }
 
 }  // namespace goose
