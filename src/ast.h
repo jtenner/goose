@@ -2267,9 +2267,6 @@ struct FnSpec {
     // call that would reuse it ends its own root silently, as a
     // consequence of the error reported (TypeCheck::GetOrCreateSpec).
     bool failed = false;
-    // A standalone check needed an enclosing caller absent from that root.
-    // Its incomplete record is never a reusable specialization or an error.
-    bool needscaller = false;
     // Made by the exemplar check of this generic function, which nothing
     // instantiated (TypeCheck::CheckExemplar): its types are the opaque
     // bindings', and it is in Ast::exemplarspecs, not fnspecs.
@@ -2514,6 +2511,9 @@ struct Ast {
     // The specializations exemplar checks made (FnSpec::exemplar), which
     // only the language server reads.
     vector<FnSpec *> exemplarspecs;
+    // Products of deferred standalone transactions. Kept alive for pointers
+    // in discarded checked trees, absent from every usable specialization cache.
+    vector<FnSpec *> deferredspecs;
 
     vector<Node *> topdecls;                        // In source/import order.
     vector<VarDecl *> globals;                      // Initialization order.
@@ -2571,6 +2571,7 @@ struct Ast {
         for (auto sp : fnspecs) delete sp;
         for (auto sp : fvenvs) delete sp;
         for (auto sp : exemplarspecs) delete sp;
+        for (auto sp : deferredspecs) delete sp;
     }
 
     TypeExpr *NewType(TypeKind kind, Line line) {
