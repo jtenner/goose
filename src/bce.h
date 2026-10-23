@@ -3204,13 +3204,17 @@ struct BCE {
     // Effect summaries for every live specialization, to a fixpoint: a
     // body's summary only grows as its callees' do, so a round that changes
     // nothing is the answer, and recursion converges the same way from
-    // empty. An extern fn (§7.10) has no body to walk: it may resize or
-    // write whatever it is handed by reference, and reaches nothing else.
+    // empty. An extern fn (§7.10) has no body or purity contract to inspect.
+    // Besides its current arguments, C can write through a raw pointer or a
+    // reference retained by an earlier call. Its effects are therefore opaque.
     void ComputeEffects() {
         for (auto sp : ast.fnspecs) {
             if (!sp->live) continue;
             auto &e = effects[sp];
             if (sp->body) continue;
+            if (sp->sf->isextern) {
+                e.opaque = e.intopaque = true;
+            }
             for (size_t j = 0; j < sp->argtypes.size(); j++)
                 if (sp->argtypes[j]->kind == TY_REF) {
                     e.params.insert((int)j);
@@ -3629,6 +3633,27 @@ inline bool Call::BceWalk(BCE &b) {
         switch (builtin) {
             case B_MEMORY_READ_BYTES:
                 // This native copy writes into an ordinary writable byte view.
+            case B_UNSAFE_STORE:
+                // UnsafePtr deliberately carries no Goose root identity. A
+                // valid raw store can alias an ordinary writable scalar or
+                // other address-exposed storage. Kill reachable facts here
+                // and record opaque effects for non-inlined callers too.
+                b.KillByCall();
+                break;
+            case B_ATOMIC_LOAD: case B_ATOMIC_STORE: case B_ATOMIC_EXCHANGE:
+            case B_ATOMIC_ADD: case B_ATOMIC_SUB: case B_ATOMIC_AND:
+            case B_ATOMIC_OR: case B_ATOMIC_XOR: case B_ATOMIC_CAS:
+                // Atomic synchronization can publish valid raw writes to
+                // ordinary address-exposed storage. Its previous bounds and
+                // storage facts do not survive that synchronization boundary.
+                b.KillByCall();
+                break;
+            case B_THREAD_SPAWN: case B_THREAD_SPAWN_CONTAINED:
+            case B_QPUT: case B_QGET: case B_QPOLL: case B_QLIMIT:
+                // An explicitly transferred integer handle can reconstruct a
+                // raw alias in another worker. Synchronization can publish its
+                // valid writes to address-exposed ordinary storage, even though
+                // safe worker values/globals retain their normal isolation.
                 b.KillByCall();
                 break;
             case B_PUSH:
@@ -3655,6 +3680,7 @@ inline bool Call::BceWalk(BCE &b) {
                 if (arg0) b.GrowShrinkKill(arg0, 1);
                 break;
             case B_THREAD_WAIT:
+                b.KillByCall();
                 // thread_wait(id, msg) appends the abort's message to msg.
                 if (arg0) b.GrowShrinkKill(arg0, 1);
                 break;

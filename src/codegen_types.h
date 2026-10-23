@@ -300,7 +300,8 @@ inline int64_t CodeGen::FixedSize(TypeExpr *t) {
         case TY_INT:  assert(t->intstorage != IS_VARINT); return IntSize(t->intstorage);
         case TY_FLT:  return t->fltstorage == FS_F32 ? 4 : 8;
         case TY_BOOL: return 1;
-        case TY_NATIVE: return t->nativekind == NK_ATOMIC_U32 || t->nativekind == NK_ATOMIC_U64 ? 24 : 16;
+        case TY_NATIVE: return t->nativekind == NK_UNSAFE_PTR ? 8
+            : t->nativekind == NK_ATOMIC_U32 || t->nativekind == NK_ATOMIC_U64 ? 24 : 16;
         case TY_REF:
             if (t->ref->lenstorage >= 0) {
                 assert(t->ref->lenstorage != IS_VARINT);
@@ -523,7 +524,10 @@ inline string CodeGen::CT(TypeExpr *t) {
         case TY_INT:  assert(t->intstorage != IS_VARINT); return IntCT(t->intstorage);
         case TY_FLT:  return t->fltstorage == FS_F32 ? "float" : "double";
         case TY_BOOL: return "uint8_t";
-        case TY_NATIVE: return t->nativekind == NK_ATOMIC_U32 || t->nativekind == NK_ATOMIC_U64 ? "gs_shared_atomic_cap" : "gs_shared_cap";
+        case TY_NATIVE:
+            if (t->nativekind == NK_UNSAFE_PTR) { EmitUnsafePtrType(); return "gs_unsafe_ptr"; }
+            return t->nativekind == NK_ATOMIC_U32 || t->nativekind == NK_ATOMIC_U64
+                ? "gs_shared_atomic_cap" : "gs_shared_cap";
         case TY_VOID: return "void";
         case TY_REF: {
             auto &r = *t->ref;
@@ -546,7 +550,10 @@ inline string CodeGen::CT(TypeExpr *t) {
     // A variant's struct is a member of its enum's union. Emitting the enum
     // emits each variant's body ahead of the enum's own, also where a payload
     // names the enum again (through a slice), so a variant starts there.
-    if (t->kind == TY_VARIANT && EIVar(t)->allfixed) {
+    // A flat exported payload needs only its own fields. Its owning enum
+    // and siblings may be entirely private (including native capabilities).
+    // Keep them out of the API snapshot; emit the enum later if code needs it.
+    if (t->kind == TY_VARIANT && EIVar(t)->allfixed && !emittingexporttypes) {
         CT(t->var->adt);
         if (cdefined.count(m)) return name;
     }
