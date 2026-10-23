@@ -5,6 +5,8 @@ Build with a Goose compiler containing native shared-memory builtins:
 ```sh
 goose build -O2 samples/parallel_wasm/main.goose -o /tmp/wasm-compiler
 python3 test/parallel_wasm.py /path/to/goose
+# A short O0 compiler regression run, separate from any timing experiment:
+python3 test/parallel_wasm.py /path/to/goose --goose-opt 0 --jobs 64
 ```
 
 The acceptance script builds real binary Wasm modules without dependencies.

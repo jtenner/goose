@@ -137,7 +137,7 @@ fn compile_jobs(module: SharedView, table: SharedView, output: SharedView,
         let status = shared_atomic_view_u32(statuses, i);
         atomic_store(status, 1, "Release"); // RUNNING, parent recovers after abort
         let record = shared_borrow(table, i * RECORD_BYTES, RECORD_BYTES);
-        assert(memory_read<u32>(record, 0, false) as u64 == i);
+        assert(memory_read<u32>(record, 0, false) == i);
         let offset = memory_read<u64>(record, 8, false);
         let length = memory_read<u64>(record, 16, false);
         let out = memory_read<u64>(record, 24, false);
@@ -228,7 +228,7 @@ fn main() {
     let output = shared_view(out_owner, 0, output_size);
     let init = shared_borrow(table);
     for job in jobs {
-        let p = (job.index as u64) * RECORD_BYTES;
+        let p = job.index * RECORD_BYTES;
         memory_write<u32>(init, p, job.index, false);
         memory_write<u64>(init, p + 8, job.offset, false);
         memory_write<u64>(init, p + 16, job.length, false);
@@ -264,7 +264,7 @@ fn main() {
         if status == 1 { status = 4; } // contained abort left a RUNNING job
         if status == 0 { status = 5; } // shutdown or last worker failed
         let visits = memory_read<u32>(results, job.output + 8, false);
-        claimed += visits as u64;
+        claimed += visits;
         let n = memory_read<u64>(results, job.output, false);
         assert(n <= job.capacity - 16);
         var text: u8[>..] = [];
