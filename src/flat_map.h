@@ -63,6 +63,15 @@ template<typename K, typename V> class flat_map {
     size_t size() const { return count; }
     bool empty() const { return !count; }
 
+    // Invalidates the value cells, as clearing an ordinary map does.
+    void clear() {
+        slots.clear();
+        chunks.clear();
+        freecells.clear();
+        count = used = 0;
+        shift = 64;
+    }
+
     V *find(const K &k) {
         assert(k != K {});
         if (!count) return nullptr;
