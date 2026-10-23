@@ -9,6 +9,9 @@ import subprocess
 import sys
 import tempfile
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / 'scripts'))
+from lsp_protocol import Client
+
 EXE = pathlib.Path(sys.argv[1]).resolve()
 CORE_ONLY = '--core-only' in sys.argv[2:]
 FIELDS_ONLY = '--fields-only' in sys.argv[2:]
@@ -28,6 +31,9 @@ def invoke(args, *, ok=True, contains=None):
 
 CORE = '''
 let ENABLED = !false && (3 * 2 == 6);
+let BYTEMAX: u8 = 255;
+let POSITIVE: i64 = 1;
+let LARGE: u64 = 18446744073709551615;
 enum Mode { Ok }
 type Number = u32;
 fn excluded_call() { print("excluded_call_sentinel"); }
@@ -50,6 +56,12 @@ fn main() {
     } else { let local = 5; print(local); }
     const if false {} else {}
     print(chosen(9));
+    const if !(1 < 2 && 2 <= 2 && 3 > 2 && 3 >= 3 && true != false && !false == true) { unknown(); }
+    const if POSITIVE < LARGE {} else { unknown(); }
+    const if ~0 == BYTEMAX { } else { unknown(); }
+    const for <C> in [1, 2] { const if C == 1 {} else {} }
+    const for <N> in ["keep", "drop"] { const if N == "keep" {} else {} }
+    const if true {} else if false { unknown(); } else { unknown(); }
     const for <N> in [true, false] {
         const if N { print("yes"); } else { print("no"); }
     }
@@ -134,6 +146,12 @@ with tempfile.TemporaryDirectory(prefix='goose-const-if-') as directory:
                 result = invoke(['run', level, *definitions, source])
                 assert result.stdout == expected, (expected, result.stdout)
                 invoke([level, *definitions, source, '-o', cfile])
+                native = root / 'native'
+                invoke(['build', level, *definitions, source, '-o', native])
+                execution = subprocess.run([str(native)], capture_output=True, text=True, timeout=30)
+                assert execution.returncode == 0 and execution.stdout == expected, execution
+                # Separate ASTs in one compiler process reuse the same config.
+                invoke(['--multi-test', '--check', *definitions, source, source])
                 c = cfile.read_text()
                 assert 'excluded_call_sentinel' not in c and 'excluded_call(' not in c
                 assert 'ns_Unknown' not in c and 'ns_Missing' not in c
@@ -170,5 +188,43 @@ with tempfile.TemporaryDirectory(prefix='goose-const-if-') as directory:
     for code, diagnostic in failures:
         source.write_text(code)
         invoke(['check', source], ok=False, contains=diagnostic)
+
+    if not CORE_ONLY:
+        # Excluded names remain quiet in editor analysis; malformed excluded
+        # syntax still reports, and a subsequent edit recovers selected fields.
+        text = ("struct S { const if build::DEBUG { enabled: u32 = 1, } "
+                "else { disabled: u32 = 2, } }\n"
+                "fn main() { const if build::DEBUG { let bad: ns::Unknown = ns::Unknown {}; } "
+                "else { let x = S {}; print(x.disabled); } }\n")
+        source.write_text(text)
+        uri = source.as_uri()
+        client = Client(str(EXE), root, ['--define', 'DEBUG=false'])
+        try:
+            client.request('initialize', {'processId': None, 'rootUri': root.as_uri(), 'capabilities': {},
+                                         'initializationOptions': {'entryFiles': [str(source)]}})
+            client.send('initialized', {}, request=False)
+            client.send('textDocument/didOpen', {'textDocument': {'uri': uri, 'languageId': 'goose',
+                                                                'version': 1, 'text': text}}, request=False)
+            diagnostics = client.diagnostics_for(uri)
+            assert diagnostics == [], diagnostics
+            position = {'line': 1, 'character': text.splitlines()[1].index('x.disabled') + 2}
+            doc = {'textDocument': {'uri': uri}, 'position': position}
+            items = client.request('textDocument/completion', doc)['items']
+            labels = [item['label'] for item in items]
+            assert 'disabled' in labels and 'enabled' not in labels, labels
+            broken = text.replace('let bad: ns::Unknown', 'let bad:')
+            for version, changed, expect_error in ((2, broken, True), (3, text, False)):
+                client.send('textDocument/didChange', {'textDocument': {'uri': uri, 'version': version},
+                                                      'contentChanges': [{'text': changed}]}, request=False)
+                diagnostics = client.diagnostics_for(uri, accept=lambda ds: bool(ds) == expect_error)
+                assert bool(diagnostics) == expect_error, diagnostics
+            client.request('shutdown', {})
+            client.send('exit', {}, request=False)
+            assert client.p.wait(timeout=10) == 0
+            CHECKS += 4
+        finally:
+            if client.p.poll() is None:
+                client.p.kill()
+                client.p.wait()
 
 print(f'const if: {CHECKS} checks passed')
