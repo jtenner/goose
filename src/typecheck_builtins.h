@@ -1733,7 +1733,7 @@ inline void TypeCheck::NoteSlotStore(const StoreEvent &e) {
                     if (h->ownerspec != own) a = { slot, false, nullptr, false, true };
                     AddContents(h, a, e.classread, e.src);
                     if (e.byteview && !h->contentbyteview) {
-                        h->contentbyteview = true;
+                        Writing(h)->contentbyteview = true;
                         NoteFact(h);
                     }
                 }
@@ -1744,7 +1744,7 @@ inline void TypeCheck::NoteSlotStore(const StoreEvent &e) {
                     continue;
                 RootAlt a { e.root, e.exact };
                 if (h->ownerspec != own) a = { slot, false };
-                auto changed = h->ref.Add(a);
+                auto changed = Writing(h)->ref.Add(a);
                 if (e.byteview && !h->ref.byteview) {
                     h->ref.byteview = true;
                     changed = true;
@@ -1773,6 +1773,7 @@ inline void TypeCheck::RecordStore(VarDef *container, const Roots &roots, bool b
         return;
     }
     auto holds = container->type && !IsRefOrSlice(container->type);
+    Writing(container);
     container->contentbyteview |= byteview;
     if (roots.Unknown()) DropKills(container);
     if (holds && roots.Unknown()) container->contents.unknown = true;
@@ -1894,7 +1895,7 @@ inline void TypeCheck::ApplyCalleeStores(FnSpec *spec, vector<Val> &argvals, Nod
         e.bound = bound;
         e.slot = slot;
         e.sliceref = sliceref;
-        container->contentbyteview |= byteview;
+        Writing(container)->contentbyteview |= byteview;
         if (container->type && !IsRefOrSlice(container->type))
             AddContents(container, a, classread, src);
         AddStoreEvent(e);
@@ -1958,7 +1959,7 @@ inline void TypeCheck::ApplyCalleeStores(FnSpec *spec, vector<Val> &argvals, Nod
             Roots bound;
             for (auto &a : x->ref.alts)
                 if (ofcallee(a)) bound.Add(RetAltVal(spec, a, argvals, x->type, at));
-            erase_if(x->ref.alts, ofcallee);
+            erase_if(Writing(x)->ref.alts, ofcallee);
             AddBinding(x, bound);
         });
     }
@@ -1978,7 +1979,7 @@ inline void TypeCheck::ApplyCalleeStores(FnSpec *spec, vector<Val> &argvals, Nod
         if (!spec->inprogress && classat(e.root, own) >= 0 && x && x->type &&
             !IsRefOrSlice(x->type) && !x->isglobal && !IsTemp(x) && lexical_container(x)) {
             spec->storesout = true;
-            erase_if(x->contents.alts, [&](const RootAlt &c) { return c.root == e.root; });
+            erase_if(Writing(x)->contents.alts, [&](const RootAlt &c) { return c.root == e.root; });
             for (auto &a : r.alts) AddContents(x, a, e.classread, src);
         }
         for (size_t k = 0; k < r.alts.size(); k++) {
@@ -1986,7 +1987,7 @@ inline void TypeCheck::ApplyCalleeStores(FnSpec *spec, vector<Val> &argvals, Nod
             e.root = a.root;
             e.exact = a.exact;
             e.src = src;
-            if (k == 0) storeevents[i] = e;
+            if (k == 0) WritingStore(i) = e;
             else storeevents.push_back(e);
         }
     }
@@ -2179,6 +2180,7 @@ inline void TypeCheck::NoteClassUses(FnSpec *spec, const vector<Val> &argvals) {
 }
 
 inline void TypeCheck::NoteClassUse(VarDef *cr, const ClassUse &u) {
+    UsingClass(cr);
     auto same = [&](const ClassUse &o) {
         return o.src == u.src && o.byteview == u.byteview &&
                o.roots.Same(u.roots, Roots::Compare::GlobalReach);
@@ -2751,7 +2753,7 @@ inline bool TypeCheck::ResizesToMark(Node *recv, Node *len) {
     if (!m || !m->markof || m->isvar || !spec || m->ownerspec != spec || m->refwrite ||
         !SamePath(m->markof, recv))
         return false;
-    if (!m->markuse) m->markuse = len;
+    if (!m->markuse) Writing(m)->markuse = len;
     return true;
 }
 
