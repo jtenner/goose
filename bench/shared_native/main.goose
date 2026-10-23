@@ -22,7 +22,7 @@ thread_fn atomic_worker(slots: SharedView, next: SharedAtomicU64, count: u64,
     if mode == 2 {
         loop { let job = atomic_fetch_add(next, 1, "Relaxed"); if job >= count { break; } }
     } else {
-        let token = shared_atomic_view_u64(slots, if mode == 0 { index } else { 0 });
+        let token = shared_atomic_view_u64(slots, if mode == 0 { index * 8 } else { 0 });
         for i in count { atomic_fetch_add(token, 1, "Relaxed"); }
     }
 }
@@ -57,9 +57,9 @@ fn main() {
     let owner, ok = shared_alloc(1048576); assert(ok);
     let data = shared_view(owner, 0, 524288);
     let target = shared_view(owner, 524288, 524288);
-    let controls, controls_ok = shared_alloc(128); assert(controls_ok);
+    let controls, controls_ok = shared_alloc(1024); assert(controls_ok);
     let next = shared_atomic_u64(controls, 0, 0);
-    let slots = shared_atomic_array_u64(controls, 8, 8, 0);
+    let slots = shared_atomic_array_u64(controls, 64, 64, 0);
     var operations: u64 = n;
     var checksum: u64 = 0;
     let t0 = clock();
