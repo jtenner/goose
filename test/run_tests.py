@@ -1934,6 +1934,17 @@ def main():
         r.section("worker packet alignment")
         r.show_task(worker_packet_alignment)
 
+    def library_headers():
+        from library_headers import check_library_headers
+        try:
+            check_library_headers(exe, cc, gendir, extra=extra)
+            r.ok("library headers: private native wrappers, self-contained C/C++ API, ABI rejection")
+        except (RuntimeError, OSError, subprocess.TimeoutExpired) as e:
+            r.fail("library headers", str(e))
+    if cc:
+        r.section("library headers")
+        r.show_task(library_headers)
+
     def extern_types():
         from extern_types import check_extern_types
         try:
