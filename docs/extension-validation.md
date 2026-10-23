@@ -31,3 +31,104 @@ Native definitions acceptance tests were committed before implementation;
 the unmodified compiler rejected the first invocation with `unknown option:
 --define`. Run the focused tests with
 `python3 test/cli_definitions.py build/goose`.
+
+## Integrated extension validation
+
+Claude and DeepSeek reviewed `102c0df53d8369325f7c33c3ae6ca308615a4b89`.
+The independent parent reviewed the diagnostic-only follow-up `61587de3`:
+synthetic definition errors now use the real condition location without
+mutating immutable values. Compiler source subtree after that correction:
+`2049b52b10eaf0192e66514fbac40bf5e2d0d3ec`. After that correction, final Release and
+assertions-enabled Debug each pass **5,125 reported section checks**, in
+separate sequential runs (118 s and 123 s). Both include the native example group and expanded
+library-header regression. The final 3,000-job Wasm acceptance also passes
+normally and with ThreadSanitizer (Clang 23); these are correctness runs.
+`build/goose` is a refreshed Release build and runs the checked clobber sample.
+Full-suite counters include grouped drivers; their internal checks are not
+summed again as unique test cases.
+
+The extension preserves ordinary worker isolation. Shared allocation/view/access
+and atomic handles have distinct compiler types; the checked runtime pins
+worker memory through lease cleanup. UnsafePtr operations have separate caller
+obligations and do not confer safe shared-memory authority.
+
+Full-suite commands (use a build beside the checkout so standard-library and
+sample resources resolve):
+
+```sh
+python3 test/run_tests.py --exe build/goose --profile baseline --cc native --require-clang -j4
+python3 test/run_tests.py --exe build-final-debug/goose --profile baseline --cc native --require-clang -j4
+python3 test/cli_definitions.py build-final-debug/goose
+python3 test/const_if.py build-final-debug/goose
+python3 test/parallel_wasm.py build/goose
+python3 test/conditional_shared_layout.py build/goose
+python3 test/native_config_definitions.py build/goose
+python3 test/jit_clobbers.py build/goose
+```
+
+Runtime version: `3a21ace949ed`. Compiler executable hashes, source revisions and
+native flags accompany the benchmark records. Final review results from Claude and
+Concentrate/OpenCode DeepSeek 1017 belong in the fork PR descriptions before
+those changes are marked ready. The CLI version identifies the
+runtime and is insufficient to distinguish compiler source snapshots.
+
+Independent review covered CLI parsing/configuration isolation/source locations;
+const-if specialization transactions, field layouts and constructors; shared
+lifetime and native atomic generation; mappings and zero-length copying; unsafe
+pointer storage, alias effects and C ABI; builder result-count alignment; worker
+packet byte copying; and their combined behavior. Confirmed issues were retained
+as regression tests before fixes. These included abandoned recursive
+specializations and speculative proof/cache state, unaligned native wrappers
+and packed result/packet counts, missing u64 generation lock-free checks on u32
+paths, stale bounds facts after synchronized raw writes, and string-definition
+source locations. Library headers test only public signature dependencies, including flat enum
+payloads with private native siblings, C/C++ hosts and retained ABI refusals.
+The focused full-sanitizer header matrix passes 352 subprocess checks per
+GCC/Clang frontend, with source unchanged after freezing.
+
+Conditional layout tests execute both 8-byte/16-byte layouts, active reflection
+and constructors, and actual cross-configuration files with explicit layout
+fingerprints. A mismatched fingerprint is rejected before reading payloads.
+Packed capability wrappers have byte alignment; registered atomic cells retain
+4/8-byte alignment checks. Tests explicitly re-enable alignment sanitization
+for these paths. The ordinary sanitizer profile retains inherited exclusions
+for unrelated general packed scalar accesses; it is not evidence of universal
+alignment safety.
+
+The parallel sample emits real x86-64 bytes for the documented `()->i32` Wasm
+subset. It does not allocate executable pages or invoke the emitted code and
+is not a complete WebAssembly implementation. Its stress checks compare every
+emitted byte and claim/publication state across serial and 1/2/4/8 workers,
+including 3,000 jobs, malformed inputs, cancellation and cleanup. Native builds
+are used for threads; embedded TinyCC execution is not used for native memory.
+
+## Platform and validation limits
+
+| Target | Status |
+| --- | --- |
+| Linux x86-64, GCC 14.2 / Clang 23.1.3 | Built and exercised: compiler, native memory, atomics, mappings/advice, UnsafePtr and examples. ASan/UBSan with focused alignment checks and TSan tested. |
+| Linux i486/i686 cross-target probes | Compile-only lock-free validation, including u64 generations on u32 paths; no 32-bit runtime claim. |
+| Windows / macOS | OS allocation/mapping branches exist; no execution validation here. |
+| MSVC | Native shared atomic backend is explicitly unsupported; no silent locking fallback. |
+| Embedded TinyCC | Existing ordinary supported programs remain tested. Native shared memory needs TLS and UnsafePtr needs packed typedef alignment; explicitly unsupported. |
+| Other pointer widths / big-endian hosts | UnsafePtr rejects non-64-bit pointers; no host execution coverage. Both requested byte endians are tested on this little-endian host. |
+
+Struct field conditions may use build definitions/global constants; generic
+structs support such layouts, while conditions depending on type parameters
+are explicitly rejected. Configuration-dependent types are ABI incompatible
+unless the application validates a matching layout/version. Readonly mappings
+are not snapshots; applications must prevent external truncation. Unsafe raw
+access still requires valid provenance, extent, lifetime, permissions, effective
+type and synchronization; numerical checks cannot establish these properties.
+
+Inherited limits outside these corrections remain documented: ordinary
+variable-mode enum streams can emit unaligned typed scalar stores; a
+variable-prefix owning alias `.items.push` can emit malformed C, and ordinary
+embedded TinyCC execution has an existing LeakSanitizer allocation report.
+Compiler-only sanitized const-if checks and the tested native programs pass;
+these results do not establish a compiler-wide or TinyCC-wide leak-free claim.
+Optional multimedia/device tests retain upstream environment skips.
+
+Measured native costs and the synthetic compiler regression, with raw samples,
+flags, hashes, variation and limits, are recorded next to the
+[benchmark](../bench/shared_native/results/README.md).
