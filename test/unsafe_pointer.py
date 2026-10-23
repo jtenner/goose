@@ -43,7 +43,9 @@ def main():
 
     fixture = ROOT / "test/memory/unsafe_pointer.goose"
     run([goose, "--roundtrip", "--check", fixture])
-    for fixture_error in sorted((ROOT / "test/errors_tc").glob("unsafe_pointer_*.goose")):
+    rejections = list((ROOT / "test/errors_tc").glob("unsafe_pointer_*.goose"))
+    rejections += list((ROOT / "test/errors").glob("unsafe_pointer_*.goose"))
+    for fixture_error in sorted(rejections):
         marker = re.search(r"^// error: (.+)$", fixture_error.read_text(), re.M)[1]
         run([goose, "--check", fixture_error], error=marker)
 
@@ -55,7 +57,7 @@ def main():
 
     errors = {
         "null_load": ('unsafe_load<u8>(unsafe_ptr_from_handle(0), false);', "unsafe pointer is null"),
-        "null_store": ('unsafe_store<u64>(default<UnsafePtr>(), 1, false);', "unsafe pointer is null"),
+        "null_store": ('unsafe_store<u64>(unsafe_ptr_from_handle(0), 1, false);', "unsafe pointer is null"),
         "null_add": ('unsafe_ptr_add(unsafe_ptr_from_handle(0), 0);', "unsafe pointer is null"),
         "overflow": ('unsafe_ptr_add(unsafe_ptr_from_handle(18446744073709551615), 1);', "unsafe pointer address overflow"),
         "underflow": ('unsafe_ptr_add(unsafe_ptr_from_handle(1), -2);', "unsafe pointer address overflow"),
@@ -63,7 +65,9 @@ def main():
         "range_load": ('unsafe_load<u64>(unsafe_ptr_from_handle(18446744073709551615), false);', "unsafe pointer address overflow"),
         "range_store": ('unsafe_store<u16>(unsafe_ptr_from_handle(18446744073709551615), 1, true);', "unsafe pointer address overflow"),
     }
-    sources = [(fixture, "unsafe pointer ok", None)]
+    names = ROOT / "test/memory/unsafe_pointer_names.goose"
+    run([goose, "--roundtrip", "--check", names])
+    sources = [(fixture, "unsafe pointer ok", None), (names, "unsafe pointer names ok", None)]
     for name, (statement, error) in errors.items():
         source = out / (name + ".goose")
         source.write_text("fn main() { " + statement + " }\n")
@@ -78,6 +82,18 @@ def main():
                 assert "UINTPTR_MAX" in generated, "target width must be validated in generated C"
                 assert "memcpy" in generated, "unaligned accesses must copy scalar bits"
                 assert "gs_shared_read(" not in generated[generated.rfind("static void main_g"):], "raw access must not use shared-memory services"
+                # Exercise the explicit target rejection without depending on
+                # the host having a complete 32-bit libc/toolchain installed.
+                start = generated.index("#if !defined(UINTPTR_MAX)")
+                stop = generated.index("typedef void *gs_unsafe_ptr;", start)
+                guard = generated[start:stop]
+                for width in ("UINT32_MAX", None):
+                    rejected = out / f"unsupported-{width}-O{level}.c"
+                    rejected.write_text("#include <stdint.h>\n#undef UINTPTR_MAX\n" +
+                                        (f"#define UINTPTR_MAX {width}\n" if width else "") + guard)
+                    for name, compiler in compilers:
+                        run([compiler, "-c", rejected, "-o", out / f"unsupported-{name}.o"],
+                            error="unsupported pointer width")
             for name, compiler in compilers:
                 for debug in (0, 1):
                     binary = out / f"{source.stem}-O{level}-{name}-debug{debug}"
