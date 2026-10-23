@@ -3640,6 +3640,14 @@ inline bool Call::BceWalk(BCE &b) {
                 // and record opaque effects for non-inlined callers too.
                 b.KillByCall();
                 break;
+            case B_ATOMIC_LOAD: case B_ATOMIC_STORE: case B_ATOMIC_EXCHANGE:
+            case B_ATOMIC_ADD: case B_ATOMIC_SUB: case B_ATOMIC_AND:
+            case B_ATOMIC_OR: case B_ATOMIC_XOR: case B_ATOMIC_CAS:
+                // Atomic synchronization can publish valid raw writes to
+                // ordinary address-exposed storage. Its previous bounds and
+                // storage facts do not survive that synchronization boundary.
+                b.KillByCall();
+                break;
             case B_THREAD_SPAWN: case B_THREAD_SPAWN_CONTAINED:
             case B_QPUT: case B_QGET: case B_QPOLL: case B_QLIMIT:
                 // An explicitly transferred integer handle can reconstruct a
