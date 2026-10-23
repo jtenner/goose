@@ -342,6 +342,13 @@ inline Node *ConstFor::Clone1(Ast &ast) const {
     return cf;
 }
 
+inline Node *ConstInitIf::Clone1(Ast &ast) const {
+    auto n = ast.New<ConstInitIf>(line, cond->Clone(ast));
+    for (int i = 0; i < 2; i++)
+        for (auto &entry : branches[i]) n->branches[i].push_back(ast.CloneFieldInit(entry));
+    return n;
+}
+
 inline FieldInit Ast::CloneFieldInit(const FieldInit &fi) {
     auto out = fi;
     out.val = fi.val->Clone(*this);
@@ -421,6 +428,11 @@ inline Node *AliasDecl::Clone1(Ast &ast) const { return ast.New<AliasDecl>(line,
 // want it handle FnDecl explicitly.
 
 #define CH(c) if (c) f(c)
+
+inline void ConstInitIf::Children(const function<void(Node *)> &f) const {
+    f(cond);
+    for (auto &branch : branches) for (auto &entry : branch) f(entry.val);
+}
 
 inline void ConstFor::Children(const function<void(Node *)> &f) const {
     for (auto c : constants) f(c);

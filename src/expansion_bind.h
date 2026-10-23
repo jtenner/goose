@@ -83,6 +83,11 @@ struct ExpansionBinder {
     }
     void Walk(Node *n) {
         if (!n) return;
+        if (auto ci = Is<ConstInitIf>(n)) {
+            Walk(ci->cond);
+            for (auto &branch : ci->branches) Inits(branch);
+            return;
+        }
         if (auto cf = Is<ConstFor>(n)) {
             for (auto t : cf->types) Type(t);
             for (auto c : cf->constants) Walk(c);
