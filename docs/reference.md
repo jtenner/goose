@@ -3635,6 +3635,11 @@ open. Spec §11.2.
 
 ---
 
+Explicit native shared storage is described in [Native memory](native_memory.md):
+opaque owners/views, synchronized range access, typed atomic regions, readonly
+file maps, and pre-spawn worker leases. Ordinary thread arguments and globals
+keep the isolation rules above.
+
 ## 23. Serialization
 
 A structure whose links are self-relative offsets means the same wherever
