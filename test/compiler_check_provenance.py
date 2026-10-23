@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 HARNESS = ROOT / 'bench/shared_native/compiler_check.py'
@@ -40,3 +41,11 @@ assert plan['requested_source_refs'] == dict(baseline='8464cc68', extended='41dc
 assert len(plan['harness_sha256']) == 64 and 'baseline' not in plan
 assert [s['unused_functions'] for s in plan['sources']] == [250, 500, 1000, 2000, 4000]
 print('compiler-check provenance/environment/plan acceptance passed (no timings)')
+
+with tempfile.TemporaryDirectory() as directory:
+    journal = Path(directory) / 'processes.jsonl'
+    bench.record_process(journal, dict(returncode=0, warmup=True, seconds=1.25))
+    bench.record_process(journal, dict(returncode=1, stderr='failed', seconds=2.5))
+    records = [json.loads(line) for line in journal.read_text().splitlines()]
+    assert len(records) == 2 and records[1]['returncode'] == 1
+    assert records[0]['warmup'] and records[1]['stderr'] == 'failed'
