@@ -4096,6 +4096,56 @@ alignment for packed fields, arrays, returns and worker packets; internal
 64-bit generation descriptors shall have at least eight-byte alignment and
 an eight-byte-multiple stride. Actual atomic cells retain natural alignment.
 
+### 11.5 Native file mappings, subranges, byte buffers, and advice
+
+`shared_map_readonly(path, bytes) -> SharedOwner, bool` maps an explicit
+positive file extent, subject to the native size limits in §11.4. Invalid
+paths, a size beyond the file, or an OS/metadata failure return false and an
+invalid owner. Mapping failure shall release partial mappings and file or
+mapping handles. A successful mapping retains read-only permission through
+all derived capabilities; `shared_close` later unmaps it. File contents are
+not snapshotted. The application shall keep the mapped extent valid until
+close: concurrent or later truncation may raise an OS mapping fault (such as
+SIGBUS), outside contained-abort recovery. External file changes can be visible.
+
+`shared_view(view, offset, bytes)` extends the owner-only form in §11.4 to a
+checked subview. It preserves the original allocation, permissions and atomic
+kind. A typed atomic subview shall start at a slot boundary and contain a whole
+number of slots. It is an alias of already registered atomic storage, not a
+new registration that changes its type or permits ordinary access. Views are
+setup descriptors retained until owner close.
+
+`shared_borrow(view, offset, bytes)` authorizes only that checked subrange;
+the one-argument form still covers the whole view. Access descriptors are
+reusable after release, so repeated bounded borrows shall not retain one new
+view descriptor per job. Ordinary mutable ranges remain exclusive. Multiple
+overlapping read accesses to a read-only mapping are permitted, including on
+different workers. Writes and atomic registrations on a read-only mapping
+abort. Atomic bytes remain excluded from ordinary accesses even through an
+otherwise ordinary parent view or a previously created alias.
+
+`memory_read_bytes(access, offset, out)` copies into an existing writable
+`u8[:]`; `memory_write_bytes(access, offset, bytes)` copies from a read-only
+byte slice. Buffer length is the byte count. Read-only destinations, including
+string literals and serialization byte views, are compile-time errors.
+Both directions validate live authorization, actor, permissions and bounds
+before transfer, even for zero bytes. A valid empty default slice may have a
+null data pointer; a zero-byte operation shall not dereference it or pass it
+to a library operation requiring a nonnull pointer. Zero bytes at the end of
+a valid range are allowed; zero-byte writes still require write permission.
+
+`shared_page_advice(view, offset, bytes, advice) -> bool, bool` reports
+`(supported, applied)`. Advice is a compile-time string literal or named global
+string constant: `"Normal"`, `"Sequential"`, `"Random"`, `"WillNeed"`, or
+`"DontNeed"`; other spellings are compile-time errors. Liveness and byte bounds
+are checked before any OS request. An unsupported request returns false/false;
+a supported request may be refused or fail, returning true/false. Advice may
+affect complete pages surrounding the byte subrange and grants no access or
+lifetime authority. DontNeed shall never discard live anonymous data; this
+implementation refuses it on all mutable anonymous mappings and permits it
+only on read-only file mappings. POSIX exposes the available `madvise` actions;
+the current Windows backend reports advice unsupported.
+
 ## 12. Builtins, the standard library, and what v1 leaves out
 
 The language's own functions:
