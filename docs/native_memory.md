@@ -107,7 +107,10 @@ Orders are compile-time string literals or named global string constants:
 Loads reject Release/AcqRel, stores reject Acquire/AcqRel, and CAS failure orders
 must be load orders no stronger than success. Every invalid combination is a
 compiler error. `atomic_is_lock_free(a)` explicitly reports the supported width.
-The current atomic backend requires an always-lock-free native GCC/Clang width;
+The complete atomic path requires both an always-lock-free native GCC/Clang
+cell width and always-lock-free 64-bit generation validation, even for u32
+cells. Descriptor records have explicit eight-byte alignment and slab stride.
+A u32-only target without that generation capability is rejected;
 TinyCC/JIT is rejected before execution because its in-memory backend lacks
 TLS support; generated C also gives explicit capability errors for unsupported
 frontends, including MSVC. There

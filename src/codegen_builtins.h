@@ -99,6 +99,8 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
                          "#error Native shared atomics require GCC or Clang; this backend is unsupported\n#endif\n");
             Append(head, "#if ", u32 ? "__GCC_ATOMIC_INT_LOCK_FREE" : "__GCC_ATOMIC_LLONG_LOCK_FREE",
                    " != 2\n#error Native shared atomic width is not always lock-free on this target\n#endif\n");
+            Append(head, "#if __GCC_ATOMIC_LLONG_LOCK_FREE != 2\n"
+                         "#error Native shared atomic generation validation requires always-lock-free 64-bit atomics\n#endif\n");
         }
         vector<string> a;
         size_t nargs = bk == B_ATOMIC_LOAD || bk == B_ATOMIC_LOCKFREE ? 1 : bk == B_ATOMIC_CAS ? 3
