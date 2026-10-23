@@ -45,19 +45,27 @@ and workload hashes are in the [raw record](linux-x86_64-2026-10-23.json).
 Checked scalar operations cost substantially more than the weaker baseline:
 read latency is 5.08x, write/readback 40.32x, scalar read throughput cost
 22.71x and write throughput cost 24.24x in this workload. The source-level
-write/readback can be forwarded by the C optimizer; this is not a direct
-physical store-latency comparison. No broad performance improvement is
+write/readback can be forwarded by the C optimizer. Its C baseline takes
+only 68 microseconds (0.341 ns per source round trip), so the 40.32x ratio
+compares against a largely optimized-away loop, not physical store latency.
+Thirty-six of the 100 measured group medians are below 1 ms. Exact ratios
+are specific to this host and optimizer, especially in these short windows.
+No broad performance improvement is
 claimed. Smaller differences in atomics, copying and mapping overlap the
 observed variation.
 
 ## Worker counts at native O2
 
-| Workers | Uncontended atomic Mops/s | Contended atomic Mops/s | Claims Mjobs/s | Start/join workers/s |
-| ---: | ---: | ---: | ---: | ---: |
-| 1 | 459.87 | 423.37 | 364.52 | 56,133 |
-| 2 | 887.97 | 140.85 | 150.35 | 68,068 |
-| 4 | 1515.52 | 155.12 | 131.89 | 73,358 |
-| 8 | 3111.17 | 172.94 | 156.37 | 56,546 |
+| Workers | Uncontended atomic Mops/s | Contended atomic Mops/s | Claims Mjobs/s | Start/join workers/s | Start/join Goose/C cost | Start/join MAD % C/Goose |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 1 | 459.87 | 423.37 | 364.52 | 56,133 | 1.00x | 1.2/2.7 |
+| 2 | 887.97 | 140.85 | 150.35 | 68,068 | 1.04x | 3.4/4.6 |
+| 4 | 1515.52 | 155.12 | 131.89 | 73,358 | 1.20x | 3.4/4.9 |
+| 8 | 3111.17 | 172.94 | 156.37 | 56,546 | 1.21x | 0.6/1.7 |
+
+The 1.00x scheduling entry above describes one worker. At four and eight
+workers, start/join costs 20% and 21% more than the C baseline, with the low
+variation shown here.
 
 Claim MAD reaches 20.5%/22.6% for two/four Goose workers; eight workers
 reach 11.3%. Mapping Goose MAD is 14.9% at O2. Twelve of the fifty pairs
@@ -104,11 +112,18 @@ The exact source generator, input hash, binaries and samples are in the
 | -O0 | 33.292 / 1.085 | 349.156 / 1.446 | 10.49x | 13,192 / 14,916 |
 | -O2 | 32.871 / 0.608 | 349.121 / 1.292 | 10.62x | 13,116 / 14,960 |
 
-This is a measured regression of about 10.5x on this synthetic check workload,
-not a runtime JIT cost or a representative-project average. Deferred-state
-snapshotting is a plausible contributor from source inspection; profiling
-was not performed, so causation is not established. The correctness
-transaction is retained and this compiler cost is disclosed.
+This is a measured regression of about 10.5x at this synthetic workload's
+size, not a fixed multiplier, runtime JIT cost or representative-project
+average. Each unreached function takes a deferred-state snapshot that copies
+the live variable definitions and scans the type collection. Its bookkeeping
+therefore grows with unreached functions times live variable definitions;
+it can grow quadratically as those functions introduce more definitions.
+Larger codebases can regress more than 10.5x. The independent reviewer used
+counting-only instrumentation (no timing): 250/500/1,000 unreached functions
+with the same 500 globals produced 156,375/375,250/1,000,500 variable-definition
+copies. That identifies scaling in the bookkeeping, without measuring how
+much of elapsed time it causes. No time profile was collected. The
+correctness transaction is retained and this compiler cost is disclosed.
 
 Reproduce the experiments with `run.py --run --samples 7 --warmups 2
 --iterations 200000` and `compiler_check.py --run --baseline /path/to/upstream
