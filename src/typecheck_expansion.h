@@ -170,7 +170,10 @@ inline bool TypeCheck::ConstBool(Node *n, set<VarDecl *> &visiting, ConstUse *us
             default: break;
         }
     }
-    Error(n, "const if requires a bool constant expression (literals, global constants, build definitions, !, &&, || and comparisons)");
+    // Build-definition literals have no source location. Diagnose their
+    // condition use (also through aliases) without changing the shared value.
+    auto at = !n->line.line && use && use->at ? use->at : n;
+    Error(at, "const if requires a bool constant expression (literals, global constants, build definitions, !, &&, || and comparisons)");
 }
 
 inline bool TypeCheck::ConstIfCondition(Node *condition) {
@@ -442,11 +445,19 @@ inline void TypeCheck::ExpandArms(vector<MatchArm> &arms) {
 }
 
 inline void TypeCheck::ExpandInitializers(vector<FieldInit> &inits) {
-    if (none_of(inits.begin(), inits.end(), [](const FieldInit &fi) { return Is<ConstFor>(fi.val); }))
+    if (none_of(inits.begin(), inits.end(), [](const FieldInit &fi) { return Is<ConstFor>(fi.val) || Is<ConstInitIf>(fi.val); }))
         return;
     vector<FieldInit> flat;
     for (auto &fi : inits) {
-        if (auto cf = Is<ConstFor>(fi.val)) {
+        if (auto ci = Is<ConstInitIf>(fi.val)) {
+            auto take = ConstIfCondition(ci->cond);
+            auto selected = ci->branches[take ? 0 : 1];
+            for (auto &entry : selected) ResolveConditionalBody(ast, entry.val);
+                    ResolvePools();
+            ResolveIndexTypes();
+            ExpandInitializers(selected);
+            flat.insert(flat.end(), selected.begin(), selected.end());
+        } else if (auto cf = Is<ConstFor>(fi.val)) {
             vector<FieldInit> generated;
             ExpandConstFor(cf, [&](ExpansionClone &) {
                 for (auto &entry : cf->inits) generated.push_back(ast.CloneFieldInit(entry));

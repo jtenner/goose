@@ -826,6 +826,7 @@ enum NodeKind : uint8_t {
     NK_LoopExpr,
     NK_ForLoop,
     NK_ConstFor,
+    NK_ConstInitIf,
     NK_Return,
     NK_Break,
     NK_Continue,
@@ -1356,6 +1357,12 @@ NODE(ConstFor)
     bool armfragments = false;      // Its fragments are match arms (in a match's arm list).
     vector<MatchArm> arms;
     ConstFor(Line l) : Node(l, NKind) {}
+NODE_END
+
+NODE(ConstInitIf)
+    Node *cond;
+    vector<FieldInit> branches[2];   // 0 true, 1 false; source order preserved.
+    ConstInitIf(Line l, Node *condition) : Node(l, NKind), cond(condition) {}
 NODE_END
 
 NODE(Return)

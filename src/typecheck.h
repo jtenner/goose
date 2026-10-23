@@ -3449,6 +3449,7 @@ struct TypeCheck {
         // their selected arm. CheckUnreached checks the deferred program;
         // exports scan that checked specialization below.
         if (auto x = Is<IfExpr>(n); x && x->isconst && !x->selected) return;
+        if (Is<ConstInitIf>(n)) return;
         if (auto r = Is<Return>(n)) {
             if (!r->from.empty() && !names.count(r->from)) foreign = true;
         } else if (auto fd = Is<FnDecl>(n)) {
