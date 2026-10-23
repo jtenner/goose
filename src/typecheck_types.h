@@ -354,7 +354,7 @@ inline SizeClass TypeCheck::ClassOf(TypeExpr *t) {
 // Flat (§1.1): no references, slices, or relative references at any depth.
 inline bool TypeCheck::IsFlat(TypeExpr *t) {
     switch (t->kind) {
-        case TY_REF: case TY_SLICE: return false;
+        case TY_NATIVE: case TY_REF: case TY_SLICE: return false;
         case TY_STRUCT: return GetStructInst(t)->flat;
         case TY_ENUM:   return GetEnumInst(t)->flat;
         case TY_ARRAY:  return IsFlat(t->arr->sub);
@@ -416,6 +416,9 @@ inline bool TypeCheck::HoldsPlainRef(TypeExpr *t) {
 // references do, which is the whole point.
 inline bool TypeCheck::ImageSafe(TypeExpr *t, string &why) {
     switch (t->kind) {
+        case TY_NATIVE:
+            why = "native capabilities cannot be serialized";
+            return false;
         case TY_SLICE:
             why = cat(TypeStr(t), " is a slice, which is an address");
             return false;
@@ -601,7 +604,7 @@ inline void TypeCheck::ValidateType(TypeExpr *t, Line l, int pos) {
             return;
         }
         case TY_FLT: return;
-        case TY_BOOL: return;
+        case TY_BOOL: case TY_NATIVE: return;
         case TY_VOID:
             Error(l, "expression has no value here");
         case TY_FN:

@@ -74,6 +74,7 @@ run as part of the test suite.
 | [20_life](20_life.goose) | Conway's Life on a torus: two byte grids that swap roles, Euclidean `%` wraparound, ASCII frames. |
 | [21_raytrace](21_raytrace.goose) | Spheres, a floor, shadows and reflections with `float3` math; writes `raytrace.ppm` and prints an ASCII preview. |
 | [22_image_filters](22_image_filters.goose) | Box blur and Sobel over row slices, bounds-check free; writes `.pgm` files. |
+| [32_shared_jobs](32_shared_jobs.goose) | Native inline atomic job claims and completion slots, reusable disjoint result borrows, worker leases and explicit close. |
 | [23_mandelbrot_threads](23_mandelbrot_threads.goose) | A worker pool over typed queues: flat jobs go in and flat rows come back, reassembled in order; serial vs parallel timing on stderr. |
 
 ## Interop

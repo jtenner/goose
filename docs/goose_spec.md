@@ -57,9 +57,10 @@ Every type belongs to exactly one *size class*:
 A compound type's class is the max over its parts (fixed < variable <
 resizable), subject to the placement rules in §3.4.
 
-Additionally, a type is **flat** if it contains no references, slices, or
-relative references at any depth. Only flat values may cross thread
-boundaries (§11.2).
+Additionally, a type is **flat** if it contains no references, slices,
+relative references or native capabilities (§11.4) at any depth. Ordinary
+thread arguments and queue elements must be flat (§11.2); explicit native
+view/atomic worker arguments follow §11.4 instead.
 
 ### 1.2 Memory model
 
@@ -77,9 +78,11 @@ A Goose program's memory consists of:
   initializers. This read-only storage is shared by all program instances
   (§11.2).
 
-There is no general-purpose heap and no `malloc`. All dynamic allocation is
-expressed as values living on data stacks, owned by locals (or globals).
-(The runtime itself may allocate internally for thread queues, §11.2.)
+Ordinary dynamic allocation is expressed as values living on data stacks,
+owned by locals (or globals); there is no general-purpose `malloc` for Goose
+values. Explicit native capabilities (§11.4) separately own OS-backed byte
+regions. The runtime may allocate internal queue, worker and capability
+metadata; this does not create ordinary Goose references into those regions.
 
 Rewinding a data stack makes its storage reusable, while normally keeping
 its pages committed. After a large workload, `trim_memory()` from `os`
@@ -4320,8 +4323,9 @@ it leaves the caller's own facts about `src` intact.
 
 ### 11.2 Concurrency
 
-Threads never share mutable memory. The model is a statically typed
-relative of the Linda tuple-space / coordination style.
+Ordinary references and mutable globals are isolated between worker
+instances. Typed queues provide a statically typed Linda-style coordination
+model; explicit native shared capabilities follow §11.4.
 
 * A worker entry point is declared `thread_fn worker(a: i64, ...) { }`.
   The compiler compiles a `thread_fn` and everything it calls **as a
@@ -4376,21 +4380,21 @@ relative of the Linda tuple-space / coordination style.
   independently and may outlive the worker that spawned it. Queued messages
   belong to their queues and remain available to receivers after the sender
   exits. Workers still running when `main` returns are killed.
-* A thread program is an instance of the program with globals of its own.
-  At `thread_spawn`, every global the worker's program uses is copied from
-  the spawning instance, in the same way as the arguments, and the worker
-  reads and writes its copies from then on. No global is shared: a worker
-  that increments a global increments its own copy, and main's copy keeps
-  its value. A global whose type is not **flat** (§1.1) cannot be copied
-  and is an error in any function a `thread_fn` reaches, unless it is a
-  `let` or `const` global whose references all lead to static data, as a
-  string literal's do (`let NAMES = ["a", "b"];`). The copy of such a
-  global views the same read-only bytes, and no program can tell this
-  apart from a copy of its own. `const` globals with compile-time
-  initializers are static data (§1.2), read-only and therefore shared as
-  they are.
-* Args and queue elements must be **flat** types (§1.1); values are copied
-  in and out, which is cheap because Goose values are contiguous. A
+* A thread program is an instance of the program with globals of its own:
+  at `thread_spawn` every global the worker's program uses is copied from
+  the spawning instance, exactly as the arguments are, and the worker reads
+  and writes its copies from then on. Ordinary mutable globals are copied: a worker that
+  increments a global increments its own, and main's is what it was. A
+  global whose type is not **flat** (§1.1) cannot be copied and is an error
+  in any function a `thread_fn` reaches, unless it is a `let` or `const`
+  global whose references all lead to static data, as a string literal's
+  do (`let NAMES = ["a", "b"];`): its copy views the same read-only bytes,
+  which no program can tell from a copy of its own. `const` globals with
+  compile-time initializers are static data (§1.2), read-only and
+  therefore shared as they are.
+* Ordinary args and all queue elements must be **flat** types (§1.1);
+  direct native view/atomic args are the explicit exception in §11.4.
+  Flat values are copied in and out as contiguous data. A
   `thread_fn`'s parameters have no defaults (§7.1): `thread_spawn` passes
   every argument.
 * **Typed queues**: conceptually there is one queue per flat element type.
@@ -4417,6 +4421,150 @@ references. It is not in v1. (The thread mechanism of §11.2 already
 introduces the dynamic-stack-block machinery this needs.)
 
 ---
+
+### 11.4 Explicit native memory capabilities
+
+This optional native extension adds `SharedOwner`, `SharedView`,
+`SharedAccess`, `SharedAtomicU32` and `SharedAtomicU64`. These are distinct
+opaque fixed-size types, not integers, ordinary references, or byte images.
+They have no public constructor, fields, numeric cast, default value, or
+serialization form. Capability-containing values are non-flat and cannot be
+queue elements or cross extern/export signatures. Root native type names are
+reserved; namespaced user types and lexical generic parameters retain their
+normal priority. `::SharedView`, for example, denotes the native root type.
+
+`shared_alloc(bytes) -> SharedOwner, bool` allocates a separate OS-backed byte
+region. Zero size, a size above `min(SIZE_MAX, INT64_MAX)`, and allocation or
+metadata failure return false and an invalid owner. Failure shall release any
+partially acquired mapping. Initial bytes are demand-zero; allocation shall
+not eagerly touch the entire region. The payload is not a Goose value on a
+data stack, so the 48-bit value/array limits in §10.4 do not describe its size.
+Later OS page-allocation faults follow the OS fault policy.
+
+`shared_view(owner, offset, bytes)` derives a checked byte range and
+`shared_size(owner|view|access) -> u64` reports its length. Sizes, offsets and
+indices accept machine integers; negative and overflowing requests cannot
+become valid ranges. Every range check shall establish `offset <= length`
+and `bytes <= length - offset` before pointer arithmetic. These checks,
+capability liveness and required alignment checks apply in every build.
+
+Copies of a capability alias its existing authority. Only the creating
+thread can derive a view from an owner, register atomic storage, or close the
+owner. `shared_close(owner) -> bool` returns false for an invalid/already
+closed owner or while any borrow or worker lease is active. A successful
+close unmaps exactly once and invalidates every derived alias. Stale
+capabilities shall remain invalid after metadata or allocation addresses are
+reused; validation shall protect storage through the actual access.
+
+Ordinary shared access requires `shared_borrow(view) -> SharedAccess`.
+An access authorizes its calling thread exclusively for that range; a
+conflicting overlapping access aborts. `shared_release(access)` revokes all
+copies of that authorization. Released, stale or wrong-thread accesses abort.
+`memory_read<T>(access, offset, big_endian)` and
+`memory_write<T>(access, offset, value, big_endian)` accept exactly the signed
+and unsigned 8/16/32/64-bit integer types. False selects little endian, true
+big endian, independently of host order; unaligned storage is supported via
+bit copies. `memory_copy(dst, doff, src, soff, bytes)` checks both active
+accesses and permits overlap. No operation yields an ordinary Goose reference
+or slice into native shared storage.
+
+`shared_atomic_u32/u64(owner, offset, initial)` registers one aligned slot.
+`shared_atomic_array_u32/u64(owner, offset, count, initial)` registers a
+positive count of nonoverlapping same-width slots, initializes them before
+publication, and returns a typed-region `SharedView`.
+`shared_atomic_view_u32/u64(region, index)` derives an existing slot without
+allocation; width, liveness, alignment and index are always checked. A typed
+atomic region shall never overlap another registered atomic region or an
+active ordinary borrow. Its bytes remain excluded from all ordinary borrows
+until allocation close, including through pre-existing aliases.
+
+`atomic_load`, `atomic_store`, `atomic_exchange`, and
+`atomic_fetch_add/sub/and/or/xor` operate on exactly the handle's unsigned
+width. Exchange/fetch operations return the old value; arithmetic wraps at
+that width. `atomic_compare_exchange(a, expected, desired, success, failure)`
+is strong CAS and returns `(observed, exchanged)`, including the actual old
+value when comparison fails. Atomic cells use native integer byte order.
+Orders are compile-time strings (literals or named global string constants):
+`"Relaxed"`, `"Acquire"`, `"Release"`, `"AcqRel"`, `"SeqCst"`. Loads allow
+Relaxed/Acquire/SeqCst, stores Relaxed/Release/SeqCst, and RMWs all five.
+CAS failure allows Relaxed with every success order, Acquire only with
+Acquire/AcqRel/SeqCst success, and SeqCst only with SeqCst success. All other
+orders/combinations are compile-time errors.
+
+Only direct `SharedView` and atomic capabilities are additionally sendable
+through worker arguments. Before native worker creation the runtime shall
+retain every containing allocation, rolling back abandoned handoffs, and
+shall keep those leases through normal or contained-abort cleanup. Cleanup
+revokes abandoned accesses, releases leases, and reclaims worker-owned
+allocations; a child lease keeps an orphaned owner alive until the last child
+finishes. Completion is published only after cleanup. Main normal return also
+cleans its context; process-fatal exits rely on OS reclamation. Capability
+owners/accesses, wrapped capabilities and capability-containing globals do
+not acquire a flat-data or static-global exception under §11.2. Ordinary
+reference, queue and copied-global isolation is unchanged.
+
+The native C atomic backend requires GCC/Clang inline atomic builtins and an
+always-lock-free cell width **and 64-bit generation validation**, even for a
+u32-only program. `atomic_is_lock_free` describes this complete supported
+path. Unsupported frontend/target configurations shall be rejected explicitly,
+not silently replaced by mutex or out-of-line atomic helpers. Routine atomic
+validation and operations shall take no central mutex, allocate no heap, and
+call no ordinary runtime helper on success. Metadata setup/borrow/spawn/close
+may synchronize and allocate. TinyCC's current in-memory backend additionally
+rejects the required TLS runtime. Capability value wrappers shall have byte
+alignment for packed fields, arrays, returns and worker packets; internal
+64-bit generation descriptors shall have at least eight-byte alignment and
+an eight-byte-multiple stride. Actual atomic cells retain natural alignment.
+
+### 11.5 Native file mappings, subranges, byte buffers, and advice
+
+`shared_map_readonly(path, bytes) -> SharedOwner, bool` maps an explicit
+positive file extent, subject to the native size limits in §11.4. Invalid
+paths, a size beyond the file, or an OS/metadata failure return false and an
+invalid owner. Mapping failure shall release partial mappings and file or
+mapping handles. A successful mapping retains read-only permission through
+all derived capabilities; `shared_close` later unmaps it. File contents are
+not snapshotted. The application shall keep the mapped extent valid until
+close: concurrent or later truncation may raise an OS mapping fault (such as
+SIGBUS), outside contained-abort recovery. External file changes can be visible.
+
+`shared_view(view, offset, bytes)` extends the owner-only form in §11.4 to a
+checked subview. It preserves the original allocation, permissions and atomic
+kind. A typed atomic subview shall start at a slot boundary and contain a whole
+number of slots. It is an alias of already registered atomic storage, not a
+new registration that changes its type or permits ordinary access. Views are
+setup descriptors retained until owner close.
+
+`shared_borrow(view, offset, bytes)` authorizes only that checked subrange;
+the one-argument form still covers the whole view. Access descriptors are
+reusable after release, so repeated bounded borrows shall not retain one new
+view descriptor per job. Ordinary mutable ranges remain exclusive. Multiple
+overlapping read accesses to a read-only mapping are permitted, including on
+different workers. Writes and atomic registrations on a read-only mapping
+abort. Atomic bytes remain excluded from ordinary accesses even through an
+otherwise ordinary parent view or a previously created alias.
+
+`memory_read_bytes(access, offset, out)` copies into an existing writable
+`u8[:]`; `memory_write_bytes(access, offset, bytes)` copies from a read-only
+byte slice. Buffer length is the byte count. Read-only destinations, including
+string literals and serialization byte views, are compile-time errors.
+Both directions validate live authorization, actor, permissions and bounds
+before transfer, even for zero bytes. A valid empty default slice may have a
+null data pointer; a zero-byte operation shall not dereference it or pass it
+to a library operation requiring a nonnull pointer. Zero bytes at the end of
+a valid range are allowed; zero-byte writes still require write permission.
+
+`shared_page_advice(view, offset, bytes, advice) -> bool, bool` reports
+`(supported, applied)`. Advice is a compile-time string literal or named global
+string constant: `"Normal"`, `"Sequential"`, `"Random"`, `"WillNeed"`, or
+`"DontNeed"`; other spellings are compile-time errors. Liveness and byte bounds
+are checked before any OS request. An unsupported request returns false/false;
+a supported request may be refused or fail, returning true/false. Advice may
+affect complete pages surrounding the byte subrange and grants no access or
+lifetime authority. DontNeed shall never discard live anonymous data; this
+implementation refuses it on all mutable anonymous mappings and permits it
+only on read-only file mappings. POSIX exposes the available `madvise` actions;
+the current Windows backend reports advice unsupported.
 
 ## 12. Builtins, the standard library, and what v1 leaves out
 
