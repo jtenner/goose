@@ -28,12 +28,19 @@ inline string AbsolutePath(const string &path) {
 
 // GOOSE_HOME/build/prog/<stem>-<hash of the root's absolute path>/: where a
 // program's C, objects and logs go.
-inline string ProgramBuildDir(const string &rootfile) {
+inline string ProgramBuildDir(const string &rootfile, vector<string> definitions = {}) {
     auto abs = AbsolutePath(rootfile);
     #ifdef _WIN32
         for (auto &c : abs) c = (char)tolower((unsigned char)c);   // One directory per file, however spelled.
     #endif
-    return cat(GooseHome(), "/build/prog/", PathStem(rootfile), "-", Hex8(abs));
+    auto dir = cat(GooseHome(), "/build/prog/", PathStem(rootfile), "-", Hex8(abs));
+    if (!definitions.empty()) {
+        sort(definitions.begin(), definitions.end());
+        string key;
+        for (auto &definition : definitions) Append(key, definition.size(), ":", definition);
+        Append(dir, "/defines-", Hex8(key));
+    }
+    return dir;
 }
 
 // Runs the toolchain's commands, printing them as -v and --dry-run ask, and

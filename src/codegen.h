@@ -101,6 +101,8 @@ struct CodeGen {
     // stacks of the resizable ones. Accessed through GS_GL, main's static
     // instance directly or a worker's through the thread-local gs_gl.
     string gblock;
+    set<const VarDef *> unusedliteralglobals;
+    void FindUnusedLiteralGlobals();
     // The globals a thread program uses, in declaration order: what a spawn
     // copies into the worker's instance (EmitThreadSpawn, EnsureThreadThunk).
     unordered_map<FnSpec *, vector<VarDef *>> threadglobals;
@@ -1442,6 +1444,7 @@ struct CodeGen {
             if (t->kind == TY_REF && t->ref->pool) poolglobals.insert(t->ref->pool);
         ComputeRelRootMax();
         CollectSpecs();
+        FindUnusedLiteralGlobals();
         for (auto sp : livespecs)
             for (auto fv : sinfo[sp].freevars) capturedvars.insert(fv);
         // Zero means "no long-distance return in flight", which is also the

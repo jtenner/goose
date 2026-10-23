@@ -1609,6 +1609,10 @@ inline FnSpec *TypeCheck::GetOrCreateSpec(MatchInfo &mi, vector<Val> &argvals, N
         }
     }
     for (auto spec : sf->specs) {
+        // Deferred transactions may reuse completed checks, but must not
+        // rewrite a preexisting stale body: rollback owns only fresh bodies.
+        if (rootcheckpoint && rootcheckpoint->deferred &&
+            spec->id < (int)rootcheckpoint->fnspecs && spec->stale) continue;
         // A reuse would merge an exemplar's call into what the real calls
         // agreed on (CheckExemplars).
         if (spec->id < exemplarbase) continue;
@@ -1676,6 +1680,7 @@ inline FnSpec *TypeCheck::GetOrCreateSpec(MatchInfo &mi, vector<Val> &argvals, N
         // another root cut short (FnSpec::failed): what that error reported
         // stands for this call too, and this root ends here, silently.
         if (spec->failed) throw Abandoned {};
+        if (rootcheckpoint) rootcheckpoint->Reusing(spec);
         // Exactness and concreteness are not part of the key, so what the
         // specialization records is what every call site that reaches it
         // agrees on. A back edge with other classes than the key's passes
@@ -2678,16 +2683,22 @@ inline void TypeCheck::CheckExport(SFunction *sf) {
         if (!p.type) fail(cat("parameter ", p.name, " needs a type"));
         if (p.defaultval) fail(cat("parameter ", p.name, " cannot have a default"));
     }
-    set<string_view> names = { sf->name };
-    auto foreign = false;
-    if (sf->body) ScanForeignFrom(sf->body, names, foreign);
-    if (foreign) fail("cannot use return ... from across the C boundary");
+    // Unconditional foreign returns can be rejected even when the function
+    // was deliberately left unchecked as a free-returning standalone.
+    set<string_view> source_names = { sf->name };
+    auto source_foreign = false;
+    if (sf->body) ScanForeignFrom(sf->body, source_names, source_foreign);
+    if (source_foreign) fail("cannot use return ... from across the C boundary");
     if (sf->specs.size() != 1)
         fail("could not resolve one concrete function signature");
     auto spec = sf->specs[0];
     // Its check failed (FnSpec::failed), which was reported: nothing more
     // can be said of the export.
     if (spec->failed) throw Abandoned {};
+    set<string_view> names = { sf->name };
+    auto foreign = false;
+    if (spec->body) ScanForeignFrom(spec->body, names, foreign);
+    if (foreign) fail("cannot use return ... from across the C boundary");
     if (spec->params.size() != sf->params.size())
         fail("could not resolve one concrete function signature");
     for (size_t i = 0; i < spec->argtypes.size(); i++) {
@@ -3584,14 +3595,22 @@ inline void TypeCheck::CheckReturn(Return *r) {
         FnSpec *env = nullptr;
         auto targets = LookupLocalFns(r->from, env);
         if (targets.empty()) targets = ast.LookupFunctions(r->from, r->ns);
-        if (targets.empty()) Error(r, cat("return from ", r->from, ": unknown function"));
+        if (targets.empty()) {
+            if (standaloneroot && !standaloneroot->sf->isexport) throw NeedsCaller {};
+            Error(r, cat("return from ", r->from, ": unknown function"));
+        }
         for (auto i = (int)frames.size() - 1; i >= 1 && tf < 0; i--) {
             if (frames[i].isfunval || !frames[i].sf) continue;
             for (auto t : targets) if (frames[i].sf == t) tf = i;
         }
-        if (tf < 0)
+        if (tf < 0) {
+            // An unreached plain helper may require a caller that does not
+            // exist in this configuration. Discover that only in its actual
+            // selected program, with lexical scopes and const-for bindings.
+            if (standaloneroot && !standaloneroot->sf->isexport) throw NeedsCaller {};
             Error(r, cat("return from ", r->from, ": no enclosing call of ", r->from,
                          " on this compile-time call path"));
+        }
     } else if (frames.back().isfunval) {
         // One written in a global initializer or a default has none.
         auto named = NamedSpec(frames.back().lexspec);

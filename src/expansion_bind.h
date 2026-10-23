@@ -47,6 +47,12 @@ struct ExpansionBinder {
             default: break;
         }
     }
+    void Fields(vector<Field> &fields) {
+        for (auto &f : fields) {
+            Walk(f.condition); Fields(f.thenfields); Fields(f.elsefields);
+            Type(f.type); Walk(f.defaultval);
+        }
+    }
     void Inits(vector<FieldInit> &inits) {
         for (auto &fi : inits) {
             auto b = Find(fi.name);
@@ -77,6 +83,11 @@ struct ExpansionBinder {
     }
     void Walk(Node *n) {
         if (!n) return;
+        if (auto ci = Is<ConstInitIf>(n)) {
+            Walk(ci->cond);
+            for (auto &branch : ci->branches) Inits(branch);
+            return;
+        }
         if (auto cf = Is<ConstFor>(n)) {
             for (auto t : cf->types) Type(t);
             for (auto c : cf->constants) Walk(c);
@@ -131,11 +142,10 @@ struct ExpansionBinder {
         if (auto c = Is<Call>(n)) for (auto t : c->tyargs) Type(t);
         if (auto c = Is<AsCast>(n)) Type(c->type);
         if (auto sd = Is<StructDecl>(n)) {
-            for (auto &f : sd->st->fields) { Type(f.type); Walk(f.defaultval); }
+            Fields(sd->st->fields);
         }
         if (auto ed = Is<EnumDecl>(n)) {
-            for (auto &v : ed->en->variants)
-                for (auto &f : v.fields) { Type(f.type); Walk(f.defaultval); }
+            for (auto &v : ed->en->variants) Fields(v.fields);
         }
         if (auto ad = Is<AliasDecl>(n)) Type(ad->al->type);
         n->Children([&](Node *ch) { Walk(ch); });
