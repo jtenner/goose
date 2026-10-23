@@ -114,7 +114,7 @@ int main(int argc, char **argv) {
 '''
     try:
         for level in (0, 2):
-            for source in sorted((ROOT / "test/library_headers").glob("*.goose")):
+            for source in sorted((ROOT / "test/library_headers/fixtures").glob("*.goose")):
                 # UnsafePtr explicitly requires GCC/Clang typedef alignment.
                 if cc.style == "msvc" and source.stem.endswith("raw"):
                     continue
