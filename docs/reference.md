@@ -1,5 +1,9 @@
 # The Goose Language Reference
 
+The fork adds [native compiler definitions](compiler-definitions.md):
+`goose build --define DEBUG=true main.goose` supplies the immutable Goose
+value `build::DEBUG`. `check`, `run`, and `lsp` accept the same definitions.
+
 <details>
 <summary>Table of contents</summary>
 

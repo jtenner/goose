@@ -976,6 +976,7 @@ NODE(Ident)
                                     // namespace of the declaration this was written in.
     // Filled by typecheck: exactly one of these.
     VarDef *vdef = nullptr;         // A variable.
+    Node *buildvalue = nullptr;     // Compiler-provided literal; never runtime storage.
     SFunction *fnref = nullptr;     // A named function used as a function value.
     Ident(Line l, string_view _name, string_view _ns = {}) : Node(l, NKind), name(_name), ns(_ns) {}
 NODE_END
@@ -2495,6 +2496,7 @@ struct Ast {
     // Declarations, by namespace. Qualified spellings (`ns::name`) are
     // interned here: the lexer delivers their parts as separate tokens.
     map<string_view, Namespace> namespaces;
+    map<string_view, Node *> builddefinitions; // Immutable, local to this compilation.
     deque<string> interned;
 
     // Shared instances of the primitive types.
@@ -2787,6 +2789,12 @@ struct Ast {
     VarDecl *LookupGlobal(string_view name, string_view usens) {
         auto p = Lookup(&Namespace::globalmap, name, usens);
         return p ? *p : nullptr;
+    }
+    Node *LookupBuildDefinition(string_view name, string_view usens) {
+        auto ref = SplitName(name, usens);
+        if (ref.ns != "build") return nullptr;
+        auto it = builddefinitions.find(ref.leaf);
+        return it == builddefinitions.end() ? nullptr : it->second;
     }
     // A function name's overload set: that of the first namespace in lookup
     // order that declares the name at all. Sets never merge across namespaces.

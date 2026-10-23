@@ -1,5 +1,9 @@
 # The Goose Language — Specification (v4 draft)
 
+Fork extension: [native compiler definitions](compiler-definitions.md) specify
+`--define NAME=VALUE`, immutable literal symbols in the reserved `build`
+namespace. These are Goose values and are independent of generated C macros.
+
 <details>
 <summary>Table of contents</summary>
 
