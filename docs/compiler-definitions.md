@@ -14,6 +14,13 @@ also works for compile-time integer sizes and `const for` sources. Definitions
 never become C macros or global variables. Unused values emit no data.
 `-DNAME=VALUE` retains its existing, separate generated-C macro behavior.
 
+String definitions also supply compile-time string arguments, directly or
+through immutable global aliases. For example, `embed_file(build::DATA_FILE)`
+accepts `--define 'DATA_FILE="module.wasm"'`; the file remains relative to the
+Goose source containing the call. `embed_shader` accepts string definitions for
+its stage and source text too. Local variables and mutable globals retain their
+existing restrictions in these compile-time APIs.
+
 Names are ASCII identifiers other than language keywords. Values are `true`,
 `false`, decimal integers from -9223372036854775808 through
 18446744073709551615, or double-quoted string literals with Goose escapes.
