@@ -2818,15 +2818,42 @@ struct TypeCheck {
     // progress -- the globals' flow is as it was, and the specializations
     // whose checks were in progress are marked failed (FnSpec::failed), as
     // are the struct and enum instances whose builds were
-    // (StructInst::failed). What the root recorded for the whole-program
-    // fixups stays: it is what checked code did, and a specialization or
-    // an instance that completed is sound and reused as any other.
+    // (StructInst::failed). Diagnosed failures retain their completed checks
+    // and fixup records. A missing caller is instead a deferred transaction:
+    // every new spec and its analysis records leave the usable caches, even
+    // completed recursive members whose back edges are not yet sound.
     struct Checkpoint {
         TypeCheck &tc;
         size_t frames, scopes, vars, localfns, blockpos, outerbodies, cyclerounds, typechain,
                laterpointees, fnspecs, structinsts, enuminsts;
         int typesbuilding, deferbodies;
         BodyState cur;
+        // Only ordinary standalone roots may defer. Existing complete bodies
+        // are read-only in that transaction: reuse records only these cache
+        // facts, and a preexisting stale body must instead get a fresh spec.
+        struct Reuse {
+            FnSpec *spec;
+            vector<RootArg> roots, views;
+            size_t neededges;
+            bool storesout;
+        };
+        struct DeferredState {
+            vector<Reuse> reused;
+            vector<StoreEvent> stores, made;
+            map<VarDef *, vector<ClassUse>> classes;
+            unordered_map<VarDef *, ThreadedClass> threaded;
+            vector<pair<VarDef *, EnvRead>> variables;
+            vector<NamedResultUse> namedresults;
+            size_t literals, shrinks, grows, casts;
+            DeferredState(TypeCheck &t)
+                : stores(t.storeevents), made(t.madestores), classes(t.classuses),
+                  threaded(t.threadedclasses), namedresults(t.namedresultuses),
+                  literals(t.litchecks.size()), shrinks(t.globalshrinks.size()),
+                  grows(t.growconflicts.size()), casts(t.castverdicts.size()) {
+                for (auto v : t.ast.vardefs) variables.push_back({ v, t.EnvReadOf(v) });
+            }
+        };
+        unique_ptr<DeferredState> deferred;
         struct GlobalFlow { VarDef *v; bool assigned, maybeassigned; TypeExpr *narrowed; };
         vector<GlobalFlow> globals;
         Checkpoint(TypeCheck &t)
@@ -2839,6 +2866,49 @@ struct TypeCheck {
               deferbodies(t.deferbodies), cur(t.cur) {
             for (auto g : tc.ast.globals)
                 for (auto v : g->defs) globals.push_back({ v, v->assigned, v->maybeassigned, v->narrowed });
+        }
+        void Reusing(FnSpec *sp) {
+            if (!deferred || sp->id >= (int)fnspecs) return;
+            for (auto &r : deferred->reused) if (r.spec == sp) return;
+            deferred->reused.push_back({ sp, sp->roots, sp->views, sp->neededges.size(), sp->storesout });
+        }
+        void Defer() {
+            assert(deferred);
+            // A completed cycle member can still contain a back edge to an
+            // incomplete member. Quarantine the ENTIRE transaction, not just
+            // the frames left active when the missing caller was discovered.
+            set<FnSpec *> discarded;
+            for (auto i = fnspecs; i < tc.ast.fnspecs.size(); i++)
+                discarded.insert(tc.ast.fnspecs[i]);
+            for (auto sf : tc.ast.functions)
+                erase_if(sf->specs, [&](FnSpec *sp) { return discarded.count(sp); });
+            tc.ast.deferredspecs.insert(tc.ast.deferredspecs.end(),
+                                       tc.ast.fnspecs.begin() + fnspecs, tc.ast.fnspecs.end());
+            tc.ast.fnspecs.resize(fnspecs);
+            for (auto &r : deferred->reused) {
+                r.spec->roots = std::move(r.roots);
+                r.spec->views = std::move(r.views);
+                r.spec->neededges.resize(r.neededges);
+                r.spec->storesout = r.storesout;
+            }
+            tc.storeevents = std::move(deferred->stores);
+            tc.madestores = std::move(deferred->made);
+            tc.classuses = std::move(deferred->classes);
+            tc.threadedclasses = std::move(deferred->threaded);
+            tc.litchecks.resize(deferred->literals);
+            tc.namedresultuses = std::move(deferred->namedresults);
+            tc.globalshrinks.resize(deferred->shrinks);
+            tc.growconflicts.resize(deferred->grows);
+            tc.castverdicts.resize(deferred->casts);
+            for (auto &[v, r] : deferred->variables) {
+                v->assigned = r.assigned;
+                v->maybeassigned = r.maybeassigned;
+                v->refrootknown = r.refrootknown;
+                v->ref = r.ref;
+                v->contents = r.contents;
+                v->contentbyteview = r.contentbyteview;
+                v->slotref = r.slotref;
+            }
         }
         void Restore() {
             tc.frames.resize(frames);
@@ -2874,6 +2944,7 @@ struct TypeCheck {
             }
         }
     };
+    Checkpoint *rootcheckpoint = nullptr;
 
     // Checks one root of the program -- a global's initializer, main, a
     // thread entry, a function nothing reached, an export, a whole-program
@@ -2884,6 +2955,7 @@ struct TypeCheck {
     // Each returns to the root's entry (Checkpoint). Returns whether the root completed.
     template<typename F> bool CheckRoot(F f, bool report = true) {
         Checkpoint cp(*this);
+        Saved<Checkpoint *> root(rootcheckpoint, &cp);
         try {
             f();
             return true;
@@ -2891,11 +2963,7 @@ struct TypeCheck {
             if (report) ReportError(e);
         } catch (Abandoned &) {
         } catch (NeedsCaller &) {
-            // Every incomplete caller on this path depended on the missing
-            // enclosing activation. Keep these records out of future cache
-            // matches, while Checkpoint closes their scopes/partial checks.
-            for (auto &frame : frames)
-                if (frame.spec && frame.spec->inprogress) frame.spec->needscaller = true;
+            cp.Defer();
         }
         cp.Restore();
         return false;
@@ -3124,6 +3192,7 @@ struct TypeCheck {
         auto foreign = false;
         if (sf->body) ScanForeignFrom(sf->body, names, foreign);
         if (foreign) return;
+        if (!sf->isexport) rootcheckpoint->deferred = make_unique<Checkpoint::DeferredState>(*this);
         auto spec = ast.NewFnSpec();
         spec->sf = sf;
         for (auto &p : sf->params) spec->argtypes.push_back(Subst(p.type));
