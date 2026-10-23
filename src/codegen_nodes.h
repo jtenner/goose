@@ -851,9 +851,16 @@ inline void Assign::CgStmt(CodeGen &cg) {
         cg.L("uint8_t *", p, " = ", lv.s, ";");
         lv.s = p;
     } else if (lv.viaref && !lv.lenlv.empty()) {
+        // Keep the original count owner across RHS rebinding. Its packed
+        // member is addressable through gs_rhdr, but not through int64_t*.
+        // A bytes tail can share this count while starting past the header's
+        // base, so only pin its count here; the data address is used below
+        // before the RHS runs.
+        auto hdr = lv.hdr.empty() ? lv.lenhdr : lv.hdr;
+        assert(!hdr.empty());
         auto p = cg.T();
-        cg.L("int64_t *", p, " = &(", lv.lenlv, ");");
-        lv.lenlv = cat("(*", p, ")");
+        cg.L("gs_rhdr *", p, " = &(", hdr, ");");
+        lv.lenlv = cat(p, "->len");
     }
     if (lv.viaref && cg.IsResz(lv.t) && !lv.stk.empty() && !cg.CacheableStk(lv.stk)) {
         auto s = cg.T();
