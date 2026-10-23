@@ -93,7 +93,10 @@ inline bool TypeCheck::ConstBool(Node *n, set<VarDecl *> &visiting, ConstUse *us
         auto g = ast.LookupGlobal(id->name, id->ns);
         if (g && !g->isvar && g->inits.size() == 1 && (!g->type || g->type->kind == TY_BOOL)) {
             if (!visiting.insert(g).second) Error(n, "cycle in const if constant initializer");
-            if (use && !g->defs.empty()) RelyOnConstant(*use, g->defs[0]);
+            if (use && !g->defs.empty()) {
+                if (!use->named) use->named = g->defs[0];
+                RelyOnConstant(*use, g->defs[0]);
+            }
             auto value = ConstBool(g->inits[0], visiting, use);
             visiting.erase(g);
             return value;
@@ -147,6 +150,57 @@ inline bool TypeCheck::ConstIfCondition(Node *condition) {
     ConstUse use { condition, "const if condition" };
     set<VarDecl *> visiting;
     return ConstBool(condition, visiting, &use);
+}
+
+inline void SelectConditionalFields(Ast &ast) {
+    auto conditional = [](const vector<Field> &fields) {
+        return any_of(fields.begin(), fields.end(), [](const Field &f) { return f.condition; });
+    };
+    auto needed = any_of(ast.structs.begin(), ast.structs.end(), [&](SStruct *s) { return conditional(s->fields); }) ||
+                  any_of(ast.enums.begin(), ast.enums.end(), [&](SEnum *e) {
+                      return any_of(e->variants.begin(), e->variants.end(), [&](const SVariant &v) { return conditional(v.fields); });
+                  });
+    if (!needed) return;
+    // Keep global VarDefs stable: the ordinary checker reuses these so its
+    // later writes still diagnose assumptions used for layout selection.
+    TypeCheck tc(ast, false, true, true);
+    auto flatten = [&](vector<Field> &fields, vector<Field> &written,
+                       const vector<GenericParam> &generics) {
+        if (none_of(fields.begin(), fields.end(), [](const Field &f) { return f.condition; })) return;
+        written = fields;
+        vector<Field> flat;
+        function<void(const vector<Field> &)> append = [&](const vector<Field> &fs) {
+            for (auto &f : fs) {
+                if (f.condition) {
+                    tc.ConstExprNames(f.condition, "const if field condition", [&](Ident *id, const char *) {
+                        for (auto &g : generics)
+                            if (g.name == id->name)
+                                tc.Error(id, "const if field condition names a type parameter; type-dependent field conditions are unsupported");
+                    });
+                    auto take = tc.ConstIfCondition(f.condition);
+                    append(take ? f.thenfields : f.elsefields);
+                } else {
+                    ResolveConditionalBody(ast, f.defaultval, f.type);
+                    for (auto &prev : flat)
+                        if (!f.ispad && !prev.ispad && f.name == prev.name)
+                            tc.Error(f.line, cat("duplicate field name: ", f.name));
+                    flat.push_back(f);
+                }
+            }
+        };
+        append(fields);
+        fields = std::move(flat);
+    };
+    for (auto st : ast.structs) {
+        tc.CheckRoot([&] { flatten(st->fields, st->declfields, st->generics); });
+        // On a failed selection retain the source, but expose no marker as
+        // a real field to the recovery checker.
+        erase_if(st->fields, [](const Field &f) { return f.condition != nullptr; });
+    }
+    for (auto en : ast.enums) for (auto &v : en->variants) {
+        tc.CheckRoot([&] { flatten(v.fields, v.declfields, en->generics); });
+        erase_if(v.fields, [](const Field &f) { return f.condition != nullptr; });
+    }
 }
 
 inline void TypeCheck::SelectConstIf(IfExpr *x) {

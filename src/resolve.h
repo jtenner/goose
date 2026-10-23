@@ -19,6 +19,10 @@
 
 namespace goose {
 
+// Implemented with the constant evaluator in typecheck_expansion.h. This
+// runs after unconditional names/aliases resolve, before field validation.
+inline void SelectConditionalFields(Ast &ast);
+
 inline void ResolveTypeNames(Ast &ast, const vector<TypeExpr *> *activated = nullptr) {
     if (!activated) BindExpansionNames(ast);
     auto &types = activated ? *activated : ast.alltypes;
@@ -125,11 +129,6 @@ inline void ResolveTypeNames(Ast &ast, const vector<TypeExpr *> *activated = nul
                 default: break;
             }
         };
-    if (!activated) for (auto st : ast.structs)
-        for (auto &f : st->fields) unknownin(f.type, &st->generics);
-    if (!activated) for (auto en : ast.enums)
-        for (auto &v : en->variants)
-            for (auto &f : v.fields) unknownin(f.type, &en->generics);
     if (!activated) for (auto a : ast.aliases) unknownin(a->type, nullptr);
 
     // Aliases expand structurally, so a cycle is invalid even when it passes
@@ -216,6 +215,15 @@ inline void ResolveTypeNames(Ast &ast, const vector<TypeExpr *> *activated = nul
         t->aliasuse = true;
     }
 
+    if (!activated) {
+        SelectConditionalFields(ast);
+        for (auto st : ast.structs)
+            for (auto &f : st->fields) unknownin(f.type, &st->generics);
+        for (auto en : ast.enums)
+            for (auto &v : en->variants)
+                for (auto &f : v.fields) unknownin(f.type, &en->generics);
+    }
+
     // Variant lookup runs last, when every ADT name is resolved.
     for (auto t : types) {
         if (t->conditional) continue;
@@ -249,7 +257,7 @@ inline void ResolveTypeNames(Ast &ast, const vector<TypeExpr *> *activated = nul
 // Find type templates owned by a selected fragment. Compound templates and
 // const-for copies may be fresh, so collecting from the tree (rather than a
 // parse-time alltypes range) preserves each expansion's substitutions.
-inline void ResolveConditionalBody(Ast &ast, Node *body) {
+inline void ResolveConditionalBody(Ast &ast, Node *body, TypeExpr *root = nullptr) {
     vector<TypeExpr *> types;
     set<TypeExpr *> seen;
     function<void(TypeExpr *)> type = [&](TypeExpr *t) {
@@ -288,6 +296,7 @@ inline void ResolveConditionalBody(Ast &ast, Node *body) {
         }
         n->Children(walk);
     };
+    type(root);
     walk(body);
     ResolveTypeNames(ast, &types);
 }
