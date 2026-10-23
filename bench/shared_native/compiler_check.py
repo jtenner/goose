@@ -29,6 +29,13 @@ def source_identity(ref):
     return dict(commit=commit, src_tree=git(commit + ':src'))
 
 
+def record_process(path, record):
+    # Outside the measured interval. Closing each append preserves warmups,
+    # accepted samples and failures even if a later command aborts the run.
+    with path.open('a') as output:
+        output.write(json.dumps(record) + '\n')
+
+
 def source_for(globals_count, functions_count, case='ordinary', stdlib=False, named_return=False):
     source = 'import std;\n' if stdlib else ''
     source += ''.join(f'let g{i}:i64={i};\n' for i in range(globals_count))
@@ -133,6 +140,11 @@ def main():
     report.update(baseline=identity(ns.baseline, env), extended=identity(ns.extended, env),
                   compiler_sources=dict(baseline=source_identity(ns.baseline_source_ref),
                                         extended=source_identity(ns.extended_source_ref)))
+    journal = ns.output.with_suffix('.processes.jsonl')
+    if ns.output.exists() or journal.exists():
+        parser.error('measurement output/journal already exists; choose a fresh output')
+    report.update(completed=False, process_journal=str(journal.resolve()))
+    ns.output.write_text(json.dumps(report, indent=2) + '\n')
     with tempfile.TemporaryDirectory(prefix='goose-compiler-measure-') as directory:
         root = Path(directory)
         for source_index, (_, source, original_path) in enumerate(sources):
@@ -148,18 +160,38 @@ def main():
                         argv = ['/usr/bin/time', '-f', '%M', '-o', str(rss), report[name]['path'],
                                 'check', level, str(input_file)]
                         start = time.perf_counter()
-                        result = subprocess.run(argv, capture_output=True, text=True, timeout=180, env=env)
+                        try:
+                            result = subprocess.run(argv, capture_output=True, text=True, timeout=180, env=env)
+                        except subprocess.TimeoutExpired as error:
+                            elapsed = time.perf_counter() - start
+                            record_process(journal, dict(argv=argv, source_index=source_index,
+                                implementation=name, goose_optimization=level, iteration=index,
+                                warmup=index < ns.warmups, seconds=elapsed, returncode=None,
+                                failure='timeout', stdout=str(error.stdout), stderr=str(error.stderr),
+                                rss_record=rss.read_text() if rss.exists() else None))
+                            raise
                         elapsed = time.perf_counter() - start
+                        rss_record = rss.read_text()
+                        rss_line = rss_record.strip().splitlines()[-1]
+                        peak_rss = int(rss_line) if rss_line.isdigit() else None
+                        record_process(journal, dict(argv=argv, source_index=source_index,
+                            implementation=name, goose_optimization=level, iteration=index,
+                            warmup=index < ns.warmups, seconds=elapsed, process_peak_rss_kib=peak_rss,
+                            returncode=result.returncode, stdout=result.stdout, stderr=result.stderr,
+                            rss_record=rss_record))
                         assert result.returncode == 0 and 'typechecked ok' in result.stdout + result.stderr, (
                             name, result.returncode, result.stdout, result.stderr)
+                        assert peak_rss is not None, rss_record
                         if index >= ns.warmups:
-                            values[name].append(dict(seconds=elapsed, process_peak_rss_kib=int(rss.read_text())))
+                            values[name].append(dict(seconds=elapsed, process_peak_rss_kib=peak_rss))
                 for name, data in values.items():
                     report['results'].append(dict(implementation=name, goose_optimization=level,
                                                   source_index=source_index, **aggregate(data)))
+                ns.output.write_text(json.dumps(report, indent=2) + '\n')
             assert hashlib.sha256(input_file.read_bytes()).hexdigest() == report['sources'][source_index]['source_sha256']
     assert identity(ns.baseline, env) == report['baseline']
     assert identity(ns.extended, env) == report['extended']
+    report['completed'] = True
     ns.output.write_text(json.dumps(report, indent=2) + '\n')
     print(str(ns.output))
 
