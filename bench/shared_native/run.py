@@ -5,6 +5,7 @@ Default/--plan prints the experiment and never runs a workload.
 import argparse
 from contextlib import contextmanager
 import fcntl
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -21,6 +22,38 @@ CASES = ["atomics_uncontended", "atomics_contended", "claims", "scalar_read_late
          "scalar_write_latency", "scalar_read_throughput", "scalar_write_throughput",
          "publication", "scheduling", "mmap", "copy", "checks_disabled", "checks_enabled"]
 PARALLEL = {"atomics_uncontended", "atomics_contended", "claims", "scheduling"}
+WORK_UNITS = {"atomics_uncontended": "fetch_add", "atomics_contended": "fetch_add",
+              "claims": "useful_job", "scalar_read_latency": "scalar_read",
+              "scalar_write_latency": "write_read_roundtrip", "scalar_read_throughput": "scalar_read",
+              "scalar_write_throughput": "scalar_write", "publication": "handshake",
+              "scheduling": "worker_start_and_join", "mmap": "mapping_lifecycle", "copy": "byte",
+              "checks_disabled": "emission_operation", "checks_enabled": "emission_operation"}
+
+
+def sha256_file(path):
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as source:
+        for block in iter(lambda: source.read(1048576), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def fingerprint(executable):
+    path = Path(shutil.which(str(executable)) or executable).resolve()
+    return {"path": str(path), "sha256": sha256_file(path)}
+
+
+def source_provenance():
+    result = {"files": {name: sha256_file(HERE / name) for name in ("main.goose", "baseline.c", "run.py")}}
+    try:
+        repo = HERE.parent.parent
+        result["git_commit"] = command(["git", "-C", repo, "rev-parse", "HEAD"]).stdout.strip()
+        status = subprocess.run(["git", "-C", str(repo), "diff", "--quiet", "HEAD", "--",
+                                 *[str(HERE / name) for name in result["files"]]], capture_output=True)
+        result["git_dirty"] = status.returncode != 0
+    except (OSError, subprocess.CalledProcessError):
+        result.update(git_commit=None, git_dirty=None)
+    return result
 
 
 def command(argv, **kwargs):
@@ -33,6 +66,8 @@ def plan(samples=7, warmups=2, cases=None):
     pairs = 2 * sum(4 if case in PARALLEL else 1 for case in cases)
     return {"samples": samples, "warmups": warmups, "workers": [1, 2, 4, 8],
             "cases": cases, "paired_scenarios": pairs,
+            "units": {case: {"work_unit": WORK_UNITS[case], "rate_unit": WORK_UNITS[case] + "/second",
+                              "latency_unit": "ns/" + WORK_UNITS[case]} for case in cases},
             "warmup_processes": pairs * 2 * warmups, "measured_processes": pairs * 2 * samples,
             "total_workload_processes": pairs * 2 * (samples + warmups),
             "maximum_worker_threads": 8 if any(c in PARALLEL for c in cases) else 2 if "publication" in cases else 0,
@@ -50,7 +85,7 @@ def experiment_lock():
 
 
 def describe_binary(binary, generated=None):
-    result = {"bytes": binary.stat().st_size}
+    result = {"bytes": binary.stat().st_size, **fingerprint(binary)}
     if shutil.which("size"):
         result["size"] = command(["size", binary]).stdout.strip()
     if shutil.which("objdump"):
@@ -62,7 +97,7 @@ def describe_binary(binary, generated=None):
             for name, body in functions if name in ("main", "main_g", "checked_emit", "checked_emit_g")}
     if generated:
         c = generated.read_text()
-        result.update(generated_c_bytes=len(c.encode()),
+        result.update(generated_c_bytes=len(c.encode()), generated_c_sha256=sha256_file(generated),
                       ownership_data_present="register_owners" in c,
                       ownership_diagnostic_present="REGISTER_CLOBBER_SENTINEL" in c)
     return result
@@ -151,7 +186,14 @@ def main():
         directory = Path(cleanup.name)
     try:
         with experiment_lock():
+            goose_executable = fingerprint(ns.goose.resolve())
+            compiler_executable = fingerprint(ns.cc)
+            source = source_provenance()
             fixture, paths, artifacts = prepare(ns.goose.resolve(), ns.cc, directory)
+            if goose_executable != fingerprint(ns.goose.resolve()) or compiler_executable != fingerprint(ns.cc):
+                raise RuntimeError("compiler executable changed during preparation")
+            if source["files"] != source_provenance()["files"]:
+                raise RuntimeError("benchmark source changed during preparation")
             cpu = platform.processor()
             if Path("/proc/cpuinfo").exists():
                 cpu = next((x.split(":", 1)[1].strip() for x in Path("/proc/cpuinfo").read_text().splitlines()
@@ -160,7 +202,9 @@ def main():
                       "affinity": sorted(os.sched_getaffinity(0)) if hasattr(os,"sched_getaffinity") else None,
                       "compiler": command([ns.cc,"--version"]).stdout.splitlines()[0],
                       "goose": command([ns.goose.resolve(),"version"]).stdout.strip(),
-                      "compiler_flags": ["-std=c11", "-pthread", "-lm"], "artifacts": artifacts, "results": []}
+                      "compiler_flags": ["-std=c11", "-pthread", "-lm"], "artifacts": artifacts,
+                      "goose_executable": goose_executable, "compiler_executable": compiler_executable,
+                      "source": source, "results": []}
             if ns.run:
                 for case in ns.case or CASES:
                     enabled = case == "checks_enabled"
@@ -179,7 +223,8 @@ def main():
                                 assert pair[0]["checksum"] == pair[1]["checksum"], (case,pair)
                             for implementation, values in collected.items():
                                 report["results"].append({"case": case, "native_optimization": opt,
-                                    "workers": workers, "implementation": implementation, **aggregate(values)})
+                                    "workers": workers, "implementation": implementation,
+                                    **report["plan"]["units"][case], **aggregate(values)})
             text = json.dumps(report, indent=2) + "\n"
             if ns.output: ns.output.write_text(text)
             else: print(text, end="")
