@@ -3472,13 +3472,18 @@ graphics module ([stdlib.md](stdlib.md#shaders)). Spec §12.
 
 ## 22. Threads
 
-There is no shared mutable memory. A worker is declared `thread_fn`, and
-the compiler compiles it and everything it calls as a **separate program**
-with its own data stacks and its own copies of the globals it uses, taken
-from the spawning program at the moment of the spawn. A worker that
-increments a global increments its own; main's is what it was. There are
-no data races to have, and no locks, atomics or memory orderings anywhere
-in the language.
+Ordinary Goose references and globals remain isolated between workers.
+A worker is declared `thread_fn`, and the compiler compiles it and everything
+it calls as a **separate program** with its own data stacks and its own copies
+of the globals it uses, taken from the spawning program at the moment of the
+spawn. A worker that increments an ordinary global increments its own;
+main's is what it was. Ordinary references cannot cross worker boundaries.
+
+Explicit [native memory capabilities](native_memory.md) opt into separate
+OS-backed shared storage. Checked range borrows synchronize ordinary accesses;
+typed native atomic regions provide explicit memory orderings. Views and atomic
+capabilities cross workers through retained allocation leases. This extension
+preserves the isolation of ordinary Goose references and copied globals.
 
 | Builtin | Meaning |
 |---|---|
@@ -3493,11 +3498,13 @@ in the language.
 | `qpoll<T>() -> T, bool` | takes one if there is one; else `T`'s zero value and `false` |
 | `qlimit<T>(n)` | lets the queue for `T` hold at most `n` messages |
 
-Values cross between programs through **typed queues**, one per type, and
-whatever crosses, arguments included, must be **flat**: no references or
-slices at any depth. That is cheap because a flat Goose value is
-contiguous, so a job or a result carries real data, variable-size parts
-included, as one copy. A `thread_fn`'s parameters have no defaults.
+Ordinary values cross between programs through **typed queues**, one per
+type, and ordinary worker arguments and queue elements must be **flat**: no
+references or slices at any depth. A flat Goose value is contiguous, so a job
+or a result carries real data, variable-size parts included, as one copy.
+Explicit `SharedView`, `SharedAtomicU32` and `SharedAtomicU64` values may also be
+direct worker arguments under the native lease protocol; they cannot be queue
+elements. A `thread_fn`'s parameters have no defaults.
 
 <!-- check-only -->
 ```goose
