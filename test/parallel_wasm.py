@@ -122,6 +122,10 @@ def main():
                    b"\0asm\1\0\0\0" + section(0, b"\1\xff")]
         for data in invalid:
             execute(data, 4, ok=False)
+        fixture.write_bytes(good)
+        run([app, fixture, len(good) + 1, 4, "normal"], ok=False)  # reject past EOF
+        run([app, fixture, len(good), -1, "normal"], ok=False)
+        run([app, fixture, len(good), 65, "normal"], ok=False)
         # Abort after claiming output, then cleanup abandoned borrows before close.
         jobs, summary = parse(execute(module([b for b, _ in valid[:40]]), 4, "abort").stdout)
         assert jobs[0][1:3] == (4, 1) and summary[2] == 1, (jobs[:1], summary)
