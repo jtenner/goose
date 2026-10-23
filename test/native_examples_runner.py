@@ -38,10 +38,11 @@ calls = check('linux', 'baseline', native, 5)
 by_script = {Path(argv[1]).name: argv for argv in calls}
 assert set(by_script) == {'parallel_wasm.py', 'jit_clobbers.py', 'conditional_shared_layout.py',
                           'native_config_definitions.py', 'shared_benchmark_harness.py'}
-assert by_script['parallel_wasm.py'][2:] == ['/compiler/goose', '--jobs', '64']
+expected_goose = str(Path('/compiler/goose'))
+assert by_script['parallel_wasm.py'][2:] == [expected_goose, '--jobs', '64']
 assert by_script['shared_benchmark_harness.py'][2:] == []
 assert all('--run' not in argv and '--compile-only' not in argv for argv in calls)
-assert all('/compiler/goose' in argv for name, argv in by_script.items() if name != 'shared_benchmark_harness.py')
+assert all(expected_goose in argv for name, argv in by_script.items() if name != 'shared_benchmark_harness.py')
 # A native-only build without TinyCC still registers all five suites; no jit
 # argument exists in the API. Failure is surfaced rather than counted as pass.
 r = Runner()
