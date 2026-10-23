@@ -37,12 +37,49 @@ def check_marks(exe, root, core_only=False, fields_only=False):
          'return 7 from outer;}}}', 'const if FLAG{1}else{2}'),
         ('extentuse', 'let A="ab";\n',
          'fn stop(){let a:u8[A.len]=[0,0];' + tail + '}', 'A.len-1'),
+        ('generic_write', boolean, 'fn touch<T>(){let r=&FLAG;r=false;}'
+         'fn stop(){touch<u8>();' + tail + '}', 'const if FLAG{1}else{2}'),
+        ('param_default', boolean, 'fn touch<T>(v:bool={let r=&FLAG;false}){}'
+         'fn stop(){touch<u8>();' + tail + '}', 'const if FLAG{1}else{2}'),
+        ('struct_default', boolean + 'struct Defaults<T>{v:bool={let r=&FLAG;false}}\n',
+         'fn stop(){let s=Defaults<u8>{};' + tail + '}', 'const if FLAG{1}else{2}'),
     ]
     if not core_only and not fields_only:
         cases += [('constructor', boolean + 'struct S{a:i64}\n',
                    'fn stop(){let s=S{const if true{a:{let r=&FLAG;return 7 from outer;0},},};}',
                    'const if FLAG{1}else{2}')]
     source, cfile, header = root / 'marks.goose', root / 'marks.c', root / 'marks.h'
+    # The VarDef pointer can remain unchanged while its pending array's shared
+    # element type is mutated. A discarded inference must not pick the live type.
+    pending = ('var DATA=[];fn stop(){DATA.push("x");' + tail + '}\n'
+               'fn outer()->i64{0}export fn api()->i64{DATA.push(1);1}')
+    for level in ('-O0', '-O2'):
+        source.write_text(pending + 'fn main(){}')
+        invoke(['check', level, source])
+        source.write_text(pending)
+        invoke([level, '--standalone', '--header', header, source, '-o', cfile])
+
+    # A retained type cache must not outlive the proof obligations its layout
+    # used. Test both unused and reused instances, and both declaration orders.
+    for declaration, literal in [('struct Box<T>{a:T[N]}', 'Box<u8>{[1,2]}'),
+                                 ('enum Box<T>{V{a:T[N]}}', 'Box<u8>.V{[1,2]}'),
+                                 ('struct Box<T>{a:u8[N]}', 'Box<u8>{[1,2]}')]:
+        for live in (False, True):
+            for ordinary in (False, True):
+                helper = ('fn touch<T>(){let s=' + literal + ';}'
+                          'fn stop(){touch<u8>();' + (tail.replace('const if', 'if') if ordinary else tail) + '}')
+                for order in (False, True):
+                    api = 'export fn api()->i64{' + ('let s=' + literal + ';' if live else '') + 'let r=&N;1}'
+                    text = 'let N=2;' + declaration + (api + helper if order else helper + api) + 'fn outer()->i64{0}'
+                    for level in ('-O0', '-O2'):
+                        source.write_text(text + 'fn main(){}')
+                        p = invoke(['check', level, source], ok=not live)
+                        if live:
+                            assert 'writable reference' in p.stderr, p.stderr
+                        source.write_text(text)
+                        p = invoke([level, '--standalone', '--header', header, source, '-o', cfile], ok=not live)
+                        if live:
+                            assert 'writable reference' in p.stderr, p.stderr
     for name, globals_, helper, api in cases:
         text = globals_ + helper + '\nfn outer()->i64{0}\nexport fn api()->i64{' + api + '}\n'
         for level in ('-O0', '-O2'):
