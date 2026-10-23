@@ -121,3 +121,44 @@ prevents close/unmap until worker cleanup. Descriptor generations are published
 atomically and stable slabs keep stale handles safe to reject. This lifetime
 protocol pins storage through the actual atomic instruction, rather than
 merely validating a token before an unprotected access.
+
+## Readonly files, byte buffers and page advice
+
+`shared_map_readonly(path, bytes)` returns `(SharedOwner, bool)`. The size is
+explicit, positive and no larger than the file; missing files and OS mapping
+failures return false. It uses a readonly file mapping and closes the file and
+mapping handles after the view is established. `shared_close` later unmaps the
+view. Mapping a file does not snapshot it: external changes can become visible.
+The application must keep other actors from truncating a mapped file. External
+truncation may cause an OS mapping fault (for example SIGBUS); it is outside
+contained Goose abort recovery.
+
+A readonly mapping permits overlapping read borrows across workers. Every
+write and atomic registration is refused. `shared_view(view, offset, bytes)`
+creates a checked subview, including in workers. A subview preserves readonly
+permissions and typed atomic regions; an atomic subview must contain complete,
+aligned slots. Views are setup metadata retained until allocation close.
+
+For repeated jobs, use `shared_borrow(view, offset, bytes)` directly. It checks
+the requested byte range and creates a reusable access record. Releasing it
+reuses that record, so metadata remains bounded by concurrent borrows rather
+than job count. The one-argument spelling borrows the entire view.
+
+`memory_read_bytes(access, offset, out)` copies into an existing writable
+`u8[:]` buffer; literals, const slices and serialization byte views cannot be
+its destination. `memory_write_bytes(access, offset, bytes)` copies from a
+read-only byte slice. The buffer length determines the checked byte count.
+Neither exposes a Goose reference into shared storage.
+
+`shared_page_advice(view, offset, bytes, advice)` returns `(supported, applied)`.
+Advice is a compile-time `"Normal"`, `"Sequential"`, `"Random"`, `"WillNeed"`,
+or `"DontNeed"`. POSIX uses the available `madvise` capability; Windows currently
+reports unsupported. A supported OS request may fail and reports applied=false.
+Advice may cover pages surrounding the byte range. DontNeed is permitted only
+for readonly mappings: it is always refused for anonymous live data because
+those OS semantics could erase bytes. Advice grants no memory-access rights.
+
+Native type names are reserved at the root for type declarations. A namespaced
+user type and a generic parameter can use the same leaf name with normal
+lexical priority. `::SharedView` unambiguously names the native type, and type
+dumps retain that qualification.

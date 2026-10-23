@@ -68,7 +68,8 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
             case B_SHARED_VIEW: return call("gs_shared_view", cat(a[0], ", ", a[1], ", ", a[2]));
             case B_SHARED_CLOSE: return call("gs_shared_close", a[0]);
             case B_SHARED_SIZE: return call("gs_shared_size", a[0]);
-            case B_SHARED_BORROW: return call("gs_shared_borrow", a[0]);
+            case B_SHARED_BORROW: return a.size() == 1 ? call("gs_shared_borrow", a[0])
+                : call("gs_shared_borrow_range", cat(a[0], ", ", a[1], ", ", a[2]));
             case B_SHARED_RELEASE:
                 L("gs_shared_release(", a[0], ", ", LocArgs(ln), ");"); return {};
             case B_MEMORY_READ: {
@@ -143,6 +144,24 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
         auto t = T(); L(CT(c->qtype), " ", t, " = __atomic_", op,
                        bk == B_ATOMIC_LOAD || bk == B_ATOMIC_EXCHANGE ? "_n" : "", "(", ptr,
                        bk == B_ATOMIC_LOAD ? "" : cat(", ", a[1]), ", ", order, ");"); return {t};
+    }
+    if (c->builtin >= B_SHARED_MAP && c->builtin <= B_MEMORY_WRITE_BYTES) {
+        usesthreads = true;
+        vector<string> a;
+        for (size_t i = 0; i < (c->builtin == B_SHARED_ADVICE ? 3 : an.size()); i++)
+            a.push_back(Snapshot(an[i]->exprtype, GenPure(an[i])));
+        if (c->builtin == B_SHARED_MAP) {
+            auto t = T(), ok = T(); L("uint8_t ", ok, ";");
+            L("gs_shared_cap ", t, " = gs_shared_map_readonly(", a[0], ".data, ", a[0], ".len, ", a[1], ", &", ok, ");");
+            return {t, ok};
+        }
+        if (c->builtin == B_SHARED_ADVICE) {
+            auto t = T(); L("int ", t, " = gs_shared_page_advice(", a[0], ", ", a[1], ", ", a[2], ", ",
+                            c->memory_order, ", ", LocArgs(ln), ");");
+            return {cat("(", t, " != 0)"), cat("(", t, " == 2)")};
+        }
+        L("gs_shared_bytes(", a[0], ", ", a[1], ", (void *)", a[2], ".data, ", a[2], ".len, ",
+          c->builtin == B_MEMORY_WRITE_BYTES ? 1 : 0, ", ", LocArgs(ln), ");"); return {};
     }
     switch ((BuiltinKind)c->builtin) {
         case B_PRINT: {
