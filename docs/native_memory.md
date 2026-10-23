@@ -248,6 +248,16 @@ with no heap allocations, registry calls or application helpers on the hot
 path. Run `python3 test/unsafe_pointer.py --exe build/goose` for the dedicated
 GCC/Clang, debug/release and ASan/UBSan matrix (alignment checking enabled).
 
+A valid raw store may target an ordinary writable Goose scalar whose address
+was exposed to C. The compiler treats `unsafe_store` as an unknown write for
+bounds analysis, including through non-inlined wrappers. It invalidates facts
+about reachable storage instead of retaining bounds established before the
+write. C extern calls have the same conservative effect: a call can use a raw
+pointer or a reference retained by an earlier call even when its current
+signature has no reference argument. Previously evaluated operands keep their
+snapshotted values; later reads observe the write. The alias regressions in
+`test/unsafe_pointer_alias.py` exercise these cases as part of the matrix.
+
 The pre-existing `stdlib/ffi.goose` `cstr` and `bytes` helpers still accept
 opaque `u64` addresses and trust C pointer/length validity. They copy results
 but cannot validate provenance, termination, lifetime or accessible bounds;
