@@ -20,6 +20,21 @@ ORDERS = {'Relaxed':'__ATOMIC_RELAXED', 'Acquire':'__ATOMIC_ACQUIRE',
           'Release':'__ATOMIC_RELEASE', 'AcqRel':'__ATOMIC_ACQ_REL', 'SeqCst':'__ATOMIC_SEQ_CST'}
 
 
+def check_advice_codegen():
+    # Location arguments use a generated filename symbol. Keep the policy in
+    # the fourth argument distinct from digits in the filename or source line.
+    for filename in ('gs_file0', 'gs_file12', '"fixture.goose"'):
+        for advice in (1, 2):
+            call = f'gs_shared_page_advice(t1, t2, t3, {advice}, {filename}, 12);'
+            assert has_advice_code(call, advice)
+            assert not has_advice_code(call, 3 - advice)
+    for call in ('gs_shared_page_advice(t1, t2, t3, advice, gs_file1, 1);',
+                 'gs_shared_page_advice(t1, t2, t3, 12, gs_file1, 1);',
+                 'gs_shared_page_advice(t1, t2, t3, 2, "1", 1);',
+                 'gs_shared_page_advice(t1, t2, 1, gs_file1, 1);'):
+        assert not has_advice_code(call, 1)
+
+
 def flags(values):
     import json
     args = []
@@ -54,6 +69,7 @@ def main():
     ap.add_argument('goose', type=Path)
     ap.add_argument('--cc', default=shutil.which('clang') or shutil.which('gcc') or 'cc')
     ns = ap.parse_args()
+    check_advice_codegen()
     goose = ns.goose.resolve()
     assert SOURCE.exists(), SOURCE
     configurations = 0
