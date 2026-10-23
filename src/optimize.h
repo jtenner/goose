@@ -859,6 +859,8 @@ inline Node *IntLit::Cp1(Inliner &inl) const { return Clone1(inl.ast); }
 inline Node *FltLit::Cp1(Inliner &inl) const { return Clone1(inl.ast); }
 
 // Specialization eliminates every expansion before these passes.
+inline Node *ConstInitIf::Cp1(Inliner &) const { assert(false); return nullptr; }
+inline Node *ConstInitIf::Opt(Optimizer &) { assert(false); return nullptr; }
 inline Node *ConstFor::Cp1(Inliner &) const { assert(false); return nullptr; }
 inline Node *ConstFor::Opt(Optimizer &) { assert(false); return nullptr; }
 inline Node *BoolLit::Cp1(Inliner &inl) const { return inl.ast.New<BoolLit>(line, val); }
@@ -989,6 +991,8 @@ inline Node *IfExpr::Cp1(Inliner &inl) const {
     auto c = inl.ast.New<IfExpr>(line, inl.Cp(cond), inl.CpBlock(thenb),
                                  elseb ? inl.Cp(elseb) : nullptr);
     c->flat = flat;
+    c->isconst = isconst;
+    c->selected = selected;
     return c;
 }
 
