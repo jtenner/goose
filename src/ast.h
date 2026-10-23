@@ -394,6 +394,10 @@ struct Param {
 };
 
 struct Field {
+    // Parse-level field fragment; ordinary fields have no condition. Flattened
+    // before declaration validation, instantiation, layout or reflection.
+    Node *condition = nullptr;
+    vector<Field> thenfields, elsefields;
     string_view name;
     Line line;                  // Of the name, or of `pad`.
     string_view doc;            // The comment lines above it (Lexer::doc).
@@ -1546,6 +1550,7 @@ struct SStruct {
     bool isroot = false;       // Explicit owning layout (docs/design/root_structs.md).
     vector<GenericParam> generics;
     vector<Field> fields;
+    vector<Field> declfields;   // Original conditional declaration for tooling/dumps.
     vector<StructInst *> insts;  // Instantiations (typecheck), owned by Ast.
     // The declaration lost a field to a parse error (Parser::ParseMembers):
     // its fields are those parsed before the error, and a name it lacks is
@@ -1564,6 +1569,7 @@ struct SVariant {
     Line line;                  // Of the name.
     string_view doc;            // As SFunction::doc.
     vector<Field> fields;
+    vector<Field> declfields;
     bool has_payload = false;   // Distinguishes "Point" from "Point {}".
 };
 
