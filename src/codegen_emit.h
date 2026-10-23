@@ -928,6 +928,7 @@ inline void CodeGen::EmitExportTypes() {
     // Seed them outside the snapshot: NameCT/CT also request this scaffolding.
     EmitCoreTypes();
     auto start = tdecls.size();
+    emittingexporttypes = true;
     for (auto sf : ast.functions) {
         if (!sf->isexport) continue;
         if (sf->specs.size() != 1 || !sinfo.count(sf->specs[0]))
@@ -941,6 +942,7 @@ inline void CodeGen::EmitExportTypes() {
         // A returned byte slice is flattened to pointer + out-length.
         for (auto t : sp->rets) if (t->kind != TY_SLICE) CT(t);
     }
+    emittingexporttypes = false;
     exporttypes = tdecls.substr(start);
 }
 

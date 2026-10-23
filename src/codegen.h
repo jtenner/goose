@@ -171,6 +171,7 @@ struct CodeGen {
     size_t dlbinds = 0;
     string code;        // Function bodies, size/eq helpers, thunks, main.
     string exporttypes; // Only the packed types required by the public API.
+    bool emittingexporttypes = false;
     string exportprotos;
     bool usesthreads = false;
     bool library = false;
