@@ -311,6 +311,8 @@ struct TypeExpr {
     // sizes name what they name where the alias is declared, at top level,
     // whatever scope the use is in (TypeCheck::ConstNamesIn).
     bool aliasuse = false;
+    // A type in an unselected const-if arm: resolve only when activated.
+    bool conditional = false;
     // On a TY_INT: an index or bound type (TypeIndex). Outside the union,
     // since intstorage is the member a TY_INT uses.
     TypeIndex *ix = nullptr;
@@ -835,8 +837,6 @@ enum NodeKind : uint8_t {
     NK_LoopExpr,
     NK_ForLoop,
     NK_ConstFor,
-    NK_ConstIf,
-    NK_ConstQuery,
     NK_Return,
     NK_Break,
     NK_Continue,
@@ -1254,6 +1254,8 @@ NODE(Block)
 NODE_END
 
 NODE(IfExpr)
+    bool isconst = false;
+    bool selected = false;       // Specialization clone has discarded the other arm.
     BCE_WALK
     Node *cond;
     Block *thenb;
@@ -1371,38 +1373,6 @@ NODE(ConstFor)
     bool armfragments = false;      // Its fragments are match arms (in a match's arm list).
     vector<MatchArm> arms;
     ConstFor(Line l) : Node(l, NKind) {}
-NODE_END
-
-// A compile-time query, valid in a `const if` condition only (const_for.md
-// §11.3): `has_default<A>` of a fields<T> accessor binding, or `same<T1, T2>`
-// of two types.
-enum QueryKind { Q_HAS_DEFAULT, Q_SAME };
-
-NODE(ConstQuery)
-    QueryKind query;
-    string_view name;               // has_default: the accessor binding, as written.
-    vector<TypeExpr *> types;       // same: the two types.
-    // Filled by cloning under an expansion, as a Dot's accessor is: the
-    // field the binding stands for, in its owning struct or variant type.
-    TypeExpr *owner = nullptr;
-    string_view field;
-    ConstQuery(Line l, QueryKind _query, string_view _name)
-        : Node(l, NKind), query(_query), name(_name) {}
-NODE_END
-
-// One branch of a `const if`: its condition, null for the final else, and
-// fragments of the enclosing list's category, as a ConstFor's are.
-struct ConstIfBranch {
-    Node *cond = nullptr;
-    Block *body = nullptr;          // Statement fragments, or null for initializer or arm fragments.
-    vector<FieldInit> inits;
-    vector<MatchArm> arms;
-};
-
-NODE(ConstIf)
-    vector<ConstIfBranch> branches;
-    bool armfragments = false;      // Its fragments are match arms (in a match's arm list).
-    ConstIf(Line l) : Node(l, NKind) {}
 NODE_END
 
 NODE(Return)
@@ -1542,6 +1512,7 @@ struct SFunction {
     // which its callers pass as they do a library function's (CodeGen::CallerLoc).
     bool takesloc = false;
     bool isnested = false;
+    bool conditional = false;   // Signature is inside a deferred const-if arm.
     SFunction *outer = nullptr;     // The function a nested one is declared in.
     Block *body = nullptr;
     // The body lost a statement to a parse error, or holds an incomplete
@@ -2366,6 +2337,9 @@ struct FnSpec {
     // call that would reuse it ends its own root silently, as a
     // consequence of the error reported (TypeCheck::GetOrCreateSpec).
     bool failed = false;
+    // A standalone check needed an enclosing caller absent from that root.
+    // Its incomplete record is never a reusable specialization or an error.
+    bool needscaller = false;
     // Made by the exemplar check of this generic function, which nothing
     // instantiated (TypeCheck::CheckExemplar): its types are the opaque
     // bindings', and it is in Ast::exemplarspecs, not fnspecs.
@@ -2593,6 +2567,8 @@ struct Ast {
     }
 
     vector<Node *> allnodes;
+    // Evaluated conditions retained only for source tooling, never runtime walks.
+    vector<Node *> constantconditions;
     vector<TypeExpr *> alltypes;
     vector<TypeDetail *> typedetails;
     vector<SFunction *> functions;

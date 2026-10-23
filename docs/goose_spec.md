@@ -2433,6 +2433,16 @@ lie in may not shrink either. Iterating a copy (`let row = a[i]; for x in
 row` over fixed-size rows), or a reference read out first (`let r .=
 refs[i]; for x in r`), leaves the array free.
 
+**Specialization-time branching.** `const if c { ... } else { ... }` requires
+a bool constant condition, parses both arms, and name-resolves, checks and
+emits only the selected arm. Omitted `else` selects an empty block. Selected
+bodies have ordinary lexical scope and control-flow targets. Conditions admit
+bool literals, immutable global constants, native build definitions, `!`, `&&`,
+`||`, bool/string equality and comparisons using the integer constant evaluator;
+locals, parameters and runtime calls are rejected. Both logical operands must
+be supported constants. Generic functions and const-for entries select after
+specialization/substitution. Excluded types and expressions need only parse.
+
 **Specialization-time expansion.** `const for` specializes a fragment once
 per entry of a compiler-known sequence. Its v1 sources are `fields<T>` with
 two bindings (field name string and field accessor), `variants<E>` with two
@@ -2482,45 +2492,6 @@ contains ordinary runtime code, with the usual reference, lifetime and
 construction rules. Returns retain their lexical targets; a `break` or
 `continue` cannot cross an expansion boundary. The full v1 rules and
 implementation limit are in [the `const for` design](design/const_for.md).
-
-**Specialization-time selection.** `const if` chooses one of its fragment
-lists while a function is specialized, and generates nothing of the others.
-It stands where a `const for` stands, in a statement, constructor
-initializer or `match` arm list, with fragments of that list's category in
-each branch; a chain continues with `else const if`, and a plain `else if`
-after a `const if` is an error. Its condition is a constant of the
-specialization: `true`, `false` or a named `bool` constant; a query; `!`,
-`&&`, `||` and parentheses over conditions; or a comparison between two
-constants of one kind, the constants a `const for` list accepts. Integers
-unify as constant arithmetic unifies them and compare at that type; an
-integer beside a float converts (§6.3); booleans and strings take `==` and
-`!=` only. A value computed at runtime, a local, a literal parameter (§7.7)
-or a field read is an error, never a runtime branch. The queries, valid in
-a `const if` condition only, are `has_default<A>`, `true` exactly when the
-field an accessor `A` from `fields<T>` stands for declares a written
-`= ...`, and `same<T1, T2>`, `true` when two types are identical after
-substitution, qualifiers included. The names `has_default` and `same` are
-contextual there and identifiers elsewhere.
-
-```goose
-fn missing<T>(seen: bool[:]) {
-    var i = 0;
-    const for <N, A> in fields<T> {
-        const if !has_default<A> { if !seen[i] { print("missing ", N); } }
-        i++;
-    }
-}
-```
-
-A branch that is not chosen is parsed and name-bound but never checked, as a
-`const for` body over an empty source is not: a call that does not exist or a
-write a field's type forbids there is not an error. In a statement list the
-chosen branch is a nested block of its own scope and not an expansion
-boundary, so `break`, `continue` and `return` in it mean what they mean in
-an `if`'s branch, and what follows is checked for the branch generated. In a
-constructor the chosen entries join the initializer list, and in a `match`
-the chosen arms join the arm list, before the checks of §4.2 and §8.1. The
-design is section 11 of [the `const for` design](design/const_for.md).
 
 ### 6.6 `defer`
 
@@ -3692,9 +3663,8 @@ match dir { North, South => "vertical", East, West => "horizontal" }
   by reference only (§3.9), which is why an ADT with such payloads is used
   in variable mode, and a resizable ADT holds them only in its resizable
   payloads (§3.5).
-* An arm list may hold `const for` expansions and `const if` selections
-  (§6.5) beside written arms; their arms are flattened first, and every rule
-  above applies to the result.
+* An arm list may hold `const for` expansions (§6.5) beside written arms;
+  their arms are flattened first, and every rule above applies to the result.
 * `T?` narrows via `if r { … }` / `guard` / `assert(r)` (flow typing, §3.8).
 
 ### 8.2 Case functions (match as an overload set)
@@ -5106,7 +5076,7 @@ postfix     := "[" expr "]"                      // fixed array (const expr)
              | ".."                              // variable-mode ADT
              | "." ident                         // variant type
 
-stmt        := decl | assign | incdec | guardstmt | deferstmt | exprstmt | constfor | constif
+stmt        := decl | assign | incdec | guardstmt | deferstmt | exprstmt
 decl        := ("reusable" ("[" "]")?)? ("let" | "var" | "const") identlist (":" type)?
                (("=" | ".=") exprlist)? ";"     // .= binds by reference (§3.8)
 assign      := lvalue assignop expr ";"          // = .= += -= *= /= %= &= |= ^= <<= >>=
@@ -5114,11 +5084,6 @@ incdec      := lvalue ("++" | "--") ";"
 exprstmt    := expr ";"
 guardstmt   := "guard" expr ("else" blockexpr | ";")  // guards the rest of its block (§6.4)
 deferstmt   := "defer" (blockexpr | assign | incdec | exprstmt)  // runs at the block's exits (§6.6)
-constfor    := "const" "for" "<" identlist ">" "in" source blockexpr   // §6.5; also an
-source      := ("fields" | "variants" | "types") tyargs                // initializer or arm
-             | "[" exprlist? "]"                                       // list in those lists
-constif     := "const" "if" expr blockexpr ("else" (constif | blockexpr))?  // §6.5; likewise
-                                                 // expr: constants, has_default<A>, same<T, U>
 
 expr        := control | binary
 control     := ifexpr | matchexpr | blockexpr | loops | jumps
