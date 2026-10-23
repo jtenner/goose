@@ -37,6 +37,7 @@ let LARGE: u64 = 18446744073709551615;
 enum Mode { Ok }
 type Number = u32;
 fn excluded_call() { print("excluded_call_sentinel"); }
+fn stopped(b: bool) { if b { return; const if MISSING {} } else {} }
 fn chosen<T>(x: T) -> T {
     const if ENABLED && build::COUNT >= 2 { x } else { missing(x); }
 }
@@ -56,6 +57,7 @@ fn main() {
     } else { let local = 5; print(local); }
     const if false {} else {}
     print(chosen(9));
+    stopped(true);
     const if !(1 < 2 && 2 <= 2 && 3 > 2 && 3 >= 3 && true != false && !false == true) { unknown(); }
     const if POSITIVE < LARGE {} else { unknown(); }
     const if ~0 == BYTEMAX { } else { unknown(); }
@@ -170,6 +172,8 @@ with tempfile.TemporaryDirectory(prefix='goose-const-if-') as directory:
         ('enum E { A } fn main() { const if true { let bad: E.Missing = E.Missing {}; } }', 'variant'),
         ('fn main() { const if true || MISSING {} }', 'constant'),
         ('fn main() { const if false && 4 {} }', 'bool'),
+        ('let FLAG = true; fn main() { if true { let FLAG = false; const if FLAG {} } else {} }', 'local'),
+        ('let N = 2; fn main() { const if true { fn inner(N: i64, x: u8[N]) {} } }', 'parameter'),
     ]
     if not CORE_ONLY:
         failures += [
