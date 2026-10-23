@@ -573,12 +573,25 @@ struct Parser {
 
     // `kept`, where given, is moved past each whole field (ParseMembers).
     void ParseFieldList(vector<Field> &fields, const char *context,
-                        Ast::DeclMark *kept = nullptr) {
+                        Ast::DeclMark *kept = nullptr, bool conditional = false) {
         while (lex.tok != T_RCURLY) {
             Field f;
             f.line = CurLine();
             f.doc = lex.doc;
-            if (IsNext(T_PAD)) {
+            if (lex.tok == T_CONST && lex.PeekTok() == T_IF) {
+                lex.Next(); lex.Next();
+                f.condition = ParseScrutinee();
+                auto branch = [&](vector<Field> &out) {
+                    auto first = ast.alltypes.size(), firstfn = ast.functions.size();
+                    Expect(T_LCURLY, "conditional fields");
+                    ParseFieldList(out, "conditional fields", nullptr, true);
+                    Expect(T_RCURLY, "conditional fields");
+                    for (auto i = first; i < ast.alltypes.size(); i++) ast.alltypes[i]->conditional = true;
+                    for (auto i = firstfn; i < ast.functions.size(); i++) ast.functions[i]->conditional = true;
+                };
+                branch(f.thenfields);
+                if (IsNext(T_ELSE)) branch(f.elsefields);
+            } else if (IsNext(T_PAD)) {
                 f.ispad = true;
                 if (lex.tok == T_INTLIT) {
                     f.padsize = lex.ival;
@@ -591,7 +604,7 @@ struct Parser {
                 f.line = CurLine();
                 f.name = ExpectIdent(context);
                 for (auto &prev : fields)
-                    if (!prev.ispad && prev.name == f.name)
+                    if (!conditional && !prev.condition && !prev.ispad && prev.name == f.name)
                         Error(cat("duplicate field name: ", f.name));
                 Expect(T_COLON, context);
                 f.type = ParseType();
