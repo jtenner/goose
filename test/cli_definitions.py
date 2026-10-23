@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Native --define acceptance tests. Run with the compiler path as argument."""
 import pathlib
+import json
 import re
 import subprocess
 import sys
@@ -123,6 +124,49 @@ with tempfile.TemporaryDirectory(prefix="goose-definitions-") as directory:
         invoke(["run", level, "--define", 'STAGE="frag"', "--define",
                 'GLSL="layout(location = 0) out vec4 result; void main() { result = vec4(1.0); }"',
                 source], contains="true")
+    # Definition literals have synthetic declaration positions. Shader errors
+    # must use each argument's actual file/line, including imported aliases.
+    valid_glsl = "layout(location = 0) out vec4 result; void main() { result = vec4(1.0); }"
+    editor_cases = []
+    for imported in (False, True):
+        for aliased in (False, True):
+            target = root / "shader_helper.goose" if imported else source
+            prefix = ('let STAGE = build::STAGE; let GLSL = build::GLSL;\n' if aliased
+                      else '// an unrelated first line\n')
+            names = ("STAGE", "GLSL") if aliased else ("build::STAGE", "build::GLSL")
+            text = prefix + '\nfn shader() {\n    let blob = embed_shader(' + names[0] + ', ' + names[1] + ');\n}\n'
+            target.write_text(text + ('\nfn main() { shader(); }\n' if not imported else ''))
+            if imported:
+                source.write_text('import shader_helper;\nfn main() { shader(); }\n')
+            for stage, glsl in (("fragment", valid_glsl), ("frag", valid_glsl.replace("1.0", "oops"))):
+                flags = ["--define", "STAGE=" + json.dumps(stage), "--define", "GLSL=" + json.dumps(glsl)]
+                for level in ("-O0", "-O2"):
+                    result = invoke(["check", "--diagnostics", "json", level, *flags, source], ok=False)
+                    diagnostics = json.loads(result.stdout)
+                    errors = [d for d in diagnostics if d["severity"] == "error"]
+                    assert errors and all(pathlib.Path(d["file"]).resolve() == target.resolve()
+                                          and d["line"] == 4 for d in errors), diagnostics
+                editor_cases.append((target, target.read_text(), flags, source.read_text()))
+    for target, text, flags, main_text in editor_cases:
+        target.write_text(text)
+        if target != source:
+            source.write_text(main_text)
+        client = Client(str(EXE), root, flags)
+        try:
+            client.request("initialize", {"processId": None, "rootUri": root.as_uri(), "capabilities": {},
+                                          "initializationOptions": {"entryFiles": [str(source)]}})
+            client.send("initialized", {}, request=False)
+            client.send("textDocument/didOpen", {"textDocument": {"uri": target.as_uri(), "languageId": "goose",
+                                                                  "version": 1, "text": text}}, request=False)
+            diagnostics = client.diagnostics_for(target.as_uri())
+            assert diagnostics and all(d["range"]["start"]["line"] == 3 for d in diagnostics), diagnostics
+            client.request("shutdown", {})
+            client.send("exit", {}, request=False)
+            client.p.wait(timeout=10)
+        finally:
+            if client.p.poll() is None:
+                client.p.kill()
+                client.p.wait()
     # The editor must report the same configuration and expose read-only symbols.
     text = 'fn main() { print(build::COUNT); }\n'
     source.write_text(text)
