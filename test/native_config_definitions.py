@@ -20,6 +20,13 @@ ORDERS = {'Relaxed':'__ATOMIC_RELAXED', 'Acquire':'__ATOMIC_ACQUIRE',
           'Release':'__ATOMIC_RELEASE', 'AcqRel':'__ATOMIC_ACQ_REL', 'SeqCst':'__ATOMIC_SEQ_CST'}
 
 
+def has_advice_code(c, advice):
+    # Three operands precede the selected integer policy; two location operands
+    # follow it. Accept both LocArgs filename symbols and literal filenames.
+    return re.search(r'\bgs_shared_page_advice\([^,;\n]+,[^,;\n]+,[^,;\n]+,\s*'
+                     + str(advice) + r'\s*,\s*(?:gs_file\d+|"[^"\n]*")\s*,\s*\d+\s*\)', c) is not None
+
+
 def check_advice_codegen():
     # Location arguments use a generated filename symbol. Keep the policy in
     # the fourth argument distinct from digits in the filename or source line.
@@ -89,7 +96,7 @@ def main():
                         assert re.search(r'__atomic_store_n\([^;\n]*,\s*' + ORDERS[profile['STORE_ORDER']] + r'\)', c)
                         assert re.search(r'__atomic_compare_exchange_n\([^;\n]*,\s*' + ORDERS[profile['CAS_SUCCESS']] + r',\s*' + ORDERS[profile['CAS_FAILURE']] + r'\)', c)
                         advice = 1 if profile['ADVICE'] == 'Sequential' else 2
-                        assert re.search(r'gs_shared_page_advice\([^\n]*,\s*' + str(advice) + r',\s*"', c)
+                        assert has_advice_code(c, advice), (profile['ADVICE'], advice)
                         for native in ('-O0','-O2'):
                             app = root / 'native'
                             run([ns.cc,native,'-std=c11','-pthread',generated,'-lm','-o',app],timeout=600)
