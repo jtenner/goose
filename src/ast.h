@@ -68,11 +68,17 @@ enum TypeKind {
     TY_VOID,        // Typecheck-created: the "type" of statements and valueless blocks.
 };
 
-enum NativeKind { NK_OWNER, NK_VIEW, NK_ACCESS, NK_ATOMIC_U32, NK_ATOMIC_U64 };
+enum NativeKind { NK_OWNER, NK_VIEW, NK_ACCESS, NK_ATOMIC_U32, NK_ATOMIC_U64, NK_COUNT };
 inline const char *NativeName(int k) {
     static const char *names[] = { "SharedOwner", "SharedView", "SharedAccess",
                                    "SharedAtomicU32", "SharedAtomicU64" };
     return names[k];
+}
+
+inline int NativeKindForName(string_view name) {
+    for (int k = NK_OWNER; k < NK_COUNT; k++)
+        if (name == NativeName(k) || name == cat("::", NativeName(k))) return k;
+    return -1;
 }
 
 enum ArrayKind {
@@ -1149,6 +1155,7 @@ NODE(Call)
     // pop: the array is provably non-empty here (bce.h); codegen omits the
     // emptiness check.
     bool nobc = false;
+    int memory_order = 0, failure_order = 0; // Validated native atomic constant orders.
     TypeExpr *qtype = nullptr;  // qlimit<T>: T, which names the queue (§11.2).
     const string *shaderblob = nullptr;  // embed_shader's compiled blob or embed_file's bytes, in Ast::shaders.
     Call(Line l, Node *_callee) : Node(l, NKind), callee(_callee) {}
