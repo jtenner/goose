@@ -35,6 +35,12 @@ fn main() {
     assert(memory_read<u64>(a, 7, true) == 18446744073709551615);
     memory_copy(a, 24, a, 1, 14);
     assert(memory_read<u16>(a, 24, false) == 4660);
+    memory_write<i16>(a, 39, -32768, true);
+    assert(memory_read<i16>(a, 39, true) == -32768);
+    memory_write<u32>(a, 41, 4294967295, false);
+    assert(memory_read<u32>(a, 41, false) == 4294967295);
+    memory_write<i64>(a, 45, -9223372036854775808, true);
+    assert(memory_read<i64>(a, 45, true) == -9223372036854775808);
     assert(!shared_close(owner));
     shared_release(a);
     for kind in 1..5 { assert(!thread_wait(thread_spawn_contained(misuse, v, kind))); }
