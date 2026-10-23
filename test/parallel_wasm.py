@@ -5,6 +5,7 @@ Run: python3 test/parallel_wasm.py /absolute/path/to/goose
 import argparse
 from pathlib import Path
 import random
+import re
 import shutil
 import struct
 import tempfile
@@ -76,13 +77,21 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("goose", type=Path)
     ap.add_argument("--jobs", type=int, default=3000)
+    ap.add_argument("--goose-opt", choices=("0", "2"), default="2")
     ns = ap.parse_args()
     if ns.jobs < 40:
         ap.error("--jobs must be at least 40 for abort/shutdown coverage")
     rng = random.Random(901)
     with tempfile.TemporaryDirectory(prefix="goose-wasm-") as directory:
         root = Path(directory)
-        app = build(ns.goose.resolve(), ROOT / "samples/parallel_wasm/main.goose", root / "wasm", "-O2")
+        app = build(ns.goose.resolve(), ROOT / "samples/parallel_wasm/main.goose", root / "wasm", "-O" + ns.goose_opt)
+        generated = root / "wasm.c"
+        run([ns.goose.resolve(), "--standalone", "-O0", ROOT / "samples/parallel_wasm/main.goose", "-o", generated])
+        c = generated.read_text()
+        claim_body = re.search(r"static(?: GS_INLINE)? void compile_jobs_g[^;]*?\{(.*?)^\}", c, re.S | re.M)
+        assert claim_body, "expected non-inlined job loop for codegen inspection"
+        assert re.search(r"__atomic_fetch_add\([^;]*__ATOMIC_RELAXED", claim_body[1])
+        assert "gs_mutex_lock" not in claim_body[1]
         fixture = root / "module.wasm"
         def execute(data, workers, mode="normal", ok=True):
             fixture.write_bytes(data)
