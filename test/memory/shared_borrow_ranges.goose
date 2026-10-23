@@ -12,6 +12,7 @@ thread_fn bad_range(v: SharedView, kind: i64) {
     if kind == 1 { shared_borrow(v, 63, 2); }
     if kind == 2 { shared_borrow(v, 0, 18446744073709551615); }
     if kind == 3 { shared_view(v, 63, 2); }
+    if kind == 4 { shared_borrow(v, 0, 8); }
 }
 fn main() {
     let o, ok = shared_alloc(64); assert(ok);
@@ -19,6 +20,7 @@ fn main() {
     var ids: i64[>..] = [];
     for i in 4 { ids.push(thread_spawn(ranged, v, i * 8)); }
     for i in 4 { qget<RangeReady>(); }
+    assert(!thread_wait(thread_spawn_contained(bad_range, v, 4)));
     let independent = shared_borrow(v, 40, 8);
     memory_write<u64>(independent, 0, 99, false); shared_release(independent);
     for i in 4 { qput(RangeContinue { n: 1 }); }
