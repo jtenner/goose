@@ -11,6 +11,7 @@ import tempfile
 
 EXE = pathlib.Path(sys.argv[1]).resolve()
 CORE_ONLY = '--core-only' in sys.argv[2:]
+FIELDS_ONLY = '--fields-only' in sys.argv[2:]
 CHECKS = 0
 
 
@@ -79,7 +80,8 @@ fn show<T>(x: T) {
 fn main() {
     let x = S<u32> {};
     show(x);
-    let image = bytes_of([x]);
+    let values = [x];
+    let image = bytes_of(values);
     // Size and offsets are an application layout fingerprint, independent
     // of natural alignment: z starts at 4 (release) or 12 (debug).
     print(image.len, " ", image[0], " ", image[4], " ", image[image.len - 4]);
@@ -119,9 +121,11 @@ with tempfile.TemporaryDirectory(prefix='goose-const-if-') as directory:
                 cases += [(FIELDS, 'a=1\n' + ('b=2\n' if debug == 'true' else '') + 'z=3\n' +
                            ('16 1 2 3\n10\n2\n' if debug == 'true' else '8 1 3 3\n4\n2\n')),
                           (CONSTRUCTORS, 'true\n3\n7\n9\n2\n')]
+            if FIELDS_ONLY:
+                cases = cases[:2]
             for code, expected in cases:
                 source.write_text(code)
-                invoke(['check', level, *definitions, source])
+                invoke(['check', '--roundtrip', level, *definitions, source])
                 # Parse-level dump retains both arms and reparses unchanged.
                 dump = invoke(['--dump', source]).stdout
                 dumped = root / 'dumped.goose'
@@ -161,6 +165,8 @@ with tempfile.TemporaryDirectory(prefix='goose-const-if-') as directory:
             ('struct S { a: u32 } fn main() { let s = S { const if false { a: 1, }, }; }', 'missing'),
             ('struct S { a: u32 } fn main() { let s = S { const if true { absent: 1, }, }; }', 'field'),
         ]
+    if FIELDS_ONLY:
+        failures = failures[:-4]
     for code, diagnostic in failures:
         source.write_text(code)
         invoke(['check', source], ok=False, contains=diagnostic)
