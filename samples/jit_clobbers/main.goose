@@ -14,6 +14,7 @@ fn validate_register_ownership(e: Emitter&, reg: i64, expected: u32) {
     const if build::CHECK_REGISTER_CLOBBERS {
         if e.register_owners[reg] != expected { abort("REGISTER_CLOBBER_SENTINEL"); }
     }
+    return;
 }
 fn claim_register(e: Emitter&, reg: i64, owner: u32) {
     const if build::CHECK_REGISTER_CLOBBERS {
@@ -27,12 +28,12 @@ fn release_register(e: Emitter&, reg: i64, owner: u32) {
         e.register_owners[reg] = 0;
     }
 }
-fn constant(e: Emitter&, value: u32, owner: u32) {
-    const if build::CHECK_REGISTER_CLOBBERS { claim_register(e, 0, owner); }
+fn constant(e: Emitter&, value: u32) {
+    const if build::CHECK_REGISTER_CLOBBERS { claim_register(e, 0, 1); }
     e.code.push(0xb8); // mov eax, imm32
     for shift in 4 { e.code.push((value >> (shift * 8)) as! u8); }
     e.code.push(0x50); // push rax: materialize the Wasm stack value
-    const if build::CHECK_REGISTER_CLOBBERS { release_register(e, 0, owner); }
+    const if build::CHECK_REGISTER_CLOBBERS { release_register(e, 0, 1); }
 }
 fn add(e: Emitter&) {
     const if build::CHECK_REGISTER_CLOBBERS {
@@ -63,8 +64,8 @@ fn main() {
             if argv.len > 1 && argv[1] == "assertion" { abort("JIT_ASSERTION_SENTINEL"); }
         }
     }
-    constant(e, 7, 1);
-    constant(e, 11, 2);
+    constant(e, 7);
+    constant(e, 11);
     add(e);
     e.code.append([0x58, 0xc3]); // pop rax; ret
     let hex = "0123456789abcdef";
