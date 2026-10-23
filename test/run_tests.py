@@ -1824,6 +1824,15 @@ def main():
         # generated C is actually valid: a call to a function defined only in
         # debug builds compiled silently under MSVC and broke every clang
         # release build.
+        def native_memory_backend():
+            from native_memory_backend import check_native_memory_backend
+            try:
+                skipped = check_native_memory_backend(exe, clang, gendir)
+                if skipped: r.say("skip native memory backend: " + skipped)
+                else: r.ok("native memory backend capability and generation alignment")
+            except RuntimeError as e:
+                r.fail("native memory backend", str(e))
+
         def clang_codegen():
             src = gendir / "cgclang.c"
             code, out, err = r.goose("-O2", "-o", src, HERE / "codegen" / "codegen_exec.goose")
@@ -1895,6 +1904,7 @@ def main():
         elif not clang:
             r.show_later(r.say, "skip cgen-clang (no clang found)")
         else:
+            r.show_task(native_memory_backend)
             r.show_task(clang_codegen)
             r.show_task(clang_simd, "simd_versions", HERE / "codegen" / "simd_versions.goose",
                         clang_simd_versions)
