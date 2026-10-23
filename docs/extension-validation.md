@@ -67,9 +67,14 @@ python3 test/jit_clobbers.py build/goose
 ```
 
 Runtime version: `3a21ace949ed`. Compiler executable hashes, source revisions and
-native flags accompany the benchmark records. Final review results from Claude and
-Concentrate/OpenCode DeepSeek 1017 belong in the fork PR descriptions before
-those changes are marked ready. The CLI version identifies the
+native flags accompany the benchmark records. Claude Opus 5.5 and
+Concentrate/OpenCode DeepSeek 1017 each completed one review thread and
+approved frozen source `102c0df5`. Claude also independently reproduced all
+published statistics from the raw measurements. Its documentation findings
+are addressed in the results: size-dependent compiler regression, multi-worker
+scheduling costs, and the optimized-away C write/readback comparison. The
+diagnostic-only follow-up has separate independent parent approval; the two
+model approvals do not extend to that later source revision. The CLI version identifies the
 runtime and is insufficient to distinguish compiler source snapshots.
 
 Independent review covered CLI parsing/configuration isolation/source locations;
@@ -132,3 +137,10 @@ Optional multimedia/device tests retain upstream environment skips.
 Measured native costs and the synthetic compiler regression, with raw samples,
 flags, hashes, variation and limits, are recorded next to the
 [benchmark](../bench/shared_native/results/README.md).
+The roughly 10.5x compiler slowdown is measured only at 500 globals and 1,000
+unreached functions. Deferred-state bookkeeping grows with unreached functions
+times live variable definitions, potentially quadratically as both grow, so
+larger codebases can regress further. This is a known performance limitation,
+not a fixed overhead bound. Four/eight-worker start/join costs are 1.20x/1.21x
+the weaker C baseline; the 40.32x source write/readback ratio uses a largely
+optimized-away C loop and is not a physical-operation latency ratio.
