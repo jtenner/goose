@@ -192,36 +192,17 @@ fn fault_tests(module: SharedView) {
     print("faults ok");
 }
 fn fail(message: u8[:]) { write_stderr(message); write_stderr("\n"); exit(1); }
-fn main() {
-    let argv = args();
-    if argv.len != 5 { fail("usage: wasm module.wasm size workers(0=serial) normal|abort|cancel|faults"); }
-    let size, size_ok = parse_int(argv[2]);
-    let workers, workers_ok = parse_int(argv[3]);
-    if !size_ok || size < 8 || size > 268435456 || !workers_ok || workers < 0 || workers > 64 {
-        fail("invalid size or worker count");
-    }
-    let mode = argv[4];
-    if mode != "normal" && mode != "abort" && mode != "cancel" && mode != "faults" { fail("invalid mode"); }
-    if mode == "abort" && workers == 0 { fail("abort requires contained workers"); }
-    let mapped, mapped_ok = shared_map_readonly(argv[1], size as u64);
-    if !mapped_ok { fail("cannot map module"); }
-    let module = shared_view(mapped, 0, size as u64);
-    let input = shared_borrow(module);
-    var jobs: Job[>..] = [];
-    let valid = parse_module(input, jobs);
-    shared_release(input);
-    if !valid { assert(shared_close(mapped)); fail("malformed or unsupported Wasm module"); }
-    if mode == "faults" { fault_tests(module); assert(shared_close(mapped)); return; }
+fn run_pool(mapped: SharedOwner, module: SharedView, jobs: Job[:], workers: i64, mode: u8[:]) {
     let count = jobs.len as u64;
     let table_owner, table_ok = shared_alloc(max(1, count * RECORD_BYTES));
     if !table_ok { assert(shared_close(mapped)); fail("work table allocation failed"); }
     var output_size: u64 = 1;
     if count > 0 { let last = jobs[jobs.len - 1]; output_size = last.output + last.capacity; }
     let out_owner, out_ok = shared_alloc(output_size);
-    if !out_ok { assert(shared_close(table_owner)); assert(shared_close(mapped)); fail("output allocation failed"); }
+    if !out_ok { assert(shared_close(table_owner)); fail("output allocation failed"); }
     let ctl_owner, ctl_ok = shared_alloc(32 + max(1, count) * 4);
     if !ctl_ok {
-        assert(shared_close(out_owner)); assert(shared_close(table_owner)); assert(shared_close(mapped));
+        assert(shared_close(out_owner)); assert(shared_close(table_owner));
         fail("control allocation failed");
     }
     let table = shared_view(table_owner, 0, max(1, count * RECORD_BYTES));
@@ -280,6 +261,30 @@ fn main() {
     }
     shared_release(results);
     assert(shared_close(ctl_owner)); assert(shared_close(out_owner));
-    assert(shared_close(table_owner)); assert(shared_close(mapped));
+    assert(shared_close(table_owner));
     print("summary ", count, " ", claimed, " ", failed);
+}
+fn main() {
+    let argv = args();
+    if argv.len != 5 { fail("usage: wasm module.wasm size workers(0=serial) normal|abort|cancel|faults|repeat"); }
+    let size, size_ok = parse_int(argv[2]);
+    let workers, workers_ok = parse_int(argv[3]);
+    if !size_ok || size < 8 || size > 268435456 || !workers_ok || workers < 0 || workers > 64 {
+        fail("invalid size or worker count");
+    }
+    let mode = argv[4];
+    if mode != "normal" && mode != "abort" && mode != "cancel" && mode != "faults" && mode != "repeat" { fail("invalid mode"); }
+    if mode == "abort" && workers == 0 { fail("abort requires contained workers"); }
+    let mapped, mapped_ok = shared_map_readonly(argv[1], size as u64);
+    if !mapped_ok { fail("cannot map module"); }
+    let module = shared_view(mapped, 0, size as u64);
+    let input = shared_borrow(module);
+    var jobs: Job[>..] = [];
+    let valid = parse_module(input, jobs);
+    shared_release(input);
+    if !valid { assert(shared_close(mapped)); fail("malformed or unsupported Wasm module"); }
+    if mode == "faults" { fault_tests(module); assert(shared_close(mapped)); return; }
+    let rounds = if mode == "repeat" { 12 } else { 1 };
+    for round in rounds { run_pool(mapped, module, jobs, workers, mode); }
+    assert(shared_close(mapped));
 }

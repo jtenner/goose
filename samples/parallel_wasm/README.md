@@ -12,7 +12,9 @@ python3 test/parallel_wasm.py /path/to/goose --goose-opt 0 --jobs 64
 The acceptance script builds real binary Wasm modules without dependencies.
 Run the executable as `wasm-compiler file.wasm file_size workers mode`.
 Workers `0` selects the identical serial compiler; `1`, `2`, `4`, `8` select
-native worker pools. Modes are `normal`, `abort`, `cancel`, and `faults`.
+native worker pools. Modes are `normal`, `abort`, `cancel`, `faults`, and `repeat`. The repeat
+mode starts/joins twelve pools in the same parent process with one shared
+readonly module, creating and closing each pool's work/result/control owners.
 Each `job index status visits hex` line reports native output. Statuses are
 2 success, 3 rejected body, 4 contained worker abort, 5 cancelled/unclaimed.
 The summary gives job count, claimed job count and failed worker count.
