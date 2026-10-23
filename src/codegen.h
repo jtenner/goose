@@ -808,6 +808,9 @@ struct CodeGen {
         bool viaref = false;
         string stk, lenlv, fl, flstk;
         string hdr;            // The resizable's own header/frame-object lvalue, when it has one.
+        // A bytes subvalue can share its owner's count without having its
+        // own header (a variable-prefix record's resizable tail, for example).
+        string lenhdr;         // The packed header owning that inherited lenlv.
         // A loop-hoisted view of the array behind this reference (see `views`):
         // set on the reference by VarLoc, and, for the length, carried across
         // the deref to the pointee, where ArrayView reads it instead of memory.
