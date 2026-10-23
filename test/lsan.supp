@@ -3,3 +3,10 @@
 # allocations behind when shader compilation fails; third_party/cute_spirv
 # is a copy kept unmodified, so its leaks are suppressed here.
 leak:cute_spirv.h
+# Line-table-only Clang stacks identify these same parser allocations at
+# their inlined ckit.h allocation sites. Keep matches specific to the bundled
+# shader functions; no general allocator, ckit.h, or compiler suppression.
+leak:cspv_parse_unary
+leak:cspv_parse_block
+leak:cspv_gen_top_level
+leak:ck_map_ensure_capacity
