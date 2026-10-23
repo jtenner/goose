@@ -4,6 +4,7 @@ Default executes every matrix entry with alignment sanitizer ENABLED.
 --compile-only prepares/inspects without running programs while fixes land.
 """
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import shutil
@@ -11,7 +12,7 @@ import struct
 import tempfile
 from native_examples_support import ROOT, run
 
-SOURCE = ROOT / "test/memory/conditional_shared_layout.goose"
+SOURCE = ROOT / "test/memory/conditional_shared_layout/main.goose"
 
 
 def definitions(debug):
@@ -84,7 +85,9 @@ def main():
     if not compilers:
         ap.error("GCC or Clang is required")
     goose = ns.goose.resolve()
-    report = {"alignment_sanitizer": True, "executed": not ns.compile_only, "matrix": []}
+    report = {"alignment_sanitizer": True, "executed": not ns.compile_only, "matrix": [],
+              "goose_path": str(goose), "goose_sha256": hashlib.sha256(goose.read_bytes()).hexdigest(),
+              "source_sha256": hashlib.sha256(SOURCE.read_bytes()).hexdigest() if SOURCE.exists() else None}
     with tempfile.TemporaryDirectory(prefix="goose-conditional-shared-") as directory:
         root = Path(directory)
         # Missing source is a red regression before the standalone fixture lands.
@@ -111,6 +114,10 @@ def main():
                             app = root / f"layout-{enabled}"
                             native_flags = [native_level, "-std=c11", "-pthread", "-g",
                                             "-fsanitize=alignment", "-fno-sanitize-recover=all"]
+                            # Conda Clang on PATH also exports an incompatible ld;
+                            # keep the system GCC sanitizer runtime with system ld.
+                            if "gcc" in identity.lower() and Path("/usr/bin/ld").exists():
+                                native_flags.append("-B/usr/bin/")
                             run([compiler, *native_flags, cfile, "-lm", "-o", app], timeout=600)
                             programs[enabled] = app
                             report["matrix"].append({"compiler": identity, "compiler_path": compiler,
