@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Phase11 structural harness contract; does NOT run timing workloads."""
+import hashlib
 import importlib.util
+import tempfile
 import json
 from pathlib import Path
 from native_examples_support import ROOT, run
@@ -14,6 +16,8 @@ assert {"atomics_uncontended", "atomics_contended", "claims", "scalar_read_laten
         "scheduling", "mmap", "copy", "checks_disabled", "checks_enabled"} <= set(plan["cases"])
 assert set(plan["implementations"]) == {"c_baseline", "goose_native"}
 assert plan["run_requires_explicit_flag"] is True
+assert plan["units"]["copy"]["work_unit"] == "byte"
+assert plan["units"]["scalar_write_latency"]["work_unit"] == "write_read_roundtrip"
 assert plan["total_workload_processes"] == 900 and plan["measured_processes"] == 700
 assert plan["warmup_processes"] == 200 and plan["maximum_worker_threads"] == 8
 claims = json.loads(run(["python3", HARNESS, "--plan", "--case", "claims"]).stdout)
@@ -35,3 +39,13 @@ assert summary["median_units_per_second"] == 100 / 3
 assert summary["samples"] == values
 run(["python3", HARNESS, "--prepare"], ok=False)
 run(["python3", HARNESS, "--plan", "--samples", 4], ok=False)
+
+with tempfile.TemporaryDirectory(prefix="goose-benchmark-hash-") as directory:
+    source = Path(directory) / "compiler"
+    source.write_bytes(b"a compiler with an unchanged version")
+    fingerprint = module.fingerprint(source)
+    assert fingerprint["sha256"] == hashlib.sha256(source.read_bytes()).hexdigest()
+    assert fingerprint["path"] == str(source.resolve())
+provenance = module.source_provenance()
+assert {"main.goose", "baseline.c", "run.py"} == set(provenance["files"])
+assert all(len(value) == 64 for value in provenance["files"].values())
