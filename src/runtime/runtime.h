@@ -892,6 +892,10 @@ typedef struct gs_shared_record {
     int kind, readonly, filemap, orphan;
 } gs_shared_record;
 GS_API gs_shared_record *gs_shared_slabs[GS_SHARED_SLABS];
+GS_API gs_shared_cap gs_shared_map_readonly(const uint8_t *path, int64_t pathlen, uint64_t size, uint8_t *ok);
+GS_API int gs_shared_page_advice(gs_shared_cap view, uint64_t offset, uint64_t size, int advice, const char *file, int line);
+GS_API gs_shared_cap gs_shared_borrow_range(gs_shared_cap view, uint64_t offset, uint64_t size, const char *file, int line);
+GS_API void gs_shared_bytes(gs_shared_cap access, uint64_t offset, void *bytes, uint64_t size, int write, const char *file, int line);
 GS_API gs_shared_cap gs_shared_alloc(uint64_t size, uint8_t *ok);
 GS_API gs_shared_cap gs_shared_view(gs_shared_cap owner, uint64_t offset, uint64_t size,
                                     const char *file, int line);
