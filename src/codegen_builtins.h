@@ -51,6 +51,8 @@ inline string CodeGen::LenCast(const Loc &lv) {
 inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
     auto an = c->ArgNodes();
     auto ln = c->line;
+    if (c->builtin >= B_UNSAFE_PTR_FROM_HANDLE && c->builtin <= B_UNSAFE_STORE)
+        return EmitUnsafeBuiltin(c);
     if (c->builtin >= B_SHARED_ALLOC && c->builtin <= B_MEMORY_COPY) {
         usesthreads = true;
         vector<string> a;
