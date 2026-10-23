@@ -101,6 +101,17 @@ inline bool IsBranchConstruct(const Node *n) {
 
 struct TypeCheck {
     Ast &ast;
+    // Deterministic transaction work, for scaling tests without wall clocks.
+    // Opt-in stderr JSON also works for CLI errors and editor compilations.
+    struct DeferredWork {
+        size_t roots = 0, deferrals = 0, variables = 0, arrays = 0, typevisits = 0;
+        ~DeferredWork() {
+            if (getenv("GOOSE_DEFERRED_WORK"))
+                fprintf(stderr, "GOOSE_DEFERRED_WORK {\"roots\":%zu,\"deferrals\":%zu,"
+                        "\"variables\":%zu,\"arrays\":%zu,\"typevisits\":%zu}\n",
+                        roots, deferrals, variables, arrays, typevisits);
+        }
+    } deferredwork;
     StableTypeGraph stabletypes;
     unordered_map<const void *, vector<TypeExpr *>> arrayelements;
     // CanContain's and ReachesThroughRefs' answers for complete type graphs:
@@ -2844,11 +2855,19 @@ struct TypeCheck {
                   threaded(t.threadedclasses), pending(t.pendingpools), namedresults(t.namedresultuses),
                   literals(t.litchecks.size()), shrinks(t.globalshrinks.size()),
                   grows(t.growconflicts.size()), casts(t.castverdicts.size()), types(t.ast.alltypes.size()) {
-                for (auto v : t.ast.vardefs) variables.push_back({ v, *v });
+                t.deferredwork.roots++;
+                for (auto v : t.ast.vardefs) {
+                    variables.push_back({ v, *v });
+                    t.deferredwork.variables++;
+                }
                 set<TypeArray *> seen;
-                for (auto type : t.ast.alltypes)
-                    if (type->kind == TY_ARRAY && seen.insert(type->arr).second)
+                for (auto type : t.ast.alltypes) {
+                    t.deferredwork.typevisits++;
+                    if (type->kind == TY_ARRAY && seen.insert(type->arr).second) {
                         arrays.push_back({ type->arr, *type->arr });
+                        t.deferredwork.arrays++;
+                    }
+                }
             }
         };
         unique_ptr<DeferredState> deferred;
@@ -2871,6 +2890,7 @@ struct TypeCheck {
         }
         void Defer() {
             assert(deferred);
+            tc.deferredwork.deferrals++;
             // A completed cycle member can still contain a back edge to an
             // incomplete member. Quarantine the ENTIRE transaction, not just
             // the frames left active when the missing caller was discovered.
@@ -2892,6 +2912,7 @@ struct TypeCheck {
             for (auto en : tc.ast.enums)
                 erase_if(en->insts, [&](EnumInst *i) { return enums.count(i); });
             for (auto type : tc.ast.alltypes) {
+                tc.deferredwork.typevisits++;
                 if (type->kind == TY_STRUCT && structs.count(type->struc->inst)) type->struc->inst = nullptr;
                 if (type->kind == TY_ENUM && enums.count(type->enu->inst)) type->enu->inst = nullptr;
             }
