@@ -2619,6 +2619,9 @@ inline int64_t TypeCheck::FillCount(Node *n) {
 // the name is an error (ConstName).
 inline bool TypeCheck::ConstIntValue(Node *n, Val &v, bool &literal,
                                      set<VarDecl *> &visiting, ConstUse *use) {
+    if (auto id = Is<Ident>(n))
+        if (auto value = ast.LookupBuildDefinition(id->name, id->ns))
+            return ConstIntValue(value, v, literal, visiting, use);
     if (auto i = Is<IntLit>(n)) {
         v.type = i->fixedtype ? i->fixedtype : ast.inttypes[i->uns ? IS_U64 : IS_I64];
         v.ck = CK_INT;

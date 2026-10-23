@@ -77,6 +77,9 @@ inline bool TypeCheck::IsValuelessTail(const Node *n) {
 }
 
 inline Node *TypeCheck::ExpansionConstant(Node *n, set<VarDecl *> &visiting) {
+    if (auto id = Is<Ident>(n))
+        if (auto value = ast.LookupBuildDefinition(id->name, id->ns))
+            return value->Clone(ast);
     // Checking a named global may have inserted its ordinary integer-to-
     // float conversion. This is not permission for a source-level cast.
     if (auto a = Is<AsCast>(n); a && a->implicit) {
