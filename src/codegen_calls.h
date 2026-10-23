@@ -253,6 +253,17 @@ inline string CodeGen::BytesResultBase(const Dst &dd, string &stk) {
     return base;
 }
 
+// A packed header's count is a valid member lvalue, but its address need
+// not satisfy int64_t's alignment. Callees also construct through this
+// channel, so give the whole call an aligned scalar and copy it back only
+// on normal completion. Frame-object channels keep their packed C type.
+inline string CodeGen::LengthResult(const string &lenlv, vector<pair<string, string>> &copies) {
+    auto count = T();
+    L("int64_t ", count, " = 0;");
+    copies.emplace_back(lenlv, count);
+    return cat("&", count);
+}
+
 inline vector<string> CodeGen::EmitSpecCall(Call *c, FnSpec *sp, Dst d0, vector<Dst> *alldst) {
     assert(sinfo.count(sp));
     auto &ki = sinfo[sp];
@@ -272,6 +283,7 @@ inline vector<string> CodeGen::EmitSpecCall(Call *c, FnSpec *sp, Dst d0, vector<
     for (size_t i = 0; i < an.size(); i++) EmitArg(sp, i, an[i], args, later[i + 1]);
     for (auto fv : ki.freevars) EmitFvArg(c->FreeVarArg(fv), args);
     vector<string> retex(sp->rets.size());
+    vector<pair<string, string>> lencopies;
     for (size_t i = 0; i < sp->rets.size(); i++) {
         auto rt = sp->rets[i];
         Dst dd = alldst && i < alldst->size() ? (*alldst)[i]
@@ -291,7 +303,7 @@ inline vector<string> CodeGen::EmitSpecCall(Call *c, FnSpec *sp, Dst d0, vector<
                 retex[i] = h;
             }
             args.push_back(stk);
-            args.push_back(cat("&", lenlv));
+            args.push_back(IsFrameObj(rt) ? cat("&", lenlv) : LengthResult(lenlv, lencopies));
         } else if (i == 0 && dd.k == DK_STACK && !dd.lenlv.empty() && rt->kind == TY_ARRAY &&
                    rt->arr->akind == A_VAR) {
             // An element-run receiver of a variable-array result: use the
@@ -301,7 +313,7 @@ inline vector<string> CodeGen::EmitSpecCall(Call *c, FnSpec *sp, Dst d0, vector<
             if (!er.empty()) {
                 ername = er;
                 args.push_back(dd.s);
-                args.push_back(cat("&", dd.lenlv));
+                args.push_back(LengthResult(dd.lenlv, lencopies));
                 retex[i] = "";
             } else {
                 slide = dd;
@@ -374,6 +386,7 @@ inline vector<string> CodeGen::EmitSpecCall(Call *c, FnSpec *sp, Dst d0, vector<
     // and a value in flight to a target may sit behind its reserved prefix,
     // where a fixup would move it from where the target's catch finds it.
     if (ki.hasrf) EmitRfCheck(sp);
+    for (auto &[lenlv, count] : lencopies) L(lenlv, " = ", count, ";");
     if (!reprefixbase.empty()) EmitReprefix(sp, reprefix, reprefixbase, reprefixcnt);
     if (!slidebase.empty()) {
         // Value form arrived as [len][elems]; slide the prefix out and
@@ -643,6 +656,7 @@ inline vector<string> CodeGen::EmitDispatch(Call *c, Dst d0, vector<Dst> *alldst
     vector<string> retex(sp0->rets.size());
     vector<string> dststk(sp0->rets.size());
     vector<string> dstlen(sp0->rets.size());
+    vector<pair<string, string>> lencopies;
     // Set when a T[] result lands in a slot of another length storage: tag
     // dispatch has no element-run form (C.3), so every arm writes the value
     // in its own layout, and the slot's prefix replaces the arms' after the
@@ -661,6 +675,7 @@ inline vector<string> CodeGen::EmitDispatch(Call *c, Dst d0, vector<Dst> *alldst
                 dstlen[i] = RzLenLv(rt, h);
                 retex[i] = h;
             }
+            dstlen[i] = IsFrameObj(rt) ? cat("&", dstlen[i]) : LengthResult(dstlen[i], lencopies);
         } else if (IsBytesT(rt)) {
             string stk;
             retex[i] = BytesResultBase(dd, stk);
@@ -727,7 +742,7 @@ inline vector<string> CodeGen::EmitDispatch(Call *c, Dst d0, vector<Dst> *alldst
         for (size_t i = 0; i < sp->rets.size(); i++) {
             if (IsResz(sp->rets[i])) {
                 args.push_back(dststk[i]);
-                args.push_back(cat("&", dstlen[i]));
+                args.push_back(dstlen[i]);
             } else if (IsBytesT(sp->rets[i])) args.push_back(dststk[i]);
             else if ((int)i != ki.cret) args.push_back(cat("&", retex[i]));
         }
@@ -750,6 +765,7 @@ inline vector<string> CodeGen::EmitDispatch(Call *c, Dst d0, vector<Dst> *alldst
     }
     L("default: GS_UNREACHABLE(", LocArgs(c->line), ");");
     L("}");
+    for (auto &[lenlv, count] : lencopies) L(lenlv, " = ", count, ";");
     if (reprefix.t) EmitReprefix(sp0, reprefix, retex[0], "");
     return retex;
 }
