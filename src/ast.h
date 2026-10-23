@@ -37,6 +37,7 @@ struct Line {
     int line = 0;
     int fileidx = 0;
     int col = 0;
+    bool operator==(const Line &) const = default;
 };
 
 // Where a diagnostic at a place, or over a node's extent, is.
@@ -1851,6 +1852,7 @@ struct VarDef {
     // that a reference read out of storage, or a parameter's class, may name
     // it (TypeCheck::RootCandidates, StoreIntoSlot). Kept as the marks are.
     bool slotref = false;
+    bool operator==(const VarDef &) const = default;
 };
 
 // Lifetime depth of a root (§9.2): a global's or static data's is 0.
@@ -2152,6 +2154,7 @@ struct StoreEvent {
     // one array exactly (RootArg::heldexact): its class only bounds them, and
     // no store in the body put them there.
     bool incoming = false;
+    bool operator==(const StoreEvent &) const = default;
 };
 
 // A shrink, and a reference, slice or holder still used after it that only
@@ -2611,6 +2614,10 @@ struct Ast {
 
     // Typecheck products (owned here so later phases can rely on them).
     vector<VarDef *> vardefs;
+    // Lifetime identities for checker undo journals. Unlike usable registry
+    // indexes, these include quarantined allocations and are never recycled.
+    unordered_map<VarDef *, size_t> varserials;
+    unordered_map<TypeDetail *, size_t> detailserials;
     vector<StructInst *> structinsts;
     vector<EnumInst *> enuminsts;
     vector<FnSpec *> fnspecs;
@@ -2757,6 +2764,7 @@ struct Ast {
 
     template<typename T> T *NewDetail() {
         auto d = new T();
+        detailserials.emplace(d, typedetails.size());
         typedetails.push_back(d);
         return d;
     }
@@ -2846,7 +2854,12 @@ struct Ast {
         return n;
     }
 
-    VarDef *NewVarDef()       { auto v = new VarDef();     vardefs.push_back(v);     return v; }
+    VarDef *NewVarDef() {
+        auto v = new VarDef();
+        varserials.emplace(v, varserials.size());
+        vardefs.push_back(v);
+        return v;
+    }
     StructInst *NewStructInst() { auto i = new StructInst(); structinsts.push_back(i); return i; }
     EnumInst *NewEnumInst()   { auto i = new EnumInst();   enuminsts.push_back(i);   return i; }
     FnSpec *NewFnSpec() {

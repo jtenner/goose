@@ -25,11 +25,15 @@ def main():
     with tempfile.TemporaryDirectory(prefix='goose-deferred-work-') as directory:
         source = Path(directory) / 'work.goose'
 
-        def check(text, ok=True):
+        def check(text, ok=True, verify=False):
             nonlocal checks
             source.write_text(text)
-            p = subprocess.run([exe, 'check', source], capture_output=True, text=True,
-                               env=dict(os.environ, GOOSE_DEFERRED_WORK='1'), timeout=90)
+            env = dict(os.environ, GOOSE_DEFERRED_WORK='1')
+            env.pop('GOOSE_DEFERRED_VERIFY', None)
+            if verify:
+                env['GOOSE_DEFERRED_VERIFY'] = '1'
+            p = subprocess.run([exe, 'check', source], capture_output=True, text=True, env=env, timeout=90)
+            assert p.returncode in (0, 1), (p.returncode, p.stderr[-4000:])
             assert (p.returncode == 0) == ok, (p.returncode, p.stdout, p.stderr[-4000:])
             reports = [json.loads(line.split(' ', 1)[1]) for line in p.stderr.splitlines()
                        if line.startswith('GOOSE_DEFERRED_WORK ')]
@@ -41,11 +45,12 @@ def main():
         check('fn bad()->i64{missing()}fn main(){}', ok=False)
         for case, stdlib, named in [('ordinary', False, False), ('ordinary', False, True),
                                     ('ordinary', True, False), ('calls', True, True),
-                                    ('arrays', False, True), ('deferred', False, False)]:
+                                    ('arrays', False, True), ('stores', True, True),
+                                    ('deferred', False, False), ('deferred-stores', True, True)]:
             results = [check(bench.source_for(40, size, case, stdlib, named)) for size in (0, 24, 48, 96)]
             assert results[-1]['roots'] >= 96, results  # no skip-all-unused shortcut
-            assert (results[-1]['deferrals'] >= 96) == (case == 'deferred'), results
-            for key in ('variables', 'arrays', 'typevisits'):
+            assert (results[-1]['deferrals'] >= 96) == case.startswith('deferred'), results
+            for key in ('variables', 'arrays', 'typevisits', 'auxiliary'):
                 # Fixed import/declaration setup is subtracted. The contract is
                 # proportional to this root's work, independent of old locals
                 # and types. Fourfold input allows fourfold work plus slack.
@@ -55,6 +60,8 @@ def main():
                     failures.append((case, stdlib, named, key, results))
             if results[-1]['variables'] - results[0]['variables'] > 12 * 96:
                 failures.append((case, 'unrelated globals copied', results))
+            # The exhaustive oracle runs separately from the cost contract.
+            check(bench.source_for(40, 12, case, stdlib, named), verify=True)
         # Growing unrelated globals must not cause full-record copies per root.
         small = check(bench.source_for(40, 48, 'calls', True, True))
         large = check(bench.source_for(160, 48, 'calls', True, True))
@@ -69,6 +76,9 @@ def main():
         check(live + api + 'fn main(){const if FLAG{}let r=&FLAG;}', ok=False)
         check((live + api + 'fn main(){outer();}').replace('fn outer()->i64{0}',
                                                                'fn outer()->i64{stop();0}'), ok=False)
+        for value in ('0.0/0.0', '(1e308*1e308)-(1e308*1e308)', '-0.0', '0.0',
+                      '1e308*1e308', '-1e308*1e308'):
+            check(f'let X={value};fn unused()->i64{{1}}fn main(){{}}', verify=True)
     assert not failures, json.dumps(failures, indent=2)
     print(f'deferred-state deterministic work: {checks} checks passed (no timings)')
 
