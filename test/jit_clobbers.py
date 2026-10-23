@@ -22,6 +22,7 @@ with tempfile.TemporaryDirectory(prefix="goose-clobber-") as directory:
                     assert (marker in c) == checks, (level, checks, marker)
                 if not checks:
                     assert "validate_register_ownership" not in c
+                    assert "claim_register" not in c and "release_register" not in c
                 elif level == "-O0":
                     assert "validate_register_ownership" in c
                 # An enabled validator may inline at Goose -O2.
