@@ -1,3 +1,2 @@
-fn main() {
-    const if 1 {} // error: bool
-}
+// error: bool
+fn main() { const if 1 {} }
