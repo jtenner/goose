@@ -68,11 +68,17 @@ enum TypeKind {
     TY_VOID,        // Typecheck-created: the "type" of statements and valueless blocks.
 };
 
-enum NativeKind { NK_OWNER, NK_VIEW, NK_ACCESS, NK_ATOMIC_U32, NK_ATOMIC_U64 };
+enum NativeKind { NK_OWNER, NK_VIEW, NK_ACCESS, NK_ATOMIC_U32, NK_ATOMIC_U64, NK_UNSAFE_PTR, NK_COUNT };
 inline const char *NativeName(int k) {
     static const char *names[] = { "SharedOwner", "SharedView", "SharedAccess",
-                                   "SharedAtomicU32", "SharedAtomicU64" };
+                                   "SharedAtomicU32", "SharedAtomicU64", "UnsafePtr" };
     return names[k];
+}
+
+inline int NativeKindForName(string_view name) {
+    for (int k = NK_OWNER; k < NK_COUNT; k++)
+        if (name == NativeName(k) || name == cat("::", NativeName(k))) return k;
+    return -1;
 }
 
 enum ArrayKind {

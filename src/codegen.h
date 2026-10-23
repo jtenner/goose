@@ -1301,6 +1301,8 @@ struct CodeGen {
     string QueueFor(TypeExpr *t);
     Loc RecvLoc(Node *n);
     string LenCast(const Loc &lv);
+    void EmitUnsafePtrType();
+    vector<string> EmitUnsafeBuiltin(Call *c);
     vector<string> EmitBuiltin(Call *c, Dst d0);
 
     // ------------------------------------------------------------------
