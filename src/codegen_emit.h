@@ -740,10 +740,33 @@ inline bool CodeGen::StaticInitX(Node *n, TypeExpr *t, string &out) {
     }
 }
 
+inline void CodeGen::FindUnusedLiteralGlobals() {
+    set<const VarDef *> used;
+    function<void(Node *)> walk = [&](Node *n) {
+        if (!n) return;
+        NodeVars(n, [&](const VarDef *v) { if (v && v->isglobal) used.insert(v); });
+        RunChildren(n, walk);
+    };
+    for (auto sp : livespecs) walk(sp->body);
+    // Initializers run unconditionally in source order, including calls
+    // whose result is unused. Their dependencies must still have storage.
+    for (auto g : ast.globals) for (auto n : g->inits) walk(n);
+    used.insert(poolglobals.begin(), poolglobals.end());
+    for (auto g : ast.globals) {
+        if (g->isvar || g->reusable || g->defs.size() != g->inits.size()) continue;
+        for (size_t i = 0; i < g->defs.size(); i++) {
+            auto n = g->inits[i];
+            auto pure = Is<IntLit>(n) || Is<FltLit>(n) || Is<BoolLit>(n) || Is<StrLit>(n) || Is<NullLit>(n);
+            if (pure && !used.count(g->defs[i])) unusedliteralglobals.insert(g->defs[i]);
+        }
+    }
+}
+
 inline void CodeGen::EmitGlobalDecls() {
     for (auto g : ast.globals) {
         for (size_t di = 0; di < g->defs.size(); di++) {
             auto d = g->defs[di];
+            if (unusedliteralglobals.count(d)) continue;
             auto name = Unique(Sanitize(g->ns, d->name));
             // Registered as they are created; see CacheableStk.
             auto reg = [&](const string &s) { gstkexprs.insert(s); };
@@ -805,6 +828,7 @@ inline void CodeGen::EmitGlobalInit() {
         PushSc(SC_STMT);
         for (size_t i = 0; i < g->defs.size(); i++) {
             auto d = g->defs[i];
+            if (unusedliteralglobals.count(d)) continue;
             if (gstatic.count(d)) continue;   // Initialized at its declaration.
             if (IsResz(d->type)) {
                 InitGlobalStack(d);
