@@ -3620,6 +3620,14 @@ inline bool Call::BceWalk(BCE &b) {
                 // and record opaque effects for non-inlined callers too.
                 b.KillByCall();
                 break;
+            case B_THREAD_SPAWN: case B_THREAD_SPAWN_CONTAINED:
+            case B_QPUT: case B_QGET: case B_QPOLL: case B_QLIMIT:
+                // An explicitly transferred integer handle can reconstruct a
+                // raw alias in another worker. Synchronization can publish its
+                // valid writes to address-exposed ordinary storage, even though
+                // safe worker values/globals retain their normal isolation.
+                b.KillByCall();
+                break;
             case B_PUSH:
                 if (recvmoved) b.GrowShrinkKill(rn, 0);
                 else b.GrowShrinkKill(rn, 1, 1);
@@ -3644,6 +3652,7 @@ inline bool Call::BceWalk(BCE &b) {
                 if (arg0) b.GrowShrinkKill(arg0, 1);
                 break;
             case B_THREAD_WAIT:
+                b.KillByCall();
                 // thread_wait(id, msg) appends the abort's message to msg.
                 if (arg0) b.GrowShrinkKill(arg0, 1);
                 break;
