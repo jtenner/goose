@@ -27,7 +27,10 @@ def main():
 
     def run(argv, error=None, output=None):
         nonlocal checks
-        result = subprocess.run([str(x) for x in argv], cwd=ROOT, env=env,
+        call_env = env
+        if Path(str(argv[0])).name == "gcc":
+            call_env = dict(env, PATH=str(Path(argv[0]).resolve().parent) + os.pathsep + env.get("PATH", ""))
+        result = subprocess.run([str(x) for x in argv], cwd=ROOT, env=call_env,
                                 capture_output=True, text=True, timeout=120)
         text = result.stdout + result.stderr
         if error:
@@ -36,6 +39,9 @@ def main():
             assert result.returncode == 0, (argv, result.returncode, text)
         if output is not None:
             assert result.stdout.strip() == output, (argv, text)
+        for diagnostic in ("ERROR: AddressSanitizer", "ERROR: LeakSanitizer",
+                           "SUMMARY: UndefinedBehaviorSanitizer", "AddressSanitizer:DEADLYSIGNAL"):
+            assert diagnostic not in text, (argv, text)
         checks += 1
         return text
 

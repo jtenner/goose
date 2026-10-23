@@ -3819,11 +3819,54 @@ Results are one scalar or flat fixed-size value, or nothing. Everything
 else (`varint`s, references inside structs, variable or resizable values
 by value, optionals) is rejected at the declaration. A parameter is as
 writable as its type says, so a read-only argument needs it declared
-`const`. C must not keep a borrowed argument beyond the call. The
+`const`. C must not keep an ordinary borrowed argument beyond the call.
+The explicit raw-pointer interop below has caller-managed lifetime
+obligations. The
 program's own C goes in a sidecar `foo.build` beside `foo.goose`
 (`c_sources = ["impl.c"];`) or comes in with `--include header.h`; the
 `math` and `os` modules are built on this interface. Spec §7.10,
 [packages.md](packages.md#3-a-program-with-c-of-its-own).
+
+### Explicitly unsafe object pointers
+
+`UnsafePtr` is an opaque native object pointer. Its operations are **not
+memory-safe**; the `unsafe_` names mark the boundary without requiring a new
+block syntax.
+
+| Builtin | Result |
+| --- | --- |
+| `unsafe_ptr_from_handle(handle: u64)` | `UnsafePtr`; zero creates null |
+| `unsafe_handle_from_ptr(pointer: UnsafePtr)` | `u64`; null becomes zero |
+| `unsafe_ptr_add(pointer: UnsafePtr, byte_offset: i64)` | `UnsafePtr` |
+| `unsafe_load<T>(pointer: UnsafePtr, big_endian: bool)` | `T` |
+| `unsafe_store<T>(pointer: UnsafePtr, value: T, big_endian: bool)` | No result |
+
+`T` is exactly `i8/i16/i32/i64/u8/u16/u32/u64`; `false` selects little endian
+and `true` big endian. Scalar copies support unaligned bytes. Null accesses
+and additions, address overflow/underflow and scalar address-range overflow
+abort in every build. The caller must guarantee valid object provenance,
+lifetime, complete object bounds, same-object arithmetic, write permission,
+effective type/aliasing, foreign object alignment and synchronization. No
+numerical check establishes those properties or retains an object.
+
+A direct extern `UnsafePtr` parameter or result has C `void *` ABI. Explicit
+raw interop can expose a live writable Goose scalar to C, with its lifetime
+then managed by the caller; raw stores and foreign calls invalidate reachable
+bounds facts, while previously evaluated operands retain their values.
+`UnsafePtr` has no integer casts, default constructor, byte serialization,
+queue form or implicit worker handoff. Safe native capabilities cannot convert
+to or from raw pointers. A numeric handle reconstructed explicitly in a worker
+requires caller-managed lifetime and synchronization.
+
+The current backend requires conventional 64-bit object pointers and checks
+`UINTPTR_MAX` and pointer sizes. GCC/Clang use a byte-aligned pointer typedef
+so packed arrays/fields, references, copies and returns preserve their ordinary
+layout and C scalar ABI. TinyCC and other frontends lacking the required
+typedef alignment support are explicitly rejected for this feature; checks
+are not suppressed. The root type name is reserved; namespaced types and
+generic parameters retain lexical priority, and `::UnsafePtr` selects the
+native type. See [native memory](native_memory.md#explicitly-unsafe-c-pointer-interoperability)
+and spec §7.10 for the complete contract.
 
 ### `extern "lib" { … }`: a shared library, bound by name
 
