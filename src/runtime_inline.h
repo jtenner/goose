@@ -1080,7 +1080,12 @@ GS_API gs_shared_cap gs_shared_atomic_region(gs_shared_cap owner, uint64_t offse
 #define GS_SHARED_SLAB_SIZE 256
 #define GS_SHARED_SLABS 4096
 #define GS_SHARED_MAX (GS_SHARED_SLAB_SIZE * GS_SHARED_SLABS)
-typedef struct gs_shared_record {
+#ifdef _MSC_VER
+#define GS_SHARED_ALIGN8 __declspec(align(8))
+#else
+#define GS_SHARED_ALIGN8 __attribute__((aligned(8)))
+#endif
+typedef struct GS_SHARED_ALIGN8 gs_shared_record {
     uint64_t generation, allocation, offset, size, identity;
     uint8_t *data;
     int64_t actor;
@@ -1256,7 +1261,8 @@ R"GSRT(static int64_t gs_uleb_read(const uint8_t *p) {
         uint8_t b = *p++;
         v |= (uint64_t)(b & 0x7f) << shift;
         if (!(b & 0x80)) return (int64_t)v;
-        shift += 7;
+)GSRT"
+R"GSRT(        shift += 7;
     }
 }
 
@@ -1264,8 +1270,7 @@ R"GSRT(static int64_t gs_uleb_read(const uint8_t *p) {
 R"GSRT(static int64_t gs_uleb_size(const uint8_t *p) {
     const uint8_t *q = p;
     while (*q & 0x80) q++;
-)GSRT"
-R"GSRT(    return (int64_t)(q - p) + 1;
+    return (int64_t)(q - p) + 1;
 }
 
 )GSRT"
