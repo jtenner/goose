@@ -1000,6 +1000,7 @@ inline bool TypeCheck::NamedResultKeepsLinks(TypeExpr *t) {
 // part of the type's identity from the first comparison on.
 inline void TypeCheck::ResolvePools() {
     for (auto t : ast.alltypes) {
+        if (t->conditional) continue;
         if (t->kind != TY_REF || t->ref->poolname.empty()) continue;
         auto g = ast.LookupGlobal(t->ref->poolname, t->ref->poolns);
         if (!g || g->defs.empty())
@@ -1018,6 +1019,7 @@ inline void TypeCheck::ResolvePools() {
 // comparison on. Copies of a type share the detail, so each resolves once.
 inline void TypeCheck::ResolveIndexTypes() {
     for (auto t : ast.alltypes) {
+        if (t->conditional) continue;
         if (t->kind != TY_INT || !t->ix || t->ix->arr) continue;
         auto g = ast.LookupGlobal(t->ix->name, t->ix->ns);
         if (!g || g->defs.empty())

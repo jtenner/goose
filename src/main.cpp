@@ -6,6 +6,7 @@
 #include "flat_map.h"
 #include "lexer.h"
 #include "ast.h"
+#include "build_definitions.h"
 #include "dump.h"
 #include "clone.h"
 #include "parser.h"
@@ -490,8 +491,10 @@ void ParseProgram(Ast &ast, const string &rootpath, const vector<string> &stdlib
 // that gives back the same text: what `goose --dump` of the dump written to a
 // file would print. `path` is where the dump's diagnostics say they are.
 void CheckRoundtrip(const string &dumped, const string &path,
-                    const vector<string> &stdlibdirs, const string &exedir) {
+                    const vector<string> &stdlibdirs, const string &exedir,
+                    const vector<string> &builddefines) {
     Ast again;
+    AddBuildDefinitions(again, builddefines);
     try {
         ParseProgram(again, path, stdlibdirs, exedir,
                      [&](const string &p) -> const string * { return p == path ? &dumped : nullptr; });
@@ -654,6 +657,7 @@ R"(  -q, --quiet           Print nothing on success but what the program prints:
   --offline             Fetch nothing: a package that is not fetched is an
                         error at its import, which goose fetch resolves.
   -D NAME[=VALUE]       Define a C macro in the generated program (or -DNAME).
+  --define NAME=VALUE   Define a typed Goose constant build::NAME (repeatable).
   --stdlib dir          The standard library's directory (or GOOSE_STDLIB);
                         found from where goose is by default.
   --update              Fetch packages at a tag or branch again (a commit is
@@ -694,6 +698,7 @@ Commands:
   help       Print this (or --help, -h); with a command, that command's help.
 
 Common options:
+  --define NAME=VALUE  Typed compile-time constant in namespace build.
   -O0, -O1, -O2   Inlining level (default -O2).
   --debug         Overflow, range and tag checks that name the source line
                   they fail on.
@@ -1340,7 +1345,7 @@ int Main(int argc, char **argv) {
     // The inlining at its highest. The C compiler optimizes whatever the
     // level, unless --debug (Builder::CFlags).
     auto optlevel = 2;
-    vector<string> cdefines, progargs, includenames, files;
+    vector<string> cdefines, builddefines, progargs, includenames, files;
     for (int i = firstarg; i < argc; i++) {
         string arg = argv[i];
         // Everything past `--` belongs to the program being run, not here.
@@ -1349,6 +1354,13 @@ int Main(int argc, char **argv) {
             break;
         }
         if (arg == "--dump") dump = true;
+        else if (arg == "--define") {
+            if (i + 1 == argc) {
+                fprintf(stderr, "--define requires NAME=VALUE\n");
+                return 1;
+            }
+            builddefines.push_back(argv[++i]);
+        }
         else if (arg == "--tokens") tokens = true;
         else if (arg == "--parse") parseonly = true;
         else if (arg == "--roundtrip") roundtrip = true;
@@ -1565,6 +1577,7 @@ int Main(int argc, char **argv) {
         }
         astp = make_unique<Ast>();
         auto &ast = *astp;
+        AddBuildDefinitions(ast, builddefines);
         if (jsondiag) ast.sink = [&](const Diagnostic &d) { found.push_back(d); };
         auto stdlibdirs = StdlibDirs(stdlibdir, exe);
         ParseProgram(ast, filename, stdlibdirs, DirOf(exe));
@@ -1606,7 +1619,7 @@ int Main(int argc, char **argv) {
         // it would without --roundtrip.
         if (roundtrip) {
             CheckRoundtrip(dumped, dumpfile.empty() ? cat(filename, ".dump") : dumpfile,
-                           stdlibdirs, DirOf(exe));
+                           stdlibdirs, DirOf(exe), builddefines);
             if (!quiet) fprintf(msgs, "roundtrip ok: %d bytes of dump\n", (int)dumped.size());
         }
         if (parseonly) return 0;
@@ -1757,7 +1770,7 @@ int Main(int argc, char **argv) {
         }
         includes = includenames;
         if (verb == "build") {
-            builddir = ProgramBuildDir(file);
+            builddir = ProgramBuildDir(file, builddefines);
             std::error_code ec;
             filesystem::create_directories(filesystem::path(builddir), ec);
             if (ec) {
@@ -1776,6 +1789,12 @@ int Main(int argc, char **argv) {
         nativepkgs.clear();
         found.clear();
         auto attempt = [&]() -> int {
+            // Hold through writing C and linking. Even a directory-key collision
+            // cannot let another configuration replace this build's input.
+            optional<FileLock> programlock;
+            if (verb == "build")
+                programlock.emplace(cat(builddir, "/program.lock"),
+                                    "waiting for another goose building this program");
             // The compile has a thread of its own. The program a JIT run
             // starts runs back on this one, the main thread, which a window
             // on macOS has to be made on, and whose stack the link reserves

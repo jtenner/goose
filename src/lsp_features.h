@@ -440,6 +440,15 @@ inline HoverText HoverIdent(const Located &loc, const Occurrence &occ) {
     auto &an = *loc.an;
     auto &ast = *an.ast;
     auto id = Is<Ident>(occ.node);
+    if (auto value = ast.LookupBuildDefinition(id->name, id->ns)) {
+        auto type = Is<BoolLit>(value) ? string("bool") : Is<StrLit>(value) ? string("const u8[:]")
+                  : TypeText(Is<IntLit>(value)->fixedtype);
+        string literal;
+        value->Dump(literal, 0);
+        h.header = cat("const ", id->name, ": ", type, " = ", literal);
+        h.doc = "Compiler-provided --define value. Read-only; no source declaration.";
+        return h;
+    }
     if (auto v = PatternVariantOf(an, occ)) {
         h.header = VariantHeader(EnumOfVariant(ast, v), v);
         h.doc = DocText(v->doc);
@@ -983,6 +992,10 @@ inline int SemanticTokenOf(const Located &loc, const Occurrence &occ, int &modif
         case Occurrence::IDENT: {
             auto id = Is<Ident>(occ.node);
             if (PatternVariantOf(an, occ)) return ST_ENUMMEMBER;
+            if (ast.LookupBuildDefinition(id->name, id->ns)) {
+                modifiers = SM_READONLY | SM_DEFAULTLIBRARY;
+                return ST_VARIABLE;
+            }
             if (auto ci = ResolvedIdent(an, occ)) {
                 if (ci->fnref) return ST_FUNCTION;
                 modifiers = readonly(ci->vdef->isvar);
@@ -1837,6 +1850,12 @@ inline void ScopeCompletions(const Located &loc, size_t offset, Completions &out
     auto filens = enclosing.empty() ? NamespaceOfFile(ast, f.fileidx) : enclosing[0]->ns;
     for (auto &[nsname, ns] : ast.namespaces)
         NamespaceCompletions(nsname, ns, !nsname.empty() && nsname != filens, out);
+    if (!ast.builddefinitions.empty()) out.Add("build", CK_MODULE, 1, "compiler definitions");
+    for (auto &[name, value] : ast.builddefinitions) {
+        string literal;
+        value->Dump(literal, 0);
+        out.Add(cat("build::", name), CK_CONSTANT, 1, cat("compiler constant = ", literal));
+    }
     for (auto &b : builtindefs)
         if (!(b.flags & BF_PROPERTY)) out.Add(b.name, CK_FUNCTION, 2, "builtin");
     for (int t = T_IMPORT; t <= T_TF64; t++) out.Add(TName((TType)t), CK_KEYWORD, 3);
@@ -1921,6 +1940,12 @@ inline bool Completion(Workspace &ws, const Json &params, JsonOut &j) {
         auto nsstart = nsend;
         while (nsstart > 0 && IsIdentCont(text[nsstart - 1])) nsstart--;
         auto nsname = text.substr(nsstart, nsend - nsstart);
+        if (nsname == "build")
+            for (auto &[name, value] : loc.an->ast->builddefinitions) {
+                string literal;
+                value->Dump(literal, 0);
+                out.Add(name, CK_CONSTANT, 1, cat("compiler constant = ", literal));
+            }
         if (auto ns = loc.an->ast->FindNS(nsname)) NamespaceCompletions(nsname, *ns, false, out);
     } else {
         ScopeCompletions(loc, offset, out);
