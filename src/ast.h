@@ -2528,6 +2528,10 @@ struct Ast {
     // Products of deferred standalone transactions. Kept alive for pointers
     // in discarded checked trees, absent from every usable specialization cache.
     vector<FnSpec *> deferredspecs;
+    vector<StructInst *> deferredstructinsts;
+    vector<EnumInst *> deferredenuminsts;
+    vector<VarDef *> deferredvardefs;
+    vector<TypeExpr *> deferredtypes;
 
     vector<Node *> topdecls;                        // In source/import order.
     vector<VarDecl *> globals;                      // Initialization order.
@@ -2573,6 +2577,7 @@ struct Ast {
     ~Ast() {
         for (auto n : allnodes) delete n;
         for (auto t : alltypes) delete t;
+        for (auto t : deferredtypes) delete t;
         for (auto d : typedetails) delete d;
         for (auto f : functions) delete f;
         for (auto s : structs) delete s;
@@ -2580,12 +2585,15 @@ struct Ast {
         for (auto e : enums) delete e;
         for (auto a : aliases) delete a;
         for (auto v : vardefs) delete v;
+        for (auto v : deferredvardefs) delete v;
         for (auto i : structinsts) delete i;
         for (auto i : enuminsts) delete i;
         for (auto sp : fnspecs) delete sp;
         for (auto sp : fvenvs) delete sp;
         for (auto sp : exemplarspecs) delete sp;
         for (auto sp : deferredspecs) delete sp;
+        for (auto i : deferredstructinsts) delete i;
+        for (auto i : deferredenuminsts) delete i;
     }
 
     TypeExpr *NewType(TypeKind kind, Line line) {

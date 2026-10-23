@@ -2842,15 +2842,25 @@ struct TypeCheck {
             vector<StoreEvent> stores, made;
             map<VarDef *, vector<ClassUse>> classes;
             unordered_map<VarDef *, ThreadedClass> threaded;
-            vector<pair<VarDef *, EnvRead>> variables;
+            // EnvRead models call-site flow, not a transaction snapshot: it
+            // deliberately omits persistent proofs, reference/use sites and
+            // their metadata. Restore the complete preexisting record, while
+            // retaining its identity for cached bodies and type references.
+            vector<pair<VarDef *, VarDef>> variables;
+            vector<pair<TypeArray *, TypeArray>> arrays;
+            map<TypeExpr *, VarDef *> pending;
             vector<NamedResultUse> namedresults;
-            size_t literals, shrinks, grows, casts;
+            size_t literals, shrinks, grows, casts, types;
             DeferredState(TypeCheck &t)
                 : stores(t.storeevents), made(t.madestores), classes(t.classuses),
-                  threaded(t.threadedclasses), namedresults(t.namedresultuses),
+                  threaded(t.threadedclasses), pending(t.pendingpools), namedresults(t.namedresultuses),
                   literals(t.litchecks.size()), shrinks(t.globalshrinks.size()),
-                  grows(t.growconflicts.size()), casts(t.castverdicts.size()) {
-                for (auto v : t.ast.vardefs) variables.push_back({ v, t.EnvReadOf(v) });
+                  grows(t.growconflicts.size()), casts(t.castverdicts.size()), types(t.ast.alltypes.size()) {
+                for (auto v : t.ast.vardefs) variables.push_back({ v, *v });
+                set<TypeArray *> seen;
+                for (auto type : t.ast.alltypes)
+                    if (type->kind == TY_ARRAY && seen.insert(type->arr).second)
+                        arrays.push_back({ type->arr, *type->arr });
             }
         };
         unique_ptr<DeferredState> deferred;
@@ -2885,6 +2895,41 @@ struct TypeCheck {
             tc.ast.deferredspecs.insert(tc.ast.deferredspecs.end(),
                                        tc.ast.fnspecs.begin() + fnspecs, tc.ast.fnspecs.end());
             tc.ast.fnspecs.resize(fnspecs);
+            // Layout/type caches can depend on proofs recorded in this
+            // transaction too. Their next real use must rebuild those proofs.
+            set<StructInst *> structs(tc.ast.structinsts.begin() + structinsts,
+                                      tc.ast.structinsts.end());
+            set<EnumInst *> enums(tc.ast.enuminsts.begin() + enuminsts, tc.ast.enuminsts.end());
+            for (auto st : tc.ast.structs)
+                erase_if(st->insts, [&](StructInst *i) { return structs.count(i); });
+            for (auto en : tc.ast.enums)
+                erase_if(en->insts, [&](EnumInst *i) { return enums.count(i); });
+            for (auto type : tc.ast.alltypes) {
+                if (type->kind == TY_STRUCT && structs.count(type->struc->inst)) type->struc->inst = nullptr;
+                if (type->kind == TY_ENUM && enums.count(type->enu->inst)) type->enu->inst = nullptr;
+            }
+            tc.ast.deferredstructinsts.insert(tc.ast.deferredstructinsts.end(),
+                                            tc.ast.structinsts.begin() + structinsts, tc.ast.structinsts.end());
+            tc.ast.deferredenuminsts.insert(tc.ast.deferredenuminsts.end(),
+                                          tc.ast.enuminsts.begin() + enuminsts, tc.ast.enuminsts.end());
+            tc.ast.structinsts.resize(structinsts);
+            tc.ast.enuminsts.resize(enuminsts);
+            // Whole-AST passes also enumerate variables and types directly.
+            // Their usable registries must not expose quarantined products.
+            tc.ast.deferredvardefs.insert(tc.ast.deferredvardefs.end(),
+                                         tc.ast.vardefs.begin() + deferred->variables.size(), tc.ast.vardefs.end());
+            tc.ast.vardefs.resize(deferred->variables.size());
+            tc.ast.deferredtypes.insert(tc.ast.deferredtypes.end(),
+                                       tc.ast.alltypes.begin() + deferred->types, tc.ast.alltypes.end());
+            tc.ast.alltypes.resize(deferred->types);
+            // Array details are shared by aliases and qualifications. Restore
+            // inferred elements and evaluated extents along with the VarDef.
+            for (auto &[array, saved] : deferred->arrays) *array = std::move(saved);
+            tc.pendingpools = std::move(deferred->pending);
+            tc.stabletypes.known.clear();
+            tc.arrayelements.clear();
+            tc.cancontain.clear();
+            tc.reachesthrough.clear();
             for (auto &r : deferred->reused) {
                 r.spec->roots = std::move(r.roots);
                 r.spec->views = std::move(r.views);
@@ -2900,15 +2945,7 @@ struct TypeCheck {
             tc.globalshrinks.resize(deferred->shrinks);
             tc.growconflicts.resize(deferred->grows);
             tc.castverdicts.resize(deferred->casts);
-            for (auto &[v, r] : deferred->variables) {
-                v->assigned = r.assigned;
-                v->maybeassigned = r.maybeassigned;
-                v->refrootknown = r.refrootknown;
-                v->ref = r.ref;
-                v->contents = r.contents;
-                v->contentbyteview = r.contentbyteview;
-                v->slotref = r.slotref;
-            }
+            for (auto &[v, saved] : deferred->variables) *v = std::move(saved);
         }
         void Restore() {
             tc.frames.resize(frames);
