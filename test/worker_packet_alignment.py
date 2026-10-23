@@ -10,7 +10,7 @@ def check_worker_packet_alignment(exe, cc, base, *, runtime, extra=()):
     # Re-enable alignment after the ordinary sanitizer profile's flags.
     # Both the generated program and the separate runtime receive these flags.
     flags = [*extra, "-fsanitize=alignment", "-fno-sanitize-recover=all"]
-    for kind in ("arguments", "globals", "alias", "fixed"):
+    for kind in ("arguments", "globals", "alias", "fixed", "counts"):
         source = tc.REPO_ROOT / "test" / "threads" / f"worker_packet_{kind}.goose"
         for goose_level in (0, 2):
             cfile = base / f"{kind}-g{goose_level}.c"
