@@ -32,6 +32,13 @@ selected bodies. Types in the excluded arm, including qualified names, alias
 uses and enum variants, produce no semantic diagnostics. Syntax errors in
 those arms still fail compilation. Parse-level dumps preserve both arms.
 
+An unused plain helper may need an enclosing caller for a selected
+`return ... from`. Its standalone check then defers without reporting an error.
+The whole speculative specialization transaction is quarantined, including
+completed recursive members, so later real callers check fresh bodies in their
+own context. An exported entry must supply a valid context itself; its error
+is reported independently of errors in other functions.
+
 ## Conditional fields
 
 A struct field list may contain conditional blocks, nested to any supported
