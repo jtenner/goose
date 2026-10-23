@@ -756,6 +756,7 @@ inline void CodeGen::EmitHoistedCheck(Index *ta, Index *ea, const string &c) {
 inline CodeGen::Loc CodeGen::GenLoc(Node *n) {
     if (auto it = fillvalues.find(n); it != fillvalues.end()) return it->second;
     if (auto id = Is<Ident>(n)) {
+        if (id->buildvalue) return GenLoc(id->buildvalue);
         assert(id->vdef);
         return VarLoc(id->vdef);
     }

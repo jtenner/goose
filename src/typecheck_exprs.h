@@ -111,7 +111,9 @@ inline TypeCheck::LVal TypeCheck::CheckLValue(Node *n) {
 // which ends with the comparison, so it may view any temporary.
 inline TypeCheck::LVal TypeCheck::LValueBase(Node *n, bool cmpview) {
     DestScope ds(*this, Dest {});
-    if (Is<Ident>(n) || Is<Dot>(n) || Is<Index>(n)) return CheckLValue(n);
+    auto id = Is<Ident>(n);
+    auto build = id && ast.LookupBuildDefinition(id->name, id->ns);
+    if ((id && !build) || Is<Dot>(n) || Is<Index>(n)) return CheckLValue(n);
     auto v = CheckV(n, nullptr);
     NoUntypedEmptyArray(v, n, "an index, slice or field of it");
     if (!cmpview) NoTemporaryLiteral(n, v.type);
@@ -2755,6 +2757,13 @@ inline bool TypeCheck::ConstIntValue(Node *n, Val &v, bool &literal,
 // type that gives the global decides (RelyOnExtent).
 inline bool TypeCheck::ConstExtent(Ident *id, bool cap, int64_t &extent,
                                    set<VarDecl *> &visiting, ConstUse *use) {
+    if (auto value = ast.LookupBuildDefinition(id->name, id->ns)) {
+        if (auto text = Is<StrLit>(value); text && !cap) {
+            extent = (int64_t)text->val.size();
+            return true;
+        }
+        return false;
+    }
     auto g = ast.LookupGlobal(id->name, id->ns);
     if (!g || g->byref || g->reusable || g->names.size() != 1 || g->inits.size() > 1)
         return false;
