@@ -81,6 +81,25 @@ version their format or validate a layout fingerprint, including total size,
 field order and field offsets, before reading it. The acceptance tests exercise
 such fingerprints using `bytes_of` and alternate configurations repeatedly.
 
+## Conditional constructor initializers
+
+Constructor lists may contain `const if` fragments that select named or
+positional entries. Selection and `const for` expansion happen before the
+ordinary constructor checks, against the effective field list. Each resulting
+list must use one form consistently. Selected duplicate names, unknown fields,
+missing required fields and extra positional entries remain errors; excluded
+entries and their expressions have no semantic effect. Nested and empty
+fragments are supported. Field defaults and a whole-constructor trailing `..`
+work as usual; `..` cannot appear inside an initializer fragment.
+
+```
+let record = Record<u32> {
+    a: 1,
+    const if build::DEBUG { diagnostics: 2, } else {},
+    z: 3,
+};
+```
+
 Run `python test/const_if.py path/to/goose` for both optimization levels,
 configuration switching, excluded-code checks in emitted C, layouts,
 constructors and rejection cases. `--core-only` isolates function branches;
