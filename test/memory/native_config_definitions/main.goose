@@ -36,6 +36,13 @@ fn check_atomic<T>(token: T) {
     }
     return;
 }
+// An odd prefix plus a native capability leaves copied global-image metadata
+// unaligned. A named CLI string alias must remain valid in this worker too.
+thread_fn configured_publish(prefix: u8, token: SharedAtomicU32) {
+    assert(prefix == 7);
+    const if build::USE_ALIAS { atomic_store(token, 42, STORE_CHAIN); }
+    else { atomic_store(token, 42, build::STORE_ORDER); }
+}
 fn main() {
     let argv = args(); assert(argv.len == 2);
     let owner, allocated = shared_alloc(build::ALLOC_BYTES); assert(allocated);
@@ -54,6 +61,8 @@ fn main() {
     shared_release(a);
     check_atomic(token32);
     check_atomic(token64);
+    assert(thread_wait(thread_spawn_contained(configured_publish, 7, token32)));
+    assert(atomic_load(token32, build::LOAD_ORDER) == 42);
     var contents: u8[4096] = [0; 4096];
     assert(write_file(argv[1], contents));
     let mapped, mapped_ok = shared_map_readonly(argv[1], 4096); assert(mapped_ok);
