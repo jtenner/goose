@@ -348,6 +348,10 @@ struct TypeCheck {
     void CheckStmts(Block *b);
     size_t expansionsize = 0;
     Node *ExpansionConstant(Node *n, set<VarDecl *> &visiting);
+    struct ConstUse;
+    bool ConstIfCondition(Node *condition);
+    bool ConstBool(Node *n, set<VarDecl *> &visiting, ConstUse *use = nullptr);
+    void SelectConstIf(IfExpr *x);
     void ExpandConstFor(ConstFor *cf, const function<void(ExpansionClone &)> &emit);
     Block *ExpandStatements(ConstFor *cf);
     void ExpandInitializers(vector<FieldInit> &inits);
@@ -2960,7 +2964,8 @@ struct TypeCheck {
             if (en->generics.empty()) GetEnumInst(ast.EnumOf(en, {}, true, en->line));
         // And the sizes in every function's signature, for its parameters' and
         // type parameters' names, and in every generic type's fields.
-        for (auto sf : ast.functions) SignatureNames(sf->params, sf->rets, sf->generics);
+        for (auto sf : ast.functions)
+            if (!sf->conditional) SignatureNames(sf->params, sf->rets, sf->generics);
         for (auto st : ast.structs)
             for (auto &fld : st->fields)
                 if (fld.type) TypeParamSizes(fld.type, st->generics);
@@ -2989,6 +2994,7 @@ struct TypeCheck {
         // Concrete ones only; a pointee still spelled with a type parameter
         // gets here again once a specialization substitutes it.
         for (auto t : ast.alltypes) {
+            if (t->conditional) continue;
             if (t->kind == TY_REF && t->ref->pool && !HasGenerics(t->ref->sub)) ValidatePool(t);
             if (IsIndexT(t)) ValidateIndexType(t);
         }
