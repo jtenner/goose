@@ -1467,8 +1467,8 @@ struct CodeGen {
             if (t->kind == TY_REF && t->ref->pool) poolglobals.insert(t->ref->pool);
         ComputeRelRootMax();
         CollectSpecs();
-        if (library) EmitExportTypes();
         FindUnusedLiteralGlobals();
+        if (library) EmitExportTypes();
         for (auto sp : livespecs)
             for (auto fv : sinfo[sp].freevars) capturedvars.insert(fv);
         // Zero means "no long-distance return in flight", which is also the

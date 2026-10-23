@@ -2054,6 +2054,28 @@ def main():
             r.show_task(clang_mul_add)
             r.show_task(clang_vec)
 
+    def builder_return_alignment():
+        from builder_return_alignment import check_builder_return_alignment
+        try:
+            check_builder_return_alignment(exe, cc, gendir, runtime=r.runtime, extra=extra)
+            r.ok("builder return channels: alignment enabled, Goose/C O0/O2")
+        except RuntimeError as e:
+            r.fail("builder return alignment", str(e))
+    if cc and cc.style == "gcc":
+        r.section("builder return alignment")
+        r.show_task(builder_return_alignment)
+
+    def worker_packet_alignment():
+        from worker_packet_alignment import check_worker_packet_alignment
+        try:
+            check_worker_packet_alignment(exe, cc, gendir, runtime=r.runtime, extra=extra)
+            r.ok("worker packets: alignment enabled, Goose/C O0/O2, release/debug")
+        except RuntimeError as e:
+            r.fail("worker packet alignment", str(e))
+    if cc and cc.style == "gcc":
+        r.section("worker packet alignment")
+        r.show_task(worker_packet_alignment)
+
     def library_headers():
         from library_headers import check_library_headers
         try:
@@ -2320,6 +2342,21 @@ def main():
             r.fail("compiler discovery", "".join(trace for _, trace in result.errors +
                                                  result.failures) or "no tests ran")
     r.show_task(compiler_discovery)
+
+    # These programs require the native shared-memory backend, irrespective
+    # of whether this compiler also contains TinyCC. The normal suite uses
+    # 64 Wasm jobs; the explicit script default remains the 3000-job stress.
+    def native_example_registration():
+        code, out, err = tc.run_capture([sys.executable, HERE / "native_examples_runner.py"])
+        if code:
+            r.fail("native example registration", out + err)
+        else:
+            r.ok(out.strip())
+    r.section("native example acceptance")
+    r.show_task(native_example_registration)
+    from native_examples import register_acceptance
+    if not register_acceptance(r, exe, cc, args.profile, capture=tc.run_capture):
+        r.show_later(r.say, "skip native example execution (requires Linux native baseline with GCC/Clang)")
 
     def cli_paths():
         from cli_paths import check_cli_paths
