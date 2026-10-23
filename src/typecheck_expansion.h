@@ -86,6 +86,9 @@ inline bool TypeCheck::IsValuelessTail(const Node *n) {
 // is, as a literal node: a typed or adaptable integer, a float, a bool or a
 // string (const_for.md §3.3, §11.2).
 inline Node *TypeCheck::ExpansionConstant(Node *n, set<VarDecl *> &visiting, const char *what) {
+    if (auto id = Is<Ident>(n))
+        if (auto value = ast.LookupBuildDefinition(id->name, id->ns))
+            return value->Clone(ast);
     // Checking a named global may have inserted its ordinary integer-to-
     // float conversion. This is not permission for a source-level cast.
     if (auto a = Is<AsCast>(n); a && a->implicit) {

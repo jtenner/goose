@@ -61,6 +61,7 @@ inline string StrLit::CgX(CodeGen &cg) {
 }
 
 inline string Ident::CgX(CodeGen &cg) {
+    if (buildvalue) return cg.GenX(buildvalue);
     assert(vdef);   // Named-function values never reach runtime.
     auto x = cg.LoadLoc(cg.VarLoc(vdef), exprtype, line);
     // A literal parameter (§7.7) is passed at its nominal type and read at
