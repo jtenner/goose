@@ -445,6 +445,12 @@ request, or stops responding. It prints the slowest files and requests.
 `--quick` checks a handful of files in a second or two. The baseline is in
 `docs/design/language_server.md` §12.
 
+`const_if_diagnostics.py`, called by `diagnostics_json.py`, checks exact file,
+line, column, range and source context for invalid build-definition conditions
+at O0/O2: functions, fields, constructors and nested conditions, aliases and
+imports, repeated uses of one definition, authored literals and valid typed
+controls. Its standalone entry point retains exact subprocess results.
+
 ## Fixture audit
 
 A fixture is load-bearing when some regression would fail it and nothing
