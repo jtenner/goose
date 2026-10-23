@@ -251,6 +251,8 @@ inline void ResolveTypeNames(Ast &ast, const vector<TypeExpr *> *activated = nul
         return tie(a.where.fileidx, a.where.line, a.where.col) <
                tie(b.where.fileidx, b.where.line, b.where.col);
     });
+    if (activated && !errors.empty())
+        throw CompileError { errors.front().message, std::move(errors) };
     for (auto &d : errors) ast.Report(std::move(d));
 }
 
@@ -259,9 +261,11 @@ inline void ResolveTypeNames(Ast &ast, const vector<TypeExpr *> *activated = nul
 // parse-time alltypes range) preserves each expansion's substitutions.
 inline void ResolveConditionalBody(Ast &ast, Node *body, TypeExpr *root = nullptr) {
     vector<TypeExpr *> types;
+    vector<TypeExpr> originals;
     set<TypeExpr *> seen;
     function<void(TypeExpr *)> type = [&](TypeExpr *t) {
         if (!t || !seen.insert(t).second) return;
+        originals.push_back(*t);
         t->conditional = false;
         types.push_back(t);
         auto each = [&](const vector<TypeExpr *> &ts) { for (auto a : ts) type(a); };
@@ -299,7 +303,14 @@ inline void ResolveConditionalBody(Ast &ast, Node *body, TypeExpr *root = nullpt
     };
     type(root);
     walk(body);
-    ResolveTypeNames(ast, &types);
+    try {
+        ResolveTypeNames(ast, &types);
+    } catch (CompileError &) {
+        // Speculative checks must not poison shared templates with unknown
+        // placeholder types: another specialization may select this arm.
+        for (size_t i = 0; i < types.size(); i++) *types[i] = originals[i];
+        throw;
+    }
 }
 
 }  // namespace goose

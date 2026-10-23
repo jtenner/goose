@@ -9,7 +9,7 @@ escape it, and returns, breaks and continues retain their enclosing targets.
 A value-producing selected branch may be used as an expression.
 
 Conditions must be bool constants. Supported forms are bool literals, immutable
-global named constants, native `build::NAME` definitions, `!`, `&&`, `||`, bool
+global named constants, native `build::NAME` definitions, `!`, `&&`, `||`, bool/string
 equality, and comparisons of supported integer constant expressions. Integer
 arithmetic uses the same evaluator, widths, overflow checks and diagnostics as
 array extents. This is not a general compile-time interpreter: calls, runtime

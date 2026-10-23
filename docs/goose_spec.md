@@ -2316,7 +2316,7 @@ a bool constant condition, parses both arms, and name-resolves, checks and
 emits only the selected arm. Omitted `else` selects an empty block. Selected
 bodies have ordinary lexical scope and control-flow targets. Conditions admit
 bool literals, immutable global constants, native build definitions, `!`, `&&`,
-`||`, bool equality and comparisons using the integer constant evaluator;
+`||`, bool/string equality and comparisons using the integer constant evaluator;
 locals, parameters and runtime calls are rejected. Both logical operands must
 be supported constants. Generic functions and const-for entries select after
 specialization/substitution. Excluded types and expressions need only parse.
