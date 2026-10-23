@@ -352,7 +352,9 @@ inline string CodeGen::SigParams(FnSpec *sp, bool decls, bool er) {
             // Elements go to the destination stack; the count comes back
             // through the length out-parameter (C.3's element-run form —
             // always for resizables, on demand for variable arrays), or
-            // the whole frame object through its out-parameter.
+            // the whole frame object through its out-parameter. Scalar
+            // channels point to aligned int64_t locals, never packed
+            // header members (LengthResult at the call boundary).
             add(cat("gs_stack *gs_dst", i));
             if (IsResz(sp->rets[i]) && IsFrameObj(sp->rets[i]))
                 add(cat(CT(sp->rets[i]), " *gs_rl", i));

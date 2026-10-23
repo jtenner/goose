@@ -143,6 +143,12 @@ the current C backend deliberately performs unaligned packed accesses. The C++
 compiler retains alignment checking. ASan observes C allocations, but does not
 know logical object boundaries inside Goose's custom virtual-memory arenas.
 
+The focused `builder_return_alignment` check enables alignment explicitly in
+both profiles on GCC/Clang-style toolchains, at Goose and native C O0/O2.
+Its byte-only payloads isolate hidden result-length channels from raw packed
+scalar accesses: a byte global before a builder forces an unaligned header
+member, which must receive the result through an aligned scalar temporary.
+
 Generated C is built as `goose -o` writes it, against the separate runtime
 (`docs/implementation.md` §7): `GooseRuntime` (`scripts/toolchain.py`) has
 the compiler under test write the runtime's C (`--emit-runtime`) once per run,
@@ -306,6 +312,12 @@ The runner checks more than exit status and runtime output:
 | `lsp_sweep.py` | Not a section of the runner but a script beside it: a robustness and latency sweep of `goose lsp` over the repository's Goose programs (every sample, the goose_in_goose bootstrap, every stdlib module, every positive fixture, every `errors/` and `errors_tc/` fixture), each opened as a root of its own: its diagnostics awaited, then hover, definition, completion and signature help asked at every identifier start and after every `.`, with the incoming and outgoing calls of a function named there, semantic tokens, symbols, folding, inlay hints and code lenses once, a burst of ten random one-character edits with their diagnostics awaited, and the text put back, whose diagnostics must be the first ones again. It fails on a server exit, an error reply, a request over 2 s or a server that stops answering, and prints the slowest files and requests; `--quick` sweeps a handful of files in a second or two. The baseline is in `docs/design/language_server.md` §12. |
 | `packages_git.py` | Besides the fetches, `goose check --offline` rejects a package not in the cache at its import, naming `goose fetch`, without fetching, and accepts it once fetched. |
 | `diagnostics_json.py` | `goose check --diagnostics json` prints an array with one object per error or warning, whose `text` is what the text mode printed on stderr, with the progress lines on stderr instead of stdout. A lexer error is at its caret's column, one byte wide, and the errors after a `"""` string the lexer rejected are at their own lines; a typecheck error ranges over the node it is at, with its instantiation chain's entries at the calls they name; a warning has a range too; an import error covers the whole import; a `checkfree` function's kept checks are several errors at once; an error with no place in the program is its text alone. |
+
+`const_if_diagnostics.py`, called by `diagnostics_json.py`, checks exact file,
+line, column, range and source context for invalid build-definition conditions
+at O0/O2: functions, fields, constructors and nested conditions, aliases and
+imports, repeated uses of one definition, authored literals and valid typed
+controls. Its standalone entry point retains exact subprocess results.
 
 ## Fixture audit
 

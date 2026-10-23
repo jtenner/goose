@@ -101,6 +101,8 @@ struct CodeGen {
     // stacks of the resizable ones. Accessed through GS_GL, main's static
     // instance directly or a worker's through the thread-local gs_gl.
     string gblock;
+    set<const VarDef *> unusedliteralglobals;
+    void FindUnusedLiteralGlobals();
     // The globals a thread program uses, in declaration order: what a spawn
     // copies into the worker's instance (EmitThreadSpawn, EnsureThreadThunk).
     unordered_map<FnSpec *, vector<VarDef *>> threadglobals;
@@ -805,6 +807,9 @@ struct CodeGen {
         bool viaref = false;
         string stk, lenlv, fl, flstk;
         string hdr;            // The resizable's own header/frame-object lvalue, when it has one.
+        // A bytes subvalue can share its owner's count without having its
+        // own header (a variable-prefix record's resizable tail, for example).
+        string lenhdr;         // The packed header owning that inherited lenlv.
         // A loop-hoisted view of the array behind this reference (see `views`):
         // set on the reference by VarLoc, and, for the length, carried across
         // the deref to the pointee, where ArrayView reads it instead of memory.
@@ -1274,6 +1279,7 @@ struct CodeGen {
     vector<Node *> CallArgNodes(Call *c, size_t nparams);
     void EmitArg(FnSpec *sp, size_t i, Node *node, vector<string> &args, bool later);
     void EmitFvArg(const VarDef *fv, vector<string> &args);
+    string LengthResult(const string &lenlv, vector<pair<string, string>> &copies);
     vector<string> EmitSpecCall(Call *c, FnSpec *sp, Dst d0, vector<Dst> *alldst);
     bool NeedsReprefix(const Dst &d, TypeExpr *rt);
     void EmitReprefix(FnSpec *sp, const Dst &dd, const string &base, const string &cnt);
@@ -1442,6 +1448,7 @@ struct CodeGen {
             if (t->kind == TY_REF && t->ref->pool) poolglobals.insert(t->ref->pool);
         ComputeRelRootMax();
         CollectSpecs();
+        FindUnusedLiteralGlobals();
         for (auto sp : livespecs)
             for (auto fv : sinfo[sp].freevars) capturedvars.insert(fv);
         // Zero means "no long-distance return in flight", which is also the

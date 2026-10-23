@@ -17,6 +17,7 @@ add_executable(goose
     src/progress.cpp
     src/progress.h
     src/buildfile.h
+    src/build_definitions.h
     src/toolchain.h
     src/build.h
     src/packages.h

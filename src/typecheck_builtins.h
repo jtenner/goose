@@ -903,8 +903,9 @@ inline FnSpec *TypeCheck::UserFormatIn(Call *c, TypeExpr *t, string_view ns,
 }
 
 // The literal a compile-time string argument stands for: a string literal,
-// or a let or const global initialized with one, named directly or through
-// other such globals -- a named constant, as an array size may use (§11.1).
+// a native build definition, or a let or const global initialized with one,
+// named directly or through other such globals -- a named constant, as an
+// array size may use (§11.1).
 // Null for anything else, a local, type parameter or nested function of the
 // name included, which hides the global. Unlike an integer one
 // (RelyOnConstant), such a global keeps its initializer's value without a
@@ -914,9 +915,19 @@ inline StrLit *TypeCheck::ConstStrLit(Node *n) {
     if (auto s = Is<StrLit>(n)) return s;
     auto id = Is<Ident>(n);
     if (!id) return nullptr;
+    auto native = [&](Ident *name) -> StrLit * {
+        auto value = ast.LookupBuildDefinition(name->name, name->ns);
+        auto lit = Is<StrLit>(value);
+        // A CLI value has no source declaration. Give each use an independent
+        // location, including through aliases in another source file. Never
+        // map GLSL lines onto source lines that do not contain the CLI text.
+        return lit ? ast.New<StrLit>(n->line, lit->val, false) : nullptr;
+    };
+    if (auto lit = native(id)) return lit;
     if (auto vd = LookupVar(id->name, id->ns); !vd || !vd->isglobal) return nullptr;
     set<VarDecl *> visiting;
     for (;;) {
+        if (auto lit = native(id)) return lit;
         auto g = ast.LookupGlobal(id->name, id->ns);
         if (!g || g->isvar || g->inits.size() != 1 || !visiting.insert(g).second) return nullptr;
         if (auto s = Is<StrLit>(g->inits[0])) return s;
