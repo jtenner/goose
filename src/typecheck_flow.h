@@ -1580,8 +1580,9 @@ inline Val TypeCheck::CheckMatch(MatchExpr *m, TypeExpr *expected, bool wantvalu
             if (auto id = Is<Ident>(u ? u->child : n)) {
                 ConstName(id, "match pattern");
                 auto g = ast.LookupGlobal(id->name, id->ns);
-                if (!g) Error(n, cat("unknown constant ", id->name, " in an integer match"));
-                if (g->isvar)
+                if (!g && !ast.LookupBuildDefinition(id->name, id->ns))
+                    Error(n, cat("unknown constant ", id->name, " in an integer match"));
+                if (g && g->isvar)
                     Error(n, cat("match pattern ", id->name, " names a var global, "
                                  "not a constant"));
             }
