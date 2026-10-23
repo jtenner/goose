@@ -401,11 +401,20 @@ inline void TypeCheck::ExpandArms(vector<MatchArm> &arms) {
 }
 
 inline void TypeCheck::ExpandInitializers(vector<FieldInit> &inits) {
-    if (none_of(inits.begin(), inits.end(), [](const FieldInit &fi) { return Is<ConstFor>(fi.val); }))
+    if (none_of(inits.begin(), inits.end(), [](const FieldInit &fi) { return Is<ConstFor>(fi.val) || Is<ConstInitIf>(fi.val); }))
         return;
     vector<FieldInit> flat;
     for (auto &fi : inits) {
-        if (auto cf = Is<ConstFor>(fi.val)) {
+        if (auto ci = Is<ConstInitIf>(fi.val)) {
+            auto take = ConstIfCondition(ci->cond);
+            auto selected = ci->branches[take ? 0 : 1];
+            for (auto &entry : selected) ResolveConditionalBody(ast, entry.val);
+            if (!ast.errors.empty()) throw Abandoned {};
+            ResolvePools();
+            ResolveIndexTypes();
+            ExpandInitializers(selected);
+            flat.insert(flat.end(), selected.begin(), selected.end());
+        } else if (auto cf = Is<ConstFor>(fi.val)) {
             vector<FieldInit> generated;
             ExpandConstFor(cf, [&](ExpansionClone &) {
                 for (auto &entry : cf->inits) generated.push_back(ast.CloneFieldInit(entry));

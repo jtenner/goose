@@ -2319,6 +2319,12 @@ locals, parameters and runtime calls are rejected. Both logical operands must
 be supported constants. Generic functions and const-for entries select after
 specialization/substitution. Excluded types and expressions need only parse.
 
+Constructor initializer lists admit nested conditional fragments as well.
+Selected entries are flattened before ordinary named/positional consistency,
+duplicate, missing-field and default checks against the effective fields.
+Excluded initializers are not resolved or checked. A trailing `..` belongs to
+the complete constructor, not to an initializer fragment.
+
 A struct field list may contain nested `const if c { fields } else { fields }`
 blocks with empty arms, ordinary field qualifiers, defaults and pads. The
 selected fields are flattened in declaration order before type validation,

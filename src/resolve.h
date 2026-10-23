@@ -280,6 +280,7 @@ inline void ResolveConditionalBody(Ast &ast, Node *body, TypeExpr *root = nullpt
     function<void(Node *)> walk = [&](Node *n) {
         if (!n) return;
         if (auto x = Is<IfExpr>(n); x && x->isconst && !x->selected) return;
+        if (Is<ConstInitIf>(n)) return;
         if (auto vd = Is<VarDecl>(n)) type(vd->type);
         if (auto sl = Is<StructLit>(n)) type(sl->type);
         if (auto c = Is<Call>(n)) for (auto t : c->tyargs) type(t);
