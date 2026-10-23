@@ -70,7 +70,9 @@ Cases and units:
 Seven samples follow two warmups by default. C/Goose order alternates per
 sample; no samples run simultaneously. JSON retains every sample, medians,
 median absolute deviations, min/max, CPU, process affinity, platform,
-compiler identity/flags, generated C metrics and whole-binary instruction
+compiler identity/flags, SHA256 of both compiler executables, source Git commit/dirty
+state and workload source hashes, generated C and executable hashes, explicit
+per-case work/rate/latency units, generated C metrics and whole-binary instruction
 counts when objdump exists. `/usr/bin/time` supplies process peak RSS in KiB
 on Linux, including runtime/thread infrastructure, not just mapped pages.
 Whole-binary counts include runtime code, so use generated C marker absence
@@ -78,3 +80,9 @@ and the dedicated clobber acceptance test for compiler-elimination evidence.
 Warmups exercise the OS caches in separate processes, rather than preserving
 thread or allocator state across samples. Small timings can fall below timer
 resolution; increase iterations and inspect variation before drawing claims.
+
+Preparation fingerprints compiler executables before and after compiling,
+and verifies that workload sources stayed unchanged. It rejects a changing
+compiler/source snapshot; equal version strings alone do not establish the
+same compiler. Whole-binary and generated-C hashes identify the actual built
+workloads even when the source checkout has uncommitted edits.
