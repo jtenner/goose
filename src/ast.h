@@ -55,6 +55,7 @@ enum TypeKind {
     TY_INT,         // A sized integer type; intstorage picks the width (§3.1, §3.6).
     TY_FLT,         // A sized float type; fltstorage picks f32/f64.
     TY_BOOL,
+    TY_NATIVE,       // Opaque native capabilities; never integer/byte images.
     TY_STRUCT,      // A nominal struct, with any generic type arguments.
     TY_ENUM,        // A nominal ADT; fixed-mode use, or variable-mode T.. (varmode flag, §3.5).
     TY_GENERIC,     // A generic type parameter name (typecheck validates scope).
@@ -66,6 +67,19 @@ enum TypeKind {
     TY_VARIANT,     // T.Name — variant type of an ADT.
     TY_VOID,        // Typecheck-created: the "type" of statements and valueless blocks.
 };
+
+enum NativeKind { NK_OWNER, NK_VIEW, NK_ACCESS, NK_ATOMIC_U32, NK_ATOMIC_U64, NK_UNSAFE_PTR, NK_COUNT };
+inline const char *NativeName(int k) {
+    static const char *names[] = { "SharedOwner", "SharedView", "SharedAccess",
+                                   "SharedAtomicU32", "SharedAtomicU64", "UnsafePtr" };
+    return names[k];
+}
+
+inline int NativeKindForName(string_view name) {
+    for (int k = NK_OWNER; k < NK_COUNT; k++)
+        if (name == NativeName(k) || name == cat("::", NativeName(k))) return k;
+    return -1;
+}
 
 enum ArrayKind {
     A_FIXED,       // T[k]           sizeexpr = k, a constant expression
@@ -317,6 +331,7 @@ struct TypeExpr {
     // since intstorage is the member a TY_INT uses.
     TypeIndex *ix = nullptr;
     union {                          // Active member selected by kind:
+        NativeKind nativekind;      //   TY_NATIVE
         IntStorage intstorage;       //   TY_INT
         FltStorage fltstorage;       //   TY_FLT
         TypeExpr *sub;               //   TY_SLICE (element type)
@@ -336,6 +351,10 @@ struct TypeExpr {
 };
 
 // The views of a type's shape that every pass asks for.
+inline bool IsSharedSendable(const TypeExpr *t) {
+    return t->kind == TY_NATIVE && (t->nativekind == NK_VIEW ||
+           t->nativekind == NK_ATOMIC_U32 || t->nativekind == NK_ATOMIC_U64);
+}
 inline bool IsRefOrSlice(const TypeExpr *t) { return t->kind == TY_REF || t->kind == TY_SLICE; }
 inline bool IsOptional(const TypeExpr *t) { return t->kind == TY_REF && t->ref->optional; }
 inline bool IsOpaque(const TypeExpr *t) { return t && t->kind == TY_GENERIC && t->named->opaque; }
@@ -1117,6 +1136,7 @@ NODE(Call)
     // free_slice/realloc_slice: the slice handed back is not provably the pool's,
     // so codegen checks at run time that it lies inside the pool (§5.4).
     bool poolcheck = false;
+    int memory_order = 0, failure_order = 0; // Validated native atomic constant orders.
     TypeExpr *qtype = nullptr;  // qlimit<T>: T, which names the queue (§11.2).
     const string *shaderblob = nullptr;  // embed_shader's compiled blob or embed_file's bytes, in Ast::shaders.
     Call(Line l, Node *_callee) : Node(l, NKind), callee(_callee) {}

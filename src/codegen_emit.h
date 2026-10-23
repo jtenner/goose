@@ -943,6 +943,33 @@ inline string CodeGen::MainCall() {
     return cat("    ", mi.cname, "(", mi.needssp ? "0" : "", ");\n");
 }
 
+inline void CodeGen::EmitExportTypes() {
+    // Capture the public dependency closure before bodies/globals can emit
+    // private types. Use the same CT state for both artifacts so names and
+    // packed definitions agree, without duplicating runtime capability types.
+    assert(tdecls.empty());
+    // No admitted export uses the internal resizable/pool reference headers.
+    // Seed them outside the snapshot: NameCT/CT also request this scaffolding.
+    EmitCoreTypes();
+    auto start = tdecls.size();
+    emittingexporttypes = true;
+    for (auto sf : ast.functions) {
+        if (!sf->isexport) continue;
+        if (sf->specs.size() != 1 || !sinfo.count(sf->specs[0]))
+            Fail(sf->line, cat("export fn ", sf->name, " has no emitted specialization"));
+        auto sp = sf->specs[0];
+        for (auto t : sp->argtypes) {
+            CT(t);
+            // A plain reference's CT only forward-declares its pointee.
+            if (t->kind == TY_REF) CT(t->ref->sub);
+        }
+        // A returned byte slice is flattened to pointer + out-length.
+        for (auto t : sp->rets) if (t->kind != TY_SLICE) CT(t);
+    }
+    emittingexporttypes = false;
+    exporttypes = tdecls.substr(start);
+}
+
 inline void CodeGen::EmitExports() {
     for (auto sf : ast.functions) {
         if (!sf->isexport) continue;
@@ -989,9 +1016,8 @@ inline void CodeGen::EmitExports() {
 
 inline string CodeGen::ExportHeader() {
     string header = "#pragma once\n#include <stdint.h>\n"
-                    "typedef struct gs_stack gs_stack;\n"
                     "#pragma pack(push, 1)\n";
-    header += tdecls;
+    header += exporttypes;
     header += "#pragma pack(pop)\n\n";
     header += "#ifdef __cplusplus\nextern \"C\" {\n#endif\n"
               "void goose_init(int argc, char **argv);\n";
@@ -1002,7 +1028,8 @@ inline string CodeGen::ExportHeader() {
 
 inline void CodeGen::EmitMain() {
     Append(code, "int main(int argc, char **argv) {\n    gs_program_init(argc, argv);\n",
-           MainCall(), "    gs_rt_stats();\n    return 0;\n}\n");
+           MainCall(), usesthreads ? "    gs_shared_worker_cleanup(NULL, -1);\n" : "",
+           "    gs_rt_stats();\n    return 0;\n}\n");
 }
 
 }  // namespace goose
