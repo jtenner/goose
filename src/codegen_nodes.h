@@ -415,6 +415,7 @@ inline void Block::CgAny(CodeGen &cg, const Dst &d) {
 }
 
 inline void IfExpr::CgAny(CodeGen &cg, const Dst &d) {
+    if (isconst) { cg.GenAny(thenb, d); return; }
     // Both arms starting with the same bounds check (same array, same index,
     // nothing before it): one check ahead of the branch, after the
     // condition, reporting the line of the arm that is taken. The arms'
