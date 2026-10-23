@@ -65,6 +65,10 @@ published. A worker-created allocation passed to a child is reclaimed only
 after the last child's lease ends. Main normal return performs the same
 context cleanup. Process-fatal exits rely on OS reclamation.
 
+Capability value wrappers have byte alignment, so packed fields, arrays,
+returns and worker packets never require an aligned wrapper address. Registry
+descriptors and mapped atomic cells retain their natural alignment.
+
 Capability records occupy stable reusable metadata slabs. Mapping storage is
 released on close; the slabs retain generation tombstones and grow only with
 peak simultaneous descriptor usage. Routine scalar accesses allocate no heap
