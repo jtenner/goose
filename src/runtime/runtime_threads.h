@@ -713,3 +713,40 @@ GS_API void gs_shared_worker_cleanup(void *leases, int64_t actor) {
     gs_mutex_unlock(&gs_shared_mutex);
 }
 #endif /* GS_NEED_THREADS */
+
+#if GS_NEED_THREADS
+GS_API gs_shared_cap gs_shared_atomic_region(gs_shared_cap owner, uint64_t offset,
+    uint64_t count, int width, uint64_t initial, const char *file, int line) {
+    gs_mutex_lock(&gs_shared_mutex);
+    gs_shared_record *r = gs_shared_get(owner, file, line);
+    if (r->kind != GS_SH_OWNER || r->actor != gs_current_thread_id)
+        gs_shared_bad("shared owner belongs to another thread", file, line);
+    if (r->readonly) gs_shared_bad("atomic storage in readonly shared memory", file, line);
+    if ((width != 4 && width != 8) || !count || count > UINT64_MAX / (uint64_t)width)
+        gs_shared_bad("invalid shared atomic region size", file, line);
+    uint64_t size = count * (uint64_t)width;
+    gs_shared_bounds(offset, size, r->size, file, line);
+    if (((uintptr_t)r->data + offset) % (uint64_t)width)
+        gs_shared_bad("shared atomic alignment", file, line);
+    for (uint64_t i = 0; i < gs_shared_highwater; i++) {
+        gs_shared_record *v = gs_shared_at(i);
+        if (v->kind >= GS_SH_ACCESS && v->allocation == owner.slot &&
+            gs_shared_overlap(v->offset, v->size, offset, size))
+            gs_shared_bad("conflicting shared atomic range", file, line);
+    }
+    uint64_t i = gs_shared_slot();
+    if (i == UINT64_MAX) gs_shared_bad("out of memory registering shared atomic range", file, line);
+    gs_shared_record *a = gs_shared_at(i);
+    a->allocation = owner.slot; a->offset = offset; a->size = size; a->data = r->data + offset;
+    /* Registration excludes every ordinary borrow/atomic range first. These
+       initialization writes happen before publication and worker handoff. */
+    if (width == 4) {
+        uint32_t v = (uint32_t)initial;
+        for (uint64_t n = 0; n < count; n++) memcpy(a->data + n * 4, &v, 4);
+    } else {
+        for (uint64_t n = 0; n < count; n++) memcpy(a->data + n * 8, &initial, 8);
+    }
+    gs_shared_cap cap = gs_shared_finish(i, width == 4 ? GS_SH_ATOMIC32 : GS_SH_ATOMIC64);
+    gs_mutex_unlock(&gs_shared_mutex); return cap;
+}
+#endif
