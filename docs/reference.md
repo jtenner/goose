@@ -2761,6 +2761,21 @@ fn main() {
 selected
 ```
 
+Constructor initializer lists also accept nested `const if` fragments. Their
+selected named or positional entries undergo the normal checks against the
+effective fields, including defaults, missing fields and duplicate names.
+A trailing `..` belongs to the whole constructor.
+
+Struct field lists can also contain `const if` blocks. Selected fields,
+qualifiers, defaults and explicit pads become the effective declaration before
+checking or layout. Excluded fields occupy zero bytes and are absent from
+`fields<T>` reflection. Conditions may depend on configuration in a generic
+struct, but cannot depend on its type parameters. Layout stays packed, with no
+automatic padding; an empty effective struct remains one byte. Configurations
+that select different fields are ABI incompatible: use matching definitions
+for all consumers and validate a format version or layout fingerprint when
+exchanging serialized data. See [native const if](design/const_if.md).
+
 ### `const for`: expansion at specialization time
 
 `const for` specializes a fragment once per entry of a compile-time

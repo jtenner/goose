@@ -578,6 +578,10 @@ inline Val RangeExpr::Check(TypeCheck &tc, TypeExpr *) {
     tc.Error(this, "range expressions are only valid in for headers");
 }
 
+inline Val ConstInitIf::Check(TypeCheck &tc, TypeExpr *) {
+    tc.Error(this, "const if initializer fragment is only valid inside a constructor");
+}
+
 inline Val ConstFor::Check(TypeCheck &tc, TypeExpr *) {
     tc.Error(this, "const for is only valid in statement or constructor initializer lists");
 }
