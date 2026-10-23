@@ -2544,6 +2544,12 @@ inline bool TypeCheck::ExternValueOk(TypeExpr *t, string &why) {
             if (t->intstorage == IS_VARINT) { why = "varints have no C form"; return false; }
             return true;
         case TY_FLT: case TY_BOOL: return true;
+        // The only native value with a raw C ABI. Never extend this to safe
+        // shared capabilities, including when nested in an aggregate.
+        case TY_NATIVE:
+            if (t->nativekind == NK_UNSAFE_PTR) return true;
+            why = "safe native capabilities have no raw C ABI";
+            return false;
         case TY_REF: case TY_SLICE: why = "nested references and slices do not cross"; return false;
         default: break;
     }

@@ -69,6 +69,10 @@ inline int RecvKindOf(TypeExpr *t) {
 
 //        enum            name                min max  args  rets recv            grows          flags
 #define BUILTINS \
+    F(B_SHARED_MAP, "shared_map_readonly", 2, 2, "", "", 0, "", 0) \
+    F(B_SHARED_ADVICE, "shared_page_advice", 4, 4, "", "", 0, "", 0) \
+    F(B_MEMORY_READ_BYTES, "memory_read_bytes", 3, 3, "", "", 0, "", 0) \
+    F(B_MEMORY_WRITE_BYTES, "memory_write_bytes", 3, 3, "", "", 0, "", 0) \
     F(B_SHARED_ATOMIC32, "shared_atomic_u32", 3, 3, "", "", 0, "", 0) \
     F(B_SHARED_ATOMIC64, "shared_atomic_u64", 3, 3, "", "", 0, "", 0) \
     F(B_SHARED_ATOMIC_ARRAY32, "shared_atomic_array_u32", 4, 4, "", "", 0, "", 0) \
@@ -85,11 +89,16 @@ inline int RecvKindOf(TypeExpr *t) {
     F(B_ATOMIC_OR, "atomic_fetch_or", 3, 3, "", "", 0, "", 0) \
     F(B_ATOMIC_XOR, "atomic_fetch_xor", 3, 3, "", "", 0, "", 0) \
     F(B_ATOMIC_CAS, "atomic_compare_exchange", 5, 5, "", "", 0, "", 0) \
+    F(B_UNSAFE_PTR_FROM_HANDLE, "unsafe_ptr_from_handle", 1, 1, "", "", 0, "", 0) \
+    F(B_UNSAFE_HANDLE_FROM_PTR, "unsafe_handle_from_ptr", 1, 1, "", "", 0, "", 0) \
+    F(B_UNSAFE_PTR_ADD, "unsafe_ptr_add", 2, 2, "", "", 0, "", 0) \
+    F(B_UNSAFE_LOAD, "unsafe_load", 2, 2, "", "", 0, "", BF_TYARGS) \
+    F(B_UNSAFE_STORE, "unsafe_store", 3, 3, "", "", 0, "", BF_TYARGS) \
     F(B_SHARED_ALLOC, "shared_alloc", 1, 1, "", "", 0, "", 0) \
     F(B_SHARED_VIEW, "shared_view", 3, 3, "", "", 0, "", 0) \
     F(B_SHARED_CLOSE, "shared_close", 1, 1, "", "", 0, "", 0) \
     F(B_SHARED_SIZE, "shared_size", 1, 1, "", "", 0, "", 0) \
-    F(B_SHARED_BORROW, "shared_borrow", 1, 1, "", "", 0, "", 0) \
+    F(B_SHARED_BORROW, "shared_borrow", 1, 3, "", "", 0, "", 0) \
     F(B_SHARED_RELEASE, "shared_release", 1, 1, "", "", 0, "", 0) \
     F(B_MEMORY_READ, "memory_read", 3, 3, "", "", 0, "", BF_TYARGS) \
     F(B_MEMORY_WRITE, "memory_write", 4, 4, "", "", 0, "", BF_TYARGS) \

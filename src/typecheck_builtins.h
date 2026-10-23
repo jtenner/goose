@@ -22,6 +22,39 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
         Error(c, cat(d.name, " takes ", (int64_t)d.minargs,
                      d.minargs == d.maxargs ? string() : cat("-", (int64_t)d.maxargs),
                      " argument(s), ", (int64_t)args.size(), " given"));
+    if (d.kind >= B_UNSAFE_PTR_FROM_HANDLE && d.kind <= B_UNSAFE_STORE) {
+        auto pointer = [&]() {
+            auto v = CheckValue(args[0], nullptr);
+            if (v.type->kind != TY_NATIVE || v.type->nativekind != NK_UNSAFE_PTR)
+                Error(c, cat(d.name, " requires UnsafePtr for argument 1"));
+        };
+        auto result = [&](TypeExpr *t) {
+            Val v; v.type = t; c->rettypes.push_back(t); return v;
+        };
+        auto ptrtype = ast.NewType(TY_NATIVE, c->line);
+        ptrtype->nativekind = NK_UNSAFE_PTR;
+        switch (d.kind) {
+            case B_UNSAFE_PTR_FROM_HANDLE:
+                CheckArg(args[0], ast.inttypes[IS_U64]); return result(ptrtype);
+            case B_UNSAFE_HANDLE_FROM_PTR:
+                pointer(); return result(ast.inttypes[IS_U64]);
+            case B_UNSAFE_PTR_ADD:
+                pointer(); CheckArg(args[1], ast.inttypes[IS_I64]); return result(ptrtype);
+            case B_UNSAFE_LOAD: case B_UNSAFE_STORE: {
+                if (c->tyargs.size() != 1)
+                    Error(c, "unsafe scalar access needs exactly one type argument");
+                auto t = Subst(c->tyargs[0]);
+                if (!IsIntT(t) || t->ix || t->intstorage == IS_VARINT)
+                    Error(c, "unsafe scalar type must be i/u8/16/32/64");
+                c->qtype = t;
+                pointer();
+                if (d.kind == B_UNSAFE_STORE) CheckArg(args[1], t);
+                CheckArg(args[d.kind == B_UNSAFE_LOAD ? 1 : 2], ast.booltype);
+                return d.kind == B_UNSAFE_LOAD ? result(t) : VoidVal();
+            }
+            default: assert(false);
+        }
+    }
     if (d.kind >= B_SHARED_ALLOC && d.kind <= B_MEMORY_COPY) {
         auto captype = [&](NativeKind k) {
             auto t = ast.NewType(TY_NATIVE, c->line); t->nativekind = k; return t;
@@ -43,8 +76,12 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
         switch (d.kind) {
             case B_SHARED_ALLOC:
                 number(0); return result(captype(NK_OWNER), true);
-            case B_SHARED_VIEW:
-                cap(0, NK_OWNER); number(1); number(2); return result(captype(NK_VIEW));
+            case B_SHARED_VIEW: {
+                auto v = CheckValue(args[0], nullptr);
+                if (v.type->kind != TY_NATIVE || (v.type->nativekind != NK_OWNER && v.type->nativekind != NK_VIEW))
+                    Error(c, "shared_view requires an owner or view");
+                number(1); number(2); return result(captype(NK_VIEW));
+            }
             case B_SHARED_CLOSE:
                 cap(0, NK_OWNER); return result(ast.booltype);
             case B_SHARED_SIZE: {
@@ -54,7 +91,10 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
                 return result(ast.inttypes[IS_U64]);
             }
             case B_SHARED_BORROW:
-                cap(0, NK_VIEW); return result(captype(NK_ACCESS));
+                if (args.size() != 1 && args.size() != 3) Error(c, "shared_borrow takes a view, or a view, offset, and size");
+                cap(0, NK_VIEW);
+                if (args.size() == 3) { number(1); number(2); }
+                return result(captype(NK_ACCESS));
             case B_SHARED_RELEASE:
                 cap(0, NK_ACCESS); return VoidVal();
             case B_MEMORY_READ: case B_MEMORY_WRITE: {
@@ -125,6 +165,35 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
                 Error(c, "invalid compare_exchange failure order");
         }
         return d.kind == B_ATOMIC_STORE ? VoidVal() : result(scalar, d.kind == B_ATOMIC_CAS);
+    }
+    if (d.kind >= B_SHARED_MAP && d.kind <= B_MEMORY_WRITE_BYTES) {
+        if (d.kind == B_SHARED_MAP) {
+            CheckArg(args[0], cu8slice); CheckIntAny(args[1]);
+            auto t = ast.NewType(TY_NATIVE, c->line); t->nativekind = NK_OWNER;
+            Val v; v.type = t; Val ok; ok.type = ast.booltype;
+            c->rettypes = {t, ast.booltype}; lastcallrets = {v, ok}; return v;
+        }
+        auto v = CheckValue(args[0], nullptr);
+        auto kind = d.kind == B_SHARED_ADVICE ? NK_VIEW : NK_ACCESS;
+        if (v.type->kind != TY_NATIVE || v.type->nativekind != kind)
+            Error(c, cat(d.name, " requires ", NativeName(kind)));
+        CheckIntAny(args[1]);
+        if (d.kind == B_SHARED_ADVICE) {
+            CheckIntAny(args[2]);
+            auto lit = ConstStrLit(args[3]);
+            if (!lit) Error(c, "page advice must be a compile-time string");
+            CheckArg(args[3], cu8slice);
+            static const char *names[] = {"Normal", "Sequential", "Random", "WillNeed", "DontNeed"};
+            int advice = -1;
+            for (int i = 0; i < 5; i++) if (lit->val == names[i]) advice = i;
+            if (advice < 0) Error(c, cat("unknown page advice: ", lit->val));
+            c->memory_order = advice;
+            Val b; b.type = ast.booltype; c->rettypes = {b.type, b.type}; lastcallrets = {b, b}; return b;
+        }
+        auto bytes = CheckArg(args[2], d.kind == B_MEMORY_READ_BYTES ? u8slice : cu8slice);
+        if (d.kind == B_MEMORY_READ_BYTES && !bytes.writable)
+            Error(c, "memory_read_bytes requires writable storage, not const bytes");
+        return VoidVal();
     }
     // The fully custom builtins first.
     switch (d.kind) {
