@@ -9,6 +9,12 @@ thread_fn misuse(v: SharedView, kind: i64) {
     if kind == 3 { shared_release(a); memory_read<u8>(a, 0, false); }
     if kind == 4 { shared_borrow(v); }
 }
+thread_fn stale(reuse: bool) {
+    let o, ok = shared_alloc(64); assert(ok);
+    let v = shared_view(o, 0, 64); assert(shared_close(o));
+    if reuse { let newer, yes = shared_alloc(64); assert(yes); }
+    shared_borrow(v);
+}
 fn main() {
     let invalid, failed = shared_alloc(18446744073709551615);
     assert(!failed);
@@ -36,10 +42,10 @@ fn main() {
     shared_release(b);
     assert(shared_close(owner));
     assert(!shared_close(owner));
-    assert(!thread_wait(thread_spawn_contained(misuse, v, 0)));
+    assert(!thread_wait(thread_spawn_contained(stale, false)));
     let next, next_ok = shared_alloc(64);
     assert(next_ok);
-    assert(!thread_wait(thread_spawn_contained(misuse, v, 0))); // Slot reuse must not revive v.
+    assert(!thread_wait(thread_spawn_contained(stale, true))); // Slot reuse must not revive v.
     assert(shared_close(next));
     print("shared memory ok");
 }
