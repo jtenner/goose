@@ -347,13 +347,21 @@ struct Analysis {
                     if (end >= (int64_t)o.len) add(o, fileidx, end - (int64_t)o.len);
                 }
             } else if (auto sl = Is<StructLit>(n)) {
-                for (size_t i = 0; i < sl->inits.size(); i++) {
-                    if (sl->inits[i].name.empty()) continue;
-                    auto o = decl(Occurrence::INIT);
-                    o.node = n;
-                    o.index = (int)i;
-                    view(o, fileidx, sl->inits[i].name);
-                }
+                function<void(const vector<FieldInit> &)> inits = [&](const vector<FieldInit> &entries) {
+                    for (size_t i = 0; i < entries.size(); i++) {
+                        auto &entry = entries[i];
+                        if (!entry.name.empty()) {
+                            auto o = decl(Occurrence::INIT);
+                            o.node = n;
+                            o.index = (int)i;
+                            view(o, fileidx, entry.name);
+                        }
+                        if (auto ci = Is<ConstInitIf>(entry.val))
+                            for (auto &branch : ci->branches) inits(branch);
+                        if (auto cf = Is<ConstFor>(entry.val)) inits(cf->inits);
+                    }
+                };
+                inits(sl->inits);
             } else if (auto vd = Is<VarDecl>(n)) {
                 if (!vd->isglobal && !vd->results)
                     for (size_t i = 0; i < vd->names.size(); i++) {
@@ -423,11 +431,16 @@ struct Analysis {
             if (sf->body) visit(sf->body, false);
             for (auto &p : sf->params) if (p.defaultval) visit(p.defaultval, false);
         }
-        for (auto st : a.structs)
-            for (auto &f : st->fields) if (f.defaultval) visit(f.defaultval, false);
+        function<void(const vector<Field> &)> fieldsource = [&](const vector<Field> &fields) {
+            for (auto &f : fields) {
+                if (f.condition) visit(f.condition, false);
+                fieldsource(f.thenfields); fieldsource(f.elsefields);
+                if (f.defaultval) visit(f.defaultval, false);
+            }
+        };
+        for (auto st : a.structs) fieldsource(st->declfields.empty() ? st->fields : st->declfields);
         for (auto en : a.enums)
-            for (auto &v : en->variants)
-                for (auto &f : v.fields) if (f.defaultval) visit(f.defaultval, false);
+            for (auto &v : en->variants) fieldsource(v.declfields.empty() ? v.fields : v.declfields);
         for (auto g : a.globals) {
             for (auto init : g->inits) visit(init, false);
         }

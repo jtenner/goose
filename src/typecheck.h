@@ -3029,7 +3029,7 @@ struct TypeCheck {
     // (RequireAssigned).
     set<VarDef *> failedglobals;
 
-    TypeCheck(Ast &_ast, bool _library = false, bool _nomain = false) : ast(_ast), library(_library), nomain(_nomain) {
+    TypeCheck(Ast &_ast, bool _library = false, bool _nomain = false, bool prepareonly = false) : ast(_ast), library(_library), nomain(_nomain) {
         // A checked program records values for about two thirds as many
         // nodes as it parsed to, clones included, so this is the size the
         // table grows to anyway.
@@ -3049,6 +3049,7 @@ struct TypeCheck {
         // Global VarDefs exist up front so names resolve in any order; reads
         // before their initializer ran are caught by the assigned flag.
         for (auto g : ast.globals) {
+            if (!g->defs.empty()) continue;
             for (auto name : g->names) {
                 auto vd = ast.NewVarDef();
                 vd->name = name;
@@ -3059,6 +3060,7 @@ struct TypeCheck {
                 g->defs.push_back(vd);
             }
         }
+        if (prepareonly) return;
         ResolvePools();
         ResolveIndexTypes();
         // Validate all non-generic type declarations up front: clearer errors
@@ -3439,6 +3441,7 @@ struct TypeCheck {
         // their selected arm. CheckUnreached checks the deferred program;
         // exports scan that checked specialization below.
         if (auto x = Is<IfExpr>(n); x && x->isconst && !x->selected) return;
+        if (Is<ConstInitIf>(n)) return;
         if (auto r = Is<Return>(n)) {
             if (!r->from.empty() && !names.count(r->from)) foreign = true;
         } else if (auto fd = Is<FnDecl>(n)) {
