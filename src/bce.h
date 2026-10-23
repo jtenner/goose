@@ -3858,6 +3858,10 @@ inline bool Call::BceWalk(BCE &b) {
                     b.StorageWriteKill(BCE::UK_OPAQUE, nullptr, nullptr);
                 else b.KillArgStorage(rn);
                 break;
+            case B_MEMORY_READ_BYTES:
+                // This native copy writes into an ordinary writable byte view.
+                b.KillByCall();
+                break;
             case B_PUSH:
                 if (recvmoved) b.GrowShrinkKill(rn, 0);
                 else b.GrowShrinkKill(rn, 1, 1);
