@@ -1851,6 +1851,7 @@ inline void TypeCheck::RecordEnvExits(FnSpec *spec) {
 inline void TypeCheck::ReplayEnvExits(FnSpec *spec) {
     for (auto &x : spec->envexits) {
         auto v = x.var;
+        Writing(v);
         // Whether it is assigned is flow, which a loop's passes compare at
         // its head (SameFlow), not a fact fed back. A `var` is not keyed by
         // whether it may be assigned (EnvIs), and stays so where it was.
@@ -1952,7 +1953,7 @@ inline void TypeCheck::ApplyCalleeRebinds(FnSpec *spec) {
     if (!rec) return;
     auto caller = CurRealFrame().spec;
     for (auto v : rec->reboundoptionals) {
-        v->narrowed = nullptr;
+        KillNarrow(v);
         if (caller && v->ownerspec != caller) caller->record.reboundoptionals.insert(v);
     }
 }
@@ -2399,6 +2400,7 @@ inline void TypeCheck::ValidateThreadArgs(FnSpec *spec, vector<Val> &argvals, No
         }
         if (ar == pr) continue;
         if (auto at = threadedclasses.find(ar); at != threadedclasses.end()) {
+            WritingThread(ar);
             auto &heirs = at->second.heirs;
             if (find(heirs.begin(), heirs.end(), pr) == heirs.end()) heirs.push_back(pr);
         }
@@ -2429,6 +2431,7 @@ inline void TypeCheck::NoteThreadedClass(VarDef *cls) {
         if (it == threadedclasses.end()) return;
         parent = &it->second;
     }
+    WritingThread(cls);
     auto &tc = threadedclasses[cls];
     if (!parent) return;
     tc.bounded = parent->bounded;
@@ -2436,6 +2439,7 @@ inline void TypeCheck::NoteThreadedClass(VarDef *cls) {
         tc.broken = true;
         tc.why = parent->why;
     } else {
+        WritingThread(from);
         parent->heirs.push_back(cls);
     }
 }
@@ -2458,6 +2462,7 @@ inline bool TypeCheck::ThreadStorable(VarDef *r) {
 inline void TypeCheck::Unthread(VarDef *cls, const string &why) {
     auto it = threadedclasses.find(cls);
     if (it == threadedclasses.end() || it->second.broken) return;
+    WritingThread(cls);
     auto &tc = it->second;
     tc.broken = true;
     tc.why = why;
@@ -3162,8 +3167,10 @@ inline void TypeCheck::CheckSpecBodyOnce(FnSpec *spec, vector<Val> *argvals, Lin
             NoteThreadedClass(classroots[k]);
         } else if (readthrough(k)) {
             NoteThreadedClass(classroots[k]);
-            if (auto it = threadedclasses.find(classroots[k]); it != threadedclasses.end())
+            if (auto it = threadedclasses.find(classroots[k]); it != threadedclasses.end()) {
+                WritingThread(classroots[k]);
                 it->second.bounded = true;
+            }
         }
     }
     if (sf->has_rets && !spec->retsknown) {
@@ -3280,15 +3287,18 @@ inline void TypeCheck::CheckSpecBodyOnce(FnSpec *spec, vector<Val> *argvals, Lin
     }
     PopScope();
     frames.pop_back();
-    for (auto [v, n] : outernarrowed) v->narrowed = n;
+    for (auto [v, n] : outernarrowed)
+        if (v->narrowed != n) Writing(v)->narrowed = n;
     // Where the body's text ends no path may reach, as after an if whose
     // branches both return, a variable holds every fact and may be assigned
     // on no path; one the body found assigned is still as it was.
-    for (auto [v, m] : outerassigned) v->maybeassigned = m;
+    for (auto [v, m] : outerassigned)
+        if (v->maybeassigned != m) Writing(v)->maybeassigned = m;
     // A body whose exits all leave callers further out, or none at all, is
     // never returned from, and leaves them as its end did.
     if (exits.reached) {
         for (size_t i = 0; i < exits.vars.size(); i++) {
+            Writing(exits.vars[i]);
             exits.vars[i]->assigned = exits.assigned[i];
             exits.vars[i]->maybeassigned = exits.maybeassigned[i];
         }
