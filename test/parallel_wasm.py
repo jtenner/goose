@@ -5,6 +5,7 @@ Run: python3 test/parallel_wasm.py /absolute/path/to/goose
 import argparse
 from pathlib import Path
 import random
+import shutil
 import struct
 import tempfile
 from native_examples_support import ROOT, build, run
@@ -95,6 +96,20 @@ def main():
                 jobs, summary = parse(execute(data, workers).stdout)
                 assert jobs == expected, (count, workers, jobs[:3])
                 assert summary == (count, count, 0), summary
+        if shutil.which("node"):
+            fixture.write_bytes(module([b for b, _ in valid]))
+            run(["node", "-e", "new WebAssembly.Module(require('fs').readFileSync(process.argv[1]))", fixture])
+        padded_zero = b"\x80\0\x41\x80\x80\x80\x80\0\x0b"
+        for workers in (0, 8):
+            jobs, _ = parse(execute(module([padded_zero]), workers).stdout)
+            assert jobs == [(0, 2, 1, expression([0])[1])]
+        # Legal depth boundary and unsupported valid local declarations.
+        deep = b"\0" + b"\x41\1" * 128 + b"\x6a" * 127 + b"\x0b"
+        deep_native = (b"\xb8\1\0\0\0\x50" * 128 + b"\x59\x58\1\xc8\x50" * 127 + b"\x58\xc3").hex()
+        too_deep = b"\0" + b"\x41\1" * 129 + b"\x6a" * 128 + b"\x0b"
+        for workers in (0, 8):
+            jobs, _ = parse(execute(module([deep, too_deep]), workers).stdout)
+            assert jobs == [(0, 2, 1, deep_native), (1, 3, 1, "")]
         # Repeated pool startup/shutdown, including more workers than work.
         for _ in range(12):
             jobs, summary = parse(execute(module([valid[0][0]]), 8).stdout)
