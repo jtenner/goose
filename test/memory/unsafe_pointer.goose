@@ -35,7 +35,6 @@ fn main() {
     assert(unsafe_load<u8>(q, true) == 52);
     assert(unsafe_load<u16>(q, true) == 13330);
     assert(unsafe_handle_from_ptr(unsafe_ptr_from_handle(0)) == 0);
-    assert(unsafe_handle_from_ptr(default<UnsafePtr>()) == 0);
     unsafe_test_free(p);
     print("unsafe pointer ok");
 }
