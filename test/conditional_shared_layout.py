@@ -72,6 +72,11 @@ def exercise(app, root, enabled):
         broken.write_bytes(changed)
         p = run([app, "consume", broken, len(changed)], ok=False)
         assert p.returncode == 2 and p.stdout == "rejected layout\n", (offset, p.stdout, p.stderr)
+    for truncated in (wire[:1], wire[:23], wire[:-1], wire + b"\0"):
+        broken = root / "truncated.wire"
+        broken.write_bytes(truncated)
+        p = run([app, "consume", broken, len(truncated)], ok=False)
+        assert p.returncode == 2 and p.stdout == "rejected layout\n", (p.stdout, p.stderr)
 
 
 def main():
