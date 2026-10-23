@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Native --define acceptance tests. Run with the compiler path as argument."""
 import pathlib
+import re
 import subprocess
 import sys
 import tempfile
@@ -122,5 +123,27 @@ with tempfile.TemporaryDirectory(prefix="goose-definitions-") as directory:
         if client.p.poll() is None:
             client.p.kill()
             client.p.wait()
+    # Native intermediates must be separated by configuration, independent of
+    # option order. Concurrent builds may use the same source and different -o.
+    def intermediate(definitions):
+        result = invoke(["build", "--dry-run", *definitions, source, "-o", root / "dry-run"])
+        return re.search(r"^wrote (.+) \(\d+ bytes\)$", result.stdout, re.MULTILINE).group(1)
+
+    config_a = ["--define", "COUNT=11", "--define", "FLAG=true"]
+    config_b = ["--define", "FLAG=true", "--define", "COUNT=11"]
+    config_c = ["--define", "COUNT=22", "--define", "FLAG=true"]
+    assert intermediate(config_a) == intermediate(config_b)
+    assert intermediate(config_a) != intermediate(config_c)
+    builds = []
+    for index, count in enumerate((11, 22, 11, 22)):
+        native = root / f"concurrent-{index}"
+        proc = subprocess.Popen([str(EXE), "build", "--define", f"COUNT={count}", str(source),
+                                 "-o", str(native)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        builds.append((proc, native, count))
+    for proc, native, count in builds:
+        out, err = proc.communicate(timeout=60)
+        assert proc.returncode == 0, (out, err)
+        result = subprocess.run([str(native)], capture_output=True, text=True, check=True)
+        assert result.stdout == f"{count}\n", (count, result.stdout)
 
 print(f"CLI definitions: {CHECKS} checks passed")
