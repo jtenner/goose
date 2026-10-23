@@ -776,8 +776,8 @@ GS_API void gs_shared_bytes(gs_shared_cap access, uint64_t offset, void *bytes, 
                              int write, const char *file, int line) {
     gs_mutex_lock(&gs_shared_mutex);
     gs_shared_record *r = gs_shared_access(access, offset, size, write, file, line);
-    if (write) memmove(r->data + offset, bytes, (size_t)size);
-    else memmove(bytes, r->data + offset, (size_t)size);
+    if (write) gs_memmove(r->data + offset, bytes, (size_t)size);
+    else gs_memmove(bytes, r->data + offset, (size_t)size);
     gs_mutex_unlock(&gs_shared_mutex);
 }
 #endif
