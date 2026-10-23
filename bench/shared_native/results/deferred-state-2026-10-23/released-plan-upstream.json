@@ -1,0 +1,63 @@
+{
+  "platform": "Linux-7.2.8-9-omarchy-x86_64-with-glibc2.41",
+  "affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "samples": 7,
+  "warmups": 2,
+  "run_requires_explicit_flag": true,
+  "requested_cpu": 0,
+  "harness_sha256": "bbfb1dc44ebd012a64ae08a49607a3c2e091f6d3b5378cc2920a1fc90d13bcd4",
+  "requested_source_refs": {
+    "baseline": "94cc64daeabcae6f072dc1fe2b864acda5a001bc",
+    "extended": "41dc6eb30e9363f1f97a51aeb047aad18d96746c"
+  },
+  "compiler_build": {
+    "compiler": "GCC 14.2.0",
+    "configuration": "Release",
+    "cxxflags": "-O3 -DNDEBUG"
+  },
+  "compiler_environment": {
+    "GOOSE_STDLIB": "/home/dev/Projects/goose/stdlib"
+  },
+  "instrumentation_environment_removed": [],
+  "instrumentation_environment_excluded_prefixes": [
+    "GOOSE_DEFERRED_",
+    "ASAN_",
+    "LSAN_",
+    "UBSAN_",
+    "TSAN_",
+    "MSAN_",
+    "HWASAN_",
+    "DFSAN_",
+    "LLVM_SYMBOLIZER"
+  ],
+  "measure": "process wall seconds for check; no C generation",
+  "sources": [
+    {
+      "case": "ordinary",
+      "globals": 500,
+      "unused_functions": 1000,
+      "stdlib": false,
+      "named_return": false,
+      "source_sha256": "a5651ebb828c481d1380c54201dcc08452aa92f8da6a727e05e705bf3ac5934b",
+      "source_bytes": 62462
+    }
+  ],
+  "results": []
+}
