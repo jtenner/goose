@@ -75,6 +75,7 @@ const N_PAD = 52;
 const N_SELF = 53;
 
 struct Node {
+    bench_label: i64 = -1, // Token holding the decoded label; metadata, not a symbol.
     tag: i64,
     token: i64,
     a: i64 = -1,
