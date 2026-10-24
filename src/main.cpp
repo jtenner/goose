@@ -690,6 +690,7 @@ Commands:
              file.goose does too.
   build      Build an executable with a C compiler on this machine.
   check      Parse and typecheck a program, and run nothing.
+  bench      Check and list benchmark declarations (--list).
   fetch      Fetch the packages a program declares.
   format     Rewrite Goose files in the standard layout.
   toolchain  Report the C compiler, cmake and git found, and GOOSE_HOME.
@@ -758,6 +759,20 @@ R"(  --cc name|path        The C compiler: msvc, clang-cl, clang, gcc, cc or a
   -v                    Print each command the build runs and what it prints.
   --dry-run             Print the commands the build would run, and run none.
 )");
+    if (topic == "bench") return cat(
+R"(usage: goose bench file.goose --list [options]
+
+Checks and lists benchmarks declared directly in the file, in source order.
+Prints qualified key, escaped label, size and signature. No native code,
+global initialization, workload execution or temperature probing occurs.
+Benchmark execution and JSON/CSV artifacts are not implemented in this milestone.
+
+Options:
+  --list                Discover declarations (required in this milestone).
+  --filter key          Select an exact qualified key; repeatable.
+  --sizes names         Nonempty duplicate-free subset of small,medium,large
+                        (default medium; listed in canonical order).
+)", COMPILEOPTIONS);
     if (topic == "check") return cat(
 R"(usage: goose check file.goose [options]
 
@@ -1027,7 +1042,7 @@ CodeGen::StackConfig StackConfigOf(const vector<string> &cdefines) {
 }
 
 // The commands, in the order the help lists them.
-static const char *const VERBS[] = { "run", "build", "check", "fetch", "format", "toolchain",
+static const char *const VERBS[] = { "run", "build", "check", "bench", "fetch", "format", "toolchain",
                                      "version", "lsp", "completion", "help" };
 
 // The edit distance between two words, for the command a mistyped one meant.
@@ -1336,6 +1351,9 @@ int Main(int argc, char **argv) {
     string outname, headername, stdlibdir, shaderfile, shadersource, dumpfile;
     auto dump = false, dumpdocs = false, tokens = false, parseonly = false, specs = false;
     auto nocgen = false;
+    auto benchlist = false;
+    string benchsize = "medium";
+    vector<string> benchfilters;
     auto roundtrip = false, multitest = false;
     auto nobce = false, bcetest = false, bcelines = false, norfcheck = false;
     auto stacks = false;
@@ -1355,7 +1373,11 @@ int Main(int argc, char **argv) {
             for (int j = i + 1; j < argc; j++) progargs.push_back(argv[j]);
             break;
         }
-        if (arg == "--dump") dump = true;
+        if (arg == "--list" && verb == "bench") benchlist = true;
+        else if (arg == "--filter" && verb == "bench" && i + 1 < argc)
+            benchfilters.push_back(argv[++i]);
+        else if (arg == "--sizes" && verb == "bench" && i + 1 < argc) benchsize = argv[++i];
+        else if (arg == "--dump") dump = true;
         else if (arg == "--define") {
             if (i + 1 == argc) {
                 fprintf(stderr, "--define requires NAME=VALUE\n");
@@ -1517,6 +1539,33 @@ int Main(int argc, char **argv) {
         buildopts = BuildOptions { debug, verbose, dryrun, standalone, outname };
         outname.clear();
     }
+    vector<string> benchsizes;
+    try {
+        if (verb == "bench") {
+            if (!benchlist) throw CompileError { "benchmark execution is not implemented; use bench --list" };
+            if (forcejit || !outname.empty() || dump || dumpdocs || parseonly || tokens || multitest || stacks)
+                throw CompileError { "bench --list requires checking without JIT, code generation or dump options" };
+            for (auto size : { "small", "medium", "large" }) {
+                auto rest = benchsize;
+                int count = 0;
+                while (true) {
+                    auto comma = rest.find(',');
+                    auto part = rest.substr(0, comma);
+                    if (part == size) count++;
+                    else if (part != "small" && part != "medium" && part != "large")
+                        throw CompileError { "--sizes requires a nonempty duplicate-free subset of small,medium,large" };
+                    if (comma == string::npos) break;
+                    rest.erase(0, comma + 1);
+                }
+                if (count > 1) throw CompileError { "duplicate --sizes entry" };
+                if (count) benchsizes.push_back(size);
+            }
+            nocgen = true;
+        }
+    } catch (CompileError &e) {
+        fprintf(stderr, "%s\n", e.msg.c_str());
+        return 2;
+    }
     if (files.size() > 1 && !multitest) {
         fprintf(stderr, "multiple input files given\n");
         return 1;
@@ -1629,6 +1678,48 @@ int Main(int argc, char **argv) {
         TypeCheckProgram(ast, library, nocgen);
         // The checker reported the errors it went on past, root by root.
         if (!ast.errors.empty()) return 1;
+        if (verb == "bench") {
+            vector<SFunction *> selected;
+            for (auto sf : ast.functions) {
+                if (!sf->isbench || sf->line.fileidx != 0) continue;
+                if (benchfilters.empty() || find(benchfilters.begin(), benchfilters.end(), sf->qname) != benchfilters.end())
+                    selected.push_back(sf);
+            }
+            for (auto &key : benchfilters) {
+                if (none_of(selected.begin(), selected.end(), [&](auto sf) { return sf->qname == key; }))
+                    throw CompileError { cat("unknown benchmark key: ", key) };
+            }
+            if (selected.empty()) throw CompileError { "no benchmarks declared; add bench \"label\" to a scalar-returning function (main is not a benchmark)" };
+            for (auto sf : selected) {
+                string label;
+                // Escape both C0 and Unicode C1/DEL controls for terminals.
+                string safe;
+                for (size_t i = 0; i < sf->benchlabel.size(); i++) {
+                    auto c = (uint8_t)sf->benchlabel[i];
+                    if (c == 0x7f) safe += "\\u007f";
+                    else if (c == 0xc2 && i + 1 < sf->benchlabel.size() &&
+                             (uint8_t)sf->benchlabel[i + 1] >= 0x80 &&
+                             (uint8_t)sf->benchlabel[i + 1] <= 0x9f) {
+                        char buf[8];
+                        snprintf(buf, sizeof buf, "\\u%04x", (uint8_t)sf->benchlabel[++i]);
+                        safe += buf;
+                    } else {
+                        string quoted;
+                        JsonQuote(quoted, string(1, (char)c));
+                        safe.append(quoted, 1, quoted.size() - 2);
+                    }
+                }
+                label = cat("\"", safe, "\"");
+                string signature;
+                for (auto t : sf->specs[0]->rets) {
+                    if (!signature.empty()) signature += ", ";
+                    t->Dump(signature);
+                }
+                printf("%s\t%s\t%s\t() -> %s\n", string(sf->qname).c_str(), label.c_str(),
+                       benchsize.c_str(), signature.c_str());
+            }
+            return 0;
+        }
         Optimizer opt(ast, optlevel);
         if (specs) {
             string s;
@@ -1876,6 +1967,17 @@ int Main(int argc, char **argv) {
         if (jsondiag) fputs(DiagnosticsJson(found, astp.get()).c_str(), stdout);
         return code;
     };
+    if (verb == "bench") {
+        auto definitions = builddefines;
+        for (auto &size : benchsizes) {
+            builddefines = definitions;
+            builddefines.push_back(cat("BENCH_SIZE=\"", size, "\""));
+            benchsize = size;
+            auto code = run(files[0]);
+            if (code) return 2;
+        }
+        return 0;
+    }
     if (!multitest) return run(files[0]);
     // Each file has an Ast and a compile thread of its own, which is all the
     // state a compile has. The mark goes after a line break of its own, so a
@@ -2023,5 +2125,7 @@ int main(int argc, char **argv) {
         _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_FILE);
         _CrtSetReportFile(_CRT_ERROR, _CRTDBG_FILE_STDERR);
     #endif
-    return goose::Main(argc, argv);
+    auto code = goose::Main(argc, argv);
+    // Discovery has only usage/compile/preflight failures, never measurement failures.
+    return argc > 1 && std::string_view(argv[1]) == "bench" && code ? 2 : code;
 }
