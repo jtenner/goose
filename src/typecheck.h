@@ -3323,7 +3323,7 @@ struct TypeCheck {
                 if (!sf->params.empty()) Error(sf->line, "bench function takes no parameters");
                 if (!sf->generics.empty()) Error(sf->line, "bench function cannot be generic");
                 for (auto other : ast.functions)
-                    if (other != sf && other->qname == sf->qname)
+                    if (other != sf && !other->isnested && other->qname == sf->qname)
                         Error(sf->line, "bench key cannot share an overload set");
                 if (sf->specs.empty()) {
                     auto spec = ast.NewFnSpec();
