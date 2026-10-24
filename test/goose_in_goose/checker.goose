@@ -827,7 +827,7 @@ recursive fn check_function(ctx: Compiler&, symbol: i64, call: i64, caller_scope
     ctx.specializations[id].state = 2;
     return id;
 }
-fn check_program(ctx: Compiler&, bench_only: bool = false) {
+fn check_program(ctx: Compiler&, bench_only: bool) {
     for n in ctx.declarations { if ctx.nodes[n].tag == N_FUNCTION && ctx.tokens[ctx.nodes[n].token].text == "format" { error_at(ctx, ctx.nodes[n].token, "not implemented yet: custom formatting dispatch"); } }
     initialization_order(ctx, 0);
     for n in ctx.global_order { check_binding(ctx, n, 0); }
