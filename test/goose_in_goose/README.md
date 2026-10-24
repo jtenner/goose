@@ -48,3 +48,12 @@ executables receive a 64 MiB stack budget where the platform permits it. The
 runner reports stage-specific failures, including timeouts and sanitizer
 diagnostics. The modules are excluded from ordinary standalone fixture discovery
 because they need imports and compiler command-line arguments.
+
+Benchmark metadata: the subset recognizes contextual `bench "label" fn`, stores
+its decoded label token on the function node, validates supported zero-argument
+scalar entries, and allows bench-only `--check`. Ordinary C emission keeps its
+main requirement and calling behavior. Multiple returns remain outside this
+subset and are explicitly rejected by its existing checker. There is no source
+dump/formatter in this fixture (`render.goose` renders runtime values, not source),
+so no source-rendering path can drop metadata. The `bench` command is explicitly
+unsupported; syntax/check support does not provide a benchmark runner.

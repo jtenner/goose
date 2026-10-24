@@ -369,7 +369,7 @@ recursive fn block_contents(ctx: Compiler&, t: i64) -> i64 {
     while !at(ctx, "}") {
         if take(ctx, ";") { continue; }
         if at(ctx, "let") || at(ctx, "var") || at(ctx, "const") || at(ctx, "reusable") { child(ctx, n, binding(ctx)); continue; }
-        if at(ctx, "fn") || at(ctx, "recursive") { child(ctx, n, function_decl(ctx, true)); continue; }
+        if at_bench(ctx) || at(ctx, "fn") || at(ctx, "recursive") { child(ctx, n, function_decl(ctx, true)); continue; }
         if at(ctx, "guard") { guard_statement(ctx, n); return n; }
         let e = expression(ctx, 0, true, true);
         if assignment_op(ctx, ctx.tokens[ctx.cursor].text) {
@@ -406,7 +406,17 @@ recursive fn generics(ctx: Compiler&, n: i64) {
     }
     close_angle(ctx);
 }
+fn at_bench(ctx: Compiler&) -> bool {
+    return at(ctx, "bench") && ctx.cursor + 1 < ctx.tokens.len && ctx.tokens[ctx.cursor + 1].kind == TK_STRING;
+}
 recursive fn function_decl(ctx: Compiler&, nested: bool) -> i64 {
+    var bench_label = -1;
+    if at_bench(ctx) {
+        ctx.cursor++; bench_label = ctx.cursor; ctx.cursor++;
+        if nested { error_at(ctx, bench_label, "bench requires a top-level function"); }
+        if ctx.tokens[bench_label].text.len == 0 { error_at(ctx, bench_label, "bench label must be nonempty"); }
+        if !at(ctx, "fn") { error_at(ctx, bench_label, "bench requires an unmodified fn declaration"); }
+    }
     var flags = 0;
     var symbol = -1;
     if take(ctx, "extern") { flags |= 2; if ctx.tokens[ctx.cursor].kind == TK_STRING { symbol = ctx.cursor; ctx.cursor++; } }
@@ -415,6 +425,7 @@ recursive fn function_decl(ctx: Compiler&, nested: bool) -> i64 {
     let n = name_node(ctx, N_FUNCTION);
     if nested && ctx.nodes[n].flags & 1 != 0 { error_at(ctx, ctx.nodes[n].token, "a nested function cannot name a namespace"); }
     ctx.nodes[n].flags = flags; ctx.nodes[n].symbol = symbol;
+    ctx.nodes[n].bench_label = bench_label;
     let old_namespace = ctx.current_namespace; ctx.current_namespace = ctx.nodes[n].ns;
     generics(ctx, n);
     let params = node(ctx, N_BLOCK, expect(ctx, "(")); ctx.nodes[n].a = params;
@@ -476,7 +487,7 @@ fn parse(ctx: Compiler&, file: i64) {
             expect(ctx, ";"); ctx.declarations.push(n); continue;
         }
         had_declaration = true;
-        if at(ctx, "fn") || at(ctx, "recursive") || at(ctx, "thread_fn") || at(ctx, "extern") { ctx.declarations.push(function_decl(ctx, false)); }
+        if at_bench(ctx) || at(ctx, "fn") || at(ctx, "recursive") || at(ctx, "thread_fn") || at(ctx, "extern") { ctx.declarations.push(function_decl(ctx, false)); }
         else if take(ctx, "struct") || take(ctx, "enum") {
             var tag = N_STRUCT; if ctx.tokens[ctx.cursor - 1].text == "enum" { tag = N_ENUM; }
             let n = name_node(ctx, tag);

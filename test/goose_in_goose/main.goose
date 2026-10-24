@@ -28,7 +28,7 @@ fn compile_command(ctx: Compiler&, mode: i64, path: const u8[:], output: const u
     }
 
     if mode == COMMAND_CHECK {
-        check_program(ctx);
+        check_program(ctx, true);
         print("checked ", ctx.specializations.len, " specializations, ", ctx.types.len, " types");
         return;
     }
