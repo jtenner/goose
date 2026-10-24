@@ -143,7 +143,7 @@ struct Parser {
             case T_DEFER: case T_RETURN: case T_BREAK: case T_CONTINUE:
                 return !declaration;
             default:
-                return AtInline() || AtCheckfree();
+                return AtBench() || AtInline() || AtCheckfree();
         }
     }
 
@@ -289,6 +289,10 @@ struct Parser {
 
     // `inline` is a keyword only before a function declaration (§7.13): it
     // stays a name everywhere else.
+    bool AtBench() {
+        return lex.tok == T_IDENT && lex.attr == "bench" && lex.PeekTok() == T_STRLIT;
+    }
+
     bool AtInline() {
         if (lex.tok != T_IDENT || lex.attr != "inline") return false;
         auto next = lex.PeekTok();
@@ -445,7 +449,7 @@ struct Parser {
             default: break;
         }
         declseen = true;
-        if (AtInline() || AtCheckfree()) goto fndecl;
+        if (AtBench() || AtInline() || AtCheckfree()) goto fndecl;
         switch (lex.tok) {
             case T_STRUCT: ParseStructDecl(); return;
             case T_ENUM:   ParseEnumDecl();   return;
@@ -723,6 +727,15 @@ struct Parser {
         ast.functions.push_back(sf);
         sf->line = line;
         sf->doc = pre ? pre->doc : lex.doc;
+        if (AtBench()) {
+            sf->isbench = true;
+            lex.Next();
+            sf->benchlabel = lex.sval;
+            lex.Next();
+            if (nested) Error("bench requires a top-level function");
+            if (sf->benchlabel.empty()) Error("bench label must be nonempty");
+            if (lex.tok != T_FN) Error("bench requires an unmodified fn declaration");
+        }
         sf->isnested = nested;
         sf->outer = curfn;
         auto inblock = pre && !pre->dylib.empty();
@@ -2029,7 +2042,7 @@ struct Parser {
     // One statement of b, or its tail; returns false once the block has
     // ended (its `}` consumed, by a guard's rest of the block included).
     bool ParseStatement(Block *b) {
-        if (AtInline() || AtCheckfree()) goto nestedfndecl;
+        if (AtBench() || AtInline() || AtCheckfree()) goto nestedfndecl;
         switch (lex.tok) {
             case T_LET: case T_VAR: case T_CONST: case T_REUSABLE: {
                 if (lex.tok == T_CONST && lex.PeekTok() == T_FOR) {

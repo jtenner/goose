@@ -5280,3 +5280,36 @@ compiler's own description, pass by pass and analysis by analysis, is
   those records. The parameter is passed at its nominal type (`int64_t`,
   `double`), and each use casts it to the type it adapted to; the
   verification proved that cast exact.
+
+### Benchmark declaration metadata
+
+`BenchmarkDeclaration = "bench" StringLiteral FunctionDeclaration`.
+`bench` is contextual only before a string literal; it remains an identifier
+elsewhere. The literal must decode to a nonempty label, with ordinary string
+escapes; expressions, concatenation and interpolation are not labels.
+
+In v1 the declaration is `bench "label" fn qualified_name() ... { ... }`:
+a top-level concrete body, zero parameters (even defaulted parameters are
+forbidden), no generics, no overload sharing its qualified key, no nested
+function or implicit receiver, and no extern, export, threadfn, SIMD, inline,
+checkfree or recursive entry modifiers. `main` cannot be a benchmark key.
+Namespace-qualified keys are allowed. Labels may repeat; the qualified function
+name is its stable identity. This metadata creates no second symbol or runtime
+ABI. The function remains ordinarily callable and dumps preserve its annotation.
+Documentation comments belong to the annotated function.
+
+At least one return component is required. Each must be a fixed-width signed or
+unsigned 8/16/32/64-bit integer, bool, f32 or f64. Normal multiple returns and
+inferred results are permitted. Void, references, raw pointers, shared
+capabilities, strings, arrays, structs and enums are rejected. All annotated
+bodies are semantic roots, including unused and imported declarations; filtering
+cannot hide invalid declarations. `check` accepts bench-only files; ordinary
+executable build/run still require main. Benchmark discovery selects only the
+target file's declarations, in source order, by exact qualified key.
+
+Repeatability and absence of external effects are author obligations, not static
+purity guarantees. One future timed call includes the body and local cleanup;
+global initialization is outside that boundary. Ordered checksum components
+compare exactly by type and value; floats compare IEEE bits (including signed
+zero) and nonfinite values fail. These runtime rules are separate from this
+language-support milestone, which provides discovery and no measurement engine.

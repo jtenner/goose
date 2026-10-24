@@ -3326,6 +3326,32 @@ struct TypeCheck {
             if (t->kind == TY_REF && t->ref->pool && !HasGenerics(t->ref->sub)) ValidatePool(t);
             if (IsIndexT(t)) ValidateIndexType(t);
         }
+        for (auto sf : ast.functions) {
+            if (!sf->isbench) continue;
+            CheckRoot([&] {
+                if (sf->name == "main") Error(sf->line, "bench key cannot be main");
+                if (sf->isnested || !sf->body || sf->isextern || sf->isexport ||
+                    sf->isthread || sf->issimd || sf->isinline || sf->checkfree || sf->isrec)
+                    Error(sf->line, "bench requires a top-level unmodified concrete function body");
+                if (!sf->params.empty()) Error(sf->line, "bench function takes no parameters");
+                if (!sf->generics.empty()) Error(sf->line, "bench function cannot be generic");
+                for (auto other : ast.functions)
+                    if (other != sf && other->qname == sf->qname)
+                        Error(sf->line, "bench key cannot share an overload set");
+                if (sf->specs.empty()) {
+                    auto spec = ast.NewFnSpec();
+                    spec->sf = sf;
+                    sf->specs.push_back(spec);
+                    CheckSpecBody(spec, nullptr, sf->line);
+                }
+                for (auto spec : sf->specs) {
+                    if (spec->rets.empty()) Error(sf->line, "bench requires at least one scalar return component");
+                    for (auto t : spec->rets)
+                        if (!(IsIntT(t) || t->kind == TY_BOOL || t->kind == TY_FLT))
+                            Error(sf->line, "bench results must be fixed-width integers, bool, f32 or f64");
+                }
+            });
+        }
         auto mainsf = ast.MainFunction();
         if (!mainsf && !library && !(nomain && !ast.DeclaresMain()))
             throw CompileError { "program needs exactly one global fn main()" };
