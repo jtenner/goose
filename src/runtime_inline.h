@@ -1134,7 +1134,8 @@ static int64_t gs_uleb_read(const uint8_t *p) {
     int shift = 0;
     for (;;) {
         uint8_t b = *p++;
-        v |= (uint64_t)(b & 0x7f) << shift;
+)GSRT"
+R"GSRT(        v |= (uint64_t)(b & 0x7f) << shift;
         if (!(b & 0x80)) return (int64_t)v;
         shift += 7;
     }
@@ -1152,8 +1153,7 @@ static int64_t gs_uleb_size(const uint8_t *p) {
    loop does not contain, and reaching it means there is a large array to
    walk, against which the call costs nothing. Both read the pointer twice,
    which the emitting sites already assume (they form the element address
-)GSRT"
-R"GSRT(   from the same text). A varint *value*, by contrast, is whatever the
+   from the same text). A varint *value*, by contrast, is whatever the
    program stored, so scalar fields and relative offsets keep the loop above
    inline, where the compilers peel the first byte themselves. */
 
