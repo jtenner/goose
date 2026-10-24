@@ -827,14 +827,32 @@ recursive fn check_function(ctx: Compiler&, symbol: i64, call: i64, caller_scope
     ctx.specializations[id].state = 2;
     return id;
 }
-fn check_program(ctx: Compiler&) {
+fn check_program(ctx: Compiler&, bench_only: bool = false) {
     for n in ctx.declarations { if ctx.nodes[n].tag == N_FUNCTION && ctx.tokens[ctx.nodes[n].token].text == "format" { error_at(ctx, ctx.nodes[n].token, "not implemented yet: custom formatting dispatch"); } }
     initialization_order(ctx, 0);
     for n in ctx.global_order { check_binding(ctx, n, 0); }
     var main_symbol = -1;
     for s, i in ctx.symbols { if s.scope == 0 && s.kind == 3 && s.ns < 0 && ctx.tokens[s.token].text == "main" { main_symbol = i; } }
-    if main_symbol < 0 { write_stderr("error: no root-file main function\n"); exit(1); }
-    check_function(ctx, main_symbol, -1, 0);
+    var benches = 0;
+    for s, i in ctx.symbols {
+        if s.kind != 3 || ctx.nodes[s.decl].bench_label < 0 { continue; }
+        benches++;
+        let d = ctx.nodes[s.decl];
+        if s.ns < 0 && ctx.tokens[d.token].text == "main" { error_at(ctx, d.token, "bench key cannot be main"); }
+        if s.scope != 0 || d.flags != 0 || d.c < 0 { error_at(ctx, d.token, "bench requires a top-level unmodified concrete function body"); }
+        if ctx.nodes[d.a].first >= 0 { error_at(ctx, d.token, "bench function takes no parameters"); }
+        if d.first >= 0 { error_at(ctx, d.token, "bench function cannot be generic"); }
+        for other, j in ctx.symbols {
+            if i != j && other.kind == 3 && other.scope == s.scope && other.ns == s.ns && ctx.tokens[other.token].text == ctx.tokens[s.token].text {
+                error_at(ctx, d.token, "bench key cannot share an overload set");
+            }
+        }
+        let spec = check_function(ctx, i, -1, 0);
+        let kind = ctx.types[ctx.specializations[spec].result].kind;
+        if kind != T_INTEGER && kind != T_FLOAT && kind != T_BOOL { error_at(ctx, d.token, "bench results must be fixed-width integers, bool, f32 or f64"); }
+    }
+    if main_symbol < 0 && !(bench_only && benches > 0) { write_stderr("error: no root-file main function\n"); exit(1); }
+    if main_symbol >= 0 { check_function(ctx, main_symbol, -1, 0); }
     // Fully annotated, non-generic top-level bodies are checked even unused.
     // Generic and nested declarations remain demand-driven.
     let original_symbols = ctx.symbols.len;

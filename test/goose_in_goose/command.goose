@@ -8,6 +8,9 @@ const COMMAND_EMIT = 3;
 fn run_commands() {
     var argument_storage: u8[>..] = [];
     let arguments = args(argument_storage);
+    if arguments.len > 1 && arguments[1] == "bench" {
+        write_stderr("benchmark execution and discovery are not implemented in the subset compiler\n"); exit(2);
+    }
     if arguments.len == 2 && arguments[1] == "--help" {
         print("usage: goose-goose [--tokens | --parse | --check | -o output.c] input.goose");
         print("       goose-goose --check-many input.goose ...");

@@ -1289,6 +1289,8 @@ class Runner:
                 if stage == 2:
                     checks.append(self.task(self_check, executable, label,
                                             work / "stage2.check.log", alone=True))
+            run([sys.executable, HERE / "bench_subset.py", compiler],
+                f"benchmark declarations {label}", work / "bench.check.log")
             native_c = cfiles[1].read_bytes()
             if native_c != cfiles[2].read_bytes():
                 self.fail(f"fixed point {label}", f"C differs: {cfiles[1]} vs {cfiles[2]}")
@@ -2276,6 +2278,13 @@ def main():
             else:
                 r.fail(f"goose {what}", text)
     r.show_task(driver_verbs)
+    def bench_declarations():
+        code, out, err = tc.run_capture([sys.executable, HERE / "bench_declarations.py", exe])
+        if code:
+            r.fail("benchmark declarations", out + err)
+        else:
+            r.ok(out.strip())
+    r.show_task(bench_declarations)
     if cc and jit:
         def cli_definitions():
             code, out, err = tc.run_capture([sys.executable, HERE / "cli_definitions.py", exe])

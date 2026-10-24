@@ -3312,10 +3312,11 @@ struct TypeCheck {
             if (t->kind == TY_REF && t->ref->pool && !HasGenerics(t->ref->sub)) ValidatePool(t);
             if (IsIndexT(t)) ValidateIndexType(t);
         }
-        for (auto sf : ast.functions) {
+        for (size_t i = 0; i < ast.functions.size(); i++) {
+            auto sf = ast.functions[i];
             if (!sf->isbench) continue;
             CheckRoot([&] {
-                if (sf->name == "main") Error(sf->line, "bench key cannot be main");
+                if (sf->qname == "main") Error(sf->line, "bench key cannot be main");
                 if (sf->isnested || !sf->body || sf->isextern || sf->isexport ||
                     sf->isthread || sf->issimd || sf->isinline || sf->checkfree || sf->isrec)
                     Error(sf->line, "bench requires a top-level unmodified concrete function body");
