@@ -4075,3 +4075,29 @@ Spec §6.1, Appendix D.
 * **Variable mode, fixed mode**: an enum stored as exactly its variant's
   size (`Shape..`), or as a tag plus room for the largest variant
   (`Shape`). §9.
+
+### Benchmark declarations
+
+```goose
+bench "Sum integers" fn sums::integers() -> i64 {
+    var total: i64 = 0;
+    for i in 1000 { total += i; }
+    total
+}
+```
+
+`bench` adds a nonempty literal label to an ordinary top-level, unmodified,
+non-generic zero-argument function. Its qualified name is the discovery key;
+labels need not be unique. Return one or more fixed-width integers, bools,
+f32/f64 values, explicitly typed or inferred. Rich values, references and void
+are not benchmark checksums. Helpers retain the ordinary language rules.
+`check` accepts a file containing benchmarks without main. `build` and `run`
+retain their main requirement; a benchmark can be called normally.
+
+The current language milestone supports `goose++ bench file.goose --list`,
+repeatable exact `--filter qualified::key`, and `--sizes small,medium,large`
+(default medium, canonical size order). It checks all benchmark declarations,
+including imports, but selects only declarations directly in the target file.
+Listing prints key, escaped label, size and result signature. It runs no work or
+global initializers and generates no native code. Benchmark execution and report
+artifacts are later milestones; this is not yet a timing runner.

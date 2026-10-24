@@ -45,3 +45,11 @@ Start an editor server with the same configuration, for example
 configuration. Definitions are compilation inputs: build systems must include
 them in artifact cache keys. A type whose fields depend on configuration is
 not automatically ABI-compatible with that type from another configuration.
+
+Benchmark discovery (`goose++ bench file.goose --list`) supplies the string
+`build::BENCH_SIZE` independently for each selected size (`medium` by default;
+`--sizes` accepts a duplicate-free subset of small,medium,large in canonical
+order). An explicit `--define BENCH_SIZE=...` on bench is a duplicate definition.
+Ordinary build/check/run/dump acquire no implicit value and may define it
+explicitly. Source owns the size mapping through ordinary expressions or
+existing `const if`; discovery adds no constant evaluator or source rewriting.
