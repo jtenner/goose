@@ -677,6 +677,7 @@ inline void DumpFields(string &s, const vector<Field> &fields, int ind) {
 }
 
 inline void FnDecl::Dump(string &s, int ind) const {
+    if (sf->isbench) { s += "bench "; EscapeString(s, sf->benchlabel, '"'); s += " "; }
     if (sf->isexport) {
         s += "export ";
         if (sf->cname != sf->name) { EscapeString(s, sf->cname, '"'); s += " "; }
