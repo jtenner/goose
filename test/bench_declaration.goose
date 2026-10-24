@@ -8,6 +8,7 @@ bench "widths" fn widths() -> i8, u8, i16, u16, i32, u32, i64, u64 {
 }
 bench "inferred pair" fn inferred_pair() { return 1, false; }
 bench "qualified main" fn ns::main() { 1 }
+fn unrelated() { fn inferred() -> i64 { 9 } inferred(); }
 fn main() {
     let bench = inferred();
     let n, ok = measured::pair();
