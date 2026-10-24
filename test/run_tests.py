@@ -2258,7 +2258,7 @@ def main():
         checks.append(("--help", code == 0 and "build" in overview and
                        "--multi-test" not in overview, overview + err))
         pages = overview
-        for cmd in ["run", "build", "check", "fetch", "format", "toolchain", "version", "lsp",
+        for cmd in ["run", "build", "check", "bench", "fetch", "format", "toolchain", "version", "lsp",
                     "completion"]:
             code, out, err = tc.run_capture([exe, cmd, "--help"])
             checks.append((f"{cmd} --help", code == 0 and

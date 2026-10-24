@@ -22,7 +22,7 @@ fn compile_command(ctx: Compiler&, mode: i64, path: const u8[:], output: const u
     register_declarations(ctx);
 
     if mode == COMMAND_EMIT {
-        check_program(ctx); generate_c(ctx);
+        check_program(ctx, false); generate_c(ctx);
         if !write_file(output, ctx.c_final) { write_stderr("cannot write C output\n"); exit(1); }
         return;
     }
