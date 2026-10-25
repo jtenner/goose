@@ -4168,13 +4168,39 @@ including imports, but selects only declarations directly in the target file.
 Listing prints key, escaped label, size and result signature. It runs no work or
 global initializers and generates no native code.
 
-Execution is experimental and prominently labeled `UNGATED`: thermal supervision,
-statistics and JSON/CSV artifacts are later stages. One call is one timed sample,
+Execution is experimental; statistics and JSON/CSV artifacts are later stages.
+One call is one timed sample,
 with 2 warmups followed by 7 measured calls by default. `--warmups W` requires
 W >= 1 and `--samples N` requires N >= 5. Output retains raw per-call nanoseconds
 and typed checksums. All selected sizes compile before any workload child starts.
 Native compiler selection, build definitions, C macros and diagnostic/optimization
 options follow `build` (Goose O2 and native O2 by default; no JIT).
+
+Thermal supervision is required by default. Linux discovery reads all hwmon
+inputs labeled exactly `Tctl`; the hottest selected sensor controls the gate.
+Repeatable `--temp-sensor PATH` restricts the sensor set to those inputs, each
+with an associated Tctl label. No readable Tctl fails before global initialization.
+`--temperature off` explicitly disables supervision and prints `UNGATED` with the
+reason. Sensor loss during a gated run fails; it never disables gating silently.
+`--list` does not probe sensors.
+
+Before every call (warmups and retries included), after child initialization,
+wait until Tctl is at or below `--temp-gate` (default 60 C). Gate waits poll each
+second and have a `--gate-timeout` (default 300 seconds per attempt). During the
+call, the parent polls every `--temp-poll-ms` (default 50 ms) and reads immediately
+after completion. Any bracket or in-call reading strictly above `--temp-ceiling`
+(default 65 C) rejects the completed timing. The child is never suspended. The
+same slot retries after cooling; reuse retains its child, process mode creates a
+fresh child. All completed checksums, including rejected calls, must agree.
+`--max-retries` defaults to 10 per slot; exhaustion fails. Gate and ceiling must
+be finite with gate <= ceiling. Poll intervals and timeouts must be positive;
+`--setup-timeout` and `--sample-timeout` override their 600-second defaults.
+The artifact directory retains `temperature.log` with per-sensor monotonic
+nanosecond timestamps and Celsius readings, including gate polls.
+Diagnostics report acceptance/rejection, maximum observed Tctl, actual maximum
+poll gap and gate waiting time. Polling cannot detect every physical spike, and
+sensor refresh may be slower than polling. Raw timings include rejected calls;
+the accompanying thermal diagnostic identifies each phase/slot/retry status.
 
 `--isolation reuse` (default) executes one child per key/size/configuration.
 Ordinary global initializers run once before readiness, outside the timer. Each
@@ -4197,8 +4223,8 @@ Very short calls warn that clock resolution and bridge overhead may dominate.
 Generated C, runner source/object/executable and per-child diagnostic logs are
 retained in the directory printed to stderr. Child stdout/stderr use separate
 bounded logs (1 MiB per stream); they never carry the private control protocol.
-The supervisor enforces 600-second setup, sample and teardown bounds and requires
+The supervisor defaults to 600-second setup, sample and teardown bounds and requires
 clean child exit. It holds the shared-native benchmark lock nonblockingly while
 measuring. Exit codes are 0 success/list, 2 usage/build/preflight failure, 1
 measurement failure, and 130 interruption. No performance publication claims
-should be made from this ungated stage.
+should be made before the remaining reporting and provenance stages land.

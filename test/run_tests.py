@@ -2376,6 +2376,13 @@ def main():
             else:
                 r.ok(out.strip())
         r.show_task(bench_runtime)
+        def bench_thermal():
+            code, out, err = tc.run_capture([sys.executable, HERE / "bench_thermal.py"])
+            if code:
+                r.fail("benchmark thermal", out + err)
+            else:
+                r.ok(out.strip())
+        r.show_task(bench_thermal)
     if cc and jit:
         def cli_definitions():
             code, out, err = tc.run_capture([sys.executable, HERE / "cli_definitions.py", exe])

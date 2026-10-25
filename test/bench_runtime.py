@@ -44,8 +44,26 @@ with tempfile.TemporaryDirectory(prefix='goose-bench-runtime-test-') as director
                       'bench "same" fn ns::selected() -> i64 { print("CALL"); fixture }\n'
                       'bench "same" fn other() -> i64 { abort("unselected"); }\n'
                       'fn main() { abort("main ran"); }\n')
+    # Native CLI uses fixture hwmon files; no host sensor or thermal wait.
+    sensor = pathlib.Path(directory) / 'hwmon'
+    sensor.mkdir()
+    (sensor / 'name').write_text('scripted_cpu\n')
+    (sensor / 'temp1_label').write_text('Tctl\n')
+    (sensor / 'temp1_input').write_text('60000\n')
+    gated = invoke(source, '--filter', 'ns::selected', '--samples', '5', '--warmups', '1',
+                   '--temperature', 'required', '--temp-sensor', str(sensor / 'temp1_input'))
+    assert 'thermal_mode=required' in gated.stderr and 'UNGATED' not in gated.stderr
+    assert gated.stderr.count('status=accepted') == 6
+    assert (artifacts(gated) / 'temperature.log').read_text().count('temp1_input') >= 13
+    invoke(source, '--temperature', 'required', '--temp-sensor', str(sensor / 'missing_input'),
+           code=2, contains='temperature read failed')
+    for option, value in [('--temp-poll-ms', '0'), ('--temp-gate', 'nan'), ('--max-retries', '1.5'),
+                          ('--gate-timeout', '-1'), ('--sample-timeout', 'inf')]:
+        invoke(source, option, value, code=2, contains='invalid bench thermal option')
+    invoke(source, '--temp-gate', '66', code=2, contains='gate must be <= ceiling')
     for mode, children in [('reuse', 1), ('process', 9)]:
         result = invoke(source, '--isolation', mode, '--filter', 'ns::selected')
+        assert 'UNGATED thermal_mode=disabled' in result.stderr
         rows = attempts(result)
         assert len(rows) == 9 and [r[2] for r in rows] == ['warmup'] * 2 + ['measure'] * 7
         assert all(r[0] == 'ns::selected' and r[-1] == 'i64:42;' for r in rows)
