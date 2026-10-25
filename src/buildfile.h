@@ -131,7 +131,7 @@ inline BuildFile ParseBuildFile(const string &path, const string &source) {
 
 // The build file at `path`, or none (an empty one) when there is no such
 // file. A file that does not parse is a CompileError.
-inline BuildFile LoadBuildFile(const string &path, bool &found) {
+inline BuildFile LoadBuildFile(const string &path, bool &found, string *contents = nullptr) {
     string source;
     found = LoadSource(path, source);
     if (!found) {
@@ -139,6 +139,7 @@ inline BuildFile LoadBuildFile(const string &path, bool &found) {
         bf.path = path;
         return bf;
     }
+    if (contents) *contents = source;
     return ParseBuildFile(path, source);
 }
 

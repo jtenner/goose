@@ -156,9 +156,11 @@ struct Builder {
     // Compiles `src` and links it with `objects` and the response files
     // `rsps` into `exe`, with `builddir` taking the intermediates.
     bool Link(const string &src, const vector<string> &objects, const vector<string> &rsps,
-              const string &exe, const string &builddir, const string &logfile) const {
+              const string &exe, const string &builddir, const string &logfile,
+              const vector<string> &extra = {}) const {
         vector<string> argv = { tc.cc };
         for (auto &f : CFlags()) argv.push_back(f);
+        for (auto &f : extra) argv.push_back(f);
         if (tc.style == "msvc") {
             argv.push_back(cat("/Fe:", exe));
             argv.push_back(cat("/Fo:", builddir, "\\"));
@@ -182,12 +184,16 @@ struct Builder {
 // `goose --emit-runtime`'s C on first use: GOOSE_HOME/build/runtime/<runtime
 // hash>/<toolchain id>-<config>/goose_runtime.o. "" when it could not be
 // built, after the builder said why.
-inline string RuntimeObject(const Builder &b) {
+inline string RuntimeObject(const Builder &b, const std::function<void(const string &)> &benchinputs = {}) {
     auto dir = cat(GooseHome(), "/build/runtime/", RuntimeVersion(), "/", b.tc.id, "-",
                    b.opts.debug ? "debug" : "release");
     auto obj = cat(dir, "/goose_runtime.", b.tc.style == "msvc" ? "obj" : "o");
-    if (PathExists(obj) && !b.opts.dryrun) return obj;
     auto src = cat(dir, "/goose_runtime.c");
+    auto existing = [&] {
+        if (benchinputs && PathExists(src)) benchinputs(src);
+        return obj;
+    };
+    if (PathExists(obj) && !b.opts.dryrun) return existing();
     auto log = cat(dir, "/cc.log");
     if (b.opts.dryrun) {
         b.CompileObject(src, obj, "compiling the runtime", log);
@@ -199,10 +205,11 @@ inline string RuntimeObject(const Builder &b) {
     // Every first build shares these paths. Wait before writing the source
     // or invoking the compiler, then recheck what the previous builder left.
     FileLock lock(cat(dir, "/build.lock"), "waiting for another goose compiling the runtime");
-    if (PathExists(obj)) return obj;
+    if (PathExists(obj)) return existing();
     ProgressStep step(cat("compiling the runtime for ", b.tc.desc), true);
     if (!WriteFileMakingDirs(src, RuntimeObjectSource()))
         throw CompileError { cat("cannot write ", src) };
+    if (benchinputs) benchinputs(src);
     // A failed or interrupted compiler may leave a partial object. Only a
     // successful compile publishes the name readers use, by atomic rename.
     auto tmp = cat(dir, "/goose_runtime.tmp.", b.tc.style == "msvc" ? "obj" : "o");
