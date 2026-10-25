@@ -68,14 +68,17 @@ double ThermalNow() {
 }
 struct Hwmon {
     vector<string> paths;
+    std::ofstream trace;
     static string text(const string &path) {
         std::ifstream in(path); string value;
         if (!std::getline(in, value)) throw std::runtime_error("temperature read failed: " + path);
         return value;
     }
-    explicit Hwmon(const BenchThermalOptions &options) {
+    explicit Hwmon(const BenchThermalOptions &options, const string &directory) {
         namespace fs = std::filesystem;
         if (options.off) return;
+        trace.open(directory + "/temperature.log");
+        if (!trace) throw std::runtime_error("cannot create temperature trace");
         paths = options.sensors;
         if (paths.empty()) {
             std::error_code ec;
@@ -106,9 +109,13 @@ struct Hwmon {
         for (auto &path : paths) {
             auto value = text(path); size_t end;
             double c;
-            try { c = std::stod(value, &end) / 1000; }
+            try { c = (double)std::stoll(value, &end) / 1000; }
             catch (...) { throw std::runtime_error("temperature read failed: " + path); }
             if (end != value.size() || !std::isfinite(c)) throw std::runtime_error("temperature read failed: " + path);
+            trace << std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now().time_since_epoch()).count()
+                  << "\t" << path << "\t" << c << "\n";
+            trace.flush();
+            if (!trace) throw std::runtime_error("cannot retain temperature trace");
             maximum = std::max(maximum, c);
         }
         return maximum;
@@ -247,11 +254,12 @@ int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups,
         ~Signals() { sigaction(SIGINT, &oldint, nullptr); sigaction(SIGTERM, &oldterm, nullptr); }
     } signals;
     int childid = 0;
+    bool preflight = true;
     try {
         if (options.gate > options.ceiling) throw std::runtime_error("temperature gate must be <= ceiling");
         std::unique_ptr<Hwmon> sensors;
         if (source) { if (!options.off) source->preflight(); }
-        else sensors = std::make_unique<Hwmon>(options);
+        else sensors = std::make_unique<Hwmon>(options, programs.at(0).directory);
         BenchThermal thermal {options, [&] { return source ? source->read() : sensors->read(); }, ThermalNow, [](double seconds) {
             double deadline = ThermalNow() + seconds;
             while (ThermalNow() < deadline) {
@@ -262,6 +270,7 @@ int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups,
         if (source) { thermal.now = source->now; thermal.wait = source->wait; }
         if (options.off) fprintf(stderr, "UNGATED thermal_mode=disabled reason=explicit --temperature off\n");
         else fprintf(stderr, "thermal_mode=required gate=%.3f C ceiling=%.3f C poll=%.3f ms\n", options.gate, options.ceiling, options.poll_ms);
+        preflight = false;
         vector<BenchRow> rows(programs.size());
         for (size_t rowindex = 0; rowindex < programs.size(); ++rowindex) {
             auto &p = programs[rowindex];
@@ -300,7 +309,7 @@ int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups,
         return 0;
     } catch (const std::exception &e) {
         fprintf(stderr, "bench: %s\n", e.what());
-        return interrupted ? 130 : 1;
+        return interrupted ? 130 : preflight ? 2 : 1;
     }
 }
 #else
