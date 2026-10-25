@@ -168,6 +168,15 @@ with tempfile.TemporaryDirectory(prefix='goose-bench-inputs-') as directory:
     result = invoke('--cc', wrapper, '--json', root / 'linked-change.json', ok=False)
     assert 'link input changed during build' in result.stdout + result.stderr, (result.stdout, result.stderr)
 
+    wrapper.write_text('#!/usr/bin/env python3\nimport os, sys\n'
+                       'if "-M" in sys.argv and any(x.endswith("/runner.c") for x in sys.argv):\n'
+                       '    sys.exit(0)\n'
+                       f'os.execv({compiler!r}, [{compiler!r}, *sys.argv[1:]])\n')
+    path = root / 'missing-dependencies.json'
+    result = invoke('--cc', wrapper, '--json', path, ok=False)
+    assert 'cannot read provenance input' in result.stdout + result.stderr
+    assert not path.exists()
+
     # CMake targets supply their actual compile flags and linked archive hashes.
     sidecar.write_text('cmake_target = "value";\n')
     cmake = root / 'CMakeLists.txt'
