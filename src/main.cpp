@@ -2393,6 +2393,16 @@ int Main(int argc, char **argv, bool &measuring) {
     };
     if (verb == "bench") {
         int code = 0;
+        optional<BenchLock> benchlock;
+        if (!benchlist) {
+            benchlock.emplace();
+            if (!*benchlock) {
+                const char *message = "shared-native benchmark lock unavailable or occupied";
+                fprintf(stderr, "bench: %s\n", message);
+                benchreport->error = {"lock", message};
+                return finishbench(2);
+            }
+        }
         try {
             auto definitions = builddefines;
             for (auto &size : benchsizes) {
@@ -2442,7 +2452,7 @@ int Main(int argc, char **argv, bool &measuring) {
                         throw std::runtime_error("benchmark build artifact changed before execution");
                 }
                 measuring = true;
-                code = RunBenchmarks(benchprograms,benchfresh,benchwarmups,benchsamples,benchthermal,nullptr,&r);
+                code = RunBenchmarks(benchprograms,benchfresh,benchwarmups,benchsamples,benchthermal,nullptr,&r,&*benchlock);
             }
         } catch (const std::exception &e) {
             fprintf(stderr,"bench: %s\n",e.what());benchreport->error={"io",e.what()};code=2;
