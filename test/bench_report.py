@@ -48,6 +48,9 @@ with tempfile.TemporaryDirectory(prefix='goose-report-test-') as name:
     partial = json.loads((folder / 'partial.json').read_text())
     bad = partial['results'][1]['attempts']
     assert [a['elapsed_ns'] for a in bad] == ['0', '-1', None]
+    assert bad[0]['temperature_reads'] == [{'sensor_id': 'cpu', 'offset_ns': '-1', 'c': 60},
+                                         {'sensor_id': 'cpu', 'offset_ns': '1', 'c': 61}]
+    assert bad[2]['temperature_reads'] == [{'sensor_id': 'cpu', 'time_ns': str(2**64 - 1), 'c': 65.5}]
     with (folder / 'partial.samples.csv').open(newline='') as f: bad_csv = list(csv.DictReader(f))[-3:]
     assert [a['elapsed_ns'] for a in bad_csv] == ['0', '-1', '']
     assert [a['seconds'] for a in bad] == [0, -1e-9, None]

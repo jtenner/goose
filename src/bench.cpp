@@ -365,7 +365,7 @@ int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups,
                         a.child_id = childid; a.warmup = i < warmups;
                         a.slot = i < warmups ? i + 1 : i - warmups + 1; a.retry = retry;
                         auto gate_start = thermal.now();
-                        bool gate_finished = false;
+                        bool gate_finished = false, released = false;
                         try {
                             if (sensors) sensors->capturing = false;
                             thermal.gate(); gate_finished = true;
@@ -374,6 +374,7 @@ int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups,
                             if (sensors) sensors->resetCoverage();
                             if (interrupted) throw std::runtime_error("benchmark interrupted");
                             child.send('C');
+                            released = true;
                             auto response = child.line("sample", options.sample_timeout, options.off ? nullptr : &thermal);
                             auto decoded = DecodeAttempt(response, childid, a.warmup, a.slot);
                             a.start_ns = decoded.start_ns; a.end_ns = decoded.end_ns;
@@ -398,7 +399,7 @@ int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups,
                         } catch (const std::exception &e) {
                             if (ErrorCode(e.what()) == "protocol") a.checksum.clear();
                             if (!gate_finished) a.gate_wait_seconds = thermal.now() - gate_start;
-                            if (sensors && a.start_ns) {
+                            if (sensors && released && !options.off) {
                                 a.reads = sensors->captured; sensors->capturing = false;
                                 for (auto &reading:a.reads) a.temperature_max = std::max(a.temperature_max.value_or(reading.c),reading.c);
                                 if (a.temperature_max) row.temperature_max = std::max(row.temperature_max.value_or(*a.temperature_max),*a.temperature_max);
