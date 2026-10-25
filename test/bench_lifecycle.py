@@ -45,6 +45,11 @@ with tempfile.TemporaryDirectory(prefix='goose-bench-lifecycle-') as name:
     driver = folder / 'driver'
     subprocess.run(['c++', '-std=c++20', '-O0', str(root / 'test/bench_lifecycle.cpp'),
                     str(root / 'src/bench_report.cpp'), '-o', str(driver)], check=True)
-    subprocess.run([str(driver)], check=True, cwd=folder, timeout=15)
+    result = subprocess.run([str(driver), str(folder)], cwd=folder, timeout=15,
+                            capture_output=True, text=True)
+    assert result.returncode == 0, (result.returncode, result.stdout, result.stderr)
+    for line in result.stdout.splitlines():
+        if line.startswith('benchmark lifecycle:'):
+            print(line)
 
 print('benchmark lifecycle: occupied lock prevents compiler launch')
