@@ -141,6 +141,13 @@ with tempfile.TemporaryDirectory(prefix='goose-bench-inputs-') as directory:
     import shutil
     compiler = shutil.which('cc')
     wrapper = root / 'cc-wrapper'
+    for extra in (7, 8):
+        wrapper.write_text('#!/usr/bin/env python3\nimport os, sys\n'
+                           f'os.execv({compiler!r}, [{compiler!r}, *sys.argv[1:], "-DEXTRA={extra}"])\n')
+        wrapper.chmod(0o755)
+        current, _ = report('--cc', wrapper)
+        checksum = current['results'][0]['checksum']['components'][0]['value']
+        assert checksum == str(45 + extra), (extra, checksum)
     wrapper.write_text('#!/usr/bin/env python3\nimport os, pathlib, sys\n'
                        f'header = pathlib.Path({str(dependency)!r})\n'
                        f'source = {str(native)!r}\n'

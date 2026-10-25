@@ -2168,6 +2168,7 @@ int Main(int argc, char **argv, bool &measuring) {
                     benchinputpaths.insert(path); protectinputs();
                     auto hash = BenchFileHash(path);
                     if (!benchcchash.empty() && benchcchash != hash) throw std::runtime_error("C compiler changed between configurations");
+                    if (benchcchash.empty()) tc.id += "-bench-" + hash;
                     benchcchash = hash;
                     benchreport->cc = BenchObject({{"path",BenchString(path)},{"sha256",BenchString(hash)},{"version",BenchString(tc.version)}});
                     auto &flags = benchreport->configurations[benchconfig].native_flags;
