@@ -172,6 +172,49 @@ string BenchReadFile(const string &path) {
     std::ifstream f(path,std::ios::binary); if(!f) throw std::runtime_error("cannot read provenance input: "+path);
     string s((std::istreambuf_iterator<char>(f)),{}); if(f.bad()) throw std::runtime_error("cannot read provenance input: "+path);return s;
 }
+vector<string> BenchCommandWords(const string &text) {
+    vector<string> words; string word; char quote = 0; bool started = false;
+    for (size_t i = 0; i < text.size(); ++i) {
+        auto c = text[i];
+        if (c == '\\' && quote != '\'') {
+            if (++i == text.size()) throw std::runtime_error("invalid native compile command");
+            auto next = text[i];
+            if (quote == '"' && next != '"' && next != '\\' && next != '$' && next != '`' && next != '\n') word += '\\';
+            if (next != '\n') word += next;
+            started = true;
+        } else if (quote) {
+            if (c == quote) quote = 0; else word += c;
+        } else if (c == '\'' || c == '"') { quote = c; started = true; }
+        else if (c == ' ' || c == '\t' || c == '\r' || c == '\n') {
+            if (started) words.push_back(word);
+            word.clear(); started = false;
+        } else { word += c; started = true; }
+    }
+    if (quote) throw std::runtime_error("invalid native compile command");
+    if (started) words.push_back(word);
+    return words;
+}
+vector<string> BenchMakeDependencies(const string &text) {
+    // The caller sets the one target to "goose". Decode make's escaped paths,
+    // including spaces, continued lines and literal dollar signs.
+    if (!text.starts_with("goose:")) throw std::runtime_error("invalid native dependency output");
+    vector<string> paths; string path;
+    for (size_t i = 6; i < text.size(); ++i) {
+        char c = text[i];
+        if (c == '\\' && i + 1 < text.size()) {
+            c = text[++i];
+            if (c == '\n') continue;
+            if (c == '\r' && i + 1 < text.size() && text[i+1] == '\n') { ++i; continue; }
+        } else if (c == ' ' || c == '\t' || c == '\r' || c == '\n') {
+            if (!path.empty()) paths.push_back(path);
+            path.clear(); continue;
+        } else if (c == '$' && i + 1 < text.size() && text[i+1] == '$') ++i;
+        path += c;
+    }
+    if (!path.empty()) paths.push_back(path);
+    if (paths.empty()) throw std::runtime_error("empty native dependency output");
+    return paths;
+}
 string BenchHash(const string &bytes) { Sha256 h;h.add(bytes.data(),bytes.size());return h.finish(); }
 string BenchFileHash(const string &path) {
     std::ifstream f(path,std::ios::binary);if(!f)throw std::runtime_error("cannot hash provenance input: "+path);

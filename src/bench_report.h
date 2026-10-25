@@ -14,6 +14,8 @@ std::string BenchChecksum(const std::vector<BenchComponent> &components);
 std::string BenchHash(const std::string &bytes);
 std::string BenchFileHash(const std::string &path);
 std::string BenchReadFile(const std::string &path);
+std::vector<std::string> BenchMakeDependencies(const std::string &text);
+std::vector<std::string> BenchCommandWords(const std::string &text);
 std::string BenchTimestamp();
 std::string BenchUUID();
 std::string BenchHost();
