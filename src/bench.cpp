@@ -69,6 +69,9 @@ double ThermalNow() {
 struct Hwmon {
     vector<string> paths;
     std::ofstream trace;
+    vector<double> last_reads;
+    double maximum_gap = 0;
+    void resetCoverage() { maximum_gap = 0; }
     static string text(const string &path) {
         std::ifstream in(path); string value;
         if (!std::getline(in, value)) throw std::runtime_error("temperature read failed: " + path);
@@ -102,16 +105,21 @@ struct Hwmon {
                     text((parent / "name").string()).c_str(), device.c_str(), path.c_str(),
                     options.sensors.empty() ? "" : " (explicit sensor restriction)");
         }
+        last_reads.resize(paths.size());
         read(); // Preflight before any initializer.
     }
     double read() {
         double maximum = -std::numeric_limits<double>::infinity();
-        for (auto &path : paths) {
+        for (size_t i = 0; i < paths.size(); ++i) {
+            auto &path = paths[i];
             auto value = text(path); size_t end;
             double c;
             try { c = (double)std::stoll(value, &end) / 1000; }
             catch (...) { throw std::runtime_error("temperature read failed: " + path); }
             if (end != value.size() || !std::isfinite(c)) throw std::runtime_error("temperature read failed: " + path);
+            double time = ThermalNow();
+            if (last_reads[i]) maximum_gap = std::max(maximum_gap, time - last_reads[i]);
+            last_reads[i] = time;
             trace << std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now().time_since_epoch()).count()
                   << "\t" << path << "\t" << c << "\n";
             trace.flush();
@@ -279,29 +287,31 @@ int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups,
             if (!fresh) reused.start(p, ++childid, options.setup_timeout);
             for (int i = 0; i < warmups + samples; ++i) {
                 for (int retry = 0;; ++retry) {
-                Child one;
-                auto &child = fresh ? one : reused;
-                if (fresh) child.start(p, ++childid, options.setup_timeout);
-                thermal.gate();
-                child.send('C');
-                auto response = child.line("sample", options.sample_timeout, options.off ? nullptr : &thermal);
-                bool accepted = thermal.finish();
-                row.attempts.push_back(DecodeAttempt(response, childid, i < warmups,
-                                                    i < warmups ? i + 1 : i - warmups + 1));
-                auto &a = row.attempts.back();
-                PrintAttempt(p, a);
-                if (!a.finite) throw std::runtime_error("nonfinite benchmark checksum: " + ChecksumText(a.checksum));
-                if (row.expected.empty()) row.expected = a.checksum;
-                else if (row.expected != a.checksum)
-                    throw std::runtime_error("checksum disagreement for " + p.key + " (" + p.size + "): expected " +
-                                             ChecksumText(row.expected) + ", observed " + ChecksumText(a.checksum));
-                if (a.end_ns - a.start_ns < 1000) fprintf(stderr, "benchmark %s: very short call; timer resolution/bridge overhead may dominate\n", p.key.c_str());
-                if (!options.off) fprintf(stderr, "thermal %s %s %s slot=%d retry=%d status=%s maximum_observed_Tctl=%.3f C max_poll_gap=%.3f ms gate_wait=%.3f s\n",
-                    p.key.c_str(), p.size.c_str(), a.warmup ? "warmup" : "measure", a.slot, retry,
-                    accepted ? "accepted" : "thermal_rejected", thermal.maximum, thermal.gap * 1000, thermal.waited);
-                if (fresh) child.finish();
-                if (accepted) break;
-                if (retry >= options.retries) throw std::runtime_error("thermal_retries exhausted");
+                    Child one;
+                    auto &child = fresh ? one : reused;
+                    if (fresh) child.start(p, ++childid, options.setup_timeout);
+                    thermal.gate();
+                    if (sensors) sensors->resetCoverage();
+                    if (interrupted) throw std::runtime_error("benchmark interrupted");
+                    child.send('C');
+                    auto response = child.line("sample", options.sample_timeout, options.off ? nullptr : &thermal);
+                    bool accepted = thermal.finish();
+                    row.attempts.push_back(DecodeAttempt(response, childid, i < warmups,
+                                                        i < warmups ? i + 1 : i - warmups + 1));
+                    auto &a = row.attempts.back();
+                    PrintAttempt(p, a);
+                    if (!a.finite) throw std::runtime_error("nonfinite benchmark checksum: " + ChecksumText(a.checksum));
+                    if (row.expected.empty()) row.expected = a.checksum;
+                    else if (row.expected != a.checksum)
+                        throw std::runtime_error("checksum disagreement for " + p.key + " (" + p.size + "): expected " +
+                                                 ChecksumText(row.expected) + ", observed " + ChecksumText(a.checksum));
+                    if (a.end_ns - a.start_ns < 1000) fprintf(stderr, "benchmark %s: very short call; timer resolution/bridge overhead may dominate\n", p.key.c_str());
+                    if (!options.off) fprintf(stderr, "thermal %s %s %s slot=%d retry=%d status=%s maximum_observed_Tctl=%.3f C max_poll_gap=%.3f ms gate_wait=%.3f s\n",
+                        p.key.c_str(), p.size.c_str(), a.warmup ? "warmup" : "measure", a.slot, retry,
+                        accepted ? "accepted" : "thermal_rejected", thermal.maximum, (sensors ? sensors->maximum_gap : thermal.gap) * 1000, thermal.waited);
+                    if (fresh) child.finish();
+                    if (accepted) break;
+                    if (retry >= options.retries) throw std::runtime_error("thermal_retries exhausted");
                 }
             }
             if (!fresh) reused.finish();
