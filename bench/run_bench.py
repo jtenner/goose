@@ -28,8 +28,8 @@ includes the compiler's own front end, so pass `--exe` a release build of it
 or those rows measure an unoptimized compiler.
 
   python bench/run_bench.py                          # everything
-  python bench/run_bench.py --only tree,sexp         # re-measure a subset; the report
-                                                     # still shows everything measured
+  python bench/run_bench.py --only tree,sexp         # measure a subset; replace saved
+                                                     # results with this run only
   python bench/run_bench.py --toolchains clang       # one toolchain
   python bench/run_bench.py --sizes small --reps 1   # a quick pass
   python bench/run_bench.py --skip-build             # re-run what is already built
@@ -42,6 +42,8 @@ import argparse
 import hashlib
 import json
 import math
+import os
+import platform
 import re
 import shutil
 import sys
@@ -74,7 +76,7 @@ NATIVE_CASES = {
 
 
 def cache_identity(args, ccs):
-    """Invalidate the state as a whole if inputs or measurement policy change."""
+    """Record input and policy evidence; this is not a full experiment identity."""
     files = [Path(__file__), HERE / 'native_results.py']
     for folder in (GOOSEDIR, CPPDIR, RUSTDIR):
         files.extend(sorted(folder.glob('*')))
@@ -89,6 +91,16 @@ def cache_identity(args, ccs):
                 legacy_goose=args.legacy_goose, isolation=args.isolation,
                 temperature=args.temperature, gate=args.temp_gate, ceiling=args.temp_ceiling,
                 statistic='median/native;best/legacy', timing_scope='function/native;process/legacy')
+
+
+def measurement_environment(rust_version):
+    """Capture report evidence on the machine that collects the measurements."""
+    try:
+        affinity = sorted(os.sched_getaffinity(0))
+    except (AttributeError, OSError):
+        affinity = None
+    return dict(host=platform.node(), cpu=tc.cpu_name(), ram_bytes=tc.ram_bytes(),
+                os=tc.os_name(), affinity=affinity, rust_version=rust_version)
 
 # Rust is not built by the C/C++ toolchains, so its measurements are filed under
 # a toolchain of their own and its rows carry one time, not one per backend.
@@ -635,7 +647,7 @@ def main():
 
     # --report-only touches neither compiler, so it works on a machine that has
     # the saved measurements and nothing else installed.
-    ccs = tc.find_ccs()
+    ccs = {} if args.report_only else tc.find_ccs()
     wanted = [s for s in args.toolchains.split(",") if s] or list(ccs)
     active = [k for k in ccs if k in wanted]
     if not args.report_only:
@@ -648,12 +660,14 @@ def main():
              for k in ccs}
 
     jit = not (args.no_jit or args.report_only)
-    rustc = tc.find_rustc()
+    rustc = None if args.report_only else tc.find_rustc()
     have_rust = bool(rustc) and RUSTDIR.is_dir()
     rust_version = tc.decode(tc.run_capture([rustc, "--version"])[1]).strip() if have_rust else None
+    environment = {} if args.report_only else measurement_environment(rust_version)
 
     GENDIR.mkdir(parents=True, exist_ok=True)
-    shutil.copy(GOOSEDIR / "rng.goose", GENDIR)     # imports resolve next to the root file
+    if not args.report_only:
+        shutil.copy(GOOSEDIR / "rng.goose", GENDIR)  # imports resolve next to the root file
     if have_rust:
         shutil.copy(RUSTDIR / "bench.rs", GENDIR)   # `mod bench;` resolves next to the root
 
@@ -670,7 +684,6 @@ def main():
 
     results = {}      # results[bench][impl][toolchain][size] = measurement
     mismatch = {}
-    measured = set()  # "bench/size" keys refreshed by this run
     failed_run = False
     statefile = GENDIR / ('results-legacy-v2.json' if args.legacy_goose else 'results-native-v2.json')
     identity = None if args.report_only else cache_identity(args, ccs)
@@ -690,6 +703,9 @@ def main():
         sizes = state["sizes"]
         active = state["toolchains"]
         descs = state["tcdefs"]
+        environment = state.get('environment', {})
+        rust_version = environment.get('rust_version')
+        have_rust = bool(rust_version)
         selected = [b for b in BENCHMARKS
                     if b["name"] in results and (not only or b["name"] in only)]
 
@@ -763,7 +779,6 @@ def main():
                         print(f"  {im['label']:<32} {sname:<7} {'jit':<5} "
                               f"RUN FAIL: {m['note']}")
             # Every implementation, under every toolchain, must agree.
-            measured.add(f"{b['name']}/{sname}")
             if len(set(checks.values())) > 1:
                 mismatch[f"{b['name']}/{sname}"] = checks
                 print(f"  !! checksum mismatch in {b['name']}/{sname}")
@@ -771,32 +786,13 @@ def main():
 
     # --- report --------------------------------------------------------------
 
-    # A partial run (--only, --sizes, --toolchains) refreshes part of the
-    # picture; it merges into what previous runs measured rather than replacing
-    # it, so results.md always shows everything measured so far.
+    # Each collection replaces the saved experiment, including partial runs.
+    # Cross-run merging needs an identity that includes the measurement
+    # environment and every retained row's dependencies and configuration.
     if not args.report_only:
-        if statefile.exists():
-            prev = json.loads(statefile.read_text(encoding="utf-8"))
-            if prev.get('schema_version') != STATE_VERSION or prev.get('cache_identity') != identity:
-                prev = dict(results={}, mismatch={}, baseline=None, sizes=[], toolchains=[], tcdefs={})
-            merged = prev["results"]
-            for bn, impls in results.items():
-                for lbl, tcs in impls.items():
-                    for tcname, szs in tcs.items():
-                        merged.setdefault(bn, {}).setdefault(lbl, {}).setdefault(tcname, {}).update(szs)
-            results = merged
-            # A mismatch recorded earlier is cleared by a run that re-measures
-            # that benchmark and size and finds them agreeing.
-            for k, v in prev["mismatch"].items():
-                if k not in mismatch and k not in measured:
-                    mismatch[k] = v
-            if not baseline:
-                baseline = prev["baseline"]
-            sizes = [s for s in SIZE_NAMES if s in prev["sizes"] or s in sizes]
-            active = [k for k in ccs if k in prev["toolchains"] or k in active]
-            descs = {**prev["tcdefs"], **descs}
         tc.write_text(statefile, json.dumps(
             {"schema_version": STATE_VERSION, "cache_identity": identity,
+             "environment": environment,
              "ordering_policy": "serial whole-row blocks", "results": results, "baseline": baseline, "mismatch": mismatch,
              "reps": args.reps, "sizes": sizes, "toolchains": active,
              "tcdefs": {k: descs[k] for k in active}}, indent=1))
@@ -859,17 +855,21 @@ def main():
     W()
     W("| | |")
     W("|---|---|")
-    W(f"| CPU | {tc.cpu_name()} |")
-    W(f"| RAM | {tc.num(tc.ram_bytes() / (1 << 30), 0)} GB |")
-    W(f"| OS | {tc.os_name()} |")
+    W(f"| Host | {environment.get('host') or 'not recorded'} |")
+    W(f"| CPU | {environment.get('cpu') or 'not recorded'} |")
+    ram = environment.get('ram_bytes')
+    W(f"| RAM | {tc.num(ram / (1 << 30), 0) + ' GB' if ram is not None else 'not recorded'} |")
+    W(f"| OS | {environment.get('os') or 'not recorded'} |")
+    affinity = environment.get('affinity')
+    W(f"| CPU affinity | {', '.join(map(str, affinity)) if affinity is not None else 'not recorded'} |")
     for tcname in active:
         W(f"| {tcname} | {descs[tcname]['desc']}, `{descs[tcname]['opt']}` "
           "(C++20 for the C++ rows) |")
     W("| Goose | `goose -O2` to C, then each toolchain above on that C |")
     if jit_measured:
         W("| Goose JIT | `goose -O2 --jit`: TinyCC in the compiler's own process, no C file |")
-    W("| Rust | " + (f"{rust_version}, `-O -C codegen-units=1`" if have_rust
-                     else "not installed (rows pending)") + " |")
+    W("| Rust | " + (f"{rust_version}, `-O -C codegen-units=1`" if have_rust else
+                     "not installed -- rows pending" if 'rust_version' in environment else "not recorded") + " |")
     W()
     if baseline:
         W(f"Startup floor (an empty program, best of 5): "
@@ -1143,7 +1143,7 @@ def main():
         W(tc.decode((HERE / "notes.md").read_bytes()).rstrip())
         W()
 
-    if not have_rust:
+    if not have_rust and 'rust_version' in environment:
         W("## Pending")
         W()
         W("* The Rust rows are missing from this run: `rustc` was not found. The harness")
