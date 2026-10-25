@@ -36,9 +36,9 @@ struct BenchThermal {
     void gate() {
         active = false; gap = 0;
         if (options.off) return;
-        double start = now();
+        double start = now(), deadline = start + options.gate_timeout;
         while (observe() > options.gate) {
-            double remaining = options.gate_timeout - (now() - start);
+            double remaining = deadline - now();
             if (remaining <= 0) throw std::runtime_error("temperature gate timeout");
             wait(std::min(1.0, remaining));
         }
