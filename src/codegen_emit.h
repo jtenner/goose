@@ -1051,7 +1051,7 @@ inline void CodeGen::EmitBench() {
         Append(code, "static void ", prefix, "_call(void) { ");
         if (si.cret >= 0) Append(code, prefix, "_r", si.cret, " = ");
         Append(code, si.cname, "(", args, "); }\n");
-        Append(code, "static int ", prefix, "_result(FILE *f) {\n");
+        Append(code, "static int ", prefix, "_result(FILE *f) {\n    int finite = 1;\n");
         for (size_t i = 0; i < sp->rets.size(); i++) {
             auto t = sp->rets[i];
             string type; t->Dump(type);
@@ -1060,7 +1060,7 @@ inline void CodeGen::EmitBench() {
                 auto bits = IsF32(t) ? 32 : 64;
                 Append(code, "    uint", bits, "_t b", i, "; memcpy(&b", i, ", &", r, ", sizeof b", i, ");\n",
                        "    fprintf(f, \"", type, ":0x%0", bits / 4, "llx;\", (unsigned long long)b", i, ");\n",
-                       "    if (!isfinite(", r, ")) return 0;\n");
+                       "    if (!isfinite(", r, ")) finite = 0;\n");
             } else if (t->kind == TY_BOOL) {
                 Append(code, "    fprintf(f, \"bool:%s;\", ", r, " ? \"true\" : \"false\");\n");
             } else {
@@ -1068,7 +1068,7 @@ inline void CodeGen::EmitBench() {
                 Append(code, "    fprintf(f, \"", type, uns ? ":%llu;\", (unsigned long long)" : ":%lld;\", (long long)", r, ");\n");
             }
         }
-        Append(code, "    return 1;\n}\n");
+        Append(code, "    return finite;\n}\n");
         string key = cat("\"", sf->qname, "\"");
         Append(lookup, "    if (!strcmp(key, ", key, ")) { *call = ", prefix, "_call; *result = ", prefix, "_result; return 1; }\n");
     }
