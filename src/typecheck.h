@@ -3334,7 +3334,9 @@ struct TypeCheck {
                 for (auto spec : sf->specs) {
                     if (spec->rets.empty()) Error(sf->line, "bench requires at least one scalar return component");
                     for (auto t : spec->rets)
-                        if (!(IsIntT(t) || t->kind == TY_BOOL || t->kind == TY_FLT))
+                        if (IsIndexT(t))
+                            Error(sf->line, "bench results cannot be index-qualified integers");
+                        else if (!(IsIntT(t) || t->kind == TY_BOOL || t->kind == TY_FLT))
                             Error(sf->line, "bench results must be fixed-width integers, bool, f32 or f64");
                 }
             });

@@ -5246,10 +5246,14 @@ Documentation comments belong to the annotated function.
 
 At least one return component is required. Each must be a fixed-width signed or
 unsigned 8/16/32/64-bit integer, bool, f32 or f64. Normal multiple returns and
-inferred results are permitted. Void, references, raw pointers, shared
+inferred results are permitted. Index-qualified integers (`in` or `upto`) are
+rejected; return a plain fixed-width integer to use one as a checksum.
+Void, references, raw pointers, shared
 capabilities, strings, arrays, structs and enums are rejected. All annotated
 bodies are semantic roots, including unused and imported declarations; filtering
-cannot hide invalid declarations. `check` accepts bench-only files; ordinary
+cannot hide invalid declarations. Only `bench` keeps otherwise-unused benchmark
+bodies as code generation roots. Other commands retain them when an ordinary
+call reaches them. `check` accepts bench-only files; ordinary
 executable build/run still require main. Benchmark discovery selects only the
 target file's declarations, in source order, by exact qualified key.
 

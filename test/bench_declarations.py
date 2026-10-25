@@ -78,4 +78,18 @@ with tempfile.TemporaryDirectory(prefix="goose-bench-declarations-") as director
     assert '\\u007f\\u009b' in result.stdout, result.stdout
     source.write_text('fn main() {}\n')
     invoke("bench", source, "--list", ok=False, contains="no benchmarks declared")
+    # Listing and execution must reject index/bound checksum components alike.
+    for qualifier in ("in", "upto"):
+        prefix = ('var nodes: i32[>..] = [7];\n'
+                  f'type NodeId = u32 {qualifier} nodes;\n')
+        for entry in ('fn indexed() -> NodeId { 0 as NodeId }',
+                      'fn indexed() { 0 as NodeId }',
+                      'fn indexed() -> i64, NodeId { return 7, 0 as NodeId; }'):
+            source.write_text(prefix + 'bench "index" ' + entry + '\nfn main() {}\n')
+            invoke("check", source, ok=False, contains="bench results cannot be index-qualified integers")
+            for options in (("--list",), ("--temperature", "off")):
+                result = invoke("bench", source, *options, ok=False,
+                                contains="bench results cannot be index-qualified integers")
+                assert result.bench_report["error"]["code"] == "compile", result.bench_report
+                assert result.bench_report["results"] == [], result.bench_report
 print(f"benchmark declarations: {checks} checks passed")
