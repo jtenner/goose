@@ -173,6 +173,7 @@ struct Hwmon {
 struct Child {
     int fd = -1;
     pid_t pid = -1;
+    pid_t pgid = -1; // Group ownership survives reaping the direct child.
     string out, err, log_prefix;
     int logs[2] { -1, -1 };
     FILE *files[2] { nullptr, nullptr };
@@ -211,15 +212,19 @@ struct Child {
             }
         }
     }
+    void stopGroup() {
+        if (pgid > 0) { kill(-pgid, SIGKILL); pgid = -1; }
+    }
     ~Child() {
         if (fd >= 0) close(fd);
+        stopGroup();
         drain();
         for (int i = 0; i < 2; ++i) {
             if (logs[i] >= 0) close(logs[i]);
             if (files[i]) fclose(files[i]);
         }
         if (pid > 0) {
-            kill(-pid, SIGKILL); int status = 0; rusage usage {};
+            int status = 0; rusage usage {};
             pid_t result; do { result = wait4(pid, &status, 0, &usage); } while (result < 0 && errno == EINTR);
             if (result > 0) reaped(status, usage);
         }
@@ -279,6 +284,7 @@ struct Child {
         close(output[1]); close(errors[1]);
         close(pair[1]); fd = pair[0];
         if (pid < 0) throw std::runtime_error("cannot launch benchmark child");
+        pgid = pid;
         setpgid(pid, pid);
         if (line("setup", timeout) != "READY") throw std::runtime_error("invalid benchmark readiness response");
     }
@@ -300,7 +306,7 @@ struct Child {
             drain();
             rusage usage {};
             auto r = wait4(pid, &status, WNOHANG, &usage);
-            if (r == pid) { reaped(status, usage); pid = -1; return WIFEXITED(status) && WEXITSTATUS(status) == 0; }
+            if (r == pid) { reaped(status, usage); pid = -1; stopGroup(); return WIFEXITED(status) && WEXITSTATUS(status) == 0; }
             if (r < 0 && errno != EINTR) return false;
             if (ThermalNow() >= deadline) throw std::runtime_error("benchmark teardown timeout");
             poll(nullptr, 0, 10);
