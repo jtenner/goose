@@ -60,7 +60,7 @@ string BenchChecksum(const vector<BenchComponent> &components) {
     if (components.empty()) return "null";
     vector<string> values;
     for (auto &c : components) values.push_back(BenchObject({{"type", BenchString(c.type)},
-        {"value", c.type == "bool" ? c.value : BenchString(c.value)}}));
+        {"value", (c.type == "bool" && (c.value == "true" || c.value == "false")) ? c.value : BenchString(c.value)}}));
     return BenchObject({{"components", BenchArray(values)}});
 }
 namespace {
@@ -364,7 +364,7 @@ void BenchReport::Print() const {
             number(s?std::optional(s->median*1000):std::nullopt).c_str(),number(s?std::optional(s->mad_percent):std::nullopt).c_str(),
             number(s?std::optional(s->minimum*1000):std::nullopt).c_str(),number(s?std::optional(s->maximum*1000):std::nullopt).c_str(),
             number(r.temperature_max).c_str(),r.thermal_rejections,number(r.rss?std::optional(double(*r.rss)/1048576):std::nullopt).c_str(),
-            Safe(Cell(BenchChecksum(r.expected))).c_str(),r.status.c_str(),Safe(r.signature).c_str());
+            Safe(r.expected.empty() ? "n/a" : BenchChecksum(r.expected)).c_str(),r.status.c_str(),Safe(r.signature).c_str());
     }
     puts("RSS is the process lifetime high-water mark, including runtime and global fixtures.");
 }

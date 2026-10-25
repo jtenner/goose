@@ -2163,12 +2163,11 @@ int Main(int argc, char **argv, bool &measuring) {
                 if (run(files[0])) { code = 2; break; }
             }
             auto &r = *benchreport;
-            // Keep the artifact's row order independent of the size build order.
-            stable_sort(r.rows.begin(),r.rows.end(),[](auto &a,auto &b) { return a.source_line < b.source_line; });
-            stable_sort(benchprograms.begin(),benchprograms.end(),[&](auto &a,auto &b) {
-                auto line = [&](auto &p) { auto it=find_if(r.rows.begin(),r.rows.end(),[&](auto &row) {return row.key==p.key;});return it->source_line; };
-                return line(a)<line(b);
-            });
+            // Keys preserve declaration order even when declarations share a line.
+            map<string,size_t> order;
+            for (auto &row:r.rows) if (!order.count(row.key)) order.emplace(row.key,order.size());
+            stable_sort(r.rows.begin(),r.rows.end(),[&](auto &a,auto &b) { return order.at(a.key) < order.at(b.key); });
+            stable_sort(benchprograms.begin(),benchprograms.end(),[&](auto &a,auto &b) { return order.at(a.key) < order.at(b.key); });
             for (auto &c : r.configurations) {
                 c.id = BenchConfigurationId(c,r.source_files,benchgoosehash,benchcchash);
                 for (auto &row : r.rows) if (row.size == c.size) row.configuration_id = c.id;
