@@ -198,6 +198,19 @@ inline void WriteGooseHeader(const NativeBuild &out) {
     if (!WriteFileIfChanged(path, GooseHeader())) throw CompileError { cat("cannot write ", path) };
 }
 
+inline vector<string> NativeCompileFlags(const Package &p, const Builder &b, const NativeBuild &out) {
+    vector<string> flags;
+    auto msvc = b.tc.style == "msvc";
+    for (auto &i : p.cincludes) flags.push_back(cat(msvc ? "/I" : "-I", i));
+    flags.push_back(cat(msvc ? "/I" : "-I", NativeIncludeDir(out)));
+    for (auto &d : p.cdefines) flags.push_back(cat(msvc ? "/D" : "-D", d));
+    for (auto &f : msvc ? p.cflags_msvc : p.cflags_cc) flags.push_back(f);
+    #ifndef _WIN32
+        if (!msvc) flags.push_back("-fPIC");
+    #endif
+    return flags;
+}
+
 // --- CMake packages (§5.2) ----------------------------------------------------------
 
 // A link command fragment's words, as CMake's file API gives them: several
@@ -275,7 +288,8 @@ inline vector<string> CMakeLinkClosure(const string &builddir, const string &tar
 // changes), built with the discovered compilers through Ninja where there
 // is one, else the platform's generator.
 inline bool BuildCMakePart(const Ast &ast, int pkg, const Builder &b, bool wantjit,
-                           const vector<string> &externs, NativeBuild &out) {
+                           const vector<string> &externs, NativeBuild &out,
+                           const std::function<void(const string &)> &benchinputs = {}) {
     auto &p = ast.packages[pkg];
     // The package's root absolute, with forward slashes, which a quoted CMake
     // argument takes as they are: the program's own is as the command line
@@ -348,8 +362,10 @@ inline bool BuildCMakePart(const Ast &ast, int pkg, const Builder &b, bool wantj
         if (!WriteFileIfChanged(cat(wrapper, "/CMakeLists.txt"), lists))
             throw CompileError { cat("cannot write into ", wrapper) };
         WriteFileMakingDirs(cat(builddir, "/.cmake/api/v1/query/codemodel-v2"), "");
+        if (benchinputs) WriteFileMakingDirs(cat(builddir, "/.cmake/api/v1/query/cmakeFiles-v1"), "");
     }
     vector<string> argv = { cmake, "-S", wrapper, "-B", builddir, "-DCMAKE_BUILD_TYPE=Release" };
+    if (benchinputs) argv.push_back("-DCMAKE_EXPORT_COMPILE_COMMANDS=ON");
     auto ninja = NinjaPath();
     if (!ninja.empty()) {
         argv.push_back("-G");
@@ -378,8 +394,8 @@ inline bool BuildCMakePart(const Ast &ast, int pkg, const Builder &b, bool wantj
     string argvtext, have;
     for (auto &a : argv) Append(argvtext, a, "\n");
     LoadFile(configured, have);
-    if (b.opts.dryrun || have != argvtext) {
-        if (!b.opts.dryrun) {
+    if (b.opts.dryrun || have != argvtext || benchinputs) {
+        if (!b.opts.dryrun && have != argvtext) {
             std::error_code ec;
             filesystem::remove(filesystem::path(configured), ec);
             filesystem::remove(filesystem::path(cat(builddir, "/CMakeCache.txt")), ec);
@@ -391,6 +407,7 @@ inline bool BuildCMakePart(const Ast &ast, int pkg, const Builder &b, bool wantj
         if (!b.opts.dryrun && !WriteFileMakingDirs(configured, argvtext))
             throw CompileError { cat("cannot write ", configured) };
     }
+    if (benchinputs) benchinputs(builddir);
     vector<string> build = { cmake, "--build", builddir, "--config", "Release", "--target",
                              "goose_linkprobe" };
     if (wantjit) build.push_back(jitname);
@@ -448,7 +465,10 @@ inline string ReadStamp(const string &path) {
 // failed command, which the builder reports; a dry run prints the commands
 // and reports success.
 inline bool BuildNativePart(const Ast &ast, int pkg, const string &rootfile,
-                            const Builder &program, bool wantjit, NativeBuild &out) {
+                            const Builder &program, bool wantjit, NativeBuild &out,
+                            const std::function<string(const Builder &, const NativeBuild &,
+                                                       const vector<string> &)> &benchinputs = {},
+                            const std::function<void(const string &)> &benchcmake = {}) {
     auto &p = ast.packages[pkg];
     // A package is built release whatever the program is (§5.5), one build
     // serving every program, and so is a CMake part. The program's own C
@@ -474,6 +494,12 @@ inline bool BuildNativePart(const Ast &ast, int pkg, const string &rootfile,
     inputs.push_back(ForwardSlashes(AbsolutePath(p.sidecar)));
     string sidecartext;
     LoadFile(p.sidecar, sidecartext);
+    auto flags = NativeCompileFlags(p, b, out);
+    string benchstamp;
+    if (benchinputs) {
+        WriteGooseHeader(out);
+        benchstamp = benchinputs(b, out, flags);
+    }
     // The JIT library's symbol table names every extern fn, so a new one
     // rebuilds it.
     auto externs = PackageExternNames(ast, pkg);
@@ -482,13 +508,14 @@ inline bool BuildNativePart(const Ast &ast, int pkg, const string &rootfile,
     // The stamp: what the build was made from, then whether it holds the
     // JIT library besides everything an AOT build has.
     auto made = cat(b.tc.id, "\n", FilesHash(inputs), "\n", Hex8(sidecartext), "\n",
-                    Hex8(externtext), "\n", Hex8(GooseHeader()), "\n");
+                    Hex8(externtext), "\n", Hex8(GooseHeader()), "\n", benchstamp);
     auto aotstamp = cat(made, "aot\n"), jitstamp = cat(made, "jit\n");
     auto stampfile = cat(dir, "/stamp");
     // Whether the build there serves this one. A CMake package from a path
     // is handed to CMake every time, whose own build is incremental and
     // sees the sources this stamp does not; a checkout never changes.
     auto serves = [&](const string &have) {
+        if (benchcmake && !p.cmake_target.empty()) return false;
         if (!p.cmake_target.empty() && p.cachekey.empty()) return false;
         return (have == jitstamp || (!wantjit && have == aotstamp)) && PathExists(out.rsp) &&
                (!wantjit || PathExists(out.jitlib));
@@ -510,7 +537,7 @@ inline bool BuildNativePart(const Ast &ast, int pkg, const string &rootfile,
                           p.cmake_target.empty() ? "" : " with CMake"), !b.opts.dryrun);
     if (!b.opts.dryrun) WriteGooseHeader(out);
     if (!p.cmake_target.empty()) {
-        if (!BuildCMakePart(ast, pkg, b, wantjit, externs, out)) return false;
+        if (!BuildCMakePart(ast, pkg, b, wantjit, externs, out, benchcmake)) return false;
         if (!b.opts.dryrun) WriteFileIfChanged(stampfile, wantjit ? jitstamp : aotstamp);
         return true;
     }
@@ -521,15 +548,7 @@ inline bool BuildNativePart(const Ast &ast, int pkg, const string &rootfile,
     // The flags the package's C compiles with: its includes, defines and
     // flags for this style; position independent where a shared library
     // needs it.
-    vector<string> flags;
     auto msvc = b.tc.style == "msvc";
-    for (auto &i : p.cincludes) flags.push_back(cat(msvc ? "/I" : "-I", i));
-    flags.push_back(cat(msvc ? "/I" : "-I", NativeIncludeDir(out)));
-    for (auto &d : p.cdefines) flags.push_back(cat(msvc ? "/D" : "-D", d));
-    for (auto &f : msvc ? p.cflags_msvc : p.cflags_cc) flags.push_back(f);
-    #ifndef _WIN32
-        if (!msvc) flags.push_back("-fPIC");
-    #endif
     vector<string> objects;
     for (auto &src : p.csources) {
         // Named for the source's path too: two files in different
