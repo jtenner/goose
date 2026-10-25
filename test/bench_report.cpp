@@ -68,6 +68,8 @@ int main(int argc, char **argv) {
     auto zero=decoded;zero.end_ns=zero.start_ns;zero.status="failed";zero.error=r.rows[1].error;
     auto negative=zero;negative.end_ns=negative.start_ns-1;
     BenchAttempt incomplete;incomplete.status="interrupted";incomplete.error={"interrupted","cancelled"};
+    incomplete.reads={{"cpu",UINT64_MAX,65.5}};
+    zero.reads={{"cpu",zero.start_ns-1,60},{"cpu",zero.start_ns+1,61}};
     r.rows[1].attempts={zero,negative,incomplete};r.error=r.rows[1].error;
     r.json_path=std::string(argv[1])+"/partial.json";r.csv_path=std::string(argv[1])+"/partial.csv";
     auto pending=r.rows[1];pending.status="pending";pending.error={};pending.attempts.clear();r.rows.push_back(pending);
