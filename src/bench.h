@@ -1,4 +1,4 @@
-// Stage 2 transport. Attempts are independent of reporting and thermal policy.
+// Native transport and parent-owned thermal supervision.
 #pragma once
 #include "bench_thermal.h"
 namespace goose {

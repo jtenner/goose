@@ -36,11 +36,16 @@ int main(int argc, char **argv) {
     else if (scenario == "loss") readings = {60};
     double clock = 0; size_t index = 0; int waits = 0;
     BenchThermalOptions options;
-    options.poll_ms = 1000000; options.retries = scenario == "exhaust" ? 0 : 10;
+    options.poll_ms = scenario == "mid" ? 1 : 1000000; options.retries = scenario == "exhaust" ? 0 : 10;
     options.off = scenario == "off";
     BenchThermalSource source {
         [&] { if (scenario == "absent" || scenario == "off") throw std::runtime_error("no readable Tctl sensor"); },
         [&] {
+            if (scenario == "mid") {
+                ++index;
+                if (index == 2) std::ofstream(string(argv[2]) + "/crossed") << "crossed";
+                return index == 2 ? 70.0 : 60.0;
+            }
             if (scenario == "loss" && index) throw std::runtime_error("temperature read failed: disappeared");
             return index < readings.size() ? readings[index++] : 60;
         },
