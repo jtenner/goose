@@ -16,7 +16,7 @@ checks = 0
 
 def invoke(source, *options, code=0, contains=None):
     global checks
-    result = subprocess.run([str(exe), 'bench', str(source), *options], capture_output=True, text=True, timeout=120)
+    result = subprocess.run([str(exe), 'bench', str(source), '--temperature', 'off', *options], capture_output=True, text=True, timeout=120)
     assert result.returncode == code, (result.args, result.returncode, result.stdout, result.stderr)
     if contains:
         assert contains in result.stdout + result.stderr, (contains, result.stdout, result.stderr)
@@ -115,7 +115,7 @@ with tempfile.TemporaryDirectory(prefix='goose-bench-runtime-test-') as director
     source.write_text('import os;\nfn setup() -> i64 { sleep_ms(30000); 1 }\nlet fixture = setup();\n'
                       'bench "interrupt" fn entry() -> i64 { fixture }\n')
     with tempfile.TemporaryFile(mode='w+') as diagnostics:
-        process = subprocess.Popen([str(exe), 'bench', str(source)], stdout=subprocess.PIPE, stderr=diagnostics, text=True)
+        process = subprocess.Popen([str(exe), 'bench', str(source), '--temperature', 'off'], stdout=subprocess.PIPE, stderr=diagnostics, text=True)
         try:
             deadline = time.monotonic() + 30
             while time.monotonic() < deadline:
