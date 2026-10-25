@@ -2285,6 +2285,14 @@ def main():
         else:
             r.ok(out.strip())
     r.show_task(bench_declarations)
+    if cc and sys.platform.startswith("linux"):
+        def bench_runtime():
+            code, out, err = tc.run_capture([sys.executable, HERE / "bench_runtime.py", exe])
+            if code:
+                r.fail("benchmark runtime", out + err)
+            else:
+                r.ok(out.strip())
+        r.show_task(bench_runtime)
     if cc and jit:
         def cli_definitions():
             code, out, err = tc.run_capture([sys.executable, HERE / "cli_definitions.py", exe])

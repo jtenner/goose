@@ -46,7 +46,7 @@ configuration. Definitions are compilation inputs: build systems must include
 them in artifact cache keys. A type whose fields depend on configuration is
 not automatically ABI-compatible with that type from another configuration.
 
-Benchmark discovery (`goose++ bench file.goose --list`) supplies the string
+Benchmark execution and discovery (`goose++ bench file.goose [--list]`) supply the string
 `build::BENCH_SIZE` independently for each selected size (`medium` by default;
 `--sizes` accepts a duplicate-free subset of small,medium,large in canonical
 order). An explicit `--define BENCH_SIZE=...` on bench is a duplicate definition.
