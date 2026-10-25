@@ -2223,6 +2223,8 @@ int Main(int argc, char **argv, bool &measuring) {
                             recordbenchfile(commands);
                             auto db = ParseJson(BenchReadFile(commands));
                             if (db.kind != Json::ARRAY || db.arr.empty()) throw std::runtime_error("missing native compile commands");
+                            auto directories = CMakeCompileDirectories(dir, "goose_linkprobe");
+                            set<string> scanned;
                             for (auto &entry : db.arr) {
                                 vector<string> command;
                                 if (auto args = entry.Get("arguments")) {
@@ -2230,6 +2232,17 @@ int Main(int argc, char **argv, bool &measuring) {
                                 } else command = BenchCommandWords(entry.Str("command"));
                                 if (command.empty()) throw std::runtime_error("empty native compile command");
                                 auto cwd = entry.Str("directory");
+                                auto object = entry.Str("output");
+                                if (object.empty()) {
+                                    for (size_t i = 1; i + 1 < command.size(); ++i)
+                                        if (command[i] == "-o") { object = command[i + 1]; break; }
+                                }
+                                if (object.empty()) throw std::runtime_error("missing native compile output");
+                                object = filesystem::weakly_canonical(filesystem::path(object).is_absolute() ? object : cat(cwd, "/", object)).string();
+                                auto owner = std::find_if(directories.begin(), directories.end(),
+                                    [&](const string &directory) { return object.starts_with(directory); });
+                                if (owner == directories.end()) continue;
+                                scanned.insert(*owner);
                                 auto compiler = FindOnPath(command[0]);
                                 if (compiler.empty()) throw std::runtime_error("cannot resolve native compiler: " + command[0]);
                                 recordbenchfile(compiler);
@@ -2247,6 +2260,7 @@ int Main(int argc, char **argv, bool &measuring) {
                                 benchreport->configurations[benchconfig].native_flags.push_back("native-compile=" +
                                     BenchObject({{"directory",BenchString(cwd)}, {"compiler",BenchString(compiler)}, {"flags",BenchStrings(flags)}}));
                             }
+                            if (scanned != directories) throw std::runtime_error("missing compile commands for selected CMake targets");
                         };
                         bool built;
                         try { built = BuildNativePart(*astp, pkg, filename, b, false, nb, capture, cmakecapture); }
