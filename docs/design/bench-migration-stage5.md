@@ -8,6 +8,10 @@ This change implements the Python integration and first migration groups from
 at `a9ca81f07220f0a1a5b40900394326087885bcfc`. Its outputs describe the old
 files at their old sizes; they are not measurements of the new entries.
 
+Stage 5 expansion remains blocked until BLOCK design review findings 1–9 are
+resolved. The artifact contract remains incomplete until finding 10 is
+resolved. The input identity fixes alone do not remove either block.
+
 ## Completed groups
 
 1. `bench/native_results.py` validates JSON v1, launches one file/key/size,
