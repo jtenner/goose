@@ -765,14 +765,23 @@ R"(usage: goose bench file.goose [options]
 
 Runs one function call per timed sample. Global initialization is untimed;
 main is never called. Checks typed return values across warmups and samples.
-Experimental Linux native execution: UNGATED, no thermal supervision,
-statistics or JSON/CSV artifacts yet. Raw attempts and diagnostic logs only.
+Experimental Linux native execution with required Tctl thermal supervision;
+no statistics or JSON/CSV artifacts yet. Raw attempts and diagnostic logs only.
 All selected sizes are built before measurement; Goose and native defaults O2.
 
 Options:
   --list                Check and list only; no compilation, setup or work.
   --isolation mode      reuse (default): one child per key/size; process:
                         freshly execute a child for every warmup and sample.
+  --temperature mode    required (default) or off (explicit UNGATED override).
+  --temp-sensor PATH    Restrict to this Tctl input; repeatable.
+  --temp-gate C         Start at or below C (default 60).
+  --temp-ceiling C      Reject above C (default 65; must be >= gate).
+  --temp-poll-ms N      In-call poll interval (default 50 ms).
+  --gate-timeout S      Gate deadline (default 300 seconds).
+  --sample-timeout S    Call deadline (default 600 seconds).
+  --setup-timeout S     Child setup deadline (default 600 seconds).
+  --max-retries N       Thermal retries per slot (default 10).
   --samples N           Measured calls (default 7, minimum 5).
   --warmups W           Warmup calls (default 2, minimum 1).
   --filter key          Select an exact qualified key; repeatable.
@@ -1359,6 +1368,7 @@ int Main(int argc, char **argv, bool &measuring) {
     auto nocgen = false;
     auto benchlist = false;
     bool benchfresh = false;
+    BenchThermalOptions benchthermal;
     int benchwarmups = 2, benchsamples = 7;
     vector<BenchProgram> benchprograms;
     string benchdir;
@@ -1387,6 +1397,28 @@ int Main(int argc, char **argv, bool &measuring) {
         if (arg == "--list" && verb == "bench") benchlist = true;
         else if (arg == "--filter" && verb == "bench" && i + 1 < argc)
             benchfilters.push_back(argv[++i]);
+        else if (verb == "bench" && arg == "--temperature" && i + 1 < argc) {
+            string mode = argv[++i];
+            if (mode != "off" && mode != "required") { fprintf(stderr, "--temperature requires required or off\n"); return 2; }
+            benchthermal.off = mode == "off";
+        }
+        else if (verb == "bench" && arg == "--temp-sensor" && i + 1 < argc) benchthermal.sensors.push_back(argv[++i]);
+        else if (verb == "bench" && (arg == "--temp-gate" || arg == "--temp-ceiling" || arg == "--temp-poll-ms" ||
+                 arg == "--gate-timeout" || arg == "--sample-timeout" || arg == "--setup-timeout" || arg == "--max-retries") && i + 1 < argc) {
+            char *end; const char *text = argv[++i]; double value = strtod(text, &end);
+            if (end == text || *end || !std::isfinite(value) ||
+                (arg == "--max-retries" ? value < 0 || value > 2147483647 || floor(value) != value :
+                 arg != "--temp-gate" && arg != "--temp-ceiling" && value <= 0)) {
+                fprintf(stderr, "invalid bench thermal option: %s\n", arg.c_str()); return 2;
+            }
+            if (arg == "--temp-gate") benchthermal.gate = value;
+            else if (arg == "--temp-ceiling") benchthermal.ceiling = value;
+            else if (arg == "--temp-poll-ms") benchthermal.poll_ms = value;
+            else if (arg == "--gate-timeout") benchthermal.gate_timeout = value;
+            else if (arg == "--sample-timeout") benchthermal.sample_timeout = value;
+            else if (arg == "--setup-timeout") benchthermal.setup_timeout = value;
+            else benchthermal.retries = (int)value;
+        }
         else if (arg == "--isolation" && verb == "bench" && i + 1 < argc) {
             string mode = argv[++i];
             if (mode != "reuse" && mode != "process") { fprintf(stderr, "--isolation requires reuse or process\n"); return 2; }
@@ -2029,7 +2061,7 @@ int Main(int argc, char **argv, bool &measuring) {
         }
         if (benchlist) return 0;
         measuring = true;
-        return RunBenchmarks(benchprograms, benchfresh, benchwarmups, benchsamples);
+        return RunBenchmarks(benchprograms, benchfresh, benchwarmups, benchsamples, benchthermal);
     }
     if (!multitest) return run(files[0]);
     // Each file has an Ast and a compile thread of its own, which is all the
