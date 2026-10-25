@@ -45,7 +45,6 @@ struct BenchThermal {
         waited = now() - start;
         // The final gate read is the pre-release bracket.
         maximum = current;
-
     }
     bool finish() { if (options.off) return true; observe(); return maximum <= options.ceiling; }
 };

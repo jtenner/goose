@@ -22,7 +22,10 @@ while True:
     if c != b'C': break
     n += 1
     start = time.monotonic_ns()
-    end = start + 100
+    marker = os.environ.get('THERMAL_MARKER')
+    if marker:
+        while not os.path.exists(marker): time.sleep(.001)
+    end = time.monotonic_ns() + 100
     value = n if os.environ.get('THERMAL_MISMATCH') else 1
     s.sendall(f'{start} {end} 1 i64:{value};\\n'.encode())
 ''')
@@ -32,6 +35,7 @@ while True:
         ('wait', 0, 6, 'gate_wait=2.000'),
         ('retry', 0, 7, 'thermal_rejected'),
         ('retry-process', 0, 7, 'thermal_rejected'),
+        ('mid', 0, 7, 'maximum_observed_Tctl=70.000'),
         ('cancel', 130, 0, 'benchmark interrupted'),
         ('exhaust', 1, 1, 'thermal_retries exhausted'),
         ('absent', 2, 0, 'no readable Tctl'),
@@ -43,13 +47,14 @@ while True:
         if scenario == 'mismatch': env['THERMAL_MISMATCH'] = '1'
         artifacts = folder / scenario
         artifacts.mkdir()
+        if scenario == 'mid': env['THERMAL_MARKER'] = str(artifacts / 'crossed')
         result = subprocess.run([str(driver), str(child), str(artifacts), scenario], capture_output=True, text=True, env=env, timeout=10)
         assert result.returncode == code, (scenario, result.stdout, result.stderr)
         assert len(result.stdout.splitlines()) == calls, (scenario, result.stdout)
         assert marker in result.stderr, (scenario, result.stderr)
-        if scenario in ('retry', 'retry-process'):
+        if scenario in ('retry', 'retry-process', 'mid'):
             assert result.stderr.count('status=accepted') == 6
             assert result.stderr.count('warmup slot=1') == 2
             assert len(list(artifacts.glob('*.stdout'))) == (7 if scenario == 'retry-process' else 1)
         if scenario == 'absent': assert not list(artifacts.glob('*.stdout'))
-    print('benchmark thermal: 10 scripted adapter/supervisor scenarios plus monitor, equality and timeout checks passed')
+    print('benchmark thermal: 11 scripted adapter/supervisor scenarios plus monitor, equality and timeout checks passed')
