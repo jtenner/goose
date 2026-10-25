@@ -67,8 +67,22 @@ Cases and units:
   tracking. Units are emission operations. Optimizers may prove enabled
   checks redundant; report the observed result instead of assuming overhead.
 
-Seven samples follow two warmups by default. C/Goose order alternates per
-sample; no samples run simultaneously. JSON retains every sample, medians,
+Seven samples follow two warmups by default. The O2 mmap Goose row uses the
+native bench command and returns a typed checksum. That row and its C baseline
+run as whole blocks; `--experiments 2` reverses their order in the second
+experiment. Other rows retain per-sample alternation. `--legacy-goose` keeps
+per-sample alternation for every row. No samples run simultaneously.
+Native temperature gating is required by default; `--temperature off` is an
+explicit ungated override. Legacy rows have no thermal gate.
+
+JSON schema version 2 identifies each experiment and its ordering policy. It
+retains native configuration, source hashes, thermal policy, raw attempts and
+the full native report. Without `--directory`, a run keeps its artifacts in a
+unique directory beside `--output`; those files are not deleted on exit.
+`--prepare` also checks native entry discovery without running a body.
+See the [stage 5 migration map](../../docs/design/bench-migration-stage5.md).
+
+JSON retains every sample, medians,
 median absolute deviations, min/max, CPU, process affinity, platform,
 compiler identity/flags, SHA256 of both compiler executables, source Git commit/dirty
 state and workload source hashes, generated C and executable hashes, explicit
