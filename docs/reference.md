@@ -4161,10 +4161,44 @@ are not benchmark checksums. Helpers retain the ordinary language rules.
 `check` accepts a file containing benchmarks without main. `build` and `run`
 retain their main requirement; a benchmark can be called normally.
 
-The current language milestone supports `goose++ bench file.goose --list`,
+`goose++ bench file.goose` runs native benchmarks on Linux. It supports
 repeatable exact `--filter qualified::key`, and `--sizes small,medium,large`
 (default medium, canonical size order). It checks all benchmark declarations,
 including imports, but selects only declarations directly in the target file.
 Listing prints key, escaped label, size and result signature. It runs no work or
-global initializers and generates no native code. Benchmark execution and report
-artifacts are later milestones; this is not yet a timing runner.
+global initializers and generates no native code.
+
+Execution is experimental and prominently labeled `UNGATED`: thermal supervision,
+statistics and JSON/CSV artifacts are later stages. One call is one timed sample,
+with 2 warmups followed by 7 measured calls by default. `--warmups W` requires
+W >= 1 and `--samples N` requires N >= 5. Output retains raw per-call nanoseconds
+and typed checksums. All selected sizes compile before any workload child starts.
+Native compiler selection, build definitions, C macros and diagnostic/optimization
+options follow `build` (Goose O2 and native O2 by default; no JIT).
+
+`--isolation reuse` (default) executes one child per key/size/configuration.
+Ordinary global initializers run once before readiness, outside the timer. Each
+call must restore equivalent logical input inside its own timed body; fixture
+capacity and caches may persist, but accumulating counters, drained streams and
+already-sorted inputs violate this repeatability contract. Matching checksums
+do not prove equivalent work. `--isolation process` freshly executes a child for
+every warmup and measured call, initializing globals each time outside timing.
+It supports destructive process-local state; it does not reset files or caches.
+No setup hooks, implicit resets or extra calls are added. `main` is never called.
+
+An opaque separately compiled runner resolves the key before timing, reads a
+monotonic clock around one call (including ordinary local cleanup), then encodes
+and consumes the result. There is no cross-boundary LTO, overhead subtraction,
+or batching. Warmups and measured results must agree exactly, with ordered typed
+components; integers are exact, bools are true/false, and floats compare IEEE bits
+(including signed zero). Nonfinite floats and mismatches fail the run immediately.
+Very short calls warn that clock resolution and bridge overhead may dominate.
+
+Generated C, runner source/object/executable and per-child diagnostic logs are
+retained in the directory printed to stderr. Child stdout/stderr use separate
+bounded logs (1 MiB per stream); they never carry the private control protocol.
+The supervisor enforces 600-second setup, sample and teardown bounds and requires
+clean child exit. It holds the shared-native benchmark lock nonblockingly while
+measuring. Exit codes are 0 success/list, 2 usage/build/preflight failure, 1
+measurement failure, and 130 interruption. No performance publication claims
+should be made from this ungated stage.

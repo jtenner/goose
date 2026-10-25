@@ -42,7 +42,7 @@ with tempfile.TemporaryDirectory(prefix="goose-bench-declarations-") as director
     for sizes in ("", "small,small", "SMALL", "small,", ",small"):
         invoke("bench", source, "--list", "--sizes", sizes, ok=False)
     invoke("bench", source, "--list", "--define", 'BENCH_SIZE="small"', ok=False, contains="duplicate")
-    invoke("bench", source, ok=False, contains="not implemented")
+    invoke("bench", source, "--samples", "4", ok=False, contains="samples >= 5")
     invoke("bench", source, "--list", "--jit", ok=False)
     invoke("check", source, "--roundtrip")
     dumped = invoke("--dump", source).stdout
