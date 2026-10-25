@@ -9,6 +9,7 @@
 #include <cstring>
 using std::string; using std::vector;
 #include "bench.h"
+#include "bench_results.h"
 #ifdef __linux__
 #include <sys/socket.h>
 #include <sys/wait.h>
@@ -29,6 +30,35 @@ string BenchDirectory() {
 namespace {
 volatile sig_atomic_t interrupted = 0;
 void BenchInterrupt(int) { interrupted = 1; }
+BenchAttempt DecodeAttempt(const string &response, int child, bool warmup, int slot) {
+    unsigned long long start, end;
+    int finite, offset = 0;
+    if (sscanf(response.c_str(), "%llu %llu %d %n", &start, &end, &finite, &offset) != 3 || !offset ||
+        end <= start || (finite != 0 && finite != 1))
+        throw std::runtime_error("invalid benchmark timed result (nonpositive interval or protocol error)");
+    BenchAttempt a { child, warmup, slot, start, end, finite != 0, {} };
+    auto payload = response.substr(offset);
+    while (!payload.empty()) {
+        auto colon = payload.find(':'), semi = payload.find(';');
+        if (colon == string::npos || semi == string::npos || colon >= semi || colon == 0 || colon + 1 == semi)
+            throw std::runtime_error("invalid benchmark checksum protocol");
+        a.checksum.push_back({ payload.substr(0, colon), payload.substr(colon + 1, semi - colon - 1) });
+        payload.erase(0, semi + 1);
+    }
+    if (a.checksum.empty()) throw std::runtime_error("missing benchmark checksum");
+    return a;
+}
+string ChecksumText(const vector<BenchComponent> &components) {
+    string text;
+    for (auto &c : components) text += c.type + ":" + c.value + ";";
+    return text;
+}
+void PrintAttempt(const BenchProgram &p, const BenchAttempt &a) {
+    printf("%s\t%s\t%s\t%d\t%llu ns\t%s\n", p.key.c_str(), p.size.c_str(),
+           a.warmup ? "warmup" : "measure", a.slot,
+           (unsigned long long)(a.end_ns - a.start_ns), ChecksumText(a.checksum).c_str());
+    fflush(stdout);
+}
 struct Child {
     int fd = -1;
     pid_t pid = -1;
@@ -159,8 +189,10 @@ int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups,
     } signals;
     int childid = 0;
     try {
-        for (auto &p : programs) {
-            string expected;
+        vector<BenchRow> rows(programs.size());
+        for (size_t rowindex = 0; rowindex < programs.size(); ++rowindex) {
+            auto &p = programs[rowindex];
+            auto &row = rows[rowindex];
             Child reused;
             if (!fresh) reused.start(p, ++childid);
             for (int i = 0; i < warmups + samples; ++i) {
@@ -169,18 +201,16 @@ int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups,
                 if (fresh) child.start(p, ++childid);
                 child.send('C');
                 auto response = child.line("sample");
-                unsigned long long start, end;
-                int finite, offset = 0;
-                if (sscanf(response.c_str(), "%llu %llu %d %n", &start, &end, &finite, &offset) != 3 || !offset || end <= start)
-                    throw std::runtime_error("invalid benchmark timed result");
-                auto checksum = response.substr(offset);
-                if (!finite) throw std::runtime_error("nonfinite benchmark checksum: " + checksum);
-                if (expected.empty()) expected = checksum;
-                else if (expected != checksum)
-                    throw std::runtime_error("checksum disagreement for " + p.key + " (" + p.size + "): expected " + expected + ", observed " + checksum);
-                printf("%s\t%s\t%s\t%d\t%llu ns\t%s\n", p.key.c_str(), p.size.c_str(),
-                       i < warmups ? "warmup" : "measure", i < warmups ? i + 1 : i - warmups + 1, end - start, checksum.c_str());
-                if (end - start < 1000) fprintf(stderr, "benchmark %s: very short call; timer resolution/bridge overhead may dominate\n", p.key.c_str());
+                row.attempts.push_back(DecodeAttempt(response, childid, i < warmups,
+                                                    i < warmups ? i + 1 : i - warmups + 1));
+                auto &a = row.attempts.back();
+                PrintAttempt(p, a);
+                if (!a.finite) throw std::runtime_error("nonfinite benchmark checksum: " + ChecksumText(a.checksum));
+                if (row.expected.empty()) row.expected = a.checksum;
+                else if (row.expected != a.checksum)
+                    throw std::runtime_error("checksum disagreement for " + p.key + " (" + p.size + "): expected " +
+                                             ChecksumText(row.expected) + ", observed " + ChecksumText(a.checksum));
+                if (a.end_ns - a.start_ns < 1000) fprintf(stderr, "benchmark %s: very short call; timer resolution/bridge overhead may dominate\n", p.key.c_str());
                 if (fresh) child.finish();
             }
             if (!fresh) reused.finish();
