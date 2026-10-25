@@ -73,11 +73,21 @@ Top-level object:
 * `status`: `running`, `ok`, `listed`, `failed`, or `interrupted`.
 * `started_at`, `finished_at`: timestamps; finished is null while running.
 * `source`: object with `path` (target's absolute path), `sha256` (target bytes),
-  `files` (array of `{path, sha256}` for target, imported source and embedded
-  input files used at compile time), `git_commit` (string or null), and
+  `files` (array of `{path, sha256}` for target, imported source, embedded
+  inputs, sidecars and native build dependencies), `git_commit` (string or null), and
   `git_dirty` (bool or null, covers recorded source inputs, including untracked
   inputs). Runtime fixture files are the author's reproducibility obligation;
   there is no automatic transitive filesystem tracing.
+  For execution, native dependencies include compiler-resolved headers and
+  sources, CMake configuration inputs and compile commands, link response
+  files, and the objects, archives, shared libraries and linker scripts that
+  the linker reports. Hash file contents, not file sizes or timestamps.
+  Run-local generated C and runner files derive from the hashed compiler;
+  keep their temporary paths out of this array and the configuration ID.
+  Listing records known explicit headers, sidecars and declared native
+  sources, but does not select a C compiler or resolve its dependency graph.
+  Native sources must exist before dependency scanning. Reject CMake sources
+  that are generated only at build time, instead of emitting an incomplete ID.
 * `host`: object with `os`, `kernel`, `architecture`, `cpu_model` (strings),
   `logical_cpus` (integer), `affinity` (array of effective CPU IDs or null),
   `clock` (monotonic clock identifier string), `clock_resolution_ns` (decimal
@@ -113,9 +123,26 @@ Configuration object:
   for integers, decoded string for strings. Includes `BENCH_SIZE`.
 * `goose_flags`, `native_flags`: arrays of effective option strings in order,
   including optimization, checks, C macros, link options and backend choice.
+  `native-compile=` entries encode each native source's effective compile
+  flags as JSON. CMake entries also give the compiler and working directory.
+  Record package flags even when a cached native object serves the build.
+  `runtime-compile=` records the runtime flags. `response=` records response
+  file text; include response file content hashes in the input list as well.
 * `executable_sha256`, `generated_c_sha256`: strings or null when not built.
   Hash immutable artifacts actually executed; never reuse a stale binary after
   a failed build. Check input/toolchain hashes have not changed during build.
+  Resolve transitive headers before compilation. Include their content hashes
+  and effective flags in the bench-only native cache stamp. Resolve linked
+  files with a preliminary traced link; hash them before the final link.
+  Repeat dependency resolution and hash checks after the final link. Fail
+  on changed contents, commands or dependency sets before any entry runs.
+
+Before writing any JSON, summary CSV or sample CSV, reject output paths that
+resolve to a known input or compiler path. Apply this rule to `--list`, failed
+compilations and successful builds. Check explicit headers before parsing,
+and collect sidecars and native source paths even when type checking fails.
+If native dependency discovery fails, do not write to an unverified artifact
+path. The diagnostic remains available on stderr.
 
 Thermal policy object:
 
