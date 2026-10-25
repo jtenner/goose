@@ -232,40 +232,74 @@ inline vector<string> SplitFragment(const string &f) {
     return out;
 }
 
-// The link line of `target` in the CMake build at `builddir`, from the file
-// API's codemodel reply (the query is written before configuring): the
-// libraries, library paths and framework paths, in order, paths relative to
-// the build directory made absolute. For the probe executable linked to a
-// package's target, that is the package's whole link closure.
-inline vector<string> CMakeLinkClosure(const string &builddir, const string &target) {
-    auto replydir = cat(builddir, "/.cmake/api/v1/reply");
-    string indexfile;
-    std::error_code ec;
-    for (filesystem::directory_iterator it(filesystem::path(replydir), ec), end; !ec && it != end;
-         it.increment(ec)) {
-        auto name = it->path().filename().string();
-        if (name.rfind("index-", 0) == 0 && name > indexfile) indexfile = name;   // The newest.
-    }
-    if (indexfile.empty())
-        throw CompileError { cat("CMake wrote no file API reply under ", replydir) };
-    auto load = [&](const string &name) {
-        string text;
-        if (name.empty() || !LoadFile(cat(replydir, "/", name), text))
-            throw CompileError { cat("cannot read CMake's file API reply ", replydir, "/", name) };
-        return ParseJson(text);
-    };
-    auto index = load(indexfile);
-    auto reply = index.Get("reply");
-    auto codemodelref = reply ? reply->Get("codemodel-v2") : nullptr;
-    auto codemodel = load(codemodelref ? codemodelref->Str("jsonFile") : string());
+// One codemodel configuration, shared by link and compile-closure readers.
+struct CMakeReply {
+    string directory;
+    Json codemodel;
     const Json *config = nullptr;
-    for (auto &c : codemodel.Arr("configurations"))
-        if (!config || c.Str("name") == "Release") config = &c;
-    if (!config) throw CompileError { "CMake's codemodel reply names no configuration" };
-    string targetfile;
-    for (auto &t : config->Arr("targets"))
-        if (t.Str("name") == target) targetfile = t.Str("jsonFile");
-    auto tj = load(targetfile);
+    Json load(const string &name) const {
+        string text;
+        if (name.empty() || !LoadFile(cat(directory, "/", name), text))
+            throw CompileError { cat("cannot read CMake's file API reply ", directory, "/", name) };
+        return ParseJson(text);
+    }
+    explicit CMakeReply(const string &builddir) : directory(cat(builddir, "/.cmake/api/v1/reply")) {
+        string indexfile;
+        std::error_code ec;
+        for (filesystem::directory_iterator it(filesystem::path(directory), ec), end; !ec && it != end;
+             it.increment(ec)) {
+            auto name = it->path().filename().string();
+            if (name.rfind("index-", 0) == 0 && name > indexfile) indexfile = name;
+        }
+        if (indexfile.empty()) throw CompileError { cat("CMake wrote no file API reply under ", directory) };
+        auto index = load(indexfile);
+        auto reply = index.Get("reply");
+        auto ref = reply ? reply->Get("codemodel-v2") : nullptr;
+        codemodel = load(ref ? ref->Str("jsonFile") : string());
+        for (auto &c : codemodel.Arr("configurations"))
+            if (!config || c.Str("name") == "Release") config = &c;
+        if (!config) throw CompileError { "CMake's codemodel reply names no configuration" };
+    }
+    CMakeReply(const CMakeReply &) = delete;
+    string targetFile(const string &target) const {
+        for (auto &t : config->Arr("targets"))
+            if (t.Str("name") == target) return t.Str("jsonFile");
+        throw CompileError { cat("CMake's codemodel reply has no target ", target) };
+    }
+};
+
+// Ninja and Makefile compile commands identify their owning target by its
+// object directory. A source path alone is insufficient: an unrelated target
+// may compile the same file with different flags and different headers.
+inline set<string> CMakeCompileDirectories(const string &builddir, const string &target) {
+    CMakeReply reply(builddir);
+    map<string, string> files;
+    for (auto &t : reply.config->Arr("targets")) files.emplace(t.Str("id"), t.Str("jsonFile"));
+    vector<string> pending {reply.targetFile(target)};
+    set<string> visited, directories;
+    while (!pending.empty()) {
+        auto file = pending.back(); pending.pop_back();
+        if (!visited.insert(file).second) continue;
+        auto tj = reply.load(file);
+        if (!tj.Arr("compileGroups").empty()) {
+            auto paths = tj.Get("paths");
+            if (!paths) throw CompileError { "missing CMake target build path" };
+            auto path = cat(builddir, "/", paths->Str("build"), "/CMakeFiles/", tj.Str("name"), ".dir");
+            directories.insert(filesystem::weakly_canonical(path).string() + "/");
+        }
+        for (auto &dependency : tj.Arr("dependencies")) {
+            auto found = files.find(dependency.Str("id"));
+            if (found == files.end()) throw CompileError { "missing CMake target dependency" };
+            pending.push_back(found->second);
+        }
+    }
+    return directories;
+}
+
+// The probe's libraries, library paths and framework paths, in link order.
+inline vector<string> CMakeLinkClosure(const string &builddir, const string &target) {
+    CMakeReply reply(builddir);
+    auto tj = reply.load(reply.targetFile(target));
     vector<string> items;
     auto link = tj.Get("link");
     if (!link) throw CompileError { cat("CMake's codemodel reply has no link line for ", target) };

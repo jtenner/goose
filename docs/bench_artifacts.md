@@ -136,6 +136,10 @@ Configuration object:
   files with a preliminary traced link; hash them before the final link.
   Repeat dependency resolution and hash checks after the final link. Fail
   on changed contents, commands or dependency sets before any entry runs.
+  For CMake packages, scan compile commands only for the selected target's
+  dependency closure, including the link probe. Unrelated excluded targets
+  do not need their generated sources to exist. Required sources generated
+  only during the build remain unsupported.
 
 Before writing any JSON, summary CSV or sample CSV, reject output paths that
 resolve to a known input or compiler path. Apply this rule to `--list`, failed
