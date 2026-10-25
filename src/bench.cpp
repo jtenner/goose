@@ -24,6 +24,7 @@ using std::string; using std::vector;
 #include <unistd.h>
 #include <signal.h>
 #include <sys/resource.h>
+#include <sys/prctl.h>
 #include <charconv>
 #endif
 namespace goose {
@@ -170,6 +171,20 @@ struct Hwmon {
         return maximum;
     }
 };
+// Orphaned workload helpers must be waitable here, not left to an unrelated
+// init process. Restore the caller's setting after all Child objects stop.
+struct Subreaper {
+    int previous = 0;
+    Subreaper() {
+        if (prctl(PR_GET_CHILD_SUBREAPER, &previous, 0, 0, 0) < 0 ||
+            (!previous && prctl(PR_SET_CHILD_SUBREAPER, 1, 0, 0, 0) < 0))
+            throw std::runtime_error(string("cannot adopt benchmark helpers: ") + strerror(errno));
+    }
+    ~Subreaper() {
+        if (!previous && prctl(PR_SET_CHILD_SUBREAPER, 0, 0, 0, 0) < 0)
+            fprintf(stderr, "bench: cannot restore child subreaper setting: %s\n", strerror(errno));
+    }
+};
 struct Child {
     int fd = -1;
     pid_t pid = -1;
@@ -182,6 +197,7 @@ struct Child {
     BenchChild *record = nullptr;
     BenchRow *row = nullptr;
     double shutdown_timeout = 600;
+    string cleanup_error;
     void reaped(int status, const rusage &usage) {
         if (!record) return;
         if (WIFEXITED(status)) record->exit_code = WEXITSTATUS(status);
@@ -212,8 +228,43 @@ struct Child {
             }
         }
     }
-    void stopGroup() {
-        if (pgid > 0) { kill(-pgid, SIGKILL); pgid = -1; }
+    bool stopGroup() {
+        auto deadline = ThermalNow() + shutdown_timeout;
+        auto failed = [&](const string &message) {
+            if (cleanup_error.empty()) {
+                cleanup_error = "benchmark group teardown: " + message;
+                fprintf(stderr, "bench: %s; retaining lock until cleanup completes\n", cleanup_error.c_str());
+            }
+        };
+        while (pgid > 0) {
+            if (kill(-pgid, SIGKILL) < 0 && errno != ESRCH && errno != EINTR)
+                failed(string("cannot stop process group: ") + strerror(errno));
+            // Reap only this workload group, including adopted descendants.
+            // Preserve direct-child status/RSS even on exceptional teardown.
+            for (;;) {
+                int status = 0; rusage usage {};
+                auto result = wait4(-pgid, &status, WNOHANG, &usage);
+                if (result > 0) {
+                    if (result == pid) { reaped(status, usage); pid = -1; }
+                    continue;
+                }
+                if (result < 0 && errno == EINTR) continue;
+                if (result < 0 && errno != ECHILD)
+                    failed(string("cannot reap process group: ") + strerror(errno));
+                break;
+            }
+            // Successful signal delivery alone does not prove termination.
+            if (kill(-pgid, 0) < 0) {
+                if (errno == ESRCH) { pgid = -1; break; }
+                if (errno != EINTR) failed(string("cannot confirm process group exit: ") + strerror(errno));
+            }
+            if (ThermalNow() >= deadline) failed("cleanup timeout");
+            // Fail closed: even after an error/deadline, keep ownership and
+            // the caller's lock until no member can run or remain unreaped.
+            drain();
+            poll(nullptr, 0, 10);
+        }
+        return cleanup_error.empty();
     }
     ~Child() {
         if (fd >= 0) close(fd);
@@ -306,7 +357,11 @@ struct Child {
             drain();
             rusage usage {};
             auto r = wait4(pid, &status, WNOHANG, &usage);
-            if (r == pid) { reaped(status, usage); pid = -1; stopGroup(); return WIFEXITED(status) && WEXITSTATUS(status) == 0; }
+            if (r == pid) {
+                reaped(status, usage); pid = -1;
+                if (!stopGroup()) throw std::runtime_error(cleanup_error);
+                return WIFEXITED(status) && WEXITSTATUS(status) == 0;
+            }
             if (r < 0 && errno != EINTR) return false;
             if (ThermalNow() >= deadline) throw std::runtime_error("benchmark teardown timeout");
             poll(nullptr, 0, 10);
@@ -337,6 +392,7 @@ int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups,
     int childid = 0;
     bool preflight = true;
     try {
+        Subreaper subreaper;
         if (options.gate > options.ceiling) throw std::runtime_error("temperature gate must be <= ceiling");
         std::unique_ptr<Hwmon> sensors;
         if (source) { if (!options.off) source->preflight(); }
