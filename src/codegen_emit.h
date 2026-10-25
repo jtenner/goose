@@ -1030,6 +1030,52 @@ inline string CodeGen::ExportHeader() {
     return header;
 }
 
+// Only the opaque runner calls these wrappers. Result representation and validation
+// happen after its stop clock; the wrapper includes the Goose caller's cleanup.
+inline void CodeGen::EmitBench() {
+    Append(code, "extern int gs_bench_runner(int, char **);\n");
+    Append(code, "void gs_bench_init(int argc, char **argv) { gs_program_init(argc, argv); }\n");
+    string lookup;
+    int n = 0;
+    for (auto sf : ast.functions) {
+        if (!sf->isbench || sf->line.fileidx != 0) continue;
+        auto sp = sf->specs[0];
+        auto &si = sinfo.at(sp);
+        auto prefix = cat("gs_bench_", n++);
+        string args;
+        for (size_t i = 0; i < sp->rets.size(); i++) {
+            Append(code, "static ", CT(sp->rets[i]), " ", prefix, "_r", i, ";\n");
+            if ((int)i != si.cret) Append(args, args.empty() ? "" : ", ", "&", prefix, "_r", i);
+        }
+        if (si.needssp) Append(args, args.empty() ? "" : ", ", "0");
+        Append(code, "static void ", prefix, "_call(void) { ");
+        if (si.cret >= 0) Append(code, prefix, "_r", si.cret, " = ");
+        Append(code, si.cname, "(", args, "); }\n");
+        Append(code, "static int ", prefix, "_result(FILE *f) {\n");
+        for (size_t i = 0; i < sp->rets.size(); i++) {
+            auto t = sp->rets[i];
+            string type; t->Dump(type);
+            auto r = cat(prefix, "_r", i);
+            if (t->kind == TY_FLT) {
+                auto bits = IsF32(t) ? 32 : 64;
+                Append(code, "    uint", bits, "_t b", i, "; memcpy(&b", i, ", &", r, ", sizeof b", i, ");\n",
+                       "    fprintf(f, \"", type, ":0x%0", bits / 4, "llx;\", (unsigned long long)b", i, ");\n",
+                       "    if (!isfinite(", r, ")) return 0;\n");
+            } else if (t->kind == TY_BOOL) {
+                Append(code, "    fprintf(f, \"bool:%s;\", ", r, " ? \"true\" : \"false\");\n");
+            } else {
+                auto uns = (IsIntT(t) && IsUnsigned(t->intstorage));
+                Append(code, "    fprintf(f, \"", type, uns ? ":%llu;\", (unsigned long long)" : ":%lld;\", (long long)", r, ");\n");
+            }
+        }
+        Append(code, "    return 1;\n}\n");
+        string key = cat("\"", sf->qname, "\"");
+        Append(lookup, "    if (!strcmp(key, ", key, ")) { *call = ", prefix, "_call; *result = ", prefix, "_result; return 1; }\n");
+    }
+    Append(code, "int gs_bench_lookup(const char *key, void (**call)(void), int (**result)(FILE *)) {\n", lookup,
+           "    return 0;\n}\nint main(int argc, char **argv) { return gs_bench_runner(argc, argv); }\n");
+}
+
 inline void CodeGen::EmitMain() {
     Append(code, "int main(int argc, char **argv) {\n    gs_program_init(argc, argv);\n",
            MainCall(), usesthreads ? "    gs_shared_worker_cleanup(NULL, -1);\n" : "",

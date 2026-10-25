@@ -52,6 +52,7 @@
 #include "packages.h"
 #include "native.h"
 #include "format.h"
+#include "bench.h"
 #include "lsp_rpc.h"
 #include "lsp_analysis.h"
 #include "lsp_workspace.h"
@@ -689,7 +690,7 @@ Commands:
              file.goose does too.
   build      Build an executable with a C compiler on this machine.
   check      Parse and typecheck a program, and run nothing.
-  bench      Check and list benchmark declarations (--list).
+  bench      Run native benchmarks, or discover declarations (--list).
   fetch      Fetch the packages a program declares.
   format     Rewrite Goose files in the standard layout.
   toolchain  Report the C compiler, cmake and git found, and GOOSE_HOME.
@@ -758,15 +759,20 @@ R"(  --cc name|path        The C compiler: msvc, clang-cl, clang, gcc, cc or a
   --dry-run             Print the commands the build would run, and run none.
 )");
     if (topic == "bench") return cat(
-R"(usage: goose bench file.goose --list [options]
+R"(usage: goose bench file.goose [options]
 
-Checks and lists benchmarks declared directly in the file, in source order.
-Prints qualified key, escaped label, size and signature. No native code,
-global initialization, workload execution or temperature probing occurs.
-Benchmark execution and JSON/CSV artifacts are not implemented in this milestone.
+Runs one function call per timed sample. Global initialization is untimed;
+main is never called. Checks typed return values across warmups and samples.
+Experimental Linux native execution: UNGATED, no thermal supervision,
+statistics or JSON/CSV artifacts yet. Raw attempts and diagnostic logs only.
+All selected sizes are built before measurement; Goose and native defaults O2.
 
 Options:
-  --list                Discover declarations (required in this milestone).
+  --list                Check and list only; no compilation, setup or work.
+  --isolation mode      reuse (default): one child per key/size; process:
+                        freshly execute a child for every warmup and sample.
+  --samples N           Measured calls (default 7, minimum 5).
+  --warmups W           Warmup calls (default 2, minimum 1).
   --filter key          Select an exact qualified key; repeatable.
   --sizes names         Nonempty duplicate-free subset of small,medium,large
                         (default medium; listed in canonical order).
@@ -1274,7 +1280,7 @@ static string ManPage() {
     return s;
 }
 
-int Main(int argc, char **argv) {
+int Main(int argc, char **argv, bool &measuring) {
     auto exe = ExePath(argv[0]);
     // The verb forms, `goose run|build|check|fetch|format|toolchain|version|help ...`.
     // A first argument that is none of them is read as an option or a file,
@@ -1350,6 +1356,11 @@ int Main(int argc, char **argv) {
     auto dump = false, dumpdocs = false, tokens = false, parseonly = false, specs = false;
     auto nocgen = false;
     auto benchlist = false;
+    bool benchfresh = false;
+    int benchwarmups = 2, benchsamples = 7;
+    vector<BenchProgram> benchprograms;
+    string benchdir;
+    vector<string> benchkeys;
     string benchsize = "medium";
     vector<string> benchfilters;
     auto roundtrip = false, multitest = false;
@@ -1374,6 +1385,20 @@ int Main(int argc, char **argv) {
         if (arg == "--list" && verb == "bench") benchlist = true;
         else if (arg == "--filter" && verb == "bench" && i + 1 < argc)
             benchfilters.push_back(argv[++i]);
+        else if (arg == "--isolation" && verb == "bench" && i + 1 < argc) {
+            string mode = argv[++i];
+            if (mode != "reuse" && mode != "process") { fprintf(stderr, "--isolation requires reuse or process\n"); return 2; }
+            benchfresh = mode == "process";
+        }
+        else if ((arg == "--samples" || arg == "--warmups") && verb == "bench" && i + 1 < argc) {
+            string value = argv[++i];
+            if (value.empty() || value.find_first_not_of("0123456789") != string::npos || value.size() > 7) {
+                fprintf(stderr, "invalid benchmark count\n"); return 2;
+            }
+            int count = atoi(value.c_str());
+            if (count < (arg == "--samples" ? 5 : 1)) { fprintf(stderr, "bench requires samples >= 5 and warmups >= 1\n"); return 2; }
+            (arg == "--samples" ? benchsamples : benchwarmups) = count;
+        }
         else if (arg == "--sizes" && verb == "bench" && i + 1 < argc) benchsize = argv[++i];
         else if (arg == "--dump") dump = true;
         else if (arg == "--define") {
@@ -1540,7 +1565,7 @@ int Main(int argc, char **argv) {
     vector<string> benchsizes;
     try {
         if (verb == "bench") {
-            if (!benchlist) throw CompileError { "benchmark execution is not implemented; use bench --list" };
+
             if (forcejit || !outname.empty() || dump || dumpdocs || parseonly || tokens || multitest || stacks)
                 throw CompileError { "bench --list requires checking without JIT, code generation or dump options" };
             for (auto size : { "small", "medium", "large" }) {
@@ -1558,10 +1583,19 @@ int Main(int argc, char **argv) {
                 if (count > 1) throw CompileError { "duplicate --sizes entry" };
                 if (count) benchsizes.push_back(size);
             }
-            nocgen = true;
+            nocgen = benchlist;
+            if (!benchlist) {
+                if (dryrun) throw CompileError { "bench execution does not support --dry-run" };
+                benchdir = BenchDirectory();
+                fprintf(stderr, "benchmark artifacts: %s\n", benchdir.c_str());
+                buildopts = BuildOptions { debug, verbose, false, standalone, "" };
+            }
         }
     } catch (CompileError &e) {
         fprintf(stderr, "%s\n", e.msg.c_str());
+        return 2;
+    } catch (const std::exception &e) {
+        fprintf(stderr, "%s\n", e.what());
         return 2;
     }
     if (files.size() > 1 && !multitest) {
@@ -1587,7 +1621,7 @@ int Main(int argc, char **argv) {
     // With no output file the program is compiled into this process and run,
     // which is what --jit asks for explicitly; a build writes the C to its
     // build directory instead.
-    auto jit = verb != "build" && (forcejit || outname.empty());
+    auto jit = verb != "build" && verb != "bench" && (forcejit || outname.empty());
     if (!headername.empty() && (jit || multitest)) {
         fprintf(stderr, "--header requires C output for a single input file\n");
         return 1;
@@ -1605,7 +1639,7 @@ int Main(int argc, char **argv) {
     }
     // The program shares stdout in JIT mode, and the diagnostics have it as
     // JSON; progress goes to stderr then.
-    auto msgs = jit || jsondiag ? stderr : stdout;
+    auto msgs = jit || jsondiag || verb == "bench" ? stderr : stdout;
     // The file being compiled, the C file it goes to, if any, and the
     // --include headers as that C file names them.
     string filename, outfile;
@@ -1672,7 +1706,7 @@ int Main(int argc, char **argv) {
             if (!quiet) fprintf(msgs, "roundtrip ok: %d bytes of dump\n", (int)dumped.size());
         }
         if (parseonly) return 0;
-        TypeCheckProgram(ast, library, nocgen);
+        TypeCheckProgram(ast, library, nocgen || verb == "bench");
         // The checker reported the errors it went on past, root by root.
         if (!ast.errors.empty()) return 1;
         if (verb == "bench") {
@@ -1687,7 +1721,9 @@ int Main(int argc, char **argv) {
                     throw CompileError { cat("unknown benchmark key: ", key) };
             }
             if (selected.empty()) throw CompileError { "no benchmarks declared; add bench \"label\" to a scalar-returning function (main is not a benchmark)" };
-            for (auto sf : selected) {
+            benchkeys.clear();
+            for (auto sf : selected) benchkeys.push_back(string(sf->qname));
+            if (benchlist) for (auto sf : selected) {
                 string label;
                 // Escape both C0 and Unicode C1/DEL controls for terminals.
                 string safe;
@@ -1715,7 +1751,7 @@ int Main(int argc, char **argv) {
                 printf("%s\t%s\t%s\t() -> %s\n", string(sf->qname).c_str(), label.c_str(),
                        benchsize.c_str(), signature.c_str());
             }
-            return 0;
+            if (benchlist) return 0;
         }
         Optimizer opt(ast, optlevel);
         if (specs) {
@@ -1775,7 +1811,7 @@ int Main(int argc, char **argv) {
         for (auto &rf : runtime_files)
             if (string_view(rf.name) == "runtime_ext.h") runtime_ext_text = rf.text;
         auto stackcfg = StackConfigOf(cdefines);
-        CodeGen cg(ast, runtime_ext_text, includes, norfcheck, library, stackcfg.maxstacks);
+        CodeGen cg(ast, runtime_ext_text, includes, norfcheck, library, stackcfg.maxstacks, verb == "bench");
         if (stacks) cg.StackReport(msgs, stackcfg);
         // The packages whose native parts the program needs, which a JIT
         // run takes functions from and a build links: its own, when it has
@@ -1860,8 +1896,9 @@ int Main(int argc, char **argv) {
                 outfile.replace(pos, 1, stem);
         }
         includes = includenames;
-        if (verb == "build") {
+        if (verb == "build" || (verb == "bench" && !benchlist)) {
             builddir = ProgramBuildDir(file, builddefines);
+            if (verb == "bench") builddir = cat(benchdir, "/", benchsize);
             std::error_code ec;
             filesystem::create_directories(filesystem::path(builddir), ec);
             if (ec) {
@@ -1893,7 +1930,7 @@ int Main(int argc, char **argv) {
             // (CMakeLists.txt).
             auto code = RunOnCompilerStack(compile);
             if (code) return code;
-            if (verb == "build") {
+            if (verb == "build" || (verb == "bench" && !benchlist)) {
                 if (nocgen) return 0;
                 // The native parts first, so that the link can take their
                 // response files: a builtin package's from the compiler's
@@ -1911,6 +1948,20 @@ int Main(int argc, char **argv) {
                     NativeBuild nb;
                     if (!BuildNativePart(*astp, pkg, filename, b, false, nb)) return 1;
                     rsps.push_back(nb.rsp);
+                }
+                if (verb == "bench") {
+                    if (tc.style == "msvc") throw CompileError { "bench execution requires a Linux native toolchain" };
+                    auto runner = cat(builddir, "/runner.c"), object = cat(builddir, "/runner.o");
+                    if (!WriteFileMakingDirs(runner, BenchRunnerSource()) ||
+                        !b.CompileObject(runner, object, "compiling benchmark runner", cat(builddir, "/runner.log"), { "-fno-lto" })) return 1;
+                    auto runtime = standalone ? string() : RuntimeObject(b);
+                    if (!standalone && runtime.empty()) return 1;
+                    vector<string> objects { object };
+                    if (!runtime.empty()) objects.push_back(runtime);
+                    auto executable = cat(builddir, "/benchmark");
+                    if (!b.Link(outfile, objects, rsps, executable, builddir, cat(builddir, "/cc.log"))) return 1;
+                    for (auto &key : benchkeys) benchprograms.push_back({ executable, key, benchsize, benchdir });
+                    return 0;
                 }
                 return BuildExecutable(filename, outfile, builddir, tc, buildopts, msgs, rsps,
                                        astp->packages[0].output);
@@ -1973,7 +2024,9 @@ int Main(int argc, char **argv) {
             auto code = run(files[0]);
             if (code) return 2;
         }
-        return 0;
+        if (benchlist) return 0;
+        measuring = true;
+        return RunBenchmarks(benchprograms, benchfresh, benchwarmups, benchsamples);
     }
     if (!multitest) return run(files[0]);
     // Each file has an Ast and a compile thread of its own, which is all the
@@ -2122,7 +2175,7 @@ int main(int argc, char **argv) {
         _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_FILE);
         _CrtSetReportFile(_CRT_ERROR, _CRTDBG_FILE_STDERR);
     #endif
-    auto code = goose::Main(argc, argv);
-    // Discovery has only usage/compile/preflight failures, never measurement failures.
-    return argc > 1 && std::string_view(argv[1]) == "bench" && code ? 2 : code;
+    bool measuring = false;
+    auto code = goose::Main(argc, argv, measuring);
+    return !measuring && argc > 1 && std::string_view(argv[1]) == "bench" && code ? 2 : code;
 }
