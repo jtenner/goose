@@ -55,6 +55,8 @@ def read_results(path, *, allow_ungated=False, configuration_id=None, checksum=N
     _require(type(policy['samples']) is int and policy['samples'] >= 5 and type(policy['warmups']) is int and policy['warmups'] >= 1, 'invalid requested counts')
     thermal = policy['thermal']
     _require(thermal['mode'] == 'required' or (allow_ungated and thermal['mode'] == 'disabled'), 'ungated results are not permitted')
+    sensor_ids = {sensor['id'] for sensor in thermal['sensors']}
+    _require(len(sensor_ids) == len(thermal['sensors']), 'duplicate sensors')
     if thermal['mode'] == 'required':
         _require(bool(thermal['sensors']), 'missing required sensors')
     configurations = {c['id']: c for c in report['configurations']}
@@ -81,25 +83,48 @@ def read_results(path, *, allow_ungated=False, configuration_id=None, checksum=N
         keys.add(key)
         _checksum(row['checksum'])
         _require(checksum is None or row['checksum'] == checksum, 'unexpected checksum')
-        measured, warmups, rejected = [], 0, 0
+        children = {child['id']: child for child in row['children']}
+        _require(bool(children) and len(children) == len(row['children']), 'missing or duplicate children')
+        measured, warmups, rejected, retry = [], 0, 0, 0
         for index, attempt in enumerate(row['attempts'], 1):
             _require(attempt['index'] == index and attempt['phase'] in ('warmup', 'measure'), 'invalid attempt order')
             _require(attempt['status'] in ('accepted', 'thermal_rejected') and attempt['error'] is None, 'failed attempt')
+            phase = 'warmup' if warmups < policy['warmups'] else 'measure'
+            slot = warmups + 1 if phase == 'warmup' else len(measured) + 1
+            _require(attempt['phase'] == phase and attempt['slot'] == slot and attempt['retry'] == retry, 'invalid sample slot or retry')
+            _require(attempt['child_id'] in children, 'unknown child')
             _checksum(attempt['checksum'])
             _require(attempt['checksum'] == row['checksum'], 'checksum disagreement')
             elapsed = attempt['elapsed_ns']
             _require(isinstance(elapsed, str) and re.fullmatch(r'[1-9][0-9]*', elapsed), 'nonpositive duration')
             seconds = Fraction(int(elapsed), 1_000_000_000)
             _require(type(attempt['seconds']) in (int, float) and math.isfinite(attempt['seconds']) and math.isclose(attempt['seconds'], float(seconds), rel_tol=1e-14), 'inconsistent duration')
+            if thermal['mode'] == 'required':
+                _require(all(type(attempt[name]) in (int, float) and math.isfinite(attempt[name]) for name in
+                             ('temperature_before_c', 'temperature_after_c', 'temperature_max_observed_c', 'temperature_max_poll_gap_ms')), 'missing thermal coverage')
+                readings = attempt['temperature_reads']
+                for sensor in sensor_ids:
+                    offsets = [int(reading['offset_ns']) for reading in readings if reading['sensor_id'] == sensor]
+                    _require(len(offsets) >= 2 and offsets[0] <= 0 and offsets[-1] >= int(elapsed), 'missing thermal brackets')
+                _require(all(reading['sensor_id'] in sensor_ids and math.isfinite(reading['c']) for reading in readings), 'invalid thermal trace')
+                _require(attempt['temperature_max_poll_gap_ms'] >= 0, 'negative thermal poll gap')
+                _require(bool(readings) and max(reading['c'] for reading in readings) == attempt['temperature_max_observed_c'], 'incorrect thermal maximum')
+                _require((attempt['status'] == 'thermal_rejected') == (attempt['temperature_max_observed_c'] > thermal['ceiling_c']), 'incorrect thermal classification')
             if attempt['status'] == 'thermal_rejected':
                 rejected += 1
+                retry += 1
+                _require(retry <= policy['max_retries'], 'exhausted thermal retries')
             elif attempt['phase'] == 'warmup':
                 warmups += 1
+                retry = 0
             else:
                 measured.append(seconds)
+                retry = 0
         _require(warmups == policy['warmups'] == row['accepted_warmups'], 'incomplete warmups')
         _require(len(measured) == policy['samples'] == row['accepted_samples'], 'incomplete samples')
         _require(rejected == row['thermal_rejections'], 'incorrect rejection count')
+        if thermal['mode'] == 'required':
+            _require(row['temperature_max_observed_c'] == max(a['temperature_max_observed_c'] for a in row['attempts']), 'incorrect row temperature')
         center = median(measured)
         mad = median(abs(value - center) for value in measured)
         expected = dict(median_seconds=center, seconds_mad=mad, seconds_mad_percent=100 * mad / center,

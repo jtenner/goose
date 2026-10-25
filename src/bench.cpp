@@ -40,6 +40,7 @@ string ErrorCode(const string &message) {
     if (message.find("checksum") != string::npos && message.find("protocol") == string::npos) return "checksum";
     if (message.find("timeout") != string::npos) return "timeout";
     if (message.find("thermal_retries") != string::npos) return "thermal_retries";
+    if (message.find("cannot retain") != string::npos) return "io";
     if (message.find("temperature") != string::npos || message.find("Tctl") != string::npos) return "sensor";
     if (message.find("teardown") != string::npos || message.find("child exited") != string::npos) return "child_exit";
     if (message.find("setup") != string::npos) return "setup";
@@ -171,7 +172,7 @@ struct Child {
     int logs[2] { -1, -1 };
     FILE *files[2] { nullptr, nullptr };
     size_t retained[2] {};
-    bool truncated = false;
+    bool truncated = false, log_failed = false;
     BenchChild *record = nullptr;
     BenchRow *row = nullptr;
     double shutdown_timeout = 600;
@@ -193,7 +194,7 @@ struct Child {
                 auto n = read(logs[i], buffer, sizeof buffer);
                 if (n <= 0) break;
                 auto keep = std::min((size_t)n, 1048576 - retained[i]);
-                if (keep) fwrite(buffer, 1, keep, files[i]);
+                if (keep && fwrite(buffer, 1, keep, files[i]) != keep) log_failed = true;
                 retained[i] += keep;
                 truncated |= keep < (size_t)n;
                 if (record) record->logs_truncated = truncated;
@@ -228,6 +229,7 @@ struct Child {
             auto ms = (deadline - ThermalNow()) * 1000;
             if (ms <= 0) throw std::runtime_error(string(phase) + " timeout");
             drain();
+            if (log_failed) throw std::runtime_error("cannot write benchmark child log");
             pollfd p[3] { { fd, POLLIN, 0 }, { logs[0], POLLIN, 0 }, { logs[1], POLLIN, 0 } };
             auto ready = poll(p, 3, (int)std::min(1000.0, std::max(1.0, std::min(ms, (next - ThermalNow()) * 1000))));
             if (ready < 0 && errno == EINTR) continue;
@@ -275,6 +277,8 @@ struct Child {
         // Read EOF under the same bounded deadline before reaping.
         if (!lineExit()) throw std::runtime_error("benchmark child failed during teardown");
         drain();
+        for (auto file : files) if (file && fflush(file)) log_failed = true;
+        if (log_failed) throw std::runtime_error("cannot write benchmark child log");
         if (retained[0] || retained[1])
             fprintf(stderr, "benchmark emitted output%s; logs: %s %s\n", truncated ? " (truncated at 1 MiB per stream)" : "", out.c_str(), err.c_str());
     }
@@ -345,7 +349,6 @@ int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups,
                 row.children.push_back({});
                 child.record = &row.children.back(); child.record->id = ++childid;
                 if (report) child.log_prefix = report->run_id + "-";
-                if (report) child.log_prefix = report->run_id + "-";
                 child.row = &row; child.shutdown_timeout = options.sample_timeout;
                 child.start(p, childid, options.setup_timeout);
             };
@@ -362,9 +365,10 @@ int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups,
                         a.child_id = childid; a.warmup = i < warmups;
                         a.slot = i < warmups ? i + 1 : i - warmups + 1; a.retry = retry;
                         auto gate_start = thermal.now();
+                        bool gate_finished = false;
                         try {
                             if (sensors) sensors->capturing = false;
-                            thermal.gate();
+                            thermal.gate(); gate_finished = true;
                             a.gate_wait_seconds = thermal.waited;
                             if (!options.off) a.before = thermal.current;
                             if (sensors) sensors->resetCoverage();
@@ -392,14 +396,15 @@ int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups,
                             if (accepted) break;
                             if (retry >= options.retries) throw std::runtime_error("thermal_retries exhausted");
                         } catch (const std::exception &e) {
-                            if (!a.start_ns) a.gate_wait_seconds = thermal.now() - gate_start;
+                            if (ErrorCode(e.what()) == "protocol") a.checksum.clear();
+                            if (!gate_finished) a.gate_wait_seconds = thermal.now() - gate_start;
                             if (sensors && a.start_ns) {
                                 a.reads = sensors->captured; sensors->capturing = false;
                                 for (auto &reading:a.reads) a.temperature_max = std::max(a.temperature_max.value_or(reading.c),reading.c);
                                 if (a.temperature_max) row.temperature_max = std::max(row.temperature_max.value_or(*a.temperature_max),*a.temperature_max);
                                 a.poll_gap_ms = sensors->maximum_gap * 1000;
                             }
-                            if (a.status != "thermal_rejected") {
+                            if (a.status != "accepted" && a.status != "thermal_rejected") {
                                 a.status = interrupted ? "interrupted" : "failed";
                                 a.error = {ErrorCode(e.what()), e.what()};
                             }

@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
     bool failed = false;
     try { BenchStatistics({0,1}); } catch (...) { failed = true; }
     assert(failed);
-    BenchReport r; r.warmups=1; r.samples=5; r.warmups=1; r.samples=5;
+    BenchReport r; r.warmups=1; r.samples=5;
     r.source_path = "/in\nput.goose";r.source_hash=BenchHash("source");r.thermal.off=true;
     r.json_path=std::string(argv[1])+"/report.json";r.csv_path=std::string(argv[1])+"/report.csv";
     BenchConfiguration config;config.size="medium";config.definitions=BenchArray({BenchObject({{"name",BenchString("TEST")},{"type",BenchString("string")},{"value",BenchString("\n\t\b\f\r")}})});
@@ -70,7 +70,21 @@ int main(int argc, char **argv) {
     BenchAttempt incomplete;incomplete.status="interrupted";incomplete.error={"interrupted","cancelled"};
     r.rows[1].attempts={zero,negative,incomplete};r.error=r.rows[1].error;
     r.json_path=std::string(argv[1])+"/partial.json";r.csv_path=std::string(argv[1])+"/partial.csv";
+    auto pending=r.rows[1];pending.status="pending";pending.error={};pending.attempts.clear();r.rows.push_back(pending);
     r.Finish("failed");
+    r.status="interrupted";r.rows[1].status="interrupted";r.error={"interrupted","cancelled"};
+    r.json_path=std::string(argv[1])+"/interrupted.json";r.csv_path.clear();r.Finish("interrupted");
+    auto preserved=std::string(argv[1])+"/preserved.json";
+    std::ofstream(preserved) << "previous checkpoint";
+    r.json_path=preserved;r.thermal.gate=std::nan("");
+    failed=false;try{r.Checkpoint();}catch(...){failed=true;}assert(failed);
+    assert(BenchReadFile(preserved)=="previous checkpoint");
+    auto binarypath=std::string(argv[1])+"/binary";
+    std::string binary(65537,'\0');for(size_t i=0;i<binary.size();++i)binary[i]=(char)(i%256);
+    {std::ofstream stream(binarypath,std::ios::binary);stream.write(binary.data(),binary.size());}
+    std::ofstream(binarypath+".sha256") << BenchFileHash(binarypath);
+
+    std::ofstream(std::string(argv[1])+"/runner.c") << BenchRunnerSource();
     BenchReport unused;unused.thermal.gate=std::nan("");unused.Checkpoint();
     unused.csv_path=std::string(argv[1])+"/unused.csv";unused.Checkpoint();
 
