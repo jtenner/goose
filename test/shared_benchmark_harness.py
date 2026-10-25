@@ -46,7 +46,11 @@ with tempfile.TemporaryDirectory(prefix="goose-benchmark-hash-") as directory:
     assert fingerprint["sha256"] == hashlib.sha256(source.read_bytes()).hexdigest()
     assert fingerprint["path"] == str(source.resolve())
 provenance = module.source_provenance()
-assert {"main.goose", "baseline.c", "run.py"} == set(provenance["files"])
+assert {"main.goose", "mmap.goose", "baseline.c", "run.py"} == set(provenance["files"])
 assert all(len(value) == 64 for value in provenance["files"].values())
+assert len(provenance['adapter_sha256']) == 64
+assert plan['native_rows'] == ['mmap/-O2']
+assert module.plan(legacy_goose=True)['native_rows'] == []
+assert module.plan(experiments=2)['total_workload_processes'] == 1800
 
 print("benchmark harness plan/hash/statistics acceptance passed (no timings run)")

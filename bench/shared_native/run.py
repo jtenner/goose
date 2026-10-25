@@ -16,6 +16,10 @@ import statistics
 import subprocess
 import tempfile
 import time
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+import native_results as native
 
 HERE = Path(__file__).resolve().parent
 CASES = ["atomics_uncontended", "atomics_contended", "claims", "scalar_read_latency",
@@ -44,7 +48,8 @@ def fingerprint(executable):
 
 
 def source_provenance():
-    result = {"files": {name: sha256_file(HERE / name) for name in ("main.goose", "baseline.c", "run.py")}}
+    result = {"files": {name: sha256_file(HERE / name) for name in ("main.goose", "mmap.goose", "baseline.c", "run.py")}}
+    result['adapter_sha256'] = sha256_file(HERE.parent / 'native_results.py')
     try:
         repo = HERE.parent.parent
         result["git_commit"] = command(["git", "-C", repo, "rev-parse", "HEAD"]).stdout.strip()
@@ -61,27 +66,64 @@ def command(argv, **kwargs):
                           text=True, timeout=600, **kwargs)
 
 
-def plan(samples=7, warmups=2, cases=None):
+def plan(samples=7, warmups=2, cases=None, *, legacy_goose=False, experiments=1):
     cases = cases or CASES
     pairs = 2 * sum(4 if case in PARALLEL else 1 for case in cases)
     return {"samples": samples, "warmups": warmups, "workers": [1, 2, 4, 8],
             "cases": cases, "paired_scenarios": pairs,
             "units": {case: {"work_unit": WORK_UNITS[case], "rate_unit": WORK_UNITS[case] + "/second",
                               "latency_unit": "ns/" + WORK_UNITS[case]} for case in cases},
-            "warmup_processes": pairs * 2 * warmups, "measured_processes": pairs * 2 * samples,
-            "total_workload_processes": pairs * 2 * (samples + warmups),
+            "warmup_processes": pairs * 2 * warmups * experiments, "measured_processes": pairs * 2 * samples * experiments,
+            "total_workload_processes": pairs * 2 * (samples + warmups) * experiments,
             "maximum_worker_threads": 8 if any(c in PARALLEL for c in cases) else 2 if "publication" in cases else 0,
             "simultaneous_workload_processes": 1, "implementations": ["c_baseline", "goose_native"],
             "native_optimization": ["-O0", "-O2"], "goose_optimization": "-O2",
-            "run_requires_explicit_flag": True, "sequential": True}
+            "run_requires_explicit_flag": True, "sequential": True,
+            "experiments": experiments,
+            "native_rows": [] if legacy_goose or 'mmap' not in cases else ['mmap/-O2'],
+            "ordering_policy": "alternate whole-row blocks across experiments for native rows; alternate samples for legacy rows"}
+
+
+def collect_legacy(binary, case, iterations, workers, fixture, directory, samples, warmups):
+    values, expected = [], None
+    for index in range(samples + warmups):
+        value = sample(binary, case, iterations, workers, fixture, directory)
+        identity = value['units'], value['checksum']
+        if expected is not None and identity != expected:
+            raise ValueError('legacy row changed its units or checksum')
+        expected = identity
+        if index >= warmups:
+            values.append(value)
+    return values
+
+
+def collect_native_mmap(goose, cc, fixture, output, samples, warmups, temperature):
+    value = native.run_native(goose, HERE / 'mmap.goose', output, key='mmap_lifecycle',
+                              size='medium', types=('u64',), cc=cc, samples=samples, warmups=warmups,
+                              definitions=['BENCH_FIXTURE=' + json.dumps(str(fixture))], temperature=temperature)
+    _, values = native.shared_samples(value['native_report'], key='mmap_lifecycle', size='medium', units=64)
+    if any(v['checksum'] != 64 * 16777216 for v in values):
+        raise ValueError('unexpected mmap checksum')
+    return value, values
 
 
 @contextmanager
-def experiment_lock():
+def experiment_lock(path="/tmp/goose-shared-native-benchmark.lock"):
     # Cross-process lock; covers this harness family. Parent coordinates other work.
-    with open("/tmp/goose-shared-native-benchmark.lock", "w") as lock:
+    with open(path, "w") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        yield lock
+
+
+@contextmanager
+def native_lock_turn(lock):
+    # No C work is active here. The native supervisor takes the same lock.
+    # A competing process in either handoff gap causes failure, not overlap.
+    fcntl.flock(lock, fcntl.LOCK_UN)
+    try:
         yield
+    finally:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
 
 
 def describe_binary(binary, generated=None):
@@ -167,12 +209,15 @@ def main():
     ap.add_argument("--iterations", type=int, default=200000)
     ap.add_argument("--case", action="append", choices=CASES)
     ap.add_argument("--output", type=Path)
+    ap.add_argument('--legacy-goose', action='store_true', help='keep exact per-sample pairing for every case')
+    ap.add_argument('--experiments', type=int, default=1, help='alternate native block order across experiments')
+    ap.add_argument('--temperature', choices=('required', 'off'), default='required')
     ap.add_argument("--directory", type=Path, help="retain build artifacts here (default temporary)")
     ns = ap.parse_args()
-    if ns.samples < 5 or ns.warmups < 1 or ns.iterations < 1:
+    if ns.samples < 5 or ns.warmups < 1 or ns.iterations < 1 or ns.experiments < 1:
         ap.error("use at least five samples, one warmup and one iteration")
     if ns.plan or not (ns.prepare or ns.run):
-        print(json.dumps(plan(ns.samples, ns.warmups, ns.case), indent=2)); return
+        print(json.dumps(plan(ns.samples, ns.warmups, ns.case, legacy_goose=ns.legacy_goose, experiments=ns.experiments), indent=2)); return
     if not ns.goose:
         ap.error("--goose is required to compile workloads")
     if ns.run and not ns.output:
@@ -181,24 +226,34 @@ def main():
         ns.directory.mkdir(parents=True, exist_ok=True)
         directory = ns.directory.resolve()
         cleanup = None
+    elif ns.run:
+        ns.output = ns.output.resolve()
+        ns.output.parent.mkdir(parents=True, exist_ok=True)
+        directory = Path(tempfile.mkdtemp(prefix=ns.output.stem + '.artifacts-', dir=ns.output.parent))
+        cleanup = None  # Native attempt logs and artifacts must survive report writing.
     else:
         cleanup = tempfile.TemporaryDirectory(prefix="goose-native-benchmark-")
         directory = Path(cleanup.name)
     try:
-        with experiment_lock():
+        with experiment_lock() as lock:
             goose_executable = fingerprint(ns.goose.resolve())
             compiler_executable = fingerprint(ns.cc)
             source = source_provenance()
             fixture, paths, artifacts = prepare(ns.goose.resolve(), ns.cc, directory)
+            if not ns.legacy_goose and 'mmap' in (ns.case or CASES):
+                command([ns.goose.resolve(), 'bench', HERE / 'mmap.goose', '--list',
+                         '--define', 'BENCH_FIXTURE=' + json.dumps(str(fixture))])
             if goose_executable != fingerprint(ns.goose.resolve()) or compiler_executable != fingerprint(ns.cc):
                 raise RuntimeError("compiler executable changed during preparation")
-            if source["files"] != source_provenance()["files"]:
+            after = source_provenance()
+            if source["files"] != after["files"] or source['adapter_sha256'] != after['adapter_sha256']:
                 raise RuntimeError("benchmark source changed during preparation")
             cpu = platform.processor()
             if Path("/proc/cpuinfo").exists():
                 cpu = next((x.split(":", 1)[1].strip() for x in Path("/proc/cpuinfo").read_text().splitlines()
                             if x.startswith("model name")), cpu)
-            report = {"plan": plan(ns.samples, ns.warmups, ns.case), "cpu": cpu, "platform": platform.platform(),
+            report = {"schema_version": 2,
+                      "plan": plan(ns.samples, ns.warmups, ns.case, legacy_goose=ns.legacy_goose, experiments=ns.experiments), "cpu": cpu, "platform": platform.platform(),
                       "affinity": sorted(os.sched_getaffinity(0)) if hasattr(os,"sched_getaffinity") else None,
                       "compiler": command([ns.cc,"--version"]).stdout.splitlines()[0],
                       "goose": command([ns.goose.resolve(),"version"]).stdout.strip(),
@@ -206,25 +261,52 @@ def main():
                       "goose_executable": goose_executable, "compiler_executable": compiler_executable,
                       "source": source, "results": []}
             if ns.run:
-                for case in ns.case or CASES:
-                    enabled = case == "checks_enabled"
-                    for opt in ("-O0", "-O2"):
-                        for workers in ([1, 2, 4, 8] if case in PARALLEL else [2] if case == "publication" else [1]):
-                            # Alternate implementation order between samples to reduce drift bias.
-                            collected = {"c_baseline": [], "goose_native": []}
-                            for iteration in range(ns.warmups + ns.samples):
-                                order = ["c_baseline", "goose_native"]
-                                if iteration % 2: order.reverse()
-                                pair = []
-                                for implementation in order:
-                                    value = sample(paths[(implementation,opt,enabled)], case, ns.iterations, workers, fixture, directory)
-                                    pair.append(value)
-                                    if iteration >= ns.warmups: collected[implementation].append(value)
-                                assert pair[0]["checksum"] == pair[1]["checksum"], (case,pair)
-                            for implementation, values in collected.items():
-                                report["results"].append({"case": case, "native_optimization": opt,
-                                    "workers": workers, "implementation": implementation,
-                                    **report["plan"]["units"][case], **aggregate(values)})
+                for experiment in range(ns.experiments):
+                    for case in ns.case or CASES:
+                        enabled = case == "checks_enabled"
+                        for opt in ("-O0", "-O2"):
+                            for workers in ([1, 2, 4, 8] if case in PARALLEL else [2] if case == "publication" else [1]):
+                                # Alternate implementation order between samples to reduce drift bias.
+                                collected = {"c_baseline": [], "goose_native": []}
+                                native_row = None
+                                migrated = case == 'mmap' and opt == '-O2' and not ns.legacy_goose
+                                if migrated:
+                                    order = ['c_baseline', 'goose_native']
+                                    if experiment % 2: order.reverse()
+                                    for implementation in order:
+                                        if implementation == 'goose_native':
+                                            with native_lock_turn(lock):
+                                                native_row, collected[implementation] = collect_native_mmap(
+                                                    ns.goose.resolve(), Path(compiler_executable['path']), fixture,
+                                                    directory / ('mmap-' + str(experiment) + '.native.json'),
+                                                    ns.samples, ns.warmups, ns.temperature)
+                                        else:
+                                            collected[implementation] = collect_legacy(paths[(implementation,opt,enabled)],
+                                                case, ns.iterations, workers, fixture, directory, ns.samples, ns.warmups)
+                                    if any(v['units'] != 64 or v['checksum'] != 64 * 16777216
+                                           for v in collected['c_baseline']):
+                                        raise ValueError('C/native mmap units or checksum mismatch')
+                                for iteration in ([] if migrated else range(ns.warmups + ns.samples)):
+                                    order = ["c_baseline", "goose_native"]
+                                    if iteration % 2: order.reverse()
+                                    pair = []
+                                    for implementation in order:
+                                        value = sample(paths[(implementation,opt,enabled)], case, ns.iterations, workers, fixture, directory)
+                                        pair.append(value)
+                                        if iteration >= ns.warmups: collected[implementation].append(value)
+                                    assert pair[0]["checksum"] == pair[1]["checksum"], (case,pair)
+                                for implementation, values in collected.items():
+                                    metadata = dict(statistic='median', timing_scope='internal function region',
+                                                    ordering_policy='alternate samples', experiment=experiment)
+                                    if migrated:
+                                        metadata['ordering_policy'] = 'whole-row blocks: ' + ','.join(order)
+                                        if implementation == 'goose_native':
+                                            metadata.update(timing_scope='function', isolation=native_row['isolation'],
+                                                            thermal_policy=native_row['thermal_policy'],
+                                                            native_report=native_row['native_report'], artifact=native_row['artifact'])
+                                    report["results"].append({"case": case, "native_optimization": opt, **metadata,
+                                        "workers": workers, "implementation": implementation,
+                                        **report["plan"]["units"][case], **aggregate(values)})
             text = json.dumps(report, indent=2) + "\n"
             if ns.output: ns.output.write_text(text)
             else: print(text, end="")

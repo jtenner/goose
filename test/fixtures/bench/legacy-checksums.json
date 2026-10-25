@@ -1,0 +1,8 @@
+{
+  "source": "docs/bench-file-inventory at a9ca81f07220f0a1a5b40900394326087885bcfc",
+  "note": "Recorded legacy outputs, not results from the migrated entries. Sum used N=4000000, outside the new named sizes.",
+  "cases": [
+    {"file": "sum.goose", "legacy_size": 4000000, "types": ["i64", "i64"], "stdout": "4000000\n15987891712\n"},
+    {"file": "tree.goose", "legacy_size": 20, "types": ["i64", "i64"], "stdout": "2097151\n8377899684\n"}
+  ]
+}
