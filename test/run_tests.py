@@ -2287,19 +2287,15 @@ def main():
     r.show_task(bench_declarations)
     if cc and sys.platform.startswith("linux"):
         def bench_runtime():
-            code, out, err = tc.run_capture([sys.executable, HERE / "bench_runtime.py", exe])
-            if code:
-                r.fail("benchmark runtime", out + err)
-            else:
-                r.ok(out.strip())
+            # Both exercise the shared-native lock; run them in sequence.
+            for script, label in (("bench_runtime.py", "benchmark runtime"),
+                                  ("bench_thermal.py", "benchmark thermal")):
+                code, out, err = tc.run_capture([sys.executable, HERE / script, exe])
+                if code:
+                    r.fail(label, out + err)
+                else:
+                    r.ok(out.strip())
         r.show_task(bench_runtime)
-        def bench_thermal():
-            code, out, err = tc.run_capture([sys.executable, HERE / "bench_thermal.py"])
-            if code:
-                r.fail("benchmark thermal", out + err)
-            else:
-                r.ok(out.strip())
-        r.show_task(bench_thermal)
     if cc and jit:
         def cli_definitions():
             code, out, err = tc.run_capture([sys.executable, HERE / "cli_definitions.py", exe])
