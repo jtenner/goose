@@ -2400,6 +2400,9 @@ int Main(int argc, char **argv, bool &measuring) {
                 const char *message = "shared-native benchmark lock unavailable or occupied";
                 fprintf(stderr, "bench: %s\n", message);
                 benchreport->error = {"lock", message};
+                // Input discovery has not run. Even a sidecar or imported
+                // source may be named as an output, so retain stderr only.
+                benchreport->json_path.clear(); benchreport->csv_path.clear();
                 return finishbench(2);
             }
         }

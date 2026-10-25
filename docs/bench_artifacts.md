@@ -142,7 +142,8 @@ resolve to a known input or compiler path. Apply this rule to `--list`, failed
 compilations and successful builds. Check explicit headers before parsing,
 and collect sidecars and native source paths even when type checking fails.
 If native dependency discovery fails, do not write to an unverified artifact
-path. The diagnostic remains available on stderr.
+path. Lock rejection also suppresses artifact writes because it precedes input
+discovery. The diagnostic remains available on stderr.
 
 Thermal policy object:
 
