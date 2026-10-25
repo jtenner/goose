@@ -235,12 +235,18 @@ def check_lsp_protocol(exe, base):
                         got["activeParameter"] != int(active)):
                     fail(f"signature {pos}", got)
             elif kind == "complete":
-                # `complete L:C has NAME` / `lacks NAME`: the labels offered.
+                # `has NAME` / `lacks NAME`: the labels offered. `inserts NAME`:
+                # the item labelled NAME inserts that spelling, as a client would.
                 pos, mode, name = rest.split()
                 got = client.request("textDocument/completion", {**doc, "position": position(pos)})
-                labels = {item["label"] for item in (got or {}).get("items", [])}
-                if (name in labels) != (mode == "has"):
-                    fail(f"completion {pos} {mode} {name}", sorted(labels))
+                items = {item["label"]: item for item in (got or {}).get("items", [])}
+                if mode == "inserts":
+                    item = items.get(name, {})
+                    insert = item.get("textEdit", {}).get("newText", item.get("insertText", item.get("label")))
+                    if insert != name:
+                        fail(f"completion {pos} inserts {name}", item)
+                elif (name in items) != (mode == "has"):
+                    fail(f"completion {pos} {mode} {name}", sorted(items))
             elif kind == "token":
                 # `none`: no token at the place.
                 pos, want = rest.split()
