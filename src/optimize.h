@@ -60,6 +60,7 @@ struct Reassociator;      // optimize_reassoc.h.
 
 struct Optimizer {
     Ast &ast;
+    bool benchmark = false;
     int nc = 0, ncu = 0;         // Inline thresholds; 0 = inlining off.
     bool caninline = false;
     FnSpec *curspec = nullptr;   // Specialization being optimized (null: globals).
@@ -242,13 +243,14 @@ struct Optimizer {
         postorder.push_back(sp);
     }
 
-    // What the program runs from: main, the thread entry points, and every
-    // tree outside a function body.
+    // What the program runs from: main, the thread entry points, exports,
+    // benchmarks for the bench command, and every tree outside a function body.
     void ReachRoots() {
         auto mainsf = ast.MainFunction();
         if (mainsf && !mainsf->specs.empty()) Reach(mainsf->specs[0]);
         for (auto sf : ast.functions)
-            if ((sf->isthread || sf->isexport || sf->isbench) && !sf->specs.empty()) Reach(sf->specs[0]);
+            if ((sf->isthread || sf->isexport || (benchmark && sf->isbench)) &&
+                !sf->specs.empty()) Reach(sf->specs[0]);
         ast.ForEachRootTree([&](Node *n) { ReachTree(n); });
     }
 
@@ -596,7 +598,7 @@ struct Optimizer {
     // ------------------------------------------------------------------
     // Driver: constructing the Optimizer runs the whole pass.
 
-    Optimizer(Ast &_ast, int level) : ast(_ast) {
+    Optimizer(Ast &_ast, int level, bool _benchmark = false) : ast(_ast), benchmark(_benchmark) {
         switch (level) {
             case 0:  nc = 0;  ncu = 0;  break;
             case 1:  nc = 8;  ncu = 48; break;
