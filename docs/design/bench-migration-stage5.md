@@ -35,6 +35,11 @@ resolved. The input identity fixes alone do not remove either block.
 The native command acquires the shared lock before benchmark compilation and
 holds it until all workload process groups have been cleaned up. An occupied
 lock prevents compiler launch. Listing entries does not acquire this lock.
+On Linux, the supervisor adopts orphaned helpers, checks group signals, and
+reaps the group before starting another row or releasing the lock. A cleanup
+error fails the row. If termination cannot be confirmed, cleanup keeps the
+lock and retries, even after its deadline; stderr reports this retained lock.
+The caller's previous child-subreaper setting is restored after cleanup.
 
 `--legacy-goose` keeps the old timing boundary and ordering for either harness.
 The suite uses `results-native-v2.json` or `results-legacy-v2.json` under
