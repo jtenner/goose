@@ -2287,8 +2287,9 @@ def main():
     r.show_task(bench_declarations)
     if cc and sys.platform.startswith("linux"):
         def bench_runtime():
-            # Both exercise the shared-native lock; run them in sequence.
+            # These checks use the shared-native lock; run them in sequence.
             for script, label in (("bench_runtime.py", "benchmark runtime"),
+                                  ("bench_checksums.py", "benchmark checksums"),
                                   ("bench_thermal.py", "benchmark thermal"),
                                   ("bench_report.py", "benchmark reports")):
                 code, out, err = tc.run_capture([sys.executable, HERE / script, exe])
