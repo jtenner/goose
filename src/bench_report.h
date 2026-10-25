@@ -2,6 +2,7 @@
 #include "bench_results.h"
 #include "bench_thermal.h"
 #include <utility>
+#include <iosfwd>
 namespace goose {
 using BenchFields = std::vector<std::pair<std::string, std::string>>;
 std::string BenchString(const std::string &s);
@@ -17,6 +18,8 @@ std::string BenchTimestamp();
 std::string BenchUUID();
 std::string BenchHost();
 BenchSummary BenchStatistics(const std::vector<uint64_t> &nanoseconds);
+void BenchRecordAttempt(BenchRow &, BenchAttempt &, bool accepted);
+void BenchCompleteRow(BenchRow &, int warmups, int samples);
 struct BenchConfiguration {
     std::string id, size, definitions;
     std::vector<std::string> goose_flags, native_flags;
@@ -37,6 +40,7 @@ struct BenchReport {
     BenchError error;
     std::string json_path, csv_path;
     std::string Json() const;
+    void WriteJson(std::ostream &) const;
     void Checkpoint(bool csv = false) const;
     void Print() const;
     void Finish(const std::string &state);

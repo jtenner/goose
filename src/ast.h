@@ -2536,6 +2536,8 @@ struct Ast {
     // calling it, a shader given as source by that file, stage and source.
     // And embed_file's bytes, by "file\n" and the path, read the same way.
     map<string, string> shaders;
+    bool record_bench_inputs = false;
+    vector<pair<string, string>> bench_inputs; // Embedded source bytes used during checking.
 
     // Every checked tree that runs outside a function body: the global
     // initializers. `f` gets the slot, so a pass that rewrites trees can

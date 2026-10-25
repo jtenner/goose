@@ -10,7 +10,7 @@ root = pathlib.Path(__file__).resolve().parents[1]
 with tempfile.TemporaryDirectory(prefix='goose-thermal-test-') as tmp:
     folder = pathlib.Path(tmp)
     driver = folder / 'driver'
-    subprocess.run(['c++', '-std=c++20', '-O2', str(root / 'test/bench_thermal.cpp'), '-o', str(driver)], check=True)
+    subprocess.run(['c++', '-std=c++20', '-O2', str(root / 'test/bench_thermal.cpp'), str(root / 'src/bench_report.cpp'), '-o', str(driver)], check=True)
     child = folder / 'child'
     child.write_text('''#!/usr/bin/env python3
 import os, socket, sys, time
@@ -27,7 +27,7 @@ while True:
         while not os.path.exists(marker): time.sleep(.001)
     end = time.monotonic_ns() + 100
     value = n if os.environ.get('THERMAL_MISMATCH') else 1
-    s.sendall(f'{start} {end} 1 i64:{value};\\n'.encode())
+    s.sendall(f'{start} {end} 1 4096 i64:{value};\\n'.encode())
 ''')
     child.chmod(0o755)
     for scenario, code, calls, marker in [

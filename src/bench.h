@@ -1,9 +1,10 @@
 // Native transport and parent-owned thermal supervision.
 #pragma once
 #include "bench_thermal.h"
+#include "bench_report.h"
 namespace goose {
 struct BenchProgram { string executable, key, size, directory; };
-int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups, int samples, const BenchThermalOptions &thermal, BenchThermalSource *source = nullptr);
+int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups, int samples, const BenchThermalOptions &thermal, BenchThermalSource *source = nullptr, BenchReport *report = nullptr);
 string BenchDirectory();
 // Compiled as its own translation unit, without LTO. No workload code is
 // visible to this timer, so every release performs exactly one opaque call.
@@ -15,6 +16,7 @@ inline const char *BenchRunnerSource() { return R"C(
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+#include <sys/resource.h>
 extern void gs_bench_init(int, char **);
 extern int gs_bench_lookup(const char *, void (**)(void), int (**)(FILE *));
 static uint64_t now(void) {
@@ -52,8 +54,10 @@ int gs_bench_runner(int argc, char **argv) {
         if (!sink) return 125;
         int finite = result(sink);
         fclose(sink);
-        fprintf(control, "%llu %llu %d %s\n", (unsigned long long)start,
-                (unsigned long long)end, finite, checksum);
+        struct rusage usage;
+        if (getrusage(RUSAGE_SELF, &usage)) return 126;
+        fprintf(control, "%llu %llu %d %llu %s\n", (unsigned long long)start,
+                (unsigned long long)end, finite, (unsigned long long)usage.ru_maxrss * 1024, checksum);
         free(checksum);
     }
 }
