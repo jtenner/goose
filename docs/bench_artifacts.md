@@ -197,8 +197,9 @@ Checksum object is `{components: [...]}`. Each ordered component is
 without leading zeros for integers (negative signed values have `-`), a JSON
 boolean for bool, or a fixed-width lowercase IEEE hex string for floats
 (`0x` plus 8 digits for f32 or 16 for f64, numerical bit order independent of
-host endianness). An observed nonfinite float may be recorded as its hex bits
-on the failed attempt; it can never yield an `ok` row. Example:
+host endianness). A completed call retains every component in order, including
+components after a nonfinite float. Record nonfinite floats as their hex bits
+on the failed attempt; they can never yield an `ok` row. Example:
 
 ```json
 {"components":[{"type":"i64","value":"16000000"},
