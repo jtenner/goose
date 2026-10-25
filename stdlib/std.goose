@@ -1374,14 +1374,18 @@ fn each_utf8<F>(s: u8[:]) {
         var n = 1;
         if b < 0x80 {
             cp = b;
-        } else if b >= 0xC0 && b < 0xE0 && i + 1 < s.len {
+        } else if b >= 0xC0 && b < 0xE0 && i + 1 < s.len &&
+                  (s[i + 1] & 0xC0) == 0x80 {
             cp = ((b & 0x1F) << 6) | ((s[i + 1] as i64) & 0x3F);
             n = 2;
-        } else if b >= 0xE0 && b < 0xF0 && i + 2 < s.len {
+        } else if b >= 0xE0 && b < 0xF0 && i + 2 < s.len &&
+                  (s[i + 1] & 0xC0) == 0x80 && (s[i + 2] & 0xC0) == 0x80 {
             cp = ((b & 0x0F) << 12) | (((s[i + 1] as i64) & 0x3F) << 6) |
                  ((s[i + 2] as i64) & 0x3F);
             n = 3;
-        } else if b >= 0xF0 && b < 0xF8 && i + 3 < s.len {
+        } else if b >= 0xF0 && b < 0xF8 && i + 3 < s.len &&
+                  (s[i + 1] & 0xC0) == 0x80 && (s[i + 2] & 0xC0) == 0x80 &&
+                  (s[i + 3] & 0xC0) == 0x80 {
             cp = ((b & 0x07) << 18) | (((s[i + 1] as i64) & 0x3F) << 12) |
                  (((s[i + 2] as i64) & 0x3F) << 6) | ((s[i + 3] as i64) & 0x3F);
             n = 4;
