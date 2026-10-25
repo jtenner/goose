@@ -67,6 +67,11 @@ int main(int argc, char **argv) {
     assert(!monitor.finish() && monitor.maximum == 66 && waits == 0);
     assert(monitor.gap >= .05 - 1e-9);
     readings = {60, 65}; index = 0; monitor.gate(); assert(monitor.finish());
+    monitor.options.gate = 55; monitor.options.ceiling = 60;
+    readings = {56, 55, 60}; index = 0; waits = 0;
+    monitor.gate(); assert(waits == 1 && monitor.finish());
+    readings = {55, 60.001}; index = 0;
+    monitor.gate(); assert(!monitor.finish());
     readings = {70}; index = 0; monitor.options.gate_timeout = 2;
     monitor.read = [] { return 70; };
     bool timeout = false;
