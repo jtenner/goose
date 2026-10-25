@@ -61,13 +61,14 @@ inline string CompileShader(const string &source, const string &path, int stage)
 }
 
 // The blob for the shader file at `path`.
-inline string CompileShaderFile(const string &path) {
+inline string CompileShaderFile(const string &path, string *input = nullptr) {
     auto stage = ShaderStageOf(path);
     if (stage < 0)
         throw CompileError { cat("cannot tell the shader stage of ", path,
                                  ": the extension must be .vert, .frag or .comp") };
     string src;
     if (!LoadFile(path, src)) throw CompileError { cat("cannot open shader file: ", path) };
+    if (input) *input = src;
     return CompileShader(src, path, stage);
 }
 

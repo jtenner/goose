@@ -16,7 +16,7 @@ struct BenchAttempt {
     bool warmup = false;
     int slot = 0;
     uint64_t start_ns = 0, end_ns = 0;
-    bool finite = false;
+    bool finite = false, completed = false;
     std::vector<BenchComponent> checksum;
     int retry = 0;
     std::string status = "failed";
@@ -42,7 +42,7 @@ struct BenchRow {
     std::optional<BenchSummary> summary;
     std::optional<double> temperature_max;
     std::optional<uint64_t> rss;
-    std::string memory_reason;
+    std::string memory_reason = "no child exit RSS available";
     std::vector<BenchChild> children;
     BenchError error;
 };

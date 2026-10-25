@@ -11,6 +11,8 @@
 #include <fstream>
 #include <limits>
 #include <random>
+#include <sstream>
+#include <functional>
 #include <stdexcept>
 #ifdef __linux__
 #include <sched.h>
@@ -24,6 +26,11 @@ string BenchString(const string &s) {
     constexpr char hex[] = "0123456789abcdef";
     for (unsigned char c : s) {
         if (c == '"' || c == '\\') { out += '\\'; out += c; }
+        else if (c == '\b') out += "\\b";
+        else if (c == '\f') out += "\\f";
+        else if (c == '\n') out += "\\n";
+        else if (c == '\r') out += "\\r";
+        else if (c == '\t') out += "\\t";
         else if (c < 32) { out += "\\u00"; out += hex[c >> 4]; out += hex[c & 15]; }
         else out += c;
     }
@@ -112,25 +119,30 @@ string AttemptJson(const BenchAttempt &a, int index) {
         auto offset = r.time_ns >= a.start_ns ? to_string(r.time_ns-a.start_ns) : "-"+to_string(a.start_ns-r.time_ns);
         reads.push_back(BenchObject({{"sensor_id",BenchString(r.sensor_id)},{"offset_ns",BenchString(offset)},{"c",BenchNumber(r.c)}}));
     }
-    bool complete = a.end_ns > a.start_ns;
+    bool complete = a.completed;
     return BenchObject({{"index",to_string(index)},{"phase",BenchString(a.warmup?"warmup":"measure")},{"slot",to_string(a.slot)},
         {"retry",to_string(a.retry)},{"child_id",to_string(a.child_id)},{"status",BenchString(a.status)},
-        {"elapsed_ns",complete?BenchString(to_string(a.end_ns-a.start_ns)):"null"},
-        {"seconds",complete?BenchNumber(double(a.end_ns-a.start_ns)/1e9):"null"},{"checksum",BenchChecksum(a.checksum)},
+        {"elapsed_ns",complete?BenchString(a.end_ns >= a.start_ns ? to_string(a.end_ns-a.start_ns) : "-"+to_string(a.start_ns-a.end_ns)):"null"},
+        {"seconds",complete?BenchNumber(double((long double)a.end_ns-(long double)a.start_ns)/1e9):"null"},{"checksum",BenchChecksum(a.checksum)},
         {"gate_wait_seconds",BenchNumber(a.gate_wait_seconds)},{"temperature_before_c",Optional(a.before)},
         {"temperature_after_c",Optional(a.after)},{"temperature_max_observed_c",Optional(a.temperature_max)},
         {"temperature_reads",BenchArray(reads)},{"temperature_max_poll_gap_ms",Optional(a.poll_gap_ms)},
         {"process_peak_rss_bytes",Optional(a.rss)},{"error",ErrorJson(a.error)}});
 }
-void AtomicWrite(const string &path, const string &text, const string &id) {
+void AtomicWrite(const string &path, const std::function<void(std::ostream &)> &write, const string &id) {
     if (path.empty()) return;
     auto temporary = path + ".tmp-" + id;
     try {
         std::ofstream f(temporary, std::ios::binary | std::ios::trunc);
-        if (!f || !f.write(text.data(), text.size()) || !f.flush()) throw std::runtime_error("cannot write artifact: " + path);
+        if (!f) throw std::runtime_error("cannot write artifact: " + path);
+        write(f);
+        if (!f.flush()) throw std::runtime_error("cannot write artifact: " + path);
         f.close(); if (!f) throw std::runtime_error("cannot close artifact: " + path);
         std::filesystem::rename(temporary,path);
     } catch (...) { std::error_code ec; std::filesystem::remove(temporary,ec); throw; }
+}
+void AtomicWrite(const string &path, const string &text, const string &id) {
+    AtomicWrite(path,[&](std::ostream &out) { out.write(text.data(),text.size()); },id);
 }
 string Csv(const vector<string> &cells) {
     string s;
@@ -207,6 +219,61 @@ BenchSummary BenchStatistics(const vector<uint64_t> &nanoseconds) {
     auto m=median(x),lo=x.front(),hi=x.back(); for(auto &v:x)v=std::abs(v-m);auto mad=median(x);
     return {double(m/1e9L),double(mad/1e9L),double(100*mad/m),double(lo/1e9L),double(hi/1e9L)};
 }
+namespace {
+void ValidateChecksum(const vector<BenchComponent> &components) {
+    for (auto &c:components) {
+        if (c.type == "bool") {
+            if (c.value != "true" && c.value != "false") throw std::runtime_error("invalid boolean checksum protocol");
+        } else if (c.type == "f32" || c.type == "f64") {
+            auto width = c.type == "f32" ? 8u : 16u;
+            if (c.value.size() != width+2 || !c.value.starts_with("0x") || c.value.find_first_not_of("0123456789abcdef",2) != string::npos)
+                throw std::runtime_error("invalid floating checksum protocol");
+            uint64_t bits = 0;
+            auto parsed = std::from_chars(c.value.data()+2,c.value.data()+c.value.size(),bits,16);
+            if (parsed.ec != std::errc()) throw std::runtime_error("invalid floating checksum protocol");
+            bool finite = width == 8 ? std::isfinite(std::bit_cast<float>((uint32_t)bits)) : std::isfinite(std::bit_cast<double>(bits));
+            if (!finite) throw std::runtime_error("nonfinite benchmark checksum");
+        } else {
+            int width = c.type == "i8" || c.type == "u8" ? 8 : c.type == "i16" || c.type == "u16" ? 16 :
+                c.type == "i32" || c.type == "u32" ? 32 : c.type == "i64" || c.type == "u64" ? 64 : 0;
+            if (!width) throw std::runtime_error("unknown checksum type protocol");
+            auto first=c.value.data(),end=first+c.value.size();
+            if (c.type[0]=='u') {
+                uint64_t value=0;auto parsed=std::from_chars(first,end,value);
+                if(parsed.ec!=std::errc() || parsed.ptr!=end || to_string(value)!=c.value || (width<64 && value>=(uint64_t(1)<<width)))
+                    throw std::runtime_error("invalid unsigned checksum protocol");
+            } else {
+                int64_t value=0;auto parsed=std::from_chars(first,end,value);
+                if(parsed.ec!=std::errc() || parsed.ptr!=end || to_string(value)!=c.value ||
+                    (width<64 && (value<-(int64_t(1)<<(width-1)) || value>=(int64_t(1)<<(width-1)))))
+                    throw std::runtime_error("invalid signed checksum protocol");
+            }
+        }
+    }
+}
+}
+void BenchRecordAttempt(BenchRow &row, BenchAttempt &a, bool accepted) {
+    if (a.temperature_max) row.temperature_max = std::max(row.temperature_max.value_or(*a.temperature_max), *a.temperature_max);
+    if (!a.completed || a.end_ns <= a.start_ns) throw std::runtime_error("nonpositive elapsed interval (clock resolution)");
+    if (!a.finite) throw std::runtime_error("nonfinite benchmark checksum");
+    if (a.checksum.empty()) throw std::runtime_error("missing benchmark checksum protocol");
+    ValidateChecksum(a.checksum);
+    if (row.expected.empty()) row.expected = a.checksum;
+    else if (row.expected != a.checksum) throw std::runtime_error("checksum disagreement for " + row.key + " (" + row.size + ")");
+    a.status = accepted ? "accepted" : "thermal_rejected";
+    if (accepted) { if (a.warmup) ++row.accepted_warmups; else ++row.accepted_samples; }
+    else ++row.thermal_rejections;
+}
+void BenchCompleteRow(BenchRow &row, int warmups, int samples) {
+    if (row.accepted_warmups != warmups || row.accepted_samples != samples || warmups < 1 || samples < 5)
+        throw std::runtime_error("incomplete benchmark row");
+    for (auto &c: row.children) if (!c.exit_code || *c.exit_code != 0 || c.signal)
+        throw std::runtime_error("benchmark child failed during teardown");
+    vector<uint64_t> accepted;
+    for (auto &a:row.attempts) if (!a.warmup && a.status == "accepted") accepted.push_back(a.end_ns-a.start_ns);
+    if ((int)accepted.size() != samples) throw std::runtime_error("incomplete benchmark attempts");
+    row.summary = BenchStatistics(accepted); row.status = "ok";
+}
 string BenchConfigurationId(const BenchConfiguration &c,const BenchFields &sources,const string &goose_hash,const string &cc_hash) {
     auto sorted=sources;std::sort(sorted.begin(),sorted.end());vector<string> files;
     for(auto &[path,hash]:sorted)files.push_back(BenchObject({{"path",BenchString(path)},{"sha256",BenchString(hash)}}));
@@ -215,23 +282,15 @@ string BenchConfigurationId(const BenchConfiguration &c,const BenchFields &sourc
         {"goose_sha256",BenchString(goose_hash)},{"native_flags",BenchStrings(c.native_flags)},{"size",BenchString(c.size)},{"source_files",BenchArray(files)}}));
 }
 string BenchReport::Json() const {
-    vector<string> files, configs, results;
+    std::ostringstream out;WriteJson(out);return out.str();
+}
+void BenchReport::WriteJson(std::ostream &out) const {
+    vector<string> files, configs;
     for(auto &[path,hash]:source_files)files.push_back(BenchObject({{"path",BenchString(path)},{"sha256",BenchString(hash)}}));
     for(auto &c:configurations)configs.push_back(BenchObject({{"id",BenchString(c.id)},{"size",BenchString(c.size)},{"definitions",c.definitions},
         {"goose_flags",BenchStrings(c.goose_flags)},{"native_flags",BenchStrings(c.native_flags)},
         {"executable_sha256",Nullable(c.executable_hash)},{"generated_c_sha256",Nullable(c.c_hash)}}));
-    for(auto &r:rows) {
-        vector<string> attempts,children;int i=0;for(auto &a:r.attempts)attempts.push_back(AttemptJson(a,++i));
-        for(auto &c:r.children)children.push_back(BenchObject({{"id",to_string(c.id)},{"exit_code",Optional(c.exit_code)},{"signal",Optional(c.signal)},
-            {"process_peak_rss_bytes",Optional(c.rss)},{"stdout_path",BenchString(c.stdout_path)},{"stderr_path",BenchString(c.stderr_path)},{"logs_truncated",c.logs_truncated?"true":"false"}}));
-        results.push_back(BenchObject({{"key",BenchString(r.key)},{"label",BenchString(r.label)},{"source_line",to_string(r.source_line)},
-            {"size",BenchString(r.size)},{"configuration_id",BenchString(r.configuration_id)},{"status",BenchString(r.status)},{"isolation",BenchString(r.isolation)},
-            {"checksum",BenchChecksum(r.expected)},{"accepted_warmups",to_string(r.accepted_warmups)},{"accepted_samples",to_string(r.accepted_samples)},
-            {"thermal_rejections",to_string(r.thermal_rejections)},{"attempts",BenchArray(attempts)},{"summary",SummaryJson(r.summary)},
-            {"temperature_max_observed_c",Optional(r.temperature_max)},{"process_peak_rss_bytes",Optional(r.rss)},
-            {"memory_unavailable_reason",Nullable(r.memory_reason)},{"children",BenchArray(children)},{"error",ErrorJson(r.error)}}));
-    }
-    return BenchObject({{"schema_version","1"},{"run_id",BenchString(run_id)},{"status",BenchString(status)},
+    auto prefix = BenchObject({{"schema_version","1"},{"run_id",BenchString(run_id)},{"status",BenchString(status)},
         {"started_at",BenchString(started_at)},{"finished_at",Nullable(finished_at)},
         {"source",BenchObject({{"path",BenchString(source_path)},{"sha256",BenchString(source_hash)},{"files",BenchArray(files)},
             {"git_commit",Nullable(git_commit)},{"git_dirty",git_dirty}})}, {"host",host},{"toolchain",BenchObject({{"goose",goose},{"cc",cc}})},
@@ -241,10 +300,34 @@ string BenchReport::Json() const {
             {"max_retries",to_string(thermal.retries)},{"thermal",BenchObject({{"mode",BenchString(thermal.off?"disabled":"required")},
                 {"reason",Nullable(thermal_reason)},{"gate_c",BenchNumber(thermal.gate)},{"ceiling_c",BenchNumber(thermal.ceiling)},
                 {"poll_interval_ms",BenchNumber(thermal.poll_ms)},{"sensors",BenchArray(sensors)}})}})},
-        {"results",BenchArray(results)},{"error",ErrorJson(error)}})+"\n";
+        {"error",ErrorJson(error)}});
+    prefix.pop_back();out << prefix << ",\"results\":[";
+    bool first=true;
+    for(auto &r:rows) {
+        if(!first)out << ',';
+        first=false;
+        auto row = BenchObject({{"key",BenchString(r.key)},{"label",BenchString(r.label)},{"source_line",to_string(r.source_line)},
+            {"size",BenchString(r.size)},{"configuration_id",BenchString(r.configuration_id)},{"status",BenchString(r.status)},{"isolation",BenchString(r.isolation)},
+            {"checksum",BenchChecksum(r.expected)},{"accepted_warmups",to_string(r.accepted_warmups)},{"accepted_samples",to_string(r.accepted_samples)},
+            {"thermal_rejections",to_string(r.thermal_rejections)},{"summary",SummaryJson(r.summary)},
+            {"temperature_max_observed_c",Optional(r.temperature_max)},{"process_peak_rss_bytes",Optional(r.rss)},
+            {"memory_unavailable_reason",Nullable(r.memory_reason)},{"error",ErrorJson(r.error)}});
+        row.pop_back();out << row << ",\"attempts\":[";
+        int index=0;for(auto &a:r.attempts) { if(index)out << ',';out << AttemptJson(a,++index); }
+        out << "],\"children\":[";
+        bool firstchild=true;
+        for(auto &c:r.children) {
+            if(!firstchild)out << ',';
+            firstchild=false;
+            out << BenchObject({{"id",to_string(c.id)},{"exit_code",Optional(c.exit_code)},{"signal",Optional(c.signal)},
+                {"process_peak_rss_bytes",Optional(c.rss)},{"stdout_path",BenchString(c.stdout_path)},{"stderr_path",BenchString(c.stderr_path)},{"logs_truncated",c.logs_truncated?"true":"false"}});
+        }
+        out << "]}";
+    }
+    out << "]}\n";
 }
 void BenchReport::Checkpoint(bool csv) const {
-    AtomicWrite(json_path,Json(),run_id);
+    if (!json_path.empty()) AtomicWrite(json_path,[&](std::ostream &out) { WriteJson(out); },run_id);
     if(!csv||csv_path.empty())return;
     string summary="schema_version,run_id,key,label,source_path,source_sha256,source_line,size,configuration_id,isolation,status,thermal_mode,gate_c,ceiling_c,warmups_requested,samples_requested,accepted_warmups,accepted_samples,thermal_rejections,median_seconds,seconds_mad,seconds_mad_percent,seconds_min,seconds_max,temperature_max_observed_c,process_peak_rss_bytes,memory_unavailable_reason,checksum_json,error_code,error_message\r\n";
     string raw="schema_version,run_id,key,size,configuration_id,index,phase,slot,retry,child_id,status,elapsed_ns,seconds,gate_wait_seconds,temperature_before_c,temperature_after_c,temperature_max_observed_c,temperature_max_poll_gap_ms,process_peak_rss_bytes,checksum_json,error_code,error_message\r\n";
@@ -257,9 +340,9 @@ void BenchReport::Checkpoint(bool csv) const {
             r.summary?BenchNumber(r.summary->minimum):"",r.summary?BenchNumber(r.summary->maximum):"",Cell(Optional(r.temperature_max)),Cell(Optional(r.rss)),
             r.memory_reason,Cell(BenchChecksum(r.expected)),e.code,e.message});
         int i=0;for(auto &a:r.attempts) {
-            bool complete=a.end_ns>a.start_ns;
+            bool complete=a.completed;
             raw+=Csv({"1",run_id,r.key,r.size,r.configuration_id,to_string(++i),a.warmup?"warmup":"measure",to_string(a.slot),to_string(a.retry),
-                to_string(a.child_id),a.status,complete?to_string(a.end_ns-a.start_ns):"",complete?BenchNumber(double(a.end_ns-a.start_ns)/1e9):"",
+                to_string(a.child_id),a.status,complete?(a.end_ns >= a.start_ns ? to_string(a.end_ns-a.start_ns) : "-"+to_string(a.start_ns-a.end_ns)):"",complete?BenchNumber(double((long double)a.end_ns-(long double)a.start_ns)/1e9):"",
                 BenchNumber(a.gate_wait_seconds),Cell(Optional(a.before)),Cell(Optional(a.after)),Cell(Optional(a.temperature_max)),Cell(Optional(a.poll_gap_ms)),
                 Cell(Optional(a.rss)),Cell(BenchChecksum(a.checksum)),a.error.code,a.error.message});
         }
