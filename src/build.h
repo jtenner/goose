@@ -155,9 +155,9 @@ struct Builder {
 
     // Compiles `src` and links it with `objects` and the response files
     // `rsps` into `exe`, with `builddir` taking the intermediates.
-    bool Link(const string &src, const vector<string> &objects, const vector<string> &rsps,
-              const string &exe, const string &builddir, const string &logfile,
-              const vector<string> &extra = {}) const {
+    vector<string> LinkCommand(const string &src, const vector<string> &objects,
+                               const vector<string> &rsps, const string &exe,
+                               const string &builddir, const vector<string> &extra = {}) const {
         vector<string> argv = { tc.cc };
         for (auto &f : CFlags()) argv.push_back(f);
         for (auto &f : extra) argv.push_back(f);
@@ -176,7 +176,13 @@ struct Builder {
             for (auto &r : rsps) argv.push_back(cat("@", r));
             for (auto &l : SystemLibs()) argv.push_back(l);
         }
-        return Run(argv, cat("building ", exe), logfile);
+        return argv;
+    }
+
+    bool Link(const string &src, const vector<string> &objects, const vector<string> &rsps,
+              const string &exe, const string &builddir, const string &logfile,
+              const vector<string> &extra = {}) const {
+        return Run(LinkCommand(src, objects, rsps, exe, builddir, extra), cat("building ", exe), logfile);
     }
 };
 
