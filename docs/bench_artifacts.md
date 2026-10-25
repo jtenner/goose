@@ -173,12 +173,17 @@ Attempt object:
 * `temperature_before_c`, `temperature_after_c`, `temperature_max_observed_c`:
   numbers or null, maxima across the selected sensors at the corresponding
   reading(s). Null when disabled or no valid reading exists.
-* `temperature_reads`: array of `{sensor_id, offset_ns, c}`. Offset is a signed
-  decimal nanosecond string relative to the child's timer start using the same
-  host clock; pre-read may be negative and post-read after elapsed_ns. `c` is
-  a number. Store bracket/in-call reads, not every gate-wait poll. Empty when
-  no call starts or temperature is disabled. Sensor failure is an error, not
-  a fabricated read. Gate timeout explanation goes into `error`.
+* `temperature_reads`: array of `{sensor_id, offset_ns, c}` for completed
+  calls. Offset is a signed decimal nanosecond string relative to the child's
+  timer start using the same host clock; pre-read may be negative and post-read
+  after elapsed_ns. If a released call fails before a valid timed result,
+  retain its readings as `{sensor_id, time_ns, c}` instead. `time_ns` is an
+  unsigned decimal nanosecond string on the absolute host `CLOCK_MONOTONIC`
+  clock; there is no known child timer origin or relative offset. `c` is a
+  number. Store bracket/in-call reads, not every gate-wait poll. Retain the
+  observed maximum and poll gap on failure. Empty when no call is released or
+  temperature is disabled. Sensor failure is an error, not a fabricated read.
+  Gate timeout explanation goes into `error`.
 * `temperature_max_poll_gap_ms`: number or null; largest adjacent read gap per
   sensor including the bracketing endpoints. At least pre/post reads are
   required for every completed gated attempt.

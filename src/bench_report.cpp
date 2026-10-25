@@ -115,9 +115,12 @@ string SummaryJson(const std::optional<BenchSummary> &s) {
 string AttemptJson(const BenchAttempt &a, int index) {
     vector<string> reads;
     for (auto &r : a.reads) {
+        // An aborted call has no child timer origin. Keep its absolute clock.
         // Avoid unsigned subtraction and signed overflow for negative offsets.
-        auto offset = r.time_ns >= a.start_ns ? to_string(r.time_ns-a.start_ns) : "-"+to_string(a.start_ns-r.time_ns);
-        reads.push_back(BenchObject({{"sensor_id",BenchString(r.sensor_id)},{"offset_ns",BenchString(offset)},{"c",BenchNumber(r.c)}}));
+        auto time = !a.completed ? to_string(r.time_ns)
+                  : r.time_ns >= a.start_ns ? to_string(r.time_ns-a.start_ns) : "-"+to_string(a.start_ns-r.time_ns);
+        reads.push_back(BenchObject({{"sensor_id",BenchString(r.sensor_id)},
+            {a.completed ? "offset_ns" : "time_ns",BenchString(time)},{"c",BenchNumber(r.c)}}));
     }
     bool complete = a.completed;
     return BenchObject({{"index",to_string(index)},{"phase",BenchString(a.warmup?"warmup":"measure")},{"slot",to_string(a.slot)},
