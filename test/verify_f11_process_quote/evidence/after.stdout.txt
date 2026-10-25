@@ -1,0 +1,23 @@
+source_commit=63d62f302203decf92655567a20774e7bf9152aa
+platform=linux
+shell=/usr/bin/dash
+c++ (Debian 14.2.0-19) 14.2.0
+sha256 src/includes.h=e6926bf8550fd3f566f7918f04731d6db5aff6a093354440b41db095d5fddc91
+sha256 src/utils.h=adb917ff0376de7ed747d766ea687b7ddab625b8e513c06515069be50515de1d
+sha256 src/process.h=a36e982d95221607baf39cba18456a7b166de39db62db42ae2ab8f30559d9d8d
+sha256 src/process.cpp=ae7d49e8d9980f620f1ec428b2046ea6aa813b371641a6b08fb4e59836b17ba5
+sha256 src/progress.h=daa73670f5b9efeb96f7f4befb4544cef3b4a29ef46d381eee84f7c6ad511713
+sha256 src/progress.cpp=7a506a4face45380143ddc0bf043748a869acebd48765c0cb8495b353160edf4
+sha256 third_party/subprocess/subprocess.h=978b492b3da0485ea6c0dab89b6ca8c71a523c85638de88fe9297249b25c5ea1
+sha256 driver.cpp=2b4b3546502f5f20f4da752ad9ed13d670b7a78dd11c993d681e0f2900e7ba1c
+build=c++ -std=c++20 -O0 -I /tmp/goose-f11-k4xro02z/source /home/dev/.t3/worktrees/goose/fix-goose-f11-process-quote/test/verify_f11_process_quote/driver.cpp /tmp/goose-f11-k4xro02z/source/process.cpp /tmp/goose-f11-k4xro02z/source/progress.cpp -pthread -ldl -o /tmp/goose-f11-k4xro02z/formatter
+build_exit=0
+sha256 formatter=d7595bef964a5a9a26773be5d9a2a0ef913be18cf8f893908d36a66bae4b60e0
+fixture_files=["a.c", "b.c"]
+{"input": ["plain.c"], "printed": "set -- plain.c", "actual_count": 1, "actual": ["plain.c"], "result": "PASS"}
+{"input": ["two words.c"], "printed": "set -- \"two words.c\"", "actual_count": 1, "actual": ["two words.c"], "result": "PASS"}
+{"input": [""], "printed": "set -- \"\"", "actual_count": 1, "actual": [""], "result": "PASS"}
+{"input": ["*.c"], "printed": "set -- \"*.c\"", "actual_count": 1, "actual": ["*.c"], "result": "PASS"}
+{"input": ["?.c"], "printed": "set -- \"?.c\"", "actual_count": 1, "actual": ["?.c"], "result": "PASS"}
+{"input": ["[ab].c"], "printed": "set -- \"[ab].c\"", "actual_count": 1, "actual": ["[ab].c"], "result": "PASS"}
+round_trip_failures=0/6
