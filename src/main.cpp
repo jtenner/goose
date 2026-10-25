@@ -1681,30 +1681,33 @@ int Main(int argc, char **argv, bool &measuring) {
         r.Print(); return code;
     };
     set<string> benchinputpaths;
+    vector<string> benchoutputpaths {benchjson, benchcsv};
+    if (!benchcsv.empty()) {
+        auto p = filesystem::path(benchcsv); auto ext = p.extension().string(); p.replace_extension();
+        benchoutputpaths.push_back(p.string() + ".samples" + ext);
+    }
+    set<string> benchresolvedoutputs;
+    auto invalidbenchoutput = [&](const string &message) {
+        benchreport->json_path.clear(); benchreport->csv_path.clear();
+        throw std::runtime_error(message);
+    };
+    auto protectbenchpath = [&](const string &path) {
+        if (benchresolvedoutputs.empty()) return;
+        if (benchresolvedoutputs.count(filesystem::weakly_canonical(path).string()))
+            invalidbenchoutput("benchmark output would overwrite an input: " + path);
+    };
     auto protectinputs = [&] {
         if (!benchreport) return;
-        vector<string> outputs {benchjson, benchcsv};
-        if (!benchcsv.empty()) {
-            auto p = filesystem::path(benchcsv); auto ext = p.extension().string(); p.replace_extension();
-            outputs.push_back(p.string() + ".samples" + ext);
-        }
-        auto invalid = [&](const string &message) {
-            benchreport->json_path.clear(); benchreport->csv_path.clear();
-            throw std::runtime_error(message);
-        };
-        set<string> seen;
-        for (auto &output : outputs) if (!output.empty()) {
+        benchresolvedoutputs.clear();
+        for (auto &output : benchoutputpaths) if (!output.empty()) {
             auto resolved = filesystem::weakly_canonical(output).string();
-            if (!seen.insert(resolved).second) invalid("duplicate benchmark output path: " + output);
-            if (filesystem::is_directory(output)) invalid("benchmark output path is a directory: " + output);
-            for (auto &path : benchinputpaths)
-                if (resolved == filesystem::weakly_canonical(path).string())
-                    invalid("benchmark output would overwrite an input: " + output);
-            for (auto &[path, hash] : benchreport->source_files)
-                if (resolved == filesystem::weakly_canonical(path).string())
-                    invalid("benchmark output would overwrite an input: " + output);
-            if (resolved == filesystem::weakly_canonical(exe).string()) invalid("benchmark output would overwrite compiler");
+            if (!benchresolvedoutputs.insert(resolved).second) invalidbenchoutput("duplicate benchmark output path: " + output);
+            if (filesystem::is_directory(output)) invalidbenchoutput("benchmark output path is a directory: " + output);
         }
+        if (benchresolvedoutputs.count(filesystem::weakly_canonical(exe).string())) invalidbenchoutput("benchmark output would overwrite compiler");
+        for (auto &path : benchinputpaths) protectbenchpath(path);
+        for (auto &[path, hash] : benchreport->source_files)
+            if (!benchinputpaths.count(path)) protectbenchpath(path);
     };
     if (verb == "bench") {
         benchreport = make_unique<BenchReport>(); auto &r = *benchreport;
@@ -1775,10 +1778,11 @@ int Main(int argc, char **argv, bool &measuring) {
         }
         protectinputs();
     };
-    auto recordbenchfile = [&](const string &path) {
-        auto absolute = AbsolutePath(path), hash = BenchFileHash(absolute);
+    auto recordbenchfile = [&](const string &path, string hash = {}) {
+        auto absolute = AbsolutePath(path);
         benchinputpaths.insert(absolute);
-        protectinputs();
+        protectbenchpath(absolute);
+        if (hash.empty()) hash = BenchFileHash(absolute);
         auto &inputs = benchreport->source_files;
         auto it = find_if(inputs.begin(), inputs.end(), [&](auto &p) { return p.first == absolute; });
         if (it == inputs.end()) inputs.push_back({absolute, hash});
@@ -2125,6 +2129,12 @@ int Main(int argc, char **argv, bool &measuring) {
                     set<string> responses;
                     recordresponses(argv, cwd, responses);
                     auto depfile = AbsolutePath(cat(builddir, "/dependencies.d"));
+                    std::error_code ec;
+                    filesystem::remove(depfile, ec);
+                    if (ec) {
+                        benchreport->json_path.clear(); benchreport->csv_path.clear();
+                        throw std::runtime_error("cannot clear native dependency output: " + ec.message());
+                    }
                     for (auto &f : vector<string>{"-M", "-MT", "goose", "-MF", depfile}) argv.push_back(f);
                     auto result = RunProcess(argv, cwd);
                     if (!result.started || result.code) {
@@ -2141,7 +2151,7 @@ int Main(int argc, char **argv, bool &measuring) {
                         auto hash = BenchFileHash(absolute);
                         // Run-local generated C and the runner derive from the compiler.
                         // Their temporary paths must not change a configuration's ID.
-                        if (!absolute.starts_with(AbsolutePath(builddir) + "/")) recordbenchfile(absolute);
+                        if (!absolute.starts_with(AbsolutePath(builddir) + "/")) recordbenchfile(absolute, hash);
                         inputs.push_back({absolute, hash});
                     }
                     sort(inputs.begin(), inputs.end());
@@ -2298,7 +2308,7 @@ int Main(int argc, char **argv, bool &measuring) {
                     BenchFields linkedhashes;
                     for (auto &path : linkedinputs) {
                         auto hash = BenchFileHash(path);
-                        if (!path.starts_with(AbsolutePath(builddir) + "/")) recordbenchfile(path);
+                        if (!path.starts_with(AbsolutePath(builddir) + "/")) recordbenchfile(path, hash);
                         linkedhashes.push_back({path, hash});
                     }
                     if (!b.Link(outfile, objects, rsps, executable, builddir, finallog, linkflags)) {
@@ -2420,6 +2430,7 @@ int Main(int argc, char **argv, bool &measuring) {
                     if (!state.output.empty()) r.git_dirty="true";
                 }
             }
+            protectinputs();
             r.Checkpoint();
             if (!code && !benchlist) {
                 // Check the immutable build artifacts again just before execution.
