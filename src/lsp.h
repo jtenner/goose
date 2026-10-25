@@ -114,7 +114,8 @@ struct Server {
     // inlay hints of a client that takes their refresh, which are answered
     // from the analysis there is and asked for again once the next is done.
     bool AsksAboutDocuments(const string &method) {
-        if (method.rfind("textDocument/", 0) != 0 && method != "workspace/symbol") return false;
+        if (method.rfind("textDocument/", 0) != 0 && method.rfind("callHierarchy/", 0) != 0 &&
+            method != "workspace/symbol") return false;
         for (auto feature : { "codeLens", "semanticTokens", "inlayHint" })
             if (method.rfind(cat("textDocument/", feature), 0) == 0)
                 return find(ws.refreshes.begin(), ws.refreshes.end(), cat("workspace/", feature, "/refresh")) ==
