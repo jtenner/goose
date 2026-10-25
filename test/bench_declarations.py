@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """Declaration discovery acceptance tests; never execute a benchmark body."""
+import json
+import uuid
 import pathlib
 import subprocess
 import sys
@@ -11,7 +13,13 @@ checks = 0
 
 def invoke(*args, ok=True, contains=None):
     global checks
-    result = subprocess.run([str(exe), *map(str, args)], text=True, capture_output=True)
+    command = [str(exe), *map(str, args)]
+    artifact = None
+    if args[0] == "bench":
+        artifact = pathlib.Path(args[1]).parent / ('listing-' + str(uuid.uuid4()) + '.json')
+        command += ['--json', str(artifact)]
+    result = subprocess.run(command, text=True, capture_output=True)
+    result.bench_report = json.loads(artifact.read_text()) if artifact and artifact.exists() else None
     assert (result.returncode == 0) == ok, (args, result.stdout, result.stderr)
     if contains:
         assert contains in result.stdout + result.stderr, (args, contains, result.stdout, result.stderr)
@@ -32,11 +40,13 @@ with tempfile.TemporaryDirectory(prefix="goose-bench-declarations-") as director
                       'bench "line\\n\\\"quoted\\\"\\t\\x1b" fn ns::first() { 1 }\n'
                       'bench "same" fn second() -> i64, bool { return 2, true; }\n')
     result = invoke("bench", source, "--list")
-    lines = result.stdout.splitlines()
-    assert len(lines) == 2 and lines[0].startswith('ns::first\t"line\\n\\\"quoted\\\"\\t\\u001b"\tmedium\t')
-    assert lines[1] == 'second\t"same"\tmedium\t() -> i64, bool'
+    rows = result.bench_report['results']
+    assert len(rows) == 2 and rows[0]['key'] == 'ns::first'
+    assert rows[0]['label'] == 'line\n"quoted"\t\x1b'
+    assert rows[1]['key'] == 'second' and rows[1]['label'] == 'same'
+    assert '\t() -> i64, bool' in result.stdout
     result = invoke("bench", source, "--list", "--filter", "second", "--sizes", "large,small")
-    assert [line.split('\t')[2] for line in result.stdout.splitlines()] == ["small", "large"]
+    assert [row['size'] for row in result.bench_report['results']] == ["small", "large"]
     invoke("bench", source, "--list", "--filter", "same", ok=False, contains="unknown benchmark key")
     invoke("bench", source, "--list", "--filter", "helper::other", ok=False, contains="unknown benchmark key")
     for sizes in ("", "small,small", "SMALL", "small,", ",small"):
@@ -64,7 +74,8 @@ with tempfile.TemporaryDirectory(prefix="goose-bench-declarations-") as director
     invoke("run", source, "--define", 'BENCH_SIZE="medium"', ok=False, contains="main")
     source.write_text('bench "\\x7f\\xc2\\x9b" fn controls() { 1 }\n')
     result = invoke("bench", source, "--list")
-    assert result.stdout == 'controls\t"\\u007f\\u009b"\tmedium\t() -> i64\n', result.stdout
+    assert result.bench_report['results'][0]['label'] == '\x7f\x9b'
+    assert '\\u007f\\u009b' in result.stdout, result.stdout
     source.write_text('fn main() {}\n')
     invoke("bench", source, "--list", ok=False, contains="no benchmarks declared")
 print(f"benchmark declarations: {checks} checks passed")

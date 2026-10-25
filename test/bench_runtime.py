@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """Native bench mechanics. Sleeps only establish a loose setup/call boundary."""
+import json
+import uuid
 import pathlib
 import re
 import platform
@@ -16,7 +18,9 @@ checks = 0
 
 def invoke(source, *options, code=0, contains=None):
     global checks
-    result = subprocess.run([str(exe), 'bench', str(source), '--temperature', 'off', *options], capture_output=True, text=True, timeout=120)
+    artifact = source.parent / ('result-' + str(uuid.uuid4()) + '.json')
+    result = subprocess.run([str(exe), 'bench', str(source), '--temperature', 'off', '--json', str(artifact), *options], capture_output=True, text=True, timeout=120)
+    result.bench_report = json.loads(artifact.read_text()) if artifact.exists() else None
     assert result.returncode == code, (result.args, result.returncode, result.stdout, result.stderr)
     if contains:
         assert contains in result.stdout + result.stderr, (contains, result.stdout, result.stderr)
@@ -29,7 +33,9 @@ def artifacts(result):
 
 
 def attempts(result):
-    return [line.split('\t') for line in result.stdout.splitlines()]
+    return [[row['key'], row['size'], attempt['phase'], str(attempt['slot']), str(attempt['elapsed_ns']) + ' ns',
+             ''.join(c['type'] + ':' + str(c['value']).lower() + ';' for c in attempt['checksum']['components'])]
+            for row in result.bench_report['results'] for attempt in row['attempts']]
 
 
 if sys.platform != 'linux':
@@ -100,7 +106,8 @@ with tempfile.TemporaryDirectory(prefix='goose-bench-runtime-test-') as director
     source.write_text('bench "bits" fn bits() -> i8, u8, i16, u16, i32, u32, i64, u64, bool, f32, f64 {\n'
                       'return -128, 255, -32768, 65535, -2147483648, 4294967295, -9223372036854775808, 18446744073709551615, true, 1.5, -0.0; }\n')
     result = invoke(source, '--samples', '5', '--warmups', '1')
-    assert 'u64:18446744073709551615;' in result.stdout and 'f32:0x3fc00000;' in result.stdout and 'f64:0x8000000000000000;' in result.stdout
+    checksum = attempts(result)[0][-1]
+    assert 'u64:18446744073709551615;' in checksum and 'f32:0x3fc00000;' in checksum and 'f64:0x8000000000000000;' in checksum
     checks += 1
     source.write_text('var zero: f64 = 0.0;\nbench "nan" fn nan() -> f64 { zero / zero }\n')
     invoke(source, code=1, contains='nonfinite benchmark checksum')
