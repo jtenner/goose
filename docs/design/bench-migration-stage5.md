@@ -31,10 +31,16 @@ files at their old sizes; they are not measurements of the new entries.
 `--legacy-goose` keeps the old timing boundary and ordering for either harness.
 The suite uses `results-native-v2.json` or `results-legacy-v2.json` under
 `bench/gen`; the old `results.json` remains separate. Version 2 states are
-merged only when their complete source/compiler and policy fingerprints match.
-There is no silent conversion of historical timings. `--report-only` reads the
-selected version 2 state without collecting data. `--skip-build` is available
-for legacy rows; native rows build through the native command.
+replaced on each collection, including partial runs. Cross-run merging is
+disabled until an experiment identity includes the measurement environment and
+each retained row's dependency and configuration record. The current input and
+policy fingerprint is evidence only; it is not sufficient for result reuse.
+Environment descriptions use the host, CPU, RAM, OS, CPU affinity (where
+available), and Rust version saved with the measurements. Older states without
+that evidence report it as not recorded. There is no silent conversion of
+historical timings. `--report-only` reads the selected version 2 state without
+collecting data or probing the current host and compilers. `--skip-build` is
+available for legacy rows; native rows build through the native command.
 
 ## Source and state audit
 
@@ -53,6 +59,10 @@ for these entries; legacy and JIT suite paths use the same source with a size
 definition. Other Goose files retain their old rewrite path.
 
 ## Remaining inventory and planned order
+
+Stage 5 expansion remains blocked until findings 1–9 of BLOCK design review
+`mcp:c782c063` are resolved. The artifact contract remains incomplete until
+finding 10 is resolved.
 
 These groups are deliberately left on the legacy path. Annotation support does
 not by itself establish repeatability or equivalent work across languages.
@@ -112,6 +122,7 @@ Useful non-timing checks:
 
 ```sh
 python3 test/bench_migration.py
+python3 test/bench_experiment_isolation.py
 python3 test/shared_benchmark_harness.py
 python3 test/bench_report.py
 python3 bench/run_bench.py --plan --only sum,tree --sizes small
