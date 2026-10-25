@@ -32,7 +32,7 @@ with tempfile.TemporaryDirectory(prefix='goose-bench-lifecycle-') as name:
         assert result.returncode == 2, (result.returncode, result.stdout, result.stderr)
         assert 'lock unavailable or occupied' in result.stderr, result.stderr
         assert not marker.exists(), 'occupied lock allowed compiler launch'
-        assert json.loads(report.read_text())['error']['code'] == 'lock'
+        assert not report.exists(), 'occupied lock wrote to an unverified report path'
         listed = subprocess.run([str(exe), 'bench', str(source), '--list'],
                                 capture_output=True, text=True, timeout=30)
         assert listed.returncode == 0, (listed.stdout, listed.stderr)

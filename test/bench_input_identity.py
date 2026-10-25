@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Focused input safety and native identity checks; no performance assertions."""
 import hashlib
+import fcntl
 import json
 import pathlib
 import subprocess
@@ -28,6 +29,27 @@ with tempfile.TemporaryDirectory(prefix='goose-bench-inputs-') as directory:
         assert (result.returncode == 0) == ok, (result.args, result.stdout, result.stderr)
         checks += 1
         return result
+
+    # Lock rejection precedes input discovery. No report path is safe yet,
+    # including sidecars, imports, native inputs and aliases of those inputs.
+    imported = root / 'imported.goose'
+    imported.write_text('fn imported() -> i64 { 42 }\n')
+    alias = root / 'native-alias'
+    alias.symlink_to(native)
+    locked_samples = root / 'locked.samples.csv'
+    locked_samples.symlink_to(imported)
+    with open('/tmp/goose-shared-native-benchmark.lock', 'a') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        for target in (sidecar, imported, native, header, alias):
+            for option in ('--json', '--csv'):
+                before = target.read_bytes()
+                result = invoke(option, target, ok=False)
+                assert 'lock unavailable or occupied' in result.stderr
+                assert target.read_bytes() == before, ('occupied lock overwrote input', target)
+        before = imported.read_bytes()
+        invoke('--csv', root / 'locked.csv', ok=False)
+        assert imported.read_bytes() == before
+        assert not (root / 'locked.csv').exists()
 
     # A failed build and --list must both preserve every known input.
     for listing in ([], ['--list']):
