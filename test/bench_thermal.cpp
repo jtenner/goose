@@ -5,6 +5,22 @@ int main(int argc, char **argv) {
     using namespace goose;
     assert(argc == 4);
     string scenario = argv[3];
+    if (scenario.starts_with("failure-")) {
+        string directory = argv[2];
+        std::ofstream(directory + "/name") << "scripted_cpu\n";
+        std::ofstream(directory + "/temp1_label") << "Tctl\n";
+        std::ofstream(directory + "/temp1_input") << "60000\n";
+        BenchThermalOptions options;
+        options.sensors = {directory + "/temp1_input"};
+        options.poll_ms = 1; options.sample_timeout = 1;
+        BenchReport report;
+        report.thermal = options; report.rows.resize(1);
+        report.json_path = directory + "/report.json";
+        vector<BenchProgram> programs {{argv[1], "entry", "medium", directory}};
+        int result = RunBenchmarks(programs, false, 1, 5, options, nullptr, &report);
+        report.Finish(result == 130 ? "interrupted" : "failed");
+        return result;
+    }
     // Real hwmon adapter against files: both sockets matter; Tdie is rejected.
     if (scenario == "adapter") {
         string directory = argv[2];
