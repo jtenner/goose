@@ -86,7 +86,7 @@ inline vector<FnSpec *> CodeGen::MainRoots() {
     if (mainsf && !mainsf->specs.empty() && sinfo.count(mainsf->specs[0]))
         roots.push_back(mainsf->specs[0]);
     for (auto sf : ast.functions)
-        if (sf->isexport && sf->specs.size() == 1 && sinfo.count(sf->specs[0]))
+        if ((sf->isexport || (benchmark && sf->isbench)) && sf->specs.size() == 1 && sinfo.count(sf->specs[0]))
             roots.push_back(sf->specs[0]);
     return roots;
 }

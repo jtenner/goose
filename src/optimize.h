@@ -248,7 +248,7 @@ struct Optimizer {
         auto mainsf = ast.MainFunction();
         if (mainsf && !mainsf->specs.empty()) Reach(mainsf->specs[0]);
         for (auto sf : ast.functions)
-            if ((sf->isthread || sf->isexport) && !sf->specs.empty()) Reach(sf->specs[0]);
+            if ((sf->isthread || sf->isexport || sf->isbench) && !sf->specs.empty()) Reach(sf->specs[0]);
         ast.ForEachRootTree([&](Node *n) { ReachTree(n); });
     }
 
@@ -505,7 +505,7 @@ struct Optimizer {
         info.nest = 0;
         info.nestedcalls = false;
         // A simd body inlined into a caller would lose its versions (§7.12).
-        auto noin = sp->sf->isrec || sp->incycle || sp->sf->isthread || sp->sf->isexport ||
+        auto noin = sp->sf->isrec || sp->incycle || sp->sf->isthread || sp->sf->isexport || sp->sf->isbench ||
                     sp->sf->issimd || sp->relnamedresult;
         auto multiret = sp->rets.size() > 1;
         function<void(Node *, int)> rec = [&](Node *n, int d) {
