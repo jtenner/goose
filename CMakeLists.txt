@@ -15,6 +15,7 @@ add_executable(goose
     src/process.cpp
     src/version.cpp
     src/bench.cpp
+    src/bench_report.cpp
     src/process.h
     src/progress.cpp
     src/progress.h
