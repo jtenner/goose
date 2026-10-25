@@ -1062,9 +1062,11 @@ fn format_flt(out: u8[>..]&, v: f64, decimals: i64) {
     }
     var scale = 1.0;
     for i in decimals { scale *= 10.0; }
-    // x is not negative, so truncation is floor and adding 0.5 first rounds
-    // half up: `as!`, since dropping the fraction is the point.
-    let scaled = (x * scale + 0.5) as! i64;
+    // x is not negative, so truncation is floor. Round the fractional part
+    // half up without adding 0.5 to an already exact large integer.
+    let value = x * scale;
+    var scaled = value as! i64;
+    if value - scaled >= 0.5 { scaled++; }
     let iscale = scale as i64;
     format_uint(out, (scaled / iscale) as u64, 10, 0, ' ');
     if decimals > 0 {
