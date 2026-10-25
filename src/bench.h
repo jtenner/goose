@@ -1,8 +1,9 @@
 // Stage 2 transport. Attempts are independent of reporting and thermal policy.
 #pragma once
+#include "bench_thermal.h"
 namespace goose {
 struct BenchProgram { string executable, key, size, directory; };
-int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups, int samples);
+int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups, int samples, const BenchThermalOptions &thermal, BenchThermalSource *source = nullptr);
 string BenchDirectory();
 // Compiled as its own translation unit, without LTO. No workload code is
 // visible to this timer, so every release performs exactly one opaque call.

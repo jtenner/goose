@@ -7,6 +7,10 @@
 #include <chrono>
 #include <cerrno>
 #include <cstring>
+#include <filesystem>
+#include <fstream>
+#include <memory>
+#include <limits>
 using std::string; using std::vector;
 #include "bench.h"
 #include "bench_results.h"
@@ -59,6 +63,57 @@ void PrintAttempt(const BenchProgram &p, const BenchAttempt &a) {
            (unsigned long long)(a.end_ns - a.start_ns), ChecksumText(a.checksum).c_str());
     fflush(stdout);
 }
+double ThermalNow() {
+    return std::chrono::duration<double>(std::chrono::steady_clock::now().time_since_epoch()).count();
+}
+struct Hwmon {
+    vector<string> paths;
+    static string text(const string &path) {
+        std::ifstream in(path); string value;
+        if (!std::getline(in, value)) throw std::runtime_error("temperature read failed: " + path);
+        return value;
+    }
+    explicit Hwmon(const BenchThermalOptions &options) {
+        namespace fs = std::filesystem;
+        if (options.off) return;
+        paths = options.sensors;
+        if (paths.empty()) {
+            std::error_code ec;
+            for (auto &chip : fs::directory_iterator("/sys/class/hwmon", ec)) {
+                for (auto &entry : fs::directory_iterator(chip.path(), ec)) {
+                    auto name = entry.path().filename().string();
+                    if (name.starts_with("temp") && name.ends_with("_label") && text(entry.path()) == "Tctl")
+                        paths.push_back(entry.path().string().substr(0, entry.path().string().size() - 6) + "_input");
+                }
+            }
+        }
+        if (paths.empty()) throw std::runtime_error("no readable Tctl sensor; use --temperature off for an explicit UNGATED run");
+        for (auto &path : paths) {
+            if (!path.ends_with("_input") || text(path.substr(0, path.size() - 6) + "_label") != "Tctl")
+                throw std::runtime_error("temperature sensor must have associated Tctl label: " + path);
+            auto parent = fs::path(path).parent_path();
+            std::error_code ec;
+            auto device = fs::canonical(parent / "device", ec);
+            if (ec) device = fs::canonical(parent);
+            fprintf(stderr, "Tctl sensor: chip=%s device=%s label=Tctl input=%s%s\n",
+                    text((parent / "name").string()).c_str(), device.c_str(), path.c_str(),
+                    options.sensors.empty() ? "" : " (explicit sensor restriction)");
+        }
+        read(); // Preflight before any initializer.
+    }
+    double read() {
+        double maximum = -std::numeric_limits<double>::infinity();
+        for (auto &path : paths) {
+            auto value = text(path); size_t end;
+            double c;
+            try { c = std::stod(value, &end) / 1000; }
+            catch (...) { throw std::runtime_error("temperature read failed: " + path); }
+            if (end != value.size() || !std::isfinite(c)) throw std::runtime_error("temperature read failed: " + path);
+            maximum = std::max(maximum, c);
+        }
+        return maximum;
+    }
+};
 struct Child {
     int fd = -1;
     pid_t pid = -1;
@@ -95,18 +150,22 @@ struct Child {
     void send(char c) {
         if (::send(fd, &c, 1, MSG_NOSIGNAL) != 1) throw std::runtime_error("benchmark control channel closed");
     }
-    string line(const char *phase) {
+    string line(const char *phase, double timeout = 600, BenchThermal *thermal = nullptr) {
         string text;
-        auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(600);
+        auto deadline = ThermalNow() + timeout;
+        double next = ThermalNow() + (thermal ? thermal->options.poll_ms / 1000 : timeout);
         while (text.size() < 1048576) {
             if (interrupted) throw std::runtime_error("benchmark interrupted");
-            auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(deadline - std::chrono::steady_clock::now()).count();
+            auto time = ThermalNow();
+            if (thermal && time >= next) { thermal->observe(); next = ThermalNow() + thermal->options.poll_ms / 1000; }
+            auto ms = (deadline - ThermalNow()) * 1000;
             if (ms <= 0) throw std::runtime_error(string(phase) + " timeout");
             drain();
             pollfd p[3] { { fd, POLLIN, 0 }, { logs[0], POLLIN, 0 }, { logs[1], POLLIN, 0 } };
-            auto ready = poll(p, 3, (int)ms);
+            auto ready = poll(p, 3, (int)std::min(1000.0, std::max(1.0, std::min(ms, (next - ThermalNow()) * 1000))));
             if (ready < 0 && errno == EINTR) continue;
-            if (ready <= 0) throw std::runtime_error(string(phase) + " timeout or control error");
+            if (ready == 0) continue;
+            if (ready < 0) throw std::runtime_error(string(phase) + " timeout or control error");
             if (!(p[0].revents & (POLLIN | POLLHUP | POLLERR))) continue;
             char c;
             if (read(fd, &c, 1) != 1) throw std::runtime_error(string(phase) + " failed: child exited before response");
@@ -115,7 +174,7 @@ struct Child {
         }
         throw std::runtime_error("benchmark control response too large");
     }
-    void start(const BenchProgram &p, int id) {
+    void start(const BenchProgram &p, int id, double timeout) {
         int pair[2];
         if (socketpair(AF_UNIX, SOCK_STREAM, 0, pair)) throw std::runtime_error("cannot create benchmark control channel");
         out = p.directory + "/child-" + std::to_string(id) + ".stdout";
@@ -141,7 +200,7 @@ struct Child {
         close(pair[1]); fd = pair[0];
         if (pid < 0) throw std::runtime_error("cannot launch benchmark child");
         setpgid(pid, pid);
-        if (line("setup") != "READY") throw std::runtime_error("invalid benchmark readiness response");
+        if (line("setup", timeout) != "READY") throw std::runtime_error("invalid benchmark readiness response");
     }
     void finish() {
         send('Q');
@@ -166,7 +225,7 @@ struct Child {
     }
 };
 }
-int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups, int samples) {
+int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups, int samples, const BenchThermalOptions &options, BenchThermalSource *source) {
     int lock = open("/tmp/goose-shared-native-benchmark.lock", O_CREAT | O_RDWR | O_CLOEXEC, 0600);
     if (lock < 0 || flock(lock, LOCK_EX | LOCK_NB)) {
         if (lock >= 0) close(lock);
@@ -174,7 +233,7 @@ int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups,
         return 2;
     }
     struct Unlock { int fd; ~Unlock() { close(fd); } } unlock { lock };
-    fprintf(stderr, "UNGATED experimental bench: thermal supervision unavailable in stage 2; raw function timings only\n");
+
     struct Signals {
         struct sigaction oldint {}, oldterm {};
         Signals() {
@@ -189,18 +248,35 @@ int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups,
     } signals;
     int childid = 0;
     try {
+        if (options.gate > options.ceiling) throw std::runtime_error("temperature gate must be <= ceiling");
+        std::unique_ptr<Hwmon> sensors;
+        if (source) { if (!options.off) source->preflight(); }
+        else sensors = std::make_unique<Hwmon>(options);
+        BenchThermal thermal {options, [&] { return source ? source->read() : sensors->read(); }, ThermalNow, [](double seconds) {
+            double deadline = ThermalNow() + seconds;
+            while (ThermalNow() < deadline) {
+                if (interrupted) throw std::runtime_error("benchmark interrupted");
+                poll(nullptr, 0, (int)std::max(1.0, std::min(50.0, (deadline - ThermalNow()) * 1000)));
+            }
+        }};
+        if (source) { thermal.now = source->now; thermal.wait = source->wait; }
+        if (options.off) fprintf(stderr, "UNGATED thermal_mode=disabled reason=explicit --temperature off\n");
+        else fprintf(stderr, "thermal_mode=required gate=%.3f C ceiling=%.3f C poll=%.3f ms\n", options.gate, options.ceiling, options.poll_ms);
         vector<BenchRow> rows(programs.size());
         for (size_t rowindex = 0; rowindex < programs.size(); ++rowindex) {
             auto &p = programs[rowindex];
             auto &row = rows[rowindex];
             Child reused;
-            if (!fresh) reused.start(p, ++childid);
+            if (!fresh) reused.start(p, ++childid, options.setup_timeout);
             for (int i = 0; i < warmups + samples; ++i) {
+                for (int retry = 0;; ++retry) {
                 Child one;
                 auto &child = fresh ? one : reused;
-                if (fresh) child.start(p, ++childid);
+                if (fresh) child.start(p, ++childid, options.setup_timeout);
+                thermal.gate();
                 child.send('C');
-                auto response = child.line("sample");
+                auto response = child.line("sample", options.sample_timeout, options.off ? nullptr : &thermal);
+                bool accepted = thermal.finish();
                 row.attempts.push_back(DecodeAttempt(response, childid, i < warmups,
                                                     i < warmups ? i + 1 : i - warmups + 1));
                 auto &a = row.attempts.back();
@@ -211,7 +287,13 @@ int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups,
                     throw std::runtime_error("checksum disagreement for " + p.key + " (" + p.size + "): expected " +
                                              ChecksumText(row.expected) + ", observed " + ChecksumText(a.checksum));
                 if (a.end_ns - a.start_ns < 1000) fprintf(stderr, "benchmark %s: very short call; timer resolution/bridge overhead may dominate\n", p.key.c_str());
+                if (!options.off) fprintf(stderr, "thermal %s %s %s slot=%d retry=%d status=%s maximum_observed_Tctl=%.3f C max_poll_gap=%.3f ms gate_wait=%.3f s\n",
+                    p.key.c_str(), p.size.c_str(), a.warmup ? "warmup" : "measure", a.slot, retry,
+                    accepted ? "accepted" : "thermal_rejected", thermal.maximum, thermal.gap * 1000, thermal.waited);
                 if (fresh) child.finish();
+                if (accepted) break;
+                if (retry >= options.retries) throw std::runtime_error("thermal_retries exhausted");
+                }
             }
             if (!fresh) reused.finish();
         }
@@ -223,6 +305,6 @@ int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups,
 }
 #else
 string BenchDirectory() { throw std::runtime_error("benchmark execution currently requires Linux"); }
-int RunBenchmarks(const vector<BenchProgram> &, bool, int, int) { return 2; }
+int RunBenchmarks(const vector<BenchProgram> &, bool, int, int, const BenchThermalOptions &, BenchThermalSource *) { return 2; }
 #endif
 }
