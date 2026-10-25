@@ -2381,6 +2381,13 @@ def main():
                     r.ok(out.strip())
         r.show_task(bench_runtime)
     if cc and jit:
+        def bench_compatibility():
+            code, out, err = tc.run_capture([sys.executable, HERE / "bench_compatibility.py", exe])
+            if code:
+                r.fail("benchmark compatibility", out + err)
+            else:
+                r.ok(out.strip())
+        r.show_task(bench_compatibility)
         def cli_definitions():
             code, out, err = tc.run_capture([sys.executable, HERE / "cli_definitions.py", exe])
             if code:

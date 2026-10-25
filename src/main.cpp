@@ -1863,7 +1863,7 @@ int Main(int argc, char **argv, bool &measuring) {
             }
             if (benchlist) return 0;
         }
-        Optimizer opt(ast, optlevel);
+        Optimizer opt(ast, optlevel, verb == "bench");
         if (specs) {
             string s;
             opt.DumpSpecs(s);
