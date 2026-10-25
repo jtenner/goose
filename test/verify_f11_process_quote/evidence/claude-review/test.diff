@@ -1,0 +1,169 @@
+diff --git a/test/verify_f11_process_quote/check.py b/test/verify_f11_process_quote/check.py
+new file mode 100644
+index 00000000..43dd12ae
+--- /dev/null
++++ b/test/verify_f11_process_quote/check.py
+@@ -0,0 +1,107 @@
++#!/usr/bin/env python3
++"""Build the real command formatter and check its POSIX shell round trip.
++
++Exit 1 means the shell changed at least one argument; exit 2 means a test
++or build error. No compiler binary
++from an unknown build is used. All build and shell files are temporary.
++"""
++
++import argparse
++import hashlib
++import json
++import os
++from pathlib import Path
++import shlex
++import subprocess
++import sys
++import tempfile
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("--ref", default="HEAD", help="committed source to test (default: HEAD)")
++    parser.add_argument("--cxx", default="c++")
++    args = parser.parse_args()
++    root = Path(__file__).resolve().parents[2]
++
++    def git(*words):
++        return subprocess.check_output(["git", "-C", str(root), *words])
++
++    commit = git("rev-parse", args.ref + "^{commit}").decode().strip()
++    print("source_commit=" + commit, flush=True)
++    print("platform=" + sys.platform, flush=True)
++    print("shell=" + os.path.realpath("/bin/sh"), flush=True)
++    print(subprocess.check_output([args.cxx, "--version"], text=True).splitlines()[0],
++          flush=True)
++
++    with tempfile.TemporaryDirectory(prefix="goose-f11-") as tmp:
++        work = Path(tmp)
++        source = work / "source"
++        source.mkdir()
++        for name in ("includes.h", "utils.h", "process.h", "process.cpp",
++                     "progress.h", "progress.cpp"):
++            data = git("show", commit + ":src/" + name)
++            (source / name).write_bytes(data)
++            print("sha256 src/" + name + "=" + hashlib.sha256(data).hexdigest(),
++                  flush=True)
++        vendor = git("show", commit + ":third_party/subprocess/subprocess.h")
++        (source / "subprocess.h").write_bytes(vendor)
++        print("sha256 third_party/subprocess/subprocess.h=" +
++              hashlib.sha256(vendor).hexdigest(), flush=True)
++        driver = Path(__file__).with_name("driver.cpp")
++        print("sha256 driver.cpp=" + hashlib.sha256(driver.read_bytes()).hexdigest(),
++              flush=True)
++        binary = work / "formatter"
++        command = [args.cxx, "-std=c++20", "-O0", "-I", str(source), str(driver),
++                   str(source / "process.cpp"), str(source / "progress.cpp"),
++                   "-pthread", "-ldl", "-o", str(binary)]
++        print("build=" + shlex.join(command), flush=True)
++        subprocess.run(command, check=True)
++        print("build_exit=0", flush=True)
++        print("sha256 formatter=" + hashlib.sha256(binary.read_bytes()).hexdigest(),
++              flush=True)
++
++        fixtures = work / "fixtures"
++        fixtures.mkdir()
++        for name in ("a.c", "b.c"):
++            (fixtures / name).touch()
++        print('fixture_files=["a.c", "b.c"]', flush=True)
++        # set records positional arguments without calling a tool. Print
++        # the count first: printf alone cannot tell zero arguments from one
++        # empty argument. NUL separators preserve each argument's contents.
++        # The formatter receives the fixed command words and literal input.
++        cases = ("plain.c", "two words.c", "", "*.c", "?.c", "[ab].c")
++        failures = 0
++        for value in cases:
++            printed = subprocess.check_output(
++                [str(binary), "set", "--", value], text=True)
++            shell = subprocess.run(
++                ["/bin/sh", "-c", printed +
++                 '\nprintf \'%s\\0\' "$#"\nif [ "$#" -gt 0 ]; then printf \'%s\\0\' "$@"; fi'],
++                cwd=fixtures, env={"PATH": "/usr/bin:/bin", "LC_ALL": "C"},
++                capture_output=True, check=True)
++            if shell.stderr:
++                raise RuntimeError(shell.stderr.decode())
++            if not shell.stdout.endswith(b"\0"):
++                raise RuntimeError("Missing argument separator")
++            parts = shell.stdout[:-1].split(b"\0")
++            count = int(parts[0])
++            actual = [part.decode() for part in parts[1:]]
++            if count != len(actual):
++                raise RuntimeError("Argument count does not match shell output")
++            passed = count == 1 and actual == [value]
++            failures += not passed
++            print(json.dumps({"input": [value], "printed": printed,
++                              "actual_count": count, "actual": actual,
++                              "result": "PASS" if passed else "FAIL"}),
++                  flush=True)
++        print(f"round_trip_failures={failures}/{len(cases)}", flush=True)
++        return int(failures != 0)
++
++
++if __name__ == "__main__":
++    try:
++        sys.exit(main())
++    except (OSError, subprocess.CalledProcessError, RuntimeError, ValueError) as error:
++        print("checker_error: " + str(error), file=sys.stderr)
++        sys.exit(2)
+diff --git a/test/verify_f11_process_quote/driver.cpp b/test/verify_f11_process_quote/driver.cpp
+new file mode 100644
+index 00000000..79b8e32a
+--- /dev/null
++++ b/test/verify_f11_process_quote/driver.cpp
+@@ -0,0 +1,11 @@
++#include "includes.h"
++#include "process.h"
++
++// Call the production formatter. Do not copy its quoting logic into the test.
++int main(int argc, char **argv) {
++    goose::vector<goose::string> args;
++    for (int i = 1; i < argc; ++i) args.emplace_back(argv[i]);
++    auto text = goose::CommandLineText(args);
++    fwrite(text.data(), 1, text.size(), stdout);
++    return 0;
++}
+diff --git a/test/verify_f11_process_quote/evidence/before.exit.txt b/test/verify_f11_process_quote/evidence/before.exit.txt
+new file mode 100644
+index 00000000..d00491fd
+--- /dev/null
++++ b/test/verify_f11_process_quote/evidence/before.exit.txt
+@@ -0,0 +1 @@
++1
+diff --git a/test/verify_f11_process_quote/evidence/before.stderr.txt b/test/verify_f11_process_quote/evidence/before.stderr.txt
+new file mode 100644
+index 00000000..e69de29b
+diff --git a/test/verify_f11_process_quote/evidence/before.stdout.txt b/test/verify_f11_process_quote/evidence/before.stdout.txt
+new file mode 100644
+index 00000000..aa016e90
+--- /dev/null
++++ b/test/verify_f11_process_quote/evidence/before.stdout.txt
+@@ -0,0 +1,23 @@
++source_commit=ad75c5af7afdd589a9ba215e9e04ac9b01f24505
++platform=linux
++shell=/usr/bin/dash
++c++ (Debian 14.2.0-19) 14.2.0
++sha256 src/includes.h=e6926bf8550fd3f566f7918f04731d6db5aff6a093354440b41db095d5fddc91
++sha256 src/utils.h=adb917ff0376de7ed747d766ea687b7ddab625b8e513c06515069be50515de1d
++sha256 src/process.h=a36e982d95221607baf39cba18456a7b166de39db62db42ae2ab8f30559d9d8d
++sha256 src/process.cpp=ee9f5aae2abcd0e35bb34d986b421553299958e092220967736d8bf0c9bc8a5e
++sha256 src/progress.h=daa73670f5b9efeb96f7f4befb4544cef3b4a29ef46d381eee84f7c6ad511713
++sha256 src/progress.cpp=7a506a4face45380143ddc0bf043748a869acebd48765c0cb8495b353160edf4
++sha256 third_party/subprocess/subprocess.h=978b492b3da0485ea6c0dab89b6ca8c71a523c85638de88fe9297249b25c5ea1
++sha256 driver.cpp=2b4b3546502f5f20f4da752ad9ed13d670b7a78dd11c993d681e0f2900e7ba1c
++build=c++ -std=c++20 -O0 -I /tmp/goose-f11-d9c6g719/source /home/dev/.t3/worktrees/goose/fix-goose-f11-process-quote/test/verify_f11_process_quote/driver.cpp /tmp/goose-f11-d9c6g719/source/process.cpp /tmp/goose-f11-d9c6g719/source/progress.cpp -pthread -ldl -o /tmp/goose-f11-d9c6g719/formatter
++build_exit=0
++sha256 formatter=7b81f538d7b2695adf1280b4b939ea9624e64f1774c89a8a344ffe67d385f84d
++fixture_files=["a.c", "b.c"]
++{"input": ["plain.c"], "printed": "set -- plain.c", "actual_count": 1, "actual": ["plain.c"], "result": "PASS"}
++{"input": ["two words.c"], "printed": "set -- \"two words.c\"", "actual_count": 1, "actual": ["two words.c"], "result": "PASS"}
++{"input": [""], "printed": "set -- \"\"", "actual_count": 1, "actual": [""], "result": "PASS"}
++{"input": ["*.c"], "printed": "set -- *.c", "actual_count": 2, "actual": ["a.c", "b.c"], "result": "FAIL"}
++{"input": ["?.c"], "printed": "set -- ?.c", "actual_count": 2, "actual": ["a.c", "b.c"], "result": "FAIL"}
++{"input": ["[ab].c"], "printed": "set -- [ab].c", "actual_count": 2, "actual": ["a.c", "b.c"], "result": "FAIL"}
++round_trip_failures=3/6
