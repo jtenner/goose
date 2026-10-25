@@ -2271,7 +2271,6 @@ int Main(int argc, char **argv, bool &measuring) {
                         addscan(b, source, {});
                     });
                     if (!standalone && runtime.empty()) return 1;
-                    addscan(b, outfile, {});
                     vector<string> objects { object };
                     if (!runtime.empty()) { recordbenchfile(runtime); objects.push_back(runtime); }
                     auto executable = cat(builddir, "/benchmark");
@@ -2301,6 +2300,15 @@ int Main(int argc, char **argv, bool &measuring) {
                     };
                     vector<string> linkflags {"-fno-lto", "-Wl,-t"};
                     benchreport->configurations[benchconfig].native_flags.push_back("-Wl,-t");
+                    // This command also compiles the generated C. Keep every
+                    // preprocessing option, including -pthread and response
+                    // files, identical to the final build. Only omit its output.
+                    auto scan = b.LinkCommand(outfile, objects, rsps, executable, builddir, linkflags);
+                    for (size_t i = 1; i < scan.size(); ++i) {
+                        if (scan[i] == "-o") { scan.erase(scan.begin() + i, scan.begin() + i + 2); break; }
+                    }
+                    auto inputs = scaninputs(scan, "");
+                    nativescans.push_back({scan, "", inputs});
                     auto inputlog = cat(builddir, "/link-inputs.log"), finallog = cat(builddir, "/cc.log");
                     if (!b.Link(outfile, objects, rsps, executable, builddir, inputlog, linkflags)) {
                         benchreport->json_path.clear(); benchreport->csv_path.clear(); return 1;
