@@ -766,10 +766,13 @@ R"(usage: goose bench file.goose [options]
 Runs one function call per timed sample. Global initialization is untimed;
 main is never called. Checks typed return values across warmups and samples.
 Experimental Linux native execution with required Tctl thermal supervision;
-no statistics or JSON/CSV artifacts yet. Raw attempts and diagnostic logs only.
+median/MAD statistics, process lifetime RSS, and versioned JSON/CSV artifacts.
 All selected sizes are built before measurement; Goose and native defaults O2.
 
 Options:
+  --json PATH           Write the full JSON v1 artifact; checkpoint each attempt.
+  --csv PATH            Write summary CSV and PATH.samples.csv raw attempts.
+                        Output paths must be files; - is not supported.
   --list                Check and list only; no compilation, setup or work.
   --isolation mode      reuse (default): one child per key/size; process:
                         freshly execute a child for every warmup and sample.
@@ -1371,7 +1374,9 @@ int Main(int argc, char **argv, bool &measuring) {
     BenchThermalOptions benchthermal;
     int benchwarmups = 2, benchsamples = 7;
     vector<BenchProgram> benchprograms;
-    string benchdir;
+    string benchdir, benchjson, benchcsv, benchgoosehash, benchcchash;
+    unique_ptr<BenchReport> benchreport;
+    size_t benchconfig = 0;
     vector<string> benchkeys;
     string benchsize = "medium";
     vector<string> benchfilters;
@@ -1394,7 +1399,13 @@ int Main(int argc, char **argv, bool &measuring) {
             for (int j = i + 1; j < argc; j++) progargs.push_back(argv[j]);
             break;
         }
-        if (arg == "--list" && verb == "bench") benchlist = true;
+        if (verb == "bench" && (arg == "--json" || arg == "--csv")) {
+            if (i + 1 == argc || !*argv[i+1] || string(argv[i+1]) == "-") {
+                fprintf(stderr, "%s requires a file path (- is not supported)\n", arg.c_str()); return 2;
+            }
+            (arg == "--json" ? benchjson : benchcsv) = AbsolutePath(argv[++i]);
+        }
+        else if (arg == "--list" && verb == "bench") benchlist = true;
         else if (arg == "--filter" && verb == "bench" && i + 1 < argc)
             benchfilters.push_back(argv[++i]);
         else if (verb == "bench" && arg == "--temperature" && i + 1 < argc) {
@@ -1600,7 +1611,7 @@ int Main(int argc, char **argv, bool &measuring) {
     try {
         if (verb == "bench") {
 
-            if (forcejit || !outname.empty() || dump || dumpdocs || parseonly || tokens || multitest || stacks)
+            if (forcejit || !outname.empty() || dump || dumpdocs || parseonly || tokens || multitest || stacks || specs || bcetest || bcelines || !headername.empty())
                 throw CompileError { "bench --list requires checking without JIT, code generation or dump options" };
             for (auto size : { "small", "medium", "large" }) {
                 auto rest = benchsize;
@@ -1652,6 +1663,54 @@ int Main(int argc, char **argv, bool &measuring) {
                              : cat("goose ", verb, " --help lists its options.").c_str());
         return 1;
     }
+    auto finishbench = [&](int code) {
+        if (!benchreport) return code;
+        auto &r = *benchreport;
+        try { r.Finish(code == 0 ? (benchlist ? "listed" : "ok") : code == 130 ? "interrupted" : "failed"); }
+        catch (const std::exception &e) {
+            fprintf(stderr, "bench: cannot finalize artifacts: %s\n", e.what());
+            r.status = "failed"; r.error = {"io", e.what()}; code = 1;
+            try { r.Checkpoint(); } catch (...) {}
+        }
+        r.Print(); return code;
+    };
+    auto protectinputs = [&] {
+        if (!benchreport) return;
+        vector<string> outputs {benchjson, benchcsv};
+        if (!benchcsv.empty()) {
+            auto p = filesystem::path(benchcsv); auto ext = p.extension().string(); p.replace_extension();
+            outputs.push_back(p.string() + ".samples" + ext);
+        }
+        auto invalid = [&](const string &message) {
+            benchreport->json_path.clear(); benchreport->csv_path.clear();
+            throw std::runtime_error(message);
+        };
+        set<string> seen;
+        for (auto &output : outputs) if (!output.empty()) {
+            auto resolved = filesystem::weakly_canonical(output).string();
+            if (!seen.insert(resolved).second) invalid("duplicate benchmark output path: " + output);
+            if (filesystem::is_directory(output)) invalid("benchmark output path is a directory: " + output);
+            for (auto &[path, hash] : benchreport->source_files)
+                if (resolved == filesystem::weakly_canonical(path).string())
+                    invalid("benchmark output would overwrite an input: " + output);
+            if (resolved == filesystem::weakly_canonical(exe).string()) invalid("benchmark output would overwrite compiler");
+        }
+    };
+    if (verb == "bench") {
+        benchreport = make_unique<BenchReport>(); auto &r = *benchreport;
+        r.source_path = AbsolutePath(files[0]); r.json_path = benchjson; r.csv_path = benchcsv;
+        r.thermal = benchthermal; r.fresh = benchfresh; r.samples = benchsamples; r.warmups = benchwarmups;
+        if (benchthermal.off) r.thermal_reason = "explicit --temperature off; sensor discovery skipped";
+
+        try {
+            r.source_files.push_back({r.source_path,""}); protectinputs();
+            r.source_hash = BenchFileHash(r.source_path); r.source_files[0].second = r.source_hash;
+            benchgoosehash = BenchFileHash(exe);
+            r.goose = BenchObject({{"path",BenchString(exe)},{"sha256",BenchString(benchgoosehash)},
+                                  {"version",BenchString("goose runtime " + RuntimeVersion())}});
+            protectinputs();
+        } catch (const std::exception &e) { r.error = {"io",e.what()}; return finishbench(2); }
+    }
     // With no output file the program is compiled into this process and run,
     // which is what --jit asks for explicitly; a build writes the C to its
     // build directory instead.
@@ -1694,6 +1753,7 @@ int Main(int argc, char **argv, bool &measuring) {
         }
         astp = make_unique<Ast>();
         auto &ast = *astp;
+        ast.record_bench_inputs = verb == "bench";
         AddBuildDefinitions(ast, builddefines);
         if (jsondiag) ast.sink = [&](const Diagnostic &d) { found.push_back(d); };
         auto stdlibdirs = StdlibDirs(stdlibdir, exe);
@@ -1756,35 +1816,50 @@ int Main(int argc, char **argv, bool &measuring) {
                     throw CompileError { cat("unknown benchmark key: ", key) };
             }
             if (selected.empty()) throw CompileError { "no benchmarks declared; add bench \"label\" to a scalar-returning function (main is not a benchmark)" };
+            auto &report = *benchreport;
+            auto record = [&](const string &path, const string &bytes) {
+                auto absolute = AbsolutePath(path), hash = BenchHash(bytes);
+                if (BenchFileHash(absolute) != hash) throw std::runtime_error("source input changed during checking: " + absolute);
+                auto it = find_if(report.source_files.begin(), report.source_files.end(), [&](auto &p) { return p.first == absolute; });
+                if (it == report.source_files.end()) report.source_files.push_back({absolute,hash});
+                else if (it->second != hash) throw std::runtime_error("source input changed between configurations: " + absolute);
+            };
+            for (auto &[path, bytes] : ast.sources) record(path,*bytes);
+            for (auto &[path, bytes] : ast.bench_inputs) record(path,bytes);
+            sort(report.source_files.begin(),report.source_files.end());
+            protectinputs();
+            BenchConfiguration configuration; configuration.size = benchsize;
+            vector<string> definitions;
+            for (auto &[name, literal] : ast.builddefinitions) {
+                string type, value;
+                if (auto b = Is<BoolLit>(literal)) { type = "bool"; value = b->val ? "true" : "false"; }
+                else if (auto n = Is<IntLit>(literal)) { type = n->uns ? "u64" : "i64"; value = BenchString(n->uns ? to_string((uint64_t)n->val) : to_string(n->val)); }
+                else if (auto t = Is<StrLit>(literal)) { type = "string"; value = BenchString(t->val); }
+                definitions.push_back(BenchObject({{"name",BenchString(string(name))},{"type",BenchString(type)},{"value",value}}));
+            }
+            configuration.definitions = BenchArray(definitions);
+            configuration.goose_flags = {cat("-O",optlevel), nobce ? "--bounds-check=off" : "--bounds-check=on",
+                norfcheck ? "--recursive-frame-check=off" : "--recursive-frame-check=on", "--backend=native", standalone ? "--standalone" : "--runtime=linked"};
+            for (auto &include : includes) configuration.goose_flags.push_back("--include=" + AbsolutePath(include));
+            // Listing resolves source options but does not select or invoke a C compiler.
+            configuration.native_flags = debug ? vector<string>{"-O0","-g"} : vector<string>{"-O2"};
+            configuration.native_flags.push_back("-fno-lto");
+            for (auto &d : cdefines) configuration.native_flags.push_back("-D" + d);
+            benchconfig = report.configurations.size();
+            report.configurations.push_back(std::move(configuration));
             benchkeys.clear();
-            for (auto sf : selected) benchkeys.push_back(string(sf->qname));
-            if (benchlist) for (auto sf : selected) {
-                string label;
-                // Escape both C0 and Unicode C1/DEL controls for terminals.
-                string safe;
-                for (size_t i = 0; i < sf->benchlabel.size(); i++) {
-                    auto c = (uint8_t)sf->benchlabel[i];
-                    if (c == 0x7f) safe += "\\u007f";
-                    else if (c == 0xc2 && i + 1 < sf->benchlabel.size() &&
-                             (uint8_t)sf->benchlabel[i + 1] >= 0x80 &&
-                             (uint8_t)sf->benchlabel[i + 1] <= 0x9f) {
-                        char buf[8];
-                        snprintf(buf, sizeof buf, "\\u%04x", (uint8_t)sf->benchlabel[++i]);
-                        safe += buf;
-                    } else {
-                        string quoted;
-                        JsonQuote(quoted, string(1, (char)c));
-                        safe.append(quoted, 1, quoted.size() - 2);
-                    }
+            for (auto sf : selected) {
+                benchkeys.push_back(string(sf->qname));
+                BenchRow row; row.key = sf->qname; row.label = sf->benchlabel; row.source_line = sf->line.line;
+                row.size = benchsize; row.isolation = benchfresh ? "process" : "reuse";
+                row.status = benchlist ? "listed" : "pending";
+                row.signature = "() -> ";
+                for (auto type : sf->specs[0]->rets) {
+                    if (row.signature.size() > 6) row.signature += ", ";
+                    type->Dump(row.signature);
                 }
-                label = cat("\"", safe, "\"");
-                string signature;
-                for (auto t : sf->specs[0]->rets) {
-                    if (!signature.empty()) signature += ", ";
-                    t->Dump(signature);
-                }
-                printf("%s\t%s\t%s\t() -> %s\n", string(sf->qname).c_str(), label.c_str(),
-                       benchsize.c_str(), signature.c_str());
+                if (report.host.find("linux_process_peak_rss") == string::npos) row.memory_reason = "native process peak RSS is unavailable on this host";
+                report.rows.push_back(std::move(row));
             }
             if (benchlist) return 0;
         }
@@ -1972,6 +2047,18 @@ int Main(int argc, char **argv, bool &measuring) {
                 // build, the others' built now.
                 if (!findtc()) return 1;
                 Builder b { tc, buildopts, msgs };
+                if (verb == "bench") {
+                    auto path = filesystem::canonical(FindOnPath(tc.cc)).string();
+                    auto hash = BenchFileHash(path);
+                    if (!benchcchash.empty() && benchcchash != hash) throw std::runtime_error("C compiler changed between configurations");
+                    benchcchash = hash;
+                    benchreport->cc = BenchObject({{"path",BenchString(path)},{"sha256",BenchString(hash)},{"version",BenchString(tc.version)}});
+                    auto &flags = benchreport->configurations[benchconfig].native_flags;
+                    flags = b.CFlags(); flags.push_back("-fno-lto");
+                    for (auto &d : cdefines) flags.push_back("-D" + d);
+                    for (auto &f : b.SystemLibs()) flags.push_back(f);
+                    flags.push_back("--cc=" + path);
+                }
                 vector<string> rsps;
                 for (auto pkg : nativepkgs) {
                     auto &p = astp->packages[pkg];
@@ -1986,6 +2073,7 @@ int Main(int argc, char **argv, bool &measuring) {
                 }
                 if (verb == "bench") {
                     if (tc.style == "msvc") throw CompileError { "bench execution requires a Linux native toolchain" };
+                    for (auto &rsp : rsps) benchreport->configurations[benchconfig].native_flags.push_back("link-response=" + BenchReadFile(rsp));
                     auto runner = cat(builddir, "/runner.c"), object = cat(builddir, "/runner.o");
                     if (!WriteFileMakingDirs(runner, BenchRunnerSource()) ||
                         !b.CompileObject(runner, object, "compiling benchmark runner", cat(builddir, "/runner.log"), { "-fno-lto" })) return 1;
@@ -1994,7 +2082,16 @@ int Main(int argc, char **argv, bool &measuring) {
                     vector<string> objects { object };
                     if (!runtime.empty()) objects.push_back(runtime);
                     auto executable = cat(builddir, "/benchmark");
+                    auto generated_hash = BenchFileHash(outfile);
                     if (!b.Link(outfile, objects, rsps, executable, builddir, cat(builddir, "/cc.log"))) return 1;
+                    if (BenchFileHash(outfile) != generated_hash) throw std::runtime_error("generated C changed during build");
+                    auto &configuration = benchreport->configurations[benchconfig];
+                    configuration.executable_hash = BenchFileHash(executable);
+                    configuration.c_hash = BenchFileHash(outfile);
+                    for (auto &[path,hash] : benchreport->source_files)
+                        if (BenchFileHash(path) != hash) throw std::runtime_error("source input changed during build: " + path);
+                    if (BenchFileHash(exe) != benchgoosehash || BenchFileHash(filesystem::canonical(FindOnPath(tc.cc)).string()) != benchcchash)
+                        throw std::runtime_error("toolchain changed during build");
                     for (auto &key : benchkeys) benchprograms.push_back({ executable, key, benchsize, benchdir });
                     return 0;
                 }
@@ -2047,21 +2144,68 @@ int Main(int argc, char **argv, bool &measuring) {
             }
             code = 1;
         }
-        if (jsondiag) fputs(DiagnosticsJson(found, astp.get()).c_str(), stdout);
+        if (verb == "bench" && code && benchreport) {
+            string message = "benchmark compilation failed";
+            if (!found.empty()) message = found.back().message;
+            benchreport->error = {message.find("benchmark key") != string::npos || message.find("no benchmarks") != string::npos ? "selection" : "compile",message};
+        }
+        if (jsondiag) fputs(DiagnosticsJson(found, astp.get()).c_str(), verb == "bench" ? stderr : stdout);
         return code;
     };
     if (verb == "bench") {
-        auto definitions = builddefines;
-        for (auto &size : benchsizes) {
-            builddefines = definitions;
-            builddefines.push_back(cat("BENCH_SIZE=\"", size, "\""));
-            benchsize = size;
-            auto code = run(files[0]);
-            if (code) return 2;
+        int code = 0;
+        try {
+            auto definitions = builddefines;
+            for (auto &size : benchsizes) {
+                builddefines = definitions;
+                builddefines.push_back(cat("BENCH_SIZE=\"", size, "\""));
+                benchsize = size;
+                if (run(files[0])) { code = 2; break; }
+            }
+            auto &r = *benchreport;
+            // Keep the artifact's row order independent of the size build order.
+            stable_sort(r.rows.begin(),r.rows.end(),[](auto &a,auto &b) { return a.source_line < b.source_line; });
+            stable_sort(benchprograms.begin(),benchprograms.end(),[&](auto &a,auto &b) {
+                auto line = [&](auto &p) { auto it=find_if(r.rows.begin(),r.rows.end(),[&](auto &row) {return row.key==p.key;});return it->source_line; };
+                return line(a)<line(b);
+            });
+            for (auto &c : r.configurations) {
+                c.id = BenchConfigurationId(c,r.source_files,benchgoosehash,benchcchash);
+                for (auto &row : r.rows) if (row.size == c.size) row.configuration_id = c.id;
+            }
+            auto trim = [](string text) { while (!text.empty() && (text.back()=='\n'||text.back()=='\r')) text.pop_back();return text; };
+            auto git = RunProcess({"git","-C",DirOf(r.source_path),"rev-parse","--show-toplevel"});
+            if (git.started && git.code == 0) {
+                auto root = trim(git.output);
+                auto commit = RunProcess({"git","-C",root,"rev-parse","HEAD"});
+                if (commit.code == 0) r.git_commit = trim(commit.output);
+                r.git_dirty = "false";
+                for (auto &[path,hash] : r.source_files) {
+                    auto relative = filesystem::relative(path,root).string();
+                    if (relative.starts_with("../")) {r.git_dirty="true";continue;}
+                    auto tracked = RunProcess({"git","-C",root,"ls-files","--error-unmatch","--",relative});
+                    if (!tracked.started || tracked.code) {r.git_dirty="true";continue;}
+                    auto state = RunProcess({"git","-C",root,"status","--porcelain","--untracked-files=all","--",relative});
+                    if (!state.started || state.code) {r.git_dirty="null";break;}
+                    if (!state.output.empty()) r.git_dirty="true";
+                }
+            }
+            r.Checkpoint();
+            if (!code && !benchlist) {
+                // Check the immutable build artifacts again just before execution.
+                for (auto &c:r.configurations) {
+                    auto dir = cat(benchdir,"/",c.size);
+                    if (BenchFileHash(dir+"/benchmark") != c.executable_hash ||
+                        BenchFileHash(dir+"/"+PathStem(files[0])+".c") != c.c_hash)
+                        throw std::runtime_error("benchmark build artifact changed before execution");
+                }
+                measuring = true;
+                code = RunBenchmarks(benchprograms,benchfresh,benchwarmups,benchsamples,benchthermal,nullptr,&r);
+            }
+        } catch (const std::exception &e) {
+            fprintf(stderr,"bench: %s\n",e.what());benchreport->error={"io",e.what()};code=2;
         }
-        if (benchlist) return 0;
-        measuring = true;
-        return RunBenchmarks(benchprograms, benchfresh, benchwarmups, benchsamples, benchthermal);
+        return finishbench(code);
     }
     if (!multitest) return run(files[0]);
     // Each file has an Ast and a compile thread of its own, which is all the

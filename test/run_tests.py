@@ -2372,7 +2372,8 @@ def main():
         def bench_runtime():
             # Both exercise the shared-native lock; run them in sequence.
             for script, label in (("bench_runtime.py", "benchmark runtime"),
-                                  ("bench_thermal.py", "benchmark thermal")):
+                                  ("bench_thermal.py", "benchmark thermal"),
+                                  ("bench_report.py", "benchmark reports")):
                 code, out, err = tc.run_capture([sys.executable, HERE / script, exe])
                 if code:
                     r.fail(label, out + err)

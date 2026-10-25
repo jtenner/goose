@@ -1132,6 +1132,7 @@ inline const string *TypeCheck::EmbedFile(Call *c, vector<Node *> &args) {
     if (it == ast.shaders.end()) {
         string bytes;
         if (!LoadFile(path, bytes)) Error(c, cat("embed_file: cannot open ", path));
+        if (ast.record_bench_inputs) ast.bench_inputs.emplace_back(path, bytes);
         it = ast.shaders.emplace(key, std::move(bytes)).first;
     }
     return &it->second;
@@ -1167,7 +1168,10 @@ inline const string *TypeCheck::EmbedShader(Call *c, vector<Node *> &args) {
         auto it = ast.shaders.find(path);
         if (it == ast.shaders.end()) {
             try {
-                it = ast.shaders.emplace(path, CompileShaderFile(path)).first;
+                string input;
+                auto blob = CompileShaderFile(path, ast.record_bench_inputs ? &input : nullptr);
+                if (ast.record_bench_inputs) ast.bench_inputs.emplace_back(path, std::move(input));
+                it = ast.shaders.emplace(path, std::move(blob)).first;
             } catch (CompileError &e) {
                 Error(c, cat("embed_shader: ", e.msg));
             }

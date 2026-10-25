@@ -4168,13 +4168,48 @@ including imports, but selects only declarations directly in the target file.
 Listing prints key, escaped label, size and result signature. It runs no work or
 global initializers and generates no native code.
 
-Execution is experimental; statistics and JSON/CSV artifacts are later stages.
-One call is one timed sample,
+Execution is experimental. One call is one timed sample,
 with 2 warmups followed by 7 measured calls by default. `--warmups W` requires
 W >= 1 and `--samples N` requires N >= 5. Output retains raw per-call nanoseconds
 and typed checksums. All selected sizes compile before any workload child starts.
 Native compiler selection, build definitions, C macros and diagnostic/optimization
 options follow `build` (Goose O2 and native O2 by default; no JIT).
+
+Stdout is a human summary table. It reports accepted count, median time, unscaled
+median absolute deviation (MAD), MAD percent, minimum and maximum time, observed
+Tctl maximum, rejection count, process peak RSS, checksum and status. Statistics
+exclude warmups and thermal rejections. A nonpositive elapsed interval fails.
+
+`--json PATH` writes the full version 1 artifact and checkpoints after each
+completed attempt. `--csv PATH` writes a summary at PATH and raw attempts with
+`.samples` inserted before its last extension. Both use atomic file replacement;
+`-` is not an output path. The files retain failed and pending rows, all attempts,
+and exact checksum components. JSON also records source/toolchain hashes,
+effective configuration, host/affinity, sensor traces and child log paths.
+See [the artifact contract](bench_artifacts.md) for all fields and null rules.
+
+RSS is the Linux process lifetime high-water mark in bytes, including the runtime
+and global fixtures. In reuse mode each call's reading is cumulative. The row is
+the maximum final child value, including warmups and retries. It is not a per-call
+allocation estimate, and setup RSS is not subtracted.
+
+Stdout is a human summary table. It reports accepted count, median time, unscaled
+median absolute deviation (MAD), MAD percent, minimum and maximum time, observed
+Tctl maximum, rejection count, process peak RSS, checksum and status. Statistics
+exclude warmups and thermal rejections. A nonpositive elapsed interval fails.
+
+`--json PATH` writes the full version 1 artifact and checkpoints after each
+completed attempt. `--csv PATH` writes a summary at PATH and raw attempts with
+`.samples` inserted before its last extension. Both use atomic file replacement;
+`-` is not an output path. The files retain failed and pending rows, all attempts,
+and exact checksum components. JSON also records source/toolchain hashes,
+effective configuration, host/affinity, sensor traces and child log paths.
+See [the artifact contract](bench_artifacts.md) for all fields and null rules.
+
+RSS is the Linux process lifetime high-water mark in bytes, including the runtime
+and global fixtures. In reuse mode each call's reading is cumulative. The row is
+the maximum final child value, including warmups and retries. It is not a per-call
+allocation estimate, and setup RSS is not subtracted.
 
 Thermal supervision is required by default. Linux discovery reads all hwmon
 inputs labeled exactly `Tctl`; the hottest selected sensor controls the gate.
@@ -4227,4 +4262,4 @@ The supervisor defaults to 600-second setup, sample and teardown bounds and requ
 clean child exit. It holds the shared-native benchmark lock nonblockingly while
 measuring. Exit codes are 0 success/list, 2 usage/build/preflight failure, 1
 measurement failure, and 130 interruption. No performance publication claims
-should be made before the remaining reporting and provenance stages land.
+should use a matching timing scope, statistic, isolation mode and thermal policy.
