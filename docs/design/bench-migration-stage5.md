@@ -32,6 +32,10 @@ resolved. The input identity fixes alone do not remove either block.
    The parent releases the shared lock for the native supervisor and must
    acquire it again before C work. Raw native files survive beside the report.
 
+The native command acquires the shared lock before benchmark compilation and
+holds it until all workload process groups have been cleaned up. An occupied
+lock prevents compiler launch. Listing entries does not acquire this lock.
+
 `--legacy-goose` keeps the old timing boundary and ordering for either harness.
 The suite uses `results-native-v2.json` or `results-legacy-v2.json` under
 `bench/gen`; the old `results.json` remains separate. Version 2 states are

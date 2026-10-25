@@ -4,7 +4,17 @@
 #include "bench_report.h"
 namespace goose {
 struct BenchProgram { string executable, key, size, directory; };
-int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups, int samples, const BenchThermalOptions &thermal, BenchThermalSource *source = nullptr, BenchReport *report = nullptr);
+// Hold from before compilation until the last workload group is cleaned up.
+class BenchLock {
+    int fd = -1;
+public:
+    BenchLock();
+    ~BenchLock();
+    BenchLock(const BenchLock &) = delete;
+    BenchLock &operator=(const BenchLock &) = delete;
+    explicit operator bool() const { return fd >= 0; }
+};
+int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups, int samples, const BenchThermalOptions &thermal, BenchThermalSource *source = nullptr, BenchReport *report = nullptr, const BenchLock *held_lock = nullptr);
 string BenchDirectory();
 // Compiled as its own translation unit, without LTO. No workload code is
 // visible to this timer, so every release performs exactly one opaque call.
