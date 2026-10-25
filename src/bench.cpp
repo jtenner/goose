@@ -28,6 +28,11 @@ using std::string; using std::vector;
 #endif
 namespace goose {
 #ifdef __linux__
+BenchLock::BenchLock() {
+    fd = open("/tmp/goose-shared-native-benchmark.lock", O_CREAT | O_RDWR | O_CLOEXEC, 0600);
+    if (fd >= 0 && flock(fd, LOCK_EX | LOCK_NB)) { close(fd); fd = -1; }
+}
+BenchLock::~BenchLock() { if (fd >= 0) close(fd); }
 string BenchDirectory() {
     char path[] = "/tmp/goose-bench-XXXXXX";
     if (!mkdtemp(path)) throw std::runtime_error("cannot create benchmark artifact directory");
@@ -298,16 +303,14 @@ struct Child {
     }
 };
 }
-int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups, int samples, const BenchThermalOptions &options, BenchThermalSource *source, BenchReport *report) {
-    int lock = open("/tmp/goose-shared-native-benchmark.lock", O_CREAT | O_RDWR | O_CLOEXEC, 0600);
-    if (lock < 0 || flock(lock, LOCK_EX | LOCK_NB)) {
-        if (lock >= 0) close(lock);
+int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups, int samples, const BenchThermalOptions &options, BenchThermalSource *source, BenchReport *report, const BenchLock *held_lock) {
+    std::optional<BenchLock> lock;
+    if (!held_lock) held_lock = &lock.emplace();
+    if (!*held_lock) {
         fprintf(stderr, "bench: shared-native benchmark lock unavailable or occupied\n");
         if (report) report->error = {"lock", "shared-native benchmark lock unavailable or occupied"};
         return 2;
     }
-    struct Unlock { int fd; ~Unlock() { close(fd); } } unlock { lock };
-
     struct Signals {
         struct sigaction oldint {}, oldterm {};
         Signals() {
@@ -433,7 +436,9 @@ int RunBenchmarks(const vector<BenchProgram> &programs, bool fresh, int warmups,
     }
 }
 #else
+BenchLock::BenchLock() = default;
+BenchLock::~BenchLock() = default;
 string BenchDirectory() { throw std::runtime_error("benchmark execution currently requires Linux"); }
-int RunBenchmarks(const vector<BenchProgram> &, bool, int, int, const BenchThermalOptions &, BenchThermalSource *, BenchReport *) { return 2; }
+int RunBenchmarks(const vector<BenchProgram> &, bool, int, int, const BenchThermalOptions &, BenchThermalSource *, BenchReport *, const BenchLock *) { return 2; }
 #endif
 }
