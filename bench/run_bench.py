@@ -14,10 +14,9 @@ so that both build against the same headers, libraries and CRT; elsewhere they
 are gcc and clang. Both languages are built by both, which is what makes "does
 the backend explain this?" answerable.
 
-Timing is whole-process wall clock, deliberately including input generation,
-construction and teardown. The startup floor is measured separately and
-printed alongside, so the reader can see how much of a short run is process
-creation. Goose also provides os.clock_ns for separate kernel experiments.
+Migrated Goose entries use native function-time medians. Other rows retain
+best whole-process wall clocks. These scopes are labeled and are not combined
+in speedup ratios. --legacy-goose keeps whole-process comparisons for all rows.
 
 Where the compiler has the TinyCC backend, every Goose row is measured a second
 way as well: compiled and run inside the compiler, with no C file and no
@@ -40,6 +39,7 @@ or those rows measure an unoptimized compiler.
 """
 
 import argparse
+import hashlib
 import json
 import math
 import re
@@ -50,6 +50,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 import toolchain as tc
+import native_results as native
 
 HERE = Path(__file__).resolve().parent
 GENDIR = HERE / "gen"
@@ -64,6 +65,30 @@ RUSTDIR = HERE / "rust"
 STACK_RESERVE = "GS_STACK_RESERVE=2147483648ull"
 
 SIZE_NAMES = ["small", "medium", "large"]
+STATE_VERSION = 2
+# Entry identity and ordered checksum types; numeric sizes remain in BENCHMARKS.
+NATIVE_CASES = {
+    "sum.goose": ("sum_generated", ("i64", "i64")),
+    "tree.goose": ("tree_build_sum", ("i64", "i64")),
+}
+
+
+def cache_identity(args, ccs):
+    """Invalidate the state as a whole if inputs or measurement policy change."""
+    files = [Path(__file__), HERE / 'native_results.py']
+    for folder in (GOOSEDIR, CPPDIR, RUSTDIR):
+        files.extend(sorted(folder.glob('*')))
+    inputs = {str(p): hashlib.sha256(p.read_bytes()).hexdigest() for p in files if p.is_file()}
+    compilers = [Path(args.exe)] + [Path(shutil.which(c.cc) or c.cc) for c in ccs.values()]
+    rust = tc.find_rustc()
+    if rust:
+        compilers.append(Path(rust))
+    for p in compilers:
+        inputs[str(p.resolve())] = hashlib.sha256(p.read_bytes()).hexdigest()
+    return dict(inputs=inputs, reps=args.reps, samples=args.samples, warmups=args.warmups,
+                legacy_goose=args.legacy_goose, isolation=args.isolation,
+                temperature=args.temperature, gate=args.temp_gate, ceiling=args.temp_ceiling,
+                statistic='median/native;best/legacy', timing_scope='function/native;process/legacy')
 
 # Rust is not built by the C/C++ toolchains, so its measurements are filed under
 # a toolchain of their own and its rows carry one time, not one per backend.
@@ -415,6 +440,8 @@ class Harness:
     def goose_source(self, file, n, base):
         """The benchmark's Goose source with its size baked in, written once
         per (benchmark, size). Both backends start from this same file."""
+        if file in NATIVE_CASES:
+            return GOOSEDIR / file
         gsrc = GENDIR / f"{base}.goose"
         if base not in self.sized:
             write_sized(GOOSEDIR / file, gsrc, n, GOOSE_N)
@@ -433,7 +460,7 @@ class Harness:
             # runtime function the program calls is the C compiler's to
             # inline.
             code, out, err = tc.run_capture([self.args.exe, "-O2", "--standalone", "-o", cfile,
-                                             gsrc])
+                                             *self.size_flags(file, n), gsrc])
             tc.write_text(GENDIR / f"{base}.goose.log", out + err)
             if code != 0:
                 return None, f"goose compile failed, see {base}.goose.log"
@@ -442,6 +469,22 @@ class Harness:
         ok, _ = self.ccs[tcname].compile(cfile, exe, opt=2, defines=[STACK_RESERVE],
                                          log=GENDIR / f"{tag}.cc.log")
         return (exe, None) if ok else (None, f"{tcname} failed, see {tag}.cc.log")
+
+    def size_flags(self, file, n):
+        if file not in NATIVE_CASES:
+            return []
+        b = next(b for b in BENCHMARKS if any(g['file'] == file for g in b['goose']))
+        return ['--define', 'BENCH_SIZE=' + json.dumps(SIZE_NAMES[b['sizes'].index(n)])]
+
+    def native_row(self, file, size, tag, tcname):
+        if file == 'tree.goose' and self.args.isolation != 'process':
+            raise native.InvalidResult('tree.goose appends to a global pool; use process isolation')
+        key, types = NATIVE_CASES[file]
+        return native.run_native(self.args.exe, GOOSEDIR / file, GENDIR / (tag + '.native.json'),
+            key=key, size=size, types=types, cc=shutil.which(self.ccs[tcname].cc) or self.ccs[tcname].cc,
+            samples=self.args.samples, warmups=self.args.warmups, isolation=self.args.isolation,
+            temperature=self.args.temperature, gate=self.args.temp_gate, ceiling=self.args.temp_ceiling,
+            native_flags=['-D' + STACK_RESERVE])
 
     def build_cpp(self, file, variant, n, tag, tcname):
         exe = GENDIR / (tag + tc.EXE_SUFFIX)
@@ -487,7 +530,8 @@ def measure_exe(exe, reps, args=()):
             best = r.ms
         peak = max(peak, r.peak)
         out = r.out
-    return {"ok": True, "ms": best, "peak": peak, "out": out}
+    return {"ok": True, "ms": best, "peak": peak, "out": out,
+            "statistic": "best", "timing_scope": "process"}
 
 
 def measure_baseline(harness, jit):
@@ -527,7 +571,18 @@ def fmt_ms(m):
 
 
 def fmt_mb(m):
-    return tc.num(m["peak"] / (1 << 20)) if m and m.get("ok") else "--"
+    return tc.num(m["peak"] / (1 << 20)) if m and m.get("ok") and m.get("peak") is not None else "--"
+
+
+def comparable(m):
+    return m and m.get('ok') and m.get('statistic') == 'best' and m.get('timing_scope') == 'process'
+
+
+def checksum_for_case(measurement, file):
+    if file in NATIVE_CASES:
+        return (native.decoded_checksum(measurement['checksum']) if 'checksum' in measurement
+                else native.legacy_checksum(measurement['out'], NATIVE_CASES[file][1]))
+    return measurement['out']
 
 
 def main():
@@ -544,11 +599,39 @@ def main():
                     help="regenerate the report from saved measurements")
     ap.add_argument("--no-jit", action="store_true",
                     help="skip the in-process TinyCC measurements")
+    ap.add_argument('--plan', action='store_true', help='show selected work; do not compile or run')
+    ap.add_argument('--legacy-goose', action='store_true', help='retain whole-process Goose comparisons')
+    ap.add_argument('--samples', type=int, default=7)
+    ap.add_argument('--warmups', type=int, default=2)
+    ap.add_argument('--isolation', choices=('process', 'reuse'), default='process')
+    ap.add_argument('--temperature', choices=('required', 'off'), default='required')
+    ap.add_argument('--temp-gate', type=float, default=60)
+    ap.add_argument('--temp-ceiling', type=float, default=65)
     args = ap.parse_args()
+    if args.samples < 5 or args.warmups < 1 or args.reps < 1:
+        ap.error('use at least five samples, one warmup, and one legacy repetition')
+    if not (math.isfinite(args.temp_gate) and math.isfinite(args.temp_ceiling) and args.temp_gate <= args.temp_ceiling):
+        ap.error('temperature thresholds must be finite and gate <= ceiling')
 
     tc.setup_console()
     only = [s for s in args.only.split(",") if s]
     sizes = [s for s in args.sizes.split(",") if s]
+    if not sizes or len(set(sizes)) != len(sizes) or any(s not in SIZE_NAMES for s in sizes):
+        ap.error('sizes must be a nonempty, duplicate-free subset of small,medium,large')
+    if args.plan:
+        print(json.dumps(dict(state_version=STATE_VERSION, ordering_policy='serial whole-row blocks',
+            isolation=args.isolation, temperature=args.temperature,
+            rows=[dict(benchmark=b['name'], file=g['file'], size=s,
+                       engine='native' if g['file'] in NATIVE_CASES and not args.legacy_goose else 'legacy')
+                  for b in BENCHMARKS if not only or b['name'] in only for g in b['goose'] for s in sizes]), indent=2))
+        return 0
+    migrated = [g['file'] for b in BENCHMARKS if not only or b['name'] in only
+                for g in b['goose'] if g['file'] in NATIVE_CASES]
+    if not args.legacy_goose and not args.report_only:
+        if args.skip_build and migrated:
+            ap.error('--skip-build requires --legacy-goose for migrated entries')
+        if args.isolation == 'reuse' and 'tree.goose' in migrated:
+            ap.error('tree.goose requires --isolation process; its global pool accumulates nodes')
 
     # --report-only touches neither compiler, so it works on a machine that has
     # the saved measurements and nothing else installed.
@@ -588,7 +671,9 @@ def main():
     results = {}      # results[bench][impl][toolchain][size] = measurement
     mismatch = {}
     measured = set()  # "bench/size" keys refreshed by this run
-    statefile = GENDIR / "results.json"
+    failed_run = False
+    statefile = GENDIR / ('results-legacy-v2.json' if args.legacy_goose else 'results-native-v2.json')
+    identity = None if args.report_only else cache_identity(args, ccs)
 
     # --report-only regenerates results.md from saved measurements, so the
     # hand-written commentary in notes.md can be edited without a rebuild.
@@ -596,6 +681,8 @@ def main():
         if not statefile.exists():
             sys.exit(f"no saved measurements at {statefile}; run without --report-only first")
         state = json.loads(statefile.read_text(encoding="utf-8"))
+        if state.get('schema_version') != STATE_VERSION:
+            sys.exit('unsupported state format; collect new results')
         results = state["results"]
         baseline = state["baseline"]
         mismatch = state["mismatch"]
@@ -627,7 +714,13 @@ def main():
                     tag = f"{b['name']}_{sname}_{slug}_{tcname}"
                     results[b["name"]][im["label"]].setdefault(tcname, {})
                     exe = GENDIR / (tag + tc.EXE_SUFFIX)
-                    if args.skip_build:
+                    is_native = im['kind'] == 'goose' and im['file'] in NATIVE_CASES and not args.legacy_goose
+                    if is_native:
+                        try:
+                            m = harness.native_row(im['file'], sname, tag, tcname)
+                        except (native.InvalidResult, OSError, ValueError) as error:
+                            m = dict(ok=False, note=str(error))
+                    elif args.skip_build:
                         exe, note = (exe, None) if exe.exists() else (None, "not built")
                     elif im["kind"] == "goose":
                         exe, note = harness.build_goose(im["file"], n, tag, tcname)
@@ -635,18 +728,20 @@ def main():
                         exe, note = harness.build_rust(im["file"], n, tag)
                     else:
                         exe, note = harness.build_cpp(im["file"], im["variant"], n, tag, tcname)
-                    if not exe:
+                    if not is_native and not exe:
                         print(f"  {im['label']:<32} {sname:<7} {tcname:<5} BUILD FAIL: {note}")
                         results[b["name"]][im["label"]][tcname][sname] = {
                             "ok": False, "note": "build failed"}
                         continue
-                    m = measure_exe(exe, args.reps)
+                    if not is_native:
+                        m = measure_exe(exe, args.reps)
                     results[b["name"]][im["label"]][tcname][sname] = m
                     if m["ok"]:
-                        checks[f"{im['label']} [{tcname}]"] = m["out"]
+                        checks[f"{im['label']} [{tcname}]"] = checksum_for_case(m, b['goose'][0]['file'])
                         print(f"  {im['label']:<32} {sname:<7} {tcname:<5} "
-                              f"{tc.num(m['ms']):>9} ms  {tc.num(m['peak'] / (1 << 20)):>8} MB")
+                              f"{tc.num(m['ms']):>9} ms  {fmt_mb(m):>8} MB")
                     else:
+                        failed_run = True
                         print(f"  {im['label']:<32} {sname:<7} {tcname:<5} "
                               f"RUN FAIL: {m['note']}")
                 # The same source through the in-process backend: one run that
@@ -658,10 +753,10 @@ def main():
                     gsrc = harness.goose_source(im["file"], n, base)
                     results[b["name"]][im["label"]].setdefault(JIT_TC, {})
                     m = measure_exe(args.exe, args.reps,
-                                    ["-O2", "--jit", f"-D{STACK_RESERVE}", gsrc])
+                                    ["-O2", "--jit", f"-D{STACK_RESERVE}", *harness.size_flags(im['file'], n), gsrc])
                     results[b["name"]][im["label"]][JIT_TC][sname] = m
                     if m["ok"]:
-                        checks[f"{im['label']} [{JIT_TC}]"] = m["out"]
+                        checks[f"{im['label']} [{JIT_TC}]"] = checksum_for_case(m, b['goose'][0]['file'])
                         print(f"  {im['label']:<32} {sname:<7} {'jit':<5} "
                               f"{tc.num(m['ms']):>9} ms  {tc.num(m['peak'] / (1 << 20)):>8} MB")
                     else:
@@ -682,6 +777,8 @@ def main():
     if not args.report_only:
         if statefile.exists():
             prev = json.loads(statefile.read_text(encoding="utf-8"))
+            if prev.get('schema_version') != STATE_VERSION or prev.get('cache_identity') != identity:
+                prev = dict(results={}, mismatch={}, baseline=None, sizes=[], toolchains=[], tcdefs={})
             merged = prev["results"]
             for bn, impls in results.items():
                 for lbl, tcs in impls.items():
@@ -699,7 +796,8 @@ def main():
             active = [k for k in ccs if k in prev["toolchains"] or k in active]
             descs = {**prev["tcdefs"], **descs}
         tc.write_text(statefile, json.dumps(
-            {"results": results, "baseline": baseline, "mismatch": mismatch,
+            {"schema_version": STATE_VERSION, "cache_identity": identity,
+             "ordering_policy": "serial whole-row blocks", "results": results, "baseline": baseline, "mismatch": mismatch,
              "reps": args.reps, "sizes": sizes, "toolchains": active,
              "tcdefs": {k: descs[k] for k in active}}, indent=1))
         selected = [b for b in BENCHMARKS if b["name"] in results]
@@ -743,12 +841,15 @@ def main():
     else:
         W(f"* Every time cell is the `{active[0]}` build. Goose is compiled to C once per size")
         W("  and that toolchain builds that C.")
-    W(f"* Times are the best of {args.reps} whole-process wall clocks, after two discarded warm-up")
+    W("* Native Goose rows (marked [native]) report function-time medians, isolation and thermal policy.")
+    W("  They are excluded from headline speedup and memory ratios against legacy rows.")
+    W("  Rows run in serial whole-row blocks; foreign samples are not interleaved within a native row.")
+    W(f"* Legacy times are the best of {args.reps} whole-process wall clocks, after two discarded warm-up")
     W("  runs. Memory is the peak working set, the larger of the toolchains (they")
     W("  rarely differ).")
-    W("* Everything a program does, including generating its input, building its")
-    W("  structure and tearing it down, is inside the measurement. Whole-process timing")
-    W("  measures these lifecycle costs together; input generation can dilute differences in")
+    W("* In legacy rows, everything a program does -- generating its input, building its structure,")
+    W("  tearing it down -- is inside the measurement. Whole-process timing measures")
+    W("  these lifecycle costs together; input generation can dilute differences in")
     W("  the phase under study. Goose now has `os.clock_ns` for separate kernel")
     W("  experiments, but this suite retains its whole-process measurement policy.")
     W("* Every implementation of a benchmark, under every toolchain, prints the same")
@@ -788,7 +889,7 @@ def main():
 
     def best_time(bench, labels, tcname, size):
         times = [m["ms"] for l in labels
-                 for m in [get_m(bench, l, tcname, size)] if m and m.get("ok")]
+                 for m in [get_m(bench, l, tcname, size)] if comparable(m)]
         return min(times) if times else None
 
     # Over whichever toolchains actually measured this label, so the Rust rows
@@ -796,7 +897,7 @@ def main():
     def best_mem(bench, labels, size):
         peaks = [m["peak"] for l in labels if l in results[bench]
                  for tcname in results[bench][l] if tcname != JIT_TC
-                 for m in [get_m(bench, l, tcname, size)] if m and m.get("ok")]
+                 for m in [get_m(bench, l, tcname, size)] if comparable(m) and m.get('peak') is not None]
         return min(peaks) if peaks else None
 
     if "large" in active_sizes:
@@ -921,14 +1022,18 @@ def main():
         W(hdr)
         W(sep)
         for label in labels:
-            row = f"| {label} |"
+            native_rows = [get_m(b['name'], label, t, s) for t in active for s in active_sizes]
+            policies = sorted({f"{m['isolation']}, thermal={m['thermal_policy']['mode']}" for m in native_rows
+                               if m and m.get('ok') and m.get('timing_scope') == 'function'})
+            suffix = ' [native: median, function, ' + '; '.join(policies) + ']' if policies else ''
+            row = f"| {label}{suffix} |"
             tcs = [RUST_TC] if label in rust_of else active
             for s in active_sizes:
                 row += " " + " / ".join(fmt_ms(get_m(b["name"], label, t, s)) for t in tcs) + " |"
             peak = None
             for tcname in tcs:
                 m = get_m(b["name"], label, tcname, "large")
-                if m and m.get("ok") and (peak is None or m["peak"] > peak["peak"]):
+                if m and m.get("ok") and m.get('peak') is not None and (peak is None or m["peak"] > peak["peak"]):
                     peak = m
             row += f" {fmt_mb(peak)} |"
             W(row)
@@ -1014,7 +1119,7 @@ def main():
                 row += f" {fmt_ms(a)} / {fmt_ms(j)} |"
             a = get_m(b["name"], label, aot_tc, "large")
             j = get_m(b["name"], label, JIT_TC, "large")
-            if a and j and a.get("ok") and j.get("ok"):
+            if comparable(a) and comparable(j):
                 ratios.append(j["ms"] / a["ms"])
                 row += f" {tc.num(j['ms'] / a['ms'], 2)}x |"
             else:
@@ -1050,7 +1155,7 @@ def main():
     if mismatch:
         print(f"{len(mismatch)} checksum mismatch(es)")
         return 1
-    return 0
+    return 1 if failed_run else 0
 
 
 if __name__ == "__main__":
