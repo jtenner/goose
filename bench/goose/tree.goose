@@ -11,7 +11,9 @@
 
 import rng;
 
-let DEPTH = 20;                          // BENCH_N
+// Keep in sync with run_bench.py: small / medium / large.
+let DEPTH = if build::BENCH_SIZE == "small" { 16 }
+            else if build::BENCH_SIZE == "medium" { 20 } else { 24 };
 let PASSES = 8;
 
 struct TNode { v: i32, l: TNode&<u32>?, r: TNode&<u32>? }
@@ -41,10 +43,16 @@ recursive fn sum_tree(n: TNode&, p: i64) -> i64 {
     t
 }
 
-fn main() {
+// This entry appends to the global pool. Use --isolation process.
+bench "Build and scan a pooled tree" fn tree_build_sum() -> i64, i64 {
     let root: TNode& = build(DEPTH, 12345);
     var total = 0;
     for p in PASSES { total += sum_tree(root, p); }
-    print(pool.len);
+    return pool.len, total;
+}
+
+fn main() {
+    let count, total = tree_build_sum();
+    print(count);
     print(total);
 }
