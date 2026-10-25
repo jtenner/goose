@@ -197,7 +197,13 @@ void ParseProgram(Ast &ast, const string &rootpath, const vector<string> &stdlib
     // package the first time a module in it is reached.
     auto rootdir = DirOf(rootpath);
     ast.packages.push_back(Package { PathStem(rootpath), rootdir, false });
-    LoadSidecar(ast.packages[0], true);
+    auto loadsidecar = [&](Package &pkg, bool isprogram) {
+        if (!ast.record_bench_inputs) { LoadSidecar(pkg, isprogram); return; }
+        ast.bench_inputs.push_back({cat(pkg.root, pkg.name, ".build"), {}});
+        LoadSidecar(pkg, isprogram, &ast.bench_inputs.back().second);
+        if (!pkg.hassidecar) ast.bench_inputs.pop_back();
+    };
+    loadsidecar(ast.packages[0], true);
     auto stdlibpkg = [&](const string &dir) {
         for (size_t i = 0; i < ast.packages.size(); i++)
             if (ast.packages[i].stdlib && ast.packages[i].root == dir) return (int)i;
@@ -243,7 +249,7 @@ void ParseProgram(Ast &ast, const string &rootpath, const vector<string> &stdlib
         auto &p = ast.packages.back();
         if (!src.ispath) p.cachekey = GitCacheKey(src);
         if (builtin && root == builtindir) p.builtin = BuiltinIndex(builtin);
-        LoadSidecar(p, false);
+        loadsidecar(p, false);
         declared.emplace(be.package, DeclaredPackage { src, (int)ast.packages.size() - 1, 0 });
         return (int)ast.packages.size() - 1;
     };
@@ -307,7 +313,7 @@ void ParseProgram(Ast &ast, const string &rootpath, const vector<string> &stdlib
                         }
                         ast.packages.push_back(Package { imp.path, root, false });
                         if (!src.ispath) ast.packages.back().cachekey = GitCacheKey(src);
-                        LoadSidecar(ast.packages.back(), false);
+                        loadsidecar(ast.packages.back(), false);
                         auto dp = DeclaredPackage { src, (int)ast.packages.size() - 1,
                                                     imp.line.line };
                         it = declared.emplace(imp.path, dp).first;
@@ -1674,6 +1680,7 @@ int Main(int argc, char **argv, bool &measuring) {
         }
         r.Print(); return code;
     };
+    set<string> benchinputpaths;
     auto protectinputs = [&] {
         if (!benchreport) return;
         vector<string> outputs {benchjson, benchcsv};
@@ -1690,6 +1697,9 @@ int Main(int argc, char **argv, bool &measuring) {
             auto resolved = filesystem::weakly_canonical(output).string();
             if (!seen.insert(resolved).second) invalid("duplicate benchmark output path: " + output);
             if (filesystem::is_directory(output)) invalid("benchmark output path is a directory: " + output);
+            for (auto &path : benchinputpaths)
+                if (resolved == filesystem::weakly_canonical(path).string())
+                    invalid("benchmark output would overwrite an input: " + output);
             for (auto &[path, hash] : benchreport->source_files)
                 if (resolved == filesystem::weakly_canonical(path).string())
                     invalid("benchmark output would overwrite an input: " + output);
@@ -1703,13 +1713,21 @@ int Main(int argc, char **argv, bool &measuring) {
         if (benchthermal.off) r.thermal_reason = "explicit --temperature off; sensor discovery skipped";
 
         try {
+            for (auto &path : includenames) benchinputpaths.insert(AbsolutePath(path));
+            if (!ccrequest.empty()) {
+                auto path = FindOnPath(ccrequest);
+                if (!path.empty()) benchinputpaths.insert(AbsolutePath(path));
+            }
             r.source_files.push_back({r.source_path,""}); protectinputs();
             r.source_hash = BenchFileHash(r.source_path); r.source_files[0].second = r.source_hash;
             benchgoosehash = BenchFileHash(exe);
             r.goose = BenchObject({{"path",BenchString(exe)},{"sha256",BenchString(benchgoosehash)},
                                   {"version",BenchString("goose runtime " + RuntimeVersion())}});
             protectinputs();
-        } catch (const std::exception &e) { r.error = {"io",e.what()}; return finishbench(2); }
+        } catch (const std::exception &e) {
+            fprintf(stderr, "bench: %s\n", e.what());
+            r.error = {"io",e.what()}; return finishbench(2);
+        }
     }
     // With no output file the program is compiled into this process and run,
     // which is what --jit asks for explicitly; a build writes the C to its
@@ -1742,6 +1760,31 @@ int Main(int argc, char **argv, bool &measuring) {
     // The program's Ast outlives the compile: a build and a JIT run read
     // its packages, for the native parts the program needs (native.h).
     unique_ptr<Ast> astp;
+    auto collectbenchinputs = [&] {
+        if (!benchreport || !astp) return;
+        for (auto &[path, bytes] : astp->sources) benchinputpaths.insert(AbsolutePath(path));
+        for (auto &[path, bytes] : astp->bench_inputs) benchinputpaths.insert(AbsolutePath(path));
+        for (auto &p : astp->packages) {
+            if (p.hassidecar) benchinputpaths.insert(AbsolutePath(p.sidecar));
+            for (auto &path : p.csources) benchinputpaths.insert(AbsolutePath(path));
+            for (auto &flag : p.cflags_cc) {
+                auto path = flag.starts_with("@") ? flag.substr(1) : flag;
+                if (FileExists(path)) benchinputpaths.insert(AbsolutePath(path));
+            }
+            if (!p.cmake_target.empty()) benchinputpaths.insert(AbsolutePath(cat(p.root, "CMakeLists.txt")));
+        }
+        protectinputs();
+    };
+    auto recordbenchfile = [&](const string &path) {
+        auto absolute = AbsolutePath(path), hash = BenchFileHash(absolute);
+        benchinputpaths.insert(absolute);
+        protectinputs();
+        auto &inputs = benchreport->source_files;
+        auto it = find_if(inputs.begin(), inputs.end(), [&](auto &p) { return p.first == absolute; });
+        if (it == inputs.end()) inputs.push_back({absolute, hash});
+        else if (it->second != hash) throw std::runtime_error("native input changed during build: " + absolute);
+        return hash;
+    };
     vector<int> nativepkgs;
     // The compile's diagnostics as data (--diagnostics json): the warnings
     // as they come, then the error's.
@@ -1758,6 +1801,7 @@ int Main(int argc, char **argv, bool &measuring) {
         if (jsondiag) ast.sink = [&](const Diagnostic &d) { found.push_back(d); };
         auto stdlibdirs = StdlibDirs(stdlibdir, exe);
         ParseProgram(ast, filename, stdlibdirs, DirOf(exe));
+        collectbenchinputs();
         // The parser reported what it recovered from as it went; nothing
         // further is asked of a program with a syntax error.
         if (!ast.errors.empty()) return 1;
@@ -1826,6 +1870,16 @@ int Main(int argc, char **argv, bool &measuring) {
             };
             for (auto &[path, bytes] : ast.sources) record(path,*bytes);
             for (auto &[path, bytes] : ast.bench_inputs) record(path,bytes);
+            for (auto &path : includenames) if (FileExists(path)) recordbenchfile(path);
+            for (auto &p : ast.packages) {
+                if (p.hassidecar) recordbenchfile(p.sidecar);
+                for (auto &path : p.csources) recordbenchfile(path);
+                for (auto &flag : p.cflags_cc) {
+                    auto path = flag.starts_with("@") ? flag.substr(1) : flag;
+                    if (FileExists(path)) recordbenchfile(path);
+                }
+                if (!p.cmake_target.empty()) recordbenchfile(cat(p.root, "CMakeLists.txt"));
+            }
             sort(report.source_files.begin(),report.source_files.end());
             protectinputs();
             BenchConfiguration configuration; configuration.size = benchsize;
@@ -2047,8 +2101,64 @@ int Main(int argc, char **argv, bool &measuring) {
                 // build, the others' built now.
                 if (!findtc()) return 1;
                 Builder b { tc, buildopts, msgs };
+                struct NativeScan { vector<string> command; string cwd; BenchFields files; };
+                vector<NativeScan> nativescans;
+                std::function<void(const vector<string> &, const string &, set<string> &)> recordresponses;
+                recordresponses = [&](const vector<string> &args, const string &cwd, set<string> &seen) {
+                    for (auto &arg : args) {
+                        auto path = arg.starts_with("@") ? arg.substr(1) : arg.starts_with("-Wl,@") ? arg.substr(5) : string();
+                        if (path.empty()) {
+                            auto input = AbsolutePath(cwd.empty() || filesystem::path(arg).is_absolute() ? arg : cat(cwd, "/", arg));
+                            std::error_code ec;
+                            if (!input.starts_with(AbsolutePath(builddir) + "/") && filesystem::is_regular_file(input, ec)) recordbenchfile(input);
+                            continue;
+                        }
+                        path = AbsolutePath(cwd.empty() || filesystem::path(path).is_absolute() ? path : cat(cwd, "/", path));
+                        if (!seen.insert(path).second) continue;
+                        recordbenchfile(path);
+                        auto text = BenchReadFile(path);
+                        benchreport->configurations[benchconfig].native_flags.push_back("response=" + text);
+                        recordresponses(BenchCommandWords(text), cwd, seen);
+                    }
+                };
+                auto scaninputs = [&](vector<string> argv, const string &cwd) {
+                    set<string> responses;
+                    recordresponses(argv, cwd, responses);
+                    auto depfile = AbsolutePath(cat(builddir, "/dependencies.d"));
+                    for (auto &f : vector<string>{"-M", "-MT", "goose", "-MF", depfile}) argv.push_back(f);
+                    auto result = RunProcess(argv, cwd);
+                    if (!result.started || result.code) {
+                        benchreport->json_path.clear(); benchreport->csv_path.clear();
+                        throw std::runtime_error("cannot resolve native dependencies: " + CommandLineText(argv) + "\n" + result.output);
+                    }
+                    BenchFields inputs;
+                    for (auto &path : responses) inputs.push_back({path, BenchFileHash(path)});
+                    vector<string> dependencies;
+                    try { dependencies = BenchMakeDependencies(BenchReadFile(depfile)); }
+                    catch (...) { benchreport->json_path.clear(); benchreport->csv_path.clear(); throw; }
+                    for (auto &path : dependencies) {
+                        auto absolute = AbsolutePath(cwd.empty() || filesystem::path(path).is_absolute() ? path : cat(cwd, "/", path));
+                        auto hash = BenchFileHash(absolute);
+                        // Run-local generated C and the runner derive from the compiler.
+                        // Their temporary paths must not change a configuration's ID.
+                        if (!absolute.starts_with(AbsolutePath(builddir) + "/")) recordbenchfile(absolute);
+                        inputs.push_back({absolute, hash});
+                    }
+                    sort(inputs.begin(), inputs.end());
+                    return inputs;
+                };
+                auto addscan = [&](const Builder &builder, const string &source, const vector<string> &extra) {
+                    auto argv = vector<string>{tc.cc};
+                    for (auto &f : builder.CFlags()) argv.push_back(f);
+                    for (auto &f : extra) argv.push_back(f);
+                    argv.push_back(source);
+                    auto inputs = scaninputs(argv, "");
+                    nativescans.push_back({argv, "", inputs});
+                    return inputs;
+                };
                 if (verb == "bench") {
                     auto path = filesystem::canonical(FindOnPath(tc.cc)).string();
+                    benchinputpaths.insert(path); protectinputs();
                     auto hash = BenchFileHash(path);
                     if (!benchcchash.empty() && benchcchash != hash) throw std::runtime_error("C compiler changed between configurations");
                     benchcchash = hash;
@@ -2068,22 +2178,139 @@ int Main(int argc, char **argv, bool &measuring) {
                         continue;
                     }
                     NativeBuild nb;
-                    if (!BuildNativePart(*astp, pkg, filename, b, false, nb)) return 1;
+                    if (verb == "bench") {
+                        auto capture = [&](const Builder &builder, const NativeBuild &, const vector<string> &extra) {
+                            vector<string> stamp;
+                            auto flags = builder.CFlags();
+                            flags.insert(flags.end(), extra.begin(), extra.end());
+                            for (auto &source : p.csources) {
+                                auto entry = BenchObject({{"source",BenchString(source)}, {"flags",BenchStrings(flags)}});
+                                benchreport->configurations[benchconfig].native_flags.push_back("native-compile=" + entry);
+                                stamp.push_back(entry);
+                                for (auto &[path, hash] : addscan(builder, source, extra))
+                                    stamp.push_back(BenchObject({{"path",BenchString(path)}, {"sha256",BenchString(hash)}}));
+                            }
+                            return BenchHash(BenchArray(stamp)) + "\n";
+                        };
+                        auto cmakecapture = [&](const string &dir) {
+                            auto replydir = cat(dir, "/.cmake/api/v1/reply");
+                            bool foundinputs = false;
+                            for (auto &file : filesystem::directory_iterator(replydir)) {
+                                if (!file.path().filename().string().starts_with("cmakeFiles-v1-")) continue;
+                                auto reply = ParseJson(BenchReadFile(file.path().string()));
+                                auto paths = reply.Get("paths");
+                                if (!paths) throw std::runtime_error("missing CMake input paths");
+                                auto root = paths->Str("source");
+                                for (auto &entry : reply.Arr("inputs")) {
+                                    auto path = entry.Str("path");
+                                    recordbenchfile(filesystem::path(path).is_absolute() ? path : cat(root, "/", path));
+                                }
+                                foundinputs = true;
+                            }
+                            if (!foundinputs) throw std::runtime_error("missing CMake input dependency reply");
+                            auto commands = cat(dir, "/compile_commands.json");
+                            recordbenchfile(commands);
+                            auto db = ParseJson(BenchReadFile(commands));
+                            if (db.kind != Json::ARRAY || db.arr.empty()) throw std::runtime_error("missing native compile commands");
+                            for (auto &entry : db.arr) {
+                                vector<string> command;
+                                if (auto args = entry.Get("arguments")) {
+                                    for (auto &arg : args->arr) command.push_back(arg.str);
+                                } else command = BenchCommandWords(entry.Str("command"));
+                                if (command.empty()) throw std::runtime_error("empty native compile command");
+                                auto cwd = entry.Str("directory");
+                                auto compiler = FindOnPath(command[0]);
+                                if (compiler.empty()) throw std::runtime_error("cannot resolve native compiler: " + command[0]);
+                                recordbenchfile(compiler);
+                                // Output paths do not affect the compiled code or its identity.
+                                vector<string> flags;
+                                for (size_t i = 1; i < command.size(); ++i) {
+                                    if (command[i] == "-o" || command[i] == "-MF" || command[i] == "-MT" || command[i] == "-MQ") { ++i; continue; }
+                                    if (command[i] == "-c" || command[i] == "-MD" || command[i] == "-MMD" || command[i] == "-MP") continue;
+                                    flags.push_back(command[i]);
+                                }
+                                vector<string> scan {command[0]};
+                                scan.insert(scan.end(), flags.begin(), flags.end());
+                                auto inputs = scaninputs(scan, cwd);
+                                nativescans.push_back({scan, cwd, inputs});
+                                benchreport->configurations[benchconfig].native_flags.push_back("native-compile=" +
+                                    BenchObject({{"directory",BenchString(cwd)}, {"compiler",BenchString(compiler)}, {"flags",BenchStrings(flags)}}));
+                            }
+                        };
+                        bool built;
+                        try { built = BuildNativePart(*astp, pkg, filename, b, false, nb, capture, cmakecapture); }
+                        catch (...) { benchreport->json_path.clear(); benchreport->csv_path.clear(); throw; }
+                        if (!built) { benchreport->json_path.clear(); benchreport->csv_path.clear(); return 1; }
+                    } else if (!BuildNativePart(*astp, pkg, filename, b, false, nb)) return 1;
                     rsps.push_back(nb.rsp);
                 }
                 if (verb == "bench") {
                     if (tc.style == "msvc") throw CompileError { "bench execution requires a Linux native toolchain" };
-                    for (auto &rsp : rsps) benchreport->configurations[benchconfig].native_flags.push_back("link-response=" + BenchReadFile(rsp));
+                    for (auto &rsp : rsps) {
+                        set<string> seen;
+                        recordresponses({"@" + rsp}, "", seen);
+                        benchreport->configurations[benchconfig].native_flags.push_back("link-response=" + BenchReadFile(rsp));
+                    }
                     auto runner = cat(builddir, "/runner.c"), object = cat(builddir, "/runner.o");
-                    if (!WriteFileMakingDirs(runner, BenchRunnerSource()) ||
-                        !b.CompileObject(runner, object, "compiling benchmark runner", cat(builddir, "/runner.log"), { "-fno-lto" })) return 1;
-                    auto runtime = standalone ? string() : RuntimeObject(b);
+                    if (!WriteFileMakingDirs(runner, BenchRunnerSource())) return 1;
+                    addscan(b, runner, {"-fno-lto"});
+                    if (!b.CompileObject(runner, object, "compiling benchmark runner", cat(builddir, "/runner.log"), { "-fno-lto" })) return 1;
+                    auto runtime = standalone ? string() : RuntimeObject(b, [&](const string &source) {
+                        benchreport->configurations[benchconfig].native_flags.push_back("runtime-compile=" + BenchStrings(b.CFlags()));
+                        addscan(b, source, {});
+                    });
                     if (!standalone && runtime.empty()) return 1;
+                    addscan(b, outfile, {});
                     vector<string> objects { object };
-                    if (!runtime.empty()) objects.push_back(runtime);
+                    if (!runtime.empty()) { recordbenchfile(runtime); objects.push_back(runtime); }
                     auto executable = cat(builddir, "/benchmark");
                     auto generated_hash = BenchFileHash(outfile);
-                    if (!b.Link(outfile, objects, rsps, executable, builddir, cat(builddir, "/cc.log"))) return 1;
+                    // The first link resolves -l, linker scripts and startup objects.
+                    // Snapshot those inputs, then verify the final link used the same set.
+                    auto traceinputs = [&](const string &log) {
+                        set<string> paths;
+                        auto text = BenchReadFile(log);
+                        for (size_t start = 0; start < text.size();) {
+                            auto end = text.find('\n', start);
+                            auto path = text.substr(start, end == string::npos ? string::npos : end-start);
+                            if (!path.empty() && path.back() == '\r') path.pop_back();
+                            std::error_code ec;
+                            if (!filesystem::is_regular_file(path, ec)) {
+                                auto member = path.find('(');
+                                if (member != string::npos) {
+                                    if (member) path.resize(member);
+                                    else path = path.substr(1, path.find(')')-1);
+                                }
+                            }
+                            if (filesystem::is_regular_file(path, ec)) paths.insert(AbsolutePath(path));
+                            start = end == string::npos ? text.size() : end+1;
+                        }
+                        if (!paths.count(AbsolutePath(object))) throw std::runtime_error("linker did not report native inputs");
+                        return paths;
+                    };
+                    vector<string> linkflags {"-fno-lto", "-Wl,-t"};
+                    benchreport->configurations[benchconfig].native_flags.push_back("-Wl,-t");
+                    auto inputlog = cat(builddir, "/link-inputs.log"), finallog = cat(builddir, "/cc.log");
+                    if (!b.Link(outfile, objects, rsps, executable, builddir, inputlog, linkflags)) {
+                        benchreport->json_path.clear(); benchreport->csv_path.clear(); return 1;
+                    }
+                    auto linkedinputs = traceinputs(inputlog);
+                    BenchFields linkedhashes;
+                    for (auto &path : linkedinputs) {
+                        auto hash = BenchFileHash(path);
+                        if (!path.starts_with(AbsolutePath(builddir) + "/")) recordbenchfile(path);
+                        linkedhashes.push_back({path, hash});
+                    }
+                    if (!b.Link(outfile, objects, rsps, executable, builddir, finallog, linkflags)) {
+                        benchreport->json_path.clear(); benchreport->csv_path.clear(); return 1;
+                    }
+                    if (traceinputs(finallog) != linkedinputs) throw std::runtime_error("native link inputs changed during build");
+                    for (auto &[path, hash] : linkedhashes)
+                        if (BenchFileHash(path) != hash) throw std::runtime_error("native link input changed during build: " + path);
+                    for (auto &scan : nativescans) {
+                        if (scaninputs(scan.command, scan.cwd) != scan.files)
+                            throw std::runtime_error("native dependencies changed during build: " + CommandLineText(scan.command));
+                    }
                     if (BenchFileHash(outfile) != generated_hash) throw std::runtime_error("generated C changed during build");
                     auto &configuration = benchreport->configurations[benchconfig];
                     configuration.executable_hash = BenchFileHash(executable);
@@ -2144,6 +2371,7 @@ int Main(int argc, char **argv, bool &measuring) {
             }
             code = 1;
         }
+        collectbenchinputs();
         if (verb == "bench" && code && benchreport) {
             string message = "benchmark compilation failed";
             if (!found.empty()) message = found.back().message;
@@ -2163,6 +2391,9 @@ int Main(int argc, char **argv, bool &measuring) {
                 if (run(files[0])) { code = 2; break; }
             }
             auto &r = *benchreport;
+            sort(r.source_files.begin(), r.source_files.end());
+            if (!code) for (auto &[path, hash] : r.source_files)
+                if (BenchFileHash(path) != hash) throw std::runtime_error("input changed during build: " + path);
             // Keys preserve declaration order even when declarations share a line.
             map<string,size_t> order;
             for (auto &row:r.rows) if (!order.count(row.key)) order.emplace(row.key,order.size());

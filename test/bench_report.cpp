@@ -19,6 +19,16 @@ int main(int argc, char **argv) {
     fake.gate();assert(now==2 && fake.waited==2 && fake.finish());
     assert(BenchHash("") == "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855");
     assert(BenchHash("abc") == "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad");
+    assert((BenchMakeDependencies("goose: one.c a\\ b.h c$$d.h e\\#f.h \\\n next.h\n") ==
+            std::vector<std::string>{"one.c", "a b.h", "c$d.h", "e#f.h", "next.h"}));
+    for (auto invalid : {"", "wrong: a.h\n", "goose:\n"}) {
+        bool rejected=false;try{BenchMakeDependencies(invalid);}catch(...){rejected=true;}assert(rejected);
+    }
+    assert((BenchCommandWords("cc -I'a b' \"c d\" e\\ f '' \"x\\\\y\"") ==
+            std::vector<std::string>{"cc", "-Ia b", "c d", "e f", "", "x\\y"}));
+    for (auto invalid : {"cc 'open", "cc \"open", "cc a\\"}) {
+        bool rejected=false;try{BenchCommandWords(invalid);}catch(...){rejected=true;}assert(rejected);
+    }
     auto s = BenchStatistics({1000000000,2000000000,3000000000,4000000000,100000000000});
     assert(s.median == 3 && s.mad == 1 && s.minimum == 1 && s.maximum == 100);
     s = BenchStatistics({1000000000,2000000000,6000000000,9000000000});

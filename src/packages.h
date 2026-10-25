@@ -126,9 +126,9 @@ inline string GitCacheDir(const PackageSource &s) {
 // own; and for the program its executable's name. Lists take a _windows,
 // _linux or _macos suffix for a platform's own part. Paths are relative to
 // the package root.
-inline void LoadSidecar(Package &pkg, bool isprogram) {
+inline void LoadSidecar(Package &pkg, bool isprogram, string *contents = nullptr) {
     pkg.sidecar = cat(pkg.root, pkg.name, ".build");
-    auto bf = LoadBuildFile(pkg.sidecar, pkg.hassidecar);
+    auto bf = LoadBuildFile(pkg.sidecar, pkg.hassidecar, contents);
     if (!pkg.hassidecar) return;
     const char *lists[] = { "c_sources", "c_include", "c_defines", "c_flags_cc", "c_flags_msvc",
                             "c_libs", "dylibs" };
