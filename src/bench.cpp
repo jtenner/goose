@@ -197,7 +197,12 @@ struct Child {
             // cannot starve the control channel or its timeout.
             for (int turn = 0; turn < 32; ++turn) {
                 auto n = read(logs[i], buffer, sizeof buffer);
-                if (n <= 0) break;
+                if (n == 0) { close(logs[i]); logs[i] = -1; break; }
+                if (n < 0) {
+                    if (errno == EINTR) continue;
+                    if (errno != EAGAIN && errno != EWOULDBLOCK) log_failed = true;
+                    break;
+                }
                 auto keep = std::min((size_t)n, 1048576 - retained[i]);
                 if (keep && fwrite(buffer, 1, keep, files[i]) != keep) log_failed = true;
                 retained[i] += keep;
