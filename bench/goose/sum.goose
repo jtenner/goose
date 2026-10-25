@@ -5,10 +5,12 @@
 
 import rng;
 
-let N = 4000000;                         // BENCH_N
+// Keep in sync with run_bench.py: small / medium / large.
+let N = if build::BENCH_SIZE == "small" { 1000000 }
+        else if build::BENCH_SIZE == "medium" { 16000000 } else { 128000000 };
 let PASSES = 8;
 
-fn main() {
+bench "Build and scan a scalar array" fn sum_generated() -> i64, i64 {
     var data: i32[>..] = [];
     var r: u64 = 12345;
     for i in N {
@@ -20,6 +22,12 @@ fn main() {
         // The `^ p` keeps the passes from collapsing into one multiply.
         for x in data { total += x ^ p; }
     }
-    print(data.len);
+    return data.len, total;
+}
+
+// Compatibility entry for whole-process experiments. Supply BENCH_SIZE.
+fn main() {
+    let count, total = sum_generated();
+    print(count);
     print(total);
 }
