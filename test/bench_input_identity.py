@@ -186,7 +186,7 @@ with tempfile.TemporaryDirectory(prefix='goose-bench-inputs-') as directory:
     # A linked object can change without any source or sidecar change.
     wrapper.write_text('#!/usr/bin/env python3\nimport os, pathlib, shlex, sys\n'
                        f'count = pathlib.Path({str(root / "links")!r})\n'
-                       'if "-Wl,-t" in sys.argv:\n'
+                       'if "-Wl,-t" in sys.argv and "-M" not in sys.argv:\n'
                        '    n = int(count.read_text()) + 1 if count.exists() else 1\n'
                        '    count.write_text(str(n))\n'
                        '    if n == 2:\n'
