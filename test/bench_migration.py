@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Native adapter and harness checks with synthetic records. No timing runs."""
 import copy
+import importlib.util
 import hashlib
 import json
 from pathlib import Path
@@ -15,6 +16,9 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'bench'))
 import native_results as native
 import run_bench as suite
+spec = importlib.util.spec_from_file_location('shared_bench', ROOT / 'bench/shared_native/run.py')
+shared = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(shared)
 
 
 def synthetic_report(source, compiler, cc):
@@ -153,6 +157,43 @@ class MigrationChecks(unittest.TestCase):
                 self.assertEqual(harness.size_flags(g['file'], b['sizes'][0]),
                                  ['--define', 'BENCH_SIZE="small"'])
                 self.assertNotIn('BENCH_N', text)
+
+    def test_recorded_legacy_outputs(self):
+        records = json.loads((ROOT / 'test/fixtures/bench/legacy-checksums.json').read_text())
+        for case in records['cases']:
+            types = case['types']
+            self.assertEqual(types, list(suite.NATIVE_CASES[case['file']][1]))
+            typed = dict(components=[dict(type=t, value=v) for t, v in zip(types, case['stdout'].splitlines())])
+            self.assertEqual(native.legacy_checksum(case['stdout'], types), native.decoded_checksum(typed))
+
+    def test_native_lock_handoff(self):
+        path = self.folder / 'experiment.lock'
+        with shared.experiment_lock(path) as lock:
+            with self.assertRaises(BlockingIOError):
+                with shared.experiment_lock(path): pass
+            with shared.native_lock_turn(lock):
+                with shared.experiment_lock(path): pass
+            with self.assertRaises(BlockingIOError):
+                with shared.experiment_lock(path): pass
+
+    def test_shared_native_projection(self):
+        self.report['results'][0]['key'] = 'mmap_lifecycle'
+        self.report['results'][0]['checksum']['components'][0]['value'] = str(64 * 16777216)
+        m = native.measurement(self.read(), key='mmap_lifecycle', size='medium', types=('u64',))
+        m['artifact'] = str(self.output)
+        with patch.object(shared.native, 'run_native', return_value=m) as invoke:
+            value, samples = shared.collect_native_mmap(self.compiler, self.cc, self.folder / 'fixture',
+                                                        self.output, 5, 1, 'off')
+        self.assertEqual(len(samples), 5)
+        self.assertEqual(samples[0]['units'], 64)
+        self.assertEqual(samples[0]['checksum'], 1073741824)
+        self.assertEqual(invoke.call_args.kwargs['definitions'],
+                         ['BENCH_FIXTURE=' + json.dumps(str(self.folder / 'fixture'))])
+
+    def test_legacy_block_checks_warmups(self):
+        values = [dict(seconds=1, units=64, checksum=1), dict(seconds=1, units=64, checksum=2)]
+        with patch.object(shared, 'sample', side_effect=values), self.assertRaises(ValueError):
+            shared.collect_legacy(None, 'mmap', 1, 1, None, None, 5, 1)
 
     def test_report_only_with_native_row(self):
         m = native.measurement(self.read(), key='entry', size='medium', types=('u64',))
