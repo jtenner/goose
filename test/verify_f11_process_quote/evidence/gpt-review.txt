@@ -1,0 +1,11 @@
+Reviewed `63d62f302203decf92655567a20774e7bf9152aa` against baseline `ad75c5a`. No remaining defect found within the requested scope.
+
+- **Confirmed baseline defect, now fixed — medium severity:** [process.cpp:240](/home/dev/.t3/worktrees/goose/fix-goose-f11-process-quote/src/process.cpp:240) printed `*.c`, `?.c`, and `[ab].c` without quotes. In a directory with `a.c` and `b.c`, the POSIX shell expands each pattern into two arguments. Adding `*?[` to the existing character check is the smallest justified fix. No change to `process.h` or `build.h` is needed.
+- **Test adequacy:** [check.py:64](/home/dev/.t3/worktrees/goose/fix-goose-f11-process-quote/test/verify_f11_process_quote/check.py:64) creates matching files and covers all six required cases. Lines 88–92 check both the argument count and exact contents, so a lost empty argument cannot pass. [driver.cpp:8](/home/dev/.t3/worktrees/goose/fix-goose-f11-process-quote/test/verify_f11_process_quote/driver.cpp:8) calls the production formatter directly.
+- **Caller:** [build.h:87](/home/dev/.t3/worktrees/goose/fix-goose-f11-process-quote/src/build.h:87) uses the formatter for printed commands. Process execution receives the original argument vector at line 93.
+- **Unverified risks:** None identified within this bounded scope. Test execution and build success were not checked.
+- **Unread scope:** No requested scope remains unread. Other parts of `build.h`, test dependencies, and saved evidence files were not reviewed.
+
+The test files are now tracked. Compared with verification commit `3dc444b1`, their only change is the checker’s default source reference, from `origin/master` to `HEAD`.
+
+No edits, tests, benchmarks, timing work, or child agents.

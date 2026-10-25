@@ -1,0 +1,22 @@
+{
+  "cwd": "/home/dev/.t3/worktrees/goose/fix-goose-f11-process-quote",
+  "argv": [
+    "claude",
+    "-p",
+    "Perform an independent read-only review of Goose F11. Run from repository root /home/dev/.t3/worktrees/goose/fix-goose-f11-process-quote.\nBaseline: ad75c5af7afdd589a9ba215e9e04ac9b01f24505. Test checkpoint: c785d0f7. Fix checkpoint and reviewed head: 63d62f302203decf92655567a20774e7bf9152aa. No PR exists; inspect both commits in scope using the supplied full diffs.\nRequired behavior: printed literal wildcard arguments *.c, ?.c, [ab].c must each survive a POSIX shell round trip as a single unchanged argument. Preserve plain.c, two words.c, and one empty argument. The empty-argument control must explicitly check argument count. Scope is this wildcard bug, not a general shell-escaping redesign. Keep any other concerns clearly outside scope.\nInspect every required file in full: /tmp/goose-f11-fix-slivfzho/test.diff, /tmp/goose-f11-fix-slivfzho/fix.diff, src/process.cpp, src/process.h, test/verify_f11_process_quote/check.py, test/verify_f11_process_quote/driver.cpp. Also inspect the Build::Run caller in src/build.h (lines 84-103), and all six before/after stdout/stderr/exit files in /tmp/goose-f11-fix-slivfzho. The logs identify exact production source and driver hashes, compiler version, shell, fixture set, build command, binary hash, and each test result. Diffs exclude unrelated changes. Source at reviewed HEAD is committed.\nDo not edit, run shell commands, use MCP tools, or delegate. Use only Read, Glob, Grep. No full tests, benchmarks, timing, or performance measurements are authorized. Assess correctness and regression risk. Note where runtime, allocation, memory or code-size implications can be inferred and where measurement is needed; no measured performance claims are requested or supplied.\nReport findings with severity, file and line, triggering input, evidence, risk, and suggested fix or test. Separate confirmed defects from unverified risks. No findings is valid. List all required files/evidence inspected and anything unread or denied. Do not treat exit zero as evidence of review coverage. Use simple English.\n",
+    "--model",
+    "opus",
+    "--effort",
+    "high",
+    "--tools",
+    "Read,Glob,Grep",
+    "--disallowedTools",
+    "mcp__*",
+    "--permission-mode",
+    "dontAsk",
+    "--output-format",
+    "text",
+    "--add-dir",
+    "/tmp/goose-f11-fix-slivfzho"
+  ]
+}

@@ -1,0 +1,13 @@
+diff --git a/src/process.cpp b/src/process.cpp
+index 9d321856..ccc2c409 100644
+--- a/src/process.cpp
++++ b/src/process.cpp
+@@ -237,7 +237,7 @@ string CommandLineText(const vector<string> &argv) {
+     string s;
+     for (auto &a : argv) {
+         if (!s.empty()) s += ' ';
+-        if (!a.empty() && a.find_first_of(" \t\"'&|<>^();$`\\") == string::npos) {
++        if (!a.empty() && a.find_first_of(" \t\"'&|<>^();$`\\*?[") == string::npos) {
+             s += a;
+             continue;
+         }
