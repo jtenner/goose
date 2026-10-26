@@ -2303,7 +2303,16 @@ int Main(int argc, char **argv, bool &measuring) {
                     if (!b.CompileObject(runner, object, "compiling benchmark runner", cat(builddir, "/runner.log"), { "-fno-lto" })) return 1;
                     auto runtime = standalone ? string() : RuntimeObject(b, [&](const string &source) {
                         benchreport->configurations[benchconfig].native_flags.push_back("runtime-compile=" + BenchStrings(b.CFlags()));
-                        addscan(b, source, {});
+                        auto inputs = addscan(b, source, {});
+                        vector<string> stamp;
+                        for (auto &[path, hash] : inputs)
+                            stamp.push_back(BenchObject({{"path",BenchString(path)}, {"sha256",BenchString(hash)}}));
+                        return BuildInputStamp {BenchHash(BenchArray(stamp)) + "\n",
+                            [inputs = std::move(inputs)] {
+                                for (auto &[path, hash] : inputs)
+                                    if (BenchFileHash(path) != hash)
+                                        throw std::runtime_error("runtime input changed during build: " + path);
+                            }};
                     });
                     if (!standalone && runtime.empty()) return 1;
                     vector<string> objects { object };
