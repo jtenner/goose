@@ -585,6 +585,7 @@ struct Parser {
                 f.condition = ParseScrutinee();
                 auto branch = [&](vector<Field> &out) {
                     auto first = ast.alltypes.size(), firstfn = ast.functions.size();
+                    if (lex.tok == T_LCURLY) Role(R_LIST);
                     Expect(T_LCURLY, "conditional fields");
                     ParseFieldList(out, "conditional fields", nullptr, true);
                     Expect(T_RCURLY, "conditional fields");
