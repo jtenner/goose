@@ -197,16 +197,12 @@ struct Builder {
 // `goose --emit-runtime`'s C on first use: GOOSE_HOME/build/runtime/<runtime
 // hash>/<toolchain id>-<config>/goose_runtime.o. "" when it could not be
 // built, after the builder said why.
-inline string RuntimeObject(const Builder &b, const std::function<void(const string &)> &benchinputs = {}) {
+inline string RuntimeObject(const Builder &b, const std::function<BuildInputStamp(const string &)> &benchinputs = {}) {
     auto dir = cat(GooseHome(), "/build/runtime/", RuntimeVersion(), "/", b.tc.id, "-",
                    b.opts.debug ? "debug" : "release");
     auto obj = cat(dir, "/goose_runtime.", b.tc.style == "msvc" ? "obj" : "o");
     auto src = cat(dir, "/goose_runtime.c");
-    auto existing = [&] {
-        if (benchinputs && PathExists(src)) benchinputs(src);
-        return obj;
-    };
-    if (PathExists(obj) && !b.opts.dryrun) return existing();
+    if (!benchinputs && PathExists(obj) && !b.opts.dryrun) return obj;
     auto log = cat(dir, "/cc.log");
     if (b.opts.dryrun) {
         b.CompileObject(src, obj, "compiling the runtime", log);
@@ -218,19 +214,32 @@ inline string RuntimeObject(const Builder &b, const std::function<void(const str
     // Every first build shares these paths. Wait before writing the source
     // or invoking the compiler, then recheck what the previous builder left.
     FileLock lock(cat(dir, "/build.lock"), "waiting for another goose compiling the runtime");
-    if (PathExists(obj)) return existing();
-    ProgressStep step(cat("compiling the runtime for ", b.tc.desc), true);
-    if (!WriteFileMakingDirs(src, RuntimeObjectSource()))
+    if (!benchinputs && PathExists(obj)) return obj;
+    if (!WriteFileIfChanged(src, RuntimeObjectSource()))
         throw CompileError { cat("cannot write ", src) };
-    if (benchinputs) benchinputs(src);
+    auto stampfile = cat(dir, "/goose-bench-inputs.txt");
+    BuildInputStamp captured;
+    if (benchinputs) {
+        captured = benchinputs(src);
+        string previous;
+        if (PathExists(obj) && LoadFile(stampfile, previous) && previous == captured.content) return obj;
+        // Missing stamps include caches built before content validation.
+        // Invalidate before rebuilding, including an interrupted rebuild.
+        filesystem::remove(stampfile, ec);
+        if (ec) throw CompileError { cat("cannot remove ", stampfile, ": ", ec.message()) };
+    }
+    ProgressStep step(cat("compiling the runtime for ", b.tc.desc), true);
     // A failed or interrupted compiler may leave a partial object. Only a
     // successful compile publishes the name readers use, by atomic rename.
     auto tmp = cat(dir, "/goose_runtime.tmp.", b.tc.style == "msvc" ? "obj" : "o");
     filesystem::remove(filesystem::path(tmp), ec);
     if (ec) throw CompileError { cat("cannot remove ", tmp, ": ", ec.message()) };
     if (!b.CompileObject(src, tmp, "compiling the runtime", log)) return "";
+    if (benchinputs) captured.verify();
     ec = RenamePath(tmp, obj);
     if (ec) throw CompileError { cat("cannot publish ", obj, ": ", ec.message()) };
+    if (benchinputs && !WriteFileIfChanged(stampfile, captured.content))
+        throw CompileError { cat("cannot write ", stampfile) };
     return obj;
 }
 
