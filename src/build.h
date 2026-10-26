@@ -20,6 +20,13 @@ struct BuildOptions {
     string exe;               // -o: the executable; "" puts it beside the root source
 };
 
+// Benchmark cache inputs captured before a build. Verify them again before
+// publishing the stamp, so a concurrent edit cannot validate stale objects.
+struct BuildInputStamp {
+    string content;
+    std::function<void()> verify;
+};
+
 inline string AbsolutePath(const string &path) {
     std::error_code ec;
     auto abs = filesystem::absolute(filesystem::path(path), ec);

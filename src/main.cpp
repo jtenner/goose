@@ -2204,6 +2204,12 @@ int Main(int argc, char **argv, bool &measuring) {
                             return BenchHash(BenchArray(stamp)) + "\n";
                         };
                         auto cmakecapture = [&](const string &dir) {
+                            BenchFields captured;
+                            auto stampfile = [&](const string &path) {
+                                auto absolute = AbsolutePath(path);
+                                auto hash = recordbenchfile(absolute);
+                                captured.push_back({absolute, hash});
+                            };
                             auto replydir = cat(dir, "/.cmake/api/v1/reply");
                             bool foundinputs = false;
                             for (auto &file : filesystem::directory_iterator(replydir)) {
@@ -2220,7 +2226,7 @@ int Main(int argc, char **argv, bool &measuring) {
                             }
                             if (!foundinputs) throw std::runtime_error("missing CMake input dependency reply");
                             auto commands = cat(dir, "/compile_commands.json");
-                            recordbenchfile(commands);
+                            stampfile(commands);
                             auto db = ParseJson(BenchReadFile(commands));
                             if (db.kind != Json::ARRAY || db.arr.empty()) throw std::runtime_error("missing native compile commands");
                             auto directories = CMakeCompileDirectories(dir, "goose_linkprobe");
@@ -2245,7 +2251,7 @@ int Main(int argc, char **argv, bool &measuring) {
                                 scanned.insert(*owner);
                                 auto compiler = FindOnPath(command[0]);
                                 if (compiler.empty()) throw std::runtime_error("cannot resolve native compiler: " + command[0]);
-                                recordbenchfile(compiler);
+                                stampfile(compiler);
                                 // Output paths do not affect the compiled code or its identity.
                                 vector<string> flags;
                                 for (size_t i = 1; i < command.size(); ++i) {
@@ -2256,11 +2262,26 @@ int Main(int argc, char **argv, bool &measuring) {
                                 vector<string> scan {command[0]};
                                 scan.insert(scan.end(), flags.begin(), flags.end());
                                 auto inputs = scaninputs(scan, cwd);
+                                captured.insert(captured.end(), inputs.begin(), inputs.end());
                                 nativescans.push_back({scan, cwd, inputs});
                                 benchreport->configurations[benchconfig].native_flags.push_back("native-compile=" +
                                     BenchObject({{"directory",BenchString(cwd)}, {"compiler",BenchString(compiler)}, {"flags",BenchStrings(flags)}}));
                             }
                             if (scanned != directories) throw std::runtime_error("missing compile commands for selected CMake targets");
+                            // Configure-only module inventories can change after the
+                            // first configure. The object cache depends on the actual
+                            // compile commands, compilers and resolved input content.
+                            sort(captured.begin(), captured.end());
+                            captured.erase(unique(captured.begin(), captured.end()), captured.end());
+                            vector<string> stamp;
+                            for (auto &[path, hash] : captured)
+                                stamp.push_back(BenchObject({{"path",BenchString(path)}, {"sha256",BenchString(hash)}}));
+                            return BuildInputStamp {BenchHash(BenchArray(stamp)) + "\n",
+                                [captured = std::move(captured)] {
+                                    for (auto &[path, hash] : captured)
+                                        if (BenchFileHash(path) != hash)
+                                            throw std::runtime_error("native input changed during build: " + path);
+                                }};
                         };
                         bool built;
                         try { built = BuildNativePart(*astp, pkg, filename, b, false, nb, capture, cmakecapture); }
