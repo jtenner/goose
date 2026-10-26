@@ -1709,7 +1709,9 @@ int Main(int argc, char **argv, bool &measuring) {
     };
     if (verb == "bench") {
         benchreport = make_unique<BenchReport>(); auto &r = *benchreport;
-        r.source_path = AbsolutePath(files[0]); r.json_path = benchjson; r.csv_path = benchcsv;
+        r.source_path = AbsolutePath(files[0]);
+        // Report destinations stay disabled until source and sidecar
+        // discovery has established that they do not name an input.
         r.thermal = benchthermal; r.fresh = benchfresh; r.samples = benchsamples; r.warmups = benchwarmups;
         if (benchthermal.off) r.thermal_reason = "explicit --temperature off; sensor discovery skipped";
 
@@ -1804,6 +1806,10 @@ int Main(int argc, char **argv, bool &measuring) {
         auto stdlibdirs = StdlibDirs(stdlibdir, exe);
         ParseProgram(ast, filename, stdlibdirs, DirOf(exe));
         collectbenchinputs();
+        if (benchreport) {
+            benchreport->json_path = benchjson;
+            benchreport->csv_path = benchcsv;
+        }
         // The parser reported what it recovered from as it went; nothing
         // further is asked of a program with a syntax error.
         if (!ast.errors.empty()) return 1;
