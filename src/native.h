@@ -324,7 +324,7 @@ inline vector<string> CMakeLinkClosure(const string &builddir, const string &tar
 // is one, else the platform's generator.
 inline bool BuildCMakePart(const Ast &ast, int pkg, const Builder &b, bool wantjit,
                            const vector<string> &externs, NativeBuild &out,
-                           const std::function<void(const string &)> &benchinputs = {}) {
+                           const std::function<BuildInputStamp(const string &)> &benchinputs = {}) {
     auto &p = ast.packages[pkg];
     // The package's root absolute, with forward slashes, which a quoted CMake
     // argument takes as they are: the program's own is as the command line
@@ -442,14 +442,34 @@ inline bool BuildCMakePart(const Ast &ast, int pkg, const Builder &b, bool wantj
         if (!b.opts.dryrun && !WriteFileMakingDirs(configured, argvtext))
             throw CompileError { cat("cannot write ", configured) };
     }
-    if (benchinputs) benchinputs(builddir);
+    // CMake's incremental build checks timestamps. A benchmark must also
+    // rebuild when dependency content changed with its timestamp preserved.
+    auto inputstamp = cat(builddir, "/goose-bench-inputs.txt");
+    BuildInputStamp captured;
+    string previous;
+    if (benchinputs) {
+        captured = benchinputs(builddir);
+        LoadFile(inputstamp, previous);
+    }
     vector<string> build = { cmake, "--build", builddir, "--config", "Release", "--target",
                              "goose_linkprobe" };
     if (wantjit) build.push_back(jitname);
+    if (benchinputs && !b.opts.dryrun) {
+        if (previous != captured.content) build.push_back("--clean-first");
+        // A failed or interrupted build must not retain a valid old stamp.
+        std::error_code ec;
+        filesystem::remove(inputstamp, ec);
+        if (ec) throw CompileError { cat("cannot remove ", inputstamp, ": ", ec.message()) };
+    }
     if (!b.Run(build, cat("building the package ", p.name, " with CMake"),
                cat(out.dir, "/cmake-build.log")))
         return false;
     if (b.opts.dryrun) return true;
+    if (benchinputs) {
+        captured.verify();
+        if (!WriteFileIfChanged(inputstamp, captured.content))
+            throw CompileError { cat("cannot write ", inputstamp) };
+    }
     string rsp;
     for (auto &i : CMakeLinkClosure(builddir, "goose_linkprobe")) {
         if (b.tc.style == "msvc") {
@@ -503,7 +523,7 @@ inline bool BuildNativePart(const Ast &ast, int pkg, const string &rootfile,
                             const Builder &program, bool wantjit, NativeBuild &out,
                             const std::function<string(const Builder &, const NativeBuild &,
                                                        const vector<string> &)> &benchinputs = {},
-                            const std::function<void(const string &)> &benchcmake = {}) {
+                            const std::function<BuildInputStamp(const string &)> &benchcmake = {}) {
     auto &p = ast.packages[pkg];
     // A package is built release whatever the program is (§5.5), one build
     // serving every program, and so is a CMake part. The program's own C

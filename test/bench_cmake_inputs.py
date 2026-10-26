@@ -102,6 +102,35 @@ class CMakeInputs(unittest.TestCase):
                               if attempt['phase'] == 'measure']), 5)
         self.assertIn(str(self.header), {entry['path'] for entry in report['source']['files']})
 
+    def test_timestamp_preserving_header_change(self):
+        compiler = shutil.which('cc')
+        count = self.root / 'compiles'
+        wrapper = self.root / 'cc-wrapper'
+        wrapper.write_text('#!/usr/bin/env python3\nimport os, sys\n'
+                           'if "-c" in sys.argv and "-M" not in sys.argv and '
+                           'any(x.endswith("/dependency.c") for x in sys.argv):\n'
+                           f'    with open({str(count)!r}, "a") as out: out.write("compile\\n")\n'
+                           f'os.execv({compiler!r}, [{compiler!r}, *sys.argv[1:]])\n')
+        wrapper.chmod(0o755)
+        self.env['GOOSE_CC'] = str(wrapper)
+        first = self.successful()
+        self.assertEqual(first['results'][0]['checksum']['components'][0]['value'], '42')
+        self.assertEqual(count.read_text().splitlines(), ['compile'])
+        self.successful()
+        self.assertEqual(count.read_text().splitlines(), ['compile'])
+        before = self.header.stat()
+        self.header.write_text('#define VALUE 43\n')
+        os.utime(self.header, ns=(before.st_atime_ns, before.st_mtime_ns))
+        self.assertEqual(self.header.stat().st_mtime_ns, before.st_mtime_ns)
+        second = self.successful()
+        self.assertNotEqual(first['configurations'][0]['id'], second['configurations'][0]['id'])
+        self.assertNotEqual(next(entry['sha256'] for entry in first['source']['files']
+                                 if entry['path'] == str(self.header)),
+                            next(entry['sha256'] for entry in second['source']['files']
+                                 if entry['path'] == str(self.header)))
+        self.assertEqual(second['results'][0]['checksum']['components'][0]['value'], '43')
+        self.assertEqual(count.read_text().splitlines(), ['compile', 'compile'])
+
     def test_makefiles_without_output_field(self):
         # Exercise both supported generators and the optional compile database
         # output field without changing the host PATH or installed tools.
