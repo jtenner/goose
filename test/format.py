@@ -60,6 +60,13 @@ GOLDEN = [
      "    let xs = [\n        1,\n        2,\n    ];\n"
      "    let n = match a {\n        1 => 2,\n        _ => { 3 },\n    };\n"
      "}\n"),
+    ("conditional field lists",
+     "struct S {\n const if true {\n x:i64,\n  y:i64\n } else {\n z:i64\n }\n}\n"
+     "enum E {\n A {\n const if true {\n x:i64,\n  y:i64\n }\n }\n}\n",
+     "struct S {\n    const if true {\n        x: i64,\n        y: i64,\n"
+     "    } else {\n        z: i64,\n    },\n}\n"
+     "enum E {\n    A {\n        const if true {\n            x: i64,\n"
+     "            y: i64,\n        },\n    },\n}\n"),
     ("trailing commas not added",
      "fn f() {\n"
      "    let p = P {\n        x: 1,\n        ..\n    };\n"
