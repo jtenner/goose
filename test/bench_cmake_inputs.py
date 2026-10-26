@@ -88,6 +88,20 @@ class CMakeInputs(unittest.TestCase):
         self.assertIn('cannot resolve native dependencies', result.stdout + result.stderr)
         self.assertFalse(self.report.exists())
 
+    def test_absolute_subdirectory_build_path(self):
+        subdir = self.root / 'dependency'
+        subdir.mkdir()
+        (subdir / 'CMakeLists.txt').write_text(
+            'add_library(dependency STATIC ../dependency.c)\n')
+        self.cmake.write_text(self.base.replace(
+            'add_library(dependency STATIC dependency.c)',
+            f'add_subdirectory(dependency "{self.root / "absolute-build"}")'))
+        report = self.successful()
+        self.assertEqual(report['results'][0]['checksum']['components'][0]['value'], '42')
+        self.assertEqual(len([attempt for attempt in report['results'][0]['attempts']
+                              if attempt['phase'] == 'measure']), 5)
+        self.assertIn(str(self.header), {entry['path'] for entry in report['source']['files']})
+
     def test_makefiles_without_output_field(self):
         # Exercise both supported generators and the optional compile database
         # output field without changing the host PATH or installed tools.
