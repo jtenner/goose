@@ -284,7 +284,8 @@ inline set<string> CMakeCompileDirectories(const string &builddir, const string 
         if (!tj.Arr("compileGroups").empty()) {
             auto paths = tj.Get("paths");
             if (!paths) throw CompileError { "missing CMake target build path" };
-            auto path = cat(builddir, "/", paths->Str("build"), "/CMakeFiles/", tj.Str("name"), ".dir");
+            auto path = filesystem::path(builddir) / paths->Str("build") /
+                        "CMakeFiles" / (tj.Str("name") + ".dir");
             directories.insert(filesystem::weakly_canonical(path).string() + "/");
         }
         for (auto &dependency : tj.Arr("dependencies")) {
