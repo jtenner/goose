@@ -1,0 +1,871 @@
+diff --cc bench/shared_native/README.md
+index 07c8ba7c,0988764b..00000000
+--- a/bench/shared_native/README.md
++++ b/bench/shared_native/README.md
+@@@ -26,7 -26,7 +26,11 @@@ reduces the plan to 144 processes. `--p
+  
+  All workloads run sequentially, with a process lock preventing another copy
+  of this harness. That lock cannot stop unrelated compilers or experiments;
+++<<<<<<< HEAD
+ +the parent coordinates those. Recorded measurements and regressions are in [results/README.md](results/README.md). Results
+++=======
++ the parent coordinates those. There are no committed timing results. Results
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+  are performance measurements, never correctness evidence. Acceptance tests
+  are in `test/parallel_wasm.py` and `test/jit_clobbers.py`.
+  
+@@@ -86,20 -86,3 +90,23 @@@ and verifies that workload sources stay
+  compiler/source snapshot; equal version strings alone do not establish the
+  same compiler. Whole-binary and generated-C hashes identify the actual built
+  workloads even when the source checkout has uncommitted edits.
+++<<<<<<< HEAD
+ +
+ +Compiler-check scaling uses `compiler_check.py`. Its default invocation prints
+ +only a plan and launches no compiler. `--globals`, `--functions` or `--sizes`,
+ +repeated `--case ordinary/calls/arrays/stores/deferred/deferred-stores`,
+ +`--stdlib`, and `--named-return` select generated cases; repeated `--source`
+ +selects existing programs. `--samples` and `--warmups` control repetition.
+ +Only parent-coordinated `--run --baseline ... --extended ... --output ...`
+ +performs timings. Measured runs also require `--baseline-source-ref`,
+ +`--extended-source-ref`, `--build-compiler`, `--build-cxxflags`, and a common
+ +`GOOSE_STDLIB` environment value. `--cpu 0` pins the harness and children;
+ +instrumentation/oracle environment variables are removed from both compiler
+ +processes. Reports retain executable/harness hashes, source commits and `src`
+ +trees, effective affinity/environment, every wall/RSS sample and both spreads.
+ +Build-toolchain/flag labels come from the coordinator's verified build records.
+ +`test/compiler_check_provenance.py` validates these contracts without timing.
+ +The structural work contract and remaining compiler costs
+ +are documented in [the transaction audit](../../docs/design/const_if_deferred_state.md).
+++=======
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+diff --cc docs/design/const_if.md
+index 75a9729d,87767a8c..00000000
+--- a/docs/design/const_if.md
++++ b/docs/design/const_if.md
+@@@ -32,16 -32,6 +32,19 @@@ selected bodies. Types in the excluded 
+  uses and enum variants, produce no semantic diagnostics. Syntax errors in
+  those arms still fail compilation. Parse-level dumps preserve both arms.
+  
+++<<<<<<< HEAD
+ +An unused plain helper may need an enclosing caller for a selected
+ +`return ... from`. Its standalone check then defers without reporting an error.
+ +The whole speculative specialization transaction is quarantined, including
+ +completed recursive members, so later real callers check fresh bodies in their
+ +own context. An exported entry must supply a valid context itself; its error
+ +is reported independently of errors in other functions.
+ +
+ +The [deferred-state audit](const_if_deferred_state.md) records variable proof
+ +marks, shared type caches and the corresponding rollback rules.
+ +
+++=======
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+  ## Conditional fields
+  
+  A struct field list may contain conditional blocks, nested to any supported
+diff --cc docs/native_memory.md
+index 16520a4d,627b21d0..00000000
+--- a/docs/native_memory.md
++++ b/docs/native_memory.md
+@@@ -107,10 -103,7 +107,14 @@@ Orders are compile-time string literal
+  Loads reject Release/AcqRel, stores reject Acquire/AcqRel, and CAS failure orders
+  must be load orders no stronger than success. Every invalid combination is a
+  compiler error. `atomic_is_lock_free(a)` explicitly reports the supported width.
+++<<<<<<< HEAD
+ +The complete atomic path requires both an always-lock-free native GCC/Clang
+ +cell width and always-lock-free 64-bit generation validation, even for u32
+ +cells. Descriptor records have explicit eight-byte alignment and slab stride.
+ +A u32-only target without that generation capability is rejected;
+++=======
++ The current atomic backend requires an always-lock-free native GCC/Clang width;
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+  TinyCC/JIT is rejected before execution because its in-memory backend lacks
+  TLS support; generated C also gives explicit capability errors for unsupported
+  frontends, including MSVC. There
+@@@ -165,115 -158,3 +169,118 @@@ Native type names are reserved at the r
+  user type and a generic parameter can use the same leaf name with normal
+  lexical priority. `::SharedView` unambiguously names the native type, and type
+  dumps retain that qualification.
+++<<<<<<< HEAD
+ +
+ +## Explicitly unsafe C pointer interoperability
+ +
+ +`UnsafePtr` is an opaque raw object pointer, separate from every safe shared
+ +capability. These operations are **not memory-safe**. Their names mark the
+ +unsafe boundary; Goose does not add an `unsafe` block or infer pointer access
+ +from an integer.
+ +
+ +The root type name `UnsafePtr` is reserved, like the safe native type names.
+ +Namespaced user types and bound generic parameters keep their normal lexical
+ +priority; `::UnsafePtr` explicitly names the root native type.
+ +
+ +| Intrinsic | Result |
+ +| --- | --- |
+ +| `unsafe_ptr_from_handle(handle: u64)` | `UnsafePtr`, after an address-width check; zero is null |
+ +| `unsafe_handle_from_ptr(pointer: UnsafePtr)` | `u64`, zero for null |
+ +| `unsafe_ptr_add(pointer: UnsafePtr, byte_offset: i64)` | `UnsafePtr`, after checked signed address arithmetic |
+ +| `unsafe_load<T>(pointer: UnsafePtr, big_endian: bool)` | `T` |
+ +| `unsafe_store<T>(pointer: UnsafePtr, value: T, big_endian: bool)` | No result |
+ +
+ +`T` is exactly `i8/i16/i32/i64/u8/u16/u32/u64`. `false` means little endian;
+ +`true` means big endian, independently of the host. Loads and stores copy the
+ +scalar bytes with `memcpy` and assemble/disassemble their bits. Packed,
+ +unaligned scalar storage is supported; no typed, potentially unaligned C
+ +lvalue is dereferenced. These operations are ordinary non-atomic copies and
+ +are unsuitable for volatile device memory or concurrent atomic storage.
+ +
+ +The caller must guarantee all of the following for each raw access:
+ +
+ +- The pointer has valid provenance from a live C allocation or object, and
+ +  the complete scalar byte range belongs to that object. An integer address
+ +  alone does not establish provenance or make storage valid.
+ +- The object remains alive throughout the access; stores have permission to
+ +  write every byte. Retaining a pointer or a handle does not retain its object.
+ +- Object representation, aliasing/effective-type rules and synchronization
+ +  permit the byte access. Unaligned copies remove the scalar alignment
+ +  requirement only; they do not remove the object's own alignment or C ABI
+ +  requirements, data races, borrow conflicts, or lifetime obligations.
+ +- Pointer arithmetic remains within the same live object (or one past it,
+ +  without dereferencing there). A numerical overflow check cannot prove this.
+ +  The computed integer address must convert back to the intended object
+ +  pointer on the target C implementation. No provenance is fabricated by
+ +  arithmetic or by a handle conversion.
+ +
+ +Null loads, stores and additions abort, including adding zero to null.
+ +Loads/stores check numerical overflow of the complete scalar address range;
+ +addition checks underflow and overflow even for `i64.min`. Checks apply in
+ +release and debug builds. They cannot detect dangling pointers, unmapped
+ +addresses, object bounds violations, readonly memory, alias violations, or
+ +races. Violating the caller obligations can crash or cause undefined behavior.
+ +Converting null to/from handle zero is allowed. There is no implicit default
+ +constructor for `UnsafePtr`; use the explicit conversion to create null.
+ +
+ +The native ABI is C `void *`. A direct extern may accept or return `UnsafePtr`
+ +for an object-pointer parameter or result; the whole extern call is an unsafe
+ +C boundary. For example, tests declare libc `malloc`/`free` directly. Match
+ +all parameters, results, calling conventions, alignment and ownership rules
+ +against the real C signature. Function pointers and capability pointers are
+ +not supported. Existing externs returning opaque `u64` object addresses may
+ +be adapted explicitly with `unsafe_ptr_from_handle`; merely calling a
+ +returned integer a handle provides no validity guarantee.
+ +
+ +The current C backend lays out pointers in eight bytes. Generated code checks
+ +`UINTPTR_MAX == UINT64_MAX` and the sizes of `void *` and `uintptr_t`, and
+ +rejects other targets explicitly instead of narrowing addresses or silently
+ +changing packed layouts. This requires the target's conventional flat-address
+ +object-pointer/integer roundtrip ABI. Address conversion never truncates.
+ +GCC and Clang lower the alignment of the pointer typedef to one byte, while
+ +retaining the C `void *` scalar ABI. This supports pointers stored after
+ +four-byte array headers and in packed fields, including references, copies
+ +and returns. It does not lower foreign objects' own C alignment requirements.
+ +TinyCC ignores the required typedef alignment reduction and is explicitly
+ +rejected for `UnsafePtr`; other frontends without this extension are rejected
+ +too. Ordinary packed layouts gain no padding, and alignment sanitizers remain
+ +enabled.
+ +
+ +Safe owners, views, accesses and atomic capabilities cannot convert to or from
+ +raw pointers, handles, integer casts, byte images or extern signatures. The
+ +unsafe intrinsics do not expose shared mappings or bypass their registry.
+ +`UnsafePtr` also cannot use numeric casts, serialization, queues, worker
+ +arguments (including nested values), or worker globals. A programmer who
+ +explicitly sends a numeric handle and reconstructs a pointer inside a worker
+ +has created another unsafe boundary and must arrange lifetime, ownership,
+ +permissions and synchronization themselves. There is no implicit handoff or
+ +lease for raw C objects, and no general garbage collector.
+ +
+ +The scalar copies and address arithmetic are emitted as compiler intrinsics,
+ +with no heap allocations, registry calls or application helpers on the hot
+ +path. Run `python3 test/unsafe_pointer.py --exe build/goose` for the dedicated
+ +GCC/Clang, debug/release and ASan/UBSan matrix (alignment checking enabled).
+ +
+ +A valid raw store may target an ordinary writable Goose scalar whose address
+ +was exposed to C. The compiler treats `unsafe_store` as an unknown write for
+ +bounds analysis, including through non-inlined wrappers. It invalidates facts
+ +about reachable storage instead of retaining bounds established before the
+ +write. C extern calls have the same conservative effect: a call can use a raw
+ +pointer or a reference retained by an earlier call even when its current
+ +signature has no reference argument. Previously evaluated operands keep their
+ +snapshotted values; later reads observe the write. The alias regressions in
+ +`test/unsafe_pointer_alias.py` exercise these cases as part of the matrix.
+ +Native atomic operations, worker spawn/wait and queue synchronization also
+ +invalidate reachable facts:
+ +an explicitly transferred numeric handle can let a worker reconstruct a raw
+ +alias, write it, and publish that write before an ordinary read in its owner.
+ +This still requires the caller to guarantee object lifetime and synchronize
+ +every access; no raw pointer or capability is implicitly transferred.
+ +
+ +The pre-existing `stdlib/ffi.goose` `cstr` and `bytes` helpers still accept
+ +opaque `u64` addresses and trust C pointer/length validity. They copy results
+ +but cannot validate provenance, termination, lifetime or accessible bounds;
+ +their older names do not make those raw operations memory-safe. The explicit
+ +pointer API does not change or weaken safe shared-memory operations.
+++=======
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+diff --cc src/ast.h
+index 1a7be8f2,87079397..00000000
+--- a/src/ast.h
++++ b/src/ast.h
+@@@ -69,10 -68,10 +69,14 @@@ enum TypeKind 
+      TY_VOID,        // Typecheck-created: the "type" of statements and valueless blocks.
+  };
+  
+++<<<<<<< HEAD
+ +enum NativeKind { NK_OWNER, NK_VIEW, NK_ACCESS, NK_ATOMIC_U32, NK_ATOMIC_U64, NK_UNSAFE_PTR, NK_COUNT };
+++=======
++ enum NativeKind { NK_OWNER, NK_VIEW, NK_ACCESS, NK_ATOMIC_U32, NK_ATOMIC_U64, NK_COUNT };
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+  inline const char *NativeName(int k) {
+      static const char *names[] = { "SharedOwner", "SharedView", "SharedAccess",
+ -                                   "SharedAtomicU32", "SharedAtomicU64" };
+ +                                   "SharedAtomicU32", "SharedAtomicU64", "UnsafePtr" };
+      return names[k];
+  }
+  
+diff --cc src/bce.h
+index c941ad98,4a3830bc..00000000
+--- a/src/bce.h
++++ b/src/bce.h
+@@@ -3633,27 -3629,6 +3633,30 @@@ inline bool Call::BceWalk(BCE &b) 
+          switch (builtin) {
+              case B_MEMORY_READ_BYTES:
+                  // This native copy writes into an ordinary writable byte view.
+++<<<<<<< HEAD
+ +            case B_UNSAFE_STORE:
+ +                // UnsafePtr deliberately carries no Goose root identity. A
+ +                // valid raw store can alias an ordinary writable scalar or
+ +                // other address-exposed storage. Kill reachable facts here
+ +                // and record opaque effects for non-inlined callers too.
+ +                b.KillByCall();
+ +                break;
+ +            case B_ATOMIC_LOAD: case B_ATOMIC_STORE: case B_ATOMIC_EXCHANGE:
+ +            case B_ATOMIC_ADD: case B_ATOMIC_SUB: case B_ATOMIC_AND:
+ +            case B_ATOMIC_OR: case B_ATOMIC_XOR: case B_ATOMIC_CAS:
+ +                // Atomic synchronization can publish valid raw writes to
+ +                // ordinary address-exposed storage. Its previous bounds and
+ +                // storage facts do not survive that synchronization boundary.
+ +                b.KillByCall();
+ +                break;
+ +            case B_THREAD_SPAWN: case B_THREAD_SPAWN_CONTAINED:
+ +            case B_QPUT: case B_QGET: case B_QPOLL: case B_QLIMIT:
+ +                // An explicitly transferred integer handle can reconstruct a
+ +                // raw alias in another worker. Synchronization can publish its
+ +                // valid writes to address-exposed ordinary storage, even though
+ +                // safe worker values/globals retain their normal isolation.
+++=======
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+                  b.KillByCall();
+                  break;
+              case B_PUSH:
+diff --cc src/builtins.h
+index d126b004,2d04d8fd..00000000
+--- a/src/builtins.h
++++ b/src/builtins.h
+@@@ -89,11 -89,6 +89,14 @@@ inline int RecvKindOf(TypeExpr *t) 
+      F(B_ATOMIC_OR, "atomic_fetch_or", 3, 3, "", "", 0, "", 0) \
+      F(B_ATOMIC_XOR, "atomic_fetch_xor", 3, 3, "", "", 0, "", 0) \
+      F(B_ATOMIC_CAS, "atomic_compare_exchange", 5, 5, "", "", 0, "", 0) \
+++<<<<<<< HEAD
+ +    F(B_UNSAFE_PTR_FROM_HANDLE, "unsafe_ptr_from_handle", 1, 1, "", "", 0, "", 0) \
+ +    F(B_UNSAFE_HANDLE_FROM_PTR, "unsafe_handle_from_ptr", 1, 1, "", "", 0, "", 0) \
+ +    F(B_UNSAFE_PTR_ADD, "unsafe_ptr_add", 2, 2, "", "", 0, "", 0) \
+ +    F(B_UNSAFE_LOAD, "unsafe_load", 2, 2, "", "", 0, "", BF_TYARGS) \
+ +    F(B_UNSAFE_STORE, "unsafe_store", 3, 3, "", "", 0, "", BF_TYARGS) \
+++=======
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+      F(B_SHARED_ALLOC, "shared_alloc", 1, 1, "", "", 0, "", 0) \
+      F(B_SHARED_VIEW, "shared_view", 3, 3, "", "", 0, "", 0) \
+      F(B_SHARED_CLOSE, "shared_close", 1, 1, "", "", 0, "", 0) \
+diff --cc src/codegen.h
+index 74084a2b,1a9891c5..00000000
+--- a/src/codegen.h
++++ b/src/codegen.h
+@@@ -1468,7 -1459,6 +1468,10 @@@ struct CodeGen 
+          ComputeRelRootMax();
+          CollectSpecs();
+          FindUnusedLiteralGlobals();
+++<<<<<<< HEAD
+ +        if (library) EmitExportTypes();
+++=======
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+          for (auto sp : livespecs)
+              for (auto fv : sinfo[sp].freevars) capturedvars.insert(fv);
+          // Zero means "no long-distance return in flight", which is also the
+diff --cc src/codegen_builtins.h
+index b4b06a21,8bcc8422..00000000
+--- a/src/codegen_builtins.h
++++ b/src/codegen_builtins.h
+@@@ -101,8 -99,6 +101,11 @@@ inline vector<string> CodeGen::EmitBuil
+                           "#error Native shared atomics require GCC or Clang; this backend is unsupported\n#endif\n");
+              Append(head, "#if ", u32 ? "__GCC_ATOMIC_INT_LOCK_FREE" : "__GCC_ATOMIC_LLONG_LOCK_FREE",
+                     " != 2\n#error Native shared atomic width is not always lock-free on this target\n#endif\n");
+++<<<<<<< HEAD
+ +            Append(head, "#if __GCC_ATOMIC_LLONG_LOCK_FREE != 2\n"
+ +                         "#error Native shared atomic generation validation requires always-lock-free 64-bit atomics\n#endif\n");
+++=======
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+          }
+          vector<string> a;
+          size_t nargs = bk == B_ATOMIC_LOAD || bk == B_ATOMIC_LOCKFREE ? 1 : bk == B_ATOMIC_CAS ? 3
+diff --cc src/codegen_types.h
+index ee2095e4,360f9426..00000000
+--- a/src/codegen_types.h
++++ b/src/codegen_types.h
+@@@ -300,8 -300,7 +300,12 @@@ inline int64_t CodeGen::FixedSize(TypeE
+          case TY_INT:  assert(t->intstorage != IS_VARINT); return IntSize(t->intstorage);
+          case TY_FLT:  return t->fltstorage == FS_F32 ? 4 : 8;
+          case TY_BOOL: return 1;
+++<<<<<<< HEAD
+ +        case TY_NATIVE: return t->nativekind == NK_UNSAFE_PTR ? 8
+ +            : t->nativekind == NK_ATOMIC_U32 || t->nativekind == NK_ATOMIC_U64 ? 24 : 16;
+++=======
++         case TY_NATIVE: return t->nativekind >= NK_ATOMIC_U32 ? 24 : 16;
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+          case TY_REF:
+              if (t->ref->lenstorage >= 0) {
+                  assert(t->ref->lenstorage != IS_VARINT);
+@@@ -524,10 -523,7 +528,14 @@@ inline string CodeGen::CT(TypeExpr *t) 
+          case TY_INT:  assert(t->intstorage != IS_VARINT); return IntCT(t->intstorage);
+          case TY_FLT:  return t->fltstorage == FS_F32 ? "float" : "double";
+          case TY_BOOL: return "uint8_t";
+++<<<<<<< HEAD
+ +        case TY_NATIVE:
+ +            if (t->nativekind == NK_UNSAFE_PTR) { EmitUnsafePtrType(); return "gs_unsafe_ptr"; }
+ +            return t->nativekind == NK_ATOMIC_U32 || t->nativekind == NK_ATOMIC_U64
+ +                ? "gs_shared_atomic_cap" : "gs_shared_cap";
+++=======
++         case TY_NATIVE: return t->nativekind >= NK_ATOMIC_U32 ? "gs_shared_atomic_cap" : "gs_shared_cap";
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+          case TY_VOID: return "void";
+          case TY_REF: {
+              auto &r = *t->ref;
+diff --cc src/parser.h
+index dd6e0f3b,e80ea885..00000000
+--- a/src/parser.h
++++ b/src/parser.h
+@@@ -1315,12 -1315,9 +1315,18 @@@ struct Parser 
+          auto thenb = ParseConditionalBlock("const if body");
+          Node *elseb = nullptr;
+          if (IsNext(T_ELSE)) {
+++<<<<<<< HEAD
+ +            auto first = ast.alltypes.size(), firstfn = ast.functions.size();
+              if (lex.tok == T_IF) elseb = ParseIf(true);
+              else if (lex.tok == T_CONST) elseb = ParseConstIf();
+              else elseb = ParseConditionalBlock("const if else body");
+ +            for (auto i = first; i < ast.alltypes.size(); i++) ast.alltypes[i]->conditional = true;
+ +            for (auto i = firstfn; i < ast.functions.size(); i++) ast.functions[i]->conditional = true;
+++=======
+++            if (lex.tok == T_IF) elseb = ParseIf(true);
+++            else if (lex.tok == T_CONST) elseb = ParseConstIf();
+++            else elseb = ParseConditionalBlock("const if else body");
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+          }
+          auto x = Finish(New<IfExpr>(line, cond, thenb, elseb));
+          x->isconst = true;
+@@@ -1333,15 -1330,9 +1339,21 @@@
+          auto cond = ParseScrutinee();
+          auto thenb = compiletime ? ParseConditionalBlock("const if body") : ParseBlockExpr("if body");
+          Node *elseb = nullptr;
+++<<<<<<< HEAD
+ +        if (IsNext(T_ELSE)) {
+ +            auto first = ast.alltypes.size(), firstfn = ast.functions.size();
+ +            elseb = lex.tok == T_IF ? ParseIf(compiletime)
+ +                    : compiletime ? ParseConditionalBlock("const if else body") : ParseBlockExpr("else body");
+ +            if (compiletime) {
+ +                for (auto i = first; i < ast.alltypes.size(); i++) ast.alltypes[i]->conditional = true;
+ +                for (auto i = firstfn; i < ast.functions.size(); i++) ast.functions[i]->conditional = true;
+ +            }
+ +        }
+++=======
++         if (IsNext(T_ELSE))
++             elseb = lex.tok == T_IF ? ParseIf(compiletime)
++                     : compiletime ? ParseConditionalBlock("const if else body") : ParseBlockExpr("else body");
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+          auto x = Finish(New<IfExpr>(line, cond, thenb, elseb));
+          x->isconst = compiletime;
+          return x;
+diff --cc src/runtime/runtime.h
+index 927ce5da,697083f5..00000000
+--- a/src/runtime/runtime.h
++++ b/src/runtime/runtime.h
+@@@ -940,13 -940,8 +940,16 @@@ GS_API void gs_free_msg(uint8_t *msg)
+  /* Opaque capabilities have no user-visible fields or byte image. Stable
+     metadata slabs retain tombstones so stale values never dereference freed
+     metadata. Only live allocation leases authorize worker atomic access. */
+ +/* Goose values may start at any byte address (packed fields and worker
+ +   packets). Pack only the copied value wrappers, never registry metadata or
+ +   the mapped atomic cells. Both caller and runtime use this exact ABI. */
+ +#pragma pack(push, 1)
+  typedef struct { uint64_t slot, generation; } gs_shared_cap;
+  typedef struct { uint64_t slot, generation, index; } gs_shared_atomic_cap;
+++<<<<<<< HEAD
+ +#pragma pack(pop)
+++=======
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+  GS_API gs_shared_cap gs_shared_atomic_region(gs_shared_cap owner, uint64_t offset,
+      uint64_t count, int width, uint64_t initial, const char *file, int line);
+  #define GS_SHARED_SLAB_SIZE 256
+diff --cc src/runtime/runtime_threads.h
+index d451365f,a27b1c2a..00000000
+--- a/src/runtime/runtime_threads.h
++++ b/src/runtime/runtime_threads.h
+@@@ -776,8 -776,8 +776,13 @@@ GS_API void gs_shared_bytes(gs_shared_c
+                               int write, const char *file, int line) {
+      gs_mutex_lock(&gs_shared_mutex);
+      gs_shared_record *r = gs_shared_access(access, offset, size, write, file, line);
+++<<<<<<< HEAD
+ +    if (write) gs_memmove(r->data + offset, bytes, (size_t)size);
+ +    else gs_memmove(bytes, r->data + offset, (size_t)size);
+++=======
++     if (write) memmove(r->data + offset, bytes, (size_t)size);
++     else memmove(bytes, r->data + offset, (size_t)size);
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+      gs_mutex_unlock(&gs_shared_mutex);
+  }
+  #endif
+diff --cc src/runtime_inline.h
+index 1c59b726,1085155d..00000000
+--- a/src/runtime_inline.h
++++ b/src/runtime_inline.h
+@@@ -961,13 -961,8 +961,16 @@@ GS_API void gs_free_msg(uint8_t *msg)
+  /* Opaque capabilities have no user-visible fields or byte image. Stable
+     metadata slabs retain tombstones so stale values never dereference freed
+     metadata. Only live allocation leases authorize worker atomic access. */
+ +/* Goose values may start at any byte address (packed fields and worker
+ +   packets). Pack only the copied value wrappers, never registry metadata or
+ +   the mapped atomic cells. Both caller and runtime use this exact ABI. */
+ +#pragma pack(push, 1)
+  typedef struct { uint64_t slot, generation; } gs_shared_cap;
+  typedef struct { uint64_t slot, generation, index; } gs_shared_atomic_cap;
+++<<<<<<< HEAD
+ +#pragma pack(pop)
+++=======
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+  GS_API gs_shared_cap gs_shared_atomic_region(gs_shared_cap owner, uint64_t offset,
+      uint64_t count, int width, uint64_t initial, const char *file, int line);
+  #define GS_SHARED_SLAB_SIZE 256
+@@@ -3821,8 -3811,8 +3824,13 @@@ GS_API void gs_shared_bytes(gs_shared_c
+                               int write, const char *file, int line) {
+      gs_mutex_lock(&gs_shared_mutex);
+      gs_shared_record *r = gs_shared_access(access, offset, size, write, file, line);
+++<<<<<<< HEAD
+ +    if (write) gs_memmove(r->data + offset, bytes, (size_t)size);
+ +    else gs_memmove(bytes, r->data + offset, (size_t)size);
+++=======
++     if (write) memmove(r->data + offset, bytes, (size_t)size);
++     else memmove(bytes, r->data + offset, (size_t)size);
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+      gs_mutex_unlock(&gs_shared_mutex);
+  }
+  #endif
+diff --cc src/typecheck_expansion.h
+index 073a1e42,c5a4843e..00000000
+--- a/src/typecheck_expansion.h
++++ b/src/typecheck_expansion.h
+@@@ -170,31 -170,14 +170,39 @@@ inline bool TypeCheck::ConstBool(Node *
+              default: break;
+          }
+      }
+++<<<<<<< HEAD
+ +    // Build-definition literals have no source location. Diagnose their
+ +    // condition use (also through aliases) without changing the shared value.
+ +    auto at = !n->line.line && use && use->at ? use->at : n;
+ +    Error(at, "const if requires a bool constant expression (literals, global constants, build definitions, !, &&, || and comparisons)");
+++=======
++     Error(n, "const if requires a bool constant expression (literals, global constants, build definitions, !, &&, || and comparisons)");
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+  }
+  
+  inline bool TypeCheck::ConstIfCondition(Node *condition) {
+      ConstNames(condition, "const if condition");
+      ConstUse use { condition, "const if condition" };
+      set<VarDecl *> visiting;
+++<<<<<<< HEAD
+ +    auto result = ConstBool(condition, visiting, &use);
+ +    if (ast.exemplars) {
+ +        // These names are compile-time uses. Retain checked bindings for
+ +        // navigation without putting the discarded condition in runtime ASTs.
+ +        function<void(Node *)> bind = [&](Node *n) {
+ +            if (auto id = Is<Ident>(n)) {
+ +                auto global = ast.LookupGlobal(id->name, id->ns);
+ +                if (global && !global->defs.empty()) id->vdef = global->defs[0];
+ +            }
+ +            n->Children(bind);
+ +        };
+ +        bind(condition);
+ +        ast.constantconditions.push_back(condition);
+ +    }
+ +    return result;
+++=======
++     return ConstBool(condition, visiting, &use);
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+  }
+  
+  inline void SelectConditionalFields(Ast &ast) {
+diff --cc src/typecheck_flow.h
+index e7d7ee2b,b2209e8c..00000000
+--- a/src/typecheck_flow.h
++++ b/src/typecheck_flow.h
+@@@ -1310,7 -1306,7 +1310,11 @@@ inline Val TypeCheck::CheckIf(IfExpr *x
+          SelectConstIf(x);
+          PathScope ps(*this, argpath == x ? x->thenb : nullptr);
+          JoinPathScope js(*this, joinpath == x ? x->thenb : nullptr);
+++<<<<<<< HEAD
+ +        auto v = CheckBlockVal(x->thenb, expected, wantvalue, true);
+++=======
++         auto v = CheckBlockVal(x->thenb, expected, wantvalue);
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+          if (!wantvalue) return VoidVal();
+          return joinpath == x ? v : TempCopy(v);
+      }
+diff --cc test/const_if.py
+index 17c201c6,307e871c..00000000
+--- a/test/const_if.py
++++ b/test/const_if.py
+@@@ -11,9 -11,6 +11,12 @@@ import tempfil
+  
+  sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / 'scripts'))
+  from lsp_protocol import Client
+++<<<<<<< HEAD
+ +from const_if_editor import check_editor
+ +from const_if_transactions import check_transactions
+ +from const_if_marks import check_marks
+++=======
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+  
+  EXE = pathlib.Path(sys.argv[1]).resolve()
+  CORE_ONLY = '--core-only' in sys.argv[2:]
+@@@ -55,10 -52,6 +58,13 @@@ enum Mode { Ok 
+  type Number = u32;
+  fn excluded_call() { print("excluded_call_sentinel"); }
+  fn stopped(b: bool) { if b { return; const if MISSING {} } else {} }
+++<<<<<<< HEAD
+ +fn void_tail(b: bool) { const if build::DEBUG { if b { abort("REGISTER_CLOBBER_SENTINEL"); } } }
+ +fn known_void_tail(b: bool) { if b { return; } const if build::DEBUG { if b { abort("known"); } } }
+ +fn nested_void_tail(b: bool) { const if build::DEBUG { if b { const if true { if b { abort("nested"); } } } else {} } }
+ +fn expanded_void_tail(b: bool) { const for <K> in [true, false] { const if K { if b { abort("expanded"); } } } }
+++=======
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+  fn chosen<T>(x: T) -> T {
+      const if ENABLED && build::COUNT >= 2 { x } else { missing(x); }
+  }
+@@@ -78,13 -71,8 +84,16 @@@ fn main() 
+          fn nested(v: ns::Missing) { unknown(); }
+      } else { let local = 5; print(local); }
+      const if false {} else {}
+ +    const if true {} else if missing<ns::Bad>() {}
+ +    const if true {} else const if missing<ns::Bad>() {}
+ +    const if true {} else if (1 as ns::Bad) == 1 {}
+ +    const if true {} else const if (1 as ns::Bad) == 1 {}
+      print(chosen(9));
+      stopped(true);
+++<<<<<<< HEAD
+ +    void_tail(false); known_void_tail(false); nested_void_tail(false); expanded_void_tail(false);
+++=======
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+      assert(match_selected() == 7);
+      let moved = move_result();
+      assert(moved.len == 3);
+@@@ -205,7 -193,6 +214,10 @@@ with tempfile.TemporaryDirectory(prefix
+          ('enum E { A } fn main() { const if true { let bad: E.Missing = E.Missing {}; } }', 'variant'),
+          ('fn main() { const if true || MISSING {} }', 'constant'),
+          ('fn main() { const if false && 4 {} }', 'bool'),
+++<<<<<<< HEAD
+ +        ('fn stop(){const if true{return 7 from outer;}} fn outer()->i64{0} fn main(){stop();}', 'no enclosing call'),
+++=======
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+          ('fn unused() { const if false { return from missing; } else { unrelated(); } } fn main() {}', 'unrelated'),
+          ('let N = 2; fn main() { const if true { fn inner<N>(x: u8[N]) {} } }', 'type parameter'),
+          ('let FLAG = true; fn f() -> i64 { { let FLAG = false; const if FLAG { 1 } else { 2 } } } fn main() { print(f()); }', 'local'),
+@@@ -243,85 -230,43 +255,124 @@@
+          invoke([level, source, '-o', cfile])
+          assert 'live_global_sentinel' in cfile.read_text()
+  
+++<<<<<<< HEAD
+ +    free_bodies = ['fn stop(){const if true {return 7 from outer;}}']
+ +    if not CORE_ONLY and not FIELDS_ONLY:
+ +        free_bodies += ['struct S{a:i64} fn stop(){let s=S{const if true {a:{return 7 from outer;0},},};}']
+ +    for body in free_bodies:
+ +        source.write_text(body + ' fn outer()->i64{const if build::CALL {stop();} 0} fn main(){print(outer());}')
+ +        for level in ('-O0', '-O2'):
+ +            for call in ('false', 'true'):
+ +                result = invoke(['run', level, '--define', 'CALL=' + call, source])
+ +                assert result.stdout == ('7\n' if call == 'true' else '0\n'), result.stdout
+ +    # Standalone checks without a caller must never poison later exported
+ +    # call roots, including a chain of helpers and constructor fragments.
+ +    for body in free_bodies:
+ +        for indirect in (False, True):
+ +            bridge = 'fn bridge(){stop();}' if indirect else ''
+ +            callee = 'bridge' if indirect else 'stop'
+ +            source.write_text(body + bridge + ' export fn outer()->i64{' + callee + '();0} fn main(){}')
+ +            for level in ('-O0', '-O2'):
+ +                invoke(['check', level, source])
+ +                invoke([level, '--standalone', '--header', root / 'exported.h', source, '-o', cfile])
+ +                host = root / 'host.c'
+ +                host.write_text('#include "exported.h"\n'
+ +                                'int main(int argc,char **argv){goose_init(argc,argv);'
+ +                                'return outer()==7 ? 0 : 1;}\n')
+ +                hostexe = root / 'exported-host'
+ +                cc = subprocess.run(['cc', level, str(cfile), str(host), '-o', str(hostexe),
+ +                                     '-lm', '-pthread'], capture_output=True, text=True, timeout=90)
+ +                assert cc.returncode == 0, cc.stderr
+ +                result = subprocess.run([str(hostexe)], capture_output=True, text=True, timeout=10)
+ +                assert result.returncode == 0, result
+ +                CHECKS += 1
+ +                native = root / 'exported'
+ +                invoke(['build', level, source, '-o', native])
+ +                result = subprocess.run([str(native)], capture_output=True, text=True)
+ +                assert result.returncode == 0, result
+ +    CHECKS += check_transactions(EXE, root, CORE_ONLY, FIELDS_ONLY)
+ +    CHECKS += check_marks(EXE, root, CORE_ONLY, FIELDS_ONLY)
+ +    CHECKS += check_editor(EXE, root, CORE_ONLY, FIELDS_ONLY)
+ +
+ +    # Excluded names remain quiet in editor analysis; malformed excluded
+ +    # syntax still reports, and a subsequent edit recovers selected fields.
+ +    text = ("fn unused<T>(v: T) { const if true { let x: ns::Missing = ns::Missing {}; } }\n"
+ +            "struct S { const if build::DEBUG { enabled: u32 = 1, } "
+ +            "else { disabled: u32 = 2, } }\n"
+ +            "fn main() { const if build::DEBUG { let bad: ns::Unknown = ns::Unknown {}; } "
+ +            "else { let x = S {}; print(x.disabled); } }\n")
+ +    if CORE_ONLY:
+ +        text = ("fn unused<T>(v: T) { const if true { let x: ns::Missing = ns::Missing {}; } }\n"
+ +                "fn main() { const if build::DEBUG { let bad: ns::Unknown = ns::Unknown {}; } "
+ +                "else { print(1); } }\n")
+ +    source.write_text(text)
+ +    uri = source.as_uri()
+ +    client = Client(str(EXE), root, ['--define', 'DEBUG=false'])
+ +    try:
+ +        client.request('initialize', {'processId': None, 'rootUri': root.as_uri(), 'capabilities': {},
+ +                                     'initializationOptions': {'entryFiles': [str(source)]}})
+ +        client.send('initialized', {}, request=False)
+ +        client.send('textDocument/didOpen', {'textDocument': {'uri': uri, 'languageId': 'goose',
+ +                                                            'version': 1, 'text': text}}, request=False)
+ +        diagnostics = client.diagnostics_for(uri)
+ +        assert diagnostics == [], diagnostics
+ +        if not CORE_ONLY:
+++=======
++     if not CORE_ONLY:
++         # Excluded names remain quiet in editor analysis; malformed excluded
++         # syntax still reports, and a subsequent edit recovers selected fields.
++         text = ("fn unused<T>(v: T) { const if true { let x: ns::Missing = ns::Missing {}; } }\n"
++                 "struct S { const if build::DEBUG { enabled: u32 = 1, } "
++                 "else { disabled: u32 = 2, } }\n"
++                 "fn main() { const if build::DEBUG { let bad: ns::Unknown = ns::Unknown {}; } "
++                 "else { let x = S {}; print(x.disabled); } }\n")
++         source.write_text(text)
++         uri = source.as_uri()
++         client = Client(str(EXE), root, ['--define', 'DEBUG=false'])
++         try:
++             client.request('initialize', {'processId': None, 'rootUri': root.as_uri(), 'capabilities': {},
++                                          'initializationOptions': {'entryFiles': [str(source)]}})
++             client.send('initialized', {}, request=False)
++             client.send('textDocument/didOpen', {'textDocument': {'uri': uri, 'languageId': 'goose',
++                                                                 'version': 1, 'text': text}}, request=False)
++             diagnostics = client.diagnostics_for(uri)
++             assert diagnostics == [], diagnostics
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+              position = {'line': 2, 'character': text.splitlines()[2].index('x.disabled') + 2}
+              doc = {'textDocument': {'uri': uri}, 'position': position}
+              items = client.request('textDocument/completion', doc)['items']
+              labels = [item['label'] for item in items]
+              assert 'disabled' in labels and 'enabled' not in labels, labels
+++<<<<<<< HEAD
+ +        broken = text.replace('let bad: ns::Unknown', 'let bad:')
+ +        for version, changed, expect_error in ((2, broken, True), (3, text, False)):
+ +            client.send('textDocument/didChange', {'textDocument': {'uri': uri, 'version': version},
+ +                                                  'contentChanges': [{'text': changed}]}, request=False)
+ +            diagnostics = client.diagnostics_for(uri, accept=lambda ds: bool(ds) == expect_error)
+ +            assert bool(diagnostics) == expect_error, diagnostics
+ +        client.request('shutdown', {})
+ +        client.send('exit', {}, request=False)
+ +        assert client.p.wait(timeout=10) == 0
+ +        CHECKS += 4
+ +    finally:
+ +        if client.p.poll() is None:
+ +            client.p.kill()
+ +            client.p.wait()
+++=======
++             broken = text.replace('let bad: ns::Unknown', 'let bad:')
++             for version, changed, expect_error in ((2, broken, True), (3, text, False)):
++                 client.send('textDocument/didChange', {'textDocument': {'uri': uri, 'version': version},
++                                                       'contentChanges': [{'text': changed}]}, request=False)
++                 diagnostics = client.diagnostics_for(uri, accept=lambda ds: bool(ds) == expect_error)
++                 assert bool(diagnostics) == expect_error, diagnostics
++             client.request('shutdown', {})
++             client.send('exit', {}, request=False)
++             assert client.p.wait(timeout=10) == 0
++             CHECKS += 4
++         finally:
++             if client.p.poll() is None:
++                 client.p.kill()
++                 client.p.wait()
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+  
+  print(f'const if: {CHECKS} checks passed')
+diff --cc test/errors_tc/shared_extern.goose
+index 353bb019,5b97f6ce..00000000
+--- a/test/errors_tc/shared_extern.goose
++++ b/test/errors_tc/shared_extern.goose
+@@@ -1,3 -1,3 +1,7 @@@
+++<<<<<<< HEAD
+ +// error: safe native capabilities have no raw C ABI
+++=======
++ // error: do not cross
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+  extern "fake_shared_api" fn foreign(v: SharedView);
+  fn main() { let o, ok = shared_alloc(8); foreign(shared_view(o, 0, 8)); }
+diff --cc test/memory/native_config_definitions/main.goose
+index 352b68d2,bf0696aa..00000000
+--- a/test/memory/native_config_definitions/main.goose
++++ b/test/memory/native_config_definitions/main.goose
+@@@ -36,13 -36,6 +36,16 @@@ fn check_atomic<T>(token: T) 
+      }
+      return;
+  }
+++<<<<<<< HEAD
+ +// An odd prefix plus a native capability leaves copied global-image metadata
+ +// unaligned. A named CLI string alias must remain valid in this worker too.
+ +thread_fn configured_publish(prefix: u8, token: SharedAtomicU32) {
+ +    assert(prefix == 7);
+ +    const if build::USE_ALIAS { atomic_store(token, 42, STORE_CHAIN); }
+ +    else { atomic_store(token, 42, build::STORE_ORDER); }
+ +}
+++=======
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+  fn main() {
+      let argv = args(); assert(argv.len == 2);
+      let owner, allocated = shared_alloc(build::ALLOC_BYTES); assert(allocated);
+@@@ -61,8 -54,6 +64,11 @@@
+      shared_release(a);
+      check_atomic(token32);
+      check_atomic(token64);
+++<<<<<<< HEAD
+ +    assert(thread_wait(thread_spawn_contained(configured_publish, 7, token32)));
+ +    assert(atomic_load(token32, build::LOAD_ORDER) == 42);
+++=======
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+      var contents: u8[4096] = [0; 4096];
+      assert(write_file(argv[1], contents));
+      let mapped, mapped_ok = shared_map_readonly(argv[1], 4096); assert(mapped_ok);
+diff --cc test/memory/runtime_shared_lifecycle.c
+index 8b478242,084da789..00000000
+--- a/test/memory/runtime_shared_lifecycle.c
++++ b/test/memory/runtime_shared_lifecycle.c
+@@@ -140,42 -140,14 +140,51 @@@ static void baseline(long allocations, 
+      check(counter_add(&live_regions, 0) == regions, "shared mapping leak");
+      for (uint64_t i = 0; i < gs_shared_highwater; i++) check(!gs_shared_at(i)->kind, "live capability after cleanup");
+  }
+++<<<<<<< HEAD
+ +#ifdef __linux__
+ +static long resident_pages(void) {
+ +    FILE *f = fopen("/proc/self/statm", "r");
+ +    long total = 0, resident = -1;
+ +    if (f) { if (fscanf(f, "%ld %ld", &total, &resident) != 2) resident = -1; fclose(f); }
+ +    return resident;
+ +}
+ +#endif
+  int main(void) {
+      gs_rt_init(0, NULL, 1, 1, 1);
+ +#ifdef _MSC_VER
+ +    check(__alignof(gs_shared_cap) == 1 && __alignof(gs_shared_atomic_cap) == 1, "packed capability ABI");
+ +    check(__alignof(gs_shared_record) >= 8, "naturally aligned atomic metadata");
+ +#else
+ +    check(_Alignof(gs_shared_cap) == 1 && _Alignof(gs_shared_atomic_cap) == 1, "packed capability ABI");
+ +    check(_Alignof(gs_shared_record) >= 8, "naturally aligned atomic metadata");
+ +#endif
+      uint8_t ok;
+ +    gs_shared_cap denied = gs_shared_alloc(INT64_MAX, &ok);
+ +    check(!ok && !denied.generation, "OS refuses impossible address-space allocation");
+++=======
+++int main(void) {
+++    gs_rt_init(0, NULL, 1, 1, 1);
+++    uint8_t ok;
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+      long before = counter_add(&live_regions, 0);
+      fail_next_calloc = 1;
+      gs_shared_cap failed = gs_shared_alloc(4096, &ok);
+      check(!ok && !failed.generation, "metadata allocation failure reports false");
+      check(counter_add(&live_regions, 0) == before, "failed metadata allocation unmaps transaction");
+++<<<<<<< HEAD
+ +#ifdef __linux__
+ +    long rss_before = resident_pages();
+ +    gs_shared_cap lazy = gs_shared_alloc(64ull << 20, &ok);
+ +    if (ok) {
+ +        long rss_after = resident_pages(), page = sysconf(_SC_PAGESIZE);
+ +        if (rss_before >= 0 && rss_after >= rss_before && page > 0)
+ +            check((uint64_t)(rss_after - rss_before) * (uint64_t)page < (8ull << 20),
+ +                  "allocation does not eagerly touch mapped bytes");
+ +        check(gs_shared_close(lazy, __FILE__, __LINE__), "lazy allocation close");
+ +    }
+ +#endif
+++=======
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+      int aborting = 1;
+      joined(gs_thread_spawn(owned, &aborting, sizeof aborting, 1), 0);
+      long allocations = counter_add(&live_allocations, 0), regions = counter_add(&live_regions, 0);
+diff --cc test/memory/shared_native_names.goose
+index 61dc25f0,b4625362..00000000
+--- a/test/memory/shared_native_names.goose
++++ b/test/memory/shared_native_names.goose
+@@@ -1,5 -1,4 +1,8 @@@
+  struct local::SharedOwner { value: i64 }
+++<<<<<<< HEAD
+ +struct local::SharedView { value: i64 }
+++=======
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+  fn local::get() -> i64 { let x = SharedOwner { value: 42 }; x.value }
+  fn local::native_size(v: ::SharedView) -> u64 { shared_size(v) }
+  fn ::identity<SharedOwner>(x: SharedOwner) -> SharedOwner { x }
+diff --cc test/native_config_definitions.py
+index 3d8676d6,cd756a04..00000000
+--- a/test/native_config_definitions.py
++++ b/test/native_config_definitions.py
+@@@ -99,8 -99,7 +99,12 @@@ def main()
+                          assert has_advice_code(c, advice), (profile['ADVICE'], advice)
+                          for native in ('-O0','-O2'):
+                              app = root / 'native'
+++<<<<<<< HEAD
+ +                            run([ns.cc,native,'-std=c11','-pthread','-fsanitize=alignment',
+ +                                 '-fno-sanitize-recover=all',generated,'-lm','-o',app],timeout=600)
+++=======
++                             run([ns.cc,native,'-std=c11','-pthread',generated,'-lm','-o',app],timeout=600)
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+                              result = run([app,root/'mapping.bin'])
+                              assert result.stdout == f'native config ok {str(alias).lower()} {str(endian).lower()}\n'
+                              configurations += 1
+@@@ -119,8 -118,7 +123,12 @@@
+                  run([goose,'--standalone',level,*args,selected,'-o',generated])
+                  for native in ('-O0','-O2'):
+                      app = root / 'selected'
+++<<<<<<< HEAD
+ +                    run([ns.cc,native,'-std=c11','-pthread','-fsanitize=alignment',
+ +                         '-fno-sanitize-recover=all',generated,'-lm','-o',app],timeout=600)
+++=======
++                     run([ns.cc,native,'-std=c11','-pthread',generated,'-lm','-o',app],timeout=600)
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+                      run([app])
+                      configurations += 1
+              result = run([goose,'check',level,*flags(dict(SELECT_INVALID=True,ORDER='Release')),selected],ok=False)
+diff --cc test/run_tests.py
+index fe28b20e,3ebcfbc6..00000000
+--- a/test/run_tests.py
++++ b/test/run_tests.py
+@@@ -2328,17 -2263,6 +2328,20 @@@ def main()
+              else:
+                  r.ok(out.strip())
+          r.show_task(const_if)
+++<<<<<<< HEAD
+ +        def deferred_state_work():
+ +            for script in ("compiler_check_harness.py", "deferred_state_work.py"):
+ +                args = [sys.executable, HERE / script]
+ +                if script == "deferred_state_work.py":
+ +                    args.append(exe)
+ +                code, out, err = tc.run_capture(args)
+ +                if code:
+ +                    r.fail(script, out + err)
+ +                else:
+ +                    r.ok(out.strip())
+ +        r.show_task(deferred_state_work)
+++=======
+++>>>>>>> refs/rewritten/feat-parallel-jit-examples
+  
+      def compiler_discovery():
+          import unittest

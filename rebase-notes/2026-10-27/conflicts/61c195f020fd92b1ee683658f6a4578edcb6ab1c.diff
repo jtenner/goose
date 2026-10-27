@@ -1,0 +1,61 @@
+diff --cc src/codegen.h
+index 6fee91b5,36d74c69..00000000
+--- a/src/codegen.h
++++ b/src/codegen.h
+@@@ -1461,7 -1461,7 +1467,11 @@@ struct CodeGen 
+              if (t->kind == TY_REF && t->ref->pool) poolglobals.insert(t->ref->pool);
+          ComputeRelRootMax();
+          CollectSpecs();
+++<<<<<<< HEAD
+ +        if (library) EmitExportTypes();
+++=======
++         FindUnusedLiteralGlobals();
+++>>>>>>> refs/rewritten/Merge-verified-fork-dependencies-retain-reviewed-integration-resolutions
+          for (auto sp : livespecs)
+              for (auto fv : sinfo[sp].freevars) capturedvars.insert(fv);
+          // Zero means "no long-distance return in flight", which is also the
+diff --cc test/run_tests.py
+index e21a94f6,c93ffde3..00000000
+--- a/test/run_tests.py
++++ b/test/run_tests.py
+@@@ -2054,16 -2043,27 +2054,40 @@@ def main()
+              r.show_task(clang_mul_add)
+              r.show_task(clang_vec)
+  
+++<<<<<<< HEAD
+ +    def library_headers():
+ +        from library_headers import check_library_headers
+ +        try:
+ +            check_library_headers(exe, cc, gendir, extra=extra)
+ +            r.ok("library headers: private native wrappers, self-contained C/C++ API, ABI rejection")
+ +        except (RuntimeError, OSError, subprocess.TimeoutExpired) as e:
+ +            r.fail("library headers", str(e))
+ +    if cc:
+ +        r.section("library headers")
+ +        r.show_task(library_headers)
+++=======
++     def worker_packet_alignment():
++         from worker_packet_alignment import check_worker_packet_alignment
++         try:
++             check_worker_packet_alignment(exe, cc, gendir, runtime=r.runtime, extra=extra)
++             r.ok("worker packets: alignment enabled, Goose/C O0/O2, release/debug")
++         except RuntimeError as e:
++             r.fail("worker packet alignment", str(e))
++     if cc and cc.style == "gcc":
++         r.section("worker packet alignment")
++         r.show_task(worker_packet_alignment)
++ 
++     def builder_return_alignment():
++         from builder_return_alignment import check_builder_return_alignment
++         try:
++             check_builder_return_alignment(exe, cc, gendir, runtime=r.runtime, extra=extra)
++             r.ok("builder return channels: alignment enabled, Goose/C O0/O2")
++         except RuntimeError as e:
++             r.fail("builder return alignment", str(e))
++     if cc and cc.style == "gcc":
++         r.section("builder return alignment")
++         r.show_task(builder_return_alignment)
+++>>>>>>> refs/rewritten/Merge-verified-fork-dependencies-retain-reviewed-integration-resolutions
+  
+      r.section("driver, diagnostics and language server")
+  
