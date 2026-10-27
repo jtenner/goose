@@ -2250,9 +2250,16 @@ int Main(int argc, char **argv, bool &measuring) {
                                         if (command[i] == "-o") { object = command[i + 1]; break; }
                                 }
                                 if (object.empty()) throw std::runtime_error("missing native compile output");
-                                object = filesystem::weakly_canonical(filesystem::path(object).is_absolute() ? object : cat(cwd, "/", object)).string();
-                                auto owner = std::find_if(directories.begin(), directories.end(),
-                                    [&](const string &directory) { return object.starts_with(directory); });
+                                auto output = filesystem::path(object);
+                                auto findowner = [&](const filesystem::path &candidate) {
+                                    auto normalized = filesystem::weakly_canonical(candidate).string();
+                                    return std::find_if(directories.begin(), directories.end(),
+                                        [&](const string &directory) { return normalized.starts_with(directory); });
+                                };
+                                auto owner = findowner(output.is_absolute() ? output : filesystem::path(cwd) / output);
+                                // CMake generators can make output relative to the top build directory.
+                                if (owner == directories.end() && output.is_relative())
+                                    owner = findowner(filesystem::path(dir) / output);
                                 if (owner == directories.end()) continue;
                                 scanned.insert(*owner);
                                 auto compiler = FindOnPath(command[0]);
