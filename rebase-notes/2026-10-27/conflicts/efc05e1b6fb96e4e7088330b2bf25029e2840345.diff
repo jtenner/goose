@@ -1,0 +1,18 @@
+diff --cc src/main.cpp
+index 67388840,671f92ec..00000000
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@@ -1619,8 -1618,8 +1621,13 @@@ int Main(int argc, char **argv) 
+          // it would without --roundtrip.
+          if (roundtrip) {
+              CheckRoundtrip(dumped, dumpfile.empty() ? cat(filename, ".dump") : dumpfile,
+++<<<<<<< HEAD
+ +                           stdlibdirs, DirOf(exe));
+ +            if (stats) fprintf(msgs, "roundtrip ok: %d bytes of dump\n", (int)dumped.size());
+++=======
++                            stdlibdirs, DirOf(exe), builddefines);
++             if (!quiet) fprintf(msgs, "roundtrip ok: %d bytes of dump\n", (int)dumped.size());
+++>>>>>>> efc05e1b (fix: propagate native definitions through constants, inlining, and editor analysis)
+          }
+          if (parseonly) return 0;
+          TypeCheckProgram(ast, library, nocgen);

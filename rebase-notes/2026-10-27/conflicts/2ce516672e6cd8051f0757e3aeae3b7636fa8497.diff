@@ -1,0 +1,20 @@
+diff --cc src/runtime_inline.h
+index 6ed84644,48f45726..00000000
+--- a/src/runtime_inline.h
++++ b/src/runtime_inline.h
+@@@ -1117,9 -1082,9 +1121,15 @@@ GS_API int64_t gs_spans_alloc(uint8_t *
+     the elements where that moved. */
+  GS_API int64_t gs_spans_regrow(uint8_t *base, int64_t *n, uint8_t **top, int64_t len,
+                                 int64_t idx, int64_t ol, int64_t cnt);
+++<<<<<<< HEAD
+ +)GSRT"
+ +R"GSRT(/* free_slice, and what realloc_slice lets go of: [idx, idx + cnt) back on
+ +   the freelist. */
+++=======
++ /* free_slice, and what realloc_slice lets go of: [idx, idx + cnt) back on
++ )GSRT"
++ R"GSRT(   the freelist. */
+++>>>>>>> 2ce51667 (feat(memory): add readonly mappings, reusable subrange borrows, safe byte copies, and page advice)
+  GS_API void gs_spans_free(uint8_t *base, int64_t *n, uint8_t **top, int64_t idx, int64_t cnt);
+  
+  /* ---------------------------------------------------------------------------

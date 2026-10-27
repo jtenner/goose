@@ -1,0 +1,984 @@
+diff --cc docs/goose_spec.md
+index 552258be,7c59f15e..00000000
+--- a/docs/goose_spec.md
++++ b/docs/goose_spec.md
+@@@ -59,10 -55,10 +59,17 @@@ Every type belongs to exactly one *siz
+  A compound type's class is the max over its parts (fixed < variable <
+  resizable), subject to the placement rules in §3.4.
+  
+++<<<<<<< HEAD
+ +Additionally, a type is **flat** if it contains no references, slices,
+ +relative references, native capabilities (§11.4), or `UnsafePtr` (§7.10) at any depth. Ordinary
+ +thread arguments and queue elements must be flat (§11.2); explicit native
+ +view/atomic worker arguments follow §11.4 instead.
+++=======
++ Additionally, a type is **flat** if it contains no references, slices, or
++ relative references at any depth. Only flat values may cross thread
++ boundaries (§11.2).
++ `UnsafePtr` (§7.10) is also not flat.
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+  
+  ### 1.2 Memory model
+  
+diff --cc docs/native_memory.md
+index 16520a4d,c062e78d..00000000
+--- a/docs/native_memory.md
++++ b/docs/native_memory.md
+@@@ -65,107 -65,11 +65,113 @@@ published. A worker-created allocation 
+  after the last child's lease ends. Main normal return performs the same
+  context cleanup. Process-fatal exits rely on OS reclamation.
+  
+++<<<<<<< HEAD
+ +Capability value wrappers have byte alignment, so packed fields, arrays,
+ +returns and worker packets never require an aligned wrapper address. Registry
+ +descriptors and mapped atomic cells retain their natural alignment.
+ +
+++=======
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+  Capability records occupy stable reusable metadata slabs. Mapping storage is
+  released on close; the slabs retain generation tombstones and grow only with
+  peak simultaneous descriptor usage. Routine scalar accesses allocate no heap
+  memory. Borrow creation, view creation and worker handoff are setup operations.
+  
+++<<<<<<< HEAD
+ +See [the shared job sample](../samples/32_shared_jobs.goose) for a complete
+ +worker pool with indexed completion flags and disjoint result ranges.
+ +
+ +## Atomic regions and indexed job tables
+ +
+ +`shared_atomic_u32(owner, offset, initial)` and `shared_atomic_u64` register
+ +one aligned atomic slot. `shared_atomic_array_u32(owner, offset, count, initial)`
+ +and its u64 counterpart register and initialize a whole typed region, returning
+ +a `SharedView` for that region. Workers obtain an existing slot with
+ +`shared_atomic_view_u32(region, index)` or `shared_atomic_view_u64`. Derivation
+ +checks width, generation and index inline; it allocates no metadata or heap.
+ +This permits one worker argument to carry thousands of completion slots.
+ +
+ +Registration rejects read-only storage, out-of-bounds or unaligned ranges,
+ +any overlapping ordinary borrow, and any previously registered atomic bytes.
+ +Atomic ranges remain permanently unavailable to ordinary borrows until close,
+ +even when the atomic capability is no longer used. U32 and u64 regions cannot
+ +partially overlap. Native atomics use host integer representation; endian
+ +scalar conversion does not apply to an atomic range.
+ +
+ +`atomic_load(a, order)`, `atomic_store(a, value, order)`,
+ +`atomic_exchange(a, value, order)`, and
+ +`atomic_fetch_add/sub/and/or/xor(a, value, order)` use exactly the handle's
+ +unsigned width. Fetch operations return the old value and arithmetic wraps at
+ +that width. `atomic_compare_exchange(a, expected, desired, success, failure)`
+ +returns `(observed, exchanged)`: on failure, observed is the actual old value.
+ +CAS is strong, with no spurious failures.
+ +
+ +Orders are compile-time string literals or named global string constants:
+ +`"Relaxed"`, `"Acquire"`, `"Release"`, `"AcqRel"`, `"SeqCst"`.
+ +Loads reject Release/AcqRel, stores reject Acquire/AcqRel, and CAS failure orders
+ +must be load orders no stronger than success. Every invalid combination is a
+ +compiler error. `atomic_is_lock_free(a)` explicitly reports the supported width.
+ +The complete atomic path requires both an always-lock-free native GCC/Clang
+ +cell width and always-lock-free 64-bit generation validation, even for u32
+ +cells. Descriptor records have explicit eight-byte alignment and slab stride.
+ +A u32-only target without that generation capability is rejected;
+ +TinyCC/JIT is rejected before execution because its in-memory backend lacks
+ +TLS support; generated C also gives explicit capability errors for unsupported
+ +frontends, including MSVC. There
+ +is no mutex fallback disguised as lock-free behavior.
+ +
+ +Routine atomic operations consist of inline generation/kind/alignment/bounds
+ +checks followed directly by a GCC/Clang atomic builtin with a constant order.
+ +They take no central mutex, call no ordinary application helper and allocate
+ +nothing. The owner thread alone may close, and every worker's allocation lease
+ +prevents close/unmap until worker cleanup. Descriptor generations are published
+ +atomically and stable slabs keep stale handles safe to reject. This lifetime
+ +protocol pins storage through the actual atomic instruction, rather than
+ +merely validating a token before an unprotected access.
+ +
+ +## Readonly files, byte buffers and page advice
+ +
+ +`shared_map_readonly(path, bytes)` returns `(SharedOwner, bool)`. The size is
+ +explicit, positive and no larger than the file; missing files and OS mapping
+ +failures return false. It uses a readonly file mapping and closes the file and
+ +mapping handles after the view is established. `shared_close` later unmaps the
+ +view. Mapping a file does not snapshot it: external changes can become visible.
+ +The application must keep other actors from truncating a mapped file. External
+ +truncation may cause an OS mapping fault (for example SIGBUS); it is outside
+ +contained Goose abort recovery.
+ +
+ +A readonly mapping permits overlapping read borrows across workers. Every
+ +write and atomic registration is refused. `shared_view(view, offset, bytes)`
+ +creates a checked subview, including in workers. A subview preserves readonly
+ +permissions and typed atomic regions; an atomic subview must contain complete,
+ +aligned slots. Views are setup metadata retained until allocation close.
+ +
+ +For repeated jobs, use `shared_borrow(view, offset, bytes)` directly. It checks
+ +the requested byte range and creates a reusable access record. Releasing it
+ +reuses that record, so metadata remains bounded by concurrent borrows rather
+ +than job count. The one-argument spelling borrows the entire view.
+ +
+ +`memory_read_bytes(access, offset, out)` copies into an existing writable
+ +`u8[:]` buffer; literals, const slices and serialization byte views cannot be
+ +its destination. `memory_write_bytes(access, offset, bytes)` copies from a
+ +read-only byte slice. The buffer length determines the checked byte count.
+ +Neither exposes a Goose reference into shared storage.
+ +
+ +`shared_page_advice(view, offset, bytes, advice)` returns `(supported, applied)`.
+ +Advice is a compile-time `"Normal"`, `"Sequential"`, `"Random"`, `"WillNeed"`,
+ +or `"DontNeed"`. POSIX uses the available `madvise` capability; Windows currently
+ +reports unsupported. A supported OS request may fail and reports applied=false.
+ +Advice may cover pages surrounding the byte range. DontNeed is permitted only
+ +for readonly mappings: it is always refused for anonymous live data because
+ +those OS semantics could erase bytes. Advice grants no memory-access rights.
+ +
+ +Native type names are reserved at the root for type declarations. A namespaced
+ +user type and a generic parameter can use the same leaf name with normal
+ +lexical priority. `::SharedView` unambiguously names the native type, and type
+ +dumps retain that qualification.
+ +
+++=======
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+  ## Explicitly unsafe C pointer interoperability
+  
+  `UnsafePtr` is an opaque raw object pointer, separate from every safe shared
+@@@ -265,8 -169,7 +271,12 @@@ pointer or a reference retained by an e
+  signature has no reference argument. Previously evaluated operands keep their
+  snapshotted values; later reads observe the write. The alias regressions in
+  `test/unsafe_pointer_alias.py` exercise these cases as part of the matrix.
+++<<<<<<< HEAD
+ +Native atomic operations, worker spawn/wait and queue synchronization also
+ +invalidate reachable facts:
+++=======
++ Worker spawn/wait and queue synchronization also invalidate reachable facts:
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+  an explicitly transferred numeric handle can let a worker reconstruct a raw
+  alias, write it, and publish that write before an ordinary read in its owner.
+  This still requires the caller to guarantee object lifetime and synchronize
+diff --cc src/bce.h
+index c941ad98,58e033f2..00000000
+--- a/src/bce.h
++++ b/src/bce.h
+@@@ -3631,8 -3631,6 +3631,11 @@@ inline bool Call::BceWalk(BCE &b) 
+          auto arg0 = recv ? (args.empty() ? nullptr : args[0])
+                           : (args.size() > 1 ? args[1] : nullptr);
+          switch (builtin) {
+++<<<<<<< HEAD
+ +            case B_MEMORY_READ_BYTES:
+ +                // This native copy writes into an ordinary writable byte view.
+++=======
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+              case B_UNSAFE_STORE:
+                  // UnsafePtr deliberately carries no Goose root identity. A
+                  // valid raw store can alias an ordinary writable scalar or
+@@@ -3640,14 -3638,6 +3643,17 @@@
+                  // and record opaque effects for non-inlined callers too.
+                  b.KillByCall();
+                  break;
+++<<<<<<< HEAD
+ +            case B_ATOMIC_LOAD: case B_ATOMIC_STORE: case B_ATOMIC_EXCHANGE:
+ +            case B_ATOMIC_ADD: case B_ATOMIC_SUB: case B_ATOMIC_AND:
+ +            case B_ATOMIC_OR: case B_ATOMIC_XOR: case B_ATOMIC_CAS:
+ +                // Atomic synchronization can publish valid raw writes to
+ +                // ordinary address-exposed storage. Its previous bounds and
+ +                // storage facts do not survive that synchronization boundary.
+ +                b.KillByCall();
+ +                break;
+++=======
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+              case B_THREAD_SPAWN: case B_THREAD_SPAWN_CONTAINED:
+              case B_QPUT: case B_QGET: case B_QPOLL: case B_QLIMIT:
+                  // An explicitly transferred integer handle can reconstruct a
+diff --cc src/builtins.h
+index d126b004,6dda3730..00000000
+--- a/src/builtins.h
++++ b/src/builtins.h
+@@@ -69,26 -69,6 +69,29 @@@ inline int RecvKindOf(TypeExpr *t) 
+  
+  //        enum            name                min max  args  rets recv            grows          flags
+  #define BUILTINS \
+++<<<<<<< HEAD
+ +    F(B_SHARED_MAP, "shared_map_readonly", 2, 2, "", "", 0, "", 0) \
+ +    F(B_SHARED_ADVICE, "shared_page_advice", 4, 4, "", "", 0, "", 0) \
+ +    F(B_MEMORY_READ_BYTES, "memory_read_bytes", 3, 3, "", "", 0, "", 0) \
+ +    F(B_MEMORY_WRITE_BYTES, "memory_write_bytes", 3, 3, "", "", 0, "", 0) \
+ +    F(B_SHARED_ATOMIC32, "shared_atomic_u32", 3, 3, "", "", 0, "", 0) \
+ +    F(B_SHARED_ATOMIC64, "shared_atomic_u64", 3, 3, "", "", 0, "", 0) \
+ +    F(B_SHARED_ATOMIC_ARRAY32, "shared_atomic_array_u32", 4, 4, "", "", 0, "", 0) \
+ +    F(B_SHARED_ATOMIC_ARRAY64, "shared_atomic_array_u64", 4, 4, "", "", 0, "", 0) \
+ +    F(B_SHARED_ATOMIC_VIEW32, "shared_atomic_view_u32", 2, 2, "", "", 0, "", 0) \
+ +    F(B_SHARED_ATOMIC_VIEW64, "shared_atomic_view_u64", 2, 2, "", "", 0, "", 0) \
+ +    F(B_ATOMIC_LOCKFREE, "atomic_is_lock_free", 1, 1, "", "", 0, "", 0) \
+ +    F(B_ATOMIC_LOAD, "atomic_load", 2, 2, "", "", 0, "", 0) \
+ +    F(B_ATOMIC_STORE, "atomic_store", 3, 3, "", "", 0, "", 0) \
+ +    F(B_ATOMIC_EXCHANGE, "atomic_exchange", 3, 3, "", "", 0, "", 0) \
+ +    F(B_ATOMIC_ADD, "atomic_fetch_add", 3, 3, "", "", 0, "", 0) \
+ +    F(B_ATOMIC_SUB, "atomic_fetch_sub", 3, 3, "", "", 0, "", 0) \
+ +    F(B_ATOMIC_AND, "atomic_fetch_and", 3, 3, "", "", 0, "", 0) \
+ +    F(B_ATOMIC_OR, "atomic_fetch_or", 3, 3, "", "", 0, "", 0) \
+ +    F(B_ATOMIC_XOR, "atomic_fetch_xor", 3, 3, "", "", 0, "", 0) \
+ +    F(B_ATOMIC_CAS, "atomic_compare_exchange", 5, 5, "", "", 0, "", 0) \
+++=======
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+      F(B_UNSAFE_PTR_FROM_HANDLE, "unsafe_ptr_from_handle", 1, 1, "", "", 0, "", 0) \
+      F(B_UNSAFE_HANDLE_FROM_PTR, "unsafe_handle_from_ptr", 1, 1, "", "", 0, "", 0) \
+      F(B_UNSAFE_PTR_ADD, "unsafe_ptr_add", 2, 2, "", "", 0, "", 0) \
+@@@ -98,7 -78,7 +101,11 @@@
+      F(B_SHARED_VIEW, "shared_view", 3, 3, "", "", 0, "", 0) \
+      F(B_SHARED_CLOSE, "shared_close", 1, 1, "", "", 0, "", 0) \
+      F(B_SHARED_SIZE, "shared_size", 1, 1, "", "", 0, "", 0) \
+++<<<<<<< HEAD
+ +    F(B_SHARED_BORROW, "shared_borrow", 1, 3, "", "", 0, "", 0) \
+++=======
++     F(B_SHARED_BORROW, "shared_borrow", 1, 1, "", "", 0, "", 0) \
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+      F(B_SHARED_RELEASE, "shared_release", 1, 1, "", "", 0, "", 0) \
+      F(B_MEMORY_READ, "memory_read", 3, 3, "", "", 0, "", BF_TYARGS) \
+      F(B_MEMORY_WRITE, "memory_write", 4, 4, "", "", 0, "", BF_TYARGS) \
+diff --cc src/codegen_builtins.h
+index b4b06a21,fad983ec..00000000
+--- a/src/codegen_builtins.h
++++ b/src/codegen_builtins.h
+@@@ -70,8 -70,7 +70,12 @@@ inline vector<string> CodeGen::EmitBuil
+              case B_SHARED_VIEW: return call("gs_shared_view", cat(a[0], ", ", a[1], ", ", a[2]));
+              case B_SHARED_CLOSE: return call("gs_shared_close", a[0]);
+              case B_SHARED_SIZE: return call("gs_shared_size", a[0]);
+++<<<<<<< HEAD
+ +            case B_SHARED_BORROW: return a.size() == 1 ? call("gs_shared_borrow", a[0])
+ +                : call("gs_shared_borrow_range", cat(a[0], ", ", a[1], ", ", a[2]));
+++=======
++             case B_SHARED_BORROW: return call("gs_shared_borrow", a[0]);
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+              case B_SHARED_RELEASE:
+                  L("gs_shared_release(", a[0], ", ", LocArgs(ln), ");"); return {};
+              case B_MEMORY_READ: {
+@@@ -88,83 -87,6 +92,86 @@@
+              default: assert(false);
+          }
+      }
+++<<<<<<< HEAD
+ +    if (c->builtin >= B_SHARED_ATOMIC32 && c->builtin <= B_ATOMIC_CAS) {
+ +        usesthreads = true;
+ +        auto bk = c->builtin;
+ +        bool u32 = bk == B_SHARED_ATOMIC32 || bk == B_SHARED_ATOMIC_ARRAY32 || bk == B_SHARED_ATOMIC_VIEW32 ||
+ +                   (bk >= B_ATOMIC_LOCKFREE && c->qtype->intstorage == IS_U32);
+ +        int width = u32 ? 4 : 8;
+ +        bool &usedwidth = u32 ? shared_atomic32 : shared_atomic64;
+ +        if (!usedwidth) {
+ +            usedwidth = true;
+ +            Append(head, "\n#if defined(__TINYC__) || (!defined(__GNUC__) && !defined(__clang__))\n"
+ +                         "#error Native shared atomics require GCC or Clang; this backend is unsupported\n#endif\n");
+ +            Append(head, "#if ", u32 ? "__GCC_ATOMIC_INT_LOCK_FREE" : "__GCC_ATOMIC_LLONG_LOCK_FREE",
+ +                   " != 2\n#error Native shared atomic width is not always lock-free on this target\n#endif\n");
+ +            Append(head, "#if __GCC_ATOMIC_LLONG_LOCK_FREE != 2\n"
+ +                         "#error Native shared atomic generation validation requires always-lock-free 64-bit atomics\n#endif\n");
+ +        }
+ +        vector<string> a;
+ +        size_t nargs = bk == B_ATOMIC_LOAD || bk == B_ATOMIC_LOCKFREE ? 1 : bk == B_ATOMIC_CAS ? 3
+ +                      : bk >= B_ATOMIC_STORE ? 2 : an.size();
+ +        for (size_t i = 0; i < nargs; i++) a.push_back(Snapshot(an[i]->exprtype, GenPure(an[i])));
+ +        if (bk <= B_SHARED_ATOMIC_ARRAY64) {
+ +            bool array = bk >= B_SHARED_ATOMIC_ARRAY32;
+ +            auto region = T();
+ +            L("gs_shared_cap ", region, " = gs_shared_atomic_region(", a[0], ", ", a[1], ", ",
+ +              array ? a[2] : "1", ", ", width, ", ", a[array ? 3 : 2], ", ", LocArgs(ln), ");");
+ +            if (array) return {region};
+ +            auto t = T(); L("gs_shared_atomic_cap ", t, " = {", region, ".slot, ", region, ".generation, 0};");
+ +            return {t};
+ +        }
+ +        bool derive = bk == B_SHARED_ATOMIC_VIEW32 || bk == B_SHARED_ATOMIC_VIEW64;
+ +        auto index = derive ? a[1] : cat(a[0], ".index");
+ +        auto rec = T(); L("gs_shared_record *", rec, " = NULL;");
+ +        auto msg = "invalid, closed, misaligned, or out-of-bounds shared atomic capability";
+ +        L("if (!", a[0], ".generation || ", a[0], ".slot >= GS_SHARED_MAX || ",
+ +          "!gs_shared_slabs[", a[0], ".slot / GS_SHARED_SLAB_SIZE] || ",
+ +          "!(", rec, " = &gs_shared_slabs[", a[0], ".slot / GS_SHARED_SLAB_SIZE][", a[0], ".slot % GS_SHARED_SLAB_SIZE]) || ",
+ +          "__atomic_load_n(&", rec, "->generation, __ATOMIC_ACQUIRE) != ", a[0], ".generation || ",
+ +          rec, "->kind != ", u32 ? 4 : 5, " || ", index, " >= ", rec, "->size / ", width,
+ +          " || ((uintptr_t)", rec, "->data & ", width - 1, ")) ",
+ +          "gs_abort_msg((const uint8_t *)\"", msg, "\", ", strlen(msg), ", ", LocArgs(ln), ");");
+ +        if (derive) {
+ +            auto t = T(); L("gs_shared_atomic_cap ", t, " = {", a[0], ".slot, ", a[0], ".generation, ", index, "};"); return {t};
+ +        }
+ +        if (bk == B_ATOMIC_LOCKFREE) return {cat("__atomic_always_lock_free(", width, ", 0)")};
+ +        auto ptr = T(); L(u32 ? "uint32_t *" : "uint64_t *", ptr, " = (", u32 ? "uint32_t" : "uint64_t", " *)(", rec, "->data + ", index, " * ", width, ");");
+ +        static const char *orders[] = {"__ATOMIC_RELAXED", "", "__ATOMIC_ACQUIRE", "__ATOMIC_RELEASE", "__ATOMIC_ACQ_REL", "__ATOMIC_SEQ_CST"};
+ +        auto order = orders[c->memory_order];
+ +        if (bk == B_ATOMIC_STORE) { L("__atomic_store_n(", ptr, ", ", a[1], ", ", order, ");"); return {}; }
+ +        if (bk == B_ATOMIC_CAS) {
+ +            auto ok = T(); L("uint8_t ", ok, " = __atomic_compare_exchange_n(", ptr, ", &", a[1], ", ", a[2],
+ +                            ", 0, ", order, ", ", orders[c->failure_order], ");"); return {a[1], ok};
+ +        }
+ +        const char *op = bk == B_ATOMIC_LOAD ? "load" : bk == B_ATOMIC_EXCHANGE ? "exchange"
+ +                         : bk == B_ATOMIC_ADD ? "fetch_add" : bk == B_ATOMIC_SUB ? "fetch_sub"
+ +                         : bk == B_ATOMIC_AND ? "fetch_and" : bk == B_ATOMIC_OR ? "fetch_or" : "fetch_xor";
+ +        auto t = T(); L(CT(c->qtype), " ", t, " = __atomic_", op,
+ +                       bk == B_ATOMIC_LOAD || bk == B_ATOMIC_EXCHANGE ? "_n" : "", "(", ptr,
+ +                       bk == B_ATOMIC_LOAD ? "" : cat(", ", a[1]), ", ", order, ");"); return {t};
+ +    }
+ +    if (c->builtin >= B_SHARED_MAP && c->builtin <= B_MEMORY_WRITE_BYTES) {
+ +        usesthreads = true;
+ +        vector<string> a;
+ +        for (size_t i = 0; i < (c->builtin == B_SHARED_ADVICE ? 3 : an.size()); i++)
+ +            a.push_back(Snapshot(an[i]->exprtype, GenPure(an[i])));
+ +        if (c->builtin == B_SHARED_MAP) {
+ +            auto t = T(), ok = T(); L("uint8_t ", ok, ";");
+ +            L("gs_shared_cap ", t, " = gs_shared_map_readonly(", a[0], ".data, ", a[0], ".len, ", a[1], ", &", ok, ");");
+ +            return {t, ok};
+ +        }
+ +        if (c->builtin == B_SHARED_ADVICE) {
+ +            auto t = T(); L("int ", t, " = gs_shared_page_advice(", a[0], ", ", a[1], ", ", a[2], ", ",
+ +                            c->memory_order, ", ", LocArgs(ln), ");");
+ +            return {cat("(", t, " != 0)"), cat("(", t, " == 2)")};
+ +        }
+ +        L("gs_shared_bytes(", a[0], ", ", a[1], ", (void *)", a[2], ".data, ", a[2], ".len, ",
+ +          c->builtin == B_MEMORY_WRITE_BYTES ? 1 : 0, ", ", LocArgs(ln), ");"); return {};
+ +    }
+++=======
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+      switch ((BuiltinKind)c->builtin) {
+          case B_PRINT: {
+              // The whole line, newline included, is rendered before any of
+@@@ -1184,7 -1084,7 +1191,11 @@@ inline vector<string> CodeGen::EmitThre
+      }
+      // Emitted here, not returned as text: a discarded result would drop the spawn.
+      for (auto &cap : sharedcaps)
+++<<<<<<< HEAD
+ +        L("gs_shared_handoff((gs_shared_cap){", cap, ".slot, ", cap, ".generation}, ", LocArgs(c->line), ");");
+++=======
++         L("gs_shared_handoff(", cap, ", ", LocArgs(c->line), ");");
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+      auto id = T();
+      L("int64_t ", id, " = gs_thread_spawn(", thunk, ", ", base, ", ", Top(stk), " - ", base,
+        c->builtin == B_THREAD_SPAWN_CONTAINED ? ", 1);" : ", 0);");
+diff --cc src/codegen_types.h
+index ee2095e4,bc0f97ba..00000000
+--- a/src/codegen_types.h
++++ b/src/codegen_types.h
+@@@ -300,8 -300,7 +300,12 @@@ inline int64_t CodeGen::FixedSize(TypeE
+          case TY_INT:  assert(t->intstorage != IS_VARINT); return IntSize(t->intstorage);
+          case TY_FLT:  return t->fltstorage == FS_F32 ? 4 : 8;
+          case TY_BOOL: return 1;
+++<<<<<<< HEAD
+ +        case TY_NATIVE: return t->nativekind == NK_UNSAFE_PTR ? 8
+ +            : t->nativekind == NK_ATOMIC_U32 || t->nativekind == NK_ATOMIC_U64 ? 24 : 16;
+++=======
++         case TY_NATIVE: return t->nativekind == NK_UNSAFE_PTR ? 8 : 16;
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+          case TY_REF:
+              if (t->ref->lenstorage >= 0) {
+                  assert(t->ref->lenstorage != IS_VARINT);
+@@@ -526,8 -525,7 +530,12 @@@ inline string CodeGen::CT(TypeExpr *t) 
+          case TY_BOOL: return "uint8_t";
+          case TY_NATIVE:
+              if (t->nativekind == NK_UNSAFE_PTR) { EmitUnsafePtrType(); return "gs_unsafe_ptr"; }
+++<<<<<<< HEAD
+ +            return t->nativekind == NK_ATOMIC_U32 || t->nativekind == NK_ATOMIC_U64
+ +                ? "gs_shared_atomic_cap" : "gs_shared_cap";
+++=======
++             return "gs_shared_cap";
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+          case TY_VOID: return "void";
+          case TY_REF: {
+              auto &r = *t->ref;
+diff --cc src/dump.h
+index d8f2b111,dbcd9096..00000000
+--- a/src/dump.h
++++ b/src/dump.h
+@@@ -84,7 -84,7 +84,11 @@@ inline void TypeExpr::Dump(string &s, s
+              break;
+          case TY_FLT:  s += FltStorageName(fltstorage); break;
+          case TY_BOOL: s += "bool"; break;
+++<<<<<<< HEAD
+ +        case TY_NATIVE: s += "::"; s += NativeName(nativekind); break;
+++=======
++         case TY_NATIVE: s += NativeName(nativekind); break;
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+          case TY_STRUCT: s += struc->st->qname; ArgsDump(struc->args); break;
+          case TY_ENUM:
+              s += enu->en->qname;
+diff --cc src/runtime/runtime.h
+index 927ce5da,9ff5f8ae..00000000
+--- a/src/runtime/runtime.h
++++ b/src/runtime/runtime.h
+@@@ -940,24 -940,11 +940,32 @@@ GS_API void gs_free_msg(uint8_t *msg)
+  /* Opaque capabilities have no user-visible fields or byte image. Stable
+     metadata slabs retain tombstones so stale values never dereference freed
+     metadata. Only live allocation leases authorize worker atomic access. */
+++<<<<<<< HEAD
+ +/* Goose values may start at any byte address (packed fields and worker
+ +   packets). Pack only the copied value wrappers, never registry metadata or
+ +   the mapped atomic cells. Both caller and runtime use this exact ABI. */
+ +#pragma pack(push, 1)
+ +typedef struct { uint64_t slot, generation; } gs_shared_cap;
+ +typedef struct { uint64_t slot, generation, index; } gs_shared_atomic_cap;
+ +#pragma pack(pop)
+ +GS_API gs_shared_cap gs_shared_atomic_region(gs_shared_cap owner, uint64_t offset,
+ +    uint64_t count, int width, uint64_t initial, const char *file, int line);
+ +#define GS_SHARED_SLAB_SIZE 256
+ +#define GS_SHARED_SLABS 4096
+ +#define GS_SHARED_MAX (GS_SHARED_SLAB_SIZE * GS_SHARED_SLABS)
+ +#ifdef _MSC_VER
+ +#define GS_SHARED_ALIGN8 __declspec(align(8))
+ +#else
+ +#define GS_SHARED_ALIGN8 __attribute__((aligned(8)))
+ +#endif
+ +typedef struct GS_SHARED_ALIGN8 gs_shared_record {
+++=======
++ typedef struct { uint64_t slot, generation; } gs_shared_cap;
++ #define GS_SHARED_SLAB_SIZE 256
++ #define GS_SHARED_SLABS 4096
++ #define GS_SHARED_MAX (GS_SHARED_SLAB_SIZE * GS_SHARED_SLABS)
++ typedef struct gs_shared_record {
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+      uint64_t generation, allocation, offset, size, identity;
+      uint8_t *data;
+      int64_t actor;
+@@@ -965,10 -952,6 +973,13 @@@
+      int kind, readonly, filemap, orphan;
+  } gs_shared_record;
+  GS_API gs_shared_record *gs_shared_slabs[GS_SHARED_SLABS];
+++<<<<<<< HEAD
+ +GS_API gs_shared_cap gs_shared_map_readonly(const uint8_t *path, int64_t pathlen, uint64_t size, uint8_t *ok);
+ +GS_API int gs_shared_page_advice(gs_shared_cap view, uint64_t offset, uint64_t size, int advice, const char *file, int line);
+ +GS_API gs_shared_cap gs_shared_borrow_range(gs_shared_cap view, uint64_t offset, uint64_t size, const char *file, int line);
+ +GS_API void gs_shared_bytes(gs_shared_cap access, uint64_t offset, void *bytes, uint64_t size, int write, const char *file, int line);
+++=======
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+  GS_API gs_shared_cap gs_shared_alloc(uint64_t size, uint8_t *ok);
+  GS_API gs_shared_cap gs_shared_view(gs_shared_cap owner, uint64_t offset, uint64_t size,
+                                      const char *file, int line);
+diff --cc src/runtime/runtime_threads.h
+index d451365f,18ab10f7..00000000
+--- a/src/runtime/runtime_threads.h
++++ b/src/runtime/runtime_threads.h
+@@@ -566,23 -566,15 +566,35 @@@ GS_API gs_shared_cap gs_shared_view(gs_
+                                      const char *file, int line) {
+      gs_mutex_lock(&gs_shared_mutex);
+      gs_shared_record *r = gs_shared_get(owner, file, line);
+++<<<<<<< HEAD
+ +    if (r->kind != GS_SH_OWNER && r->kind != GS_SH_VIEW &&
+ +        r->kind != GS_SH_ATOMIC32 && r->kind != GS_SH_ATOMIC64)
+ +        gs_shared_bad("shared_view requires an owner or view", file, line);
+ +    if (r->kind == GS_SH_OWNER && r->actor != gs_current_thread_id)
+ +        gs_shared_bad("shared owner belongs to another thread", file, line);
+ +    gs_shared_bounds(offset, size, r->size, file, line);
+ +    int kind = r->kind == GS_SH_OWNER ? GS_SH_VIEW : r->kind;
+ +    if (kind == GS_SH_ATOMIC32 || kind == GS_SH_ATOMIC64) {
+ +        uint64_t width = kind == GS_SH_ATOMIC32 ? 4 : 8;
+ +        if (offset % width || size % width) gs_shared_bad("shared atomic subview alignment", file, line);
+ +    }
+ +    uint64_t i = gs_shared_slot();
+ +    if (i == UINT64_MAX) gs_shared_bad("out of memory creating shared view", file, line);
+ +    gs_shared_record *v = gs_shared_at(i);
+ +    v->allocation = r->allocation; v->offset = r->offset + offset; v->size = size;
+ +    v->data = r->data + offset; v->readonly = r->readonly;
+ +    gs_shared_cap c = gs_shared_finish(i, kind);
+++=======
++     if (r->kind != GS_SH_OWNER || r->actor != gs_current_thread_id)
++         gs_shared_bad("shared owner belongs to another thread", file, line);
++     gs_shared_bounds(offset, size, r->size, file, line);
++     uint64_t i = gs_shared_slot();
++     if (i == UINT64_MAX) gs_shared_bad("out of memory creating shared view", file, line);
++     gs_shared_record *v = gs_shared_at(i);
++     v->allocation = owner.slot; v->offset = offset; v->size = size;
++     v->data = r->data + offset; v->readonly = r->readonly;
++     gs_shared_cap c = gs_shared_finish(i, GS_SH_VIEW);
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+      gs_mutex_unlock(&gs_shared_mutex); return c;
+  }
+  GS_API uint8_t gs_shared_close(gs_shared_cap owner, const char *file, int line) {
+@@@ -612,36 -604,24 +624,55 @@@ GS_API uint64_t gs_shared_size(gs_share
+          gs_shared_bad("shared access belongs to another thread", file, line);
+      uint64_t n = r->size; gs_mutex_unlock(&gs_shared_mutex); return n;
+  }
+++<<<<<<< HEAD
+ +static gs_shared_cap gs_shared_borrow_impl(gs_shared_cap view, uint64_t offset, uint64_t size,
+ +                                           int whole, const char *file, int line) {
+ +    gs_mutex_lock(&gs_shared_mutex);
+ +    gs_shared_record *r = gs_shared_get(view, file, line);
+ +    if (r->kind != GS_SH_VIEW) gs_shared_bad("shared_borrow requires an ordinary view", file, line);
+ +    if (whole) size = r->size;
+ +    gs_shared_bounds(offset, size, r->size, file, line);
+ +    uint64_t absolute = r->offset + offset;
+ +    for (uint64_t i = 0; i < gs_shared_highwater; i++) {
+ +        gs_shared_record *v = gs_shared_at(i);
+ +        if (v->kind >= GS_SH_ACCESS && v->allocation == r->allocation &&
+ +            !(v->kind == GS_SH_ACCESS && v->readonly && r->readonly) &&
+ +            gs_shared_overlap(v->offset, v->size, absolute, size))
+++=======
++ GS_API gs_shared_cap gs_shared_borrow(gs_shared_cap view, const char *file, int line) {
++     gs_mutex_lock(&gs_shared_mutex);
++     gs_shared_record *r = gs_shared_get(view, file, line);
++     if (r->kind != GS_SH_VIEW) gs_shared_bad("shared_borrow requires a view", file, line);
++     for (uint64_t i = 0; i < gs_shared_highwater; i++) {
++         gs_shared_record *v = gs_shared_at(i);
++         if (v->kind >= GS_SH_ACCESS && v->allocation == r->allocation &&
++             gs_shared_overlap(v->offset, v->size, r->offset, r->size))
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+              gs_shared_bad("conflicting shared range access", file, line);
+      }
+      uint64_t i = gs_shared_slot();
+      if (i == UINT64_MAX) gs_shared_bad("out of memory borrowing shared view", file, line);
+      gs_shared_record *a = gs_shared_at(i);
+++<<<<<<< HEAD
+ +    a->allocation = r->allocation; a->offset = absolute; a->size = size;
+ +    a->data = r->data + offset; a->readonly = r->readonly; a->actor = gs_current_thread_id;
+ +    gs_shared_cap c = gs_shared_finish(i, GS_SH_ACCESS);
+ +    gs_mutex_unlock(&gs_shared_mutex); return c;
+ +}
+ +GS_API gs_shared_cap gs_shared_borrow(gs_shared_cap view, const char *file, int line) {
+ +    return gs_shared_borrow_impl(view, 0, 0, 1, file, line);
+ +}
+ +GS_API gs_shared_cap gs_shared_borrow_range(gs_shared_cap view, uint64_t offset, uint64_t size,
+ +                                           const char *file, int line) {
+ +    return gs_shared_borrow_impl(view, offset, size, 0, file, line);
+ +}
+++=======
++     a->allocation = r->allocation; a->offset = r->offset; a->size = r->size;
++     a->data = r->data; a->readonly = r->readonly; a->actor = gs_current_thread_id;
++     gs_shared_cap c = gs_shared_finish(i, GS_SH_ACCESS);
++     gs_mutex_unlock(&gs_shared_mutex); return c;
++ }
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+  GS_API void gs_shared_release(gs_shared_cap access, const char *file, int line) {
+      gs_mutex_lock(&gs_shared_mutex);
+      gs_shared_record *r = gs_shared_get(access, file, line);
+@@@ -733,51 -713,3 +764,54 @@@ GS_API void gs_shared_worker_cleanup(vo
+      gs_mutex_unlock(&gs_shared_mutex);
+  }
+  #endif /* GS_NEED_THREADS */
+++<<<<<<< HEAD
+ +
+ +#if GS_NEED_THREADS
+ +GS_API gs_shared_cap gs_shared_atomic_region(gs_shared_cap owner, uint64_t offset,
+ +    uint64_t count, int width, uint64_t initial, const char *file, int line) {
+ +    gs_mutex_lock(&gs_shared_mutex);
+ +    gs_shared_record *r = gs_shared_get(owner, file, line);
+ +    if (r->kind != GS_SH_OWNER || r->actor != gs_current_thread_id)
+ +        gs_shared_bad("shared owner belongs to another thread", file, line);
+ +    if (r->readonly) gs_shared_bad("atomic storage in readonly shared memory", file, line);
+ +    if ((width != 4 && width != 8) || !count || count > UINT64_MAX / (uint64_t)width)
+ +        gs_shared_bad("invalid shared atomic region size", file, line);
+ +    uint64_t size = count * (uint64_t)width;
+ +    gs_shared_bounds(offset, size, r->size, file, line);
+ +    if (((uintptr_t)r->data + offset) % (uint64_t)width)
+ +        gs_shared_bad("shared atomic alignment", file, line);
+ +    for (uint64_t i = 0; i < gs_shared_highwater; i++) {
+ +        gs_shared_record *v = gs_shared_at(i);
+ +        if (v->kind >= GS_SH_ACCESS && v->allocation == owner.slot &&
+ +            gs_shared_overlap(v->offset, v->size, offset, size))
+ +            gs_shared_bad("conflicting shared atomic range", file, line);
+ +    }
+ +    uint64_t i = gs_shared_slot();
+ +    if (i == UINT64_MAX) gs_shared_bad("out of memory registering shared atomic range", file, line);
+ +    gs_shared_record *a = gs_shared_at(i);
+ +    a->allocation = owner.slot; a->offset = offset; a->size = size; a->data = r->data + offset;
+ +    /* Registration excludes every ordinary borrow/atomic range first. These
+ +       initialization writes happen before publication and worker handoff. */
+ +    if (width == 4) {
+ +        uint32_t v = (uint32_t)initial;
+ +        for (uint64_t n = 0; n < count; n++) memcpy(a->data + n * 4, &v, 4);
+ +    } else {
+ +        for (uint64_t n = 0; n < count; n++) memcpy(a->data + n * 8, &initial, 8);
+ +    }
+ +    gs_shared_cap cap = gs_shared_finish(i, width == 4 ? GS_SH_ATOMIC32 : GS_SH_ATOMIC64);
+ +    gs_mutex_unlock(&gs_shared_mutex); return cap;
+ +}
+ +#endif
+ +
+ +#if GS_NEED_THREADS
+ +GS_API void gs_shared_bytes(gs_shared_cap access, uint64_t offset, void *bytes, uint64_t size,
+ +                             int write, const char *file, int line) {
+ +    gs_mutex_lock(&gs_shared_mutex);
+ +    gs_shared_record *r = gs_shared_access(access, offset, size, write, file, line);
+ +    if (write) gs_memmove(r->data + offset, bytes, (size_t)size);
+ +    else gs_memmove(bytes, r->data + offset, (size_t)size);
+ +    gs_mutex_unlock(&gs_shared_mutex);
+ +}
+ +#endif
+++=======
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+diff --cc src/runtime_inline.h
+index 78d9c6a6,912e8df1..00000000
+--- a/src/runtime_inline.h
++++ b/src/runtime_inline.h
+@@@ -961,24 -961,11 +961,32 @@@ GS_API void gs_free_msg(uint8_t *msg)
+  /* Opaque capabilities have no user-visible fields or byte image. Stable
+     metadata slabs retain tombstones so stale values never dereference freed
+     metadata. Only live allocation leases authorize worker atomic access. */
+++<<<<<<< HEAD
+ +/* Goose values may start at any byte address (packed fields and worker
+ +   packets). Pack only the copied value wrappers, never registry metadata or
+ +   the mapped atomic cells. Both caller and runtime use this exact ABI. */
+ +#pragma pack(push, 1)
+ +typedef struct { uint64_t slot, generation; } gs_shared_cap;
+ +typedef struct { uint64_t slot, generation, index; } gs_shared_atomic_cap;
+ +#pragma pack(pop)
+ +GS_API gs_shared_cap gs_shared_atomic_region(gs_shared_cap owner, uint64_t offset,
+ +    uint64_t count, int width, uint64_t initial, const char *file, int line);
+ +#define GS_SHARED_SLAB_SIZE 256
+ +#define GS_SHARED_SLABS 4096
+ +#define GS_SHARED_MAX (GS_SHARED_SLAB_SIZE * GS_SHARED_SLABS)
+ +#ifdef _MSC_VER
+ +#define GS_SHARED_ALIGN8 __declspec(align(8))
+ +#else
+ +#define GS_SHARED_ALIGN8 __attribute__((aligned(8)))
+ +#endif
+ +typedef struct GS_SHARED_ALIGN8 gs_shared_record {
+++=======
++ typedef struct { uint64_t slot, generation; } gs_shared_cap;
++ #define GS_SHARED_SLAB_SIZE 256
++ #define GS_SHARED_SLABS 4096
++ #define GS_SHARED_MAX (GS_SHARED_SLAB_SIZE * GS_SHARED_SLABS)
++ typedef struct gs_shared_record {
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+      uint64_t generation, allocation, offset, size, identity;
+      uint8_t *data;
+      int64_t actor;
+@@@ -986,10 -973,6 +994,13 @@@
+      int kind, readonly, filemap, orphan;
+  } gs_shared_record;
+  GS_API gs_shared_record *gs_shared_slabs[GS_SHARED_SLABS];
+++<<<<<<< HEAD
+ +GS_API gs_shared_cap gs_shared_map_readonly(const uint8_t *path, int64_t pathlen, uint64_t size, uint8_t *ok);
+ +GS_API int gs_shared_page_advice(gs_shared_cap view, uint64_t offset, uint64_t size, int advice, const char *file, int line);
+ +GS_API gs_shared_cap gs_shared_borrow_range(gs_shared_cap view, uint64_t offset, uint64_t size, const char *file, int line);
+ +GS_API void gs_shared_bytes(gs_shared_cap access, uint64_t offset, void *bytes, uint64_t size, int write, const char *file, int line);
+++=======
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+  GS_API gs_shared_cap gs_shared_alloc(uint64_t size, uint8_t *ok);
+  GS_API gs_shared_cap gs_shared_view(gs_shared_cap owner, uint64_t offset, uint64_t size,
+                                      const char *file, int line);
+@@@ -3608,23 -3592,15 +3620,35 @@@ GS_API gs_shared_cap gs_shared_view(gs_
+                                      const char *file, int line) {
+      gs_mutex_lock(&gs_shared_mutex);
+      gs_shared_record *r = gs_shared_get(owner, file, line);
+++<<<<<<< HEAD
+ +    if (r->kind != GS_SH_OWNER && r->kind != GS_SH_VIEW &&
+ +        r->kind != GS_SH_ATOMIC32 && r->kind != GS_SH_ATOMIC64)
+ +        gs_shared_bad("shared_view requires an owner or view", file, line);
+ +    if (r->kind == GS_SH_OWNER && r->actor != gs_current_thread_id)
+ +        gs_shared_bad("shared owner belongs to another thread", file, line);
+ +    gs_shared_bounds(offset, size, r->size, file, line);
+ +    int kind = r->kind == GS_SH_OWNER ? GS_SH_VIEW : r->kind;
+ +    if (kind == GS_SH_ATOMIC32 || kind == GS_SH_ATOMIC64) {
+ +        uint64_t width = kind == GS_SH_ATOMIC32 ? 4 : 8;
+ +        if (offset % width || size % width) gs_shared_bad("shared atomic subview alignment", file, line);
+ +    }
+ +    uint64_t i = gs_shared_slot();
+ +    if (i == UINT64_MAX) gs_shared_bad("out of memory creating shared view", file, line);
+ +    gs_shared_record *v = gs_shared_at(i);
+ +    v->allocation = r->allocation; v->offset = r->offset + offset; v->size = size;
+ +    v->data = r->data + offset; v->readonly = r->readonly;
+ +    gs_shared_cap c = gs_shared_finish(i, kind);
+++=======
++     if (r->kind != GS_SH_OWNER || r->actor != gs_current_thread_id)
++         gs_shared_bad("shared owner belongs to another thread", file, line);
++     gs_shared_bounds(offset, size, r->size, file, line);
++     uint64_t i = gs_shared_slot();
++     if (i == UINT64_MAX) gs_shared_bad("out of memory creating shared view", file, line);
++     gs_shared_record *v = gs_shared_at(i);
++     v->allocation = owner.slot; v->offset = offset; v->size = size;
++     v->data = r->data + offset; v->readonly = r->readonly;
++     gs_shared_cap c = gs_shared_finish(i, GS_SH_VIEW);
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+      gs_mutex_unlock(&gs_shared_mutex); return c;
+  }
+  GS_API uint8_t gs_shared_close(gs_shared_cap owner, const char *file, int line) {
+@@@ -3654,37 -3630,25 +3678,57 @@@ GS_API uint64_t gs_shared_size(gs_share
+          gs_shared_bad("shared access belongs to another thread", file, line);
+      uint64_t n = r->size; gs_mutex_unlock(&gs_shared_mutex); return n;
+  }
+++<<<<<<< HEAD
+ +static gs_shared_cap gs_shared_borrow_impl(gs_shared_cap view, uint64_t offset, uint64_t size,
+ +                                           int whole, const char *file, int line) {
+ +    gs_mutex_lock(&gs_shared_mutex);
+ +    gs_shared_record *r = gs_shared_get(view, file, line);
+ +    if (r->kind != GS_SH_VIEW) gs_shared_bad("shared_borrow requires an ordinary view", file, line);
+ +    if (whole) size = r->size;
+ +)GSRT"
+ +R"GSRT(    gs_shared_bounds(offset, size, r->size, file, line);
+ +    uint64_t absolute = r->offset + offset;
+ +    for (uint64_t i = 0; i < gs_shared_highwater; i++) {
+ +        gs_shared_record *v = gs_shared_at(i);
+ +        if (v->kind >= GS_SH_ACCESS && v->allocation == r->allocation &&
+ +            !(v->kind == GS_SH_ACCESS && v->readonly && r->readonly) &&
+ +            gs_shared_overlap(v->offset, v->size, absolute, size))
+++=======
++ GS_API gs_shared_cap gs_shared_borrow(gs_shared_cap view, const char *file, int line) {
++     gs_mutex_lock(&gs_shared_mutex);
++     gs_shared_record *r = gs_shared_get(view, file, line);
++     if (r->kind != GS_SH_VIEW) gs_shared_bad("shared_borrow requires a view", file, line);
++     for (uint64_t i = 0; i < gs_shared_highwater; i++) {
++         gs_shared_record *v = gs_shared_at(i);
++         if (v->kind >= GS_SH_ACCESS && v->allocation == r->allocation &&
++             gs_shared_overlap(v->offset, v->size, r->offset, r->size))
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+              gs_shared_bad("conflicting shared range access", file, line);
+      }
+      uint64_t i = gs_shared_slot();
+      if (i == UINT64_MAX) gs_shared_bad("out of memory borrowing shared view", file, line);
+      gs_shared_record *a = gs_shared_at(i);
+++<<<<<<< HEAD
+ +    a->allocation = r->allocation; a->offset = absolute; a->size = size;
+ +    a->data = r->data + offset; a->readonly = r->readonly; a->actor = gs_current_thread_id;
+ +    gs_shared_cap c = gs_shared_finish(i, GS_SH_ACCESS);
+ +    gs_mutex_unlock(&gs_shared_mutex); return c;
+ +}
+ +GS_API gs_shared_cap gs_shared_borrow(gs_shared_cap view, const char *file, int line) {
+ +    return gs_shared_borrow_impl(view, 0, 0, 1, file, line);
+ +}
+ +GS_API gs_shared_cap gs_shared_borrow_range(gs_shared_cap view, uint64_t offset, uint64_t size,
+ +                                           const char *file, int line) {
+ +    return gs_shared_borrow_impl(view, offset, size, 0, file, line);
+ +}
+++=======
++     a->allocation = r->allocation; a->offset = r->offset; a->size = r->size;
++     a->data = r->data; a->readonly = r->readonly; a->actor = gs_current_thread_id;
++ )GSRT"
++ R"GSRT(    gs_shared_cap c = gs_shared_finish(i, GS_SH_ACCESS);
++     gs_mutex_unlock(&gs_shared_mutex); return c;
++ }
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+  GS_API void gs_shared_release(gs_shared_cap access, const char *file, int line) {
+      gs_mutex_lock(&gs_shared_mutex);
+      gs_shared_record *r = gs_shared_get(access, file, line);
+@@@ -3776,55 -3740,6 +3820,58 @@@ GS_API void gs_shared_worker_cleanup(vo
+      gs_mutex_unlock(&gs_shared_mutex);
+  }
+  #endif /* GS_NEED_THREADS */
+++<<<<<<< HEAD
+ +
+ +#if GS_NEED_THREADS
+ +GS_API gs_shared_cap gs_shared_atomic_region(gs_shared_cap owner, uint64_t offset,
+ +    uint64_t count, int width, uint64_t initial, const char *file, int line) {
+ +    gs_mutex_lock(&gs_shared_mutex);
+ +    gs_shared_record *r = gs_shared_get(owner, file, line);
+ +    if (r->kind != GS_SH_OWNER || r->actor != gs_current_thread_id)
+ +        gs_shared_bad("shared owner belongs to another thread", file, line);
+ +    if (r->readonly) gs_shared_bad("atomic storage in readonly shared memory", file, line);
+ +    if ((width != 4 && width != 8) || !count || count > UINT64_MAX / (uint64_t)width)
+ +        gs_shared_bad("invalid shared atomic region size", file, line);
+ +    uint64_t size = count * (uint64_t)width;
+ +    gs_shared_bounds(offset, size, r->size, file, line);
+ +    if (((uintptr_t)r->data + offset) % (uint64_t)width)
+ +        gs_shared_bad("shared atomic alignment", file, line);
+ +    for (uint64_t i = 0; i < gs_shared_highwater; i++) {
+ +        gs_shared_record *v = gs_shared_at(i);
+ +        if (v->kind >= GS_SH_ACCESS && v->allocation == owner.slot &&
+ +            gs_shared_overlap(v->offset, v->size, offset, size))
+ +            gs_shared_bad("conflicting shared atomic range", file, line);
+ +    }
+ +    uint64_t i = gs_shared_slot();
+ +    if (i == UINT64_MAX) gs_shared_bad("out of memory registering shared atomic range", file, line);
+ +    gs_shared_record *a = gs_shared_at(i);
+ +    a->allocation = owner.slot; a->offset = offset; a->size = size; a->data = r->data + offset;
+ +    /* Registration excludes every ordinary borrow/atomic range first. These
+ +       initialization writes happen before publication and worker handoff. */
+ +    if (width == 4) {
+ +        uint32_t v = (uint32_t)initial;
+ +        for (uint64_t n = 0; n < count; n++) memcpy(a->data + n * 4, &v, 4);
+ +    } else {
+ +)GSRT"
+ +R"GSRT(        for (uint64_t n = 0; n < count; n++) memcpy(a->data + n * 8, &initial, 8);
+ +    }
+ +    gs_shared_cap cap = gs_shared_finish(i, width == 4 ? GS_SH_ATOMIC32 : GS_SH_ATOMIC64);
+ +    gs_mutex_unlock(&gs_shared_mutex); return cap;
+ +}
+ +#endif
+ +
+ +#if GS_NEED_THREADS
+ +GS_API void gs_shared_bytes(gs_shared_cap access, uint64_t offset, void *bytes, uint64_t size,
+ +                             int write, const char *file, int line) {
+ +    gs_mutex_lock(&gs_shared_mutex);
+ +    gs_shared_record *r = gs_shared_access(access, offset, size, write, file, line);
+ +    if (write) gs_memmove(r->data + offset, bytes, (size_t)size);
+ +    else gs_memmove(bytes, r->data + offset, (size_t)size);
+ +    gs_mutex_unlock(&gs_shared_mutex);
+ +}
+ +#endif
+++=======
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+  )GSRT"
+      ) },
+      { "runtime_ext.h", string_view(
+diff --cc src/typecheck_builtins.h
+index 50fb6e2a,c2403778..00000000
+--- a/src/typecheck_builtins.h
++++ b/src/typecheck_builtins.h
+@@@ -64,7 -64,7 +64,11 @@@ inline Val TypeCheck::CheckBuiltin(Cal
+              if (v.type->kind != TY_NATIVE || v.type->nativekind != k)
+                  Error(c, cat(d.name, " requires ", NativeName(k), " for argument ", i + 1));
+          };
+++<<<<<<< HEAD
+ +        auto number = [&](size_t i) { CheckIntAny(args[i]); };
+++=======
++         auto number = [&](size_t i) { CheckArg(args[i], ast.inttypes[IS_U64]); };
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+          auto result = [&](TypeExpr *t, bool ok = false) {
+              Val v; v.type = t; c->rettypes.push_back(t);
+              if (ok) {
+@@@ -76,12 -76,8 +80,17 @@@
+          switch (d.kind) {
+              case B_SHARED_ALLOC:
+                  number(0); return result(captype(NK_OWNER), true);
+++<<<<<<< HEAD
+ +            case B_SHARED_VIEW: {
+ +                auto v = CheckValue(args[0], nullptr);
+ +                if (v.type->kind != TY_NATIVE || (v.type->nativekind != NK_OWNER && v.type->nativekind != NK_VIEW))
+ +                    Error(c, "shared_view requires an owner or view");
+ +                number(1); number(2); return result(captype(NK_VIEW));
+ +            }
+++=======
++             case B_SHARED_VIEW:
++                 cap(0, NK_OWNER); number(1); number(2); return result(captype(NK_VIEW));
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+              case B_SHARED_CLOSE:
+                  cap(0, NK_OWNER); return result(ast.booltype);
+              case B_SHARED_SIZE: {
+@@@ -91,10 -87,7 +100,14 @@@
+                  return result(ast.inttypes[IS_U64]);
+              }
+              case B_SHARED_BORROW:
+++<<<<<<< HEAD
+ +                if (args.size() != 1 && args.size() != 3) Error(c, "shared_borrow takes a view, or a view, offset, and size");
+ +                cap(0, NK_VIEW);
+ +                if (args.size() == 3) { number(1); number(2); }
+ +                return result(captype(NK_ACCESS));
+++=======
++                 cap(0, NK_VIEW); return result(captype(NK_ACCESS));
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+              case B_SHARED_RELEASE:
+                  cap(0, NK_ACCESS); return VoidVal();
+              case B_MEMORY_READ: case B_MEMORY_WRITE: {
+@@@ -113,88 -106,6 +126,91 @@@
+              default: assert(false);
+          }
+      }
+++<<<<<<< HEAD
+ +    if (d.kind >= B_SHARED_ATOMIC32 && d.kind <= B_ATOMIC_CAS) {
+ +        auto native = [&](size_t i, NativeKind k) {
+ +            auto v = CheckValue(args[i], nullptr);
+ +            if (v.type->kind != TY_NATIVE || v.type->nativekind != k)
+ +                Error(c, cat(d.name, " requires ", NativeName(k)));
+ +        };
+ +        auto result = [&](TypeExpr *t, bool second = false) {
+ +            Val v; v.type = t; c->rettypes.push_back(t);
+ +            if (second) { Val b; b.type = ast.booltype; c->rettypes.push_back(b.type); lastcallrets = {v, b}; }
+ +            return v;
+ +        };
+ +        auto nt = [&](NativeKind k) { auto t = ast.NewType(TY_NATIVE, c->line); t->nativekind = k; return t; };
+ +        if (d.kind <= B_SHARED_ATOMIC_ARRAY64) {
+ +            bool u32 = d.kind == B_SHARED_ATOMIC32 || d.kind == B_SHARED_ATOMIC_ARRAY32;
+ +            native(0, NK_OWNER); CheckIntAny(args[1]);
+ +            bool array = d.kind >= B_SHARED_ATOMIC_ARRAY32;
+ +            if (array) CheckIntAny(args[2]);
+ +            CheckArg(args[array ? 3 : 2], ast.inttypes[u32 ? IS_U32 : IS_U64]);
+ +            return result(nt(array ? NK_VIEW : u32 ? NK_ATOMIC_U32 : NK_ATOMIC_U64));
+ +        }
+ +        if (d.kind == B_SHARED_ATOMIC_VIEW32 || d.kind == B_SHARED_ATOMIC_VIEW64) {
+ +            native(0, NK_VIEW); CheckIntAny(args[1]);
+ +            return result(nt(d.kind == B_SHARED_ATOMIC_VIEW32 ? NK_ATOMIC_U32 : NK_ATOMIC_U64));
+ +        }
+ +        auto v = CheckValue(args[0], nullptr);
+ +        if (v.type->kind != TY_NATIVE || (v.type->nativekind != NK_ATOMIC_U32 && v.type->nativekind != NK_ATOMIC_U64))
+ +            Error(c, cat(d.name, " requires SharedAtomicU32 or SharedAtomicU64"));
+ +        auto scalar = ast.inttypes[v.type->nativekind == NK_ATOMIC_U32 ? IS_U32 : IS_U64];
+ +        c->qtype = scalar;
+ +        if (d.kind == B_ATOMIC_LOCKFREE) return result(ast.booltype);
+ +        if (d.kind != B_ATOMIC_LOAD) CheckArg(args[1], scalar);
+ +        if (d.kind == B_ATOMIC_CAS) CheckArg(args[2], scalar);
+ +        auto order = [&](size_t i) {
+ +            auto lit = ConstStrLit(args[i]);
+ +            if (!lit) Error(c, "memory order must be a compile-time string");
+ +            CheckArg(args[i], cu8slice);
+ +            static const char *names[] = {"Relaxed", "Acquire", "Release", "AcqRel", "SeqCst"};
+ +            static const int codes[] = {0, 2, 3, 4, 5};
+ +            for (int k = 0; k < 5; k++) if (lit->val == names[k]) return codes[k];
+ +            Error(c, cat("unknown memory order: ", lit->val));
+ +        };
+ +        auto oi = d.kind == B_ATOMIC_LOAD ? 1 : d.kind == B_ATOMIC_CAS ? 3 : 2;
+ +        c->memory_order = order(oi);
+ +        auto o = c->memory_order;
+ +        if (d.kind == B_ATOMIC_LOAD && (o == 3 || o == 4)) Error(c, "invalid memory order for atomic load");
+ +        if (d.kind == B_ATOMIC_STORE && (o == 2 || o == 4)) Error(c, "invalid memory order for atomic store");
+ +        if (d.kind == B_ATOMIC_CAS) {
+ +            auto f = c->failure_order = order(4);
+ +            if (f == 3 || f == 4 || (f == 5 && o != 5) || (f == 2 && o != 2 && o != 4 && o != 5))
+ +                Error(c, "invalid compare_exchange failure order");
+ +        }
+ +        return d.kind == B_ATOMIC_STORE ? VoidVal() : result(scalar, d.kind == B_ATOMIC_CAS);
+ +    }
+ +    if (d.kind >= B_SHARED_MAP && d.kind <= B_MEMORY_WRITE_BYTES) {
+ +        if (d.kind == B_SHARED_MAP) {
+ +            CheckArg(args[0], cu8slice); CheckIntAny(args[1]);
+ +            auto t = ast.NewType(TY_NATIVE, c->line); t->nativekind = NK_OWNER;
+ +            Val v; v.type = t; Val ok; ok.type = ast.booltype;
+ +            c->rettypes = {t, ast.booltype}; lastcallrets = {v, ok}; return v;
+ +        }
+ +        auto v = CheckValue(args[0], nullptr);
+ +        auto kind = d.kind == B_SHARED_ADVICE ? NK_VIEW : NK_ACCESS;
+ +        if (v.type->kind != TY_NATIVE || v.type->nativekind != kind)
+ +            Error(c, cat(d.name, " requires ", NativeName(kind)));
+ +        CheckIntAny(args[1]);
+ +        if (d.kind == B_SHARED_ADVICE) {
+ +            CheckIntAny(args[2]);
+ +            auto lit = ConstStrLit(args[3]);
+ +            if (!lit) Error(c, "page advice must be a compile-time string");
+ +            CheckArg(args[3], cu8slice);
+ +            static const char *names[] = {"Normal", "Sequential", "Random", "WillNeed", "DontNeed"};
+ +            int advice = -1;
+ +            for (int i = 0; i < 5; i++) if (lit->val == names[i]) advice = i;
+ +            if (advice < 0) Error(c, cat("unknown page advice: ", lit->val));
+ +            c->memory_order = advice;
+ +            Val b; b.type = ast.booltype; c->rettypes = {b.type, b.type}; lastcallrets = {b, b}; return b;
+ +        }
+ +        auto bytes = CheckArg(args[2], d.kind == B_MEMORY_READ_BYTES ? u8slice : cu8slice);
+ +        if (d.kind == B_MEMORY_READ_BYTES && !bytes.writable)
+ +            Error(c, "memory_read_bytes requires writable storage, not const bytes");
+ +        return VoidVal();
+ +    }
+++=======
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+      // The fully custom builtins first.
+      switch (d.kind) {
+          case B_PRINT:
+diff --cc test/errors_tc/unsafe_pointer_cast_out.goose
+index 27644966,ec27ba51..00000000
+--- a/test/errors_tc/unsafe_pointer_cast_out.goose
++++ b/test/errors_tc/unsafe_pointer_cast_out.goose
+@@@ -1,2 -1,2 +1,6 @@@
+++<<<<<<< HEAD
+ +// error: as requires a numeric source, got ::UnsafePtr
+++=======
++ // error: as requires a numeric source, got UnsafePtr
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+  fn main() { let h = unsafe_ptr_from_handle(0) as u64; }
+diff --cc test/errors_tc/unsafe_pointer_safe_from_raw.goose
+index da21f5d7,99da1f38..00000000
+--- a/test/errors_tc/unsafe_pointer_safe_from_raw.goose
++++ b/test/errors_tc/unsafe_pointer_safe_from_raw.goose
+@@@ -1,2 -1,2 +1,6 @@@
+++<<<<<<< HEAD
+ +// error: as requires a numeric source, got ::UnsafePtr
+++=======
++ // error: as requires a numeric source, got UnsafePtr
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+  fn main() { let p = unsafe_ptr_from_handle(0) as SharedView; }
+diff --cc test/memory/shared_memory.goose
+index 36e49f6b,2a7c5e3a..00000000
+--- a/test/memory/shared_memory.goose
++++ b/test/memory/shared_memory.goose
+@@@ -35,12 -35,6 +35,15 @@@ fn main() 
+      assert(memory_read<u64>(a, 7, true) == 18446744073709551615);
+      memory_copy(a, 24, a, 1, 14);
+      assert(memory_read<u16>(a, 24, false) == 4660);
+++<<<<<<< HEAD
+ +    memory_write<i16>(a, 39, -32768, true);
+ +    assert(memory_read<i16>(a, 39, true) == -32768);
+ +    memory_write<u32>(a, 41, 4294967295, false);
+ +    assert(memory_read<u32>(a, 41, false) == 4294967295);
+ +    memory_write<i64>(a, 45, -9223372036854775808, true);
+ +    assert(memory_read<i64>(a, 45, true) == -9223372036854775808);
+++=======
+++>>>>>>> refs/rewritten/feat-unsafe-pointer-interop
+      assert(!shared_close(owner));
+      shared_release(a);
+      for kind in 1..5 { assert(!thread_wait(thread_spawn_contained(misuse, v, kind))); }

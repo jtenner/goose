@@ -1,0 +1,34 @@
+diff --cc test/run_tests.py
+index 6e02758d,f316e6d5..00000000
+--- a/test/run_tests.py
++++ b/test/run_tests.py
+@@@ -2043,16 -2043,16 +2043,29 @@@ def main()
+              r.show_task(clang_mul_add)
+              r.show_task(clang_vec)
+  
+++<<<<<<< HEAD
+ +    def worker_packet_alignment():
+ +        from worker_packet_alignment import check_worker_packet_alignment
+ +        try:
+ +            check_worker_packet_alignment(exe, cc, gendir, runtime=r.runtime, extra=extra)
+ +            r.ok("worker packets: alignment enabled, Goose/C O0/O2, release/debug")
+ +        except RuntimeError as e:
+ +            r.fail("worker packet alignment", str(e))
+ +    if cc and cc.style == "gcc":
+ +        r.section("worker packet alignment")
+ +        r.show_task(worker_packet_alignment)
+++=======
++     def builder_return_alignment():
++         from builder_return_alignment import check_builder_return_alignment
++         try:
++             check_builder_return_alignment(exe, cc, gendir, runtime=r.runtime, extra=extra)
++             r.ok("builder return channels: alignment enabled, Goose/C O0/O2")
++         except RuntimeError as e:
++             r.fail("builder return alignment", str(e))
++     if cc and cc.style == "gcc":
++         r.section("builder return alignment")
++         r.show_task(builder_return_alignment)
+++>>>>>>> refs/rewritten/Merge-fork-master-retain-both-packed-alignment-regression-groups
+  
+      r.section("driver, diagnostics and language server")
+  

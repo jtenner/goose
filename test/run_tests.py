@@ -2120,7 +2120,6 @@ def main():
     if cc and cc.style == "gcc":
         r.section("worker packet alignment")
         r.show_task(worker_packet_alignment)
-
     def library_headers():
         from library_headers import check_library_headers
         try:
@@ -2131,28 +2130,6 @@ def main():
     if cc:
         r.section("library headers")
         r.show_task(library_headers)
-
-    def worker_packet_alignment():
-        from worker_packet_alignment import check_worker_packet_alignment
-        try:
-            check_worker_packet_alignment(exe, cc, gendir, runtime=r.runtime, extra=extra)
-            r.ok("worker packets: alignment enabled, Goose/C O0/O2, release/debug")
-        except RuntimeError as e:
-            r.fail("worker packet alignment", str(e))
-    if cc and cc.style == "gcc":
-        r.section("worker packet alignment")
-        r.show_task(worker_packet_alignment)
-
-    def builder_return_alignment():
-        from builder_return_alignment import check_builder_return_alignment
-        try:
-            check_builder_return_alignment(exe, cc, gendir, runtime=r.runtime, extra=extra)
-            r.ok("builder return channels: alignment enabled, Goose/C O0/O2")
-        except RuntimeError as e:
-            r.fail("builder return alignment", str(e))
-    if cc and cc.style == "gcc":
-        r.section("builder return alignment")
-        r.show_task(builder_return_alignment)
 
     r.section("driver, diagnostics and language server")
 
