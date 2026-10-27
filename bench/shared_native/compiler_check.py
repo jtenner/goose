@@ -158,7 +158,7 @@ def main():
                     for name in order:
                         rss = root / 'rss'
                         argv = ['/usr/bin/time', '-f', '%M', '-o', str(rss), report[name]['path'],
-                                'check', level, str(input_file)]
+                                'check', '--stats', level, str(input_file)]
                         start = time.perf_counter()
                         try:
                             result = subprocess.run(argv, capture_output=True, text=True, timeout=180, env=env)
