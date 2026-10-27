@@ -47,6 +47,67 @@ class CMakeInputs(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         return json.loads(self.report.read_text())
 
+    def output_base_report(self, base):
+        tools = self.root / 'tools'
+        tools.mkdir()
+        cmake = shutil.which('cmake')
+        wrapper = tools / 'cmake'
+        wrapper.write_text(f'#!{sys.executable}\nimport json, os, pathlib, shlex, subprocess, sys\n'
+                           f'base = {base!r}\n'
+                           'args = sys.argv[1:]\n'
+                           'if "-S" in args:\n'
+                           '    if "-G" in args: args[args.index("-G") + 1] = "Unix Makefiles"\n'
+                           '    else: args += ["-G", "Unix Makefiles"]\n'
+                           '    args = [a for a in args if not a.startswith("-DCMAKE_MAKE_PROGRAM=")]\n'
+                           f'code = subprocess.call([{cmake!r}, *args])\n'
+                           'if not code and "-S" in args:\n'
+                           '    db = pathlib.Path(args[args.index("-B") + 1]) / "compile_commands.json"\n'
+                           '    entries = json.loads(db.read_text())\n'
+                           '    matches = [entry for entry in entries\n'
+                           '               if pathlib.Path(entry["file"]).name == "value.c"]\n'
+                           '    if len(matches) != 1: raise RuntimeError("expected one value.c command")\n'
+                           '    entry = matches[0]\n'
+                           '    raw_output = entry.get("output")\n'
+                           '    if not raw_output:\n'
+                           '        command = entry.get("arguments") or shlex.split(entry["command"])\n'
+                           '        if "-o" not in command: raise RuntimeError("missing value.c output")\n'
+                           '        raw_output = command[command.index("-o") + 1]\n'
+                           '    output = pathlib.Path(raw_output)\n'
+                           '    if not output.is_absolute():\n'
+                           '        candidates = [db.parent / output, pathlib.Path(entry["directory"]) / output]\n'
+                           '        output = next((path for path in candidates if path.parent.is_dir()), None)\n'
+                           '        if output is None: raise RuntimeError("cannot resolve value.c output")\n'
+                           '    anchor = db.parent if base == "build" else pathlib.Path(entry["directory"])\n'
+                           '    entry["output"] = os.path.relpath(output, anchor)\n'
+                           '    db.write_text(json.dumps(entries))\n'
+                           'sys.exit(code)\n')
+        wrapper.chmod(0o755)
+        self.env['PATH'] = str(tools) + os.pathsep + self.env['PATH']
+        report = self.successful()
+        db = next(pathlib.Path(entry['path']) for entry in report['source']['files']
+                  if entry['path'].endswith('/compile_commands.json'))
+        entry = next(entry for entry in json.loads(db.read_text())
+                     if pathlib.Path(entry['file']).name == 'value.c')
+        return report, db, entry
+
+    def check_output_base(self, base):
+        report, db, entry = self.output_base_report(base)
+        output = pathlib.Path(entry['output'])
+        self.assertFalse(output.is_absolute())
+        self.assertEqual(output.parts[0], 'pkg' if base == 'build' else 'CMakeFiles')
+        anchor = db.parent if base == 'build' else pathlib.Path(entry['directory'])
+        self.assertEqual((anchor / output).parent,
+                         pathlib.Path(entry['directory']) / 'CMakeFiles' / 'value.dir')
+        self.assertEqual(report['results'][0]['checksum']['components'][0]['value'], '42')
+        files = {item['path'] for item in report['source']['files']}
+        self.assertTrue({str(self.header), str(self.root / 'dependency.c')} <= files)
+
+    def test_output_relative_to_top_build_directory(self):
+        self.check_output_base('build')
+
+    def test_output_relative_to_entry_directory(self):
+        self.check_output_base('entry')
+
     def test_excluded_generated_source(self):
         self.cmake.write_text(self.base +
             'add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/unused.c\n'
