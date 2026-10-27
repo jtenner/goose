@@ -1,0 +1,25 @@
+{
+  "backup_branch": "backup/2026-10-27-prerebase-goose",
+  "backup": "3ef85aa33971632971c80665f4b3dca7d4131dbc",
+  "master": "3ef85aa33971632971c80665f4b3dca7d4131dbc",
+  "upstream": "64d62fc7f148eadaed9b1c69be0c33d1da97c82f",
+  "replayed_head": "df7d9c1f31ddd345af8d5fc625e6d20e0aafadf9",
+  "src_tree": "b0d19699cd52e1edc5a60e3bf0c104b35c75fd31",
+  "replayed_count": 319,
+  "merge_count": 34,
+  "upstream_ancestor_exit": 0,
+  "empty_utf8_commit": "129055e564d7c3f7a0fbacc12dbbd9306046c4b8",
+  "skipped": [],
+  "builds_run": false,
+  "test_suites_run": false,
+  "benchmarks_run": false,
+  "pushed": false,
+  "runtime_headers_sha256": {
+    "goose.h": "16e4d67ae7013050fa14a84162fe57f77ae8f0a7cd7c285d94cdfefc99a87de4",
+    "runtime.h": "e2bde7cd14aaed697dfb5f68d4f5adaebcc25dd5fe15d9ce8b7417279eb601f2",
+    "runtime_ext.h": "bfce3ceee2d6d922d2ad2cdb527a293cde691c261aa4ecf9fe6e35e02637ddf3",
+    "runtime_impl.h": "c663afba24e83958fb599ec711c8f1ebebf2b3d4aee0175c1254ceb70158b50b",
+    "runtime_os.h": "c9a39f27dbdccc67cef192893cf2ddf397a3763605de204b6f072f9c196cbff5",
+    "runtime_threads.h": "e40656f42a88c82ed037d408543e57ae60d3069c8a340542fd10bcd63c4f0305"
+  }
+}
