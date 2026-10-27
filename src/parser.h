@@ -2134,7 +2134,10 @@ struct Parser {
             IsNext(T_SEMI);  // A redundant ';' after the block.
         } else {
             switch (lex.tok) {
-                case T_LET: case T_VAR: case T_CONST: case T_REUSABLE: case T_GUARD: case T_DEFER:
+                case T_CONST:
+                    if (lex.PeekTok() == T_IF) break;
+                    [[fallthrough]];
+                case T_LET: case T_VAR: case T_REUSABLE: case T_GUARD: case T_DEFER:
                 case T_FN: case T_RECURSIVE: case T_THREADFN: case T_EXTERN: case T_EXPORT:
                 case T_SIMD:
                     Error(cat("defer takes a statement or a block, not `", TokStr(), "`"));
