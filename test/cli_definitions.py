@@ -2,7 +2,7 @@
 """Native --define acceptance tests. Run with the compiler path as argument."""
 import pathlib
 import json
-import re
+import os
 import subprocess
 import sys
 import tempfile
@@ -14,9 +14,9 @@ EXE = pathlib.Path(sys.argv[1]).resolve()
 CHECKS = 0
 
 
-def invoke(args, *, ok=True, contains=None):
+def invoke(args, *, ok=True, contains=None, env=None):
     global CHECKS
-    result = subprocess.run([str(EXE), *map(str, args)], capture_output=True, text=True)
+    result = subprocess.run([str(EXE), *map(str, args)], capture_output=True, text=True, env=env)
     output = result.stdout + result.stderr
     assert (result.returncode == 0) == ok, (args, result.returncode, output)
     if contains is not None:
@@ -199,9 +199,28 @@ with tempfile.TemporaryDirectory(prefix="goose-definitions-") as directory:
             client.p.wait()
     # Native intermediates must be separated by configuration, independent of
     # option order. Concurrent builds may use the same source and different -o.
+    home = root / "intermediate-home"
+    env = dict(os.environ, GOOSE_HOME=str(home))
+    expected = root / "expected.c"
+
     def intermediate(definitions):
-        result = invoke(["build", "--dry-run", *definitions, source, "-o", root / "dry-run"])
-        return re.search(r"^wrote (.+) \(\d+ bytes\)$", result.stdout, re.MULTILINE).group(1)
+        pattern = f"build/prog/*/defines-*/{source.stem}.c"
+        for path in home.glob(pattern):
+            path.unlink()
+        expected.unlink(missing_ok=True)
+        invoke([*definitions, source, "-o", expected], env=env)
+        assert expected.is_file(), expected
+        expected_bytes = expected.read_bytes()
+        assert expected_bytes, expected
+        result = invoke(["build", "--dry-run", *definitions, source,
+                         "-o", root / "dry-run"], env=env)
+        paths = list(home.glob(pattern))
+        assert len(paths) == 1, (paths, result.stdout, result.stderr)
+        path = paths[0]
+        assert path.is_file(), path
+        assert path.stat().st_size == len(expected_bytes), path
+        assert path.read_bytes() == expected_bytes, path
+        return path
 
     config_a = ["--define", "COUNT=11", "--define", "FLAG=true"]
     config_b = ["--define", "FLAG=true", "--define", "COUNT=11"]
