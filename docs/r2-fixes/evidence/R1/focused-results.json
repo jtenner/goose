@@ -1,0 +1,290 @@
+[
+  {
+    "test": "test/typing/array_equality_assignment_controls.goose",
+    "mode": "roundtrip",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/typing/array_equality_assignment_controls.goose",
+    "mode": "O0",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/typing/array_equality_assignment_controls.goose",
+    "mode": "O2",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/typing/array_equality_lhs_assignment.goose",
+    "mode": "roundtrip",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/typing/array_equality_lhs_assignment.goose",
+    "mode": "O0",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/typing/array_equality_lhs_assignment.goose",
+    "mode": "O2",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/typing/array_equality_operand_order.goose",
+    "mode": "roundtrip",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/typing/array_equality_operand_order.goose",
+    "mode": "O0",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/typing/array_equality_operand_order.goose",
+    "mode": "O2",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/typing/array_equality_rhs_assignment.goose",
+    "mode": "roundtrip",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/typing/array_equality_rhs_assignment.goose",
+    "mode": "O0",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/typing/array_equality_rhs_assignment.goose",
+    "mode": "O2",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/typing/array_equality_slice_assignment.goose",
+    "mode": "roundtrip",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/typing/array_equality_slice_assignment.goose",
+    "mode": "O0",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/typing/array_equality_slice_assignment.goose",
+    "mode": "O2",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/codegen/byte_run_equality.goose",
+    "mode": "roundtrip",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/codegen/byte_run_equality.goose",
+    "mode": "O0",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/codegen/byte_run_equality.goose",
+    "mode": "O2",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/codegen/scalar_struct_equality.goose",
+    "mode": "roundtrip",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/codegen/scalar_struct_equality.goose",
+    "mode": "O0",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/codegen/scalar_struct_equality.goose",
+    "mode": "O2",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/codegen/bytes_value_equality.goose",
+    "mode": "roundtrip",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/codegen/bytes_value_equality.goose",
+    "mode": "O0",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/codegen/bytes_value_equality.goose",
+    "mode": "O2",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/codegen/float_equality.goose",
+    "mode": "roundtrip",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/codegen/float_equality.goose",
+    "mode": "O0",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/codegen/float_equality.goose",
+    "mode": "O2",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/typing/optional_call_flow.goose",
+    "mode": "roundtrip",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/typing/optional_call_flow.goose",
+    "mode": "O0",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/typing/optional_call_flow.goose",
+    "mode": "O2",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/typing/break_exit_flow.goose",
+    "mode": "roundtrip",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/typing/break_exit_flow.goose",
+    "mode": "O0",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/typing/break_exit_flow.goose",
+    "mode": "O2",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/typing/flow_scope_projection.goose",
+    "mode": "roundtrip",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/typing/flow_scope_projection.goose",
+    "mode": "O0",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/typing/flow_scope_projection.goose",
+    "mode": "O2",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "test/errors_tc/array_equality_double_assignment.goose",
+    "mode": "expected diagnostic",
+    "status": 1,
+    "passed": true
+  },
+  {
+    "test": "test/errors_tc/array_equality_unassigned_left.goose",
+    "mode": "expected diagnostic",
+    "status": 1,
+    "passed": true
+  },
+  {
+    "test": "test/errors_tc/array_inequality_implicit_slice_shrink.goose",
+    "mode": "expected diagnostic",
+    "status": 1,
+    "passed": true
+  },
+  {
+    "test": "test/errors_tc/shrink_temporary_implicit_slice.goose",
+    "mode": "expected diagnostic",
+    "status": 1,
+    "passed": true
+  },
+  {
+    "test": "test/errors_tc/shrink_temporary_binary.goose",
+    "mode": "expected diagnostic",
+    "status": 1,
+    "passed": true
+  },
+  {
+    "test": "test/errors_tc/empty_array_equality.goose",
+    "mode": "expected diagnostic",
+    "status": 1,
+    "passed": true
+  },
+  {
+    "test": "equality_recheck",
+    "mode": "O0",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "equality_recheck",
+    "mode": "O2",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "equality_same_type",
+    "mode": "O0",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "equality_same_type",
+    "mode": "O2",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "equality_bound_rhs",
+    "mode": "O0",
+    "status": 0,
+    "passed": true
+  },
+  {
+    "test": "equality_bound_rhs",
+    "mode": "O2",
+    "status": 0,
+    "passed": true
+  }
+]

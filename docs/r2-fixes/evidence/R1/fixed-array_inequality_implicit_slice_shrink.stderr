@@ -1,0 +1,3 @@
+/home/dev/.t3/worktrees/goose/t3-85933385/test/errors_tc/array_inequality_implicit_slice_shrink.goose:12: error: cannot call replace, which shrinks rows: rows[0][..], evaluated earlier in the statement, may still refer into rows (§5.2)
+    print(rows[0] != replace());
+  in fn main() instantiated from /home/dev/.t3/worktrees/goose/t3-85933385/test/errors_tc/array_inequality_implicit_slice_shrink.goose:4
