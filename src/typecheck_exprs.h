@@ -1848,7 +1848,14 @@ inline Val TypeCheck::CheckLogical(Binary *b) {
     return v;
 }
 
-inline Val TypeCheck::CheckBinaryResult(Binary *b, Val &lv, Val &rv) {
+inline Val TypeCheck::CheckEquality(Binary *b) {
+    auto entry = SaveFlow();
+    auto lv = Operand(b->left);
+    auto rv = Operand(b->right);
+    return CheckBinaryResult(b, lv, rv, &entry);
+}
+
+inline Val TypeCheck::CheckBinaryResult(Binary *b, Val &lv, Val &rv, const FlowState *entry) {
     NoUntypedEmptyArray(lv, b->left, TName(b->op));
     NoUntypedEmptyArray(rv, b->right, TName(b->op));
     auto lt = LoadType(lv.type), rt = LoadType(rv.type);
@@ -1892,15 +1899,14 @@ inline Val TypeCheck::CheckBinaryResult(Binary *b, Val &lv, Val &rv) {
             };
             if (!TypeEq(lt, rt) && elemof(lt) && elemof(rt) &&
                 TypeEq(elemof(lt), elemof(rt))) {
-                if (lt->kind != TY_SLICE) {
-                    b->left = WholeSlice(b->left);
-                    lv = Operand(b->left);
-                    lt = LoadType(lv.type);
-                }
+                if (lt->kind != TY_SLICE) b->left = WholeSlice(b->left);
                 if (rt->kind != TY_SLICE) b->right = WholeSlice(b->right);
                 // The adaptation can turn a copied fixed-array operand into
-                // a retained view. Recheck the RHS with that view live, as
-                // call arguments are rechecked after parameter adaptation.
+                // a retained view. Check both operands in source order with
+                // that view live, applying their flow effects only once.
+                RestoreFlow(*entry);
+                lv = Operand(b->left);
+                lt = LoadType(lv.type);
                 rv = Operand(b->right);
                 rt = LoadType(rv.type);
             }

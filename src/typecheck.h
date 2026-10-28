@@ -1999,7 +1999,8 @@ struct TypeCheck {
     void RetypeVal(Val &v, TypeExpr *ct);
     Val CheckRefIdentity(Binary *b);
     Val CheckLogical(Binary *b);
-    Val CheckBinaryResult(Binary *b, Val &lv, Val &rv);
+    Val CheckEquality(Binary *b);
+    Val CheckBinaryResult(Binary *b, Val &lv, Val &rv, const FlowState *entry = nullptr);
     Val NumericBinary(Binary *b, Val lv, Val rv, TypeExpr *&ct, bool trial);
     Val NumericUnary(Unary *u, const Val &v, bool trial);
     // A float whose type comes from float literals alone (§6.3): a constant,
