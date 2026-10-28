@@ -1,0 +1,3 @@
+/home/dev/.t3/worktrees/goose/t3-85933385/test/errors_tc/empty_array_equality.goose:5: error: cannot infer the element type of []: == gives it none (§4.2)
+    print([] == []);
+  in fn main() instantiated from /home/dev/.t3/worktrees/goose/t3-85933385/test/errors_tc/empty_array_equality.goose:4
