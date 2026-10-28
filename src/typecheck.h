@@ -2080,7 +2080,8 @@ struct TypeCheck {
     void RetypeVal(Val &v, TypeExpr *ct);
     Val CheckRefIdentity(Binary *b);
     Val CheckLogical(Binary *b);
-    Val CheckBinaryResult(Binary *b, Val &lv, Val &rv);
+    Val CheckEquality(Binary *b);
+    Val CheckBinaryResult(Binary *b, Val &lv, Val &rv, const FlowState *entry = nullptr);
     Val NumericBinary(Binary *b, Val lv, Val rv, TypeExpr *&ct, bool trial);
     void DecidedComparison(Binary *b, const Val &lv, const Val &rv, TypeExpr *lt, TypeExpr *rt);
     Val NumericUnary(Unary *u, const Val &v, bool trial);
