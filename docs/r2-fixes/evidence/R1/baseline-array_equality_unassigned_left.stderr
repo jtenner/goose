@@ -1,0 +1,3 @@
+test/errors_tc/array_equality_unassigned_left.goose:5: error: variable x may be used before it is assigned
+    print([x] == (block { x = 2; [1, 2] }));
+  in fn main() instantiated from test/errors_tc/array_equality_unassigned_left.goose:3
