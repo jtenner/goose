@@ -1,0 +1,9 @@
+[1/4] cd /home/dev/.t3/worktrees/goose/t3-85933385/build-r2-r1 && /home/dev/.local/lib/python3.13/site-packages/cmake/data/bin/cmake -DSRC=/home/dev/.t3/worktrees/goose/t3-85933385 -DOUT=/home/dev/.t3/worktrees/goose/t3-85933385/build-r2-r1/version/goose_version.h -DVERSION= -P /home/dev/.t3/worktrees/goose/t3-85933385/cmake/version.cmake
+[2/4] Building CXX object CMakeFiles/goose.dir/src/main.cpp.o
+In file included from /home/dev/.t3/worktrees/goose/t3-85933385/src/main.cpp:49:
+/home/dev/.t3/worktrees/goose/t3-85933385/src/toolchain.h:117:14: warning: variable 'wait' set but not used [-Wunused-but-set-variable]
+  117 |     for (int wait = 1;; wait *= 2) {
+      |              ^
+1 warning generated.
+[3/4] Building CXX object CMakeFiles/goose.dir/src/version.cpp.o
+[4/4] Linking CXX executable goose
