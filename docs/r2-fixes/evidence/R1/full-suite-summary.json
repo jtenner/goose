@@ -1,0 +1,145 @@
+{
+  "exit_status": 1,
+  "sections": [
+    {
+      "name": "lexer and shader compiler",
+      "passed": 5,
+      "failed": 0
+    },
+    {
+      "name": "parse, roundtrip and typecheck",
+      "passed": 1320,
+      "failed": 0
+    },
+    {
+      "name": "optimizer, stack report and C shapes",
+      "passed": 14,
+      "failed": 0
+    },
+    {
+      "name": "bounds-check annotations",
+      "passed": 63,
+      "failed": 0
+    },
+    {
+      "name": "generated C, built and run at -O0 and -O2",
+      "passed": 628,
+      "failed": 0
+    },
+    {
+      "name": "dump-runtime programs",
+      "passed": 13,
+      "failed": 0
+    },
+    {
+      "name": "GS_DEBUG programs",
+      "passed": 142,
+      "failed": 0
+    },
+    {
+      "name": "compiler roots, runtime lifecycle and clang",
+      "passed": 23,
+      "failed": 0
+    },
+    {
+      "name": "builder return alignment",
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "name": "worker packet alignment",
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "name": "library headers",
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "name": "driver, diagnostics and language server",
+      "passed": 56,
+      "failed": 1
+    },
+    {
+      "name": "native example acceptance",
+      "passed": 12,
+      "failed": 0
+    },
+    {
+      "name": "native builds, packages and runtime I/O",
+      "passed": 12,
+      "failed": 0
+    },
+    {
+      "name": "goose_in_goose bootstrap",
+      "passed": 23,
+      "failed": 0
+    },
+    {
+      "name": "JIT (TinyCC) runs",
+      "passed": 716,
+      "failed": 0
+    },
+    {
+      "name": "parse errors (errors/)",
+      "passed": 92,
+      "failed": 0
+    },
+    {
+      "name": "typecheck errors (errors_tc/ and native modules' rejection tests)",
+      "passed": 1891,
+      "failed": 0
+    },
+    {
+      "name": "recovery (errors_tc/recovery/)",
+      "passed": 17,
+      "failed": 0
+    },
+    {
+      "name": "long call chains and guard runs",
+      "passed": 6,
+      "failed": 0
+    },
+    {
+      "name": "language reference examples (docs/reference.md)",
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "name": "samples",
+      "passed": 52,
+      "failed": 0
+    }
+  ],
+  "passed": 5089,
+  "failed": 1,
+  "failure_names": [
+    "benchmark declarations"
+  ],
+  "failure_reason": "shared-native benchmark lock unavailable or occupied",
+  "negative_result": "expected index-qualified bench diagnostic was replaced by lock error",
+  "fixed_retry": {
+    "script": "test/bench_declarations.py",
+    "exit_status": 0,
+    "checks_passed": 43
+  },
+  "runtime_native_fixture_skips": 31,
+  "jit_fixture_skips": 45,
+  "native_sample_skips": 5,
+  "jit_sample_skips": 2,
+  "platform_skips": [
+    "huge pages (no transparent huge pages)",
+    "commit limit (not Windows)"
+  ],
+  "baseline_check": {
+    "script": "test/bench_declarations.py",
+    "exit_status": 1,
+    "failure_name": "benchmark declarations",
+    "failure_reason": "shared-native benchmark lock unavailable or occupied",
+    "expected_diagnostic": "bench results cannot be index-qualified integers",
+    "raw_evidence": "baseline-benchmark-declarations.stderr",
+    "product_revision": "67ad0726167292029f3dce9c28e370db48e625cc"
+  },
+  "introduced_failures_observed": []
+}

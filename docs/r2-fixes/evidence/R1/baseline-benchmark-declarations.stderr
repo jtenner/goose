@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/dev/.t3/worktrees/goose/t3-85933385/test/bench_declarations.py", line 91, in <module>
+    result = invoke("bench", source, *options, ok=False,
+                    contains="bench results cannot be index-qualified integers")
+  File "/home/dev/.t3/worktrees/goose/t3-85933385/test/bench_declarations.py", line 25, in invoke
+    assert contains in result.stdout + result.stderr, (args, contains, result.stdout, result.stderr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (('bench', PosixPath('/tmp/goose-bench-declarations-6k6cizba/entry.goose'), '--temperature', 'off'), 'bench results cannot be index-qualified integers', 'Benchmark source: /tmp/goose-bench-declarations-6k6cizba/entry.goose\nGoose/toolchain: {"path":"/home/dev/.t3/worktrees/goose/t3-85933385/build-r2-r1/goose","sha256":"f0649f53ed9ecf70c472c780145a7cada4a894ef4fa61418ea7371f0c28c1a18","version":"goose runtime 0ec98ba49118"} / null\nWarmups: 2; gate: 60 C; ceiling: 65 C; UNGATED\nkey\tlabel\tsize\tisolation\tcount\tmedian ms\tMAD %\tmin ms\tmax ms\tmax observed Tctl C\trejections\tprocess peak MiB\tchecksum\tstatus\tsignature\nRSS is the process lifetime high-water mark, including runtime and global fixtures.\n', 'benchmark artifacts: /tmp/goose-bench-7M3O7B\nbench: shared-native benchmark lock unavailable or occupied\n')
