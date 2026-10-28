@@ -1,0 +1,29 @@
+[1/24] Building C object CMakeFiles/libtcc.dir/third_party/tinycc/libtcc.c.o
+[2/24] Linking C static library libtcc.a
+[3/24] Building C object CMakeFiles/tcc_driver.dir/third_party/tinycc/tcc.c.o
+[4/24] Linking C executable tcc/tcc
+[5/24] tcc lib/alloca-bt.S
+[6/24] tcc lib/alloca.S
+[7/24] tcc lib/atomic.S
+[8/24] tcc lib/builtin.c
+[9/24] tcc lib/dsohandle.c
+[10/24] tcc lib/libtcc1.c
+[11/24] tcc lib/stdatomic.c
+[12/24] tcc lib/va_list.c
+[13/24] Building C object CMakeFiles/goose_shaderc.dir/src/shaderc.c.o
+[14/24] cd /home/dev/.t3/worktrees/goose/t3-85933385/build-r2-r1 && /home/dev/.local/lib/python3.13/site-packages/cmake/data/bin/cmake -DSRC=/home/dev/.t3/worktrees/goose/t3-85933385 -DOUT=/home/dev/.t3/worktrees/goose/t3-85933385/build-r2-r1/version/goose_version.h -DVERSION= -P /home/dev/.t3/worktrees/goose/t3-85933385/cmake/version.cmake
+[15/24] tcc -ar libtcc1.a
+[16/24] tcc lib/runmain.c
+[17/24] Linking C static library libgoose_shaderc.a
+[18/24] Building CXX object CMakeFiles/goose.dir/src/main.cpp.o
+In file included from /home/dev/.t3/worktrees/goose/t3-85933385/src/main.cpp:49:
+/home/dev/.t3/worktrees/goose/t3-85933385/src/toolchain.h:117:14: warning: variable 'wait' set but not used [-Wunused-but-set-variable]
+  117 |     for (int wait = 1;; wait *= 2) {
+      |              ^
+1 warning generated.
+[19/24] Building CXX object CMakeFiles/goose.dir/src/process.cpp.o
+[20/24] Building CXX object CMakeFiles/goose.dir/src/version.cpp.o
+[21/24] Building CXX object CMakeFiles/goose.dir/src/bench.cpp.o
+[22/24] Building CXX object CMakeFiles/goose.dir/src/bench_report.cpp.o
+[23/24] Building CXX object CMakeFiles/goose.dir/src/progress.cpp.o
+[24/24] Linking CXX executable goose

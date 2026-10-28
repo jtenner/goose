@@ -1,0 +1,57 @@
+[
+  {
+    "test": "test/typing/array_equality_assignment_controls.goose",
+    "status": 0,
+    "reason": "control passed"
+  },
+  {
+    "test": "test/typing/array_equality_lhs_assignment.goose",
+    "status": 1,
+    "reason": "repeat-assignment diagnostic"
+  },
+  {
+    "test": "test/typing/array_equality_operand_order.goose",
+    "status": 1,
+    "reason": "repeat-assignment diagnostic"
+  },
+  {
+    "test": "test/typing/array_equality_rhs_assignment.goose",
+    "status": 1,
+    "reason": "repeat-assignment diagnostic"
+  },
+  {
+    "test": "test/typing/array_equality_slice_assignment.goose",
+    "status": 1,
+    "reason": "repeat-assignment diagnostic"
+  },
+  {
+    "test": "test/errors_tc/array_equality_double_assignment.goose",
+    "status": 1,
+    "reason": "all expected rejection markers matched"
+  },
+  {
+    "test": "test/errors_tc/array_equality_unassigned_left.goose",
+    "status": 1,
+    "reason": "all expected rejection markers matched"
+  },
+  {
+    "test": "test/errors_tc/array_inequality_implicit_slice_shrink.goose",
+    "status": 1,
+    "reason": "all expected rejection markers matched"
+  },
+  {
+    "test": "test/errors_tc/shrink_temporary_implicit_slice.goose",
+    "status": 1,
+    "reason": "all expected rejection markers matched"
+  },
+  {
+    "test": "test/errors_tc/shrink_temporary_binary.goose",
+    "status": 1,
+    "reason": "all expected rejection markers matched"
+  },
+  {
+    "test": "test/errors_tc/empty_array_equality.goose",
+    "status": 1,
+    "reason": "all expected rejection markers matched"
+  }
+]

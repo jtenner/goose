@@ -1,0 +1,3 @@
+test/errors_tc/array_equality_double_assignment.goose:5: error: cannot assign to let x (§4.4)
+    print((block { x = 1; [1] }) == (block { x = 2; [1, 2] }));
+  in fn main() instantiated from test/errors_tc/array_equality_double_assignment.goose:3

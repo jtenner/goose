@@ -1,0 +1,3 @@
+test/typing/array_equality_slice_assignment.goose:5: error: cannot assign to let x (§4.4)
+    print(values[..] == (block { x = 2; [1] }));
+  in fn main() instantiated from test/typing/array_equality_slice_assignment.goose:2

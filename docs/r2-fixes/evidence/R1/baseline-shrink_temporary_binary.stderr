@@ -1,0 +1,3 @@
+test/errors_tc/shrink_temporary_binary.goose:5: error: cannot pop a: a[..], evaluated earlier in the statement, may still refer into a (§5.2)
+    print(a[..] == (block { a.pop(); break [42]; }));
+  in fn main() instantiated from test/errors_tc/shrink_temporary_binary.goose:3

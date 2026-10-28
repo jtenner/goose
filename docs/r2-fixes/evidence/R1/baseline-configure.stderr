@@ -1,0 +1,29 @@
+CMake Error at /home/dev/.local/lib/python3.13/site-packages/cmake/data/share/cmake-4.4/Modules/CMakeTestCXXCompiler.cmake:71 (message):
+  The C++ compiler
+
+    "/home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++-23"
+
+  is not able to compile a simple test program.
+
+  It fails with the following output:
+
+    Change Dir: '/home/dev/.t3/worktrees/goose/t3-85933385/build-r2-r1/CMakeFiles/CMakeScratch/TryCompile-o4xA09'
+    
+    Run Build Command(s): /home/dev/.local/bin/ninja -v cmTC_83ec9
+    [1/2] /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++-23    -MD -MT CMakeFiles/cmTC_83ec9.dir/testCXXCompiler.cxx.o -MF CMakeFiles/cmTC_83ec9.dir/testCXXCompiler.cxx.o.d -o CMakeFiles/cmTC_83ec9.dir/testCXXCompiler.cxx.o -c /home/dev/.t3/worktrees/goose/t3-85933385/build-r2-r1/CMakeFiles/CMakeScratch/TryCompile-o4xA09/testCXXCompiler.cxx
+    [2/2] : && /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++-23   CMakeFiles/cmTC_83ec9.dir/testCXXCompiler.cxx.o -o cmTC_83ec9   && :
+    FAILED: [code=1] cmTC_83ec9 
+    : && /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++-23   CMakeFiles/cmTC_83ec9.dir/testCXXCompiler.cxx.o -o cmTC_83ec9   && :
+    /home/dev/.local/share/mise/installs/clang/23.1.3/bin/x86_64-conda-linux-gnu-ld: cannot find -lstdc++: No such file or directory
+    clang++-23: error: linker command failed with exit code 1 (use -v to see invocation)
+    ninja: build stopped: subcommand failed.
+    
+    
+
+
+
+  CMake will not be able to correctly generate this project.
+Call Stack (most recent call first):
+  CMakeLists.txt:2 (project)
+
+
