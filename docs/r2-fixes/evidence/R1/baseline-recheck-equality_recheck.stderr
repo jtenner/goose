@@ -1,0 +1,3 @@
+/home/dev/.t3/worktrees/goose/t3-85933385/docs/r2-fixes/evidence/R1/equality_recheck.goose:3: error: cannot assign to let x (§4.4)
+    print([1] == (block { x = 2; [1, 2] }));
+  in fn main() instantiated from /home/dev/.t3/worktrees/goose/t3-85933385/docs/r2-fixes/evidence/R1/equality_recheck.goose:1
