@@ -70,4 +70,3 @@ package: exit 1; expected ['main-thread-only extern', 'worker -> native']
 /home/dev/.t3/worktrees/goose/feat-safer-threading/build/red-contract-plumbing/worker-native-contract/restricted.goose:1: error: expected ';' in extern declaration, found 'worker_callable'
 extern fn native() worker_callable;
                    ^
-

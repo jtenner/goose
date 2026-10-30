@@ -107,3 +107,9 @@ through Goose workers and moving the claim into Goose; safe capabilities cannot
 be converted to a pointer for its current C counter adapter. Strict adoption
 also requires auditing/annotating the transitive native calls. Neither
 migration was made here, and no new mutex, TLS API or ownership system was added.
+
+The main `/home/dev/Projects/goose` checkout was fast-forwarded and rebuilt.
+`goose++` on PATH passed strict positive and negative checks, declaration
+roundtripping, the LSP option probe, and native execution of the unchanged
+shared-atomic jobs sample (`1000 jobs, sum 500500`). See
+`evidence/primary-goose-smoke.log`.
