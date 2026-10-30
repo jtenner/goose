@@ -113,7 +113,13 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
             default: assert(false);
         }
     }
-    if (d.kind >= B_SHARED_ATOMIC32 && d.kind <= B_ATOMIC_CAS) {
+    bool rawatomic = d.kind >= B_UNSAFE_ATOMIC_LOCKFREE && d.kind <= B_UNSAFE_ATOMIC_CAS;
+    if ((d.kind >= B_SHARED_ATOMIC32 && d.kind <= B_ATOMIC_CAS) || rawatomic) {
+        auto bk = d.kind;
+        if (rawatomic) {
+            static const BuiltinKind kinds[] = {B_ATOMIC_LOCKFREE, B_ATOMIC_LOAD, B_ATOMIC_STORE, B_ATOMIC_ADD, B_ATOMIC_CAS};
+            bk = kinds[d.kind - B_UNSAFE_ATOMIC_LOCKFREE];
+        }
         auto native = [&](size_t i, NativeKind k) {
             auto v = CheckValue(args[i], nullptr);
             if (v.type->kind != TY_NATIVE || v.type->nativekind != k)
@@ -125,26 +131,36 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
             return v;
         };
         auto nt = [&](NativeKind k) { auto t = ast.NewType(TY_NATIVE, c->line); t->nativekind = k; return t; };
-        if (d.kind <= B_SHARED_ATOMIC_ARRAY64) {
-            bool u32 = d.kind == B_SHARED_ATOMIC32 || d.kind == B_SHARED_ATOMIC_ARRAY32;
+        if (bk <= B_SHARED_ATOMIC_ARRAY64) {
+            bool u32 = bk == B_SHARED_ATOMIC32 || bk == B_SHARED_ATOMIC_ARRAY32;
             native(0, NK_OWNER); CheckIntAny(args[1]);
-            bool array = d.kind >= B_SHARED_ATOMIC_ARRAY32;
+            bool array = bk >= B_SHARED_ATOMIC_ARRAY32;
             if (array) CheckIntAny(args[2]);
             CheckArg(args[array ? 3 : 2], ast.inttypes[u32 ? IS_U32 : IS_U64]);
             return result(nt(array ? NK_VIEW : u32 ? NK_ATOMIC_U32 : NK_ATOMIC_U64));
         }
-        if (d.kind == B_SHARED_ATOMIC_VIEW32 || d.kind == B_SHARED_ATOMIC_VIEW64) {
+        if (bk == B_SHARED_ATOMIC_VIEW32 || bk == B_SHARED_ATOMIC_VIEW64) {
             native(0, NK_VIEW); CheckIntAny(args[1]);
-            return result(nt(d.kind == B_SHARED_ATOMIC_VIEW32 ? NK_ATOMIC_U32 : NK_ATOMIC_U64));
+            return result(nt(bk == B_SHARED_ATOMIC_VIEW32 ? NK_ATOMIC_U32 : NK_ATOMIC_U64));
         }
-        auto v = CheckValue(args[0], nullptr);
-        if (v.type->kind != TY_NATIVE || (v.type->nativekind != NK_ATOMIC_U32 && v.type->nativekind != NK_ATOMIC_U64))
-            Error(c, cat(d.name, " requires SharedAtomicU32 or SharedAtomicU64"));
-        auto scalar = ast.inttypes[v.type->nativekind == NK_ATOMIC_U32 ? IS_U32 : IS_U64];
+        TypeExpr *scalar;
+        if (rawatomic) {
+            if (c->tyargs.size() != 1) Error(c, "unsafe atomics need exactly one type argument");
+            scalar = Subst(c->tyargs[0]);
+            if (!IsIntT(scalar) || scalar->ix ||
+                (scalar->intstorage != IS_U32 && scalar->intstorage != IS_U64))
+                Error(c, "unsafe atomic type must be u32 or u64");
+            if (bk != B_ATOMIC_LOCKFREE) CheckArg(args[0], ast.inttypes[IS_U64]);
+        } else {
+            auto v = CheckValue(args[0], nullptr);
+            if (v.type->kind != TY_NATIVE || (v.type->nativekind != NK_ATOMIC_U32 && v.type->nativekind != NK_ATOMIC_U64))
+                Error(c, cat(d.name, " requires SharedAtomicU32 or SharedAtomicU64"));
+            scalar = ast.inttypes[v.type->nativekind == NK_ATOMIC_U32 ? IS_U32 : IS_U64];
+        }
         c->qtype = scalar;
-        if (d.kind == B_ATOMIC_LOCKFREE) return result(ast.booltype);
-        if (d.kind != B_ATOMIC_LOAD) CheckArg(args[1], scalar);
-        if (d.kind == B_ATOMIC_CAS) CheckArg(args[2], scalar);
+        if (bk == B_ATOMIC_LOCKFREE) return result(ast.booltype);
+        if (bk != B_ATOMIC_LOAD) CheckArg(args[1], scalar);
+        if (bk == B_ATOMIC_CAS) CheckArg(args[2], scalar);
         auto order = [&](size_t i) {
             auto lit = ConstStrLit(args[i]);
             if (!lit) Error(c, "memory order must be a compile-time string");
@@ -154,17 +170,17 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
             for (int k = 0; k < 5; k++) if (lit->val == names[k]) return codes[k];
             Error(c, cat("unknown memory order: ", lit->val));
         };
-        auto oi = d.kind == B_ATOMIC_LOAD ? 1 : d.kind == B_ATOMIC_CAS ? 3 : 2;
+        auto oi = bk == B_ATOMIC_LOAD ? 1 : bk == B_ATOMIC_CAS ? 3 : 2;
         c->memory_order = order(oi);
         auto o = c->memory_order;
-        if (d.kind == B_ATOMIC_LOAD && (o == 3 || o == 4)) Error(c, "invalid memory order for atomic load");
-        if (d.kind == B_ATOMIC_STORE && (o == 2 || o == 4)) Error(c, "invalid memory order for atomic store");
-        if (d.kind == B_ATOMIC_CAS) {
+        if (bk == B_ATOMIC_LOAD && (o == 3 || o == 4)) Error(c, "invalid memory order for atomic load");
+        if (bk == B_ATOMIC_STORE && (o == 2 || o == 4)) Error(c, "invalid memory order for atomic store");
+        if (bk == B_ATOMIC_CAS) {
             auto f = c->failure_order = order(4);
             if (f == 3 || f == 4 || (f == 5 && o != 5) || (f == 2 && o != 2 && o != 4 && o != 5))
                 Error(c, "invalid compare_exchange failure order");
         }
-        return d.kind == B_ATOMIC_STORE ? VoidVal() : result(scalar, d.kind == B_ATOMIC_CAS);
+        return bk == B_ATOMIC_STORE ? VoidVal() : result(scalar, bk == B_ATOMIC_CAS);
     }
     if (d.kind >= B_SHARED_MAP && d.kind <= B_MEMORY_WRITE_BYTES) {
         if (d.kind == B_SHARED_MAP) {
