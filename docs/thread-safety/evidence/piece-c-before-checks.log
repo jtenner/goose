@@ -1,0 +1,73 @@
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+  File "/home/dev/.t3/worktrees/goose/feat-safer-threading/test/worker_native_contract.py", line 71, in check_worker_native_contract
+    raise RuntimeError("\n".join(failures))
+RuntimeError: direct: exit 0; expected ['unclassified extern', 'declaration at', 'worker -> native']
+
+helper: exit 0; expected ['unclassified extern', 'declaration at', 'worker -> helper -> native']
+
+generic: exit 0; expected ['unclassified extern', 'declaration at', 'worker -> helper -> native']
+
+recursive: exit 0; expected ['unclassified extern', 'declaration at', 'worker -> helper -> native']
+
+bound: exit 0; expected ['unclassified extern', 'declaration at', 'worker -> invoke -> helper -> native']
+
+format: exit 0; expected ['unclassified extern', 'declaration at', 'worker -> format -> native']
+
+dispatch: exit 0; expected ['unclassified extern', 'declaration at', 'worker -> visit -> native']
+
+unsafe_ptr_from_handle: exit 0; expected ['unsafe native operation', 'worker -> helper -> unsafe_ptr_from_handle']
+
+unsafe_handle_from_ptr: exit 0; expected ['unsafe native operation', 'worker -> helper -> unsafe_handle_from_ptr']
+
+unsafe_ptr_add: exit 0; expected ['unsafe native operation', 'worker -> helper -> unsafe_ptr_add']
+
+unsafe_load: exit 0; expected ['unsafe native operation', 'worker -> helper -> unsafe_load']
+
+unsafe_store: exit 0; expected ['unsafe native operation', 'worker -> helper -> unsafe_store']
+
+main-only: exit 1; expected ['main-thread-only extern', 'worker -> native', 'declaration at']
+/home/dev/.t3/worktrees/goose/feat-safer-threading/build/red-contract-plumbing/worker-native-contract/main-only.goose:1: error: expected ';' in extern declaration, found 'main_thread_only'
+extern fn native() main_thread_only; thread_fn worker() { native(); } fn main() { thread_wait(thread_spawn(worker)); }
+                   ^
+
+main-only-legacy: exit 1; expected ['runs on the main thread only', 'worker -> native']
+/home/dev/.t3/worktrees/goose/feat-safer-threading/build/red-contract-plumbing/worker-native-contract/main-only-legacy.goose:1: error: expected ';' in extern declaration, found 'main_thread_only'
+extern fn native() main_thread_only; thread_fn worker() { native(); } fn main() { thread_wait(thread_spawn(worker)); }
+                   ^
+
+overload: exit 1; expected ['unclassified extern', 'worker -> native', 'declaration at']
+/home/dev/.t3/worktrees/goose/feat-safer-threading/build/red-contract-plumbing/worker-native-contract/overload.goose:1: error: expected ';' in extern declaration, found 'worker_callable'
+extern fn native(x: i64) worker_callable; extern fn native(x: bool); thread_fn worker() { native(1); native(true); } fn main() { thread_wait(thread_spawn(worker)); }
+                         ^
+
+exact: exit 1; expected ['unclassified extern', 'worker -> native']
+/home/dev/.t3/worktrees/goose/feat-safer-threading/build/red-contract-plumbing/worker-native-contract/exact.goose:1: error: expected ';' in extern declaration, found 'worker_callable'
+extern fn allowed() worker_callable; extern fn native(); thread_fn worker() { allowed(); native(); } fn main() { thread_wait(thread_spawn(worker)); }
+                    ^
+
+coordinator: exit 1; expected accept
+/home/dev/.t3/worktrees/goose/feat-safer-threading/build/red-contract-plumbing/worker-native-contract/coordinator.goose:1: error: expected ';' in extern declaration, found 'main_thread_only'
+extern fn native() main_thread_only; thread_fn worker() {} fn main() { native(); thread_wait(thread_spawn(worker)); }
+                   ^
+
+annotated: exit 1; expected accept
+/home/dev/.t3/worktrees/goose/feat-safer-threading/build/red-contract-plumbing/worker-native-contract/annotated.goose:1: error: expected ';' in extern declaration, found 'worker_callable'
+extern fn native() worker_callable = "contract_native"; thread_fn worker() { native(); } fn main() { thread_wait(thread_spawn(worker)); }
+                   ^
+
+dylib: exit 1; expected accept
+/home/dev/.t3/worktrees/goose/feat-safer-threading/build/red-contract-plumbing/worker-native-contract/dylib.goose:1: error: expected ';' in extern declaration, found 'worker_callable'
+extern "contract-library" { fn native() worker_callable; } thread_fn worker() { native(); } fn main() { thread_wait(thread_spawn(worker)); }
+                                        ^
+
+conflicting: exit 1; expected ['only one worker-native classification']
+/home/dev/.t3/worktrees/goose/feat-safer-threading/build/red-contract-plumbing/worker-native-contract/conflicting.goose:1: error: expected ';' in extern declaration, found 'worker_callable'
+extern fn native() worker_callable main_thread_only; fn main() {}
+                   ^
+
+package: exit 1; expected ['main-thread-only extern', 'worker -> native']
+/home/dev/.t3/worktrees/goose/feat-safer-threading/build/red-contract-plumbing/worker-native-contract/restricted.goose:1: error: expected ';' in extern declaration, found 'worker_callable'
+extern fn native() worker_callable;
+                   ^
+
