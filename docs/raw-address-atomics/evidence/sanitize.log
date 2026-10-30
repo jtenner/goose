@@ -1,0 +1,49 @@
+profile: sanitize; C backend: clang 23.1.3; JIT backend: none; audio: not built in; gfx: not built in; physics: not built in; ui: not built in
+== lexer and shader compiler: 5 ok
+== parse, roundtrip and typecheck: 1324 ok
+== optimizer, stack report and C shapes: 14 ok
+== bounds-check annotations: 63 ok
+== generated C, built and run at -O2
+skip running 31 audio, gfx, physics or ui test(s) (no layer for them, or no GPU device): audio_errors.goose, audio_mixer.goose, gfx_compute.goose, gfx_events.goose, gfx_frames.goose, gfx_input_edges.goose, gfx_misuse.goose, gfx_mouse_capture.goose, gfx_render.goose, gfx_shader_sources.goose, gfx_textures.goose, physics_bodies.goose, physics_events.goose, physics_joints.goose, physics_misuse.goose, physics_queries.goose, physics_recording.goose, physics_shapes.goose, physics_world.goose, ui_charts.goose, ui_draw.goose, ui_edit.goose, ui_fonts.goose, ui_misuse.goose, ui_misuse_messages.goose, ui_popups.goose, ui_render.goose, ui_style.goose, ui_wants_input.goose, ui_widgets.goose, ui_windows.goose
+== generated C, built and run at -O2: 630 ok
+== dump-runtime programs: 13 ok
+== GS_DEBUG programs: 142 ok
+== compiler roots, runtime lifecycle and clang: 6 ok
+== unsafe raw atomics: 1 ok
+== worker native contract: 1 ok
+== builder return alignment: 1 ok
+== worker packet alignment: 1 ok
+== library headers: 1 ok
+== driver, diagnostics and language server
+Traceback (most recent call last):
+  File "/home/dev/.t3/worktrees/goose/feat-raw-address-atomics/test/bench_declarations.py", line 91, in <module>
+    result = invoke("bench", source, *options, ok=False,
+                    contains="bench results cannot be index-qualified integers")
+  File "/home/dev/.t3/worktrees/goose/feat-raw-address-atomics/test/bench_declarations.py", line 25, in invoke
+    assert contains in result.stdout + result.stderr, (args, contains, result.stdout, result.stderr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (('bench', PosixPath('/tmp/goose-bench-declarations-ticjgbsv/entry.goose'), '--temperature', 'off'), 'bench results cannot be index-qualified integers', 'Benchmark source: /tmp/goose-bench-declarations-ticjgbsv/entry.goose\nGoose/toolchain: {"path":"/home/dev/.t3/worktrees/goose/feat-raw-address-atomics/build-sanitize/goose","sha256":"6dc637e3effaf06873859e13cbcf3e7a73831c45d099a527af552d79c190022d","version":"goose runtime 0ec98ba49118"} / null\nWarmups: 2; gate: 60 C; ceiling: 65 C; UNGATED\nkey\tlabel\tsize\tisolation\tcount\tmedian ms\tMAD %\tmin ms\tmax ms\tmax observed Tctl C\trejections\tprocess peak MiB\tchecksum\tstatus\tsignature\nRSS is the process lifetime high-water mark, including runtime and global fixtures.\n', 'benchmark artifacts: /tmp/goose-bench-pmN9h8\nbench: shared-native benchmark lock unavailable or occupied\n')
+FAIL benchmark declarations
+== driver, diagnostics and language server: 50 ok, 1 FAIL
+== native example acceptance
+skip native example execution (requires Linux native baseline with GCC/Clang)
+== native example acceptance: 7 ok
+== native builds, packages and runtime I/O
+skip huge pages (no transparent huge pages)
+skip commit limit (not Windows)
+== native builds, packages and runtime I/O: 12 ok
+== goose_in_goose bootstrap: 9 ok
+== JIT (TinyCC) runs
+skip JIT run tests (sanitizer profile, --no-jit, or a compiler built without the TinyCC backend)
+== JIT (TinyCC) runs: 0 ok
+== parse errors (errors/): 92 ok
+== typecheck errors (errors_tc/ and native modules' rejection tests): 1897 ok
+== recovery (errors_tc/recovery/): 17 ok
+== long call chains and guard runs: 4 ok
+== language reference examples (docs/reference.md): 1 ok
+== samples
+skip audio, gfx, physics or ui sample(s) (no layer for them, or no GPU device): 27_gfx_cube.goose, 28_physics_boxes.goose, 29_ui_todo.goose, 30_mini_minecraft.goose, 31_mini_doom.goose
+== samples: 27 ok
+(120s with 16 job(s))
+1 FAILURE(S):
+driver, diagnostics and language server: FAIL benchmark declarations

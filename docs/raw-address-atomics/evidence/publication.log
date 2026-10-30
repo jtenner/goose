@@ -1,0 +1,9 @@
+Goose O0, gcc, sanitizer=False: bounds diagnostic preserved
+Goose O0, clang, sanitizer=False: bounds diagnostic preserved
+Goose O0, clang, sanitizer=True: bounds diagnostic preserved
+Goose O1, gcc, sanitizer=False: bounds diagnostic preserved
+Goose O1, clang, sanitizer=False: bounds diagnostic preserved
+Goose O1, clang, sanitizer=True: bounds diagnostic preserved
+Goose O2, gcc, sanitizer=False: bounds diagnostic preserved
+Goose O2, clang, sanitizer=False: bounds diagnostic preserved
+Goose O2, clang, sanitizer=True: bounds diagnostic preserved
