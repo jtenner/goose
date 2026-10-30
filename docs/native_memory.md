@@ -284,3 +284,54 @@ The optional [strict worker-native contract](worker_native_contract.md) rejects
 unclassified or main-thread-only externs, and unsafe pointer builtins, reached
 from worker call graphs. It complements the existing shared capabilities;
 annotations do not prove synchronization or lifetime rules for native handles.
+
+## Fork-only unsafe raw address atomics
+
+The owner authorized this deliberate unsafe facility for the jtenner fork on
+2026-10-30, overriding the scope study's recommendation to require capabilities.
+It is fork-only and must not be proposed upstream. Existing `SharedAtomicU32`
+and `SharedAtomicU64` contracts are unchanged.
+
+Each builtin requires exactly one type argument, `u32` or `u64`. Addresses are
+`u64` integer address values, as returned by `unsafe_handle_from_ptr`:
+
+| Builtin | Result |
+| --- | --- |
+| `unsafe_atomic_is_lock_free<T>()` | `bool`, for the selected width |
+| `unsafe_atomic_load<T>(address, order)` | `T` |
+| `unsafe_atomic_store<T>(address, value, order)` | no result |
+| `unsafe_atomic_fetch_add<T>(address, value, order)` | previous `T`, wrapping addition |
+| `unsafe_atomic_compare_exchange<T>(address, expected, desired, success_order, failure_order)` | observed `T`, success `bool` |
+
+Compare-exchange is strong (no spurious failure). On success the observed value
+is the original expected value; on failure it is the actual value of the cell.
+Orders use the existing compile-time strings `Relaxed`, `Acquire`, `Release`,
+`AcqRel`, and `SeqCst`, with the same load, store and failure-order restrictions
+as capability atomics. Load rejects Release/AcqRel, store rejects Acquire/AcqRel;
+CAS failure rejects Release/AcqRel and orders stronger than the success order.
+
+**The caller owns the address, its alignment, its lifetime, and the rule that
+the cell is touched only through these operations.** The caller must provide
+valid provenance, sufficient allocated extent, read/write permissions and
+synchronization; retain the allocation until every worker has joined. There
+is no capability registration, ownership tracking, bounds checking or lifetime
+validation. Null, out-of-target-width and misaligned addresses abort with a
+source diagnostic before dereferencing; alignment is 4 bytes for u32 and 8 for
+u64. These checks cannot make an otherwise invalid address safe. Do not mix
+ordinary accesses, unsafe_load/store, or capability accesses with these cells.
+
+Only native GCC/Clang targets where the requested width is always lock-free
+are accepted. TinyCC and MSVC are explicitly rejected, with no mutex fallback.
+Only Linux x86-64 has been execution-verified. The opt-in strict worker-native
+contract rejects these unsafe operations in worker call graphs, as it does
+other unsafe native operations.
+
+A Slipstream consumer can retain a native allocation containing an aligned
+u64 counter, pass its integer address to workers, initialize it with
+`unsafe_atomic_store<u64>(address, 0, "Relaxed")` before spawn, and claim work
+with `unsafe_atomic_fetch_add<u64>(address, 1, "Relaxed")`. A returned index
+below the job count belongs to that worker; higher indices terminate its loop.
+Choose a width and workload that cannot wrap, publish job metadata before
+spawn, and join all workers before reading results or freeing the allocation.
+Relaxed claims distribute indices; publication of other data needs its own
+synchronization. No Slipstream source changes are required by this compiler API.

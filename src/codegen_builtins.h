@@ -88,6 +88,42 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
             default: assert(false);
         }
     }
+    if (c->builtin >= B_UNSAFE_ATOMIC_LOCKFREE && c->builtin <= B_UNSAFE_ATOMIC_CAS) {
+        auto bk = c->builtin;
+        bool u32 = c->qtype->intstorage == IS_U32;
+        int width = u32 ? 4 : 8;
+        if (used.insert(u32 ? "raw_atomic32" : "raw_atomic64").second) {
+            Append(head, "\n#if defined(__TINYC__) || defined(_MSC_VER) || (!defined(__GNUC__) && !defined(__clang__))\n"
+                         "#error Unsafe raw address atomics require GCC or Clang; TinyCC and MSVC unsupported\n#endif\n");
+            Append(head, "_Static_assert(__atomic_always_lock_free(", width,
+                   ", 0), \"Unsafe raw atomic width is not always lock-free on this target\");\n");
+        }
+        if (bk == B_UNSAFE_ATOMIC_LOCKFREE) return {cat("__atomic_always_lock_free(", width, ", 0)")};
+        vector<string> a;
+        size_t nargs = bk == B_UNSAFE_ATOMIC_LOAD ? 1 : bk == B_UNSAFE_ATOMIC_CAS ? 3 : 2;
+        for (size_t i = 0; i < nargs; i++) a.push_back(Snapshot(an[i]->exprtype, GenPure(an[i])));
+        auto msg = "unsafe atomic address is null, misaligned, or exceeds target width";
+        L("if (!", a[0], " || ", a[0], " > UINTPTR_MAX || (", a[0], " & ", width - 1,
+          ")) gs_abort_msg((const uint8_t *)", CStr(msg), ", ", strlen(msg), ", ", LocArgs(ln), ");");
+        auto ptr = T();
+        L(u32 ? "uint32_t *" : "uint64_t *", ptr, " = (", u32 ? "uint32_t" : "uint64_t",
+          " *)(uintptr_t)", a[0], ";");
+        static const char *orders[] = {"__ATOMIC_RELAXED", "", "__ATOMIC_ACQUIRE", "__ATOMIC_RELEASE", "__ATOMIC_ACQ_REL", "__ATOMIC_SEQ_CST"};
+        auto order = orders[c->memory_order];
+        if (bk == B_UNSAFE_ATOMIC_STORE) {
+            L("__atomic_store_n(", ptr, ", ", a[1], ", ", order, ");"); return {};
+        }
+        if (bk == B_UNSAFE_ATOMIC_CAS) {
+            auto ok = T();
+            L("uint8_t ", ok, " = __atomic_compare_exchange_n(", ptr, ", &", a[1], ", ", a[2],
+              ", 0, ", order, ", ", orders[c->failure_order], ");");
+            return {a[1], ok};
+        }
+        auto t = T();
+        L(CT(c->qtype), " ", t, " = __atomic_", bk == B_UNSAFE_ATOMIC_LOAD ? "load_n" : "fetch_add",
+          "(", ptr, bk == B_UNSAFE_ATOMIC_LOAD ? "" : cat(", ", a[1]), ", ", order, ");");
+        return {t};
+    }
     if (c->builtin >= B_SHARED_ATOMIC32 && c->builtin <= B_ATOMIC_CAS) {
         usesthreads = true;
         auto bk = c->builtin;
