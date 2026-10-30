@@ -1,0 +1,6 @@
+PASS /home/dev/.local/bin/goose++ check --strict-worker-native --roundtrip /home/dev/.t3/worktrees/goose/feat-safer-threading/test/threads/native_contract/scheduler.goose
+PASS /home/dev/.local/bin/goose++ check --strict-worker-native /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/final-contract/worker-native-contract/direct.goose
+PASS /home/dev/.local/bin/goose++ lsp --strict-worker-native --probe
+PASS /home/dev/.local/bin/goose++ build --strict-worker-native --cc /usr/bin/gcc /home/dev/.t3/worktrees/goose/feat-safer-threading/samples/32_shared_jobs.goose -o /tmp/thread-main-shared-jobs
+PASS /tmp/thread-main-shared-jobs
+PASS installed goose++ strict positive/rejection/LSP and native shared-atomic execution
