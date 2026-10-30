@@ -1,12 +1,14 @@
 // Spawn snapshots precede execution: the gate forces main's later mutation
 // to happen before the worker observes its private global through helpers.
 var option = 0;
+var format_option = 0; // Reached only through the formatting hook.
 struct Gate { token: i64 }
 struct Result { value: i64, bytes: u8[] }
 struct Show { unused: i64 }
 fn read_option() -> i64 { option }
 fn nested_option() -> i64 { read_option() }
-fn format(out: u8[>..]&, item: Show) { out.append(str(nested_option())); }
+fn read_format_option() -> i64 { format_option }
+fn format(out: u8[>..]&, item: Show) { out.append(str(read_format_option())); }
 thread_fn snapshot() {
     qget<Gate>();
     var scratch: u8[>..] = str(Show { unused: 0 });
@@ -18,14 +20,16 @@ thread_fn contained(fail: bool) { if fail { abort("contract abort"); } }
 fn main() {
     for round in 32 {
         option = 41;
+        format_option = 43;
         let id = thread_spawn(snapshot);
         option = 99;
+        format_option = 100;
         qput(Gate { token: round });
         let result = qget<Result>();
         assert(result.value == 41);
-        assert(result.bytes == "41");
+        assert(result.bytes == "43");
         assert(thread_wait(id));
-        assert(option == 99);
+        assert(option == 99 && format_option == 100);
         for kind in 2 {
             let failed = kind == 1;
             let child = thread_spawn_contained(contained, failed);
