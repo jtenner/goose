@@ -28,3 +28,9 @@ Commands: `python3 test/run_tests.py --exe build/goose --profile baseline
 --cc native --require-clang -j1` (also `-j8`). Corrected PATH uses wrappers for
 Clang 23.1.3 without placing its conda linker ahead of `/usr/bin/ld`.
 Full outputs and the successful targeted rerun are in `evidence/piece-b-*.log`.
+
+The Piece B follow-up separates the format-only global from the ordinary
+helper-only global so neither graph edge can mask the other. It passed the
+GCC/Clang Goose/C O0/O2/debug matrix and Clang ASan/UBSan; see
+`evidence/piece-b-snapshot-final.log`. TSan also passed the controlled C
+completion/lifecycle fixture (`evidence/piece-b-tsan.log`).
