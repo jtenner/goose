@@ -716,6 +716,8 @@ inline void FnDecl::Dump(string &s, int ind) const {
         }
     }
     if (sf->isextern) {
+        if (sf->native_thread == SFunction::WorkerCallable) s += " worker_callable";
+        if (sf->native_thread == SFunction::MainThreadOnly) s += " main_thread_only";
         if (sf->cname != sf->name) { s += " = "; EscapeString(s, sf->cname, '"'); }
         s += ";";
         return;

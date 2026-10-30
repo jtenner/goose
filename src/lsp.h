@@ -248,6 +248,7 @@ struct Server {
 inline int RunLsp(const string &exe, const vector<string> &args) {
     string stdlib;
     vector<string> builddefines;
+    bool strict_worker_native = false;
     for (size_t i = 0; i < args.size(); i++) {
         if (args[i] == "--probe") {
             printf("goose lsp %s\n", LSP_VERSION);
@@ -255,6 +256,10 @@ inline int RunLsp(const string &exe, const vector<string> &args) {
         }
         if (args[i] == "--stdlib" && i + 1 < args.size()) {
             stdlib = args[++i];
+            continue;
+        }
+        if (args[i] == "--strict-worker-native") {
+            strict_worker_native = true;
             continue;
         }
         if (args[i] == "--define" && i + 1 < args.size()) {
@@ -280,6 +285,7 @@ inline int RunLsp(const string &exe, const vector<string> &args) {
         fprintf(stderr, "%s\n", e.msg.c_str());
         return 1;
     }
+    server.ws.strict_worker_native = strict_worker_native;
     server.ws.builddefines = std::move(builddefines);
     auto code = server.Run();
     // The reader thread is still blocked in fgetc on stdin, holding the

@@ -277,3 +277,10 @@ opaque `u64` addresses and trust C pointer/length validity. They copy results
 but cannot validate provenance, termination, lifetime or accessible bounds;
 their older names do not make those raw operations memory-safe. The explicit
 pointer API does not change or weaken safe shared-memory operations.
+
+## Auditing worker FFI
+
+The optional [strict worker-native contract](worker_native_contract.md) rejects
+unclassified or main-thread-only externs, and unsafe pointer builtins, reached
+from worker call graphs. It complements the existing shared capabilities;
+annotations do not prove synchronization or lifetime rules for native handles.
