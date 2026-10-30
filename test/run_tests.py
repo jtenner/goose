@@ -2099,6 +2099,16 @@ def main():
             r.show_task(clang_mul_add)
             r.show_task(clang_vec)
 
+    def unsafe_atomic_contract():
+        from unsafe_atomics import check_unsafe_atomics
+        try:
+            check_unsafe_atomics(exe, gendir, cc, runtime=r.runtime, extra=extra)
+            r.ok("unsafe raw atomic orders, emission and backend rejection")
+        except RuntimeError as e:
+            r.fail("unsafe raw atomics", str(e))
+    r.section("unsafe raw atomics")
+    r.show_task(unsafe_atomic_contract)
+
     def worker_native_contract():
         from worker_native_contract import check_worker_native_contract
         try:

@@ -40,6 +40,8 @@ fn main() {
     let seen32, ok32 = unsafe_atomic_compare_exchange<u32>(address, 80000, 4294967295, "AcqRel", "Acquire");
     assert(ok32 && seen32 == 80000);
     assert(unsafe_atomic_fetch_add<u32>(address, 1, "Release") == 4294967295);
+    let old32, failed32 = unsafe_atomic_compare_exchange<u32>(address, 1, 7, "Acquire", "Relaxed");
+    assert(!failed32 && old32 == 0);
     let seen64, ok64 = unsafe_atomic_compare_exchange<u64>(address + 8, 80000, 18446744073709551615, "SeqCst", "SeqCst");
     assert(ok64 && seen64 == 80000);
     let old, failed = unsafe_atomic_compare_exchange<u64>(address + 8, 0, 1, "Relaxed", "Relaxed");

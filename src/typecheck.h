@@ -3697,6 +3697,8 @@ struct TypeCheck {
                     if (ast.strict_worker_native) {
                         switch (c->builtin) {
                             case B_UNSAFE_PTR_FROM_HANDLE: case B_UNSAFE_HANDLE_FROM_PTR:
+                            case B_UNSAFE_ATOMIC_LOCKFREE: case B_UNSAFE_ATOMIC_LOAD:
+                            case B_UNSAFE_ATOMIC_STORE: case B_UNSAFE_ATOMIC_ADD: case B_UNSAFE_ATOMIC_CAS:
                             case B_UNSAFE_PTR_ADD: case B_UNSAFE_LOAD: case B_UNSAFE_STORE:
                                 Error(n, cat("strict worker-native contract: unsafe native operation ",
                                              builtindefs[c->builtin].name, "; worker path: ",

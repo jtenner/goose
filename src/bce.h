@@ -3640,6 +3640,8 @@ inline bool Call::BceWalk(BCE &b) {
                 // and record opaque effects for non-inlined callers too.
                 b.KillByCall();
                 break;
+            case B_UNSAFE_ATOMIC_LOAD: case B_UNSAFE_ATOMIC_STORE:
+            case B_UNSAFE_ATOMIC_ADD: case B_UNSAFE_ATOMIC_CAS:
             case B_ATOMIC_LOAD: case B_ATOMIC_STORE: case B_ATOMIC_EXCHANGE:
             case B_ATOMIC_ADD: case B_ATOMIC_SUB: case B_ATOMIC_AND:
             case B_ATOMIC_OR: case B_ATOMIC_XOR: case B_ATOMIC_CAS:
