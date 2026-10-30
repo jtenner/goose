@@ -172,6 +172,31 @@ static void check_baseline(long allocations, long regions) {
     check(gs_nregions == 1 && GS(0)->top[0] == 99, "main storage survives worker exit");
 }
 
+/* Ordinary native payload stores are published by runtime completion. Each
+   worker owns one slot; main never reads it until wait returns. There are no
+   volatile accesses or fixture atomics that could supply a substitute barrier. */
+static int64_t completion_payload[8][128];
+static void completion_writer(uint8_t *packet) {
+    int64_t slot;
+    memcpy(&slot, packet, sizeof slot);
+    for (int j = 0; j < 128; ++j) completion_payload[slot][j] = slot * 128 + j + 1;
+}
+
+static void check_completion_visibility(void) {
+    for (int round = 0; round < 64; ++round) {
+        int64_t ids[8];
+        memset(completion_payload, 0, sizeof completion_payload);
+        for (int64_t slot = 0; slot < 8; ++slot)
+            ids[slot] = gs_thread_spawn(completion_writer, &slot, sizeof slot, 0);
+        for (int slot = 7; slot >= 0; --slot) {
+            check(gs_thread_wait(ids[slot], NULL, NULL, __FILE__, __LINE__), "completion returned");
+            for (int j = 0; j < 128; ++j)
+                check(completion_payload[slot][j] == slot * 128 + j + 1,
+                      "join publishes all ordinary native payload writes");
+        }
+    }
+}
+
 int main(void) {
     /* Main's one stack, in its one region; a worker's GS_MAX_STACKS. */
     gs_rt_init(0, NULL, 1, 1, GS_MAX_STACKS);
@@ -253,6 +278,8 @@ int main(void) {
         }
         check_baseline(allocations, regions);
     }
+    check_completion_visibility();
+    check_baseline(allocations, regions);
     /* A message no wait takes stays until the process ends. */
     int64_t bad = gs_thread_spawn(bad_waiting_worker, &stamp, sizeof(stamp), 1);
     check(!gs_thread_wait(bad, NULL, NULL, __FILE__, __LINE__), "a contained worker aborts in thread_wait");
