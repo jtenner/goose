@@ -48,7 +48,7 @@ def check_unsafe_atomics(exe, base, cc=None, *, runtime=None, extra=()):
                 raise RuntimeError('compare_exchange must be strong with validated orders')
             if cc and cc.style == 'gcc':
                 for macro in ('__TINYC__', '_MSC_VER'):
-                    code, out, err = tc.run_capture([cc.cc, '-fsyntax-only', '-D' + macro, cfile])
+                    code, out, err = tc.run_capture([cc.cc, '-E', '-D' + macro, cfile])
                     if code == 0 or 'Unsafe raw address atomics require GCC or Clang' not in err:
                         raise RuntimeError(f'{macro}: missing explicit backend rejection\n{out}{err}')
         if cc and cc.style == 'gcc':
@@ -62,7 +62,7 @@ def check_unsafe_atomics(exe, base, cc=None, *, runtime=None, extra=()):
             if not ok:
                 raise RuntimeError(log)
             code, out, err = tc.run_capture([binary])
-            if code == 0 or 'unsafe atomic address is null, misaligned' not in err:
+            if code == 0 or 'unsafe atomic address is null, misaligned' not in err or tc.sanitizer_failure(err):
                 raise RuntimeError('misaligned address did not abort loudly\n' + out + err)
         if cc and cc.style == 'gcc':
             # Force the target query false to exercise the compile-time rejection.
