@@ -1,0 +1,15 @@
+built /tmp/goose-slipstream-baseline-jit
+Traceback (most recent call last):
+  File "/home/dev/Projects/slipstream/tests/test_parallel_jit.py", line 103, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/home/dev/Projects/slipstream/tests/test_parallel_jit.py", line 98, in main
+    result=run(8,65536,'cached');assert result.returncode==0 and not result.stderr and result.stdout=='cache-ok\n',result
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: CompletedProcess(args=['/tmp/goose-slipstream-baseline-jit', '/tmp/tmpfc0wc3nf/jobs.actions', '8', '65536', 'cached'], returncode=1, stdout='', stderr='byte 0: cannot read module\n')
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+  File "/usr/lib/python3.13/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['python3', 'tests/test_parallel_jit.py', '--driver', '/tmp/goose-slipstream-baseline-jit']' returned non-zero exit status 1.

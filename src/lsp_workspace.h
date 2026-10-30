@@ -49,6 +49,7 @@ struct Workspace {
     string exe;
     vector<string> stdlibdirs;
     vector<string> builddefines;
+    bool strict_worker_native = false;
     map<string, Document> open;     // By PathKey.
     vector<unique_ptr<Root>> roots;
     // The commands the client runs itself, which code lenses may name: the
@@ -269,6 +270,7 @@ struct Workspace {
         an->ast = make_unique<Ast>();
         auto &ast = *an->ast;
         ast.cancel = cancellable ? &rpc.cancel : nullptr;
+        ast.strict_worker_native = strict_worker_native;
         ast.exemplars = true;
         ast.sink = [&](const Diagnostic &d) { an->diags.push_back(d); };
         SourceProvider sources = [&](const string &path) { return TextOf(path); };

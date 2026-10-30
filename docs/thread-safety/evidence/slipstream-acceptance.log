@@ -1,0 +1,55 @@
+/home/dev/.t3/worktrees/goose/feat-safer-threading/build/goose build --define FACTS_METADATA=true --define FACTS_CONTROL_FLOW=true --define FACTS_VALUES=true --define FACTS_LIVENESS=true --define FACTS_ABSTRACT_VALUES=true --define FACTS_REFERENCE_TYPES=true --define FACTS_EFFECTS=true --define FACTS_TRAPS=true --define FACTS_LINEAR_MEMORY=true --define FACTS_RESOURCES=true --define FACTS_GC=true --define FACTS_OBJECT_LAYOUT=true --define FACTS_OWNERSHIP=true --define FACTS_ESCAPE=true --define FACTS_ALLOCATION_ELISION=true --define FACTS_SIMPLIFICATION=true --define FACTS_LOOPS=true --define FACTS_CALL_SUMMARIES=true --define FACTS_INSTRUCTION_PROPERTIES=true --define FACTS_EMISSION=true --define FACTS_OPPORTUNITIES=true examples/atomic_work.goose -O2 -o build/atomic-work
+compiling the runtime for gcc 14.2.0
+built build/atomic-work
+/home/dev/.t3/worktrees/goose/feat-safer-threading/build/goose build --define FACTS_METADATA=true --define FACTS_CONTROL_FLOW=true --define FACTS_VALUES=true --define FACTS_LIVENESS=true --define FACTS_ABSTRACT_VALUES=true --define FACTS_REFERENCE_TYPES=true --define FACTS_EFFECTS=true --define FACTS_TRAPS=true --define FACTS_LINEAR_MEMORY=true --define FACTS_RESOURCES=true --define FACTS_GC=true --define FACTS_OBJECT_LAYOUT=true --define FACTS_OWNERSHIP=true --define FACTS_ESCAPE=true --define FACTS_ALLOCATION_ELISION=true --define FACTS_SIMPLIFICATION=true --define FACTS_LOOPS=true --define FACTS_CALL_SUMMARIES=true --define FACTS_INSTRUCTION_PROPERTIES=true --define FACTS_EMISSION=true --define FACTS_OPPORTUNITIES=true examples/atomic_work.goose --debug -o build/atomic-work-debug
+compiling the runtime for gcc 14.2.0
+built build/atomic-work-debug
+/home/dev/.t3/worktrees/goose/feat-safer-threading/build/goose build --define FACTS_METADATA=true --define FACTS_CONTROL_FLOW=true --define FACTS_VALUES=true --define FACTS_LIVENESS=true --define FACTS_ABSTRACT_VALUES=true --define FACTS_REFERENCE_TYPES=true --define FACTS_EFFECTS=true --define FACTS_TRAPS=true --define FACTS_LINEAR_MEMORY=true --define FACTS_RESOURCES=true --define FACTS_GC=true --define FACTS_OBJECT_LAYOUT=true --define FACTS_OWNERSHIP=true --define FACTS_ESCAPE=true --define FACTS_ALLOCATION_ELISION=true --define FACTS_SIMPLIFICATION=true --define FACTS_LOOPS=true --define FACTS_CALL_SUMMARIES=true --define FACTS_INSTRUCTION_PROPERTIES=true --define FACTS_EMISSION=true --define FACTS_OPPORTUNITIES=true tests/scheduler_test.goose -O2 -o build/scheduler-test
+built build/scheduler-test
+/home/dev/.t3/worktrees/goose/feat-safer-threading/build/goose build --define FACTS_METADATA=true --define FACTS_CONTROL_FLOW=true --define FACTS_VALUES=true --define FACTS_LIVENESS=true --define FACTS_ABSTRACT_VALUES=true --define FACTS_REFERENCE_TYPES=true --define FACTS_EFFECTS=true --define FACTS_TRAPS=true --define FACTS_LINEAR_MEMORY=true --define FACTS_RESOURCES=true --define FACTS_GC=true --define FACTS_OBJECT_LAYOUT=true --define FACTS_OWNERSHIP=true --define FACTS_ESCAPE=true --define FACTS_ALLOCATION_ELISION=true --define FACTS_SIMPLIFICATION=true --define FACTS_LOOPS=true --define FACTS_CALL_SUMMARIES=true --define FACTS_INSTRUCTION_PROPERTIES=true --define FACTS_EMISSION=true --define FACTS_OPPORTUNITIES=true tests/scheduler_test.goose --debug -o build/scheduler-test-debug
+built build/scheduler-test-debug
+/usr/bin/gcc -std=c11 -O2 -Wall -Wextra -Werror -pthread -DTRACK_ALLOCATIONS tests/test_scheduler_native.c scheduler/native.c -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free -o build/scheduler-native-test
+/usr/bin/gcc -std=c11 -O2 -Wall -Wextra -Werror -pthread -D__STDC_NO_ATOMICS__=1 tests/test_scheduler_native.c scheduler/native.c -o build/scheduler-fallback-test
+build/scheduler-native-test
+native scheduler: exact-once, boundaries, concurrent instances, 100 lifetimes PASS
+native allocation interception: one allocation per scheduler, zero in hot path PASS
+build/scheduler-fallback-test
+native scheduler: exact-once, boundaries, concurrent instances, 100 lifetimes PASS
+python3 tests/test_atomic_work.py build/atomic-work build/atomic-work-debug build/scheduler-test build/scheduler-test-debug
+atomic work integration: all byte oracles, 100,000 jobs, malformed fixtures, bounded RSS PASS
+/home/dev/.t3/worktrees/goose/feat-safer-threading/build/goose build --define FACTS_METADATA=true --define FACTS_CONTROL_FLOW=true --define FACTS_VALUES=true --define FACTS_LIVENESS=true --define FACTS_ABSTRACT_VALUES=true --define FACTS_REFERENCE_TYPES=true --define FACTS_EFFECTS=true --define FACTS_TRAPS=true --define FACTS_LINEAR_MEMORY=true --define FACTS_RESOURCES=true --define FACTS_GC=true --define FACTS_OBJECT_LAYOUT=true --define FACTS_OWNERSHIP=true --define FACTS_ESCAPE=true --define FACTS_ALLOCATION_ELISION=true --define FACTS_SIMPLIFICATION=true --define FACTS_LOOPS=true --define FACTS_CALL_SUMMARIES=true --define FACTS_INSTRUCTION_PROPERTIES=true --define FACTS_EMISSION=true --define FACTS_OPPORTUNITIES=true src/main.goose -O2 -o build/wasm-validate
+built build/wasm-validate
+/home/dev/.t3/worktrees/goose/feat-safer-threading/build/goose build --define FACTS_METADATA=true --define FACTS_CONTROL_FLOW=true --define FACTS_VALUES=true --define FACTS_LIVENESS=true --define FACTS_ABSTRACT_VALUES=true --define FACTS_REFERENCE_TYPES=true --define FACTS_EFFECTS=true --define FACTS_TRAPS=true --define FACTS_LINEAR_MEMORY=true --define FACTS_RESOURCES=true --define FACTS_GC=true --define FACTS_OBJECT_LAYOUT=true --define FACTS_OWNERSHIP=true --define FACTS_ESCAPE=true --define FACTS_ALLOCATION_ELISION=true --define FACTS_SIMPLIFICATION=true --define FACTS_LOOPS=true --define FACTS_CALL_SUMMARIES=true --define FACTS_INSTRUCTION_PROPERTIES=true --define FACTS_EMISSION=true --define FACTS_OPPORTUNITIES=true src/main.goose --debug -o build/wasm-validate-debug
+building the package main's C
+built build/wasm-validate-debug
+/home/dev/.t3/worktrees/goose/feat-safer-threading/build/goose build --define FACTS_METADATA=true --define FACTS_CONTROL_FLOW=true --define FACTS_VALUES=true --define FACTS_LIVENESS=true --define FACTS_ABSTRACT_VALUES=true --define FACTS_REFERENCE_TYPES=true --define FACTS_EFFECTS=true --define FACTS_TRAPS=true --define FACTS_LINEAR_MEMORY=true --define FACTS_RESOURCES=true --define FACTS_GC=true --define FACTS_OBJECT_LAYOUT=true --define FACTS_OWNERSHIP=true --define FACTS_ESCAPE=true --define FACTS_ALLOCATION_ELISION=true --define FACTS_SIMPLIFICATION=true --define FACTS_LOOPS=true --define FACTS_CALL_SUMMARIES=true --define FACTS_INSTRUCTION_PROPERTIES=true --define FACTS_EMISSION=true --define FACTS_OPPORTUNITIES=true src/tiny.goose --debug -o build/wasm-validate-tiny
+building the package tiny's C
+built build/wasm-validate-tiny
+/home/dev/.t3/worktrees/goose/feat-safer-threading/build/goose build --define FACTS_METADATA=true --define FACTS_CONTROL_FLOW=true --define FACTS_VALUES=true --define FACTS_LIVENESS=true --define FACTS_ABSTRACT_VALUES=true --define FACTS_REFERENCE_TYPES=true --define FACTS_EFFECTS=true --define FACTS_TRAPS=true --define FACTS_LINEAR_MEMORY=true --define FACTS_RESOURCES=true --define FACTS_GC=true --define FACTS_OBJECT_LAYOUT=true --define FACTS_OWNERSHIP=true --define FACTS_ESCAPE=true --define FACTS_ALLOCATION_ELISION=true --define FACTS_SIMPLIFICATION=true --define FACTS_LOOPS=true --define FACTS_CALL_SUMMARIES=true --define FACTS_INSTRUCTION_PROPERTIES=true --define FACTS_EMISSION=true --define FACTS_OPPORTUNITIES=true tests/parallel_validation.goose -O2 -o build/parallel-validation-test
+building the package parallel_validation's C
+built build/parallel-validation-test
+/usr/bin/gcc -std=c11 -O2 -Wall -Wextra -Werror -pthread tests/test_validation_context.c validation/context.c -o build/validation-context-test
+/home/dev/.t3/worktrees/goose/feat-safer-threading/build/goose build --define FACTS_METADATA=true --define FACTS_CONTROL_FLOW=true --define FACTS_VALUES=true --define FACTS_LIVENESS=true --define FACTS_ABSTRACT_VALUES=true --define FACTS_REFERENCE_TYPES=true --define FACTS_EFFECTS=true --define FACTS_TRAPS=true --define FACTS_LINEAR_MEMORY=true --define FACTS_RESOURCES=true --define FACTS_GC=true --define FACTS_OBJECT_LAYOUT=true --define FACTS_OWNERSHIP=true --define FACTS_ESCAPE=true --define FACTS_ALLOCATION_ELISION=true --define FACTS_SIMPLIFICATION=true --define FACTS_LOOPS=true --define FACTS_CALL_SUMMARIES=true --define FACTS_INSTRUCTION_PROPERTIES=true --define FACTS_EMISSION=true --define FACTS_OPPORTUNITIES=true tests/validation_plan.goose --debug -o build/validation-plan-test
+built build/validation-plan-test
+build/validation-context-test
+PASS native immutable metadata: packed ABI, ownership, bounds, 8 concurrent readers
+build/validation-plan-test
+PASS Goose snapshot planning: metadata, packed offsets, compact counts, page boundaries
+python3 tests/test_parallel_validation.py build/parallel-validation-test build/wasm-validate build/wasm-validate-debug build/wasm-validate-tiny
+PASS build/wasm-validate: 202 parallel semantic/boundary regressions
+PASS build/wasm-validate-debug: 202 parallel semantic/boundary regressions
+PASS build/wasm-validate-tiny: 202 parallel semantic/boundary regressions
+PASS real validator: 100,000 jobs, uneven work, concurrent pools, lifetimes, contained failures, low RSS
+/home/dev/.t3/worktrees/goose/feat-safer-threading/build/goose build --define FACTS_METADATA=true --define FACTS_CONTROL_FLOW=true --define FACTS_VALUES=true --define FACTS_LIVENESS=true --define FACTS_ABSTRACT_VALUES=true --define FACTS_REFERENCE_TYPES=true --define FACTS_EFFECTS=true --define FACTS_TRAPS=true --define FACTS_LINEAR_MEMORY=true --define FACTS_RESOURCES=true --define FACTS_GC=true --define FACTS_OBJECT_LAYOUT=true --define FACTS_OWNERSHIP=true --define FACTS_ESCAPE=true --define FACTS_ALLOCATION_ELISION=true --define FACTS_SIMPLIFICATION=true --define FACTS_LOOPS=true --define FACTS_CALL_SUMMARIES=true --define FACTS_INSTRUCTION_PROPERTIES=true --define FACTS_EMISSION=true --define FACTS_OPPORTUNITIES=true tests/parallel_jit.goose -O2 -o build/parallel-jit-test
+building the package parallel_jit's C
+built build/parallel-jit-test
+python3 tests/test_parallel_jit.py
+Traceback (most recent call last):
+  File "/home/dev/Projects/slipstream/tests/test_parallel_jit.py", line 103, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/home/dev/Projects/slipstream/tests/test_parallel_jit.py", line 98, in main
+    result=run(8,65536,'cached');assert result.returncode==0 and not result.stderr and result.stdout=='cache-ok\n',result
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: CompletedProcess(args=['/home/dev/Projects/slipstream/build/parallel-jit-test', '/tmp/tmps_ezqzbe/jobs.actions', '8', '65536', 'cached'], returncode=1, stdout='', stderr='byte 0: cannot read module\n')
+make: *** [Makefile:434: parallel-jit-test] Error 1

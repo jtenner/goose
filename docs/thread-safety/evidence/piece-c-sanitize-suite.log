@@ -1,0 +1,121 @@
+profile: sanitize; C backend: clang 23.1.3; JIT backend: none; audio: not built in; gfx: not built in; physics: not built in; ui: not built in
+== lexer and shader compiler: 5 ok
+== parse, roundtrip and typecheck: 1322 ok
+== optimizer, stack report and C shapes: 14 ok
+== bounds-check annotations: 63 ok
+== generated C, built and run at -O2
+skip running 31 audio, gfx, physics or ui test(s) (no layer for them, or no GPU device): audio_errors.goose, audio_mixer.goose, gfx_compute.goose, gfx_events.goose, gfx_frames.goose, gfx_input_edges.goose, gfx_misuse.goose, gfx_mouse_capture.goose, gfx_render.goose, gfx_shader_sources.goose, gfx_textures.goose, physics_bodies.goose, physics_events.goose, physics_joints.goose, physics_misuse.goose, physics_queries.goose, physics_recording.goose, physics_shapes.goose, physics_world.goose, ui_charts.goose, ui_draw.goose, ui_edit.goose, ui_fonts.goose, ui_misuse.goose, ui_misuse_messages.goose, ui_popups.goose, ui_render.goose, ui_style.goose, ui_wants_input.goose, ui_widgets.goose, ui_windows.goose
+== generated C, built and run at -O2: 629 ok
+== dump-runtime programs: 13 ok
+== GS_DEBUG programs: 142 ok
+== compiler roots, runtime lifecycle and clang
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+FAIL compiler-cc compiler_roots
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+FAIL compiler-cc compiler_containers
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+FAIL compiler-cc compiler_process
+== compiler roots, runtime lifecycle and clang: 3 ok, 3 FAIL
+== worker native contract: 1 ok
+== builder return alignment: 1 ok
+== worker packet alignment: 1 ok
+== library headers
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/minimal-g0-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/private_native-g0-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/private_ordinary-g0-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/private_raw-g0-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/public-g0-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/public_raw-g0-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/variant_value-g0-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/variant_reference-g0-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/variant_slice-g0-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/variant_nested-g0-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/variant_return-g0-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/variant_whole_enum-g0-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/minimal-g2-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/private_native-g2-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/private_ordinary-g2-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/private_raw-g2-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/public-g2-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/public_raw-g2-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/variant_value-g2-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/variant_reference-g2-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/variant_slice-g2-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/variant_nested-g2-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/variant_return-g2-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+
+/tmp/goose-thread-toolchain/clang++ -std=c++17 -fsyntax-only -fsanitize=address,undefined -fno-sanitize=alignment -fno-sanitize-recover=all -fno-omit-frame-pointer -g /home/dev/.t3/worktrees/goose/feat-safer-threading/build/gen/sanitize/library-headers/clang/variant_whole_enum-g2-host.cpp
+/tmp/goose-thread-toolchain/clang++: 2: exec: /home/dev/.local/share/mise/installs/clang/23.1.3/bin/clang++: not found
+FAIL library headers
+== library headers: 0 ok, 1 FAIL
+== driver, diagnostics and language server: 51 ok
+== native example acceptance
+skip native example execution (requires Linux native baseline with GCC/Clang)
+== native example acceptance: 7 ok
+== native builds, packages and runtime I/O
+skip huge pages (no transparent huge pages)
+skip commit limit (not Windows)
+== native builds, packages and runtime I/O: 12 ok
+== goose_in_goose bootstrap: 9 ok
+== JIT (TinyCC) runs
+skip JIT run tests (sanitizer profile, --no-jit, or a compiler built without the TinyCC backend)
+== JIT (TinyCC) runs: 0 ok
+== parse errors (errors/): 92 ok
+== typecheck errors (errors_tc/ and native modules' rejection tests): 1891 ok
+== recovery (errors_tc/recovery/): 17 ok
+== long call chains and guard runs: 4 ok
+== language reference examples (docs/reference.md): 1 ok
+== samples
+skip audio, gfx, physics or ui sample(s) (no layer for them, or no GPU device): 27_gfx_cube.goose, 28_physics_boxes.goose, 29_ui_todo.goose, 30_mini_minecraft.goose, 31_mini_doom.goose
+== samples: 27 ok
+(387s with 1 job(s))
+4 FAILURE(S):
+compiler roots, runtime lifecycle and clang: FAIL compiler-cc compiler_roots
+compiler roots, runtime lifecycle and clang: FAIL compiler-cc compiler_containers
+compiler roots, runtime lifecycle and clang: FAIL compiler-cc compiler_process
+library headers: FAIL library headers

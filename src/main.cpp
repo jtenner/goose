@@ -666,6 +666,7 @@ R"(  --stats               Print what the compile did: the declarations parsed,
                         error at its import, which goose fetch resolves.
   -D NAME[=VALUE]       Define a C macro in the generated program (or -DNAME).
   --define NAME=VALUE   Define a typed Goose constant build::NAME (repeatable).
+  --strict-worker-native Require audited worker-callable externs in worker graphs.
   --stdlib dir          The standard library's directory (or GOOSE_STDLIB);
                         found from where goose is by default.
   --update              Fetch packages at a tag or branch again (a commit is
@@ -1374,6 +1375,7 @@ int Main(int argc, char **argv, bool &measuring) {
     if (verb == "format") return RunFormat(vector<string>(argv + firstarg, argv + argc));
     string outname, headername, stdlibdir, shaderfile, shadersource, dumpfile;
     auto dump = false, dumpdocs = false, tokens = false, parseonly = false, specs = false;
+    auto strict_worker_native = false;
     auto nocgen = false;
     auto benchlist = false;
     bool benchfresh = false;
@@ -1459,6 +1461,7 @@ int Main(int argc, char **argv, bool &measuring) {
             }
             builddefines.push_back(argv[++i]);
         }
+        else if (arg == "--strict-worker-native") strict_worker_native = true;
         else if (arg == "--tokens") tokens = true;
         else if (arg == "--parse") parseonly = true;
         else if (arg == "--roundtrip") roundtrip = true;
@@ -1802,6 +1805,7 @@ int Main(int argc, char **argv, bool &measuring) {
         }
         astp = make_unique<Ast>();
         auto &ast = *astp;
+        ast.strict_worker_native = strict_worker_native;
         ast.record_bench_inputs = verb == "bench";
         AddBuildDefinitions(ast, builddefines);
         if (jsondiag) ast.sink = [&](const Diagnostic &d) { found.push_back(d); };

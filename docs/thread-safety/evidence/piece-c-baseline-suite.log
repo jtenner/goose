@@ -1,0 +1,36 @@
+profile: baseline; C backend: gcc 14.2.0; JIT backend: TinyCC; audio: not built in; gfx: not built in; physics: not built in; ui: not built in
+== lexer and shader compiler: 5 ok
+== parse, roundtrip and typecheck: 1322 ok
+== optimizer, stack report and C shapes: 14 ok
+== bounds-check annotations: 63 ok
+== generated C, built and run at -O0 and -O2
+skip running 31 audio, gfx, physics or ui test(s) (no layer for them, or no GPU device): audio_errors.goose, audio_mixer.goose, gfx_compute.goose, gfx_events.goose, gfx_frames.goose, gfx_input_edges.goose, gfx_misuse.goose, gfx_mouse_capture.goose, gfx_render.goose, gfx_shader_sources.goose, gfx_textures.goose, physics_bodies.goose, physics_events.goose, physics_joints.goose, physics_misuse.goose, physics_queries.goose, physics_recording.goose, physics_shapes.goose, physics_world.goose, ui_charts.goose, ui_draw.goose, ui_edit.goose, ui_fonts.goose, ui_misuse.goose, ui_misuse_messages.goose, ui_popups.goose, ui_render.goose, ui_style.goose, ui_wants_input.goose, ui_widgets.goose, ui_windows.goose
+== generated C, built and run at -O0 and -O2: 629 ok
+== dump-runtime programs: 13 ok
+== GS_DEBUG programs: 142 ok
+== compiler roots, runtime lifecycle and clang: 23 ok
+== worker native contract: 1 ok
+== builder return alignment: 1 ok
+== worker packet alignment: 1 ok
+== library headers: 1 ok
+== driver, diagnostics and language server: 57 ok
+== native example acceptance: 12 ok
+== native builds, packages and runtime I/O
+skip huge pages (no transparent huge pages)
+skip commit limit (not Windows)
+== native builds, packages and runtime I/O: 12 ok
+== goose_in_goose bootstrap: 23 ok
+== JIT (TinyCC) runs
+skip 46 JIT test(s) the backend cannot run yet: append_limited_queue.goose, codegen_threads.goose, const_types.goose, large_fixed_thread.goose, namespaces.goose, parser_all.goose, qlimit_negative.goose, qlimit_zero.goose, qpoll_zero_padded.goose, queue_bounds.goose, queue_producers.goose, shared_atomics.goose, shared_borrow_ranges.goose, shared_cap_alignment.goose, shared_empty_bytes.goose, shared_mapping.goose, shared_memory.goose, shared_native_names.goose, thread_cap.goose, thread_const_globals.goose, thread_contained.goose, thread_contained_child.goose, thread_contained_main.goose, thread_contained_many.goose, thread_fn_plain_overload.goose, thread_format_globals.goose, thread_globals.goose, thread_resizable_arguments.goose, thread_spawn_discarded.goose, thread_spawn_modules.goose, thread_spawn_stack.goose, thread_stack_overflow.goose, thread_static_views.goose, thread_sync_contract.goose, thread_wait_self.goose, thread_wait_unknown.goose, trim_memory_threads.goose, unsafe_pointer.goose, unsafe_pointer_names.goose, unsafe_pointer_packed.goose, worker_packet_alias.goose, worker_packet_arguments.goose, worker_packet_counts.goose, worker_packet_fixed.goose, worker_packet_globals.goose, zero_size_messages.goose
+== JIT (TinyCC) runs: 716 ok
+== parse errors (errors/): 92 ok
+== typecheck errors (errors_tc/ and native modules' rejection tests): 1891 ok
+== recovery (errors_tc/recovery/): 17 ok
+== long call chains and guard runs: 6 ok
+== language reference examples (docs/reference.md): 1 ok
+== samples
+skip JIT for sample(s) the backend cannot run yet: 23_mandelbrot_threads.goose, 32_shared_jobs.goose
+skip audio, gfx, physics or ui sample(s) (no layer for them, or no GPU device): 27_gfx_cube.goose, 28_physics_boxes.goose, 29_ui_todo.goose, 30_mini_minecraft.goose, 31_mini_doom.goose
+== samples: 52 ok
+(338s with 1 job(s))
+all tests passed

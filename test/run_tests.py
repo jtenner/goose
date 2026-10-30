@@ -2099,6 +2099,16 @@ def main():
             r.show_task(clang_mul_add)
             r.show_task(clang_vec)
 
+    def worker_native_contract():
+        from worker_native_contract import check_worker_native_contract
+        try:
+            check_worker_native_contract(exe, gendir, cc, runtime=r.runtime, extra=extra)
+            r.ok("strict worker-native graph, declarations, unsafe escapes and scheduler")
+        except RuntimeError as e:
+            r.fail("worker native contract", str(e))
+    r.section("worker native contract")
+    r.show_task(worker_native_contract)
+
     def builder_return_alignment():
         from builder_return_alignment import check_builder_return_alignment
         try:

@@ -3376,8 +3376,8 @@ struct TypeCheck {
             auto sf = ast.functions[i];
             if (sf->isthread) CheckRoot([&] { EnsureThreadSpec(sf, sf->line); });
         }
-        // Thread programs may not touch globals: that would be shared mutable
-        // memory between programs (§11.2).
+        // Workers copy allowed globals; validate their transitive global and
+        // native-call boundaries before optimization can erase graph edges.
         for (auto sf : ast.functions)
             if (sf->isthread && !sf->specs.empty() && !sf->specs[0]->failed)
                 CheckRoot([&] { CheckThreadGlobals(sf->specs[0]); });
@@ -3649,8 +3649,39 @@ struct TypeCheck {
     // holding references into other storage cannot be.
     void CheckThreadGlobals(FnSpec *entry) {
         set<FnSpec *> seen;
-        function<void(FnSpec *)> rec = [&](FnSpec *sp) {
-            if (!sp || !sp->body || !seen.insert(sp).second) return;
+        vector<string_view> path;
+        auto chain = [&](string_view leaf = {}) {
+            string result;
+            for (auto name : path) {
+                if (!result.empty()) result += " -> ";
+                result += name;
+            }
+            if (!leaf.empty()) { result += " -> "; result += leaf; }
+            return result;
+        };
+        function<void(FnSpec *, Node *)> rec = [&](FnSpec *sp, Node *edge) {
+            if (!sp || !seen.insert(sp).second) return;
+            auto sf = sp->sf;
+            path.push_back(sf->qname);
+            if (sf->isextern) {
+                auto fileidx = sf->line.fileidx;
+                bool package_main = ast.packages[ast.filepkg[fileidx]].main_thread_only;
+                bool main_only = package_main || sf->native_thread == SFunction::MainThreadOnly;
+                if (ast.strict_worker_native &&
+                    (main_only || sf->native_thread == SFunction::Unclassified))
+                    Error(edge, cat("strict worker-native contract: ",
+                                    main_only ? "main-thread-only extern " : "unclassified extern ",
+                                    sf->qname, "; worker path: ", chain(),
+                                    "; declaration at ", ast.sources[fileidx].first, ":",
+                                    sf->line.line, ":", sf->line.col));
+                if (main_only)
+                    Error(edge, cat(PathStem(ast.sources[fileidx].first),
+                                    " runs on the main thread only: ", sf->qname,
+                                    " is reached from thread_fn ", entry->sf->name,
+                                    "; worker path: ", chain(),
+                                    "; declaration at ", ast.sources[fileidx].first, ":",
+                                    sf->line.line, ":", sf->line.col));
+            }
             function<void(Node *)> walk = [&](Node *n) {
                 if (!n) return;
                 if (auto id = Is<Ident>(n)) {
@@ -3663,26 +3694,26 @@ struct TypeCheck {
                                      entry->sf->name, ")"));
                 }
                 if (auto c = Is<Call>(n)) {
-                    // A native layer that keeps one state for the process,
-                    // or SDL's windowing, is main-thread only: its package
-                    // says so in its sidecar (main_thread_only), and the
-                    // error names the module the extern fn was declared in.
-                    if (c->spec && c->spec->sf->isextern) {
-                        auto fileidx = c->spec->sf->line.fileidx;
-                        if (ast.packages[ast.filepkg[fileidx]].main_thread_only)
-                            Error(n, cat(PathStem(ast.sources[fileidx].first),
-                                         " runs on the main thread only: ", c->spec->sf->qname,
-                                         " is reached from thread_fn ", entry->sf->name));
+                    if (ast.strict_worker_native) {
+                        switch (c->builtin) {
+                            case B_UNSAFE_PTR_FROM_HANDLE: case B_UNSAFE_HANDLE_FROM_PTR:
+                            case B_UNSAFE_PTR_ADD: case B_UNSAFE_LOAD: case B_UNSAFE_STORE:
+                                Error(n, cat("strict worker-native contract: unsafe native operation ",
+                                             builtindefs[c->builtin].name, "; worker path: ",
+                                             chain(builtindefs[c->builtin].name)));
+                            default: break;
+                        }
                     }
-                    rec(c->spec);
-                    for (auto d : c->dispatch) rec(d);
-                    for (auto &fs : c->fmtspecs) rec(fs.second);
+                    rec(c->spec, n);
+                    for (auto d : c->dispatch) rec(d, n);
+                    for (auto &fs : c->fmtspecs) rec(fs.second, n);
                 }
                 RunChildren(n, walk);
             };
             walk(sp->body);
+            path.pop_back();
         };
-        rec(entry);
+        rec(entry, nullptr);
     }
 
     // Does the body contain `return ... from f` for an f not declared within?

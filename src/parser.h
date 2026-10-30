@@ -865,6 +865,15 @@ struct Parser {
                 }
             }
             if (sf->isextern) {
+                if (lex.tok == T_IDENT &&
+                    (lex.attr == "worker_callable" || lex.attr == "main_thread_only")) {
+                    sf->native_thread = lex.attr == "worker_callable"
+                        ? SFunction::WorkerCallable : SFunction::MainThreadOnly;
+                    lex.Next();
+                    if (lex.tok == T_IDENT &&
+                        (lex.attr == "worker_callable" || lex.attr == "main_thread_only"))
+                        Error("an extern declaration takes only one worker-native classification");
+                }
                 // The symbol where a body would go: `fn delay(ms: u32) = "SDL_Delay";`.
                 if (IsNext(T_ASSIGN)) {
                     if (lex.tok != T_STRLIT)

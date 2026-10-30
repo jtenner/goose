@@ -1510,6 +1510,9 @@ struct SFunction {
     // check left in any copy of the body is an error (bce.h).
     bool checkfree = false;
     bool isthread = false;
+    // Audited declaration-level native contract; package restrictions still apply.
+    enum NativeThread { Unclassified, MainThreadOnly, WorkerCallable };
+    NativeThread native_thread = Unclassified;
     bool isextern = false;      // A C function behind a Goose signature (§7.10); no body.
     bool isexport = false;      // A Goose function exposed through a C ABI wrapper.
     string cname;               // Its C symbol (the Goose name unless spelled out).
@@ -2550,6 +2553,7 @@ struct Ast {
     // calling it, a shader given as source by that file, stage and source.
     // And embed_file's bytes, by "file\n" and the path, read the same way.
     map<string, string> shaders;
+    bool strict_worker_native = false; // Opt-in native trust boundary for worker graphs.
     bool record_bench_inputs = false;
     vector<pair<string, string>> bench_inputs; // Embedded source bytes used during checking.
 
