@@ -1,7 +1,8 @@
 # `packed word`: named views of one integer (v1)
 
-Status: proposed for Joshua's fork; design only. No compiler implementation
-is included. Source observations below refer to commit
+Status: implemented on `feat/packed-word` (all five backings). Validation and
+environment-blocked tests are recorded in the [implementation report](../evidence/packed-word-validation.md).
+Original source observations refer to commit
 `f22a70de6b63dc5ae5d3fc2b98d122c354a11235`; line references are to that revision.
 
 ## 1. Scope and cost model
@@ -408,8 +409,9 @@ later declarations rather than treating the rest of a bad layout as fields.
 ## 8. Implementation phases and risks
 
 Estimates are changed handwritten lines (additions plus substantive edits),
-not commitments; generated parser artifacts are excluded. These phases are
-future work. This commit contains only this document.
+not commitments; generated parser artifacts are excluded. These were the
+approved planning estimates. Phase checkpoints and measured validation results
+are recorded in the [implementation report](../evidence/packed-word-validation.md).
 
 | Phase | Files and deliverables | Rough size |
 |---|---|---|
@@ -459,8 +461,8 @@ Key risks and acceptance gates:
 Use `goose++` on PATH for the fork. Tests create all generated C, executables,
 and assembly in temporary directories and remove them on success and failure.
 Run the repository's ordinary fixtures and relevant conditional/native-memory
-regressions after the focused suite. No new build artifacts are needed for
-this design-only commit.
+regressions after the focused suite. Acceptance drivers remove their temporary
+C, binaries and assembly.
 
 1. **Layout and diagnostics.** Backings 8/16/32/64/128; zero named fields;
    repeated reserves; implicit trailing reserves; exact fills; one-bit

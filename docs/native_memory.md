@@ -335,3 +335,20 @@ Choose a width and workload that cannot wrap, publish job metadata before
 spawn, and join all workers before reading results or freeing the allocation.
 Relaxed claims distribute indices; publication of other data needs its own
 synchronization. No Slipstream source changes are required by this compiler API.
+
+
+## Packed words and atomic capabilities
+
+A packed word backed by u32 or u64 converts freely to that backing for the
+existing atomic load/store/exchange/CAS APIs. A concurrent field update uses
+a CAS loop: load the raw integer, cast to the word, modify a local field,
+cast back, and retry if compare-exchange fails. Each retry must start from the
+newly loaded word so concurrent disjoint-field updates are preserved. Choose
+memory orders for the surrounding protocol as usual.
+
+Ordinary `word.field = value` is a non-atomic whole-word update; it neither
+registers atomic storage nor grants shared-memory authority. Capability
+alignment, lifetime, overlap and borrow exclusions remain unchanged. Workers
+may receive plain packed-word copies or existing atomic capabilities. u128 is
+a plain native value with no atomic promise; memory_read/write, unsafe scalar
+loads/stores and atomic APIs retain their documented 8/16/32/64-bit limits.

@@ -53,3 +53,17 @@ order). An explicit `--define BENCH_SIZE=...` on bench is a duplicate definition
 Ordinary build/check/run/dump acquire no implicit value and may define it
 explicitly. Source owns the size mapping through ordinary expressions or
 existing `const if`; discovery adds no constant evaluator or source rewriting.
+
+
+## Conditional packed-word layouts
+
+`const if` also selects fields inside `packed word` declarations. Selected
+fields determine bit offsets, constructor arguments and defaults. Excluded
+fields consume no bits; reserve their width in an `else` when later positions
+must stay fixed. The checker records a compilation-local layout fingerprint
+including enum ordinal mappings. It is not an automatically enforced wire
+protocol identifier: applications must version persisted formats and agree
+on definitions across FFI boundaries. The width of the backing alone does not
+prove compatible field meanings. Editor servers need the same `--define`
+arguments as builds. Command-line integer definitions remain limited to
+[-2^63, 2^64-1]; adding u128 source literals does not widen that CLI contract.
