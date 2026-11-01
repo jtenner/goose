@@ -595,8 +595,6 @@ inline string CodeGen::ArithX(TType op, TypeExpr *t, const string &l, const stri
         }
     }
     auto s = t->intstorage;
-    if (s == IS_U128 && (op == T_DIV || op == T_MOD))
-        return cat(op == T_DIV ? "gs_div_u128(" : "gs_mod_u128(", l, ", ", r, ", ", LocArgs(line), ")");
     auto sfx = IntSfx(s);
     switch (op) {
         case T_PLUS:  return cat("gs_add_", sfx, "(", l, ", ", r, OvfLocArgs(s, line), ")");
@@ -1485,8 +1483,7 @@ inline bool CodeGen::Speculatable(Node *n, bool idxok, bool truth, int &budget) 
             if (!IsIntT(st) || !IsIntT(tt)) return false;
             auto [slo, shi] = IntRange(st->intstorage);
             auto [lo, hi] = IntRange(tt->intstorage);
-            auto exact = st->intstorage == IS_U128 ? tt->intstorage == IS_U128
-                       : st->intstorage == IS_U64 ? tt->intstorage == IS_U64 || tt->intstorage == IS_U128
+            auto exact = st->intstorage == IS_U64 ? tt->intstorage == IS_U64
                                                   : slo >= lo && shi <= hi;
             if (!c->unchecked && !TEq(st, tt) && !exact) return false;
         } else if (tt->kind != TY_FLT) {

@@ -586,9 +586,11 @@ struct Parser {
         ParseMembers(st->broken, depth, startp, [&](Ast::DeclMark &kept) {
             Expect(T_COLON, "packed word backing");
             st->wordbacking = lex.attr;
+            if (st->wordbacking == "u128")
+                Error("128-bit packed word backings are not yet supported");
             if (st->wordbacking != "u8" && st->wordbacking != "u16" &&
-                st->wordbacking != "u32" && st->wordbacking != "u64" && st->wordbacking != "u128")
-                Error(cat("packed word backing must be u8, u16, u32, u64, or u128; found ", lex.attr));
+                st->wordbacking != "u32" && st->wordbacking != "u64")
+                Error(cat("packed word backing must be u8, u16, u32, or u64; found ", lex.attr));
             lex.Next();
             Role(R_LIST);
             Expect(T_LCURLY, "packed word declaration");
@@ -1603,12 +1605,11 @@ struct Parser {
         }
         if (lex.tok != T_INTLIT)
             Error(cat("integer constant expected in match pattern, found \'", TokStr(), "\'"));
-        if (neg && lex.iuns && (lex.ihi || lex.ival != INT64_MIN))
+        if (neg && lex.iuns && lex.ival != INT64_MIN)
             Error("negated literal too large for i64");
         // Unsigned arithmetic: the one admitted u64 literal negates to i64.min.
         auto val = neg ? (int64_t)(0u - (uint64_t)lex.ival) : lex.ival;
         auto n = New<IntLit>(line, val, neg ? string_view {} : lex.attr, !neg && lex.iuns);
-        n->hi = neg ? 0 : lex.ihi;
         lex.Next();
         return Finish(n);
     }
@@ -1811,7 +1812,6 @@ struct Parser {
         switch (lex.tok) {
             case T_INTLIT: {
                 auto n = New<IntLit>(line, lex.ival, lex.attr, lex.iuns);
-                n->hi = lex.ihi;
                 lex.Next();
                 return Finish(n);
             }

@@ -227,11 +227,6 @@ struct Optimizer {
             r = ast.New<FltLit>(lit->line, v, f->text);
         } else if (auto s = Is<StrLit>(lit)) r = ast.New<StrLit>(lit->line, s->val, s->multiline);
         else r = ast.New<BoolLit>(lit->line, ((BoolLit *)lit)->val);
-        if (auto i = Is<IntLit>(lit)) {
-            auto copy = Is<IntLit>(r);
-            copy->hi = i->hi;
-            if (it == IS_U128 && !i->uns && i->val < 0) copy->hi = UINT64_MAX;
-        }
         r->exprtype = usetype ? usetype : lit->exprtype;
         return r;
     }
@@ -1158,7 +1153,6 @@ inline Node *Ident::Opt(Optimizer &o) {
 
 inline Node *Unary::Opt(Optimizer &o) {
     child = op == T_BITAND ? o.OptViewed(child) : o.Opt(child);
-    if ((child->exprtype && IsIntT(child->exprtype)) && child->exprtype->intstorage == IS_U128) return this;
     // - and ~ compute at their operand's type (§6.1); the node's own exprtype
     // is the slot the result lands in, which can be wider.
     switch (op) {
@@ -1217,8 +1211,6 @@ inline Node *Binary::Opt(Optimizer &o) {
     }
     left = o.Opt(left);
     right = o.Opt(right);
-    if (((left->exprtype && IsIntT(left->exprtype)) && left->exprtype->intstorage == IS_U128) ||
-        ((right->exprtype && IsIntT(right->exprtype)) && right->exprtype->intstorage == IS_U128)) return this;
     // A comparison of two constants, at the type they compare at; null for
     // any other operator.
     auto compare = [&](auto a, auto b) -> Node * {
@@ -1336,8 +1328,6 @@ inline Node *SliceExpr::Opt(Optimizer &o) {
 inline Node *AsCast::Opt(Optimizer &o) {
     child = o.Opt(child);
     auto tt = totype;
-    if ((IsIntT(tt) && tt->intstorage == IS_U128) ||
-        ((child->exprtype && IsIntT(child->exprtype)) && child->exprtype->intstorage == IS_U128)) return this;
     // A conversion into an index type checks against the array's length at
     // run time, which no constant settles (§3.11).
     if (tt->ix) return this;
@@ -1440,7 +1430,7 @@ inline Node *IfExpr::Opt(Optimizer &o) {
 
 inline Node *MatchExpr::Opt(Optimizer &o) {
     scrutinee = o.Opt(scrutinee);
-    if (auto iv = Is<IntLit>(scrutinee); iv && scrutinee->exprtype->intstorage != IS_U128) {
+    if (auto iv = Is<IntLit>(scrutinee)) {
         // An integer match on a constant selects its arm statically (first
         // matching arm; a _ arm is guaranteed present). Compare at the
         // scrutinee's signedness.

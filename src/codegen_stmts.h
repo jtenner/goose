@@ -166,7 +166,7 @@ inline bool CodeGen::AsDivision(Node *n, Division &dv) {
 // HoistDivisors may find a loop cannot change.
 inline bool CodeGen::LoopDivisible(const Division &dv) {
     auto t = dv.t;
-    if (!t || t->kind != TY_INT || t->intstorage == IS_VARINT || t->intstorage == IS_U128) return false;
+    if (!t || t->kind != TY_INT || t->intstorage == IS_VARINT) return false;
     if (!IsUnsigned(t->intstorage) && !dv.nonneg) return false;
     auto rt = dv.divisor->exprtype;
     return rt && rt->kind == TY_INT && !DivisorKey(dv.divisor).empty();
@@ -217,7 +217,7 @@ inline string CodeGen::FixedDivX(const Division &dv, const string &l,
 // of one, and so on), or an integer conversion of one of those. `root` gets
 // the variable and `path` whether fields lead from it to the value.
 inline string CodeGen::DivisorKey(Node *n, const VarDef **root, bool *path) {
-    auto isint = [](TypeExpr *t) { return t && t->kind == TY_INT && t->intstorage != IS_VARINT && t->intstorage != IS_U128; };
+    auto isint = [](TypeExpr *t) { return t && t->kind == TY_INT && t->intstorage != IS_VARINT; };
     if (!n || fillvalues.count(n)) return "";
     if (auto id = Is<Ident>(n)) {
         auto vd = id->vdef;

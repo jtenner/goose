@@ -102,9 +102,7 @@ inline void CodeGen::RenderLoc(Loc &out, Loc lv, TypeExpr *t, bool nested, Call 
         case TY_INT: {
             auto vt = t->intstorage == IS_VARINT ? ast.inttypes[IS_I64] : t;
             auto x = LoadLoc(lv, vt, ln);
-            if (vt->intstorage == IS_U128)
-                RenderN(out, cat("gs_fmt_u128(", Top(out.stk), ", ", x, ")"));
-            else if (vt->intstorage == IS_U64)
+            if (vt->intstorage == IS_U64)
                 RenderN(out, cat("gs_fmt_u64(", Top(out.stk), ", ", x, ")"));
             else
                 RenderN(out, cat("gs_fmt_i64(", Top(out.stk), ", (int64_t)(", x, "))"));
@@ -479,7 +477,6 @@ inline CodeGen::Loc CodeGen::RenderToTemp(Node *a, Call *c) {
 inline string CodeGen::FmtCall(Node *a, const string &dst) {
     auto t = a->exprtype;
     if (t->kind == TY_INT) {
-        if (t->intstorage == IS_U128) return cat("gs_fmt_u128(", dst, ", ", GenX(a), ")");
         if (t->intstorage == IS_U64) return cat("gs_fmt_u64(", dst, ", ", GenX(a), ")");
         return cat("gs_fmt_i64(", dst, ", (int64_t)(", GenX(a), "))");
     }

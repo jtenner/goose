@@ -1,81 +1,83 @@
-# Packed-word implementation validation
+# Packed-word v1 scope and validation
 
-Branch: `feat/packed-word`, created from `design/packed-word`.
-Compiler tested: `5a48b687` (the final documentation checkpoint adds no compiler changes).
-Date: 2026-11-01. Native target: Linux x86-64, GCC 14.2.0 and Clang 23.1.3.
-No merge or push was performed.
+Branch: `feat/packed-word`, based on `design/packed-word`.
+Scope authority: owner decision **2026-10-31 23:51 ET**, superseding the
+previous five-backing authorization. This report supersedes the earlier u128
+implementation results. No merge or push was performed.
 
-## Phase checkpoints
+## Scope correction
 
-| Phase | Status | Checkpoint |
-|---|---|---|
-| 1: parser, AST, tooling | Implemented | `54b45276` |
-| u128 prerequisite | Independently tested before packed layout/lowering | `129f71cc`, `5b9e1b6d` |
-| 2: checker and layouts | Implemented | `a3e2ec97` |
-| 3: scalar C generation/runtime | Implemented | `7649f078` |
-| 4: acceptance and residency evidence | Implemented; final regression run below | `b67207f0` |
-| Regression corrections | TinyCC masks, u128 shifts, signed comparisons, narrowing guards | `5a48b687` |
-| 5: documentation and sample | Implemented in the documentation checkpoint containing this report | — |
+V1 backings are **u8, u16, u32 and u64**. Field descriptors and read carriers
+cap at 64 bits. `packed word W : u128 { ... }` produces exactly one primary
+diagnostic, `128-bit packed word backings are not yet supported`, and emits
+no C or aggregate fallback. u128 is deferred until a concrete two-word need
+drives a separately approved round.
 
-All five backings ship. u128 was not reduced to a two-field aggregate or
-removed from scope. Its portable constant and independent native scalar
-checkpoints preceded packed-word checking and lowering. The implementation
-stayed within the original rough size estimates; it did not require a scope
-reduction. Nominal declaration infrastructure is reused with an explicit
-packed-word discriminator; the emitted representation is still the scalar.
+The general u128 type, lexer keyword, widened literal/constant storage,
+constant arithmetic helper, folding and match extensions, code generation,
+runtime arithmetic, formatting, serialization and ABI support are removed.
+The positive u128 scalar drivers are deleted; only rejection tests remain.
+Eight affected files match the design-branch baseline byte for byte:
+`src/lexer.h`, `src/clone.h`, `src/bce.h`, `src/optimize.h`,
+`src/codegen_stmts.h`, `src/runtime/runtime.h`, `src/runtime_inline.h` and
+`src/typecheck_builtins.h`. Pre-existing internal wide-product helpers for
+ordinary u64 division remain unchanged; they are not a Goose u128 scalar.
 
-## Focused checks
+The complete diff against `design/packed-word`, including documentation and
+textual evidence, remains below 3,000 added-plus-removed lines. There is no
+size overrun. The reduced implementation reuses the existing scalar machinery.
 
-| Driver | Passing checks |
+## Phase status
+
+| Phase | Current status |
+|---|---|
+| 1: parser, AST and tooling | Complete; four backings, dedicated u128 rejection, editor grammar updated |
+| 2: checker/layouts | Complete; widths/carriers capped at 64, ordinary constants unchanged |
+| 3: C generation/runtime | Complete; scalar u8–u64 lowering, no new 128-bit scalar/runtime support |
+| 4: tests/evidence | Focused suites pass; full run completed with two externally blocked benchmark tests |
+| 5: documentation/sample | Complete; dated scope note, sections 6–10, references and evidence agree |
+
+The original phase checkpoints remain in branch history. Their u128
+prerequisite commits are superseded by the scope-correction commit containing
+this report; the final source tree contains none of that general scalar work.
+
+## Focused results
+
+Linux x86-64, GCC 14.2.0 and Clang 23.1.3; generated C tested at real O0/O2
+with UBSan, with TinyCC execution for supported packed words.
+
+| Driver | Passing assertions |
 |---|---:|
-| `test/compiler_uint128.py`: Python oracle, portable two-limb arithmetic, UBSan | 12,017 |
-| `test/u128.py`: independent native scalar oracle, C O0/O2, GCC/Clang, UBSan | 850 |
-| `test/packed_word_check.py`: diagnostics and selected-branch checking | 38 |
-| `test/packed_word.py`: every width, raw preservation, values, placement, serialization, enums, traps, u8–u64 JIT | 6,111 |
-| `test/packed_word_contracts.py`: configurations, defaults/evaluation order, worker values, contended CAS | 76 |
-| `test/packed_word_residency.py`: C shape, native ABI, disassembly, unsupported backend | 35 |
-| `test/packed_word_editor.py`: fresh true/false-configured LSP sessions | 10 |
-| **Total driver assertions** | **19,137** |
+| `test/packed_word_rejection.py`: one diagnostic, no C output, unsupported widths/type/literals | 24 |
+| `test/packed_word_check.py`: layout, constructors, mutability, casts, bit-view references | 38 |
+| `test/packed_word.py`: every width 1–64, preservation, values, placement, serialization, enums, traps, JIT | 3,038 |
+| `test/packed_word_contracts.py`: conditional layouts, defaults/order, worker copies and contended CAS | 76 |
+| `test/packed_word_residency.py`: scalar C shape, ABI and disassembly | 32 |
+| `test/packed_word_editor.py`: fresh configured LSP sessions | 10 |
+| **Total** | **3,218** |
 
-Additionally, all 27 tree-sitter corpus cases pass, and the sample produces
-all 3 expected output lines. The repository-wide tree-sitter sweep parsed
-3,112 files and reported 141 existing failures. A clean temporary parser built
-from the design-branch grammar reported 142 failures on that same file set:
-no new failures, and the new packed-word syntax fixture now parses. The
-remaining failures concern pre-existing grammar gaps such as root structs
-and ordinary conditional fields; they were not changed by this feature.
+All **27 tree-sitter corpus tests** also pass after removing the u128 type
+and backing grammar. Tests create artifacts in temporary directories and
+remove them after execution.
 
-The native drivers compile actual generated C at both O0 and O2 under UBSan,
-not only different Goose inlining levels. Runtime out-of-range writes and
-invalid enum reads are checked in release builds. Raw invalid enum bits can
-be copied and preserved while unrelated fields are updated. Existing native
-memory/atomic misuse and order regressions pass in the full suite.
+[Updated residency evidence](packed-word-residency.txt) records extract,
+known-fit replace, construction and equality leaf kernels plus handwritten
+counterparts. Both GCC and Clang at O2 show **no stack loads/stores, stack
+allocation or helper calls** in these u64 leaves. Leaves are explicitly
+noinline/used in test C, and a separately compiled C host exercises exported
+call boundaries. This does not promise no spills under register pressure or
+when a whole-word address is taken.
 
-## Residency evidence
-
-[Recorded C and disassembly](packed-word-residency.txt) contain all four u64
-leaf kernels (extract, replace known-fit field, construct, equality), their
-handwritten counterparts, exact compiler versions, target and flags.
-Both GCC and Clang at O2 produce register arguments/results with **no stack
-loads/stores, stack allocation, or helper calls** in those leaf symbols.
-The test marks the leaf definitions noinline/used and calls through exports
-from a separately compiled C host, so inlining cannot hide an aggregate ABI.
-The host also roundtrips a high-half u128 value using the generated header.
-Address-taking and register-pressure cases remain outside this no-spill claim.
-
-## Full repository run
-
-Command:
+## Full repository suite
 
 ```sh
 python3 test/run_tests.py --exe /home/dev/Projects/goose/build/goose \
   --profile baseline --cc native --require-clang -j 8
 ```
 
-Final result: **5,723 passing runner checks, 2 failures**, 79.5 seconds.
-The seven focused drivers count as seven checks in this runner total; their
-19,137 internal assertions above are not added again. The complete
-[runner log](packed-word-full-suite.txt) records the section counts and failures.
+Result: **5,722 passing runner checks, 2 failures**, 72.2 seconds. The six
+focused drivers count as six runner checks; their internal assertions are
+reported separately above. [Complete log](packed-word-full-suite.txt).
 
 | Section | Pass | Fail |
 |---|---:|---:|
@@ -92,7 +94,7 @@ The seven focused drivers count as seven checks in this runner total; their
 | builder return alignment | 1 | 0 |
 | worker packet alignment | 1 | 0 |
 | library headers | 1 | 0 |
-| packed words and portable u128 | 7 | 0 |
+| packed words | 6 | 0 |
 | driver, diagnostics and language server | 55 | 2 |
 | native example acceptance | 13 | 0 |
 | native builds, packages and runtime I/O | 13 | 0 |
@@ -105,44 +107,33 @@ The seven focused drivers count as seven checks in this runner total; their
 | language reference examples (docs/reference.md) | 1 | 0 |
 | samples | 53 | 0 |
 
-The two failures are `benchmark declarations` and `benchmark compatibility`.
-Both abort because another process already holds
-`/tmp/goose-shared-native-benchmark.lock`; they fail before the intended
-benchmark assertions. That process and its lock were left intact. Rerunning
-those two tests after the benchmark owner releases the lock remains deferred.
+Both failures (`benchmark declarations`, `benchmark compatibility`) result
+from another process holding `/tmp/goose-shared-native-benchmark.lock`.
+They abort before their intended benchmark assertions. The lock and its
+owner were left intact; rerun these tests when that owner releases the lock.
+All other executed sections pass, including compiler bootstrap, native/JIT
+fixtures, memory/atomic regressions and reference examples.
 
-Environment-supported skips remain visible: 31 optional native-module tests,
-51 unsupported JIT fixture configurations, 5 optional native-module samples,
-3 unsupported JIT sample configurations, transparent huge pages unavailable,
-and the Windows-only commit-limit check. These are separate configurations,
-not necessarily distinct source files. Audio/gfx/physics/ui are not built
-into this compiler.
+Existing environment skips remain: 31 optional-module test configurations,
+51 unsupported JIT fixture configurations, 5 optional-module samples,
+3 unsupported JIT sample configurations, unavailable transparent huge pages
+and the Windows-only commit-limit test. The earlier repository-wide
+tree-sitter comparison found 141 pre-existing parse failures and no new
+failures; this scope round reran the complete 27-case corpus.
 
-The first full run exposed and led to a TinyCC mask fix. A separate scalar
-audit found high-literal shift folding and led to dedicated regressions.
-That run also exposed GCC accidentally finding the Clang distribution's
-linker through PATH. The final run exposed only the Clang driver executables,
-leaving GCC's assembler/linker discovery intact. No failure expectations or
-benchmark locks were bypassed to obtain the final counts.
+## Deferrals and cleanup
 
-## Limits and cleanup
+u128 and all general 128-bit scalar work are deferred by the dated owner
+scope decision, to be driven by a concrete two-word need. The other approved
+v1 exclusions remain unchanged: signed narrow fields, pinned positions,
+generic packed declarations and field reflection.
 
-Approved v1 exclusions remain: signed narrow fields, pinned positions,
-generic packed declarations, and field reflection. Native u128 requires
-unsigned __int128 support; TinyCC rejects it explicitly. u128 atomics and
-128-bit native memory scalar APIs are not added. Existing 64-bit index/count
-APIs require explicit conversion; scalar shifts accept u128 counts.
+The earlier white-box validation limits also remain unchanged: source-level
+layout/enum tests run, but there is no injected-corrupt-enum-metadata fixture
+or direct comparison of private fingerprint strings through a testing API.
+No new deferral was introduced for the supported four backings.
 
-The tests cover source-reachable enum layouts and configured raw encodings.
-They do not inject corrupt enum metadata into a live checker or directly
-compare the private fingerprint strings through a testing API. The checker
-stores the fingerprint and checks inferred enum widths; these two proposed
-white-box test cases remain validation limitations. No public fingerprint
-builtin was part of v1.
-
-Focused tests remove their temporary files on success and failure. Full-suite
-generated directories were isolated, removed, and pre-existing directories
-restored. Generated tree-sitter parser files and its temporary installation
-were removed. Only source, sample, documentation, and textual evidence are
-committed; no C binaries, assembly objects, generated runtime cache, or test
-executables are included.
+Full-suite generated directories were isolated, removed, and pre-existing
+ones restored. Tree-sitter generation/install ran in a temporary directory.
+Only source, documentation, sample and textual evidence are committed;
+no generated C, binaries or test executables are retained.

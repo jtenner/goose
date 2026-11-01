@@ -1054,10 +1054,6 @@ struct CodeGen {
     // The three per-node passes dispatch virtually (ast.h); the bodies live
     // together in codegen_nodes.h, delegating into the machinery here.
     string GenX(Node *n) {
-        // A folded u128 literal may need no local declaration; still emit
-        // the backend capability gate before any generated use.
-        if (n->exprtype && IsIntT(n->exprtype) && n->exprtype->intstorage == IS_U128)
-            CT(n->exprtype);
         if (!substs.empty())
             if (auto s = substs.find(n); s != substs.end()) return s->second;
         auto it = fillvalues.find(n);

@@ -977,47 +977,6 @@ R"GSRT(#define GS_RANGE(v, lo, hi, t, f, l) (v)
 R"GSRT(#endif
 
 )GSRT"
-R"GSRT(/* Optional native unsigned scalar. The compiler host uses two limbs instead. */
-#if defined(__SIZEOF_INT128__) && !defined(__TINYC__)
-typedef unsigned __int128 gs_u128;
-typedef gs_u128 gs_u128_unaligned GS_ALIGN1;
-static gs_u128 gs_add_u128(gs_u128 a, gs_u128 b) { return a + b; }
-static gs_u128 gs_sub_u128(gs_u128 a, gs_u128 b) { return a - b; }
-static gs_u128 gs_mul_u128(gs_u128 a, gs_u128 b) { return a * b; }
-static gs_u128 gs_shl_u128(gs_u128 a, int64_t n) { return a << (n & 127); }
-static gs_u128 gs_shr_u128(gs_u128 a, int64_t n) { return a >> (n & 127); }
-static gs_u128 gs_div_u128(gs_u128 a, gs_u128 b, const char *f, int l) {
-    if (!b) gs_abort_msg((const uint8_t *)"division by zero", 16, f, l);
-    return a / b;
-}
-static gs_u128 gs_mod_u128(gs_u128 a, gs_u128 b, const char *f, int l) {
-    if (!b) gs_abort_msg((const uint8_t *)"division by zero", 16, f, l);
-    return a % b;
-}
-static gs_u128 gs_range_u128(gs_u128 v, gs_u128 hi, int check, const char *f, int l) {
-    if (check && v > hi) gs_abort_msg((const uint8_t *)"u128 conversion out of range", 28, f, l);
-    return v;
-}
-static gs_u128 gs_f2u128(double d, int check, const char *f, int l) {
-    /* 2^128 itself is exactly representable as a double. Unchecked converts
-       truncate and wrap, including negative values, without undefined casts. */
-    const double limit = 340282366920938463463374607431768211456.0;
-    if (check && (!(d >= 0.0) || d >= limit))
-        gs_abort_msg((const uint8_t *)"u128 conversion out of range", 28, f, l);
-    if (!isfinite(d)) return 0;
-    d = fmod(trunc(d), limit);
-    if (d < 0) return (gs_u128)0 - (gs_u128)(-d);
-    return (gs_u128)d;
-}
-static int64_t gs_fmt_u128(uint8_t *out, gs_u128 v) {
-    uint8_t digits[39]; int n = 0;
-    do { digits[n++] = (uint8_t)('0' + v % 10); v /= 10; } while (v);
-    for (int i = 0; i < n; ++i) out[i] = digits[n - i - 1];
-    return n;
-}
-#endif
-
-)GSRT"
 R"GSRT(/* ---------------------------------------------------------------------------
    Data stacks (§1.2, Appendix C.1/C.4): large reserved regions, committed on
    use, bump-pointer allocation, watermark restore on scope exit. Emitted code
@@ -1432,7 +1391,7 @@ R"GSRT(/* ----------------------------------------------------------------------
    them. A float takes the shortest form that still round-trips. */
 
 )GSRT"
-R"GSRT(#define GS_FMT_MAX 40
+R"GSRT(#define GS_FMT_MAX 32
 
 )GSRT"
 R"GSRT(GS_API int64_t gs_fmt_i64(uint8_t *dst, int64_t v);

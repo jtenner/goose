@@ -11,5 +11,5 @@ packed word Header : u64 {
     type_id: u32,
 }
 packed word Empty : u8 {}
-packed word Wide : u128 { low: u64, high: u64 }
+packed word Full : u64 { value: u64 }
 fn word(packed: u64) -> u64 { packed }

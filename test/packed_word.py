@@ -17,8 +17,8 @@ def check(exe=None):
     def output(expression, value):
         body.append(f'print({expression});')
         expected.append(str(value).lower())
-    # Every descriptor width, all backings, and offsets on both sides of bit 64.
-    for bits in (8, 16, 32, 64, 128):
+    # Every descriptor width, all four backings, and edge/interior offsets.
+    for bits in (8, 16, 32, 64):
         for width in range(1, bits + 1):
             offset = (bits - width) // 2
             name = f'W{bits}_{width}'
@@ -102,7 +102,6 @@ def check(exe=None):
         traps = [
             ('packed word T:u8 {a:u3}', 'var w=T{0}; w.a=x;', 'fn value()->u64 {8}'),
             ('packed word T:u8 {a:u8}', 'var w=T{255}; w.a++;', ''),
-            ('packed word T:u128 {a:u128}', 'var w=T{340282366920938463463374607431768211455}; w.a++;', ''),
             ('packed word T:u64 {a:u64}', 'var w=T{18446744073709551615}; w.a+=1;', ''),
             ('packed word T:u8 {a:u3}', 'var w=T{1}; w.a-=2;', ''),
             ('packed word T:u8 {a:u3}', 'var w=T{4}; w.a*=2;', ''),

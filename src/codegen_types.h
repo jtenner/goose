@@ -205,7 +205,6 @@ inline const char *CodeGen::IntCT(IntStorage s, bool unaligned) {
         case IS_U16: return unaligned ? "gs_u16" : "uint16_t";
         case IS_U32: return unaligned ? "gs_u32" : "uint32_t";
         case IS_U64: return unaligned ? "gs_u64" : "uint64_t";
-        case IS_U128: return unaligned ? "gs_u128_unaligned" : "gs_u128";
         default:     return unaligned ? "gs_i64" : "int64_t";
     }
 }
@@ -220,7 +219,6 @@ inline const char *CodeGen::IntSfx(IntStorage s) {
         case IS_U16: return "u16";
         case IS_U32: return "u32";
         case IS_U64: return "u64";
-        case IS_U128: return "u128";
         default:     return "i64";
     }
 }
@@ -532,12 +530,7 @@ inline void CodeGen::EmitCoreTypes() {
 inline string CodeGen::CT(TypeExpr *t, bool unaligned) {
     if (IsWord(t)) return CT(ast.inttypes[WordStorage(t)], unaligned);
     switch (t->kind) {
-        case TY_INT:
-            assert(t->intstorage != IS_VARINT);
-            if (t->intstorage == IS_U128 && cdefined.insert("__u128_support").second)
-                Append(head, "\n#if !defined(__SIZEOF_INT128__) || defined(__TINYC__)\n"
-                             "#error u128 requires a backend with unsigned 128-bit scalar support\n#endif\n");
-            return IntCT(t->intstorage, unaligned);
+        case TY_INT:  assert(t->intstorage != IS_VARINT); return IntCT(t->intstorage, unaligned);
         case TY_FLT:  return t->fltstorage == FS_F32 ? (unaligned ? "gs_f32" : "float")
                                                    : (unaligned ? "gs_f64" : "double");
         case TY_BOOL: return "uint8_t";

@@ -2,9 +2,8 @@
 #pragma once
 namespace goose {
 inline string CodeGen::WordMask(int bits) {
-    auto mask = bits == 128 ? ~UInt128() : (UInt128(1) << bits) - UInt128(1);
-    if (bits <= 64) return cat(mask.lo, "ULL");
-    return cat("(((gs_u128)", mask.hi, "ULL << 64) | (gs_u128)", mask.lo, "ULL)");
+    auto mask = bits == 64 ? UINT64_MAX : (uint64_t(1) << bits) - 1;
+    return cat(mask, "ULL");
 }
 
 inline string CodeGen::WordRead(Dot *d) {
@@ -34,7 +33,7 @@ inline string CodeGen::WordInput(Node *n, TypeExpr *owner, const Field &f) {
     auto nt = n->exprtype;
     if (!IsIntT(nt) || !IsUnsigned(nt->intstorage) || IntBits(nt->intstorage) > f.bits) {
         auto msg = cat("packed word field ", owner->struc->st->name, ".", f.name,
-                       " value is outside range 0..", (f.bits == 128 ? ~UInt128() : (UInt128(1) << f.bits) - UInt128(1)).Decimal());
+                       " value is outside range 0..", (f.bits == 64 ? UINT64_MAX : (uint64_t(1) << f.bits) - 1));
         L("if (", value, " > ", WordMask(f.bits), ") gs_abort_msg((const uint8_t *)", CStr(msg), ", ", msg.size(), ", ", LocArgs(n->line), ");");
     }
     return value;
@@ -50,7 +49,7 @@ inline void CodeGen::WordConstruct(StructLit *sl, const string &destination) {
         if (f.ispad) continue;
         auto value = WordInput(sl->InitFor((int)i), owner, f);
         // u8/u16 are promoted to unsigned 32 bits before shifting.
-        auto calc = WordStorage(owner) == IS_U128 ? "gs_u128" : "uint64_t";
+        auto calc = "uint64_t";
         L(result, " |= (", ct, ")(((", calc, ")(", value, ") & ", WordMask(f.bits), ") << ", f.bitoffset, ");");
     }
     L(destination, " = ", result, ";");
@@ -65,7 +64,7 @@ inline void CodeGen::WordWrite(Dot *d, Node *rhs, TType op, Line line) {
     // word stays a C scalar name, including when the RHS contains calls.
     if (loc.viaref || !StableDest(d->obj)) PinLoc(loc);
     auto ct = CT(owner);
-    auto calc = WordStorage(owner) == IS_U128 ? "gs_u128" : "uint64_t";
+    auto calc = "uint64_t";
     auto mask = WordMask(f.bits);
     string old;
     if (op != T_ASSIGN) {
@@ -102,9 +101,8 @@ inline void CodeGen::WordWrite(Dot *d, Node *rhs, TType op, Line line) {
             default: Fail(line, "internal: unsupported packed word update");
         }
         auto result = T();
-        // Retain an RHS wider than the backing until AFTER the range check.
-        auto wide = rhs && IsIntT(rhs->exprtype) && rhs->exprtype->intstorage == IS_U128;
-        auto resultct = wide || WordStorage(owner) == IS_U128 ? "gs_u128" : "uint64_t";
+        // Keep the full unsigned carrier until after the field range check.
+        auto resultct = "uint64_t";
         L(resultct, " ", result, " = (", resultct, ")", old, " ", operation, " (", resultct, ")(", value, ");");
         fail(cat(result, " > ", mask));
         value = result;

@@ -7704,15 +7704,15 @@ need pinning. `GenLoc` materializes a bit-view read in a temporary where a
 consumer needs a location, never inventing a member address. Enum extraction
 validates the tag before materializing its ordinary enum wrapper.
 
-`uint128.h` implements compiler constant arithmetic using two uint64 limbs;
-lexer literals, constant folding, matching and defaults preserve both halves.
-Native runtime helpers use unsigned __int128 under an explicit backend gate.
-The optimizer avoids old 64-bit-only constant and division transformations for
-u128. Native-memory scalar allowlists and atomic capabilities are unchanged.
+No scalar type or constant representation is added. Backings and carriers
+stop at u64, and descriptor validation rejects larger widths before forming
+masks. The parser rejects u128 backings explicitly; no code generation or
+aggregate fallback follows. Existing runtime arithmetic, serialization,
+native-memory allowlists and atomic capabilities are unchanged.
 
-Acceptance drivers are `test/compiler_uint128.py`, `test/u128.py` and the
-`test/packed_word*.py` drivers. They use temporary directories, Python integer
-oracles, real C O0/O2 with UBSan, and GCC/Clang. The residency driver marks leaf
+Acceptance drivers are `test/packed_word*.py`. They use temporary directories,
+Python integer oracles, real C O0/O2 with UBSan, and GCC/Clang; u8–u64 JIT and
+explicit u128 rejection are covered separately. The residency driver marks leaf
 definitions noinline/used in generated test C, retains exported wrappers,
 links a separate C host, and checks disassembly against handwritten kernels.
 The recorded [evidence](evidence/packed-word-residency.txt) covers known-fit u64
