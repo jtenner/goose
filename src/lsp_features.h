@@ -54,6 +54,7 @@ inline string GenericsText(const vector<GenericParam> &gs) {
 
 // A type's declaration as its header line.
 inline string DeclDetail(const SStruct *st) {
+    if (!st->wordbacking.empty()) return cat("packed word ", st->qname, " : ", st->wordbacking);
     return cat(st->isroot ? "root " : "", "struct ", st->qname, GenericsText(st->generics));
 }
 inline string DeclDetail(const SEnum *en) { return cat("enum ", en->qname, GenericsText(en->generics)); }
@@ -620,7 +621,7 @@ inline HoverText HoverOf(const Located &loc, const Occurrence &occ) {
             break;
         }
         case Occurrence::FIELD:
-            h.header = cat(occ.field->isconst ? "let " : "", occ.field->name, ": ", TypeText(occ.field->type));
+            h.header = cat(occ.field->isconst ? "let " : "", occ.field->name, ": ", (occ.field->bitwidth.empty() ? TypeText(occ.field->type) : string(occ.field->bitwidth)));
             h.doc = DocText(occ.field->doc);
             break;
         case Occurrence::VARIANT:
@@ -689,7 +690,7 @@ inline HoverText HoverOf(const Located &loc, const Occurrence &occ) {
         }
         case Occurrence::INIT:
             if (auto f = FieldOfInit(an, occ)) {
-                h.header = cat(f->isconst ? "let " : "", f->name, ": ", TypeText(f->type));
+                h.header = cat(f->isconst ? "let " : "", f->name, ": ", f->bitwidth.empty() ? TypeText(f->type) : string(f->bitwidth));
                 h.doc = DocText(f->doc);
             }
             break;

@@ -426,6 +426,9 @@ struct Field {
     bool isconst = false;       // "let" field: const after construction.
     bool ispad = false;         // pad n / bare pad (padsize -1 = align next field).
     int64_t padsize = -1;
+    // Packed-word descriptors retain their spelling even in excluded branches.
+    string_view bitwidth;
+    int bitoffset = 0, bits = 0;
 };
 
 struct FieldInit {
@@ -1580,6 +1583,7 @@ struct SStruct {
     Line line;
     Line end;                   // As SFunction::end.
     string_view doc;            // As SFunction::doc.
+    string_view wordbacking;    // Nonempty: packed word, not aggregate storage.
     bool isroot = false;       // Explicit owning layout (docs/design/root_structs.md).
     vector<GenericParam> generics;
     vector<Field> fields;

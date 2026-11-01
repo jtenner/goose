@@ -66,6 +66,7 @@ template<typename Inst> Inst *Reused(Inst *inst) {
 
 inline StructInst *TypeCheck::GetStructInst(TypeExpr *t) {
     auto st = t->struc->st;
+    if (!st->wordbacking.empty()) Error(t->line, "packed word checking is not yet implemented");
     if (t->struc->inst) return Reused(t->struc->inst);
     Publishing(t->struc);
     for (auto inst : st->insts)

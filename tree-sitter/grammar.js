@@ -93,6 +93,7 @@ module.exports = grammar({
       $.namespace_declaration,
       $.import_declaration,
       $.struct_declaration,
+      $.packed_word_declaration,
       $.enum_declaration,
       $.type_alias_declaration,
       $.function_declaration,
@@ -123,6 +124,25 @@ module.exports = grammar({
     _qualified_name: $ => choice($.identifier, $.scoped_identifier),
 
     // --- Declarations ---
+
+    packed_word_declaration: $ => seq(
+      'packed', 'word', field('name', $._qualified_name), ':',
+      field('backing', choice('u8', 'u16', 'u32', 'u64', 'u128')),
+      field('body', $.packed_word_fields),
+    ),
+
+    packed_word_fields: $ => seq('{', commaSep(choice(
+      $.packed_word_field, $.packed_word_conditional_fields)), '}'),
+
+    packed_word_field: $ => seq(
+      field('name', $.identifier), ':', field('type', $._type),
+      optional(seq('=', field('default', $._expression))),
+    ),
+
+    packed_word_conditional_fields: $ => seq(
+      'const', 'if', field('condition', $._expression), $.packed_word_fields,
+      optional(seq('else', $.packed_word_fields)),
+    ),
 
     // `root` is a keyword only before `struct`, at the top level.
     struct_declaration: $ => seq(
