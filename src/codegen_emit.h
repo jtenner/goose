@@ -737,9 +737,8 @@ inline bool CodeGen::StaticInitX(Node *n, TypeExpr *t, string &out) {
         case TY_INT: {
             auto i = Is<IntLit>(n);
             if (!i || t->intstorage == IS_VARINT) return false;
-            out = t->intstorage == IS_U128
-                    ? cat("(((gs_u128)", i->hi, "ULL << 64) | (gs_u128)", (uint64_t)i->val, "ULL)")
-                    : i->val < 0 && t->intstorage == IS_U64 ? cat((uint64_t)i->val, "ULL") : IntStr(i->val);
+            out = i->val < 0 && t->intstorage == IS_U64 ? cat((uint64_t)i->val, "ULL")
+                                                        : IntStr(i->val);
             return true;
         }
         case TY_FLT: {
@@ -1130,10 +1129,6 @@ inline string CodeGen::ExportHeader() {
                     "typedef uint16_t gs_u16 GS_ALIGN1;\n"
                     "typedef uint32_t gs_u32 GS_ALIGN1;\n"
                     "typedef uint64_t gs_u64 GS_ALIGN1;\n"
-                    "#if defined(__SIZEOF_INT128__) && !defined(__TINYC__)\n"
-                    "typedef unsigned __int128 gs_u128;\n"
-                    "typedef unsigned __int128 gs_u128_unaligned GS_ALIGN1;\n"
-                    "#endif\n"
                     "typedef float gs_f32 GS_ALIGN1;\n"
                     "typedef double gs_f64 GS_ALIGN1;\n"
                     "#pragma pack(push, 1)\n";

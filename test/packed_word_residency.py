@@ -13,7 +13,6 @@ export fn extract(w:Header)->u8 { w.age }
 export fn replace(w:Header, value:u8)->Header { var out=w; out.age=value; out }
 export fn construct(age:u8, kind:u8)->Header { Header { age,kind } }
 export fn equal(a:Header,b:Header)->bool { a==b }
-export fn wide_echo(a:u128)->u128 { a }
 '''
 HAND = '''
 __attribute__((noinline,used)) uint8_t hand_extract(uint64_t w) { return (w>>3)&255; }
@@ -30,8 +29,6 @@ int main(int argc,char **argv) {
  assert(w==((23ULL<<3)|(42ULL<<16)));
  assert(extract(w)==23); assert(extract(replace(w,81))==81);
  assert(equal(w,w)); assert(!equal(w,w|1));
- gs_u128 high=((gs_u128)1<<127)|17;
- assert(wide_echo(high)==high);
  return 0;
 }
 '''
@@ -73,7 +70,7 @@ def check(exe=None, evidence=None):
             obj=p/'kernels.o'; binary=p/'host'
             run([cc,'-std=c11','-O2','-c',c,'-o',obj])
             run([cc,'-std=c11','-O2',host,obj,'-lm','-pthread','-ldl','-o',binary])
-            run([binary]); checks+=7
+            run([binary]); checks+=6
             dis=run(['objdump','-d',obj])
             for symbol in names+['hand_'+n for n in ('extract','replace','construct','equal')]:
                 match=re.search(rf'^[0-9a-f]+ <{symbol}>:\n(.*?)(?=\n\n|\Z)',dis,re.M|re.S)
@@ -81,12 +78,7 @@ def check(exe=None, evidence=None):
                 asm=match[0]
                 assert not re.search(r'\b(call\w*|push\w*|pop\w*|enter|leave)\b|%[re](sp|bp)\b',asm),(symbol,asm)
                 records.append(asm); checks+=1
-        # Embedded TinyCC must fail explicitly, never silently use an aggregate.
-        bad=p/'unsupported.goose';bad.write_text('fn main(){var x:u128=1; print(x);}')
-        r=subprocess.run([exe,'--jit',str(bad)],capture_output=True,text=True)
-        assert r.returncode and 'u128 requires a backend' in r.stdout+r.stderr,(r.returncode,r.stderr)
-        checks+=1
-    if evidence: Path(evidence).write_text('\n'.join(records)+'\n')
+    if evidence: Path(evidence).write_text('\n'.join(line.rstrip() for line in '\n'.join(records).splitlines())+'\n')
     print(f'packed word residency/ABI: {checks} checks passed')
     return checks
 

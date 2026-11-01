@@ -36,7 +36,7 @@ const PREC = {
 const PRIMITIVE_TYPES = [
   'bool', 'varint',
   'i8', 'i16', 'i32', 'i64',
-  'u8', 'u16', 'u32', 'u64', 'u128',
+  'u8', 'u16', 'u32', 'u64',
   'f32', 'f64',
 ];
 
@@ -124,7 +124,7 @@ module.exports = grammar({
 
     packed_word_declaration: $ => seq(
       'packed', 'word', field('name', $._qualified_name), ':',
-      field('backing', choice('u8', 'u16', 'u32', 'u64', 'u128')),
+      field('backing', choice('u8', 'u16', 'u32', 'u64')),
       field('body', $.packed_word_fields),
     ),
 

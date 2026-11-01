@@ -8,7 +8,7 @@
     { "match": "\\bpacked\\s+word\\b", "name": "storage.type.goose" },
     { "match": "\\broot\\b(?=\\s+struct\\b)", "name": "storage.modifier.goose" },
     { "include": "#declarations" },
-    { "match": "\\b(?:bool|varint|u128|[iu](?:8|16|32|64)|f(?:32|64))\\b", "name": "storage.type.goose" },
+    { "match": "\\b(?:bool|varint|[iu](?:8|16|32|64)|f(?:32|64))\\b", "name": "storage.type.goose" },
     { "match": "\\b(?:true|false|null)\\b", "name": "constant.language.goose" },
     { "match": "\\bself\\b", "name": "variable.language.goose" },
     { "match": "\\b(?:if|else|while|for|in|loop|block|guard|defer|match|return|break|continue)\\b", "name": "keyword.control.goose" },

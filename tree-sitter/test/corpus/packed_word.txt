@@ -2,7 +2,7 @@
 Packed words with conditional reserves
 ==================
 packed word Header:u64 { flag:bool, age:u2, const if true { _:u21 } else { _:u21 }, id:u32 }
-packed word Wide:u128 { low:u64, high:u64 }
+packed word Pair:u64 { low:u32, high:u32 }
 ---
 
 (source_file

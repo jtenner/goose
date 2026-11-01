@@ -78,13 +78,19 @@ inline void TypeCheck::BuildWord(TypeExpr *t, StructInst *inst) {
         if (!f.bitwidth.empty()) {
             if (f.bitwidth[0] == 'i')
                 Error(f.line, "signed packed word fields are unsupported in v1; use an unsigned field and explicit decoding");
-            UInt128 n;
-            if (f.bitwidth.size() < 2 || f.bitwidth[1] == '0' ||
-                !UInt128::Parse(f.bitwidth.substr(1), 10, n) || n.hi || n.lo > 128 || !n.lo)
-                Error(f.line, cat("packed word field width must be between 1 and 128; found ", f.bitwidth));
-            width = (int)n.lo;
+            // Bound the descriptor while parsing, so even enormous decimal
+            // spellings cannot overflow the compiler's ordinary integers.
+            unsigned n = 0;
+            bool valid = f.bitwidth.size() > 1 && f.bitwidth[1] != '0';
+            for (auto c : f.bitwidth.substr(1)) {
+                if (c < '0' || c > '9' || n > 64) { valid = false; break; }
+                n = n * 10 + unsigned(c - '0');
+            }
+            if (!valid || !n || n > 64)
+                Error(f.line, cat("packed word field width must be between 1 and 64; found ", f.bitwidth));
+            width = (int)n;
             if (!f.ispad) inst->ftypes[i] = ast.inttypes[width <= 8 ? IS_U8 : width <= 16 ? IS_U16 :
-                                                     width <= 32 ? IS_U32 : width <= 64 ? IS_U64 : IS_U128];
+                                                     width <= 32 ? IS_U32 : IS_U64];
         } else {
             auto ft = inst->ftypes[i];
             if (f.ispad) Error(f.line, "reserved packed word fields require an unsigned bit width");
@@ -124,11 +130,11 @@ inline void TypeCheck::CheckWordValue(Node *n, const Val &v, TypeExpr *owner, co
     if (!IsIntT(t) || (!IsUnsigned(t->intstorage) && !(v.ck == CK_INT && !v.uns && v.ival >= 0)))
         Error(n, "packed word unsigned field requires an unsigned integer or nonnegative integer literal");
     if (v.ck == CK_INT) {
-        auto value = UInt128((uint64_t)v.ival, v.ihi);
-        auto mask = f.bits == 128 ? ~UInt128() : (UInt128(1) << f.bits) - UInt128(1);
+        auto value = (uint64_t)v.ival;
+        auto mask = f.bits == 64 ? UINT64_MAX : (uint64_t(1) << f.bits) - 1;
         if ((!v.uns && v.ival < 0) || mask < value)
             Error(n, cat("value ", ConstStr(v), " does not fit packed word field ", owner->struc->st->name,
-                         ".", f.name, " (", f.bitwidth, ", range 0..", mask.Decimal(), ")"));
+                         ".", f.name, " (", f.bitwidth, ", range 0..", mask, ")"));
     }
 }
 
@@ -878,12 +884,10 @@ inline bool TypeCheck::ImplicitInt(IntStorage from, IntStorage to) {
 // Positions that accept any integer type (indices, slice bounds, sizes,
 // counts): the value is used at 64 bits internally; a u64 above i64.max
 // is out of range for every such use and the bounds check catches it.
-inline Val TypeCheck::CheckIntAny(Node *n, bool wide) {
+inline Val TypeCheck::CheckIntAny(Node *n) {
     auto v = Operand(n);
     if (!IsIntT(v.type))
         Error(n, cat("an integer is expected here, got ", TypeStr(v.type)));
-    if (!wide && v.type->intstorage == IS_U128)
-        Error(n, "u128 index or count requires an explicit conversion to u64");
     return v;
 }
 

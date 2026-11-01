@@ -284,7 +284,7 @@ this table is an overview.
 
 | Written | Meaning | Section |
 |---|---|---|
-| `i8 … i64`, `u8 … u128`, `f32`, `f64`, `bool`, `varint` | the scalars | [3](#3-scalars-and-arithmetic) |
+| `i8 … i64`, `u8 … u64`, `f32`, `f64`, `bool`, `varint` | the scalars | [3](#3-scalars-and-arithmetic) |
 | `T[4]`, `T[]`, `T[varint]`, `T[..8]`, `T[..]`, `T[>..]`, `T[>..<]` | the array family | [5](#5-the-array-family) |
 | `T[:]` | a slice: a view of a run of `T`s | [7](#7-slices) |
 | `Point`, `Pair<i64>` | a struct, a generic struct instance | [8](#8-structs) |
@@ -307,7 +307,7 @@ so an array of an index type is written `(u32 in a)[>..]`.
 
 ### Integers
 
-The integer types are `i8 i16 i32 i64` and `u8 u16 u32 u64 u128`, two's
+The integer types are `i8 i16 i32 i64` and `u8 u16 u32 u64`, two's
 complement, usable everywhere: fields, elements, locals, parameters,
 results. `i64` is the conventional type for counts, sizes and indices; it
 is what `.len`, integer literals and the builtins produce. The narrower
@@ -416,22 +416,6 @@ print(h);
 A `u64` literal above `i64.max`, as above, is accepted; negating one is an
 error except for `-9223372036854775808`, which is exactly `i64.min`.
 Spec §6.2.
-
-### Native `u128`
-
-`u128` is an unsigned 128-bit scalar. Decimal and hexadecimal literals up to
-`340282366920938463463374607431768211455` are accepted. Unconstrained positive
-constants use `i64`, then `u64`, then `u128`, according to their value.
-Arithmetic wraps modulo 2^128; shifts mask the count to 0..127. Checked and
-unchecked conversions follow the ordinary integer conversion rules. Values
-work in arrays, structs, generic functions, matches, serialization and native
-C signatures. Printing preserves all 39 decimal digits.
-
-The compiler evaluates constants with portable two-limb arithmetic. Generated
-C requires native `unsigned __int128` support; embedded TinyCC rejects `u128`
-explicitly. Counts and indices accepted by the existing 64-bit APIs require
-an explicit conversion to `u64`; native memory and atomic APIs retain their
-existing width restrictions. There is no `i128` type.
 
 ### Floats
 
@@ -1463,9 +1447,13 @@ exist on numbers only. Spec §4.5.
 
 ### Packed words: fields inside one integer
 
+V1 supports only 8-, 16-, 32- and 64-bit backings. A `u128` backing fails with
+`128-bit packed word backings are not yet supported`; general u128 scalar
+support is deferred, with no aggregate fallback.
+
 A `packed word` is a nominal scalar with named bit views. Its representation
 and native calling convention are exactly its backing integer, one of `u8`,
-`u16`, `u32`, `u64`, or `u128`. It can be copied, stored in arrays and ordinary
+`u16`, `u32`, or `u64`. It can be copied, stored in arrays and ordinary
 structs, passed to functions and workers, and referenced as a whole value.
 
 ```goose
@@ -1488,11 +1476,11 @@ fn main() {
 ```
 
 Fields occupy consecutive bits, starting at bit zero. `bool` occupies one bit;
-`uN` declares an unsigned field of 1..128 bits; a payload-free enum occupies
+`uN` declares an unsigned field of 1..64 bits; a payload-free enum occupies
 at least one bit and enough bits for its highest ordinal tag. `_ : uN`
 reserves bits without creating a field. Unused high bits are also reserved.
 Widths such as `u2` are descriptors inside these declarations, not general
-integer types. Reads use the smallest carrier among u8/u16/u32/u64/u128.
+integer types. Reads use the smallest carrier among u8/u16/u32/u64.
 Enum reads validate raw tags in every build before producing an enum value.
 
 Construction supports named or positional initializers over named fields,

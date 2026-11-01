@@ -9,11 +9,10 @@ namespace goose {
 
 inline Val IntLit::Check(TypeCheck &tc, TypeExpr *) {
     Val v;
-    v.type = tc.ast.inttypes[hi ? IS_U128 : uns ? IS_U64 : IS_I64];
+    v.type = tc.ast.inttypes[uns ? IS_U64 : IS_I64];
     if (fixedtype) { v.type = fixedtype; v.nonneg = uns || val >= 0; return v; }
     v.ck = CK_INT;
     v.ival = val;
-    v.ihi = hi;
     v.uns = uns;
     v.nonneg = uns || val >= 0;
     return v;
@@ -131,7 +130,6 @@ inline Val Ident::Check(TypeCheck &tc, TypeExpr *expected) {
             } else if (vd->constlit) {
                 v.ck = CK_INT;
                 v.ival = vd->constval;
-                v.ihi = vd->consthi;
                 v.uns = vd->constuns;
                 v.constfrom = vd;
             }

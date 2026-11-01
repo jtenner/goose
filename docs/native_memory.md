@@ -349,6 +349,6 @@ memory orders for the surrounding protocol as usual.
 Ordinary `word.field = value` is a non-atomic whole-word update; it neither
 registers atomic storage nor grants shared-memory authority. Capability
 alignment, lifetime, overlap and borrow exclusions remain unchanged. Workers
-may receive plain packed-word copies or existing atomic capabilities. u128 is
-a plain native value with no atomic promise; memory_read/write, unsafe scalar
+may receive plain packed-word copies or existing atomic capabilities. u128
+backings and general u128 scalars are deferred; memory_read/write, unsafe scalar
 loads/stores and atomic APIs retain their documented 8/16/32/64-bit limits.

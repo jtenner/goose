@@ -1,9 +1,16 @@
 # `packed word`: named views of one integer (v1)
 
-Status: implemented on `feat/packed-word` (all five backings). Validation and
+Status: implemented on `feat/packed-word` (u8/u16/u32/u64 backings). Validation and
 environment-blocked tests are recorded in the [implementation report](../evidence/packed-word-validation.md).
 Original source observations refer to commit
 `f22a70de6b63dc5ae5d3fc2b98d122c354a11235`; line references are to that revision.
+
+Owner scope decision — **2026-10-31 23:51 ET**: v1 backings are u8, u16,
+u32 and u64 only. u128 and all general 128-bit scalar work are deferred to a
+later round driven by a concrete two-word need. Fields and carriers cap at
+64 bits. A u128 backing is rejected explicitly, never lowered as an aggregate.
+This decision supersedes the earlier five-backing implementation authorization;
+all other approved semantics remain unchanged.
 
 ## 1. Scope and cost model
 
@@ -32,7 +39,7 @@ ObjectKind has two variants**. With three variants its width becomes two and
 this particular declaration overflows; the author must reduce the reserved
 region. Enum changes can change a layout and must never silently truncate it.
 
-Backings are exactly `u8`, `u16`, `u32`, `u64`, and `u128`. An empty declaration
+Backings are exactly `u8`, `u16`, `u32`, and `u64`. An empty declaration
 still occupies its backing width. Wider records compose ordinary structs of
 packed words. There are no unbounded packed blobs or arbitrary backing widths.
 
@@ -70,7 +77,7 @@ rest for a local reader.
 | Checking structs | [`src/typecheck_types.h:67`](../../src/typecheck_types.h#L67), lines 67–139: `GetStructInst` substitutes field types and computes fixed/variable/resizable placement and flatness. Packed words are always fixed and flat; their fields must not enter this storage walk. |
 | Constructors | [`src/parser.h:1955`](../../src/parser.h#L1955) parses `StructLit`; [`src/typecheck_nodes.h:304`](../../src/typecheck_nodes.h#L304) expands initializers and dispatches by type; [`src/typecheck_exprs.h:3041`](../../src/typecheck_exprs.h#L3041) checks named/positional fields and missing/default entries. Reuse list syntax, dispatch packed-word construction separately. |
 | Conditional fields | [`src/parser.h:600`](../../src/parser.h#L600) parses both branches and marks branch-owned types/functions conditional. [`src/typecheck_expansion.h:176`](../../src/typecheck_expansion.h#L176) defines constant-condition diagnostics; lines 200–248 select and flatten fields, resolve only selected bodies, reject active duplicates, and reject type-parameter-dependent conditions. [`src/resolve.h:225`](../../src/resolve.h#L225) performs selection before checking active field types. Extend this boundary to packed declarations. |
-| Integer widths | [`src/lexer.h:53`](../../src/lexer.h#L53) has unsigned keywords through u64; [`src/ast.h:95`](../../src/ast.h#L95), lines 95–145, has fixed 8/16/32/64 storage, varint, 64-bit range helpers and constant representations. There is no general u2/u21 or u128 scalar support here. [`src/codegen_types.h:199`](../../src/codegen_types.h#L199) maps existing integer storage to C. u128 is substantial prerequisite work, not an existing capability. |
+| Integer widths | [`src/lexer.h:53`](../../src/lexer.h#L53) has unsigned keywords through u64; [`src/ast.h:95`](../../src/ast.h#L95), lines 95–145, has fixed 8/16/32/64 storage, varint, 64-bit range helpers and constant representations. There is no general u2/u21 or u128 scalar support here. [`src/codegen_types.h:199`](../../src/codegen_types.h#L199) maps existing integer storage to C. General u128 scalar support is outside v1 under the owner scope decision. |
 | Enum values | [`src/parser.h:640`](../../src/parser.h#L640), lines 640–687, parses variants and optional payloads, with no explicit numeric discriminants. [`src/codegen_types.h:704`](../../src/codegen_types.h#L704), lines 704–720, assigns tags by zero-based variant index. Infer widths from those values in v1. |
 | Struct C layout | [`src/codegen_types.h:606`](../../src/codegen_types.h#L606) emits struct bodies; [`src/codegen_types.h:678`](../../src/codegen_types.h#L678) emits their fields. [`src/codegen_nodes.h:372`](../../src/codegen_nodes.h#L372) creates a fixed aggregate temporary for a struct literal; [`src/codegen_construct.h:1132`](../../src/codegen_construct.h#L1132) fills it. None should become the representation of a packed word. |
 | Field locations and assignment | [`src/typecheck_exprs.h:13`](../../src/typecheck_exprs.h#L13) checks lvalue paths; [`src/typecheck_nodes.h:452`](../../src/typecheck_nodes.h#L452) checks dot access; [`src/codegen_values.h:943`](../../src/codegen_values.h#L943) constructs field locations. [`src/codegen_nodes.h:842`](../../src/codegen_nodes.h#L842) pins assignment destinations, sometimes taking their address. A bit view needs a distinct write target; pretending it is an ordinary field breaks both correctness and residency. |
@@ -82,7 +89,7 @@ rest for a local reader.
 
 ```text
 packed-decl := "packed" "word" name ":" backing "{" fields? "}"
-backing     := "u8" | "u16" | "u32" | "u64" | "u128"
+backing     := "u8" | "u16" | "u32" | "u64"
 fields      := field ("," field)* ","?
 field       := name ":" field-type ("=" expression)?
              | "_" ":" unsigned-width
@@ -95,7 +102,7 @@ unsigned-width := "u" decimal-width
 Recognize `packed word` contextually at declaration position; do not reserve
 `word` as a global keyword. Recognize nonstandard `uN` spellings only in the
 field-type position, before ordinary type-name resolution. Canonical widths
-are decimal 1 through 128 without leading zeros. `u8/u16/u32/u64/u128` remain
+are decimal 1 through 64 without leading zeros. `u8/u16/u32/u64` remain
 ordinary unsigned types too. `u2`, `u21`, etc. are layout descriptors, never
 types permitted in parameters, aliases, locals, casts, or generic arguments.
 An enum field may use an ordinary alias to an eligible enum. V1 declarations
@@ -148,8 +155,8 @@ encoding of the raw backing value for external formats.
 ### 4.1 Field reads and enum interpretation
 
 A bool reads as bool. A `uN` reads as the smallest unsigned carrier in
-u8/u16/u32/u64/u128 that contains N bits; e.g. `age` reads as u8 and `u65`
-reads as u128. No narrow type escapes the declaration. Reads of temporary
+u8/u16/u32/u64 that contains N bits; e.g. `age` reads as u8 and `u33`
+reads as u64. No narrow type escapes the declaration. Reads of temporary
 words work without first materializing an addressed word.
 
 Only nonempty, payload-free, fixed-mode enums are eligible. If its greatest
@@ -206,7 +213,7 @@ queue payload, and whole-value reference. It has backing size and alignment
 in the same storage context; enclosing Goose packed structs may use their
 existing unaligned scalar access convention. Worker isolation remains the
 backing scalar's isolation; no ordinary shared reference exemption is added.
-For native FFI use the backing ABI (u128 only where supported by the target).
+For native FFI use the exact backing ABI.
 
 ### 4.3 Construction
 
@@ -235,7 +242,7 @@ scalar writability rules (a `let` word cannot be mutated through its views).
 The containing word must already be initialized. Preserve all bits outside
 the field mask, including implicit high reserves.
 
-Unsigned assignments accept unsigned runtime integers (up to u128) and
+Unsigned assignments accept unsigned runtime integers (up to u64) and
 nonnegative integer literals. Compile-time values outside `0..2^N-1` are
 errors. Runtime values are checked in all builds and abort when out of
 range; proven-fitting carrier types or range facts eliminate the check.
@@ -292,11 +299,11 @@ before the loop unless the algorithm intentionally recalculates it.
 `atomic_fetch_*` on a raw backing remains integer arithmetic/bitwise work;
 it is not narrow-field arithmetic (addition may carry into neighboring bits).
 There are no u8/u16 capabilities in the existing API, so those words are
-plain values; pack into a u32 cell explicitly if needed. u128 has **no atomic
-promise**, even if some native targets provide 128-bit atomic instructions.
+plain values; pack into a u32 cell explicitly if needed. u128 backings are
+rejected even if a native target provides 128-bit atomic instructions; no new atomic width is introduced.
 Do not add a mutex fallback or ordinary borrow of atomic bytes.
 
-## 6. Generated C and the u128 prerequisite
+## 6. Generated C and existing scalar support
 
 Use a distinct checker type, e.g. `TY_PACKED_WORD`, with immutable checked
 layout metadata. `CT(word)` is exactly `CT(backing)`; an optional typedef to
@@ -340,41 +347,23 @@ as wide as the backing and at least 32 bits (avoid signed promotions for
 u8/u16), then cast the completed result back to the backing. Width and offset
 arithmetic in the compiler must be checked before mask formation.
 
-A u128 seam crossing is ordinary unsigned arithmetic, not two field stores:
+### 6.1 Scope of scalar work
 
-```c
-typedef unsigned __int128 U128;
-/* _: u60, cross: u12, _: u56 */
-uint16_t cross = (uint16_t)((w >> 60) & (U128)0xfff);
-w = (w & ~((U128)0xfff << 60)) | (((U128)x & (U128)0xfff) << 60);
-/* A full-width field uses ~(U128)0, never (1 << 128). */
-```
+Reuse the existing u8/u16/u32/u64 scalar types, constants, arithmetic and C
+mapping. Do not add a u128 keyword/type, widen constant storage, or introduce
+128-bit code generation, formatting or serialization. Field descriptors and
+carriers cap at 64 bits; full-width masks use all ones without shifting by 64.
+The register-residency objective remains u64 on Linux x86-64, with no new
+execution-verified platform claim.
 
-### 6.1 Required scalar work
+A declaration naming `u128` receives one clean diagnostic:
+`128-bit packed word backings are not yet supported`. It cannot produce an
+aggregate representation or generated C. Wider formats compose ordinary
+structs containing multiple supported words; a future u128 design needs a
+concrete two-word use case and separate approval.
 
-u128 must be an actual unsigned scalar usable outside the declaration so raw
-conversion, arrays, and function signatures are meaningful. Add IS_U128,
-lexer/parser support, size/alignment, C type mapping, constant parsing and
-folding, casts, comparison, arithmetic/bitwise operations, formatting, and
-byte serialization consistent with unsigned integer rules. Extend constant
-storage beyond the current int64-plus-uns flag, preferably a compiler-side
-two-u64 representation with checked operations; do not require the compiler
-host itself to support `__int128`. Audit all IntStorage ordinal comparisons,
-range helpers, switches, integer literal emission, optimizer facts, and
-match coverage. Large literals must not first pass through u64 and truncate.
-
-Use native `unsigned __int128` only when the C target supports it; emit a
-clear unsupported-backend diagnostic otherwise. No two-u64 struct fallback
-in this version: it changes the scalar representation and ABI. TinyCC support
-must be capability-tested, not inferred from GCC/Clang. This design makes no
-new execution-verified platform claim. u128 native functions may use two
-registers or memory according to ABI; the one-register objective applies to
-native register-sized words, particularly u64 on Linux x86-64.
-
-Do not accidentally broaden APIs that intentionally accept only i/u8/16/32/64,
-such as `memory_read/write`, or u32/u64 atomics. Keep those allowlists explicit.
-CLI build-definition integers keep their documented 64-bit range; this
-feature does not expand that input format.
+Native-memory width allowlists, u32/u64 atomic capabilities, and CLI
+build-definition integer ranges are unchanged.
 
 ## 7. Diagnostics
 
@@ -386,8 +375,8 @@ below are proposed exact primary messages (names substituted as shown).
 |---|---|
 | `packed word Small : u8 { a: u6, b: u3 }` | `packed word Small uses 9 bits, exceeding u8 backing width 8; field b occupies bits 6..8` |
 | `packed word W : u64 { a: u2, a: bool }` | `duplicate field name a in packed word W` (note first a; active branches only) |
-| `a: u0` or `a: u129` | `packed word field width must be between 1 and 128; found u0` (substitute u129) |
-| `packed word W : u24 {}` | `packed word backing must be u8, u16, u32, u64, or u128; found u24` |
+| `a: u0` or `a: u65` | `packed word field width must be between 1 and 64; found u0` (substitute u65) |
+| `packed word W : u24 {}` | `packed word backing must be u8, u16, u32, or u64; found u24` |
 | `a: i3` | `signed packed word fields are unsupported in v1; use an unsigned field and explicit decoding` |
 | `a: u2 @ 4` | `explicit packed word field positions are unsupported in v1; use reserved fields` |
 | Payload enum E / empty enum E as field e | `packed word field e requires a nonempty payload-free enum; found E` |
@@ -398,7 +387,7 @@ below are proposed exact primary messages (names substituted as shown).
 | Runtime out-of-range age | `packed word field W.age value is outside range 0..3` (abort, source location) |
 | Raw enum tag 3 for three-variant E on field read | `invalid enum tag 3 in packed word field W.e (E)` (abort, source location) |
 | `&w.age` / reference argument | `packed word field W.age is a bit view, not addressable storage; reference the whole word or copy the field` |
-| u128 on unsupported C backend | `u128 packed words require a backend with unsigned 128-bit scalar support` |
+| `packed word W : u128 {}` on any backend | `128-bit packed word backings are not yet supported` |
 
 Reuse existing unknown-field, constructor missing/duplicate initializer,
 const-expression and immutable-destination diagnostics with packed-word
@@ -415,17 +404,16 @@ are recorded in the [implementation report](../evidence/packed-word-validation.m
 
 | Phase | Files and deliverables | Rough size |
 |---|---|---|
-| 1. Parser, AST, tooling | `src/lexer.h`, `src/parser.h`, `src/ast.h`, `src/clone.h`, `src/dump.h`, `src/format.h`, `src/resolve.h`: sibling declaration/type, contextual widths, conditional field tree, constructor dispatch metadata, name resolution/recovery. `src/lsp_analysis.h`, `src/lsp_features.h`, `tree-sitter/grammar.js`, `vscode/syntaxes/goose.tmLanguage.json`: declaration outline, width-aware hover, formatting/highlighting. | 700–1,100 lines |
-| 2. Checker and scalar prerequisite | `src/ast.h`, `src/type_queries.h`, `src/typecheck.h`, `src/typecheck_types.h`, `src/typecheck_nodes.h`, `src/typecheck_exprs.h`, `src/typecheck_flow.h`, `src/typecheck_expansion.h`, `src/resolve.h`, `src/lexer.h`: layout selection/cache, width/carrier/range rules, enum validity, nominal casts, constructors, nonaddressable write targets, scalar effects, and u128 constants/types. `src/typecheck_builtins.h`: retain explicit restricted-width allowlists. | 1,800–2,800 lines, including u128 front end |
-| 3. C generation and scalar runtime | `src/codegen.h`, `src/codegen_types.h`, `src/codegen_nodes.h`, `src/codegen_values.h`, `src/codegen_construct.h`, `src/codegen_calls.h`, `src/codegen_emit.h`, `src/codegen_render.h`, `src/runtime/runtime.h`: scalar word mapping, masks, range/enum checks, once-only read/modify/write, scalar ABI/equality, u128 arithmetic/formatting/serialization. Audit `src/optimize_*.h` and `src/bce.h` for 64-bit constant assumptions. `src/codegen_builtins.h`: ensure no accidental atomic widening. | 1,500–2,500 lines, including u128 backend |
-| 4. Tests | New `test/packed_word.py`; fixtures in `test/syntax`, `test/typing`, `test/codegen`, `test/errors`, `test/errors_tc`, `test/memory`, and `test/expected`; integrate with `test/run_tests.py` and conditional/editor harnesses as appropriate. Include dedicated general-u128 regressions. | 1,200–1,800 lines |
-| 5. Documentation | `docs/reference.md`, `docs/goose_spec.md`, `docs/implementation.md`, `docs/native_memory.md`, `docs/compiler-definitions.md`, and a small sample under `samples/packed_word`; update this document's status only after implementation. | 300–500 lines |
+| 1. Parser, AST, tooling | `src/parser.h`, `src/ast.h`, `src/dump.h`, `src/resolve.h`, LSP and editor grammar files: nominal declaration, descriptors, conditionals, source preservation and explicit u128 rejection. | 350–500 lines |
+| 2. Checker and layouts | `src/typecheck*.h`, `src/ast.h`: selected layouts, width/carrier/range rules, enums, exact backing casts, construction, mutability and bit-view reference rejection. Existing scalar storage remains unchanged. | 500–750 lines |
+| 3. C generation | `src/codegen*.h`: scalar mapping, masks, checked extraction/updates, once-only evaluation, scalar ABI/equality and stored-word handling. No 128-bit runtime additions. | 400–600 lines |
+| 4. Tests | `test/packed_word*.py`, syntax/editor fixtures and `test/run_tests.py`: all four backings, preservation, conditionals, enums, placement, atomic CAS, native/JIT execution and residency evidence. u128 coverage is rejection diagnostics only. | 550–850 lines |
+| 5. Documentation | Reference, specification, implementation notes, native-memory/configuration docs, this design, and `samples/packed_word`. | 200–300 lines |
 
-Total: approximately **5,500–8,700 handwritten lines**. The largest uncertainty
-is complete u128 support and the reach of integer-range assumptions; do not
-present this as a small parser-only feature. A useful implementation sequence
-within phases 2–3 is u128 scalar correctness first, then word integration;
-shipping the complete feature still requires all five backing widths.
+Revised total: approximately **2,000–3,000 handwritten lines**. Report any
+growth beyond that range with its reason. The largest remaining risk is
+addressability and aggregate assumptions in existing checker/codegen paths;
+there is no general u128 scalar prerequisite in this scope.
 
 Key risks and acceptance gates:
 
@@ -439,10 +427,9 @@ Key risks and acceptance gates:
   cloning, generic caches, flatness, byte images, ABI headers, and rendering
   must retain word identity while using backing storage. A catch-all type
   switch that falls through to struct handling is a correctness defect.
-* **Constant width assumptions.** Extending IS_U128 without changing folded
-  constants/ranges silently corrupts high halves. No shifts by 64/128 in
-  host mask code, signed shifts, or 64-bit literal truncation are acceptable.
-  Test the scalar prerequisite independently before layout relies on it.
+* **Constant width assumptions.** Keep the existing scalar constant storage.
+  Full-width u64 masks must avoid shifting by 64; reject widths above 64 before
+  mask formation. Do not introduce signed promotions or truncate u64 literals.
 * **Enums and raw casts.** A free raw cast permits invalid enum encodings;
   extraction must validate before creating an ordinary enum. This is a field
   read cost, not a whole-word conversion cost. Do not claim enum extraction
@@ -464,9 +451,9 @@ Run the repository's ordinary fixtures and relevant conditional/native-memory
 regressions after the focused suite. Acceptance drivers remove their temporary
 C, binaries and assembly.
 
-1. **Layout and diagnostics.** Backings 8/16/32/64/128; zero named fields;
+1. **Layout and diagnostics.** Backings 8/16/32/64; zero named fields;
    repeated reserves; implicit trailing reserves; exact fills; one-bit
-   overflow; every legal narrow width; invalid 0/129 widths/backings; signed,
+   overflow; every legal narrow width; invalid 0/65 widths/backings; signed,
    pointer, array, nested-word and payload-enum field rejection. Verify the
    §1 offsets using independently computed integer masks. Assert source
    locations and diagnostics, including duplicate names after flattening.
@@ -483,7 +470,7 @@ C, binaries and assembly.
    messages and whole-word references; unaligned containing struct offsets;
    let/const rejection; field address rejection through generic reference
    adaptation. Confirm whole-word copies stay independent. FFI roundtrip
-   tests use exact backing signatures, with conditional u128 target support.
+   tests use exact supported backing signatures.
 4. **Conditional layouts.** Alternate `--define DEBUG=true/false` in fresh
    processes and editor sessions. Verify same-width reserved alternatives,
    deliberately shifting offsets without else, nested conditions, active
@@ -497,18 +484,17 @@ C, binaries and assembly.
    (including a single-variant enum's tag 1), and no trap for copying/casting
    such a raw word or updating unrelated fields. Inject a mismatched width
    in a checker unit fixture for the otherwise unreachable width invariant.
-6. **u128.** Scalar literal, folding, conversion, arithmetic, rendering,
-   match, serialization and ABI tests first. Then `_: u60, cross: u12,
-   _: u56` crossing bit 64, fields of widths 64/65/127/128, offset 64,
-   bit 127, all-one masks, high-half raw roundtrips, and randomized
-   comparisons against a Python big-integer oracle. Run generated C under
-   undefined-behavior sanitization on supported native targets to detect
-   invalid shifts and signed promotions. Assert explicit unsupported-backend
-   failure rather than an aggregate fallback.
+6. **Deferred u128 rejection only.** Empty and populated u128-backed
+   declarations must each produce exactly one explicit unsupported-backing
+   diagnostic under parse/check/native generation, at O0 and O2. Verify no C
+   or aggregate fallback is produced. Fields u65/u127/u128 and larger fail
+   the 64-bit descriptor limit. General u128 declarations and literals above
+   u64.max remain rejected by the existing scalar rules. No positive scalar,
+   seam-crossing, formatting or serialization tests belong in v1.
 7. **Atomics.** u32/u64 raw-cast load/store/exchange/CAS roundtrips and
    contended disjoint-field CAS updates with final counter checks. Verify
    stale/misaligned/out-of-range capability errors and ordinary borrow
-   exclusion still work; invalid order tests remain rejected. Ensure u128
+   exclusion still work; invalid order tests remain rejected. Ensure rejected u128 backings
    cannot enter atomic APIs and plain `w.field = ...` emits no atomic call.
 8. **Register-residency evidence.** Add externally observable noinline leaf
    kernels taking and returning a u64 word: extract age, replace a known-fit
@@ -533,8 +519,11 @@ backing casts, checked writes, and nonaddressable field views. Preserve every
 raw bit outside the written field and compare all bits for equality. Infer
 payload-free enum widths from current ordinal tags and validate raw enum
 encodings at extraction. Reuse existing u32/u64 atomic capabilities through
-raw casts and CAS loops. Include native u128 scalar support as a prerequisite,
-with explicit backend limits and no atomic promise. Defer pinned positions,
-signed fields, generic packed declarations, and field reflection. None of
+raw casts and CAS loops. Ship only u8/u16/u32/u64 backings and cap descriptors
+and carriers at 64 bits.
+Per the owner decision of 2026-10-31 23:51 ET, defer u128 and all general
+128-bit scalar work until a concrete two-word need drives a later round.
+Reject a u128 backing with the explicit diagnostic in §7, never an aggregate
+fallback. Defer pinned positions, signed fields, generic packed declarations, and field reflection. None of
 these deferrals changes the owner's single-integer representation or
 conditional-layout decisions.

@@ -14,7 +14,7 @@ skip running 31 audio, gfx, physics or ui test(s) (no layer for them, or no GPU 
 == builder return alignment: 1 ok
 == worker packet alignment: 1 ok
 == library headers: 1 ok
-== packed words and portable u128: 7 ok
+== packed words: 6 ok
 == driver, diagnostics and language server
 Traceback (most recent call last):
   File "/home/dev/Projects/goose/test/bench_declarations.py", line 91, in <module>
@@ -23,7 +23,7 @@ Traceback (most recent call last):
   File "/home/dev/Projects/goose/test/bench_declarations.py", line 25, in invoke
     assert contains in result.stdout + result.stderr, (args, contains, result.stdout, result.stderr)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AssertionError: (('bench', PosixPath('/tmp/goose-bench-declarations-_p6n6m5t/entry.goose'), '--temperature', 'off'), 'bench results cannot be index-qualified integers', 'Benchmark source: /tmp/goose-bench-declarations-_p6n6m5t/entry.goose\nGoose/toolchain: {"path":"/home/dev/Projects/goose/build/goose","sha256":"561b93901d564cdee2273c7a4ec50b648ec2e8c9d4ef4d87b7e444e0c3614feb","version":"goose runtime 5f7e9c5c3ea4"} / null\nWarmups: 2; gate: 60 C; ceiling: 65 C; UNGATED\nkey\tlabel\tsize\tisolation\tcount\tmedian ms\tMAD %\tmin ms\tmax ms\tmax observed Tctl C\trejections\tprocess peak MiB\tchecksum\tstatus\tsignature\nRSS is the process lifetime high-water mark, including runtime and global fixtures.\n', 'benchmark artifacts: /tmp/goose-bench-JVlTE3\nbench: shared-native benchmark lock unavailable or occupied\n')
+AssertionError: (('bench', PosixPath('/tmp/goose-bench-declarations-bzu7u5jr/entry.goose'), '--temperature', 'off'), 'bench results cannot be index-qualified integers', 'Benchmark source: /tmp/goose-bench-declarations-bzu7u5jr/entry.goose\nGoose/toolchain: {"path":"/home/dev/Projects/goose/build/goose","sha256":"bea08f7f19b6909b7ef3bf48ce810a5dcddf76852299c5a0b54d1d8e74c9648a","version":"goose runtime aceae1fd76c7"} / null\nWarmups: 2; gate: 60 C; ceiling: 65 C; UNGATED\nkey\tlabel\tsize\tisolation\tcount\tmedian ms\tMAD %\tmin ms\tmax ms\tmax observed Tctl C\trejections\tprocess peak MiB\tchecksum\tstatus\tsignature\nRSS is the process lifetime high-water mark, including runtime and global fixtures.\n', 'benchmark artifacts: /tmp/goose-bench-2mIJoJ\nbench: shared-native benchmark lock unavailable or occupied\n')
 FAIL benchmark declarations
 Traceback (most recent call last):
   File "/home/dev/Projects/goose/test/bench_compatibility.py", line 51, in <module>
@@ -34,7 +34,7 @@ Traceback (most recent call last):
   File "/home/dev/Projects/goose/test/bench_compatibility.py", line 17, in invoke
     assert (result.returncode == 0) == ok, (args, result.stdout, result.stderr)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AssertionError: (('bench', '-O0', PosixPath('/tmp/goose-bench-compatibility-8ioifh46/entry.goose'), '--temperature', 'off', '--samples', '5', '--warmups', '1', '--json', PosixPath('/tmp/goose-bench-compatibility-8ioifh46/result.json')), 'Benchmark source: /tmp/goose-bench-compatibility-8ioifh46/entry.goose\nGoose/toolchain: {"path":"/home/dev/Projects/goose/build/goose","sha256":"561b93901d564cdee2273c7a4ec50b648ec2e8c9d4ef4d87b7e444e0c3614feb","version":"goose runtime 5f7e9c5c3ea4"} / null\nWarmups: 1; gate: 60 C; ceiling: 65 C; UNGATED\nkey\tlabel\tsize\tisolation\tcount\tmedian ms\tMAD %\tmin ms\tmax ms\tmax observed Tctl C\trejections\tprocess peak MiB\tchecksum\tstatus\tsignature\nRSS is the process lifetime high-water mark, including runtime and global fixtures.\n', 'benchmark artifacts: /tmp/goose-bench-mNfEvU\nbench: shared-native benchmark lock unavailable or occupied\n')
+AssertionError: (('bench', '-O0', PosixPath('/tmp/goose-bench-compatibility-upw66991/entry.goose'), '--temperature', 'off', '--samples', '5', '--warmups', '1', '--json', PosixPath('/tmp/goose-bench-compatibility-upw66991/result.json')), 'Benchmark source: /tmp/goose-bench-compatibility-upw66991/entry.goose\nGoose/toolchain: {"path":"/home/dev/Projects/goose/build/goose","sha256":"bea08f7f19b6909b7ef3bf48ce810a5dcddf76852299c5a0b54d1d8e74c9648a","version":"goose runtime aceae1fd76c7"} / null\nWarmups: 1; gate: 60 C; ceiling: 65 C; UNGATED\nkey\tlabel\tsize\tisolation\tcount\tmedian ms\tMAD %\tmin ms\tmax ms\tmax observed Tctl C\trejections\tprocess peak MiB\tchecksum\tstatus\tsignature\nRSS is the process lifetime high-water mark, including runtime and global fixtures.\n', 'benchmark artifacts: /tmp/goose-bench-bMlU9r\nbench: shared-native benchmark lock unavailable or occupied\n')
 FAIL benchmark compatibility
 == driver, diagnostics and language server: 55 ok, 2 FAIL
 == native example acceptance: 13 ok
@@ -55,7 +55,7 @@ skip 51 JIT test(s) the backend cannot run yet: append_limited_queue.goose, code
 skip JIT for sample(s) the backend cannot run yet: 23_mandelbrot_threads.goose, 32_pool_worker_snapshots.goose, 32_shared_jobs.goose
 skip audio, gfx, physics or ui sample(s) (no layer for them, or no GPU device): 27_gfx_cube.goose, 28_physics_boxes.goose, 29_ui_todo.goose, 30_mini_minecraft.goose, 31_mini_doom.goose
 == samples: 53 ok
-(79s with 8 job(s))
+(72s with 8 job(s))
 2 FAILURE(S):
 driver, diagnostics and language server: FAIL benchmark declarations
 driver, diagnostics and language server: FAIL benchmark compatibility

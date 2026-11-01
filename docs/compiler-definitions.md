@@ -66,4 +66,5 @@ protocol identifier: applications must version persisted formats and agree
 on definitions across FFI boundaries. The width of the backing alone does not
 prove compatible field meanings. Editor servers need the same `--define`
 arguments as builds. Command-line integer definitions remain limited to
-[-2^63, 2^64-1]; adding u128 source literals does not widen that CLI contract.
+[-2^63, 2^64-1]. Packed words introduce no new scalar integer type or literal
+range; u128 backings are deferred.

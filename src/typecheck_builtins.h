@@ -44,7 +44,7 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
                 if (c->tyargs.size() != 1)
                     Error(c, "unsafe scalar access needs exactly one type argument");
                 auto t = Subst(c->tyargs[0]);
-                if (!IsIntT(t) || t->ix || t->intstorage == IS_U128)
+                if (!IsIntT(t) || t->ix || t->intstorage == IS_VARINT)
                     Error(c, "unsafe scalar type must be i/u8/16/32/64");
                 c->qtype = t;
                 pointer();
@@ -100,7 +100,7 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
             case B_MEMORY_READ: case B_MEMORY_WRITE: {
                 if (c->tyargs.size() != 1) Error(c, "memory scalar access needs exactly one type argument");
                 auto t = Subst(c->tyargs[0]);
-                if (!IsIntT(t) || t->ix || t->intstorage == IS_U128) Error(c, "memory scalar type must be i/u8/16/32/64");
+                if (!IsIntT(t) || t->ix) Error(c, "memory scalar type must be i/u8/16/32/64");
                 c->qtype = t;
                 cap(0, NK_ACCESS); number(1);
                 if (d.kind == B_MEMORY_WRITE) CheckArg(args[2], t);
