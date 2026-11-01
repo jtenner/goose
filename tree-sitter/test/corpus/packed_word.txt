@@ -1,0 +1,42 @@
+==================
+Packed words with conditional reserves
+==================
+packed word Header:u64 { flag:bool, age:u2, const if true { _:u21 } else { _:u21 }, id:u32 }
+packed word Wide:u128 { low:u64, high:u64 }
+---
+
+(source_file
+  (packed_word_declaration
+    (identifier)
+    (packed_word_fields
+      (packed_word_field
+        (identifier)
+        (primitive_type))
+      (packed_word_field
+        (identifier)
+        (named_type
+          (identifier)))
+      (packed_word_conditional_fields
+        (boolean_literal)
+        (packed_word_fields
+          (packed_word_field
+            (identifier)
+            (named_type
+              (identifier))))
+        (packed_word_fields
+          (packed_word_field
+            (identifier)
+            (named_type
+              (identifier)))))
+      (packed_word_field
+        (identifier)
+        (primitive_type))))
+  (packed_word_declaration
+    (identifier)
+    (packed_word_fields
+      (packed_word_field
+        (identifier)
+        (primitive_type))
+      (packed_word_field
+        (identifier)
+        (primitive_type)))))

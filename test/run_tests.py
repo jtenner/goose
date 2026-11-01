@@ -2300,6 +2300,23 @@ def main():
         r.section("library headers")
         r.show_task(library_headers)
 
+    # The packed-word scalar contract has a native u128 prerequisite. These
+    # self-cleaning drivers exercise both supported native C backends and
+    # count their individual oracle assertions in their own summaries.
+    if cc and clang and sys.platform.startswith("linux") and shutil.which("gcc"):
+        r.section("packed words and portable u128")
+        def packed_word_acceptance(script):
+            env = dict(os.environ, GOOSE_TEST_EXE=str(exe), CLANG=str(clang.cc))
+            result = subprocess.run([sys.executable, str(HERE / script)], env=env,
+                                    capture_output=True, text=True, timeout=600)
+            if result.returncode:
+                r.fail(script, result.stdout + result.stderr)
+            else:
+                r.ok(script + ": " + result.stdout.strip())
+        for script in ("compiler_uint128.py", "u128.py", "packed_word_check.py",
+                       "packed_word.py", "packed_word_contracts.py", "packed_word_residency.py", "packed_word_editor.py"):
+            r.show_task(packed_word_acceptance, script)
+
     r.section("driver, diagnostics and language server")
 
     def driver_verbs():

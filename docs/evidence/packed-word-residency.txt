@@ -1,0 +1,160 @@
+Packed-word residency evidence (x86-64; measured, not a universal no-spill guarantee).
+Goose -O0 --standalone --header; C -std=c11 -O2.
+Internal leaf definitions marked noinline,used in the test C; exported wrappers and a separately compiled C host exercise the call boundary.
+Handwritten scalar kernels use the same noinline,used attributes.
+
+C leaf: static uint8_t extract_g(gs_u64 w_g) {
+
+    gs_u64 t1;
+    uint8_t t0;
+    t1 = w_g;
+    t0 = (uint8_t)((t1 >> 3) & UINT64_C(255));
+    return t0;
+}
+
+C leaf: static gs_u64 replace_g(gs_u64 w_g, uint8_t value_g) {
+
+    gs_u64 out_g;
+    gs_u64 t2;
+    out_g = w_g;
+    uint8_t t0 = value_g;
+    uint8_t t1 = t0;
+    out_g = (gs_u64)(((uint64_t)(out_g) & ~((uint64_t)UINT64_C(255) << 3)) | (((uint64_t)(t1) & UINT64_C(255)) << 3));
+    t2 = out_g;
+    return t2;
+}
+
+C leaf: static gs_u64 construct_g(uint8_t age_g, uint8_t kind_g) {
+
+    gs_u64 t0;
+    gs_u64 t1;
+    gs_u64 t2;
+    t2 = 0;
+    uint8_t t3 = age_g;
+    uint8_t t4 = t3;
+    t2 |= (gs_u64)(((uint64_t)(t4) & UINT64_C(255)) << 3);
+    uint8_t t5 = kind_g;
+    uint8_t t6 = t5;
+    t2 |= (gs_u64)(((uint64_t)(t6) & UINT64_C(255)) << 16);
+    t1 = t2;
+    t0 = t1;
+    return t0;
+}
+
+C leaf: static uint8_t equal_g(gs_u64 a_g, gs_u64 b_g) {
+
+    uint8_t t0;
+    t0 = (a_g == b_g);
+    return t0;
+}
+
+Compiler: gcc (Debian 14.2.0-19) 14.2.0
+Target: x86_64-linux-gnu
+0000000000000360 <extract_g>:
+ 360:	48 89 f8             	mov    %rdi,%rax
+ 363:	48 c1 e8 03          	shr    $0x3,%rax
+ 367:	c3                   	ret
+ 368:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+ 36f:	00 
+0000000000000370 <replace_g>:
+ 370:	48 81 e7 07 f8 ff ff 	and    $0xfffffffffffff807,%rdi
+ 377:	40 0f b6 f6          	movzbl %sil,%esi
+ 37b:	48 c1 e6 03          	shl    $0x3,%rsi
+ 37f:	48 89 f8             	mov    %rdi,%rax
+ 382:	48 09 f0             	or     %rsi,%rax
+ 385:	c3                   	ret
+ 386:	66 2e 0f 1f 84 00 00 	cs nopw 0x0(%rax,%rax,1)
+ 38d:	00 00 00 
+0000000000000390 <construct_g>:
+ 390:	40 0f b6 ff          	movzbl %dil,%edi
+ 394:	40 0f b6 f6          	movzbl %sil,%esi
+ 398:	48 8d 04 fd 00 00 00 	lea    0x0(,%rdi,8),%rax
+ 39f:	00 
+ 3a0:	48 c1 e6 10          	shl    $0x10,%rsi
+ 3a4:	48 09 f0             	or     %rsi,%rax
+ 3a7:	c3                   	ret
+ 3a8:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+ 3af:	00 
+00000000000003b0 <equal_g>:
+ 3b0:	48 39 f7             	cmp    %rsi,%rdi
+ 3b3:	0f 94 c0             	sete   %al
+ 3b6:	c3                   	ret
+ 3b7:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+ 3be:	00 00 
+0000000000000710 <hand_extract>:
+ 710:	48 89 f8             	mov    %rdi,%rax
+ 713:	48 c1 e8 03          	shr    $0x3,%rax
+ 717:	c3                   	ret
+ 718:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+ 71f:	00 
+0000000000000720 <hand_replace>:
+ 720:	48 81 e7 07 f8 ff ff 	and    $0xfffffffffffff807,%rdi
+ 727:	40 0f b6 f6          	movzbl %sil,%esi
+ 72b:	48 c1 e6 03          	shl    $0x3,%rsi
+ 72f:	48 89 f8             	mov    %rdi,%rax
+ 732:	48 09 f0             	or     %rsi,%rax
+ 735:	c3                   	ret
+ 736:	66 2e 0f 1f 84 00 00 	cs nopw 0x0(%rax,%rax,1)
+ 73d:	00 00 00 
+0000000000000740 <hand_construct>:
+ 740:	40 0f b6 ff          	movzbl %dil,%edi
+ 744:	40 0f b6 f6          	movzbl %sil,%esi
+ 748:	48 8d 04 fd 00 00 00 	lea    0x0(,%rdi,8),%rax
+ 74f:	00 
+ 750:	48 c1 e6 10          	shl    $0x10,%rsi
+ 754:	48 09 f0             	or     %rsi,%rax
+ 757:	c3                   	ret
+ 758:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+ 75f:	00 
+0000000000000760 <hand_equal>:
+ 760:	48 39 f7             	cmp    %rsi,%rdi
+ 763:	0f 94 c0             	sete   %al
+ 766:	c3                   	ret
+
+
+Compiler: clang version 23.1.3 (https://github.com/conda-forge/clangdev-feedstock 846d5eb2556c29463558d2bae20a3ef40192f71e)
+Target: x86_64-conda-linux-gnu
+0000000000000000 <extract_g>:
+   0:	48 89 f8             	mov    %rdi,%rax
+   3:	c1 e8 03             	shr    $0x3,%eax
+   6:	c3                   	ret
+   7:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+   e:	00 00 
+0000000000000010 <replace_g>:
+  10:	48 81 e7 07 f8 ff ff 	and    $0xfffffffffffff807,%rdi
+  17:	89 f0                	mov    %esi,%eax
+  19:	48 8d 04 c7          	lea    (%rdi,%rax,8),%rax
+  1d:	c3                   	ret
+  1e:	66 90                	xchg   %ax,%ax
+0000000000000020 <construct_g>:
+  20:	c1 e6 10             	shl    $0x10,%esi
+  23:	8d 04 fe             	lea    (%rsi,%rdi,8),%eax
+  26:	c3                   	ret
+  27:	90                   	nop
+0000000000000028 <equal_g>:
+  28:	48 39 f7             	cmp    %rsi,%rdi
+  2b:	0f 94 c0             	sete   %al
+  2e:	c3                   	ret
+  2f:	90                   	nop
+0000000000000360 <hand_extract>:
+ 360:	48 89 f8             	mov    %rdi,%rax
+ 363:	c1 e8 03             	shr    $0x3,%eax
+ 366:	c3                   	ret
+ 367:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+ 36e:	00 00 
+0000000000000370 <hand_replace>:
+ 370:	48 81 e7 07 f8 ff ff 	and    $0xfffffffffffff807,%rdi
+ 377:	89 f0                	mov    %esi,%eax
+ 379:	48 8d 04 c7          	lea    (%rdi,%rax,8),%rax
+ 37d:	c3                   	ret
+ 37e:	66 90                	xchg   %ax,%ax
+0000000000000380 <hand_construct>:
+ 380:	c1 e6 10             	shl    $0x10,%esi
+ 383:	8d 04 fe             	lea    (%rsi,%rdi,8),%eax
+ 386:	c3                   	ret
+ 387:	90                   	nop
+0000000000000388 <hand_equal>:
+ 388:	48 39 f7             	cmp    %rsi,%rdi
+ 38b:	0f 94 c0             	sete   %al
+ 38e:	c3                   	ret
+ 38f:	90                   	nop

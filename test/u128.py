@@ -10,7 +10,7 @@ import tempfile
 MASK = (1 << 128) - 1
 
 def main():
-    goose = shutil.which('goose++')
+    goose = os.environ.get('GOOSE_TEST_EXE') or shutil.which('goose++')
     assert goose, 'goose++ required on PATH'
     checks = 0
     with tempfile.TemporaryDirectory(prefix='goose-u128-native-') as td:
@@ -44,6 +44,15 @@ def main():
                   'print(18446744073709551616 == 18446744073709551617);',
                   'const if 18446744073709551616 < 18446744073709551617 { print(7); } else { print(8); }']
         expected += [str(1 << 127), str((1 << 64)-1), '2', str(1 << 64), str(MASK), str((1 << 64)-1), 'false', '7']
+        calls += ['var grow:u128[>..]=[18446744073709551616,340282366920938463463374607431768211455];',
+                  'let image=to_bytes(grow); var restored=from_bytes<u128[>..]>(image);',
+                  'print(restored[0]);', 'print(restored[1]);',
+                  'print((18446744073709551616 as u128) as f64);',
+                  'print((65535.0 as u128) as u16);',
+                  'const HIGH:u128=18446744073709551616;',
+                  'const NEXT:u128=HIGH+17; print(NEXT);',
+                  'print(~(0 as u128));']
+        expected += [str(1<<64),str(MASK),'1.8446744073709552e+19','65535',str((1<<64)+17),str(MASK)]
         source = root/'scalar.goose'
         source.write_text('\n'.join(declarations) + '\nfn main() {\n' + '\n'.join(calls) + '\n}\n')
         run([goose, '--check', '--roundtrip', source]); checks += 1
@@ -51,7 +60,10 @@ def main():
             assert shutil.which(cc), f'{cc} required for native acceptance'
             for opt in [0, 2]:
                 binary = root/f'scalar-{pathlib.Path(cc).name}-{opt}'
-                run([goose, 'build', '--cc', cc, f'-O{opt}', source, '-o', binary])
+                generated=root/'scalar.c'
+                run([goose, f'-O{opt}', '--standalone', source, '-o', generated])
+                run([cc, f'-O{opt}', '-fsanitize=undefined', '-fno-sanitize-recover=all', generated,
+                     '-lm', '-pthread', '-ldl', '-o', binary])
                 actual = run([binary]).splitlines()
                 assert actual == expected, (cc, opt, [(a,b) for a,b in zip(actual,expected) if a != b][:10], actual[-10:])
                 checks += len(expected)
