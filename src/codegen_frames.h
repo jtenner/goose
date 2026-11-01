@@ -317,8 +317,10 @@ inline void CodeGen::PushRootMembers(vector<string> &args, TypeExpr *t, string v
 }
 
 inline void CodeGen::CollectSpecs() {
-    for (auto sp : ast.fnspecs)
-        if (sp->live && sp->body) { assert(!sp->sf->isconstfn); livespecs.push_back(sp); }
+    for (auto sp : ast.fnspecs) {
+        assert(!sp->sf->isconstfn);
+        if (sp->live && sp->body) livespecs.push_back(sp);
+    }
     // Names: suffix whenever the goose name maps to more than one live
     // spec (overloads or multiple specializations).
     map<string_view, int> namecount;

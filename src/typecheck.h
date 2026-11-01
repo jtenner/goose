@@ -365,19 +365,24 @@ struct TypeCheck {
     vector<pair<string_view, Val>> constargs;
     vector<pair<SFunction *, Node *>> constcalls;
     vector<Node *> constsites;
+    Node *constrequest = nullptr;
     size_t constvisits = 0;
     int constevaldepth = 0;
     bool constrequested = false;
     struct ConstVisit {
         TypeCheck &tc;
-        ConstVisit(TypeCheck &t, Node *n) : tc(t) {
-            if (!tc.constevaldepth) { tc.constvisits = 0; tc.constrequested = false; }
+        ConstVisit(TypeCheck &t, Node *n, Node *request) : tc(t) {
+            if (!tc.constevaldepth) {
+                tc.constvisits = 0; tc.constrequested = false; tc.constrequest = request;
+            }
             ++tc.constvisits;
             tc.constrequested |= Is<Call>(n) != nullptr;
             if (tc.constrequested && tc.constvisits > 10000) tc.Error(n, "const fn expression visit limit is 10000");
             ++tc.constevaldepth;
         }
-        ~ConstVisit() { --tc.constevaldepth; }
+        ~ConstVisit() {
+            if (!--tc.constevaldepth) { tc.constrequest = nullptr; tc.constrequested = false; }
+        }
     };
     TypeExpr *ConstScalar(TypeExpr *t, Line at);
     Node *ConstBody(SFunction *sf);
@@ -640,6 +645,8 @@ struct TypeCheck {
         d.where = where;
         d.message = msg;
         d.related = std::move(chain);
+        if (constrequested && constrequest)
+            d.related.push_back({LocOf(constrequest->line), "constant evaluation requested here"});
         for (auto site : constsites)
             d.related.push_back({LocOf(site->line), "while evaluating this const fn request"});
         LibraryCallLocation(d);
@@ -3406,6 +3413,7 @@ struct TypeCheck {
             }
         }
         if (prepareonly) return;
+        CheckConstFunctions();
         ResolvePools();
         ResolveIndexTypes();
         // Validate all non-generic type declarations up front: clearer errors
