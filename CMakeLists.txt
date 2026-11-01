@@ -229,3 +229,11 @@ if(GOOSE_BUILD_LSP_TESTS)
     add_test(NAME lsp_call_hierarchy COMMAND goose_lsp_test
         "${CMAKE_CURRENT_SOURCE_DIR}/stdlib" "${CMAKE_CURRENT_BINARY_DIR}/lsp_calls.goose")
 endif()
+
+# Isolated native/JIT acceptance; generated artifacts live in a temporary directory.
+find_package(Python3 COMPONENTS Interpreter QUIET)
+if(Python3_Interpreter_FOUND)
+    enable_testing()
+    add_test(NAME record_read COMMAND ${CMAKE_COMMAND} -E env
+        GOOSE_TEST_EXE=$<TARGET_FILE:goose> ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test/record_read.py)
+endif()
