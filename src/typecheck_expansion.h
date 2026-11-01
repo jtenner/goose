@@ -127,7 +127,13 @@ inline bool TypeCheck::ConstBool(Node *n, set<VarDecl *> &visiting, ConstUse *us
                     if (l.notconst) l.ival = WrapStorage(l.ival, t->intstorage);
                     if (r.notconst) r.ival = WrapStorage(r.ival, t->intstorage);
                     auto uns = IsUnsigned(t->intstorage);
-                    auto cmp = uns ? ((uint64_t)l.ival < (uint64_t)r.ival ? -1 : l.ival == r.ival ? 0 : 1)
+                    auto a = UInt128((uint64_t)l.ival, l.ihi), rhswide = UInt128((uint64_t)r.ival, r.ihi);
+                    if (t->intstorage == IS_U128) {
+                        if (l.notconst) a.hi = UINT64_MAX;
+                        if (r.notconst) rhswide.hi = UINT64_MAX;
+                    }
+                    auto cmp = t->intstorage == IS_U128 ? (a < rhswide ? -1 : a == rhswide ? 0 : 1)
+                             : uns ? ((uint64_t)l.ival < (uint64_t)r.ival ? -1 : l.ival == r.ival ? 0 : 1)
                                    : (l.ival < r.ival ? -1 : l.ival == r.ival ? 0 : 1);
                     switch (b->op) {
                         case T_EQ: return cmp == 0;
@@ -277,7 +283,7 @@ inline Node *TypeCheck::ExpansionConstant(Node *n, set<VarDecl *> &visiting) {
     if (auto a = Is<AsCast>(n); a && a->implicit) {
         auto c = ExpansionConstant(a->child, visiting);
         if (auto i = Is<IntLit>(c)) {
-            auto f = ast.New<FltLit>(n->line, i->uns ? (double)(uint64_t)i->val : (double)i->val);
+            auto f = ast.New<FltLit>(n->line, i->hi ? UInt128((uint64_t)i->val, i->hi).ToDouble() : i->uns ? (double)(uint64_t)i->val : (double)i->val);
             f->fixedtype = a->type;
             if (a->type->fltstorage == FS_F32) f->val = (float)f->val;
             return f;
@@ -293,6 +299,7 @@ inline Node *TypeCheck::ExpansionConstant(Node *n, set<VarDecl *> &visiting) {
         if (v.notconst)
             return ast.New<Unary>(n->line, T_BITNOT, ast.New<IntLit>(n->line, v.litlo));
         auto i = ast.New<IntLit>(n->line, v.ival, string_view {}, v.uns);
+        i->hi = v.ihi;
         // An unannotated named literal keeps its ordinary adaptability.
         // Arithmetic still follows ConstIntValue's evaluation widths.
         if (auto id = Is<Ident>(n)) {
@@ -317,7 +324,7 @@ inline Node *TypeCheck::ExpansionConstant(Node *n, set<VarDecl *> &visiting) {
             auto t = g->defs[0]->type ? g->defs[0]->type : g->type;
             if (t && t->kind == TY_FLT) {
                 if (auto i = Is<IntLit>(c))
-                    c = ast.New<FltLit>(n->line, i->uns ? (double)(uint64_t)i->val : (double)i->val);
+                    c = ast.New<FltLit>(n->line, i->hi ? UInt128((uint64_t)i->val, i->hi).ToDouble() : i->uns ? (double)(uint64_t)i->val : (double)i->val);
                 auto f = Is<FltLit>(c);
                 if (!f) Error(n, "const for named floating constant requires a numeric constant initializer");
                 if (g->type || !g->defs[0]->constlit) f->fixedtype = ast.PlainOf(t);

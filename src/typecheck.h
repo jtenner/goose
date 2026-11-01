@@ -857,6 +857,7 @@ struct TypeCheck {
         bool literal;
         set<VarDecl *> visiting;
         if (!ConstIntValue(n, value, literal, visiting, use)) return false;
+        if (value.ihi) Error(n, "integer constant exceeds the 64-bit range of this context");
         v = value.ival;   // Keep all 64 bits: u64 match patterns also use this path.
         return true;
     }

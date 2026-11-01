@@ -1253,7 +1253,7 @@ inline bool TypeCheck::FitsAt(Val &v, TypeExpr *dt) {
             // construct of constants to any type they all fit (§6.4).
             if (v.ck == CK_INT || (v.litint && dt->intstorage != IS_VARINT)) {
                 if (v.litint ? ConstsFit(v, dt->intstorage)
-                             : FitsIntStorage(v.ival, v.uns, dt->intstorage)) {
+                             : FitsIntStorage(v.ival, v.uns, dt->intstorage, v.ihi)) {
                     v.type = dt;
                     return true;
                 }
@@ -1263,7 +1263,7 @@ inline bool TypeCheck::FitsAt(Val &v, TypeExpr *dt) {
             if (dt->intstorage == IS_VARINT) {
                 // varint stores hold the full i64 value range: every
                 // integer type embeds except u64 (§3.6).
-                if (t->intstorage != IS_U64 && t->intstorage != IS_VARINT) {
+                if (t->intstorage != IS_U64 && t->intstorage != IS_U128 && t->intstorage != IS_VARINT) {
                     v.type = dt;
                     return true;
                 }
@@ -1392,6 +1392,7 @@ inline bool TypeCheck::FitsAt(Val &v, TypeExpr *dt) {
 }
 
 inline string TypeCheck::ConstStr(const Val &v) {
+    if (v.ihi) return UInt128((uint64_t)v.ival, v.ihi).Decimal();
     return v.uns ? cat((uint64_t)v.ival) : cat(v.ival);
 }
 
@@ -1633,6 +1634,31 @@ inline void TypeCheck::FoldInt(TType op, Val &l, Val &r, Val &out, Node *at) {
     if (l.ck != CK_INT || r.ck != CK_INT) return;
     auto s = out.type->intstorage;
     if (s == IS_VARINT) return;
+    if (s == IS_U128) {
+        UInt128 a((uint64_t)l.ival, l.ihi), b((uint64_t)r.ival, r.ihi), result;
+        if ((op == T_DIV || op == T_MOD) && !b) {
+            if (r.constfrom) return;
+            Error(at, "constant division by zero");
+        }
+        switch (op) {
+            case T_PLUS: result = a + b; break;
+            case T_MINUS: result = a - b; break;
+            case T_MUL: result = a * b; break;
+            case T_DIV: result = a / b; break;
+            case T_MOD: result = a % b; break;
+            case T_BITAND: result = a & b; break;
+            case T_BITOR: result = a | b; break;
+            case T_XOR: result = a ^ b; break;
+            case T_SHL: result = a << (b.lo & 127); break;
+            case T_SHR: result = a >> (b.lo & 127); break;
+            default: return;
+        }
+        out.ck = CK_INT; out.ival = (int64_t)result.lo; out.ihi = result.hi;
+        out.uns = result.hi || out.ival < 0;
+        if (l.constfrom && r.constfrom) RelyOnNamed(r, at);
+        out.constfrom = l.constfrom ? l.constfrom : r.constfrom;
+        return;
+    }
     if ((op == T_DIV || op == T_MOD) && !r.ival) {
         if (r.constfrom) return;
         Error(at, "constant division by zero");
@@ -1683,14 +1709,14 @@ inline TypeExpr *TypeCheck::UnifyNumeric(Node *at, TType op, Val &lv, Val &rv, T
                 if (neg(lv) || neg(rv))
                     return fail("constant operands have no common type (one is above "
                                 "i64.max, the other negative)");
-                return ast.inttypes[IS_U64];
+                return ast.inttypes[lv.ihi || rv.ihi ? IS_U128 : IS_U64];
             }
             return ast.inttypes[IS_I64];
         }
         auto fits = [&](const Val &c, TypeExpr *t) {
             return c.flexint ? FlexFits(c, t->intstorage)
                    : c.litint ? ConstsFit(c, t->intstorage)
-                              : FitsIntStorage(c.ival, c.uns, t->intstorage);
+                              : FitsIntStorage(c.ival, c.uns, t->intstorage, c.ihi);
         };
         if (lconst) {
             if (!fits(lv, rt)) return fail(ConstsNoFit(lv, rt));
@@ -1984,7 +2010,7 @@ inline Val TypeCheck::NumericBinary(Binary *b, Val lv, Val rv, TypeExpr *&ct, bo
     // A constant division by zero is FoldInt's error.
     auto fold = [&](Val &v) {
         if (trial && lv.ck == CK_INT && rv.ck == CK_INT && (op == T_DIV || op == T_MOD) &&
-            !rv.ival && !rv.constfrom)
+            !rv.ival && !rv.ihi && !rv.constfrom)
             return false;
         FoldInt(op, lv, rv, v, b);
         return true;
@@ -2111,7 +2137,7 @@ inline Val TypeCheck::NumericUnary(Unary *u, const Val &cv, bool trial) {
                 if (v.ck == CK_INT && (v.uns || v.ival != INT64_MIN)) {
                     // -(2^63) is exactly i64.min; any other u64-range value
                     // cannot be negated.
-                    if (v.uns && v.ival != INT64_MIN)
+                    if (v.uns && (v.ihi || v.ival != INT64_MIN))
                         return fail("negated constant too large for i64");
                     r.type = ast.inttypes[IS_I64];
                     r.ck = CK_INT;
@@ -2162,10 +2188,11 @@ inline Val TypeCheck::NumericUnary(Unary *u, const Val &cv, bool trial) {
                 return r;
             }
             if (v.ck == CK_INT) {
-                r.type = ast.inttypes[v.uns ? IS_U64 : IS_I64];
+                r.type = t->intstorage == IS_U128 ? t : ast.inttypes[v.uns ? IS_U64 : IS_I64];
+                r.ihi = t->intstorage == IS_U128 ? ~v.ihi : 0;
                 r.ck = CK_INT;
                 r.ival = ~v.ival;
-                r.uns = v.uns && r.ival < 0;
+                r.uns = r.ihi || (IsUnsigned(r.type->intstorage) && r.ival < 0);
                 r.constfrom = v.constfrom;
                 if (!trial) u->child->exprtype = r.type;
                 return r;
@@ -2190,8 +2217,8 @@ inline Val TypeCheck::NumericUnary(Unary *u, const Val &cv, bool trial) {
 inline void TypeCheck::IntToFloat(Val &v, TypeExpr *ft) {
     if (v.ck == CK_INT) {
         v.ck = CK_FLT;
-        v.fval = v.uns ? (double)(uint64_t)v.ival : (double)v.ival;
-        if (IsF32(ft)) v.fval = v.uns ? (double)(float)(uint64_t)v.ival : (double)(float)v.ival;
+        v.fval = v.ihi ? UInt128((uint64_t)v.ival, v.ihi).ToDouble() : v.uns ? (double)(uint64_t)v.ival : (double)v.ival;
+        if (IsF32(ft)) v.fval = (double)(float)v.fval;
         v.uns = false;
     }
     v.unsized = false;
@@ -2298,7 +2325,7 @@ inline bool TypeCheck::Converts(const Val &v, TypeExpr *t) {
         if (vt->intstorage == t->intstorage) return true;
         if (v.ck == CK_INT || (v.litint && t->intstorage != IS_VARINT))
             return v.litint ? ConstsFit(v, t->intstorage)
-                            : FitsIntStorage(v.ival, v.uns, t->intstorage);
+                            : FitsIntStorage(v.ival, v.uns, t->intstorage, v.ihi);
         if (t->intstorage == IS_VARINT) return vt->intstorage != IS_U64;
         return ImplicitInt(vt->intstorage, t->intstorage);
     }
@@ -2316,7 +2343,7 @@ inline bool TypeCheck::SameNumVal(const Val &a, const Val &b) {
         a.flexint != b.flexint || a.unsized != b.unsized || a.notconst != b.notconst)
         return false;
     if (a.notconst && a.litlo != b.litlo) return false;
-    if (a.ck == CK_INT && (a.ival != b.ival || a.uns != b.uns)) return false;
+    if (a.ck == CK_INT && (a.ival != b.ival || a.ihi != b.ihi || a.uns != b.uns)) return false;
     if (a.ck == CK_FLT && a.fval != b.fval) return false;
     return !a.litint || (a.litlo == b.litlo && a.lithi == b.lithi);
 }
@@ -2646,9 +2673,10 @@ inline bool TypeCheck::ConstIntValue(Node *n, Val &v, bool &literal,
         if (auto value = ast.LookupBuildDefinition(id->name, id->ns))
             return ConstIntValue(value, v, literal, visiting, use);
     if (auto i = Is<IntLit>(n)) {
-        v.type = i->fixedtype ? i->fixedtype : ast.inttypes[i->uns ? IS_U64 : IS_I64];
+        v.type = i->fixedtype ? i->fixedtype : ast.inttypes[i->hi ? IS_U128 : i->uns ? IS_U64 : IS_I64];
         v.ck = CK_INT;
         v.ival = i->val;
+        v.ihi = i->hi;
         v.uns = i->uns;
         literal = !i->fixedtype;
         return true;
@@ -2673,15 +2701,31 @@ inline bool TypeCheck::ConstIntValue(Node *n, Val &v, bool &literal,
                 // The initializer's `~c` at the width the annotation gives.
                 if (!FitsIntStorage(v.litlo, false, t->intstorage)) Error(n, ConstsNoFit(v, t));
                 v.ival = WrapStorage(v.ival, t->intstorage);
-                v.uns = t->intstorage == IS_U64 && v.ival < 0;
+                v.ihi = t->intstorage == IS_U128 ? UINT64_MAX : 0;
+                v.uns = v.ihi || (IsUnsigned(t->intstorage) && v.ival < 0);
                 v.notconst = false;
             }
-            if (!FitsIntStorage(v.ival, v.uns, t->intstorage))
+            if (!FitsIntStorage(v.ival, v.uns, t->intstorage, v.ihi))
                 Error(n, cat("constant ", ConstStr(v), " does not fit ", TypeStr(t)));
             v.type = ast.PlainOf(t);
-            v.uns = t->intstorage == IS_U64 && v.ival < 0;
+            v.uns = v.ihi || (IsUnsigned(t->intstorage) && v.ival < 0);
         }
         literal = false;
+        return true;
+    }
+    if (auto cast = Is<AsCast>(n)) {
+        auto target = Subst(cast->type);
+        if (!IsIntT(target) || target->ix ||
+            !ConstIntValue(cast->child, v, literal, visiting, use)) return false;
+        if (!cast->unchecked && !FitsIntStorage(v.ival, v.uns, target->intstorage, v.ihi)) return false;
+        if (target->intstorage == IS_U128) {
+            if (!v.uns && v.ival < 0) v.ihi = UINT64_MAX;
+        } else {
+            v.ival = WrapStorage(v.ival, target->intstorage);
+            v.ihi = 0;
+        }
+        v.uns = v.ihi || (IsUnsigned(target->intstorage) && v.ival < 0);
+        v.type = target; v.notconst = false; literal = false;
         return true;
     }
     if (auto u = Is<Unary>(n)) {
@@ -2696,7 +2740,7 @@ inline bool TypeCheck::ConstIntValue(Node *n, Val &v, bool &literal,
         }
         auto s = v.type->intstorage;
         if (u->op == T_MINUS) {
-            if (v.uns && (!literal || v.ival != INT64_MIN))
+            if (v.uns && (v.ihi || !literal || v.ival != INT64_MIN))
                 Error(n, "negated constant too large for i64");
             if (!literal && IsUnsigned(s))
                 Error(n, cat("cannot negate a value of unsigned type ", TypeStr(v.type)));
@@ -2714,13 +2758,14 @@ inline bool TypeCheck::ConstIntValue(Node *n, Val &v, bool &literal,
             v.ival = ~v.ival;
         } else {
             v.ival = ~v.ival;
+            if (s == IS_U128) v.ihi = ~v.ihi;
             auto bits = IntBits(s);
             if (IsUnsigned(s) && bits < 64)
                 v.ival = (int64_t)((uint64_t)v.ival & ((1ull << bits) - 1));
-            v.uns = s == IS_U64 && v.ival < 0;
+            v.uns = v.ihi || (IsUnsigned(s) && v.ival < 0);
             v.notconst = false;
         }
-        if (!FitsIntStorage(v.ival, v.uns, v.type->intstorage))
+        if (!FitsIntStorage(v.ival, v.uns, v.type->intstorage, v.ihi))
             Error(n, "signed overflow in constant expression");
         return true;
     }

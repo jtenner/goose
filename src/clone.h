@@ -93,6 +93,7 @@ inline void CloneNodes(Ast &ast, const vector<Node *> &src, vector<Node *> &dst)
 
 inline Node *IntLit::Clone1(Ast &ast) const {
     auto n = ast.New<IntLit>(line, val, text, uns);
+    n->hi = hi;
     n->fixedtype = fixedtype;
     return n;
 }

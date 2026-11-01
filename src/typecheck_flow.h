@@ -1698,6 +1698,48 @@ inline Val TypeCheck::CheckMatch(MatchExpr *m, TypeExpr *expected, bool wantvalu
                 if (!covered[i])
                     Error(m, cat("match does not cover variant ", en->name, ".",
                                  en->variants[i].name));
+    } else if (IsIntT(LoadType(st)) && LoadType(st)->intstorage == IS_U128) {
+        vector<pair<UInt128, UInt128>> earlier;
+        bool haswild = false;
+        auto value = [&](Node *n) {
+            ConstNames(n, "match pattern");
+            Val v; bool literal; set<VarDecl *> visiting;
+            ConstUse use {n, "match pattern"};
+            if (!ConstIntValue(n, v, literal, visiting, &use))
+                Error(n, "constant integer expression expected for match pattern");
+            if (v.notconst) { v.ihi = UINT64_MAX; v.uns = true; }
+            if (!FitsIntStorage(v.ival, v.uns, IS_U128, v.ihi))
+                Error(n, "match pattern does not fit the scrutinee type u128");
+            return UInt128((uint64_t)v.ival, v.ihi);
+        };
+        for (auto &arm : m->arms) {
+            if (arm.pat.kind == P_WILDCARD) { haswild = true; DoArm(arm, nullptr); continue; }
+            if (!arm.pat.binder.empty()) Error(arm.body, "constant pattern has no payload to bind");
+            arm.ranges.clear();
+            for (auto &pi : arm.pat.items) {
+                auto lo = value(pi.lo), hi = pi.hi ? value(pi.hi) : lo;
+                if (pi.hi) {
+                    if (!(lo < hi)) Error(pi.lo, "empty range in match pattern");
+                    hi = hi - UInt128(1);
+                }
+                for (auto &[a, b] : earlier)
+                    if (!(lo < a) && !(b < hi))
+                        Error(pi.lo, "match pattern never matches: earlier arms match all of its values");
+                arm.ranges.push_back({(int64_t)lo.lo, (int64_t)hi.lo, lo.hi, hi.hi});
+            }
+            for (auto &r : arm.ranges)
+                earlier.push_back({UInt128((uint64_t)r.lo, r.upper_lo), UInt128((uint64_t)r.hi, r.upper_hi)});
+            sort(earlier.begin(), earlier.end());
+            vector<pair<UInt128, UInt128>> merged;
+            for (auto &r : earlier) {
+                if (merged.empty() || (merged.back().second != ~UInt128() &&
+                    merged.back().second + UInt128(1) < r.first)) merged.push_back(r);
+                else if (merged.back().second < r.second) merged.back().second = r.second;
+            }
+            earlier = std::move(merged);
+            DoArm(arm, nullptr);
+        }
+        if (!haswild) Error(m, "integer match requires a _ arm");
     } else if (IsIntT(LoadType(st))) {
         auto sit = LoadType(st)->intstorage;
         auto haswild = false;
@@ -1727,6 +1769,7 @@ inline Val TypeCheck::CheckMatch(MatchExpr *m, TypeExpr *expected, bool wantvalu
                 v.ival = WrapStorage(v.ival, sit);
                 v.uns = sit == IS_U64 && v.ival < 0;
             }
+            if (v.ihi) Error(n, "match pattern does not fit the scrutinee type");
             uns = v.uns;
             return v.ival;
         };
@@ -2711,6 +2754,7 @@ inline void TypeCheck::CheckVarDecl(VarDecl *vd, bool global) {
         d->constnot = d->constlit && v.notconst;
         d->constval = v.notconst ? ~v.litlo : v.ival;
         d->constuns = v.uns;
+        d->consthi = v.ihi;
         d->constflt = v.ck == CK_FLT;
         d->constfval = v.fval;
         d->constfrom = d->constlit ? v.constfrom : nullptr;

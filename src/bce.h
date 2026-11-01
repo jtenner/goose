@@ -901,7 +901,7 @@ struct BCE {
     // An integer type the domain computes at: each of its values is the i64
     // the facts state, which a u64 above i64.max or a varint is not.
     static bool MachineInt(TypeExpr *t) {
-        return t && t->kind == TY_INT && t->intstorage != IS_U64 && t->intstorage != IS_VARINT;
+        return t && t->kind == TY_INT && t->intstorage != IS_U64 && t->intstorage != IS_U128 && t->intstorage != IS_VARINT;
     }
 
     // A one-shot base carrying [lo, hi], for a value the operation computes
