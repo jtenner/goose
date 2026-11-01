@@ -2488,6 +2488,7 @@ struct TypeCheck {
     // ------------------------------------------------------------------
     // Builtins (§3.7, §9.3, §11.2) and array members (§3.3, §5.4).
 
+    Val CheckRecordRead(Call *c, vector<Node *> &args);
     Val CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> &args, Val *precv);
     void CheckByteOut(Call *c, Node *out, const string &form);
     void CheckPrintable(Call *c, const char *what, vector<Node *> &args, size_t i,
