@@ -781,7 +781,7 @@ inline CodeGen::Loc CodeGen::GenLoc(Node *n) {
     }
     // A payload-less variant constant or a property (.len, .cap) is a value,
     // not a path: it is built on a temporary below like the other rvalues.
-    if (auto d = Is<Dot>(n); d && d->IsField()) {
+    if (auto d = Is<Dot>(n); d && d->IsField() && !WordObject(d)) {
         auto lv = GenLoc(d->obj);
         if (lv.t->kind == TY_REF) DerefLoc(lv);
         auto ml = MemberLoc(lv, d);

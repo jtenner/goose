@@ -77,7 +77,7 @@ inline EnumInst *CodeGen::EIVar(TypeExpr *t) {   // For TY_VARIANT.
 
 inline span<const FieldRun> CodeGen::FieldRuns(TypeExpr *t) {
     switch (t->kind) {
-        case TY_STRUCT: return RunsOf(SI(t));
+        case TY_STRUCT: return IsWord(t) ? span<const FieldRun>() : RunsOf(SI(t));
         case TY_ENUM: return RunsOf(EIOf(t));
         case TY_VARIANT: {
             auto ei = EIVar(t);
@@ -246,6 +246,7 @@ inline const char *CodeGen::RelCT(TypeExpr *rt) {
 
 // The alignment `pad` (bare form) gives the next field: its scalar width.
 inline int64_t CodeGen::PadAlign(TypeExpr *t) {
+    if (IsWord(t)) return IntSize(WordStorage(t));
     switch (t->kind) {
         case TY_INT: return t->intstorage == IS_VARINT ? 1 : IntSize(t->intstorage);
         case TY_FLT: return t->fltstorage == FS_F32 ? 4 : 8;
@@ -314,6 +315,7 @@ inline int64_t CodeGen::FixedSize(TypeExpr *t) {
             return IsResz(t->ref->sub) ? 16 : 8;
         case TY_SLICE: return 16;
         case TY_STRUCT: {
+            if (IsWord(t)) return IntSize(WordStorage(t));
             // An empty struct takes the one byte C gives it.
             auto sz = StructLayout(SI(t)).size;
             return sz ? sz : 1;
@@ -528,6 +530,7 @@ inline void CodeGen::EmitCoreTypes() {
 // its type has reduced alignment. References and slices still use the
 // alignment-one aliases for accesses through escaped member addresses.
 inline string CodeGen::CT(TypeExpr *t, bool unaligned) {
+    if (IsWord(t)) return CT(ast.inttypes[WordStorage(t)], unaligned);
     switch (t->kind) {
         case TY_INT:
             assert(t->intstorage != IS_VARINT);
@@ -665,13 +668,14 @@ inline string CodeGen::CT(TypeExpr *t, bool unaligned) {
 // one needs only the name and the body follows when the type is first
 // needed by value or through a pointer (PointeeLv).
 inline bool CodeGen::StructLike(TypeExpr *t) {
-    return t->kind == TY_STRUCT || t->kind == TY_VARIANT ||
+    return (t->kind == TY_STRUCT && !IsWord(t)) || t->kind == TY_VARIANT ||
            (t->kind == TY_ENUM && !t->enu->varmode);
 }
 
 // The C name of a fixed-class type, assigned (and, for struct-like kinds,
 // forward-declared) on first sight; CT emits the body.
 inline string CodeGen::NameCT(TypeExpr *t) {
+    if (IsWord(t)) return CT(ast.inttypes[WordStorage(t)]);
     auto m = Mangle(t);
     auto it = ctypes.find(m);
     if (it != ctypes.end()) return it->second;
@@ -1301,6 +1305,7 @@ inline bool CodeGen::ZeroDefaultValue(Node *n, TypeExpr *t) {
 // than a few scalars shortcut to memcmp.
 
 inline bool CodeGen::BitwiseEq(TypeExpr *t) {
+    if (IsWord(t)) return true;
     if (!IsFix(t)) return false;
     switch (t->kind) {
         case TY_STRUCT: case TY_VARIANT:
@@ -1318,6 +1323,7 @@ inline bool CodeGen::BitwiseEq(TypeExpr *t) {
 }
 
 inline bool CodeGen::ScalarEq(TypeExpr *t) {
+    if (IsWord(t)) return true;
     return t->kind == TY_INT || t->kind == TY_FLT || t->kind == TY_BOOL ||
            (t->kind == TY_REF && t->ref->lenstorage < 0 && !IsFatRef(t));
 }

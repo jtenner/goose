@@ -657,6 +657,13 @@ inline void TypeCheck::CheckAccessorOwner(Node *at, TypeExpr *owner, TypeExpr *t
 // caller has checked (CheckAccessorOwner).
 inline void TypeCheck::ResolveMemberLValue(LVal &lv, Dot *d) {
     auto t = lv.type;
+    if (IsWord(t)) {
+        // Even a plain field write reads and preserves the other word bits.
+        // Follow an owning field path back to its definite-assignment root.
+        Node *base = d->obj;
+        while (auto field = Is<Dot>(base)) base = field->obj;
+        if (auto id = Is<Ident>(base); id && id->vdef) RequireAssigned(id->vdef, d);
+    }
     // Steps the path into the named field of a field run; a frame
     // object's resizable tail has a header of its own to address (C.2).
     auto step = [&](const vector<Field> &fields, const vector<TypeExpr *> &ftypes,

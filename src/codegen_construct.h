@@ -43,6 +43,7 @@ inline void CodeGen::StoreWhole(const string &p, TypeExpr *t, const string &x) {
 
 // Whether StoreWhole stores a value of type t as one integer of its width.
 inline bool CodeGen::WholeStore(TypeExpr *t) {
+    if (IsWord(t)) return false;
     auto sz = FixedSize(t);
     auto agg = t->kind == TY_STRUCT || t->kind == TY_VARIANT || t->kind == TY_ARRAY ||
                (t->kind == TY_ENUM && !t->enu->varmode);
@@ -1155,6 +1156,7 @@ inline void CodeGen::FixedArrayLitAt(ArrayLit *al, const string &base, bool inro
 // `inroot` says `base` is the value's real address inside its root (see
 // EmitRelStoreAt); a temporary that is copied afterwards is not.
 inline void CodeGen::StructLitAt(StructLit *sl, const string &base, bool inroot) {
+    if (IsWord(sl->exprtype)) { WordConstruct(sl, base); return; }
     auto et = sl->exprtype;
     if (ZeroDefaultValue(sl, et)) {
         EmitDefaultInto(base, et);
@@ -1290,6 +1292,7 @@ inline bool CodeGen::HasSelfInit(StructLit *sl) {
 // of declaration order still construct in layout order (a note against
 // §2's left-to-right rule; flagged for the spec).
 inline void CodeGen::GenStructLit(StructLit *sl, const string &stk, const string &lenlv) {
+    if (IsWord(sl->exprtype)) { EmitValStore(stk, sl->exprtype, GenX(sl)); return; }
     auto et = sl->exprtype;
     string selfbase;
     if (HasSelfInit(sl)) {

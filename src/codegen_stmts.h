@@ -166,7 +166,7 @@ inline bool CodeGen::AsDivision(Node *n, Division &dv) {
 // HoistDivisors may find a loop cannot change.
 inline bool CodeGen::LoopDivisible(const Division &dv) {
     auto t = dv.t;
-    if (!t || t->kind != TY_INT || t->intstorage == IS_VARINT) return false;
+    if (!t || t->kind != TY_INT || t->intstorage == IS_VARINT || t->intstorage == IS_U128) return false;
     if (!IsUnsigned(t->intstorage) && !dv.nonneg) return false;
     auto rt = dv.divisor->exprtype;
     return rt && rt->kind == TY_INT && !DivisorKey(dv.divisor).empty();
