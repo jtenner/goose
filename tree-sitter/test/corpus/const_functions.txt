@@ -1,0 +1,37 @@
+==================
+Scalar compile-time function and call pattern
+==================
+const fn scalar(n:u64)->u64{return n+1;}
+fn main(){match 2 {scalar(1)=>{},_=>{},}}
+---
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (primitive_type)))
+    (primitive_type)
+    (block
+      (expression_statement
+        (return_expression
+          (binary_expression
+            (identifier)
+            (int_literal))))))
+  (function_declaration
+    (identifier)
+    (parameters)
+    (block
+      (match_expression
+        (int_literal)
+        (match_arm
+          (pattern_list
+            (call_expression
+              (identifier)
+              (argument_list
+                (int_literal))))
+          (block))
+        (match_arm
+          (wildcard_pattern)
+          (block))))))

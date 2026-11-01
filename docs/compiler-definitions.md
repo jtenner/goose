@@ -68,3 +68,52 @@ prove compatible field meanings. Editor servers need the same `--define`
 arguments as builds. Command-line integer definitions remain limited to
 [-2^63, 2^64-1]. Packed words introduce no new scalar integer type or literal
 range; u128 backings are deferred.
+
+## Compile-time scalar functions
+
+Declare a compile-time-only helper with `const fn`. Its explicit parameters and
+one result must use literal `bool` or `u64` types. Its body contains exactly one
+`return expression;`:
+
+```goose
+const fn needs_edges(edges: bool, paths: bool) -> bool {
+    return edges || paths;
+}
+const NEED_EDGES: bool =
+    needs_edges(build::FACT_BUILD_EDGES, build::FACT_BUILD_PATHS);
+```
+
+Run this example with both independent inputs, for example
+`goose++ check --define FACT_BUILD_EDGES=false --define FACT_BUILD_PATHS=true main.goose`.
+Use `NEED_EDGES` in an ordinary `const if`; do not pass a derived NEED definition
+on the CLI. Only the selected branch is checked and emitted, including at O0.
+
+Bodies accept scalar literals, their own parameters, scalar operators, direct
+calls to other marked helpers, and expression `if` with two expression arms.
+Both arms must have the same scalar kind and are checked even when unselected;
+only the selected arm incurs value faults. `&&` and `||` evaluate both operands,
+as the existing constant boolean evaluator does. Integers inside helpers are
+u64; arithmetic wraps and shift counts are masked according to existing u64
+constant rules. Negative literals and casts inside helpers are rejected.
+
+Helpers cannot read globals or `build::` names: pass inputs explicitly. They
+cannot use statements, locals, loops, strings, aggregates, layout operations,
+generics, overloads, aliases in signatures, defaults, or declaration modifiers.
+Calls accept constant scalar expressions, including eligible immutable globals
+and build inputs; integer arguments must fit u64. Runtime locals remain invalid.
+
+Calls work in existing scalar constant contexts: conditional bodies, fields and
+constructors, array sizes/capacities/fill counts, integer pattern bounds, and
+integer entries of `const for <N> in [expressions]`. A typed scalar global
+`const` initializer can materialize a computed bool/u64 for ordinary runtime
+reads. Array tables use ordinary array syntax with those named scalar results;
+see [the fixed width-table sample](../samples/compile_time_functions/main.goose).
+Local initializers, array elements, and field defaults must refer to named
+results instead of calling a helper directly. Helpers have no runtime function
+value, prototype, body, or startup call at any optimization level.
+
+Each declaration permits at most 16 parameters. A request permits 32 active
+calls and 10,000 scalar evaluator visits, shared across nested calls and global
+arguments. Taking an active call cycle is an error; an unselected well-typed
+self-call is allowed. No results are cached across configurations or LSP source
+snapshots. Source initializers remain available after scalar normalization.

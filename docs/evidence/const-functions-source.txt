@@ -1,0 +1,36 @@
+Start testing: Nov 01 17:46 UTC
+----------------------------------------------------------
+1/4 Testing: const_functions_source
+1/4 Test: const_functions_source
+Command: "/tmp/goose-ctf-build/goose_const_source_test" "/home/dev/Projects/goose/stdlib" "/tmp/goose-ctf-build/const_source.goose"
+Directory: /tmp/goose-ctf-build
+"const_functions_source" start time: Nov 01 17:46 UTC
+Output:
+----------------------------------------------------------
+const fn source retention: 6 fresh configurations and helper edits passed
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"const_functions_source" end time: Nov 01 17:46 UTC
+"const_functions_source" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/4 Testing: const_functions
+3/4 Test: const_functions
+Command: "/usr/bin/python3.13" "/home/dev/Projects/goose/test/const_functions.py" "/tmp/goose-ctf-build/goose"
+Directory: /tmp/goose-ctf-build
+"const_functions" start time: Nov 01 17:46 UTC
+Output:
+----------------------------------------------------------
+width64 oracle: 65680 values
+const fn acceptance: 413 checks passed
+<end of output>
+Test time =  12.10 sec
+----------------------------------------------------------
+Test Passed.
+"const_functions" end time: Nov 01 17:46 UTC
+"const_functions" time elapsed: 00:00:12
+----------------------------------------------------------
+
+End testing: Nov 01 17:46 UTC
