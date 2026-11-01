@@ -33,8 +33,8 @@ inline vector<string> CodeGen::EmitRecordRead(Call *c, vector<Node *> &args) {
     }
     assert(extent > 0 && layout.size == extent);
 
-    L("if (", start, " <= ", length, " && UINT64_C(", extent,
-      ") <= ", length, " - ", start, ") {");
+    L("if (", start, " <= ", length, " && ", extent,
+      "ULL <= ", length, " - ", start, ") {");
     ind++;
     // No pointer arithmetic, source access or per-field check before this
     // guard. Byte loads support unaligned sources and either host endian.
@@ -66,9 +66,9 @@ inline vector<string> CodeGen::EmitRecordRead(Call *c, vector<Node *> &args) {
             // two's-complement value, including INT64_MIN without overflow.
             auto mask = width == 8 ? UINT64_MAX : (uint64_t(1) << (width * 8)) - 1;
             auto high = uint64_t(1) << (width * 8 - 1);
-            scalar = cat("(", CT(ft), ")((", bits, " & UINT64_C(", high,
-                         ")) ? (-INT64_C(1) - (int64_t)(~", bits,
-                         " & UINT64_C(", mask, "))) : (int64_t)", bits, ")");
+            scalar = cat("(", CT(ft), ")((", bits, " & ", high,
+                         "ULL) ? (-1LL - (int64_t)(~", bits,
+                         " & ", mask, "ULL)) : (int64_t)", bits, ")");
         }
         auto field = FieldLocAt(record, (int)i);
         L(field.s, " = ", scalar, ";");
