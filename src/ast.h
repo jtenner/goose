@@ -1588,6 +1588,7 @@ struct SStruct {
     Line end;                   // As SFunction::end.
     string_view doc;            // As SFunction::doc.
     string_view wordbacking;    // Nonempty: packed word, not aggregate storage.
+    string wordfingerprint;
     bool isroot = false;       // Explicit owning layout (docs/design/root_structs.md).
     vector<GenericParam> generics;
     vector<Field> fields;
@@ -1604,6 +1605,21 @@ struct SStruct {
     // code at hand silently.
     bool unknown = false;
 };
+
+// A nominal word uses the declaration/name machinery shared with structs;
+// its nonempty backing is the scalar discriminator, never a structural alias.
+inline bool IsWord(const TypeExpr *t) {
+    return t && t->kind == TY_STRUCT && !t->struc->st->wordbacking.empty();
+}
+inline IntStorage WordStorage(const TypeExpr *t) {
+    auto b = t->struc->st->wordbacking;
+    return b == "u8" ? IS_U8 : b == "u16" ? IS_U16 : b == "u32" ? IS_U32 : b == "u64" ? IS_U64 : IS_U128;
+}
+inline TypeExpr *WordObject(Dot *d) {
+    auto t = d ? d->obj->exprtype : nullptr;
+    if (t && t->kind == TY_REF) t = t->ref->sub;
+    return IsWord(t) ? t : nullptr;
+}
 
 struct SVariant {
     string_view name;

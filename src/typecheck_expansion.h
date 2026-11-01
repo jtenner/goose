@@ -360,6 +360,7 @@ inline void TypeCheck::ExpandConstFor(ConstFor *cf, const function<void(Expansio
             if (HasGenerics(t)) Error(cf, cat("const for source requires a concrete type, got ", TypeStr(t)));
             if (cf->source == ES_FIELDS && t->kind != TY_STRUCT && t->kind != TY_VARIANT)
                 Error(cf, cat("fields requires a concrete struct or variant type, got ", TypeStr(t)));
+            if (IsWord(t)) Error(cf, "fields reflection of packed words is unsupported in v1");
             if (cf->source == ES_VARIANTS && ast.PlainOf(t)->kind != TY_ENUM)
                 Error(cf, cat("variants requires a concrete ADT type, got ", TypeStr(t)));
             if (t->kind != TY_FN) ValidateType(t, cf->line, VT_POINTEE);

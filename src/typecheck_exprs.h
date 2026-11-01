@@ -655,8 +655,7 @@ inline void TypeCheck::ResolveMemberLValue(LVal &lv, Dot *d) {
             if (f.ispad || f.name != d->name) continue;
             d->fieldidx = i;
             if (lv.type->cq) lv.writable = false;   // A field of a const value.
-            lv.letbound = f.isconst;
-            lv.letname = f.name;
+            if (!IsWord(t)) { lv.letbound = f.isconst; lv.letname = f.name; }
             lv.type = ftypes[i];
             lv.var = nullptr;
             lv.fromstorage = true;
@@ -669,6 +668,8 @@ inline void TypeCheck::ResolveMemberLValue(LVal &lv, Dot *d) {
     };
     if (t->kind == TY_STRUCT) {
         auto inst = GetStructInst(t);
+        if (IsWord(t) && d->name == "_")
+            Error(d, "reserved packed word bits have no field name and cannot be accessed or initialized");
         if (inst->st->isroot) {
             auto parent = lv.AsRoots();
             if (step(inst->st->fields, inst->ftypes, true)) {
@@ -761,6 +762,7 @@ inline bool TypeCheck::KeepsRef(const Val &v, TypeExpr *dt) {
 // through the reference, which is not so of an identity comparison's,
 // index_of's, or one bound to a `const T&`.
 inline Node *TypeCheck::AutoRef(Node *n, Val &v, bool writes) {
+    NoWordReference(n);
     if (!Referenceable(n, v)) NoResizableRef(n);
     if (auto id = Is<Ident>(n); id && id->vdef && writes && v.writable)
         NoteWritableRef(id->vdef, n);
@@ -1457,6 +1459,7 @@ inline Val TypeCheck::VoidVal() {
 inline Val TypeCheck::CheckRefOf(Unary *x) {
     DestScope ds(*this, Dest {});
     auto lv = CheckLValue(x->child);
+    NoWordReference(x->child);
     if (lv.var) RequireAssigned(lv.var, x);
     // A resizable value has a header of its own only as a whole variable or
     // as a frame object's tail (C.2).
@@ -2875,6 +2878,7 @@ inline bool TypeCheck::ConstExtent(Ident *id, bool cap, int64_t &extent,
 // leaf is of an index or bound type: arithmetic on one computes a plain
 // integer (§3.11), which the result's leaf of that type could not hold.
 inline bool TypeCheck::ElementwiseOK(TypeExpr *t) {
+    if (IsWord(t)) return false;
     int isint = -1;
     function<bool(TypeExpr *)> rec = [&](TypeExpr *t2) -> bool {
         switch (t2->kind) {
@@ -2888,6 +2892,7 @@ inline bool TypeCheck::ElementwiseOK(TypeExpr *t) {
                 isint = 0;
                 return true;
             case TY_STRUCT: {
+                if (IsWord(t2)) return false;
                 auto inst = GetStructInst(t2);
                 for (size_t i = 0; i < inst->ftypes.size(); i++)
                     if (inst->ftypes[i] && !rec(inst->ftypes[i])) return false;
@@ -3094,6 +3099,8 @@ inline TypeCheck::LitDeep TypeCheck::CheckInits(StructLit *sl, vector<Field> &fi
         auto idx = -1;
         CheckAccessorOwner(fi.val, fi.accessorowner, selft, sl);
         if (named) {
+            if (IsWord(selft) && fi.name == "_")
+                Error(fi.val, "reserved packed word bits have no field name and cannot be accessed or initialized");
             for (auto i = 0; i < (int)fields.size(); i++)
                 if (!fields[i].ispad && fields[i].name == fi.name) { idx = i; break; }
             if (idx < 0 && LacksByError(selft)) throw Abandoned {};
@@ -3148,7 +3155,14 @@ inline TypeCheck::LitDeep TypeCheck::CheckInits(StructLit *sl, vector<Field> &fi
         auto component = selft->kind == TY_STRUCT && selft->struc->st->isroot
                              ? RootComponent(rootowner, selft, sl->fieldindices[k]) : nullptr;
         DestScope ds(*this, component ? Dest(component) : curdst);
-        if (Is<SelfRef>(fi.val)) CheckSelfInit(fi.val, ft, selft);
+        if (IsWord(selft)) {
+            auto &f = fields[sl->fieldindices[k]];
+            if (Is<SelfRef>(fi.val)) Error(fi.val, "packed word construction has no self readback");
+            auto expected = f.bitwidth.empty() ? ft : nullptr;
+            auto fv = fi.fromdefault ? CheckDefaultInit(fi.val, expected, selft, sl, f)
+                                     : CheckValue(fi.val, expected);
+            CheckWordValue(fi.val, fv, selft, f);
+        } else if (Is<SelfRef>(fi.val)) CheckSelfInit(fi.val, ft, selft);
         else {
             SlotScope ss(*this, true);
             auto fv = fi.fromdefault
@@ -3160,7 +3174,7 @@ inline TypeCheck::LitDeep TypeCheck::CheckInits(StructLit *sl, vector<Field> &fi
     }
     // Check every inverted pair, not just expressions whose numeric position
     // changed: a mutation in the middle can stay put while a read crosses it.
-    if (named) {
+    if (named && !IsWord(selft)) {
         vector<bool> supplied(fields.size(), false);
         for (auto idx : sourceorder) supplied[idx] = true;
         vector<int> reorderable(fields.size(), -1);
