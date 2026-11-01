@@ -31,6 +31,7 @@
 #include "codegen_types.h"
 #include "codegen_frames.h"
 #include "codegen_values.h"
+#include "codegen_word.h"
 #include "codegen_construct.h"
 #include "codegen_stmts.h"
 #include "codegen_calls.h"

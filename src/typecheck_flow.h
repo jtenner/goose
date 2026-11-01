@@ -2916,8 +2916,15 @@ inline void TypeCheck::CheckAssign(Assign *a) {
         if (!WholeWritable(lv)) Error(a, "cannot assign through this path (const or read-only)");
         if (a->op == T_DOTASSIGN) Error(a, "a packed word bit view cannot be rebound");
         if (a->op != T_ASSIGN && f.bitwidth.empty()) Error(a, "bool and enum packed word fields only support plain assignment");
-        auto v = CheckValue(a->rhs, f.bitwidth.empty() ? lv.type : nullptr);
-        CheckWordValue(a->rhs, v, owner, f);
+        if (a->op == T_SHLEQ || a->op == T_SHREQ) {
+            CheckIntAny(a->rhs);
+        } else {
+            auto v = CheckValue(a->rhs, f.bitwidth.empty() ? lv.type : nullptr);
+            if (a->op == T_ASSIGN) CheckWordValue(a->rhs, v, owner, f);
+            else if (!IsIntT(v.type) || (!IsUnsigned(v.type->intstorage) &&
+                     !(v.ck == CK_INT && !v.uns && v.ival >= 0)))
+                Error(a->rhs, "packed word unsigned field requires an unsigned integer or nonnegative integer literal");
+        }
         return;
     }
     if (a->op == T_DOTASSIGN) { CheckRebind(a, lv); return; }

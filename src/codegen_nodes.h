@@ -267,6 +267,7 @@ inline string Binary::CgX(CodeGen &cg) {
 }
 
 inline string Dot::CgX(CodeGen &cg) {
+    if (WordObject(this)) return cg.WordRead(this);
     if (variantconst) {
         auto et = exprtype;
         auto ei = einst;
@@ -322,6 +323,7 @@ inline string AsCast::CgX(CodeGen &cg) {
                                  : cg.GenX(child);
     auto st = child->exprtype;
     auto tt = totype;
+    if (IsWord(st) || IsWord(tt)) return x;
     auto swide = IsIntT(st) && st->intstorage == IS_U128;
     auto twide = IsIntT(tt) && tt->intstorage == IS_U128;
     if (swide || twide) {
@@ -862,6 +864,7 @@ inline void VarDecl::CgStmt(CodeGen &cg) {
 }
 
 inline void Assign::CgStmt(CodeGen &cg) {
+    if (auto d = Is<Dot>(lval); WordObject(d)) { cg.WordWrite(d, rhs, op, line); return; }
     // A plain store of a value that runs nothing (QuietValue) uses its
     // destination as soon as it is resolved.
     auto quiet = op == T_ASSIGN && !pointee && cg.QuietValue(rhs) && !cg.HasStmts(lval);
@@ -977,6 +980,7 @@ inline void Assign::CgStmt(CodeGen &cg) {
 }
 
 inline void IncDec::CgStmt(CodeGen &cg) {
+    if (auto d = Is<Dot>(lval); WordObject(d)) { cg.WordWrite(d, nullptr, op, line); return; }
     auto lv = cg.GenLoc(lval);
     if (lv.t->kind == TY_REF) cg.DerefLoc(lv);
     assert(lv.val);

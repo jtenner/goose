@@ -913,6 +913,11 @@ struct CodeGen {
     string PointeeLv(const string &p, TypeExpr *t);
     void DerefLoc(Loc &lv);
     void PinLoc(Loc &lv);
+    string WordMask(int bits);
+    string WordRead(Dot *d);
+    string WordInput(Node *n, TypeExpr *owner, const Field &field);
+    void WordConstruct(StructLit *sl, const string &destination);
+    void WordWrite(Dot *d, Node *rhs, TType op, Line line);
     Loc VarLoc(VarDef *vd);
     string HdrLv(VarDef *vd);
     string VarCT(const VarDef *vd);
@@ -1049,6 +1054,10 @@ struct CodeGen {
     // The three per-node passes dispatch virtually (ast.h); the bodies live
     // together in codegen_nodes.h, delegating into the machinery here.
     string GenX(Node *n) {
+        // A folded u128 literal may need no local declaration; still emit
+        // the backend capability gate before any generated use.
+        if (n->exprtype && IsIntT(n->exprtype) && n->exprtype->intstorage == IS_U128)
+            CT(n->exprtype);
         if (!substs.empty())
             if (auto s = substs.find(n); s != substs.end()) return s->second;
         auto it = fillvalues.find(n);

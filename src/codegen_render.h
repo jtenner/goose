@@ -68,6 +68,12 @@ inline void CodeGen::RenderLoc(Loc &out, Loc lv, TypeExpr *t, bool nested, Call 
     // optional, a plain reference in value position): the pointee.
     if (lv.t->kind == TY_REF && t->kind != TY_REF) DerefLoc(lv);
     if (auto sp = FmtSpecFor(c, t)) { EmitUserFormat(out, lv, sp, ln); return; }
+    if (IsWord(t)) {
+        auto backing = ast.inttypes[WordStorage(t)];
+        lv.t = backing;
+        RenderLoc(out, lv, backing, nested, nullptr, ln);
+        return;
+    }
     // A value of a type this rendering is already inside of is the next
     // level of a type that reaches itself through references: its render
     // function takes it from here, level by level (RenderFn). A resizable

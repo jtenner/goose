@@ -755,6 +755,7 @@ inline bool CodeGen::StaticInitX(Node *n, TypeExpr *t, string &out) {
             return true;
         }
         case TY_STRUCT: {
+            if (IsWord(t)) return false; // Checked scalar construction runs during initialization.
             auto sl = Is<StructLit>(n);
             auto si = SI(t);
             if (!sl || sl->sinst != si) return false;
@@ -1129,6 +1130,10 @@ inline string CodeGen::ExportHeader() {
                     "typedef uint16_t gs_u16 GS_ALIGN1;\n"
                     "typedef uint32_t gs_u32 GS_ALIGN1;\n"
                     "typedef uint64_t gs_u64 GS_ALIGN1;\n"
+                    "#if defined(__SIZEOF_INT128__) && !defined(__TINYC__)\n"
+                    "typedef unsigned __int128 gs_u128;\n"
+                    "typedef unsigned __int128 gs_u128_unaligned GS_ALIGN1;\n"
+                    "#endif\n"
                     "typedef float gs_f32 GS_ALIGN1;\n"
                     "typedef double gs_f64 GS_ALIGN1;\n"
                     "#pragma pack(push, 1)\n";
