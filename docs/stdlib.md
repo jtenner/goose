@@ -2667,3 +2667,20 @@ frame of input to the context, in order:
 `render` and `input_from_gfx` both work in the screen's pixels, so on a
 high-density display the ui has as many pixels as elsewhere, and so looks
 smaller, until the program sets a scale.
+
+### Reading flat wire records
+
+The compiler builtin `read_record_le<T>(at: i64, data: const u8[:]) -> T, bool`
+reads an eager little-endian snapshot with one recoverable whole-record
+extent check. T is a nonempty, nongeneric, non-root ordinary struct of direct
+writable fixed-width integer fields without defaults or padding. Integer
+aliases are accepted; conditional fields and other field types are rejected.
+On failure every result field is zero and the bool is false. A successful
+result is independent of later input changes. The operation has no write API.
+See [record snapshots](reference.md#little-endian-record-snapshots) and
+[the memory-limit example](../samples/record_read/main.goose).
+
+Use `binary` for cursors, individual integers, other byte orders and variable
+formats. Use `from_bytes` for verified Goose serialization images; these
+APIs remain separate from flat wire records. Shared-memory and raw-pointer
+adapters are outside the record builtin's safe byte-slice interface.

@@ -4249,6 +4249,43 @@ thread that called `goose_init`. Spec §7.11.
 
 ---
 
+### Little-endian record snapshots
+
+`read_record_le<T>(at: i64, data: const u8[:]) -> T, bool` decodes a
+fixed-size wire record into an ordinary struct value. Declare T with plain
+struct syntax and consecutive integer fields in wire order:
+
+```goose
+struct WirePair { count: u32, delta: i16 }
+fn read_pair(bytes: const u8[:], at: i64) -> WirePair, bool {
+    return read_record_le<WirePair>(at, bytes);
+}
+```
+
+T must be nonempty, nongeneric, non-root and unqualified. Its direct fields
+must be writable u8/u16/u32/u64 or i8/i16/i32/i64, including aliases to those
+types. Pads, defaults, conditional declarations (even inactive arms), const
+fields, index types, varints, nested structs, packed words, arrays, slices,
+references, enums, bools and floats are rejected. Flatten nested wire records
+and keep protocol booleans as bytes until the application validates them.
+
+The extent is the sum of field widths, with no alignment gaps. Position is
+evaluated once, then the byte slice once; ordinary array-to-slice adaptation
+is accepted. Negative positions, extreme positions and short buffers return
+an all-zero record and false without reading source bytes or trapping.
+Success returns true and decodes every field little-endian, including from
+unaligned input. One overflow-safe whole-record predicate protects all byte
+loads; there are no per-field bounds checks, even at O0.
+
+The result owns its values. Resizing or changing the input cannot change a
+previous result, and assigning a local result field cannot change input.
+Records can be copied, stored and returned under ordinary struct rules.
+There is no writeback, retained borrowed view, or record-write operation.
+The builtin accepts safe byte slices, never integer handles, UnsafePtr or
+shared capabilities. It validates extent only; check the bool and perform
+any protocol validation separately. No speedup over native record-copy
+adapters is implied.
+
 ## 25. Builtins
 
 These are the language's own functions. Everything else is in the
