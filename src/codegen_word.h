@@ -3,7 +3,7 @@
 namespace goose {
 inline string CodeGen::WordMask(int bits) {
     auto mask = bits == 128 ? ~UInt128() : (UInt128(1) << bits) - UInt128(1);
-    if (bits <= 64) return cat("UINT64_C(", mask.lo, ")");
+    if (bits <= 64) return cat(mask.lo, "ULL");
     return cat("(((gs_u128)", mask.hi, "ULL << 64) | (gs_u128)", mask.lo, "ULL)");
 }
 

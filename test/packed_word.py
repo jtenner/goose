@@ -68,6 +68,10 @@ def check(exe=None):
     output('restored[0] == w', True)
     output('restored[1] == grow[1]', True)
     output('((0 as u64) as W) == ((128 as u64) as W)', False)
+    body += ['var invalid=(63 as u64) as W; let rawcopy=invalid; invalid.b=8;']
+    output('rawcopy as u64',63)
+    output('invalid.a',7)
+    output('invalid as u64',(8<<8)|63)
     for count in (1, 2, 3, 4, 5, 256, 257):
         decls += [f'enum E{count} {{' + ','.join(f'V{i}' for i in range(count)) + '}',
                   f'packed word EW{count}:u16 {{ e:E{count}, flag:bool }}']
@@ -115,7 +119,13 @@ def check(exe=None):
             text=run([binary],fail=True)
             assert 'packed word field' in text,(i,text)
             checks+=1
-        print(f'packed word native: {checks} checks passed')
+        for bits in (8,16,32,64):
+            source.write_text(f'packed word J:u{bits} {{ a:u3, b:bool, _:u4 }} '
+                              f'fn main(){{ var w=((1 as u{bits}) as J); w.a=7; w.b=true; '
+                              f'print(w as u{bits}); print(w.a); print(w.b); }}')
+            assert run([exe,'--jit',source]).splitlines()==['15','7','true']
+            checks+=3
+        print(f'packed word native/JIT: {checks} checks passed')
         return checks
 
 if __name__ == '__main__':

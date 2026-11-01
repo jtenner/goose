@@ -1674,7 +1674,7 @@ struct TypeCheck {
     TypeExpr *ValueType(TypeExpr *t);
     TypeExpr *DeclType(TypeExpr *t, TypeExpr *s);
     static bool ImplicitInt(IntStorage from, IntStorage to);
-    Val CheckIntAny(Node *n);
+    Val CheckIntAny(Node *n, bool wide = false);
     bool HasRelRefT(TypeExpr *t, bool inpool = false);
     bool BuiltWhereReceived(Node *n, size_t result);
     void NoRelRefCopy(Node *n, TypeExpr *t, size_t result = 0, const VarDecl *bind = nullptr,

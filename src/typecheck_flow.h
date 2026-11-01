@@ -2917,7 +2917,7 @@ inline void TypeCheck::CheckAssign(Assign *a) {
         if (a->op == T_DOTASSIGN) Error(a, "a packed word bit view cannot be rebound");
         if (a->op != T_ASSIGN && f.bitwidth.empty()) Error(a, "bool and enum packed word fields only support plain assignment");
         if (a->op == T_SHLEQ || a->op == T_SHREQ) {
-            CheckIntAny(a->rhs);
+            CheckIntAny(a->rhs, true);
         } else {
             auto v = CheckValue(a->rhs, f.bitwidth.empty() ? lv.type : nullptr);
             if (a->op == T_ASSIGN) CheckWordValue(a->rhs, v, owner, f);
@@ -3263,7 +3263,7 @@ inline void TypeCheck::CompoundAssign(Assign *a, TypeExpr *st, bool writable) {
         Operand(a->rhs);
     } else if (st->kind == TY_INT && st->intstorage != IS_VARINT && isshift) {
         // A shift count is any integer type, masked to the width (§6.2).
-        CheckIntAny(a->rhs);
+        CheckIntAny(a->rhs, true);
     } else if (st->kind == TY_INT && st->intstorage != IS_VARINT) {
         // The update computes at the target's type; the operand must
         // reach it implicitly (literal fit or widening, §6.3).

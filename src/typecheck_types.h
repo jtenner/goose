@@ -878,11 +878,11 @@ inline bool TypeCheck::ImplicitInt(IntStorage from, IntStorage to) {
 // Positions that accept any integer type (indices, slice bounds, sizes,
 // counts): the value is used at 64 bits internally; a u64 above i64.max
 // is out of range for every such use and the bounds check catches it.
-inline Val TypeCheck::CheckIntAny(Node *n) {
+inline Val TypeCheck::CheckIntAny(Node *n, bool wide) {
     auto v = Operand(n);
     if (!IsIntT(v.type))
         Error(n, cat("an integer is expected here, got ", TypeStr(v.type)));
-    if (v.type->intstorage == IS_U128)
+    if (!wide && v.type->intstorage == IS_U128)
         Error(n, "u128 index or count requires an explicit conversion to u64");
     return v;
 }
