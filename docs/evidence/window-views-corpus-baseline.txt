@@ -1,0 +1,40 @@
+
+added 1 package in 648ms
+npm warn install-scripts 1 package has install scripts not yet covered by allowScripts:
+npm warn install-scripts   tree-sitter-cli@0.25.8 (install: node install.js)
+npm warn install-scripts
+npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+  declarations:
+      1. ✓ Namespace and imports
+      2. ✓ Generic struct with relative references and padding
+      3. ✓ Enum with payload variants
+      4. ✓ Type alias of a function type
+      5. ✓ Reusable global
+      6. ✓ Function modifiers and extern declaration
+      7. ✓ Extern symbol after the signature
+      8. ✓ Extern block
+      9. ✓ Thread function
+  expressions:
+     10. ✓ Scrutinee is not a struct literal or trailing block
+     11. ✓ Struct and variant literals
+     12. ✓ Generic calls against comparisons
+     13. ✓ Function values
+     14. ✓ Indexing, slicing, casts
+     15. ✓ Match patterns
+     16. ✓ Operator precedence
+  literals:
+     17. ✓ Numbers and characters
+     18. ✓ Strings
+     19. ✓ Nested block comments
+  packed_word:
+     20. ✓ Packed words with conditional reserves
+  statements:
+     21. ✓ Guard
+     22. ✓ Defer statements
+     23. ✓ Assignments and increments
+     24. ✓ Const for
+     25. ✓ Const for over variants
+     26. ✓ Loops and jumps
+     27. ✓ Block-ended statements need no semicolon
+
+Total parses: 27; successful parses: 27; failed parses: 0; success percentage: 100.00%; average speed: 6429 bytes/ms
