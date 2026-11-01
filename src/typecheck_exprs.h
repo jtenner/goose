@@ -2652,6 +2652,24 @@ inline int64_t TypeCheck::FillCount(Node *n) {
 // the name is an error (ConstName).
 inline bool TypeCheck::ConstIntValue(Node *n, Val &v, bool &literal,
                                      set<VarDecl *> &visiting, ConstUse *use) {
+    ConstVisit visit(*this, n);
+    if (auto c = Is<Call>(n)) {
+        auto sf = ConstCallee(c, constfunction != nullptr);
+        if (sf->rets.size() == 1 && sf->rets[0]->kind == TY_BOOL) return false;
+        v = ConstCall(c, visiting, use);
+        literal = false;
+        return v.type->kind == TY_INT;
+    }
+    if (auto x = Is<IfExpr>(n)) {
+        if (constfunction && ConstKind(x) == ast.booltype) return false;
+        return ConstIntValue(ConstBranch(x, visiting, use), v, literal, visiting, use);
+    }
+    if (auto b = Is<Block>(n); b && b->stmts.empty() && b->tail)
+        return ConstIntValue(b->tail, v, literal, visiting, use);
+    if (auto id = Is<Ident>(n))
+        for (auto &p : constargs) if (p.first == id->name) {
+            v = p.second; literal = false; return v.type->kind == TY_INT;
+        }
     if (auto id = Is<Ident>(n))
         if (auto value = ast.LookupBuildDefinition(id->name, id->ns))
             return ConstIntValue(value, v, literal, visiting, use);
@@ -2661,6 +2679,11 @@ inline bool TypeCheck::ConstIntValue(Node *n, Val &v, bool &literal,
         v.ival = i->val;
         v.uns = i->uns;
         literal = !i->fixedtype;
+        if (constfunction) {
+            v.type = ast.inttypes[IS_U64];
+            literal = false;
+            v.uns = v.ival < 0;
+        }
         return true;
     }
     if (auto id = Is<Ident>(n)) {
@@ -2673,7 +2696,9 @@ inline bool TypeCheck::ConstIntValue(Node *n, Val &v, bool &literal,
             if (visiting.size() == 1) use->named = g->defs[0];
             RelyOnConstant(*use, g->defs[0]);
         }
-        auto ok = ConstIntValue(g->inits[0], v, literal, visiting, use);
+        Saved<decltype(constargs)> args(constargs, {});
+        Saved<SFunction *> context(constfunction, nullptr);
+        auto ok = ConstIntValue(g->sourceinits.empty() ? g->inits[0] : g->sourceinits[0], v, literal, visiting, use);
         visiting.erase(g);
         if (!ok) return false;
         if (g->type) {

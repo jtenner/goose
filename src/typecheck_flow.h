@@ -1705,6 +1705,7 @@ inline Val TypeCheck::CheckMatch(MatchExpr *m, TypeExpr *expected, bool wantvalu
         // or const global, as an array size names (§11.1). A local of the
         // name hides the global here as it does anywhere else.
         auto PatternValue = [&](Node *n, bool &uns) {
+            ConstNames(n, "match pattern");
             auto u = Is<Unary>(n);
             if (auto id = Is<Ident>(u ? u->child : n)) {
                 ConstName(id, "match pattern");

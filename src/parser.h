@@ -514,6 +514,10 @@ struct Parser {
                 return;
             }
             case T_REUSABLE: case T_LET: case T_VAR: case T_CONST: {
+                if (lex.tok == T_CONST && lex.PeekTok() == T_FN) {
+                    ast.topdecls.push_back(ParseFnDecl(false));
+                    return;
+                }
                 auto vd = ParseVarDecl(true);
                 Expect(T_SEMI, "global declaration");
                 ast.topdecls.push_back(vd);
@@ -823,6 +827,9 @@ struct Parser {
         auto sf = new SFunction();
         ast.functions.push_back(sf);
         sf->line = line;
+        sf->isconstfn = IsNext(T_CONST);
+        if (sf->isconstfn && (nested || lex.tok != T_FN))
+            Error("const fn requires an unmodified top-level declaration");
         sf->doc = pre ? pre->doc : lex.doc;
         if (AtBench()) {
             sf->isbench = true;
@@ -1601,6 +1608,11 @@ struct Parser {
         auto operandline = CurLine();
         if (lex.tok == T_IDENT || lex.tok == T_COLONCOLON) {
             Node *n = Finish(New<Ident>(operandline, ParseQualifiedName("match pattern"), curns));
+            if (lex.tok == T_LPAREN) {
+                Role(R_LIST);
+                lex.Next();
+                n = ParseCallRest(n, {}, operandline);
+            }
             return neg ? Finish(New<Unary>(line, T_MINUS, n)) : n;
         }
         if (lex.tok != T_INTLIT)

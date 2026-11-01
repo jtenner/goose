@@ -17,6 +17,7 @@
 #include "typecheck_types.h"
 #include "typecheck_exprs.h"
 #include "typecheck_expansion.h"
+#include "typecheck_const_calls.h"
 #include "typecheck_flow.h"
 #include "typecheck_calls.h"
 #include "typecheck_record_read.h"

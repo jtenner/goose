@@ -195,7 +195,7 @@ module.exports = grammar({
 
     function_declaration: $ => seq(
       repeat($.function_modifier),
-      choice('fn', 'thread_fn'),
+      choice('fn', 'thread_fn', seq('const', 'fn')),
       field('name', $._qualified_name),
       optional(field('type_parameters', $.type_parameters)),
       field('parameters', $.parameters),
@@ -698,6 +698,7 @@ module.exports = grammar({
     ),
 
     _pattern_bound: $ => choice(
+      $.call_expression,
       $._expression_name,
       $.int_literal,
       $.char_literal,

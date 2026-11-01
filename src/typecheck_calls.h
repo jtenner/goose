@@ -1379,6 +1379,7 @@ inline bool TypeCheck::HasView(Val &av, TypeExpr *pt, int reach, SFunction *sf) 
 
 inline FnSpec *TypeCheck::GetOrCreateSpec(MatchInfo &mi, vector<Val> &argvals, Node *callnode) {
     auto sf = mi.sf;
+    if (sf->isconstfn) Error(callnode, "const fn cannot escape into runtime code");
     if (sf->brokensig) throw Abandoned {};
     // A thread_fn starts a program of its own (§11.2), whose one
     // specialization a spawn makes (EnsureThreadSpec): no call runs it,

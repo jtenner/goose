@@ -622,9 +622,10 @@ inline void VarDecl::Dump(string &s, int ind) const {
         s += names[i];
     }
     if (type) { s += ": "; type->Dump(s); }
-    for (size_t i = 0; i < inits.size(); i++) {
+    auto &written = sourceinits.empty() ? inits : sourceinits;
+    for (size_t i = 0; i < written.size(); i++) {
         s += i ? ", " : byref ? " .= " : " = ";
-        inits[i]->Dump(s, ind);
+        written[i]->Dump(s, ind);
     }
 }
 
@@ -680,6 +681,7 @@ inline void DumpFields(string &s, const vector<Field> &fields, int ind) {
 }
 
 inline void FnDecl::Dump(string &s, int ind) const {
+    if (sf->isconstfn) s += "const ";
     if (sf->isbench) { s += "bench "; EscapeString(s, sf->benchlabel, '"'); s += " "; }
     if (sf->isexport) {
         s += "export ";

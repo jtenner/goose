@@ -228,6 +228,8 @@ endif()
 find_package(Python3 COMPONENTS Interpreter QUIET)
 if(Python3_Interpreter_FOUND)
     enable_testing()
+    add_test(NAME const_functions COMMAND ${Python3_EXECUTABLE}
+        ${CMAKE_CURRENT_SOURCE_DIR}/test/const_functions.py $<TARGET_FILE:goose>)
     add_test(NAME record_read COMMAND ${CMAKE_COMMAND} -E env
         GOOSE_TEST_EXE=$<TARGET_FILE:goose> ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test/record_read.py)
 endif()

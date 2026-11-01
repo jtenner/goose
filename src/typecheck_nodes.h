@@ -170,8 +170,10 @@ inline Val Ident::Check(TypeCheck &tc, TypeExpr *expected) {
     }
     if (auto &cands = tc.ast.LookupFunctions(name, ns); !cands.empty()) {
         fnref = cands[0];
-        for (auto sf : cands)
+        for (auto sf : cands) {
+            if (sf->isconstfn) tc.Error(this, "const fn cannot be used as a function value");
             if (sf->brokensig) throw Abandoned {};
+        }
         Val v;
         v.type = tc.fntype;
         v.fnv.named = cands[0];
