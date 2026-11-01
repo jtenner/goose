@@ -217,7 +217,7 @@ inline string CodeGen::FixedDivX(const Division &dv, const string &l,
 // of one, and so on), or an integer conversion of one of those. `root` gets
 // the variable and `path` whether fields lead from it to the value.
 inline string CodeGen::DivisorKey(Node *n, const VarDef **root, bool *path) {
-    auto isint = [](TypeExpr *t) { return t && t->kind == TY_INT && t->intstorage != IS_VARINT; };
+    auto isint = [](TypeExpr *t) { return t && t->kind == TY_INT && t->intstorage != IS_VARINT && t->intstorage != IS_U128; };
     if (!n || fillvalues.count(n)) return "";
     if (auto id = Is<Ident>(n)) {
         auto vd = id->vdef;

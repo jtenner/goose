@@ -1759,10 +1759,11 @@ inline TypeExpr *TypeCheck::UnifyNumeric(Node *at, TType op, Val &lv, Val &rv, T
         // Without that knowledge the conversion could change the value,
         // so the cast has to be written (and thought about).
         if (cmp) {
-            auto isu64 = [](TypeExpr *t) { return t->intstorage == IS_U64; };
+            auto isu64 = [](TypeExpr *t) { return t->intstorage == IS_U64 || t->intstorage == IS_U128; };
             if (isu64(lt) != isu64(rt)) {
                 auto &sv = isu64(lt) ? rv : lv;
                 auto st = isu64(lt) ? rt : lt;
+                auto common = isu64(lt) ? lt : rt;
                 if (!IsUnsigned(st->intstorage)) {
                     if (sv.nonneg) {
                         // A trial relies on nothing: where a writable reference may
@@ -1770,7 +1771,7 @@ inline TypeExpr *TypeCheck::UnifyNumeric(Node *at, TType op, Val &lv, Val &rv, T
                         if (unifytrial) {
                             for (auto d = sv.nonnegfrom; d; d = d->nonnegfrom)
                                 if (d->refwrite) return nullptr;
-                            return ast.inttypes[IS_U64];
+                            return common;
                         }
                         if (auto w = RelyOnNonneg(sv, at)) {
                             auto d = sv.nonnegfrom;
@@ -1781,7 +1782,7 @@ inline TypeExpr *TypeCheck::UnifyNumeric(Node *at, TType op, Val &lv, Val &rv, T
                                           " at ", Where(w->refwrite->line), " may make it "
                                           "negative (§4.4, §6.1); convert it with `as`"));
                         }
-                        return ast.inttypes[IS_U64];
+                        return common;
                     }
                     return fail(cat("comparing ", TypeStr(lt), " with ", TypeStr(rt),
                                     " needs the signed side to be known non-negative "
@@ -2109,7 +2110,8 @@ inline Val TypeCheck::NumericBinary(Binary *b, Val lv, Val rv, TypeExpr *&ct, bo
             if (!IsIntT(lt) || !IsIntT(rt))
                 return fail(cat("shift requires integer operands, got ", TypeStr(lt), " and ",
                                 TypeStr(rt)));
-            ct = v.type = lv.ck == CK_INT ? ast.inttypes[lv.uns ? IS_U64 : IS_I64] : lt;
+            ct = v.type = lv.ck == CK_INT && lt->intstorage != IS_U128
+                          ? ast.inttypes[lv.uns ? IS_U64 : IS_I64] : lt;
             if (!trial) b->left->exprtype = v.type;
             lv.type = v.type;
             if (!fold(v)) return Val {};
@@ -2381,7 +2383,7 @@ inline bool TypeCheck::Converts(const Val &v, TypeExpr *t) {
         if (v.ck == CK_INT || (v.litint && t->intstorage != IS_VARINT))
             return v.litint ? ConstsFit(v, t->intstorage)
                             : FitsIntStorage(v.ival, v.uns, t->intstorage, v.ihi);
-        if (t->intstorage == IS_VARINT) return vt->intstorage != IS_U64;
+        if (t->intstorage == IS_VARINT) return vt->intstorage != IS_U64 && vt->intstorage != IS_U128;
         return ImplicitInt(vt->intstorage, t->intstorage);
     }
     if (t->kind != TY_FLT) return false;

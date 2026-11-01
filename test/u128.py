@@ -53,6 +53,12 @@ def main():
                   'const NEXT:u128=HIGH+17; print(NEXT);',
                   'print(~(0 as u128));']
         expected += [str(1<<64),str(MASK),'1.8446744073709552e+19','65535',str((1<<64)+17),str(MASK)]
+        calls += ['print(18446744073709551616 >> 64);',
+                  'print((1 as u128) << 127);',
+                  'print((18446744073709551616 as u128) >> 1);',
+                  'var shifting:u128=1; shifting <<= (127 as u128); print(shifting);',
+                  'let n=[1,2].len; var wide:u128=18446744073709551616; print(wide>n);']
+        expected += ['1',str(1<<127),str(1<<63),str(1<<127),'true']
         source = root/'scalar.goose'
         source.write_text('\n'.join(declarations) + '\nfn main() {\n' + '\n'.join(calls) + '\n}\n')
         run([goose, '--check', '--roundtrip', source]); checks += 1
@@ -70,6 +76,7 @@ def main():
         for i, body in enumerate([
             'let x: u64 = 18446744073709551616;',
             'let x: u128 = -1;',
+            'fn value()->u128 {18446744073709551616} var xs:varint[>..]=[value()];',
             'let x = 340282366920938463463374607431768211456;',
             'var x: u128 = 0; unsafe_atomic_load<u128>(0, "Relaxed");',
         ]):
