@@ -2911,6 +2911,17 @@ inline void TypeCheck::CheckAssign(Assign *a) {
     } else {
         nodevals.erase(a->lval);
     }
+    if (auto d = Is<Dot>(a->lval); WordObject(d)) {
+        auto owner = WordObject(d);
+        auto &f = owner->struc->st->fields[d->fieldidx];
+        NoCopyWrite(a, lv); NoLetAssign(a, lv);
+        if (!WholeWritable(lv)) Error(a, "cannot assign through this path (const or read-only)");
+        if (a->op == T_DOTASSIGN) Error(a, "a packed word bit view cannot be rebound");
+        if (a->op != T_ASSIGN && f.bitwidth.empty()) Error(a, "bool and enum packed word fields only support plain assignment");
+        auto v = CheckValue(a->rhs, f.bitwidth.empty() ? lv.type : nullptr);
+        CheckWordValue(a->rhs, v, owner, f);
+        return;
+    }
     if (a->op == T_DOTASSIGN) { CheckRebind(a, lv); return; }
     if (lv.isvarint)
         Error(a, "varint fields are written only at construction (§3.6)");

@@ -563,6 +563,15 @@ inline Val AsCast::Check(TypeCheck &tc, TypeExpr *) {
         totype = ov.type = tc.Subst(type);
         return ov;
     }
+    auto rawtarget = tc.Subst(type);
+    if (IsWord(st) || IsWord(rawtarget)) {
+        auto word = IsWord(st) ? st : rawtarget;
+        auto integer = IsWord(st) ? rawtarget : st;
+        tc.GetStructInst(word);
+        if (!IsIntT(integer) || integer->ix || integer->intstorage != WordStorage(word))
+            tc.Error(this, "packed word conversion requires its exact backing integer type");
+        Val v; totype = v.type = rawtarget; return v;
+    }
     if (!IsIntT(st) && st->kind != TY_FLT)
         tc.Error(this, cat("as requires a numeric source, got ", tc.TypeStr(st)));
     auto tt = tc.Subst(type);

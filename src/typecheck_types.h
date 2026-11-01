@@ -64,9 +64,84 @@ template<typename Inst> Inst *Reused(Inst *inst) {
     return inst;
 }
 
+inline void TypeCheck::BuildWord(TypeExpr *t, StructInst *inst) {
+    auto st = inst->st;
+    if (!st->generics.empty() || !inst->args.empty()) Error(t->line, "packed words take no type parameters");
+    int offset = 0, capacity = IntBits(WordStorage(t));
+    string fingerprint = cat(st->qname.size(), ":", st->qname, ":", st->wordbacking);
+    set<string_view> names;
+    for (size_t i = 0; i < st->fields.size(); ++i) {
+        auto &f = st->fields[i];
+        if (!f.ispad && !names.insert(f.name).second)
+            Error(f.line, cat("duplicate field name ", f.name, " in packed word ", st->name));
+        int width = 0;
+        if (!f.bitwidth.empty()) {
+            if (f.bitwidth[0] == 'i')
+                Error(f.line, "signed packed word fields are unsupported in v1; use an unsigned field and explicit decoding");
+            UInt128 n;
+            if (f.bitwidth.size() < 2 || f.bitwidth[1] == '0' ||
+                !UInt128::Parse(f.bitwidth.substr(1), 10, n) || n.hi || n.lo > 128 || !n.lo)
+                Error(f.line, cat("packed word field width must be between 1 and 128; found ", f.bitwidth));
+            width = (int)n.lo;
+            if (!f.ispad) inst->ftypes[i] = ast.inttypes[width <= 8 ? IS_U8 : width <= 16 ? IS_U16 :
+                                                     width <= 32 ? IS_U32 : width <= 64 ? IS_U64 : IS_U128];
+        } else {
+            auto ft = inst->ftypes[i];
+            if (f.ispad) Error(f.line, "reserved packed word fields require an unsigned bit width");
+            if (ft->kind == TY_BOOL) width = 1;
+            else if (ft->kind == TY_ENUM) {
+                auto en = ft->enu->en;
+                if (ft->enu->varmode || en->variants.empty() ||
+                    any_of(en->variants.begin(), en->variants.end(), [](const SVariant &v) { return v.has_payload; }))
+                    Error(f.line, cat("packed word field ", f.name, " requires a nonempty payload-free enum; found ", en->name));
+                GetEnumInst(ft);
+                auto max = en->variants.size() - 1;
+                width = 1;
+                while (max >>= 1) ++width;
+                for (size_t vi = 0; vi < en->variants.size(); ++vi) {
+                    if (width < 64 && (uint64_t)vi >> width)
+                        Error(f.line, cat("enum ", en->name, " variant tag ", vi, " does not fit inferred width ", width));
+                    Append(fingerprint, ":", en->variants[vi].name.size(), ":", en->variants[vi].name, "=", vi);
+                }
+            } else Error(f.line, "packed word field requires bool, unsigned bit width, or payload-free enum");
+        }
+        if (f.ispad && f.defaultval)
+            Error(f.line, "reserved packed word bits have no field name and cannot be accessed or initialized");
+        f.bitoffset = offset; f.bits = width;
+        if (offset + width > capacity)
+            Error(f.line, cat("packed word ", st->name, " uses ", offset + width, " bits, exceeding ",
+                  st->wordbacking, " backing width ", capacity, "; field ", f.name, " occupies bits ", offset, "..", offset + width - 1));
+        Append(fingerprint, ":", f.name.size(), ":", f.name, ":", offset, ":", width,
+               ":", f.ispad ? "reserved" : TypeStr(inst->ftypes[i]));
+        offset += width;
+    }
+    st->wordfingerprint = std::move(fingerprint);
+}
+
+inline void TypeCheck::CheckWordValue(Node *n, const Val &v, TypeExpr *owner, const Field &f) {
+    if (f.bitwidth.empty()) return; // Ordinary bool/enum fitting is checked by the caller.
+    auto t = LoadType(v.type);
+    if (!IsIntT(t) || (!IsUnsigned(t->intstorage) && !(v.ck == CK_INT && !v.uns && v.ival >= 0)))
+        Error(n, "packed word unsigned field requires an unsigned integer or nonnegative integer literal");
+    if (v.ck == CK_INT) {
+        auto value = UInt128((uint64_t)v.ival, v.ihi);
+        auto mask = f.bits == 128 ? ~UInt128() : (UInt128(1) << f.bits) - UInt128(1);
+        if ((!v.uns && v.ival < 0) || mask < value)
+            Error(n, cat("value ", ConstStr(v), " does not fit packed word field ", owner->struc->st->name,
+                         ".", f.name, " (", f.bitwidth, ", range 0..", mask.Decimal(), ")"));
+    }
+}
+
+inline void TypeCheck::NoWordReference(Node *n) {
+    auto d = Is<Dot>(n);
+    auto t = WordObject(d);
+    if (t) Error(n, cat("packed word field ", t->struc->st->name, ".", d->name,
+                       " is a bit view, not addressable storage; reference the whole word or copy the field"));
+}
+
 inline StructInst *TypeCheck::GetStructInst(TypeExpr *t) {
     auto st = t->struc->st;
-    if (!st->wordbacking.empty()) Error(t->line, "packed word checking is not yet implemented");
+
     if (t->struc->inst) return Reused(t->struc->inst);
     Publishing(t->struc);
     for (auto inst : st->insts)
@@ -89,6 +164,11 @@ inline StructInst *TypeCheck::GetStructInst(TypeExpr *t) {
         for (auto &f : st->fields)
             inst->ftypes.push_back(f.ispad ? nullptr : Subst(f.type));
     });
+    if (IsWord(t)) {
+        BuildWord(t, inst);
+        inst->validated = true;
+        return inst;
+    }
     // Ordinary structs have one packed region and at most one resizable
     // tail. Root fields have independent storage, so neither their order
     // nor their size classes change the owner's SC_ROOT classification.
@@ -314,7 +394,9 @@ inline Node *TypeCheck::DefaultValue(TypeExpr *t, Line line) {
 
 inline span<const FieldRun> TypeCheck::FieldRuns(TypeExpr *t) {
     switch (t->kind) {
-        case TY_STRUCT: return RunsOf(GetStructInst(t));
+        case TY_STRUCT:
+            if (IsWord(t)) { GetStructInst(t); return {}; }
+            return RunsOf(GetStructInst(t));
         case TY_ENUM: return RunsOf(GetEnumInst(t));
         case TY_VARIANT: {
             auto inst = GetEnumInst(t->var->adt);

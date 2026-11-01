@@ -1798,6 +1798,9 @@ struct TypeCheck {
     Val ContainerRead(LVal lv);
     void CheckAccessorOwner(Node *at, TypeExpr *owner, TypeExpr *t, StructLit *lit = nullptr);
     void ResolveMemberLValue(LVal &lv, Dot *d);
+    void BuildWord(TypeExpr *t, StructInst *inst);
+    void CheckWordValue(Node *n, const Val &v, TypeExpr *owner, const Field &field);
+    void NoWordReference(Node *n);
     // Where a holder value's references point: what was derived for it, else
     // for a reference or slice its own roots, and for a by-value holder what
     // they bound (a temporary's outlive nothing). A value whose own type
@@ -3413,6 +3416,9 @@ struct TypeCheck {
     // the code that root reached after it; the rest is checked as if the
     // root had completed.
     void CheckRoots() {
+        for (auto st : ast.structs)
+            if (!st->wordbacking.empty() && !st->broken)
+                CheckRoot([&] { GetStructInst(ast.StructOf(st, {}, st->line)); });
         for (auto g : ast.globals) {
             if (CheckRoot([&] { CheckVarDecl(g, true); })) {
                 for (auto d : g->defs) d->assigned = d->maybeassigned = true;
