@@ -1,0 +1,84 @@
+
+added 1 package in 654ms
+npm warn install-scripts 1 package has install scripts not yet covered by allowScripts:
+npm warn install-scripts   tree-sitter-cli@0.25.8 (install: node install.js)
+npm warn install-scripts
+npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+  const_functions:
+      1. ✓ Scalar compile-time function and call pattern -- Warning: Slow parse rate (2361.411 bytes/ms)
+  declarations:
+      2. ✓ Namespace and imports
+      3. ✓ Generic struct with relative references and padding
+      4. ✓ Enum with payload variants
+      5. ✓ Type alias of a function type
+      6. ✓ Reusable global
+      7. ✓ Function modifiers and extern declaration
+      8. ✓ Extern symbol after the signature
+      9. ✓ Extern block
+     10. ✓ Thread function
+  expressions:
+     11. ✓ Scrutinee is not a struct literal or trailing block
+     12. ✓ Struct and variant literals
+     13. ✓ Generic calls against comparisons
+     14. ✓ Function values
+     15. ✓ Indexing, slicing, casts
+     16. ✓ Match patterns
+     17. ✓ Operator precedence
+  literals:
+     18. ✓ Numbers and characters
+     19. ✓ Strings
+     20. ✓ Nested block comments
+  packed_word:
+     21. ✓ Packed words with conditional reserves
+  statements:
+     22. ✓ Guard
+     23. ✓ Defer statements
+     24. ✓ Assignments and increments
+     25. ✓ Const for
+     26. ✓ Const for over variants
+     27. ✓ Loops and jumps
+     28. ✓ Block-ended statements need no semicolon
+
+1 update:
+
+  1. Scalar compile-time function and call pattern
+
+Total parses: 28; successful parses: 27; failed parses: 1; success percentage: 96.43%; average speed: 6669 bytes/ms
+
+  const_functions:
+      1. ✓ Scalar compile-time function and call pattern -- Warning: Slow parse rate (1566.739 bytes/ms)
+  declarations:
+      2. ✓ Namespace and imports
+      3. ✓ Generic struct with relative references and padding
+      4. ✓ Enum with payload variants
+      5. ✓ Type alias of a function type
+      6. ✓ Reusable global
+      7. ✓ Function modifiers and extern declaration
+      8. ✓ Extern symbol after the signature
+      9. ✓ Extern block
+     10. ✓ Thread function
+  expressions:
+     11. ✓ Scrutinee is not a struct literal or trailing block
+     12. ✓ Struct and variant literals
+     13. ✓ Generic calls against comparisons
+     14. ✓ Function values
+     15. ✓ Indexing, slicing, casts
+     16. ✓ Match patterns
+     17. ✓ Operator precedence
+  literals:
+     18. ✓ Numbers and characters
+     19. ✓ Strings
+     20. ✓ Nested block comments
+  packed_word:
+     21. ✓ Packed words with conditional reserves
+  statements:
+     22. ✓ Guard
+     23. ✓ Defer statements
+     24. ✓ Assignments and increments
+     25. ✓ Const for
+     26. ✓ Const for over variants
+     27. ✓ Loops and jumps
+     28. ✓ Block-ended statements need no semicolon
+
+Total parses: 28; successful parses: 28; failed parses: 0; success percentage: 100.00%; average speed: 5763 bytes/ms
+
