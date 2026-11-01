@@ -652,6 +652,9 @@ inline void DumpFields(string &s, const vector<Field> &fields, int ind) {
             DumpFields(s, f.elsefields, ind + 1);
             NL(s, ind + 1);
             s += "}";
+        } else if (!f.bitwidth.empty()) {
+            Append(s, f.name, ": ", f.bitwidth);
+            if (f.defaultval) { s += " = "; f.defaultval->Dump(s, ind + 1); }
         } else if (f.ispad) {
             s += "pad";
             if (f.padsize >= 0) Append(s, " ", f.padsize);
@@ -728,7 +731,8 @@ inline void FnDecl::Dump(string &s, int ind) const {
 
 inline void StructDecl::Dump(string &s, int ind) const {
     if (st->isroot) s += "root ";
-    Append(s, "struct ", st->qname);
+    Append(s, st->wordbacking.empty() ? "struct " : "packed word ", st->qname);
+    if (!st->wordbacking.empty()) Append(s, " : ", st->wordbacking);
     DumpGenerics(s, st->generics);
     s += " {";
     DumpFields(s, st->declfields.empty() ? st->fields : st->declfields, ind);

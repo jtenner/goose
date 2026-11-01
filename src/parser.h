@@ -143,7 +143,8 @@ struct Parser {
             case T_DEFER: case T_RETURN: case T_BREAK: case T_CONTINUE:
                 return !declaration;
             default:
-                return AtBench() || AtInline() || AtCheckfree();
+                return AtBench() || AtInline() || AtCheckfree() ||
+                       (declaration && lex.tok == T_IDENT && lex.attr == "packed");
         }
     }
 
@@ -460,6 +461,10 @@ struct Parser {
             ParseStructDecl(true);
             return;
         }
+        if (lex.tok == T_IDENT && lex.attr == "packed") {
+            ParsePackedWordDecl();
+            return;
+        }
         if (AtBench() || AtInline() || AtCheckfree()) goto fndecl;
         switch (lex.tok) {
             case T_STRUCT: ParseStructDecl(); return;
@@ -557,6 +562,83 @@ struct Parser {
             if (t->kind != TY_UNRESOLVED) continue;
             for (auto &g : generics)
                 if (t->named->name == g.name) { t->kind = TY_GENERIC; break; }
+        }
+    }
+
+    // Shares declaration ownership and field fragments with structs, but has
+    // its own syntax and (after checking) scalar representation.
+    void ParsePackedWordDecl() {
+        auto line = CurLine();
+        auto doc = lex.doc;
+        auto depth = lex.DepthBefore();
+        auto startp = lex.attr.data();
+        lex.Next();
+        if (lex.tok != T_IDENT || lex.attr != "word") Error("expected word after packed");
+        lex.Next();
+        auto st = new SStruct();
+        ast.structs.push_back(st);
+        st->line = line;
+        st->doc = doc;
+        st->name = ParseDeclName("packed word declaration");
+        st->ns = curns;
+        st->qname = ast.QualifiedName(st->ns, st->name);
+        CheckFreshTypeName(st->ns, st->name);
+        ParseMembers(st->broken, depth, startp, [&](Ast::DeclMark &kept) {
+            Expect(T_COLON, "packed word backing");
+            st->wordbacking = lex.attr;
+            if (st->wordbacking != "u8" && st->wordbacking != "u16" &&
+                st->wordbacking != "u32" && st->wordbacking != "u64" && st->wordbacking != "u128")
+                Error(cat("packed word backing must be u8, u16, u32, u64, or u128; found ", lex.attr));
+            lex.Next();
+            Role(R_LIST);
+            Expect(T_LCURLY, "packed word declaration");
+            ParseWordFields(st->fields, &kept);
+            Expect(T_RCURLY, "packed word declaration");
+        });
+        st->end = PrevEnd();
+        ast.NS(st->ns).structmap[st->name] = st;
+        ast.topdecls.push_back(Finish(New<StructDecl>(line, st)));
+    }
+
+    void ParseWordFields(vector<Field> &fields, Ast::DeclMark *kept = nullptr) {
+        while (lex.tok != T_RCURLY) {
+            Field f;
+            f.line = CurLine();
+            f.doc = lex.doc;
+            if (lex.tok == T_CONST && lex.PeekTok() == T_IF) {
+                lex.Next(); lex.Next();
+                f.condition = ParseScrutinee();
+                auto branch = [&](vector<Field> &out) {
+                    auto first = ast.alltypes.size(), firstfn = ast.functions.size();
+                    Role(R_LIST);
+                    Expect(T_LCURLY, "conditional packed word fields");
+                    ParseWordFields(out);
+                    Expect(T_RCURLY, "conditional packed word fields");
+                    for (auto i = first; i < ast.alltypes.size(); i++) ast.alltypes[i]->conditional = true;
+                    for (auto i = firstfn; i < ast.functions.size(); i++) ast.functions[i]->conditional = true;
+                };
+                branch(f.thenfields);
+                if (IsNext(T_ELSE)) branch(f.elsefields);
+            } else {
+                f.name = ExpectIdent("packed word field");
+                f.ispad = f.name == "_";
+                Expect(T_COLON, "packed word field");
+                auto spelling = lex.attr;
+                // Width validity is semantic: an excluded branch may use u129.
+                if (spelling.size() > 1 && (spelling[0] == 'u' || spelling[0] == 'i') &&
+                    all_of(spelling.begin() + 1, spelling.end(), [](char c) { return c >= '0' && c <= '9'; })) {
+                    f.bitwidth = spelling;
+                    f.type = ast.inttypes[IS_U64]; // Carrier replaced by layout checking.
+                    lex.Next();
+                } else {
+                    f.type = ParseType();
+                }
+                if (lex.attr == "@") Error("explicit packed word field positions are unsupported in v1; use reserved fields");
+                if (IsNext(T_ASSIGN)) f.defaultval = ParseExpr();
+            }
+            fields.push_back(f);
+            KeepMember(kept);
+            if (!IsNext(T_COMMA)) break;
         }
     }
 

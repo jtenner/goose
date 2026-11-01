@@ -137,3 +137,7 @@
 
 (line_comment) @comment
 (block_comment) @comment
+
+(packed_word_declaration name: (_) @type.definition)
+(packed_word_field name: (identifier) @variable.member)
+["packed" "word"] @keyword
