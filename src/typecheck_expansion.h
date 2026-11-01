@@ -87,6 +87,19 @@ inline bool TypeCheck::IsValuelessTail(const Node *n) {
 // integer constant evaluator. Both operands are validated, even for && / ||;
 // only bodies, never condition operands, are conditionally excluded.
 inline bool TypeCheck::ConstBool(Node *n, set<VarDecl *> &visiting, ConstUse *use) {
+    ConstVisit visit(*this, n);
+    if (auto c = Is<Call>(n)) {
+        auto v = ConstCall(c, visiting, use);
+        if (v.type != ast.booltype) Error(n, "const fn result is not bool");
+        return v.ival != 0;
+    }
+    if (auto x = Is<IfExpr>(n)) return ConstBool(ConstBranch(x, visiting, use), visiting, use);
+    if (auto b = Is<Block>(n); b && b->stmts.empty() && b->tail) return ConstBool(b->tail, visiting, use);
+    if (auto id = Is<Ident>(n))
+        for (auto &p : constargs) if (p.first == id->name) {
+            if (p.second.type != ast.booltype) Error(n, "const fn argument is not bool");
+            return p.second.ival != 0;
+        }
     if (auto b = Is<BoolLit>(n)) return b->val;
     if (auto id = Is<Ident>(n)) {
         if (auto value = ast.LookupBuildDefinition(id->name, id->ns))
@@ -98,7 +111,9 @@ inline bool TypeCheck::ConstBool(Node *n, set<VarDecl *> &visiting, ConstUse *us
                 if (!use->named) use->named = g->defs[0];
                 RelyOnConstant(*use, g->defs[0]);
             }
-            auto value = ConstBool(g->inits[0], visiting, use);
+            Saved<decltype(constargs)> args(constargs, {});
+            Saved<SFunction *> context(constfunction, nullptr);
+            auto value = ConstBool(g->sourceinits.empty() ? g->inits[0] : g->sourceinits[0], visiting, use);
             visiting.erase(g);
             return value;
         }
@@ -205,6 +220,9 @@ inline void SelectConditionalFields(Ast &ast) {
                   any_of(ast.enums.begin(), ast.enums.end(), [&](SEnum *e) {
                       return any_of(e->variants.begin(), e->variants.end(), [&](const SVariant &v) { return conditional(v.fields); });
                   });
+    // Validate closed scalar declarations before any early field request.
+    TypeCheck scalar(ast, false, true, true);
+    scalar.CheckConstFunctions();
     if (!needed) return;
     // Keep global VarDefs stable: the ordinary checker reuses these so its
     // later writes still diagnose assumptions used for layout selection.

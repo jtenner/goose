@@ -294,7 +294,7 @@ inline Node *VarDecl::Clone1(Ast &ast) const {
     vd->results = results;
     vd->names = names;
     vd->type = ast.CloneExpansionType(type);
-    CloneNodes(ast, inits, vd->inits);
+    CloneNodes(ast, sourceinits.empty() ? inits : sourceinits, vd->inits);
     return vd;
 }
 

@@ -1471,6 +1471,7 @@ NODE(VarDecl)
     bool results = false;
     TypeExpr *type = nullptr;
     vector<Node *> inits;       // Empty for uninitialized locals.
+    vector<Node *> sourceinits; // Original scalar constant request, before normalization.
     vector<VarDef *> defs;      // Filled by typecheck, aligned with names.
     VarDecl(Line l, bool _isvar) : Node(l, NKind), isvar(_isvar) {}
 NODE_END
@@ -1525,6 +1526,7 @@ struct SFunction {
     vector<Param> params;
     vector<TypeExpr *> rets;    // Empty + !has_rets = inferred/none.
     bool has_rets = false;
+    bool isconstfn = false;       // Compile-time-only scalar expression function.
     bool isbench = false;
     string benchlabel;
     bool isrec = false;         // Declared with `recursive`.

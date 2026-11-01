@@ -361,6 +361,32 @@ struct TypeCheck {
     size_t expansionsize = 0;
     Node *ExpansionConstant(Node *n, set<VarDecl *> &visiting);
     struct ConstUse;
+    SFunction *constfunction = nullptr;
+    vector<pair<string_view, Val>> constargs;
+    vector<pair<SFunction *, Node *>> constcalls;
+    vector<Node *> constsites;
+    size_t constvisits = 0;
+    int constevaldepth = 0;
+    bool constrequested = false;
+    struct ConstVisit {
+        TypeCheck &tc;
+        ConstVisit(TypeCheck &t, Node *n) : tc(t) {
+            if (!tc.constevaldepth) { tc.constvisits = 0; tc.constrequested = false; }
+            ++tc.constvisits;
+            tc.constrequested |= Is<Call>(n) != nullptr;
+            if (tc.constrequested && tc.constvisits > 10000) tc.Error(n, "const fn expression visit limit is 10000");
+            ++tc.constevaldepth;
+        }
+        ~ConstVisit() { --tc.constevaldepth; }
+    };
+    TypeExpr *ConstScalar(TypeExpr *t, Line at);
+    Node *ConstBody(SFunction *sf);
+    SFunction *ConstCallee(Call *c, bool body);
+    TypeExpr *ConstKind(Node *n);
+    void CheckConstFunctions();
+    Node *ConstBranch(IfExpr *x, set<VarDecl *> &visiting, ConstUse *use);
+    Val ConstCall(Call *c, set<VarDecl *> &visiting, ConstUse *use);
+    void NormalizeConstGlobal(VarDecl *g);
     bool ConstIfCondition(Node *condition);
     bool ConstBool(Node *n, set<VarDecl *> &visiting, ConstUse *use = nullptr);
     void SelectConstIf(IfExpr *x);
@@ -614,6 +640,8 @@ struct TypeCheck {
         d.where = where;
         d.message = msg;
         d.related = std::move(chain);
+        for (auto site : constsites)
+            d.related.push_back({LocOf(site->line), "while evaluating this const fn request"});
         LibraryCallLocation(d);
         d.text = ast.DiagnosticText(d);
         throw CompileError { d.text, { d } };
@@ -916,6 +944,15 @@ struct TypeCheck {
         } else if (auto b = Is<Binary>(n)) {
             ConstExprNames(b->left, what, f);
             ConstExprNames(b->right, what, f);
+        } else if (auto c = Is<Call>(n)) {
+            if (auto id = Is<Ident>(c->callee)) f(id, what);
+            for (auto a : c->args) ConstExprNames(a, what, f);
+        } else if (auto x = Is<IfExpr>(n)) {
+            ConstExprNames(x->cond, what, f);
+            ConstExprNames(x->thenb, what, f);
+            if (x->elseb) ConstExprNames(x->elseb, what, f);
+        } else if (auto b = Is<Block>(n)) {
+            if (b->tail) ConstExprNames(b->tail, what, f);
         } else if (auto d = Is<Dot>(n)) {
             if (auto obj = Is<Ident>(d->obj)) f(obj, what);
         }
@@ -3420,7 +3457,7 @@ struct TypeCheck {
             if (!st->wordbacking.empty() && !st->broken)
                 CheckRoot([&] { GetStructInst(ast.StructOf(st, {}, st->line)); });
         for (auto g : ast.globals) {
-            if (CheckRoot([&] { CheckVarDecl(g, true); })) {
+            if (CheckRoot([&] { NormalizeConstGlobal(g); CheckVarDecl(g, true); })) {
                 for (auto d : g->defs) d->assigned = d->maybeassigned = true;
             } else {
                 for (auto d : g->defs) failedglobals.insert(d);
@@ -3468,7 +3505,7 @@ struct TypeCheck {
             throw CompileError { "program needs exactly one global fn main()" };
         if (mainsf && !mainsf->brokensig) {
             CheckRoot([&] {
-                if (!mainsf->params.empty() || mainsf->has_rets || !mainsf->generics.empty() ||
+                if (mainsf->isconstfn || !mainsf->params.empty() || mainsf->has_rets || !mainsf->generics.empty() ||
                     mainsf->isthread)
                     Error(mainsf->line, "fn main() takes no parameters and returns nothing");
                 auto mainspec = ast.NewFnSpec();
@@ -3573,7 +3610,7 @@ struct TypeCheck {
     struct NeedsCaller {};
     FnSpec *standaloneroot = nullptr;
     void CheckUnreached(SFunction *sf) {
-        if (!sf->specs.empty() || sf->isthread || sf->isnested || sf->brokensig) return;
+        if (sf->isconstfn || !sf->specs.empty() || sf->isthread || sf->isnested || sf->brokensig) return;
         if (sf->IsGeneric()) return;
         set<string_view> names = { sf->name };
         auto foreign = false;
@@ -3601,7 +3638,7 @@ struct TypeCheck {
     void CheckExemplars() {
         vector<SFunction *> todo;
         for (auto sf : ast.functions) {
-            if (!sf->specs.empty() || sf->isthread || sf->isnested || sf->isextern || !sf->body)
+            if (sf->isconstfn || !sf->specs.empty() || sf->isthread || sf->isnested || sf->isextern || !sf->body)
                 continue;
             if (sf->IsGeneric()) todo.push_back(sf);
         }

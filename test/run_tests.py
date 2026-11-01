@@ -2618,6 +2618,13 @@ def main():
             else:
                 r.ok(out.strip())
         r.show_task(cli_definitions)
+        def const_functions():
+            code, out, err = tc.run_capture([sys.executable, HERE / "const_functions.py", exe])
+            if code:
+                r.fail("scalar const functions", out + err)
+            else:
+                r.ok(out.strip())
+        r.show_task(const_functions)
         def const_if():
             code, out, err = tc.run_capture([sys.executable, HERE / "const_if.py", exe])
             if code:
