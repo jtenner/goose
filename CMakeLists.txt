@@ -45,6 +45,7 @@ add_executable(goose
     src/resolve.h
     src/expansion_bind.h
     src/typecheck_expansion.h
+    src/typecheck_const_calls.h
     src/builtins.h
     src/typecheck.h
     src/type_queries.h

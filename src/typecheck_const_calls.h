@@ -9,6 +9,16 @@ inline TypeExpr *TypeCheck::ConstScalar(TypeExpr *t, Line at) {
     return t;
 }
 
+inline void TypeCheck::ConstFitU64(Val &v, Node *n) {
+    if (v.notconst) {
+        if (!FitsIntStorage(v.litlo, false, IS_U64)) Error(n, "constant must fit u64");
+        v.ival = WrapStorage(v.ival, IS_U64);
+        v.uns = v.ival < 0;
+        v.notconst = false;
+    }
+    if (!FitsIntStorage(v.ival, v.uns, IS_U64)) Error(n, "constant must fit u64");
+}
+
 inline Node *TypeCheck::ConstBody(SFunction *sf) {
     auto b = sf->body;
     auto r = b && b->stmts.size() == 1 ? Is<Return>(b->stmts[0]) : nullptr;
@@ -140,8 +150,8 @@ inline Val TypeCheck::ConstCall(Call *c, set<VarDecl *> &visiting, ConstUse *use
             v.ival = ConstBool(n, visiting, use);
         } else {
             bool literal;
-            if (!ConstIntValue(n, v, literal, visiting, use) || v.notconst ||
-                !FitsIntStorage(v.ival, v.uns, IS_U64)) Error(n, "const fn argument must fit u64");
+            if (!ConstIntValue(n, v, literal, visiting, use)) Error(n, "const fn argument requires u64");
+            ConstFitU64(v, n);
             v.type = ast.inttypes[IS_U64];
             v.uns = v.ival < 0;
             v.constfrom = nullptr;
@@ -190,8 +200,8 @@ inline void TypeCheck::NormalizeConstGlobal(VarDecl *g) {
     else {
         Val v;
         bool literal;
-        if (!ConstIntValue(n, v, literal, visiting, &use) || v.notconst ||
-            !FitsIntStorage(v.ival, v.uns, IS_U64)) Error(n, "const fn global result must fit u64");
+        if (!ConstIntValue(n, v, literal, visiting, &use)) Error(n, "const fn global result requires u64");
+        ConstFitU64(v, n);
         auto i = ast.New<IntLit>(n->line, v.ival, string_view {}, v.ival < 0);
         i->fixedtype = ast.inttypes[IS_U64];
         result = i;
