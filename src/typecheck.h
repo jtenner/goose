@@ -385,6 +385,7 @@ struct TypeCheck {
         }
     };
     TypeExpr *ConstScalar(TypeExpr *t, Line at);
+    void ConstFitU64(Val &v, Node *n);
     Node *ConstBody(SFunction *sf);
     SFunction *ConstCallee(Call *c, bool body);
     TypeExpr *ConstKind(Node *n);

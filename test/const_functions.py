@@ -60,7 +60,11 @@ with tempfile.TemporaryDirectory(prefix='goose-ctf-') as tmp:
         for paths in (False, True):
             source.write_text('''const fn needs_edges(a:bool,b:bool)->bool{return a||b;}
 const NEED:bool=needs_edges(build::E,build::P);
-fn main(){const if NEED {print(1);} else {print(0);}}
+struct Config {const if NEED {enabled:u8,} else {disabled:u64,}}
+fn main(){
+    let config=Config{const if NEED {enabled:1,} else {disabled:0,}};
+    const if NEED {print(config.enabled);} else {print(config.disabled);}
+}
 ''')
             for opt in ['0', '2']:
                 definitions = ['--define', f'E={str(edges).lower()}', '--define', f'P={str(paths).lower()}']
@@ -163,6 +167,7 @@ fn main(){
         expr='f11()'+'+1'*padding
         if unary: expr='~('+expr+')'
         check(tree+'const X:u64='+expr+';fn main(){}',ok,None if ok else 'visit limit')
+    check(tree+'const fn twice(x:u64)->u64{return x+x;} const X:u64=twice(f11());fn main(){}')
     check(tree+simple+'const A:u64=f11();const B:u64=f(A+A);fn main(){}',False,'visit limit')
     check('const fn f(x:bool)->bool{return x && (1/0==1);} const X:bool=f(false); fn main(){}',False,'division by zero')
     for flipped in [False,True,False]:
@@ -175,7 +180,10 @@ fn main(){
             invoke(['build',*defs,source,'-o',native])
             assert subprocess.check_output([str(native)],text=True)==f'{int(flag != flipped)}\n'
 
+    (root/'helpers.goose').write_text('namespace calc; const fn first(x:u64)->u64{return later(x);} const fn later(x:u64)->u64{return x+1;}')
+    check('import helpers;const fn later(x:u64)->u64{return x+99;} const X:u64=calc::first(1);fn main(){const if X==2 {} else {missing();}}')
     check(simple+'const X:u64=f(f(1));fn main(){}')
+    check(simple+'const X:u64=f(~0);fn main(){const if X==18446744073709551615 {} else {missing();}}')
     check('const fn f(x:bool)->bool{return if x {false} else {true};} const X:bool=f(false);fn main(){const if X {} else {missing();}}')
     source.write_text(simple+'const X:u64=f(build::N);fn main(){}')
     invoke(['check','--define','N=-1',source],False,'must fit u64')
