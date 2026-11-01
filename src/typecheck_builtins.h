@@ -386,6 +386,7 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
             c->rettypes.push_back(v.type);
             return v;
         }
+        case B_READ_RECORD_LE: return CheckRecordRead(c, args);
         case B_FROM_BYTES: {
             // from_bytes<T[>..]>(bytes): the image verified and copied into
             // a fresh array (docs/design/serialization.md §4). The result is

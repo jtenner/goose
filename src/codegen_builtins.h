@@ -263,6 +263,7 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
         }
         case B_TO_BYTES: return EmitToBytes(an, d0, ln);
         case B_BYTES_OF: return EmitBytesOf(c, an, ln);
+        case B_READ_RECORD_LE: return EmitRecordRead(c, an);
         case B_FROM_BYTES: return EmitFromBytes(c, an, d0, ln);
         case B_DEFAULT: {
             auto t = c->rettypes[0];

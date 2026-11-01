@@ -1377,6 +1377,7 @@ struct CodeGen {
     string LenCast(const Loc &lv);
     void EmitUnsafePtrType();
     vector<string> EmitUnsafeBuiltin(Call *c);
+    vector<string> EmitRecordRead(Call *c, vector<Node *> &args);
     vector<string> EmitBuiltin(Call *c, Dst d0);
 
     // ------------------------------------------------------------------
