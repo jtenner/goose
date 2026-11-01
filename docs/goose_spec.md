@@ -223,7 +223,7 @@ A grammar sketch and precedence table are in Appendix D.
 
 ### 3.1 Scalars
 
-* `i8 i16 i32 i64 u8 u16 u32 u64` — the integer types, two's-complement,
+* `i8 i16 i32 i64 u8 u16 u32 u64 u128` — the integer types, two's-complement,
   usable everywhere: fields, array elements, locals, parameters, returns,
   and expression temporaries. Every integer operation computes at its
   operands' exact type and width (§6.2), so a loop over `i32` data runs in
@@ -248,7 +248,7 @@ A grammar sketch and precedence table are in Appendix D.
 Integer literals are *constants without a committed type*. They adapt to any
 integer type that can hold their value: `let x: u8 = 255;` is valid, but `=
 256` is a compile error. Without a type constraint, they are `i64`, or `u64`
-for values above `i64.max`. A **named constant** is a `let`
+for values above `i64.max`, then `u128` above `u64.max`. A **named constant** is a `let`
 or `const` global with no written type whose initializer is an integer
 constant expression (`let SZ = 15;`, `let B = SZ * 2;`, `let NEG = -3;`).
 It is also a constant without a committed type: each use of it adapts as
@@ -329,6 +329,37 @@ arguments (`struct L<T> { v: T, next: L<T>? }`), or with arguments that stop
 changing, reach an instantiation that was already made instead. So only a
 type that nests one declaration more than 16 deep in its own arguments
 reaches the limit.
+
+### 3.2a Packed words (fork extension)
+
+`packed word Name : Backing { Fields }` declares a nominal fixed-size scalar;
+Backing is exactly u8/u16/u32/u64/u128. Field grammar permits `name: bool`,
+`name: uN` (1 <= N <= 128), `name: PayloadFreeEnum`, `_ : uN`, defaults on
+named fields, and nested `const if` field lists. Positions are consecutive
+from bit zero after conditional selection. Duplicate names, unsupported field
+types, invalid widths, or total width above the backing are errors.
+
+The physical type is the backing integer, not a C aggregate. Ordinary structs
+and arrays may contain words without extra padding. Exact backing casts are
+bit-preserving; equality includes reserved bits. Construction initializes
+reserves to zero and evaluates named fields/defaults in declaration order.
+Each integer field reads as its smallest unsigned carrier; enum extraction
+checks the tag in every build. Reserved entries are not addressable fields.
+
+Field assignment is a checked whole-word update, preserving all other bits.
+The destination must be initialized and writable. Resolve its location once;
+for a compound update snapshot its selected bits; evaluate the RHS once;
+validate the assignment/result; reload the latest word and merge once. A
+non-fitting constant is a compile error; a non-fitting runtime value aborts
+regardless of debug mode. References to fields are rejected. References to
+whole words follow ordinary reference rules. Bool/enum compounds, signed
+fields, pinned positions, generic declarations and field reflection are
+unsupported. Full semantics: [reference](reference.md#packed-words-fields-inside-one-integer).
+
+Native u128 scalars use unsigned modulo-2^128 arithmetic and exact literals;
+compiler constants are portable, but generated C requires unsigned __int128.
+TinyCC is unsupported. Existing 64-bit count/index APIs require explicit
+conversion; memory APIs and atomics do not gain a 128-bit operation.
 
 ### 3.3 The array family
 

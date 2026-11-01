@@ -7622,3 +7622,38 @@ analysis, and answers the server's requests.
 `test/lsp_sweep.py` is the robustness and latency sweep over the
 repository's programs (`docs/design/language_server.md` §12), run by
 hand. The editors' configuration is in `docs/editors.md`.
+
+
+## Packed-word scalar lowering (fork)
+
+The parser retains packed declarations in the existing nominal declaration
+ownership machinery. Nonempty `SStruct::wordbacking` distinguishes them from
+ordinary structs; `IsWord` is the mandatory discriminator before storage-field
+logic. `Field::bitwidth`, `bits` and `bitoffset` retain the source descriptor
+and selected layout. `BuildWord` runs after conditional flattening, checks
+eligible enums and capacity, and records a deterministic `wordfingerprint`
+including backing, ordered fields/reserves, types, widths, offsets and enum
+ordinal mappings. Compilation-local declarations prevent cross-configuration
+reuse. This reuses declaration infrastructure without giving bit views storage.
+
+`codegen_word.h` owns extraction, checked input, scalar construction and
+whole-word update emission. `CT`, fixed size, equality, rendering, globals,
+stack stores and location materialization distinguish words from aggregates.
+A scalar local update keeps the C scalar lvalue; only indirect destinations
+need pinning. `GenLoc` materializes a bit-view read in a temporary where a
+consumer needs a location, never inventing a member address. Enum extraction
+validates the tag before materializing its ordinary enum wrapper.
+
+`uint128.h` implements compiler constant arithmetic using two uint64 limbs;
+lexer literals, constant folding, matching and defaults preserve both halves.
+Native runtime helpers use unsigned __int128 under an explicit backend gate.
+The optimizer avoids old 64-bit-only constant and division transformations for
+u128. Native-memory scalar allowlists and atomic capabilities are unchanged.
+
+Acceptance drivers are `test/compiler_uint128.py`, `test/u128.py` and the
+`test/packed_word*.py` drivers. They use temporary directories, Python integer
+oracles, real C O0/O2 with UBSan, and GCC/Clang. The residency driver marks leaf
+definitions noinline/used in generated test C, retains exported wrappers,
+links a separate C host, and checks disassembly against handwritten kernels.
+The recorded [evidence](evidence/packed-word-residency.txt) covers known-fit u64
+leaves, not pressure-heavy or address-taking code.

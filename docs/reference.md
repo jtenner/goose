@@ -274,7 +274,7 @@ fn main() {
 14 ["goose"]
 ```
 
-A nominal type comes from a `struct` or `enum` declaration
+A nominal type comes from a `struct`, `packed word`, or `enum` declaration
 ([section 8](#8-structs), [section 9](#9-enums-algebraic-data-types)).
 
 ### Type syntax at a glance
@@ -284,7 +284,7 @@ this table is an overview.
 
 | Written | Meaning | Section |
 |---|---|---|
-| `i8 … i64`, `u8 … u64`, `f32`, `f64`, `bool`, `varint` | the scalars | [3](#3-scalars-and-arithmetic) |
+| `i8 … i64`, `u8 … u128`, `f32`, `f64`, `bool`, `varint` | the scalars | [3](#3-scalars-and-arithmetic) |
 | `T[4]`, `T[]`, `T[varint]`, `T[..8]`, `T[..]`, `T[>..]`, `T[>..<]` | the array family | [5](#5-the-array-family) |
 | `T[:]` | a slice: a view of a run of `T`s | [7](#7-slices) |
 | `Point`, `Pair<i64>` | a struct, a generic struct instance | [8](#8-structs) |
@@ -307,7 +307,7 @@ so an array of an index type is written `(u32 in a)[>..]`.
 
 ### Integers
 
-The integer types are `i8 i16 i32 i64` and `u8 u16 u32 u64`, two's
+The integer types are `i8 i16 i32 i64` and `u8 u16 u32 u64 u128`, two's
 complement, usable everywhere: fields, elements, locals, parameters,
 results. `i64` is the conventional type for counts, sizes and indices; it
 is what `.len`, integer literals and the builtins produce. The narrower
@@ -416,6 +416,22 @@ print(h);
 A `u64` literal above `i64.max`, as above, is accepted; negating one is an
 error except for `-9223372036854775808`, which is exactly `i64.min`.
 Spec §6.2.
+
+### Native `u128`
+
+`u128` is an unsigned 128-bit scalar. Decimal and hexadecimal literals up to
+`340282366920938463463374607431768211455` are accepted. Unconstrained positive
+constants use `i64`, then `u64`, then `u128`, according to their value.
+Arithmetic wraps modulo 2^128; shifts mask the count to 0..127. Checked and
+unchecked conversions follow the ordinary integer conversion rules. Values
+work in arrays, structs, generic functions, matches, serialization and native
+C signatures. Printing preserves all 39 decimal digits.
+
+The compiler evaluates constants with portable two-limb arithmetic. Generated
+C requires native `unsigned __int128` support; embedded TinyCC rejects `u128`
+explicitly. Counts and indices accepted by the existing 64-bit APIs require
+an explicit conversion to `u64`; native memory and atomic APIs retain their
+existing width restrictions. There is no `i128` type.
 
 ### Floats
 
@@ -1444,6 +1460,76 @@ through it could loop. The arithmetic operators apply memberwise
 exist on numbers only. Spec §4.5.
 
 ---
+
+### Packed words: fields inside one integer
+
+A `packed word` is a nominal scalar with named bit views. Its representation
+and native calling convention are exactly its backing integer, one of `u8`,
+`u16`, `u32`, `u64`, or `u128`. It can be copied, stored in arrays and ordinary
+structs, passed to functions and workers, and referenced as a whole value.
+
+```goose
+enum ObjectKind { Object, Array, String }
+packed word Header : u64 {
+    marked: bool,
+    age: u2,
+    kind: ObjectKind,
+    _: u27,
+    type_id: u32,
+}
+fn main() {
+    var h = Header { marked: false, age: 2, kind: ObjectKind.Array, type_id: 42 };
+    h.marked = true;
+    let raw = h as u64;
+    let copy = raw as Header;
+    assert(copy == h);
+    print(h.age);
+}
+```
+
+Fields occupy consecutive bits, starting at bit zero. `bool` occupies one bit;
+`uN` declares an unsigned field of 1..128 bits; a payload-free enum occupies
+at least one bit and enough bits for its highest ordinal tag. `_ : uN`
+reserves bits without creating a field. Unused high bits are also reserved.
+Widths such as `u2` are descriptors inside these declarations, not general
+integer types. Reads use the smallest carrier among u8/u16/u32/u64/u128.
+Enum reads validate raw tags in every build before producing an enum value.
+
+Construction supports named or positional initializers over named fields,
+declaration defaults, and `..` for omitted zero defaults. Initializers and
+omitted declaration defaults run once in declaration order, regardless of
+label order. Reserved bits start at zero. A missing initializer without a
+default or `..` is an error. `self` readback is unsupported.
+
+A field write replaces bits in an already initialized whole word, preserving
+all other bits. Unsigned fields accept unsigned runtime values or nonnegative
+integer constants. Constant overflow is an error; runtime overflow aborts in
+all builds. Compound arithmetic and increment/decrement check the result
+before carrier wrap. Bool and enum fields support plain assignment only.
+For intentional truncation, mask the input explicitly. A write evaluates its
+destination and RHS once, then reloads the containing word to preserve any
+neighboring field changes made by the RHS. Compound updates snapshot the
+selected field before evaluating the RHS.
+
+`let` prevents field writes. Bit views cannot be referenced, including by
+implicit reference adaptation in generic calls; reference the whole word or
+copy a field into a local instead. Casts with `as` or `as!` are free and require
+the exact backing type. Equality compares every raw bit, including reserves.
+Raw casts neither clear reserves nor validate enum fields until those fields
+are read. Different packed-word declarations remain different nominal types.
+
+`const if` selects active fields before layout and construction. Inactive
+fields occupy zero bits and their semantic errors and defaults are excluded;
+both branches still must parse. A reserved alternative of the same width
+keeps later offsets stable. Configuration changes can change the ABI and
+persistent format. Generic packed declarations, signed descriptors, explicit
+positions, and `fields<T>` reflection are not supported in v1.
+
+u64 words can remain registers across native calls: measured known-fit leaf
+kernels and handwritten equivalents have no spills under GCC and Clang at
+O2. This is not a universal promise under register pressure or address-taking.
+See [the measured evidence](evidence/packed-word-residency.txt) and
+[the complete design](design/packed-word.md).
 
 ## 9. Enums (algebraic data types)
 
