@@ -522,7 +522,7 @@ inline HoverText HoverDot(const Located &loc, const Occurrence &occ) {
             if (cd->exprtype && cd->exprtype->kind != TY_VOID) Append(h.header, ": ", TypeText(cd->exprtype));
         } else {
             auto f = FieldOfDot(cd);
-            h.header = cat(f && f->isconst ? "let " : "", cd->name, ": ", TypeText(cd->exprtype));
+            h.header = cat(f && f->isconst ? "let " : "", cd->name, ": ", f && !f->bitwidth.empty() ? string(f->bitwidth) : TypeText(cd->exprtype));
             if (f) h.doc = DocText(f->doc);
         }
         NoteExemplar(h, an, cd);
@@ -1916,7 +1916,7 @@ inline void MemberCompletions(const Located &loc, size_t dotpos, Completions &ou
             auto &fld = fs[i];
             if (fld.ispad) continue;
             auto ft = ftypes && i < ftypes->size() && (*ftypes)[i] ? (*ftypes)[i] : fld.type;
-            out.Add(fld.name, CK_FIELD, 0, cat(fld.isconst ? "let " : "", fld.name, ": ", TypeText(ft)), fld.doc);
+            out.Add(fld.name, CK_FIELD, 0, cat(fld.isconst ? "let " : "", fld.name, ": ", fld.bitwidth.empty() ? TypeText(ft) : string(fld.bitwidth)), fld.doc);
         }
     };
     auto builtins = [&](int recv) {
