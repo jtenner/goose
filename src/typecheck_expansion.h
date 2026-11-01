@@ -87,7 +87,7 @@ inline bool TypeCheck::IsValuelessTail(const Node *n) {
 // integer constant evaluator. Both operands are validated, even for && / ||;
 // only bodies, never condition operands, are conditionally excluded.
 inline bool TypeCheck::ConstBool(Node *n, set<VarDecl *> &visiting, ConstUse *use) {
-    ConstVisit visit(*this, n);
+    ConstVisit visit(*this, n, use && use->at ? use->at : n);
     if (auto c = Is<Call>(n)) {
         auto v = ConstCall(c, visiting, use);
         if (v.type != ast.booltype) Error(n, "const fn result is not bool");
@@ -220,13 +220,11 @@ inline void SelectConditionalFields(Ast &ast) {
                   any_of(ast.enums.begin(), ast.enums.end(), [&](SEnum *e) {
                       return any_of(e->variants.begin(), e->variants.end(), [&](const SVariant &v) { return conditional(v.fields); });
                   });
-    // Validate closed scalar declarations before any early field request.
-    TypeCheck scalar(ast, false, true, true);
-    scalar.CheckConstFunctions();
     if (!needed) return;
     // Keep global VarDefs stable: the ordinary checker reuses these so its
     // later writes still diagnose assumptions used for layout selection.
     TypeCheck tc(ast, false, true, true);
+    tc.CheckConstFunctions();
     auto flatten = [&](vector<Field> &fields, vector<Field> &written,
                        const vector<GenericParam> &generics) {
         if (none_of(fields.begin(), fields.end(), [](const Field &f) { return f.condition; })) return;

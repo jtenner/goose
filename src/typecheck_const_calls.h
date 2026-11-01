@@ -34,60 +34,63 @@ inline SFunction *TypeCheck::ConstCallee(Call *c, bool body) {
 }
 
 inline TypeExpr *TypeCheck::ConstKind(Node *n) {
-    if (Is<BoolLit>(n)) return ast.booltype;
-    if (auto i = Is<IntLit>(n)) {
-        if (!i->uns && i->val < 0) Error(n, "const fn integer literal must fit u64");
-        return ast.inttypes[IS_U64];
-    }
-    if (auto id = Is<Ident>(n)) {
-        for (auto &p : constfunction->params)
-            if (p.name == id->name) return ConstScalar(p.type, p.line);
-        Error(n, "const fn body cannot read free names");
-    }
-    if (auto b = Is<Block>(n)) {
-        if (!b->stmts.empty() || !b->tail) Error(n, "const fn branch requires one expression");
-        return ConstKind(b->tail);
-    }
-    if (auto x = Is<IfExpr>(n)) {
-        if (x->isconst || !x->elseb) Error(n, "const fn requires expression if with both arms");
-        auto c = ConstKind(x->cond), l = ConstKind(x->thenb), r = ConstKind(x->elseb);
-        if (c != ast.booltype || l != r) Error(n, "const fn if scalar kind mismatch");
-        return l;
-    }
-    if (auto c = Is<Call>(n)) {
-        auto sf = ConstCallee(c, true);
-        for (size_t i = 0; i < c->args.size(); i++)
-            if (ConstKind(c->args[i]) != ConstScalar(sf->params[i].type, sf->line))
-                Error(c->args[i], "const fn argument scalar kind mismatch");
-        if (sf->rets.size() != 1) Error(c, "const fn requires one result");
-        return ConstScalar(sf->rets[0], sf->line);
-    }
-    if (auto u = Is<Unary>(n)) {
-        auto t = ConstKind(u->child);
-        if ((u->op == T_NOT && t == ast.booltype) ||
-            (u->op == T_BITNOT && t == ast.inttypes[IS_U64])) return t;
-        Error(n, "unsupported const fn unary operator or scalar kind");
-    }
-    if (auto b = Is<Binary>(n)) {
-        auto l = ConstKind(b->left), r = ConstKind(b->right);
-        if (l != r) Error(n, "const fn operator scalar kind mismatch");
-        switch (b->op) {
-            case T_ANDAND: case T_OROR:
-                if (l == ast.booltype) return l;
-                break;
-            case T_EQ: case T_NEQ: return ast.booltype;
-            case T_LT: case T_LTEQ: case T_GT: case T_GTEQ:
-                if (l == ast.inttypes[IS_U64]) return ast.booltype;
-                break;
-            case T_PLUS: case T_MINUS: case T_MUL: case T_DIV: case T_MOD:
-            case T_BITAND: case T_BITOR: case T_XOR: case T_SHL: case T_SHR:
-                if (l == ast.inttypes[IS_U64]) return l;
-                break;
-            default: break;
+    auto kind = [&]() -> TypeExpr * {
+        if (Is<BoolLit>(n)) return ast.booltype;
+        if (auto i = Is<IntLit>(n)) {
+            if (!i->uns && i->val < 0) Error(n, "const fn integer literal must fit u64");
+            return ast.inttypes[IS_U64];
         }
-        Error(n, "unsupported const fn binary operator or scalar kind");
-    }
-    Error(n, "unsupported expression in const fn");
+        if (auto id = Is<Ident>(n)) {
+            for (auto &p : constfunction->params)
+                if (p.name == id->name) return ConstScalar(p.type, p.line);
+            Error(n, "const fn body cannot read free names");
+        }
+        if (auto b = Is<Block>(n)) {
+            if (!b->stmts.empty() || !b->tail) Error(n, "const fn branch requires one expression");
+            return ConstKind(b->tail);
+        }
+        if (auto x = Is<IfExpr>(n)) {
+            if (x->isconst || !x->elseb) Error(n, "const fn requires expression if with both arms");
+            auto c = ConstKind(x->cond), l = ConstKind(x->thenb), r = ConstKind(x->elseb);
+            if (c != ast.booltype || l != r) Error(n, "const fn if scalar kind mismatch");
+            return l;
+        }
+        if (auto c = Is<Call>(n)) {
+            auto sf = ConstCallee(c, true);
+            for (size_t i = 0; i < c->args.size(); i++)
+                if (ConstKind(c->args[i]) != ConstScalar(sf->params[i].type, sf->line))
+                    Error(c->args[i], "const fn argument scalar kind mismatch");
+            if (sf->rets.size() != 1) Error(c, "const fn requires one result");
+            return ConstScalar(sf->rets[0], sf->line);
+        }
+        if (auto u = Is<Unary>(n)) {
+            auto t = ConstKind(u->child);
+            if ((u->op == T_NOT && t == ast.booltype) ||
+                (u->op == T_BITNOT && t == ast.inttypes[IS_U64])) return t;
+            Error(n, "unsupported const fn unary operator or scalar kind");
+        }
+        if (auto b = Is<Binary>(n)) {
+            auto l = ConstKind(b->left), r = ConstKind(b->right);
+            if (l != r) Error(n, "const fn operator scalar kind mismatch");
+            switch (b->op) {
+                case T_ANDAND: case T_OROR:
+                    if (l == ast.booltype) return l;
+                    break;
+                case T_EQ: case T_NEQ: return ast.booltype;
+                case T_LT: case T_LTEQ: case T_GT: case T_GTEQ:
+                    if (l == ast.inttypes[IS_U64]) return ast.booltype;
+                    break;
+                case T_PLUS: case T_MINUS: case T_MUL: case T_DIV: case T_MOD:
+                case T_BITAND: case T_BITOR: case T_XOR: case T_SHL: case T_SHR:
+                    if (l == ast.inttypes[IS_U64]) return l;
+                    break;
+                default: break;
+            }
+            Error(n, "unsupported const fn binary operator or scalar kind");
+        }
+        Error(n, "unsupported expression in const fn");
+    };
+    return n->exprtype = kind();
 }
 
 inline void TypeCheck::CheckConstFunctions() {
@@ -124,6 +127,9 @@ inline Val TypeCheck::ConstCall(Call *c, set<VarDecl *> &visiting, ConstUse *use
     sites.push_back(c);
     Saved<decltype(constsites)> request(constsites, std::move(sites));
     auto sf = ConstCallee(c, constfunction != nullptr);
+    if (constcalls.size() >= 32) Error(c, "const fn active call limit is 32");
+    for (auto &entry : constcalls)
+        if (entry.first == sf) Error(c, "active const fn call cycle");
     vector<pair<string_view, Val>> args;
     for (size_t i = 0; i < c->args.size(); i++) {
         auto n = c->args[i];
@@ -142,9 +148,6 @@ inline Val TypeCheck::ConstCall(Call *c, set<VarDecl *> &visiting, ConstUse *use
         }
         args.push_back({sf->params[i].name, v});
     }
-    if (constcalls.size() >= 32) Error(c, "const fn active call limit is 32");
-    for (auto &entry : constcalls)
-        if (entry.first == sf) Error(c, "active const fn call cycle");
     auto calls = constcalls;
     calls.push_back({sf, c});
     Saved<decltype(constcalls)> trace(constcalls, std::move(calls));

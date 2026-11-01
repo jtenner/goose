@@ -2697,8 +2697,12 @@ inline int64_t TypeCheck::FillCount(Node *n) {
 // the name is an error (ConstName).
 inline bool TypeCheck::ConstIntValue(Node *n, Val &v, bool &literal,
                                      set<VarDecl *> &visiting, ConstUse *use) {
-    ConstVisit visit(*this, n);
+    ConstVisit visit(*this, n, use && use->at ? use->at : n);
     if (auto c = Is<Call>(n)) {
+        auto id = Is<Ident>(c->callee);
+        if (!id) return false;
+        auto &fs = ast.LookupFunctions(id->name, id->ns);
+        if (none_of(fs.begin(), fs.end(), [](SFunction *f) { return f->isconstfn; })) return false;
         auto sf = ConstCallee(c, constfunction != nullptr);
         if (sf->rets.size() == 1 && sf->rets[0]->kind == TY_BOOL) return false;
         v = ConstCall(c, visiting, use);
@@ -2706,7 +2710,7 @@ inline bool TypeCheck::ConstIntValue(Node *n, Val &v, bool &literal,
         return v.type->kind == TY_INT;
     }
     if (auto x = Is<IfExpr>(n)) {
-        if (constfunction && ConstKind(x) == ast.booltype) return false;
+        if (constfunction && x->exprtype == ast.booltype) return false;
         return ConstIntValue(ConstBranch(x, visiting, use), v, literal, visiting, use);
     }
     if (auto b = Is<Block>(n); b && b->stmts.empty() && b->tail)
