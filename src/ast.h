@@ -92,13 +92,13 @@ enum ArrayKind {
 
 // The integer types (§3.1). All are usable everywhere; IS_VARINT is the one
 // storage-only exception, LEB128-encoded in memory and read as i64 (§3.6).
-enum IntStorage { IS_I8, IS_I16, IS_I32, IS_I64, IS_U8, IS_U16, IS_U32, IS_U64, IS_VARINT };
+enum IntStorage { IS_I8, IS_I16, IS_I32, IS_I64, IS_U8, IS_U16, IS_U32, IS_U64, IS_U128, IS_VARINT };
 
 enum FltStorage { FS_F32, FS_F64 };
 
 inline const char *IntStorageName(int s) {
     static const char *names[] = { "i8", "i16", "i32", "i64",
-                                   "u8", "u16", "u32", "u64", "varint" };
+                                   "u8", "u16", "u32", "u64", "u128", "varint" };
     return names[s];
 }
 
@@ -107,12 +107,13 @@ inline const char *FltStorageName(int s) {
     return names[s];
 }
 
-inline bool IsUnsigned(IntStorage s) { return s >= IS_U8 && s <= IS_U64; }
+inline bool IsUnsigned(IntStorage s) { return s >= IS_U8 && s <= IS_U128; }
 inline int IntBits(IntStorage s) {
     switch (s) {
         case IS_I8: case IS_U8:   return 8;
         case IS_I16: case IS_U16: return 16;
         case IS_I32: case IS_U32: return 32;
+        case IS_U128:             return 128;
         default:                  return 64;
     }
 }
@@ -129,14 +130,16 @@ inline pair<int64_t, int64_t> IntRange(IntStorage s) {
         case IS_U8:  return { 0, 255 };
         case IS_U16: return { 0, 65535 };
         case IS_U32: return { 0, (int64_t)UINT32_MAX };
-        case IS_U64: return { 0, INT64_MAX };
+        case IS_U64: case IS_U128: return { 0, INT64_MAX };
         default:     return { INT64_MIN, INT64_MAX };
     }
 }
 
 // Whether a constant (value bits v, u64-flavored when uns) fits a storage
 // type: above i64.max only u64 holds it, anything else by its range.
-inline bool FitsIntStorage(int64_t v, bool uns, IntStorage s) {
+inline bool FitsIntStorage(int64_t v, bool uns, IntStorage s, uint64_t high = 0) {
+    if (s == IS_U128) return high || uns || v >= 0;
+    if (high) return false;
     if (uns) return s == IS_U64;   // Above i64.max: only u64 holds it.
     auto [lo, hi] = IntRange(s);
     return v >= lo && v <= hi;
@@ -192,6 +195,7 @@ inline int64_t EuclidMod(int64_t a, int64_t b) {
 // zero divisor, which aborts in every build. Comparisons are not here: they
 // fold to a bool, which only the optimizer has a node for.
 inline bool FoldIntOp(TType op, int64_t la, int64_t rb, IntStorage s, int64_t &out) {
+    if (s == IS_U128) return false; // Use FoldWideIntOp with both limbs.
     auto bits = IntBits(s);
     if (IsUnsigned(s)) {
         auto a = (uint64_t)la, b = (uint64_t)rb;
@@ -462,6 +466,7 @@ struct Pattern {
 // The first and last value an integer arm's value or range matches.
 struct ArmRange {
     int64_t lo = 0, hi = 0;
+    uint64_t upper_lo = 0, upper_hi = 0; // u128 pattern endpoints.
 };
 
 struct MatchArm {
@@ -720,6 +725,7 @@ struct Val : Prov {
     TypeExpr *type = nullptr;
     ConstKind ck = CK_NONE;
     int64_t ival = 0;
+    uint64_t ihi = 0;            // Constant high limb (zero for <=64-bit values).
     bool uns = false;            // CK_INT: ival's bits are a u64 above i64.max.
     double fval = 0;
     bool strlit = false;         // String literal: adaptable to u8 array types.
@@ -984,6 +990,7 @@ template<typename T> T *Is(Node *n) {
 
 NODE(IntLit)
     TypeExpr *fixedtype = nullptr; // Materialized typed constant; not an adaptable literal.
+    uint64_t hi = 0;
     int64_t val;       // The value's bits; uns says how to read them.
     string_view text;  // Original spelling, so hex/char literals dump readably.
     bool uns;          // Value above i64.max: a u64 constant carried as bits.
@@ -1753,6 +1760,7 @@ struct VarDef {
     bool constlit = false;
     bool constuns = false;      // constval's bits are a u64 above i64.max (Val::uns).
     int64_t constval = 0;
+    uint64_t consthi = 0;
     bool constnot = false;      // A constlit whose constval is `~c`, c >= 0 (Val::notconst).
     bool constflt = false;      // A float constant, of value constfval.
     double constfval = 0;
@@ -2897,6 +2905,7 @@ struct Ast {
             case T_TU16:    return inttypes[IS_U16];
             case T_TU32:    return inttypes[IS_U32];
             case T_TU64:    return inttypes[IS_U64];
+            case T_TU128:   return inttypes[IS_U128];
             case T_TVARINT: return inttypes[IS_VARINT];
             case T_TF32:    return flttypes[FS_F32];
             case T_TF64:    return flttypes[FS_F64];

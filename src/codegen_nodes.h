@@ -19,6 +19,8 @@ inline void ConstFor::CgStmt(CodeGen &cg) { cg.Fail(line, "internal: unexpanded 
 // ---- CgX ------------------------------------------------------------------
 
 inline string IntLit::CgX(CodeGen &) {
+    if (exprtype && exprtype->kind == TY_INT && exprtype->intstorage == IS_U128)
+        return cat("(((gs_u128)", hi, "ULL << 64) | (gs_u128)", (uint64_t)val, "ULL)");
     // A u64-typed value above i64.max has negative bits; emit it unsigned.
     if (val < 0 && exprtype && exprtype->kind == TY_INT && exprtype->intstorage == IS_U64)
         return cat((uint64_t)val, "ULL");
@@ -320,6 +322,22 @@ inline string AsCast::CgX(CodeGen &cg) {
                                  : cg.GenX(child);
     auto st = child->exprtype;
     auto tt = totype;
+    auto swide = IsIntT(st) && st->intstorage == IS_U128;
+    auto twide = IsIntT(tt) && tt->intstorage == IS_U128;
+    if (swide || twide) {
+        auto ct = cg.CT(tt);
+        if (tt->kind == TY_FLT) return cat("(", ct, ")(", x, ")");
+        if (st->kind == TY_FLT)
+            return cat("gs_f2u128(", x, ", ", unchecked ? "0" : "GS_DEBUG", ", ", cg.LocArgs(line), ")");
+        if (unchecked || cg.TEq(st, tt) || (twide && IsUnsigned(st->intstorage)))
+            return cat("(", ct, ")(", x, ")");
+        if (twide)
+            return cat("(gs_u128)GS_RANGE((int64_t)(", x, "), 0, INT64_MAX, \"u128\", ", cg.LocArgs(line), ")");
+        auto hi = IsUnsigned(tt->intstorage)
+                  ? (tt->intstorage == IS_U64 ? UINT64_MAX : (uint64_t)IntRange(tt->intstorage).second)
+                  : (uint64_t)IntRange(tt->intstorage).second;
+        return cat("(", ct, ")gs_range_u128(", x, ", (gs_u128)", hi, "ULL, GS_DEBUG, ", cg.LocArgs(line), ")");
+    }
     // u64 is the one source whose values exceed the int64 range the checks
     // compute in; it gets unsigned-compare variants.
     auto su64 = st->kind == TY_INT && st->intstorage == IS_U64;
@@ -512,7 +530,11 @@ inline void MatchExpr::CgAny(CodeGen &cg, const Dst &d) {
         // Compare at the scrutinee's type (unsigned scrutinees compare
         // unsigned; pattern constants carry that type's value bits).
         auto sct = cg.CT(scrutinee->exprtype);
-        auto k = [&](int64_t v) { return cat("(", sct, ")", cg.IntStr(v)); };
+        auto k = [&](int64_t v, uint64_t hi = 0) {
+            if (scrutinee->exprtype->intstorage == IS_U128)
+                return cat("(((gs_u128)", hi, "ULL << 64) | (gs_u128)", (uint64_t)v, "ULL)");
+            return cat("(", sct, ")", cg.IntStr(v));
+        };
         auto xs = cat("(", sct, ")(", x, ")");
         auto first = true;
         for (auto &arm : arms) {
@@ -523,9 +545,9 @@ inline void MatchExpr::CgAny(CodeGen &cg, const Dst &d) {
                 string c;
                 for (auto &r : arm.ranges) {
                     if (!c.empty()) c += " || ";
-                    if (r.hi == r.lo) Append(c, xs, " == ", k(r.lo));
-                    else Append(c, several ? "(" : "", xs, " >= ", k(r.lo), " && ", xs, " <= ",
-                                k(r.hi), several ? ")" : "");
+                    if (r.hi == r.lo && r.upper_hi == r.upper_lo) Append(c, xs, " == ", k(r.lo, r.upper_lo));
+                    else Append(c, several ? "(" : "", xs, " >= ", k(r.lo, r.upper_lo), " && ", xs, " <= ",
+                                k(r.hi, r.upper_hi), several ? ")" : "");
                 }
                 cg.L(first ? "" : "} else ", "if (", c, ") {");
             }

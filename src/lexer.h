@@ -1,6 +1,7 @@
 // Goose compiler — lexer. A hand-written scanner: one big switch over the next
 // character. Input is 0-terminated, so only the 0 case checks for end of input.
 #pragma once
+#include "uint128.h"
 
 namespace goose {
 
@@ -50,7 +51,7 @@ namespace goose {
     F(T_SELF,     "self") \
     F(T_TBOOL,    "bool")      F(T_TVARINT,  "varint") \
     F(T_TI8,      "i8")  F(T_TI16, "i16") F(T_TI32, "i32") F(T_TI64, "i64") \
-    F(T_TU8,      "u8")  F(T_TU16, "u16") F(T_TU32, "u32") F(T_TU64, "u64") \
+    F(T_TU8,      "u8")  F(T_TU16, "u16") F(T_TU32, "u32") F(T_TU64, "u64") F(T_TU128, "u128") \
     F(T_TF32,     "f32") F(T_TF64, "f64")
 
 enum TType {
@@ -117,6 +118,7 @@ struct Lexer {
     TType tok = T_EOF;
     string_view attr;                // Source text of ident/literal tokens.
     int64_t ival = 0;                // T_INTLIT value (also char literals).
+    uint64_t ihi = 0;             // High limb of an unsigned 128-bit literal.
     bool iuns = false;               // T_INTLIT above i64.max: a u64 constant.
     double fval = 0;                 // T_FLTLIT value.
     string sval;                     // T_STRLIT decoded value.
@@ -357,6 +359,7 @@ struct Lexer {
             case '\'': {
                 ival = LexEscapedChar('\'');
                 iuns = false;
+                ihi = 0;
                 if (*p != '\'') Error("expected closing \' of character literal");
                 p++;
                 Set(T_INTLIT);
@@ -405,10 +408,11 @@ struct Lexer {
                             Set(T_FLTLIT);
                             return;
                         }
-                        errno = 0;
-                        ival = (int64_t)strtoull(string(numstart, p).c_str(), nullptr, 16);
-                        if (errno) Error("hex literal too large for 64 bits");
-                        iuns = ival < 0;
+                        UInt128 v;
+                        if (!UInt128::Parse(string_view(numstart, p - numstart), 16, v))
+                            Error("hex literal too large for 128 bits");
+                        ival = (int64_t)v.lo; ihi = v.hi;
+                        iuns = ihi || ival < 0;
                         Set(T_INTLIT);
                         return;
                     }
@@ -434,10 +438,11 @@ struct Lexer {
                     } else {
                         // Decimal literals cover the full u64 range; a value
                         // above i64.max is a u64 constant (§2).
-                        errno = 0;
-                        ival = (int64_t)strtoull(text.c_str(), nullptr, 10);
-                        if (errno) Error(cat("integer literal too large for 64 bits: ", text));
-                        iuns = ival < 0;
+                        UInt128 v;
+                        if (!UInt128::Parse(text, 10, v))
+                            Error(cat("integer literal too large for 128 bits: ", text));
+                        ival = (int64_t)v.lo; ihi = v.hi;
+                        iuns = ihi || ival < 0;
                         Set(T_INTLIT);
                     }
                     return;

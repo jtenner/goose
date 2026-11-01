@@ -254,6 +254,7 @@ inline void Block::Dump(string &s, int ind) const {
 
 inline void IntLit::Dump(string &s, int) const {
     if (!text.empty()) s += text;
+    else if (hi) s += UInt128((uint64_t)val, hi).Decimal();
     else if (uns) Append(s, (uint64_t)val);
     else Append(s, val);
 }
