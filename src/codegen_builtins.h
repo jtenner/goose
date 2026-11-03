@@ -316,7 +316,135 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
             L("}");
             return { t };
         }
-        case B_THREAD_SPAWN: case B_THREAD_SPAWN_CONTAINED: return EmitThreadSpawn(c, an);
+        case B_THREAD_JOIN: {
+            usesthreads = true;
+            auto rt = c->rettypes[0]; auto h = GenX(an[0]);
+            auto n = T(), p = T(), msg = T(), mlen = T();
+            L("int64_t ", n, ", ", mlen, " = 0; uint8_t *", msg, " = NULL;");
+            L("uint8_t *", p, " = gs_thread_join(", h, ", &", n, ", ",
+              an.size() == 2 ? cat("&", msg, ", &", mlen) : string("NULL, NULL"),
+              ", ", LocArgs(ln), ");");
+            if (an.size() == 2) {
+                L("if (", msg, ") {"); ind++; AppendBytes(RecvLoc(an[1]), msg, mlen, ln);
+                L("gs_free_msg(", msg, ");"); ind--; L("}");
+            }
+            auto ok = T(); L("uint8_t ", ok, " = ", p, " != NULL;");
+            if (IsResz(rt)) {
+                EmitCoreTypes();
+                string stk = d0.k == DK_STACK && !d0.lenlv.empty() ? d0.s : "";
+                string lenlv = d0.k == DK_STACK ? d0.lenlv : "";
+                string hv;
+                if (stk.empty()) { hv = RzTemp(rt, stk); lenlv = RzLenLv(rt, hv); }
+                auto fo = IsFrameObj(rt);
+                auto cnt = fo ? cat(FoTailHdr(rt, lenlv), ".len") : lenlv;
+                auto image = cat(p, " + 8");
+                auto bytes = cat("(", n, " - 8)");
+                if (fo) {
+                    L("GS_MEMZERO(&", lenlv, ", sizeof(", lenlv, "));");
+                    L(FoTailHdr(rt, lenlv), ".base = ", Top(stk), ";");
+                } else L(lenlv, " = 0;");
+                L("if (", p, ") {"); ind++;
+                if (fo) {
+                    auto pre = FoPrefixSize(rt);
+                    L("GS_MEMCPY(&", lenlv, ", ", image, ", ", pre, ");");
+                    image = cat(image, " + ", pre); bytes = cat("(", n, " - 8 - ", pre, ")");
+                }
+                L("GS_MEMCPY(&", cnt, ", ", p, ", 8);");
+                L("GS_MEMCPY(", Top(stk), ", ", image, ", (size_t)", bytes, ");");
+                Bump(stk, bytes); L("free(", p, ");"); ind--; L("}");
+                return { hv, ok };
+            }
+            if (IsBytesT(rt)) {
+                string stk = d0.k == DK_STACK ? d0.s : ""; string base = T();
+                if (stk.empty()) { stk = AllocStk(false); L("uint8_t *", base, " = ", Top(stk), ";"); SaveBase(false, stk, base); }
+                else L("uint8_t *", base, " = ", Top(stk), ";");
+                L("if (", p, ") { GS_MEMCPY(", Top(stk), ", ", p, ", (size_t)", n, ");");
+                ind++; Bump(stk, n); L("free(", p, ");"); ind--; L("} else {"); ind++;
+                L("GS_MEMZERO(", Top(stk), ", ", MinBytes(rt, true), ");");
+                Bump(stk, cat(MinBytes(rt, true))); ind--; L("}");
+                return { base, ok };
+            }
+            auto v = T(); FixedLocal(rt, v);
+            L("GS_MEMZERO(&", v, ", sizeof(", v, "));");
+            L("if (", p, ") { GS_MEMCPY(&", v, ", ", p, ", ", FixedSize(rt), "); free(", p, "); }");
+            return { v, ok };
+        }
+        case B_THREAD_SPAWN: case B_THREAD_SPAWN_CONTAINED:
+        case B_THREAD_SPAWN_JOIN: case B_THREAD_SPAWN_CONTAINED_JOIN:
+            return EmitThreadSpawn(c, an);
+        case B_THREAD_CANCELLED: return { "gs_thread_cancelled()" };
+        case B_THREAD_CANCEL: {
+            auto h = GenX(an[0]);
+            return { cat("gs_thread_cancel(", h, ", ", LocArgs(ln), ")") };
+        }
+        case B_CHANNEL: {
+            usesthreads = true;
+            auto limit = an.empty() ? string("INT64_MAX") : GenX(an[0]);
+            return { cat("gs_channel_create(", limit, ", ", LocArgs(ln), ")") };
+        }
+        case B_CHANNEL_CLOSE: {
+            auto h = GenX(an[0]);
+            return { cat("gs_channel_close(", h, ", ", LocArgs(ln), ")") };
+        }
+        case B_CHANNEL_WAIT_ANY: {
+            auto hs = T();
+            L("gs_handle ", hs, "[", an.size(), "];");
+            for (size_t i = 0; i < an.size(); i++) L(hs, "[", i, "] = ", GenX(an[i]), ";");
+            return { cat("gs_channel_wait_any(", hs, ", ", an.size(), ", ", LocArgs(ln), ")") };
+        }
+        case B_CHANNEL_SEND: case B_CHANNEL_TRY_SEND: {
+            auto t = an[1]->exprtype; auto h = GenX(an[0]); auto ok = T();
+            auto wait = c->builtin == B_CHANNEL_SEND ? "1" : "0";
+            if (IsResz(t)) {
+                auto src = GenLoc(an[1]); if (src.t->kind == TY_REF) DerefLoc(src);
+                string stk; auto base = BytesTemp(stk); EmitRzImage(src, t, stk, ln);
+                L("uint8_t ", ok, " = gs_channel_send(", h, ", ", base, ", ", Top(stk),
+                  " - ", base, ", ", wait, ", ", LocArgs(ln), ");");
+            } else if (IsBytesT(t)) {
+                auto p = GenPtr(an[1]);
+                L("uint8_t ", ok, " = gs_channel_send(", h, ", ", p, ", ", SizeX(t, p),
+                  ", ", wait, ", ", LocArgs(ln), ");");
+            } else {
+                auto tv = T(); FixedLocal(t, tv, GenX(an[1]));
+                L("uint8_t ", ok, " = gs_channel_send(", h, ", &", tv, ", ", FixedSize(t),
+                  ", ", wait, ", ", LocArgs(ln), ");");
+            }
+            return { ok };
+        }
+        case B_CHANNEL_RECEIVE: case B_CHANNEL_TRY_RECEIVE: {
+            auto t = c->rettypes[0]; auto h = GenX(an[0]); auto nn = T();
+            L("gs_qnode *", nn, " = gs_channel_receive(", h, ", ",
+              c->builtin == B_CHANNEL_RECEIVE ? "1" : "0", ", ", LocArgs(ln), ");");
+            auto got = T(); L("uint8_t ", got, " = ", nn, " != NULL;");
+            if (IsResz(t)) {
+                EmitCoreTypes(); string stk = d0.k == DK_STACK && !d0.lenlv.empty() ? d0.s : "";
+                string lenlv = d0.k == DK_STACK ? d0.lenlv : ""; string hv;
+                if (stk.empty()) { hv = RzTemp(t, stk); lenlv = RzLenLv(t, hv); }
+                auto fo = IsFrameObj(t); auto cnt = fo ? cat(FoTailHdr(t, lenlv), ".len") : lenlv;
+                auto image = cat("(uint8_t *)(", nn, " + 1) + 8");
+                auto bytes = cat("(", nn, "->size - 8)");
+                if (fo) { L("GS_MEMZERO(&", lenlv, ", sizeof(", lenlv, "));"); L(FoTailHdr(t, lenlv), ".base = ", Top(stk), ";"); }
+                else L(lenlv, " = 0;");
+                L("if (", nn, ") {"); ind++;
+                if (fo) { auto pre = FoPrefixSize(t); L("GS_MEMCPY(&", lenlv, ", ", image, ", ", pre, ");"); image = cat(image, " + ", pre); bytes = cat("(", nn, "->size - 8 - ", pre, ")"); }
+                L("GS_MEMCPY(&", cnt, ", ", nn, " + 1, 8);");
+                L("GS_MEMCPY(", Top(stk), ", ", image, ", (size_t)", bytes, ");");
+                Bump(stk, bytes); L("free(", nn, ");"); ind--; L("}");
+                return { hv, got };
+            }
+            if (IsBytesT(t)) {
+                string stk = d0.k == DK_STACK ? d0.s : ""; string base = T();
+                if (stk.empty()) { stk = AllocStk(false); L("uint8_t *", base, " = ", Top(stk), ";"); SaveBase(false, stk, base); }
+                else L("uint8_t *", base, " = ", Top(stk), ";");
+                L("if (", nn, ") {"); ind++; L("GS_MEMCPY(", Top(stk), ", ", nn, " + 1, (size_t)", nn, "->size);");
+                Bump(stk, cat(nn, "->size")); L("free(", nn, ");"); ind--; L("} else {"); ind++;
+                L("GS_MEMZERO(", Top(stk), ", ", MinBytes(t, true), ");"); Bump(stk, cat(MinBytes(t, true))); ind--; L("}");
+                return { base, got };
+            }
+            auto v = T(); FixedLocal(t, v); L("GS_MEMZERO(&", v, ", sizeof(", v, "));");
+            L("if (", nn, ") { GS_MEMCPY(&", v, ", ", nn, " + 1, ", FixedSize(t), "); free(", nn, "); }");
+            return { v, got };
+        }
         case B_QPUT: {
             auto t = an[0]->exprtype;
             auto q = QueueFor(t);
@@ -1284,7 +1412,8 @@ inline vector<string> CodeGen::EmitThreadSpawn(Call *c, vector<Node *> &an) {
     vector<string> sharedcaps;
     for (size_t i = 0; i < sp->argtypes.size(); i++) {
         auto pt = sp->argtypes[i];
-        if (IsSharedSendable(pt)) {
+        if (IsSharedSendable(pt) && pt->native->kind != NK_THREAD &&
+            pt->native->kind != NK_CHANNEL) {
             auto cap = Snapshot(pt, GenPure(an[1 + i]));
             sharedcaps.push_back(cap);
             EmitValStore(stk, pt, cap);
@@ -1367,8 +1496,13 @@ inline vector<string> CodeGen::EmitThreadSpawn(Call *c, vector<Node *> &an) {
     for (auto &cap : sharedcaps)
         L("gs_shared_handoff((gs_shared_cap){", cap, ".slot, ", cap, ".generation}, ", LocArgs(c->line), ");");
     auto id = T();
-    L("int64_t ", id, " = gs_thread_spawn(", thunk, ", ", base, ", ", Top(stk), " - ", base,
-      c->builtin == B_THREAD_SPAWN_CONTAINED ? ", 1);" : ", 0);");
+    auto structured = c->builtin == B_THREAD_SPAWN_JOIN ||
+                      c->builtin == B_THREAD_SPAWN_CONTAINED_JOIN;
+    auto contained = c->builtin == B_THREAD_SPAWN_CONTAINED ||
+                     c->builtin == B_THREAD_SPAWN_CONTAINED_JOIN;
+    L(structured ? "gs_handle " : "int64_t ", id, " = ",
+      structured ? "gs_thread_spawn_structured(" : "gs_thread_spawn(",
+      thunk, ", ", base, ", ", Top(stk), " - ", base, contained ? ", 1);" : ", 0);");
     return { id };
 }
 
@@ -1437,7 +1571,36 @@ inline void CodeGen::EmitThreadThunk(FnSpec *sp, int64_t stacks) {
             PushArg(args, pt, IsPoolParam(sp, i), cat("a", i));
         }
     }
-    assert(ki.freevars.empty() && !ki.hasrf && sp->rets.empty());
+    assert(ki.freevars.empty() && !ki.hasrf && sp->rets.size() <= 1);
+    string result, resultstk, resultbase, resultlen;
+    if (!sp->rets.empty()) {
+        auto rt = sp->rets[0];
+        result = "gs_worker_result";
+        if (IsResz(rt)) {
+            regions++;
+            resultstk = "gs_worker_result_stk"; resultbase = "gs_worker_result_base";
+            Append(b, "    gs_stack ", resultstk, "; gs_stack_init(&", resultstk, ");\n",
+                   "    uint8_t *", resultbase, " = ", resultstk, ".top;\n");
+            args.push_back(cat("&", resultstk));
+            if (IsFrameObj(rt)) {
+                Append(b, "    ", CT(rt), " ", result, " = {0};\n");
+                args.push_back(cat("&", result));
+            } else {
+                resultlen = "gs_worker_result_len";
+                Append(b, "    int64_t ", resultlen, " = 0;\n");
+                args.push_back(cat("&", resultlen));
+            }
+        } else if (IsBytesT(rt)) {
+            regions++;
+            resultstk = "gs_worker_result_stk"; resultbase = "gs_worker_result_base";
+            Append(b, "    gs_stack ", resultstk, "; gs_stack_init(&", resultstk, ");\n",
+                   "    uint8_t *", resultbase, " = ", resultstk, ".top;\n");
+            args.push_back(cat("&", resultstk));
+        } else if (ki.cret < 0) {
+            Append(b, "    ", CT(rt), " ", result, " = {0};\n");
+            args.push_back(cat("&", result));
+        }
+    }
     if (ki.needssp) args.push_back("0");
     // A worker has no caller: its function's failures report its declaration.
     if (ki.located) args.push_back(CallerLoc(sp->sf->line));
@@ -1498,7 +1661,38 @@ inline void CodeGen::EmitThreadThunk(FnSpec *sp, int64_t stacks) {
     }
     string argstr;
     for (size_t i = 0; i < args.size(); i++) Append(argstr, i ? ", " : "", args[i]);
-    Append(b, "    ", ki.cname, "(", argstr, ");\n}\n\n");
+    if (sp->rets.empty()) {
+        Append(b, "    ", ki.cname, "(", argstr, ");\n");
+    } else {
+        auto rt = sp->rets[0];
+        if (ki.cret == 0) {
+            Append(b, "    ", CT(rt), " ", result, " = ", ki.cname, "(", argstr, ");\n");
+        } else {
+            Append(b, "    ", ki.cname, "(", argstr, ");\n");
+        }
+        if (IsResz(rt)) {
+            auto pre = IsFrameObj(rt) ? FoPrefixSize(rt) : string("0");
+            auto len = IsFrameObj(rt) ? cat(FoTailHdr(rt, result), ".len") : resultlen;
+            Append(b, "    int64_t gs_worker_result_bytes = ", resultstk, ".top - ", resultbase, ";\n",
+                   "    int64_t gs_worker_result_size = 8 + ", pre,
+                   " + gs_worker_result_bytes;\n",
+                   "    uint8_t *gs_worker_result_image = malloc((size_t)gs_worker_result_size);\n",
+                   "    if (!gs_worker_result_image) gs_panic(\"out of memory publishing structured result\");\n",
+                   "    GS_MEMCPY(gs_worker_result_image, &", len, ", 8);\n");
+            if (IsFrameObj(rt))
+                Append(b, "    GS_MEMCPY(gs_worker_result_image + 8, &", result, ", ", pre, ");\n");
+            Append(b, "    GS_MEMCPY(gs_worker_result_image + 8 + ", pre, ", ", resultbase,
+                   ", (size_t)gs_worker_result_bytes);\n",
+                   "    gs_thread_publish_result(gs_worker_result_image, gs_worker_result_size);\n",
+                   "    free(gs_worker_result_image);\n");
+        } else if (IsBytesT(rt)) {
+            Append(b, "    gs_thread_publish_result(", resultbase, ", ",
+                   SizeX(rt, resultbase).c_str(), ");\n");
+        } else {
+            Append(b, "    gs_thread_publish_result(&", result, ", ", FixedSize(rt), ");\n");
+        }
+    }
+    Append(b, "}\n\n");
     code += b;
     thunkregions[sp] = regions;
 }

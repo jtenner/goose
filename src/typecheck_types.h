@@ -708,7 +708,15 @@ inline void TypeCheck::ValidateType(TypeExpr *t, Line l, int pos) {
             return;
         }
         case TY_FLT: return;
-        case TY_BOOL: case TY_NATIVE: return;
+        case TY_BOOL: return;
+        case TY_NATIVE:
+            if (t->native->arg) {
+                ValidateType(t->native->arg, l, VT_LOCAL);
+                if (!IsFlat(t->native->arg))
+                    Error(l, cat(NativeName(t->native->kind), " payload must be flat (§11.2), not ",
+                                 TypeStr(t->native->arg)));
+            }
+            return;
         case TY_VOID:
             Error(l, "expression has no value here");
         case TY_FN:

@@ -69,10 +69,12 @@ enum TypeKind {
     TY_VOID,        // Typecheck-created: the "type" of statements and valueless blocks.
 };
 
-enum NativeKind { NK_OWNER, NK_VIEW, NK_ACCESS, NK_ATOMIC_U32, NK_ATOMIC_U64, NK_UNSAFE_PTR, NK_COUNT };
+enum NativeKind { NK_OWNER, NK_VIEW, NK_ACCESS, NK_ATOMIC_U32, NK_ATOMIC_U64, NK_UNSAFE_PTR,
+                  NK_THREAD, NK_CHANNEL, NK_COUNT };
 inline const char *NativeName(int k) {
     static const char *names[] = { "SharedOwner", "SharedView", "SharedAccess",
-                                   "SharedAtomicU32", "SharedAtomicU64", "UnsafePtr" };
+                                   "SharedAtomicU32", "SharedAtomicU64", "UnsafePtr",
+                                   "Thread", "Channel" };
     return names[k];
 }
 
@@ -242,6 +244,11 @@ inline bool FoldIntOp(TType op, int64_t la, int64_t rb, IntStorage s, int64_t &o
 // these behind its single union member; they are owned by Ast.typedetails.
 struct TypeDetail { virtual ~TypeDetail() {} };
 
+struct TypeNative : TypeDetail {     // TY_NATIVE
+    NativeKind kind = NK_OWNER;
+    TypeExpr *arg = nullptr;         // Thread<T>/Channel<T>; null for other native types.
+};
+
 struct TypeStruct : TypeDetail {     // TY_STRUCT
     SStruct *st = nullptr;
     vector<TypeExpr *> args;         // Generic type arguments, possibly empty.
@@ -332,7 +339,7 @@ struct TypeExpr {
     // since intstorage is the member a TY_INT uses.
     TypeIndex *ix = nullptr;
     union {                          // Active member selected by kind:
-        NativeKind nativekind;      //   TY_NATIVE
+        TypeNative *native;         //   TY_NATIVE
         IntStorage intstorage;       //   TY_INT
         FltStorage fltstorage;       //   TY_FLT
         TypeExpr *sub;               //   TY_SLICE (element type)
@@ -353,8 +360,9 @@ struct TypeExpr {
 
 // The views of a type's shape that every pass asks for.
 inline bool IsSharedSendable(const TypeExpr *t) {
-    return t->kind == TY_NATIVE && (t->nativekind == NK_VIEW ||
-           t->nativekind == NK_ATOMIC_U32 || t->nativekind == NK_ATOMIC_U64);
+    return t->kind == TY_NATIVE && (t->native->kind == NK_VIEW ||
+           t->native->kind == NK_ATOMIC_U32 || t->native->kind == NK_ATOMIC_U64 ||
+           t->native->kind == NK_THREAD || t->native->kind == NK_CHANNEL);
 }
 inline bool IsRefOrSlice(const TypeExpr *t) { return t->kind == TY_REF || t->kind == TY_SLICE; }
 inline bool IsOptional(const TypeExpr *t) { return t->kind == TY_REF && t->ref->optional; }

@@ -1015,6 +1015,7 @@ inline bool TypeCheck::HasOpaque(TypeExpr *t) {
 inline bool TypeCheck::HasGenerics(TypeExpr *t) {
     switch (t->kind) {
         case TY_GENERIC: return !t->named->opaque;
+        case TY_NATIVE: return t->native->arg && HasGenerics(t->native->arg);
         case TY_STRUCT: for (auto a : t->struc->args) if (HasGenerics(a)) return true; return false;
         case TY_ENUM:   for (auto a : t->enu->args) if (HasGenerics(a)) return true; return false;
         case TY_ARRAY:  return HasGenerics(t->arr->sub);
@@ -1034,6 +1035,10 @@ inline bool TypeCheck::HasGenerics(TypeExpr *t) {
 inline bool TypeCheck::BindTypes(TypeExpr *pt, TypeExpr *at,
                                  vector<pair<string_view, TypeExpr *>> &b) {
     switch (pt->kind) {
+        case TY_NATIVE:
+            if (at->kind != TY_NATIVE || at->native->kind != pt->native->kind) return false;
+            if (!pt->native->arg || !at->native->arg) return !pt->native->arg && !at->native->arg;
+            return BindTypes(pt->native->arg, at->native->arg, b);
         case TY_GENERIC: {
             auto name = pt->named->name;
             auto bindto = at;
@@ -2566,7 +2571,7 @@ inline bool TypeCheck::ExternValueOk(TypeExpr *t, string &why) {
         // The only native value with a raw C ABI. Never extend this to safe
         // shared capabilities, including when nested in an aggregate.
         case TY_NATIVE:
-            if (t->nativekind == NK_UNSAFE_PTR) return true;
+            if (t->native->kind == NK_UNSAFE_PTR) return true;
             why = "safe native capabilities have no raw C ABI";
             return false;
         case TY_REF: case TY_SLICE: why = "nested references and slices do not cross"; return false;
@@ -3777,7 +3782,7 @@ inline FnSpec *TypeCheck::EnsureThreadSpec(SFunction *sf, Line l) {
         return sf->specs[0];
     }
     if (!sf->generics.empty()) Error(l, cat("thread_fn ", sf->name, " cannot be generic"));
-    if (sf->has_rets) Error(l, cat("thread_fn ", sf->name, " cannot return values"));
+    if (sf->rets.size() > 1) Error(l, cat("thread_fn ", sf->name, " may return at most one value"));
     auto spec = ast.NewFnSpec();
     spec->sf = sf;
     for (auto &p : sf->params) {
@@ -3795,6 +3800,8 @@ inline FnSpec *TypeCheck::EnsureThreadSpec(SFunction *sf, Line l) {
     spec->views.resize(spec->argtypes.size(), noview);
     sf->specs.push_back(spec);
     CheckSpecBody(spec, nullptr, l);
+    if (!spec->rets.empty() && !IsFlat(spec->rets[0]))
+        Error(l, cat("thread_fn result must be flat (§11.2), not ", TypeStr(spec->rets[0])));
     return spec;
 }
 
