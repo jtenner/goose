@@ -4808,10 +4808,23 @@ The reference-count update uses the target's always-lock-free u64 atomic
 operation. Retain and release also take the capability-registry mutex while
 creating, invalidating, or reclaiming descriptors; the complete operations are
 thread-safe, not claimed to be lock-free.
+Even a program using no public atomic capability must emit the same GCC/Clang,
+always-lock-free u64 cell and generation assertions when it uses
+`SharedPointer<T>`. TinyCC, MSVC, a non-lock-free u64 width, and any path that
+would require `libatomic` or a mutex fallback are rejected before execution.
 
-This allocation form always creates and returns a fresh anonymous owner.
-Allocation inside a caller-supplied existing owner is not part of the form and
-must not be inferred from the phrase "stored in an owner".
+`shared_pointer_alloc<T>(owner, offset, value) -> SharedPointer<T>, bool`
+places the copied value in a checked range of an existing writable anonymous
+owner. The owner must belong to the calling thread. The complete fixed-size
+payload range must be in bounds and must not overlap an ordinary borrow,
+registered atomic region, or another live shared-pointer object. Registration
+reserves those bytes until the last pointer claim is released; no ordinary
+borrow or atomic registration may overlap them meanwhile. Metadata remains in
+the existing capability registry, not in a second allocator. The one-argument
+`shared_pointer_alloc<T>(value)` convenience form creates a fresh owner and
+returns `(SharedPointer<T>, SharedOwner, bool)` using the same registration
+path. Failure leaves the supplied owner and bytes unchanged and returns an
+invalid pointer with false.
 
 ### 11.5 Native file mappings, subranges, byte buffers, and advice
 
