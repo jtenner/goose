@@ -4609,9 +4609,11 @@ model; explicit native shared capabilities follow §11.4.
   a handle does not cancel or leak a worker: the worker remains in its
   containing scope and its completion is reclaimed during scope cleanup.
   A structured worker cannot outlive the worker that spawned it. Before a
-  worker returns or aborts, cleanup requests cancellation of every unjoined
-  structured child and joins it. Main performs the same cleanup before normal
-  return. Result images are owned by the completion until a successful join,
+  worker returns or aborts, cleanup first requests cancellation of every
+  contained descendant, then joins every unjoined direct structured child.
+  Cancelling the whole descendant set before any join prevents one child from
+  keeping another blocked during cleanup. Main performs the same cleanup before
+  normal return. Result images are owned by the completion until a successful join,
   then copied into the joiner's storage and freed; abort and scope cleanup free
   them without exposing a partial value. No completed structured-worker record
   remains after its join or containing-scope cleanup.
@@ -4622,16 +4624,24 @@ model; explicit native shared capabilities follow §11.4.
   contained children. Cancellation is not an asynchronous abort: ordinary
   Goose code continues until it observes the request or returns. It does wake
   the worker from a blocked channel send, receive or wait-any operation; that
-  operation returns its unsuccessful/cancelled result. Scope cleanup still
+  operation returns its unsuccessful/cancelled result. Once requested,
+  cancellation takes priority over channel readiness: a later send or receive
+  also returns unsuccessful without committing or consuming a queued value,
+  and wait-any returns `-1`. Scope cleanup still
   waits for a worker that ignores cancellation, so cancellation cannot violate
   ordinary value lifetimes or native cleanup.
 * **First-class channels**: `channel<T>() -> Channel<T>` creates an unbounded
   channel and `channel<T>(n) -> Channel<T>` creates one bounded to `n` queued
   messages; `n <= 0` aborts. `T` must be flat. `Channel<T>` is an opaque typed
   handle, not a reference or shared-memory capability. Copies name the same
-  channel and may cross worker boundaries directly. The runtime retains the
-  channel until the last program instance or queued worker packet holding it
-  is cleaned up. Each channel has its own FIFO even when another channel has
+  channel and may cross worker boundaries directly. A program instance retains
+  a channel once, however many local handle copies it has. Packing one or more
+  copies for a worker retains it once for the prospective child; spawn failure
+  rolls that retention back, and the child releases it on normal return or
+  contained abort. The creating main/worker instance releases its retention
+  during its normal/contained cleanup. The last release destroys queued
+  messages and synchronization state and makes the registry slot reusable with
+  a new generation. Each channel has its own FIFO even when another channel has
   the same T.
 
   `channel_send(ch, value) -> bool` waits for capacity in a bounded channel and
