@@ -401,7 +401,7 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
             return { v };
         }
         case B_CHANNEL_SEND: case B_CHANNEL_TRY_SEND: {
-            auto t = an[1]->exprtype; auto h = GenX(an[0]); auto ok = T();
+            auto t = an[1]->exprtype; auto h = GenPure(an[0]); auto ok = T();
             auto wait = c->builtin == B_CHANNEL_SEND ? "1" : "0";
             if (IsResz(t)) {
                 auto src = GenLoc(an[1]); if (src.t->kind == TY_REF) DerefLoc(src);
