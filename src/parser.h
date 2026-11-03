@@ -1096,6 +1096,8 @@ struct Parser {
         // to a read-only slice value. Where no reference or slice follows,
         // the value's contents are read-only: `const i64[3]`.
         auto constq = IsNext(T_CONST);
+        auto vectorq = lex.tok == T_IDENT && lex.attr == "vector";
+        if (vectorq) lex.Next();
         auto t = ParseTypePrimary();
         auto qualify = [&](TypeExpr *n) {
             n->cq = constq;
@@ -1190,6 +1192,12 @@ struct Parser {
                 }
                 default:
                     if (constq) t = ast.ConstOf(t);
+                    if (vectorq) {
+                        if (t->kind != TY_ARRAY || t->arr->akind != A_FIXED ||
+                            (t->arr->sub->kind != TY_INT && t->arr->sub->kind != TY_FLT))
+                            Error("vector requires a fixed array of integer or float lanes, as in vector f32[4]");
+                        t->simdvector = true;
+                    }
                     return t;
             }
         }

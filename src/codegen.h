@@ -1101,8 +1101,11 @@ struct CodeGen {
                          bool lscalar = false, bool rscalar = false);
     void GenElemwiseNegInto(TypeExpr *t, Line line, const string &x, const string &dst);
     bool VecShape(TypeExpr *t, FltStorage &fs, int64_t &n);
+    bool IntVecShape(TypeExpr *t, IntStorage &is, int64_t &n);
     string VecType(FltStorage fs, int64_t n);
+    string IntVecType(IntStorage is, int64_t n);
     string VecOperand(TypeExpr *t, FltStorage fs, const string &x, bool scalar);
+    string IntVecOperand(TypeExpr *t, IntStorage is, const string &x, bool scalar);
     string VecLoad(const string &vt, int64_t n, const string &v, bool scalar);
     void GenElemwiseLeaves(TypeExpr *t, const string &dst,
                            const function<string(TypeExpr *, const string &)> &leaf);

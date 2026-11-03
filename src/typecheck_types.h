@@ -762,6 +762,16 @@ inline void TypeCheck::ValidateType(TypeExpr *t, Line l, int pos) {
             switch (t->arr->akind) {
                 case A_FIXED:
                     ArraySize(t->arr);
+                    if (t->simdvector) {
+                        auto lanes = t->arr->size;
+                        auto lane = t->arr->sub;
+                        auto bytes = lanes * (lane->kind == TY_FLT ?
+                            (lane->fltstorage == FS_F32 ? 4 : 8) : IntBits(lane->intstorage) / 8);
+                        if (lane->kind == TY_INT && (lane->intstorage == IS_VARINT || lane->ix))
+                            Error(l, "vector integer lanes require exact i/u8/16/32/64 types");
+                        if (bytes != 16 && bytes != 32 && bytes != 64)
+                            Error(l, cat("vector size must be 16, 32 or 64 bytes; found ", bytes));
+                    }
                     if (ec != SC_FIXED)
                         Error(l, cat("fixed array elements must be fixed-size: ",
                                      TypeStr(t->arr->sub)));

@@ -18,4 +18,7 @@ fn main() {
     let v: u32x4 = [1, 2, 3, 4];
     print(u + v, " ", u * v);
     print(shuffle_u32x4(v, 3, 1, 1, 0));
+    let si: i32x4 = [2147483647, -2147483648, -2, 7];
+    let sj: i32x4 = [1, -1, 3, -4];
+    print(si + sj, " ", si * sj, " ", si / sj);
 }
