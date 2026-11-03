@@ -54,4 +54,28 @@ def check_native_memory_backend(exe, clang, base):
         aligned = compile_c(layout, "i386-unknown-linux-gnu", "i486")
         if aligned.returncode:
             raise RuntimeError("descriptor generations lack 8-byte slab alignment:\n" + aligned.stderr)
+
+        pointer_source = root / "pointer_only.goose"
+        pointer_source.write_text('fn main() { let p, o, ok = shared_pointer_alloc<i64>(7); '
+                                  'assert(ok); shared_pointer_release(p); assert(shared_close(o)); }\n')
+        pointer_c = root / "pointer_only.c"
+        built = subprocess.run([str(exe), "-O2", "-o", str(pointer_c), str(pointer_source)],
+                               capture_output=True, text=True, timeout=60)
+        if built.returncode:
+            raise RuntimeError(built.stdout + built.stderr)
+        pointer_text = pointer_c.read_text()
+        pointer_gates = "\n".join(re.findall(r"^#if .*?^#endif$", pointer_text, re.M | re.S))
+        if "Native shared pointers require GCC or Clang" not in pointer_gates or \
+           "always-lock-free 64-bit atomics" not in pointer_gates:
+            raise RuntimeError("pointer-only program emitted no complete backend/lock-free gate")
+        unsupported_pointer = compile_c(pointer_gates + "\nint probe;\n",
+                                        "i386-unknown-linux-gnu", "i486")
+        if unsupported_pointer.returncode == 0 or "shared pointer" not in unsupported_pointer.stderr:
+            raise RuntimeError("pointer-only gate accepted non-lock-free u64 target:\n" +
+                               unsupported_pointer.stdout + unsupported_pointer.stderr)
+        tiny_pointer = compile_c("#define __TINYC__ 1\n" + pointer_gates + "\nint probe;\n",
+                                 "x86_64-unknown-linux-gnu")
+        if tiny_pointer.returncode == 0 or "require GCC or Clang" not in tiny_pointer.stderr:
+            raise RuntimeError("pointer-only gate accepted TinyCC:\n" +
+                               tiny_pointer.stdout + tiny_pointer.stderr)
     return None
