@@ -60,6 +60,7 @@ inline void TypeExpr::Dump(string &s, size_t limit) const {
         return false;
     };
     if (cq) s += "const ";
+    if (simdvector) s += "vector ";
     auto SubDump = [&](const TypeExpr *inner) {
         // An index type takes no postfix of its own: `(u32 in a)[>..]`.
         auto parens = inner->kind == TY_FN || inner->cq || inner->ix ||

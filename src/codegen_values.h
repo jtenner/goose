@@ -1829,23 +1829,26 @@ inline void CodeGen::GenElemwiseInto(TypeExpr *t, TType op, Line line, const str
                                      const string &r, const string &dst,
                                      bool lscalar, bool rscalar) {
     FltStorage fs = FS_F64;
+    IntStorage is = IS_I64;
     int64_t n = 0;
     const char *o = op == T_PLUS || op == T_PLUSEQ   ? " + "
                     : op == T_MINUS || op == T_MINUSEQ ? " - "
                     : op == T_MUL || op == T_MULEQ   ? " * "
                     : op == T_DIV || op == T_DIVEQ   ? " / "
                                                      : nullptr;
-    bool vec = o && VecShape(t, fs, n);
+    bool fvec = o && VecShape(t, fs, n);
+    bool ivec = o && op != T_DIV && op != T_DIVEQ && IntVecShape(t, is, n);
+    bool vec = fvec || ivec;
     // Where the C compiler has vector extensions, one vector operation
     // (GS_VEC, runtime.h); the members below otherwise.
     if (vec) {
         // The operands go to temps of their own type first, inside the test
         // so that the member-by-member form doesn't pay for them; both are
         // read before dst, which may be one of them, is written.
-        L("#if GS_VEC");
-        auto a = VecOperand(t, fs, l, lscalar);
-        auto b = VecOperand(t, fs, r, rscalar);
-        auto vt = VecType(fs, n);
+        L(ivec && !IsUnsigned(is) ? "#if GS_VEC && !GS_DEBUG" : "#if GS_VEC");
+        auto a = fvec ? VecOperand(t, fs, l, lscalar) : IntVecOperand(t, is, l, lscalar);
+        auto b = fvec ? VecOperand(t, fs, r, rscalar) : IntVecOperand(t, is, r, rscalar);
+        auto vt = fvec ? VecType(fs, n) : IntVecType(is, n);
         L("GS_VST(", vt, ", &(", dst, "), ", VecLoad(vt, n, a, lscalar), o,
           VecLoad(vt, n, b, rscalar), ");");
         L("#else");
@@ -1863,13 +1866,18 @@ inline void CodeGen::GenElemwiseInto(TypeExpr *t, TType op, Line line, const str
 inline void CodeGen::GenElemwiseNegInto(TypeExpr *t, Line line, const string &x,
                                         const string &dst) {
     FltStorage fs = FS_F64;
+    IntStorage is = IS_I64;
     int64_t n = 0;
-    bool vec = VecShape(t, fs, n);
+    bool fvec = VecShape(t, fs, n);
+    bool ivec = IntVecShape(t, is, n);
+    bool vec = fvec || ivec;
     if (vec) {
-        L("#if GS_VEC");
-        auto a = VecOperand(t, fs, x, false);
-        auto vt = VecType(fs, n);
-        L("GS_VST(", vt, ", &(", dst, "), -", VecLoad(vt, n, a, false), ");");
+        L(ivec ? "#if GS_VEC && !GS_DEBUG" : "#if GS_VEC");
+        auto a = fvec ? VecOperand(t, fs, x, false) : IntVecOperand(t, is, x, false);
+        auto vt = fvec ? VecType(fs, n) : IntVecType(is, n);
+        if (fvec) L("GS_VST(", vt, ", &(", dst, "), -", VecLoad(vt, n, a, false), ");");
+        else L("GS_VST(", vt, ", &(", dst, "), ", VecLoad(vt, n, "0", true), " - ",
+               VecLoad(vt, n, a, false), ");");
         L("#else");
     }
     GenElemwiseLeaves(t, dst, [&](TypeExpr *tt, const string &path) {
@@ -1922,6 +1930,20 @@ inline string CodeGen::VecType(FltStorage fs, int64_t n) {
     return cat("gs_v", FltStorageName(fs), "_", n);
 }
 
+inline bool CodeGen::IntVecShape(TypeExpr *t, IntStorage &is, int64_t &n) {
+    if (!t->simdvector || t->kind != TY_ARRAY || t->arr->akind != A_FIXED ||
+        t->arr->sub->kind != TY_INT || t->arr->sub->ix ||
+        t->arr->sub->intstorage == IS_VARINT) return false;
+    is = t->arr->sub->intstorage;
+    n = ArrSize(t->arr);
+    auto bytes = n * IntSize(is);
+    return bytes == 16 || bytes == 32 || bytes == 64;
+}
+
+inline string CodeGen::IntVecType(IntStorage is, int64_t n) {
+    return cat("gs_vu", IntSize(is) * 8, "_", n);
+}
+
 // An operand of a vector operation in a new temp: a scalar of the lanes'
 // type, or a value of type t.
 inline string CodeGen::VecOperand(TypeExpr *t, FltStorage fs, const string &x, bool scalar) {
@@ -1932,6 +1954,13 @@ inline string CodeGen::VecOperand(TypeExpr *t, FltStorage fs, const string &x, b
     } else {
         L(CT(t), " ", v, " = ", x, ";");
     }
+    return v;
+}
+
+inline string CodeGen::IntVecOperand(TypeExpr *t, IntStorage is, const string &x, bool scalar) {
+    auto v = T();
+    if (scalar) L(IntCT(is, false), " ", v, " = (", IntCT(is, false), ")(", x, ");");
+    else L(CT(t), " ", v, " = ", x, ";");
     return v;
 }
 

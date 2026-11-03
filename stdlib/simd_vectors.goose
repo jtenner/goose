@@ -3,36 +3,36 @@
 // flat and available to scalar-only backends. The C backend recognizes the
 // same shapes for its GS_VEC expression lowering.
 
-type i8x16 = i8[16];
-type i8x32 = i8[32];
-type i8x64 = i8[64];
-type u8x16 = u8[16];
-type u8x32 = u8[32];
-type u8x64 = u8[64];
-type i16x8 = i16[8];
-type i16x16 = i16[16];
-type i16x32 = i16[32];
-type u16x8 = u16[8];
-type u16x16 = u16[16];
-type u16x32 = u16[32];
-type i32x4 = i32[4];
-type i32x8 = i32[8];
-type i32x16 = i32[16];
-type u32x4 = u32[4];
-type u32x8 = u32[8];
-type u32x16 = u32[16];
-type i64x2 = i64[2];
-type i64x4 = i64[4];
-type i64x8 = i64[8];
-type u64x2 = u64[2];
-type u64x4 = u64[4];
-type u64x8 = u64[8];
-type f32x4 = f32[4];
-type f32x8 = f32[8];
-type f32x16 = f32[16];
-type f64x2 = f64[2];
-type f64x4 = f64[4];
-type f64x8 = f64[8];
+type i8x16 = vector i8[16];
+type i8x32 = vector i8[32];
+type i8x64 = vector i8[64];
+type u8x16 = vector u8[16];
+type u8x32 = vector u8[32];
+type u8x64 = vector u8[64];
+type i16x8 = vector i16[8];
+type i16x16 = vector i16[16];
+type i16x32 = vector i16[32];
+type u16x8 = vector u16[8];
+type u16x16 = vector u16[16];
+type u16x32 = vector u16[32];
+type i32x4 = vector i32[4];
+type i32x8 = vector i32[8];
+type i32x16 = vector i32[16];
+type u32x4 = vector u32[4];
+type u32x8 = vector u32[8];
+type u32x16 = vector u32[16];
+type i64x2 = vector i64[2];
+type i64x4 = vector i64[4];
+type i64x8 = vector i64[8];
+type u64x2 = vector u64[2];
+type u64x4 = vector u64[4];
+type u64x8 = vector u64[8];
+type f32x4 = vector f32[4];
+type f32x8 = vector f32[8];
+type f32x16 = vector f32[16];
+type f64x2 = vector f64[2];
+type f64x4 = vector f64[4];
+type f64x8 = vector f64[8];
 
 fn splat_i8x16(x: i8) -> i8x16 { return [x; 16]; }
 fn vector_load_i8x16(xs: const i8[:], first: i64) -> i8x16 {

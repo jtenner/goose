@@ -328,6 +328,9 @@ struct TypeExpr {
     bool aliasuse = false;
     // A type in an unselected const-if arm: resolve only when activated.
     bool conditional = false;
+    // An explicit `vector Lane[N]` value (§7.12). Its storage is the fixed
+    // array below, but its language identity and C-boundary rules are distinct.
+    bool simdvector = false;
     // On a TY_INT: an index or bound type (TypeIndex). Outside the union,
     // since intstorage is the member a TY_INT uses.
     TypeIndex *ix = nullptr;

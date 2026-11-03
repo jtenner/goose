@@ -991,7 +991,7 @@ struct TypeCheck {
 
     bool TypeEq(TypeExpr *a, TypeExpr *b) {
         if (a == b) return true;
-        if (a->kind != b->kind || a->cq != b->cq) return false;
+        if (a->kind != b->kind || a->cq != b->cq || a->simdvector != b->simdvector) return false;
         switch (a->kind) {
             case TY_INT:  return a->intstorage == b->intstorage && SameIndex(a, b);
             case TY_FLT:  return a->fltstorage == b->fltstorage;

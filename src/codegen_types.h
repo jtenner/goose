@@ -13,7 +13,7 @@ namespace goose {
 
 inline bool CodeGen::TEq(TypeExpr *a, TypeExpr *b) {
     if (a == b) return true;
-    if (a->kind != b->kind) return false;
+    if (a->kind != b->kind || a->simdvector != b->simdvector) return false;
     switch (a->kind) {
         case TY_INT:  return a->intstorage == b->intstorage;
         case TY_FLT:  return a->fltstorage == b->fltstorage;

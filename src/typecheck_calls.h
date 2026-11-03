@@ -2575,6 +2575,10 @@ inline void TypeCheck::CheckfreeCallee(Node *at, SFunction *callee) {
 // A fixed-size value C takes by value (§7.10): a scalar, bool, or a flat
 // fixed struct or array (packed, no references).
 inline bool TypeCheck::ExternValueOk(TypeExpr *t, string &why) {
+    if (t->simdvector) {
+        why = "explicit vectors have no public C ABI (§7.12)";
+        return false;
+    }
     if (HoldsIndexT(t)) {
         why = "C code is not checked against the array an index type names (§3.11)";
         return false;
