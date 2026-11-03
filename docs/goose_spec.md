@@ -3586,7 +3586,9 @@ specialization has its own versions), and `extern simd fn` is an error.
 #### Explicit fixed-width vectors
 
 **Fork status.** The named types and their width-specific splat, checked
-load/store and shuffle operations are implemented as fixed-array values. The C
+load/store and shuffle operations are implemented. The explicit vector marker
+and its C-boundary rejection are specified here for the following implementation
+checkpoint. The C
 backend's existing vector-expression path lowers the floating shapes to vector
 extensions; extending that lowering to integer operations while retaining the
 scalar overflow and division aborts is proposed, not implemented. The scalar
@@ -3595,9 +3597,11 @@ fallback is therefore the current semantics for those integer operations.
 The native SIMD extension provides the fixed-width value types `i8x16`,
 `u8x16`, `i16x8`, `u16x8`, `i32x4`, `u32x4`, `i64x2`, `u64x2`, `f32x4` and
 `f64x2`, and the corresponding 32-byte and 64-byte types obtained by doubling
-or quadrupling the lane count. A vector has exactly the stated number of
-lanes, in increasing memory order, and occupies exactly 16, 32 or 64 bytes.
-It is flat, has no references or hidden state, and its stored alignment is one
+or quadrupling the lane count. The standard-library names are aliases of
+explicit `vector Lane[N]` types, not aliases of ordinary fixed arrays. A vector
+has exactly the stated number of lanes, in increasing memory order, and
+occupies exactly 16, 32 or 64 bytes. It is flat, has no references or hidden
+state, and its stored alignment is one
 byte unless the containing storage requests a greater alignment explicitly.
 Consequently adding a vector field does not add implicit padding to a packed
 struct and does not change the offsets of following fields.
@@ -3633,18 +3637,24 @@ value copying under §11.2.
 
 #### Explicit storage alignment
 
-**Fork status.** This syntax and its layout rules are proposed. They are not
-accepted by the current parser and no implementation may rely on them yet.
+**Fork status.** This syntax and its layout rules are implemented only after
+the corresponding implementation checkpoint; earlier fork revisions must not
+be assumed to accept it.
 
 `align(N)` immediately before a global, local or struct field declaration
 requests an address divisible by the positive power-of-two byte constant `N`.
 `N` may not exceed 64. The annotation changes placement, not the value's type,
 size or access permissions. On a local or global the implementation may place
 padding outside the value. On a packed struct field it inserts explicit bytes
-before that field; those bytes are part of the struct's fixed layout and its
-layout fingerprint, are initialized to zero, and are ignored by equality and
-formatting. Arrays retain their ordinary stride, so aligning an array aligns
-its first element only; an element type is not silently padded.
+before that field, raises the containing struct's required alignment to at
+least `N`, and rounds the struct's final fixed size up to that alignment. Those
+bytes are part of the struct's fixed layout and its layout fingerprint, are
+initialized to zero, and are ignored by equality and formatting. The rule
+applies recursively: storage for the containing struct must meet its raised
+alignment. An array's stride is the rounded fixed size of its element, so
+every element—not only the first—has the alignment promised by its fields. A
+packed outer struct likewise pads and raises its own alignment when it contains
+such an element.
 
 An aligned field is rejected in a variable-size packed prefix or anywhere its
 required offset cannot be a configuration-independent constant. Alignment
@@ -3660,10 +3670,15 @@ storage alignment must reject it explicitly rather than silently lower the
 alignment. A backend may ignore the performance request of `simd`, but may not
 change vector results, observable aborts, output or layout.
 
-Build-time vectorization feedback for a `simd fn` hot loop is also proposed,
-not implemented. Such feedback must be advisory, must identify the function
-and loop, and must not change whether compilation succeeds unless a future
-separate opt-in gate requests that behavior.
+With `--simd-feedback`, a native `build` or `run` asks the selected C compiler
+for vectorization remarks. For every loop originating in a `simd fn`, Goose
+prints whether each emitted instruction-set version vectorized; a missed loop
+includes the C compiler's reason where it supplies one. The feedback is
+advisory, names the Goose function and source line, and never changes whether
+compilation succeeds. `check`, `lsp`, C-only output, TinyCC and native compilers
+without a supported remark interface reject the option explicitly rather than
+printing guessed feedback. This feedback is specified here for the following
+implementation checkpoint.
 
 ### 7.13 `inline fn`: inlined whatever its size
 
