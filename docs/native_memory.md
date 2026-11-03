@@ -7,6 +7,10 @@ fields, convert integers to them, serialize them, or send them through queues
 or C signatures. Copying a capability copies its authority; it does not create
 a second allocation or a second right to free storage.
 
+The concurrency types `Thread<T>` and `Channel<T>` are opaque runtime tokens,
+not native-memory capabilities. They expose no address, borrow, atomic or raw
+pointer conversion and do not weaken the shared-nothing rules below.
+
 ## Allocate, borrow and close
 
 ```goose
