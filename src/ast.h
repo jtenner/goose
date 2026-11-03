@@ -429,6 +429,7 @@ struct Field {
     bool isconst = false;       // "let" field: const after construction.
     bool ispad = false;         // pad n / bare pad (padsize -1 = align next field).
     int64_t padsize = -1;
+    int align = 1;              // Explicit align(N), including enclosing layout.
     // Packed-word descriptors retain their spelling even in excluded branches.
     string_view bitwidth;
     int bitoffset = 0, bits = 0;
@@ -1463,6 +1464,7 @@ NODE(VarDecl)
     bool isvar;                 // var vs let.
     bool isconst = false;       // `const x`: a let whose type is `const` (§4.4).
     int reusable = 0;           // `reusable` or `reusable[]`: RU_SLOTS or RU_SLICES (§5.4).
+    int align = 1;              // Explicit align(N) storage request.
     bool isglobal = false;
     bool byref = false;         // `x .= e`: bound by reference, no decay (§3.8).
     bool inline_arg = false;    // Synthesized call argument: caller-scope storage.
@@ -1738,6 +1740,7 @@ struct VarDef {
     TypeExpr *type = nullptr;   // Concrete (post-substitution) declared type.
     Line line;
     bool isvar = false;         // Reassignable (§4.4).
+    int align = 1;              // Storage alignment copied from VarDecl.
     // A by-value `for` or `match` binding: a copy of the element, which a
     // write would silently update instead of the element, so none is
     // allowed (§6.5, §8.1).

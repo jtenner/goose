@@ -674,10 +674,12 @@ inline void CodeGen::BindLocal(VarDef *d, Node *init, bool forlocal) {
     }
     auto name = LocalName(d);
     auto t = d->type;
+    auto align = std::max<int64_t>(d->align, TypeAlign(t));
+    auto ap = align > 1 ? cat("GS_ALIGNAS(", align, ") ") : string();
     if (IsRoot(t)) {
         auto sl = Is<StructLit>(init);
         assert(sl && sl->sinst->st->isroot);
-        L(CT(t), " ", name, " = { 0 };");
+        L(ap, CT(t), " ", name, " = { 0 };");
         for (size_t i = 0; i < d->components.size(); i++) {
             auto c = d->components[i];
             if (!c) continue;
@@ -698,23 +700,23 @@ inline void CodeGen::BindLocal(VarDef *d, Node *init, bool forlocal) {
         return;
     }
     if (LargeFixedOnStack(t)) {
-        FixedLocal(t, name, "", forlocal);
+        FixedLocal(t, name, "", forlocal, align);
         vnames[d] = name;
         if (init) GenAny(init, Dst { DK_LVALUE, name, t });
         return;
     }
     if (!init) {
-        L(VarCT(d), " ", name, ";");
+        L(ap, VarCT(d), " ", name, ";");
         return;
     }
     if (PrefVar(d)) {
-        L("gs_pref ", name, " = ", GenPrefVal(init), ";");
+        L(ap, "gs_pref ", name, " = ", GenPrefVal(init), ";");
         return;
     }
     // A relative reference variable holds the offset (§3.9): whatever the
     // initializer, its value is the plain reference to encode.
     if (IsRelRef(t)) {
-        L(CT(t), " ", name, ";");
+        L(ap, CT(t), " ", name, ";");
         EmitRelStoreAt(cat("(uint8_t *)&", name), t, GenX(init), init->line, true,
                        RelValue(init));
         return;
@@ -723,18 +725,18 @@ inline void CodeGen::BindLocal(VarDef *d, Node *init, bool forlocal) {
     // variable itself rather than through an initializer copy.
     if (IsCtl(init) || Is<Call>(init) || (Is<SliceExpr>(init) && t->kind == TY_SLICE) ||
         ((Is<StructLit>(init) || Is<ArrayLit>(init)) && HasRelRef(t))) {
-        L(CT(t), " ", name, ";");
+        L(ap, CT(t), " ", name, ";");
         GenAny(init, Dst { DK_LVALUE, name, t });
         return;
     }
     if (IsStaticLimited(t)) {
-        L(CT(t), " ", name, ";");
+        L(ap, CT(t), " ", name, ";");
         if (GenIntoLimited(init, t, name, false)) return;
         L(name, " = ", GenXD(init, t), ";");
         return;
     }
     auto ct = CT(t), x = GenXD(init, t);
-    L(ct, " ", name, " = ", x, ";");
+    L(ap, ct, " ", name, " = ", x, ";");
 }
 
 // Declares the local `d` of a resizable or bytes type -- a resizable's

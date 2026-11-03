@@ -277,10 +277,13 @@ inline CodeGen::Layout CodeGen::LayoutFields(const vector<Field> &fields,
             }
             continue;
         }
+        auto a = std::max<int64_t>(f.align, TypeAlign(ftypes[i]));
+        off = (off + a - 1) / a * a;
+        lo.align = std::max(lo.align, a);
         lo.offs.push_back(off);
         off += FixedSize(ftypes[i]);
     }
-    lo.size = off;
+    lo.size = (off + lo.align - 1) / lo.align * lo.align;
     return lo;
 }
 
@@ -340,6 +343,14 @@ inline int64_t CodeGen::FixedSize(TypeExpr *t) {
             }
         }
         default: assert(false); return 0;
+    }
+}
+
+inline int64_t CodeGen::TypeAlign(TypeExpr *t) {
+    switch (t->kind) {
+        case TY_STRUCT: return IsWord(t) ? 1 : StructLayout(SI(t)).align;
+        case TY_ARRAY: return TypeAlign(t->arr->sub);
+        default: return 1;  // Goose packed values otherwise promise byte alignment.
     }
 }
 
@@ -697,7 +708,9 @@ inline void CodeGen::EmitCFields(string &d, const vector<Field> &fields,
             if (sz > 0) Append(d, "    uint8_t gs_pad", npad++, "[", sz, "];\n");
             continue;
         }
-        Append(d, "    ", CT(ftypes[i], false), " ", Sanitize(f.name), ";\n");
+        auto a = std::max<int64_t>(f.align, TypeAlign(ftypes[i]));
+        Append(d, "    ", a > 1 ? cat("GS_ALIGNAS(", a, ") ") : string(),
+               CT(ftypes[i], false), " ", Sanitize(f.name), ";\n");
     }
     for (auto i = n; i < fields.size(); i++) {
         EmitCoreTypes();

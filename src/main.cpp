@@ -796,6 +796,7 @@ Options:
 R"(  --cc name|path        The C compiler: msvc, clang-cl, clang, gcc, cc or a
                         path (or GOOSE_CC; by default the first one found).
   --standalone          Compile the runtime into the program rather than link
+  --simd-feedback       Print Clang vectorization remarks for simd fn loops.
                         the runtime object built once per C compiler.
   -v                    Print each command the build runs and what it prints.
   --dry-run             Print the commands the build would run, and run none.
@@ -1429,6 +1430,7 @@ int Main(int argc, char **argv, bool &measuring) {
     auto stats = false;
     auto forcejit = false, standalone = false;
     auto json = false, refresh = false, debug = false, verbose = false, dryrun = false;
+    auto simd_feedback = false;
     auto jsondiag = false;
     string ccrequest;
     // The inlining at its highest. The C compiler optimizes whatever the
@@ -1585,6 +1587,7 @@ int Main(int argc, char **argv, bool &measuring) {
             debug = true;
             cdefines.push_back("GS_DEBUG=1");
         }
+        else if (arg == "--simd-feedback") simd_feedback = true;
         else if (arg == "-v") verbose = true;
         else if (arg == "--stats") stats = true;
         else if (arg == "--color" && i + 1 < argc) {
@@ -1610,6 +1613,10 @@ int Main(int argc, char **argv, bool &measuring) {
         else files.push_back(arg);
     }
     if (verbose || dryrun) ProgressPlain();
+    if (simd_feedback && verb != "build") {
+        fprintf(stderr, "--simd-feedback requires a native build\n");
+        return 1;
+    }
     if (verb == "toolchain") {
         try {
             auto tools = FindTools(ccrequest, refresh);
@@ -1649,6 +1656,7 @@ int Main(int argc, char **argv, bool &measuring) {
             return 1;
         }
         buildopts = BuildOptions { debug, verbose, dryrun, standalone, outname };
+        buildopts.simd_feedback = simd_feedback;
         outname.clear();
     }
     vector<string> benchsizes;
@@ -2163,6 +2171,8 @@ int Main(int argc, char **argv, bool &measuring) {
                 // response files: a builtin package's from the compiler's
                 // build, the others' built now.
                 if (!findtc()) return 1;
+                if (simd_feedback && tc.name != "clang")
+                    throw CompileError { "--simd-feedback requires the Clang native compiler" };
                 Builder b { tc, buildopts, msgs };
                 struct NativeScan { vector<string> command; string cwd; BenchFields files; };
                 vector<NativeScan> nativescans;

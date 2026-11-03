@@ -614,6 +614,7 @@ inline void FunVal::Dump(string &s, int ind) const {
 }
 
 inline void VarDecl::Dump(string &s, int ind) const {
+    if (align > 1) Append(s, "align(", align, ") ");
     if (reusable) s += reusable == RU_SLICES ? "reusable[] " : "reusable ";
     s += isconst ? "const " : isvar ? "var " : "let ";
     // A namespaced global dumps with its qualifier: the dump merges every
@@ -662,6 +663,7 @@ inline void DumpFields(string &s, const vector<Field> &fields, int ind) {
             s += "pad";
             if (f.padsize >= 0) Append(s, " ", f.padsize);
         } else {
+            if (f.align > 1) Append(s, "align(", f.align, ") ");
             // `let f: const T` is written back as its sugar, `const f: T`.
             auto sugar = f.isconst && f.type->cq;
             if (f.isconst) s += sugar ? "const " : "let ";

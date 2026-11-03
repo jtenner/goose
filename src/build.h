@@ -18,6 +18,7 @@ struct BuildOptions {
     bool dryrun = false;      // --dry-run: print the commands and run nothing
     bool standalone = false;  // --standalone: no runtime object
     string exe;               // -o: the executable; "" puts it beside the root source
+    bool simd_feedback = false; // Clang vectorization remarks for simd functions
 };
 
 // Benchmark cache inputs captured before a build. Verify them again before
@@ -66,8 +67,14 @@ struct Builder {
             else f.push_back("/O2");
             return f;
         }
-        if (opts.debug) return { "-O0", "-g" };
-        return { "-O2" };
+        vector<string> f = opts.debug ? vector<string> { "-O0", "-g" }
+                                      : vector<string> { "-O2" };
+        if (opts.simd_feedback) {
+            f.push_back("-Rpass=loop-vectorize");
+            f.push_back("-Rpass-missed=loop-vectorize");
+            f.push_back("-Rpass-analysis=loop-vectorize");
+        }
+        return f;
     }
 
     // The system libraries a program links beyond the C library, in the cc
@@ -100,7 +107,19 @@ struct Builder {
             r = RunProcess(argv, "", opts.verbose);
         }
         if (!logfile.empty()) WriteFileMakingDirs(logfile, r.output);
-        if (r.started && r.code == 0) return true;
+        if (r.started && r.code == 0) {
+            if (opts.simd_feedback) {
+                for (size_t b = 0; b < r.output.size();) {
+                    auto e = r.output.find('\n', b);
+                    auto line = r.output.substr(b, e == string::npos ? string::npos : e - b);
+                    if (line.find(".goose:") != string::npos)
+                        fprintf(msgs, "simd feedback: %s\n", line.c_str());
+                    if (e == string::npos) break;
+                    b = e + 1;
+                }
+            }
+            return true;
+        }
         auto msg = cat(what, " failed", r.started ? cat(" (exit ", r.code, ")") : string(), ":\n    ",
                        CommandLineText(argv), "\n");
         if (!opts.verbose) msg += r.output;
