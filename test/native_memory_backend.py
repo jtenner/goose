@@ -64,10 +64,16 @@ def check_native_memory_backend(exe, clang, base):
         if built.returncode:
             raise RuntimeError(built.stdout + built.stderr)
         pointer_text = pointer_c.read_text()
-        pointer_gates = "\n".join(re.findall(r"^#if .*?^#endif$", pointer_text, re.M | re.S))
-        if "Native shared pointers require GCC or Clang" not in pointer_gates or \
-           "always-lock-free 64-bit atomics" not in pointer_gates:
+        backend_gate = re.search(r"^#if defined\(__TINYC__\) \|\| \(!defined\(__GNUC__\) && !defined\(__clang__\)\)\n"
+                                 r"#error Native shared pointers require GCC or Clang; this backend is unsupported\n"
+                                 r"#endif$",
+                                 pointer_text, re.M | re.S)
+        lock_gate = re.search(r"^#if __GCC_ATOMIC_LLONG_LOCK_FREE != 2\n"
+                              r"#error Native shared pointer.*?^#endif$",
+                              pointer_text, re.M | re.S)
+        if not backend_gate or not lock_gate:
             raise RuntimeError("pointer-only program emitted no complete backend/lock-free gate")
+        pointer_gates = backend_gate[0] + "\n" + lock_gate[0]
         unsupported_pointer = compile_c(pointer_gates + "\nint probe;\n",
                                         "i386-unknown-linux-gnu", "i486")
         if unsupported_pointer.returncode == 0 or "shared pointer" not in unsupported_pointer.stderr:
