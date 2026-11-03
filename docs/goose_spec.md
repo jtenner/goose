@@ -4661,7 +4661,13 @@ model; explicit native shared capabilities follow §11.4.
   contained descendant, then joins every unjoined direct structured child.
   Cancelling the whole descendant set before any join prevents one child from
   keeping another blocked during cleanup. Main performs the same cleanup before
-  normal return. Result images are owned by the completion until a successful join,
+  normal return. The cleanup request remains active until those joins finish:
+  a structured contained descendant registered later inherits it through its
+  structured ancestry, including through a non-contained structured worker.
+  Registration and inheritance are one synchronized operation, so their race
+  has the same result in either order. A legacy detached worker breaks that
+  ancestry and retains its existing lifetime and cancellation behavior.
+  Result images are owned by the completion until a successful join,
   then copied into the joiner's storage and freed; abort and scope cleanup free
   them without exposing a partial value. No completed structured-worker record
   remains after its join or containing-scope cleanup.
@@ -4669,7 +4675,9 @@ model; explicit native shared capabilities follow §11.4.
   `thread_cancel(handle) -> bool` requests cancellation and returns false only
   when that handle's worker has already completed. `thread_cancelled() -> bool`
   observes the request in the worker. A request is inherited by its structured
-  contained children. Cancellation is not an asynchronous abort: ordinary
+  contained descendants registered later, through any intervening structured
+  workers; an intervening legacy detached worker is outside that cancellation
+  scope. Cancellation is not an asynchronous abort: ordinary
   Goose code continues until it observes the request or returns. It does wake
   the worker from a blocked channel send, receive or wait-any operation; that
   operation returns its unsuccessful/cancelled result. Once requested,
