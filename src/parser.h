@@ -331,7 +331,9 @@ struct Parser {
         return name;
     }
 
-    bool AtAlign() { return lex.tok == T_IDENT && lex.attr == "align"; }
+    bool AtAlign() {
+        return lex.tok == T_IDENT && lex.attr == "align" && lex.PeekTok() == T_LPAREN;
+    }
 
     int ParseAlign() {
         if (!AtAlign()) return 1;
