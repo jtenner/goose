@@ -300,6 +300,7 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
                              "'s result; use thread_spawn_join"));
             if (structured && spec->rets.empty())
                 Error(c, cat(d.name, " requires a thread_fn with one result"));
+            if (structured && HoldsIndexT(spec->rets[0])) ThreadIndexError(c, spec->rets[0]);
             if (structured) {
                 v.type = ast.NewType(TY_NATIVE, c->line);
                 v.type->native = ast.NewDetail<TypeNative>();
@@ -340,6 +341,7 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
             if (c->tyargs.size() != 1) Error(c, "channel<T> needs exactly one type argument");
             auto t = Subst(c->tyargs[0]); ValidateType(t, c->line, VT_LOCAL);
             if (!IsFlat(t)) Error(c, cat("channel payload must be flat (§11.2), not ", TypeStr(t)));
+            if (HoldsIndexT(t)) ThreadIndexError(c, t);
             if (!args.empty()) CheckArg(args[0], ast.inttypes[IS_I64]);
             Val v; v.type = ast.NewType(TY_NATIVE, c->line);
             v.type->native = ast.NewDetail<TypeNative>(); v.type->native->kind = NK_CHANNEL;
@@ -349,6 +351,7 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
             auto h = CheckValue(args[0], nullptr);
             if (h.type->kind != TY_NATIVE || h.type->native->kind != NK_CHANNEL)
                 Error(c, cat(d.name, " requires Channel<T>"));
+            if (HoldsIndexT(h.type->native->arg)) ThreadIndexError(c, h.type->native->arg);
             CheckArg(args[1], h.type->native->arg);
             Val v; v.type = ast.booltype; return v;
         }
@@ -356,6 +359,7 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
             auto h = CheckValue(args[0], nullptr);
             if (h.type->kind != TY_NATIVE || h.type->native->kind != NK_CHANNEL)
                 Error(c, cat(d.name, " requires Channel<T>"));
+            if (HoldsIndexT(h.type->native->arg)) ThreadIndexError(c, h.type->native->arg);
             auto t = h.type->native->arg; c->rettypes = { t, ast.booltype };
             Val first; first.type = t; first.Set(TempRoot(), false);
             Val ok; ok.type = ast.booltype; lastcallrets = { first, ok }; return first;

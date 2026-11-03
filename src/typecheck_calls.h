@@ -3851,6 +3851,10 @@ inline FnSpec *TypeCheck::EnsureThreadSpec(SFunction *sf, Line l) {
     CheckSpecBody(spec, nullptr, l);
     if (!spec->rets.empty() && !IsFlat(spec->rets[0]))
         Error(l, cat("thread_fn result must be flat (§11.2), not ", TypeStr(spec->rets[0])));
+    if (!spec->rets.empty() && HoldsIndexT(spec->rets[0]))
+        Error(l, cat(TypeStr(spec->rets[0]), " cannot return between threads: it holds an index "
+                     "type, and each thread program's copy of the array it names grows on its "
+                     "own (§3.11)"));
     return spec;
 }
 

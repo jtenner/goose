@@ -1062,13 +1062,18 @@ GS_API int64_t gs_thread_start(void (*run)(void (*)(uint8_t *), uint8_t *),
    gs_free_msg, or to NULL and no bytes. */
 GS_API uint8_t gs_thread_wait(int64_t id, uint8_t **msg, int64_t *len,
                                const char *file, int line);
-typedef struct { uint64_t slot, generation; } gs_handle;
+typedef struct { uint64_t slot, generation; } gs_handle GS_ALIGN1;
 GS_API uint8_t *gs_thread_join(gs_handle h, int64_t *size, uint8_t **msg, int64_t *len,
                                const char *file, int line);
 GS_API uint8_t gs_thread_cancel(gs_handle h, const char *file, int line);
 GS_API uint8_t gs_thread_cancelled(void);
 GS_API void gs_thread_publish_result(const void *data, int64_t size);
 GS_API void gs_structured_cleanup(int64_t parent);
+GS_API void gs_channel_handoff(gs_handle h, const char *file, int line);
+GS_API void *gs_channel_pending_take(void);
+GS_API void gs_channel_context_begin(void *leases);
+GS_API void gs_channel_context_cleanup(void);
+GS_API void gs_channel_pending_release(void *leases);
 GS_API void gs_free_msg(uint8_t *msg);
 
 )GSRT"
@@ -3505,6 +3510,8 @@ typedef CONDITION_VARIABLE gs_cond;
 #define gs_cond_wait(c, m) SleepConditionVariableSRW((c), (m), INFINITE, 0)
 #define gs_cond_signal(c)  WakeConditionVariable(c)
 #define gs_cond_broadcast(c) WakeAllConditionVariable(c)
+#define gs_mutex_destroy(m) ((void)0)
+#define gs_cond_destroy(c)  ((void)0)
 
 )GSRT"
 R"GSRT(#else  /* posix */
@@ -3524,6 +3531,8 @@ typedef pthread_cond_t gs_cond;
 #define gs_cond_wait(c, m) pthread_cond_wait((c), (m))
 #define gs_cond_signal(c)  pthread_cond_signal(c)
 #define gs_cond_broadcast(c) pthread_cond_broadcast(c)
+#define gs_mutex_destroy(m) pthread_mutex_destroy(m)
+#define gs_cond_destroy(c)  pthread_cond_destroy(c)
 
 )GSRT"
 R"GSRT(#endif
@@ -3553,11 +3562,29 @@ R"GSRT(typedef struct gs_thread {
     uint8_t *result, *abort_msg;
     int64_t result_size, abort_len;
     void *shared_leases;
+    void *channel_leases;
 } gs_thread;
 
 )GSRT"
 R"GSRT(static GS_TLS gs_thread *gs_current_structured;
 static void gs_channels_cancel_wakeup(void);
+
+)GSRT"
+R"GSRT(/* Cancellation is read outside gs_threads_mutex by channel operations. */
+static int gs_cancel_load(const int *p) {
+    #ifdef _MSC_VER
+        return InterlockedCompareExchange((volatile LONG *)p, 0, 0) != 0;
+    #else
+        return __atomic_load_n(p, __ATOMIC_ACQUIRE) != 0;
+    #endif
+}
+static void gs_cancel_store(int *p) {
+    #ifdef _MSC_VER
+        InterlockedExchange((volatile LONG *)p, 1);
+    #else
+        __atomic_store_n(p, 1, __ATOMIC_RELEASE);
+    #endif
+}
 
 )GSRT"
 R"GSRT(static gs_thread *gs_threads;
@@ -3627,6 +3654,7 @@ static void *gs_thread_main(void *p)
 {
     gs_thread *t = (gs_thread *)p;
     gs_current_structured = t->structured ? t : NULL;
+    gs_channel_context_begin(t->channel_leases);
     gs_regions_begin(gs_workerregions);
     gs_native_stack_init();
     gs_current_thread_id = t->id;
@@ -3635,6 +3663,7 @@ static void *gs_thread_main(void *p)
     if (t->contained) aborted = gs_run_contained(t, &contain);
     else t->run(t->entry, t->args);
     gs_structured_cleanup(t->id);
+    gs_channel_context_cleanup();
     gs_shared_worker_cleanup(t->shared_leases, t->id);
     t->release();
     free(t->args);
@@ -3680,7 +3709,7 @@ R"GSRT(GS_API int64_t gs_thread_start(void (*run)(void (*)(uint8_t *), uint8_t *
     t->parent = gs_current_thread_id;
     t->structured = structured;
     t->completed = t->aborted = 0;
-    t->cancelled = structured && contained && gs_thread_cancelled();
+    t->cancelled = 0;
     t->result = t->abort_msg = NULL;
     t->result_size = t->abort_len = 0;
     t->args = (uint8_t *)malloc(argsize ? (size_t)argsize : 1);
@@ -3690,10 +3719,16 @@ R"GSRT(GS_API int64_t gs_thread_start(void (*run)(void (*)(uint8_t *), uint8_t *
     }
     if (argsize) memcpy(t->args, args, (size_t)argsize);
     t->shared_leases = gs_shared_pending_take();
+    t->channel_leases = gs_channel_pending_take();
     gs_mutex_lock(&gs_threads_mutex);
     if (gs_numthreads == INT64_MAX) gs_panic("thread id space exhausted");
     int64_t id = gs_numthreads++;
     t->id = id;
+    if (structured && contained && t->parent >= 0) {
+        gs_thread *parent = gs_threads;
+        while (parent && parent->id != t->parent) parent = parent->next;
+        if (parent && gs_cancel_load(&parent->cancelled)) gs_cancel_store(&t->cancelled);
+    }
     t->next = gs_threads;
     gs_threads = t;
     int failed;
@@ -3717,6 +3752,7 @@ R"GSRT(GS_API int64_t gs_thread_start(void (*run)(void (*)(uint8_t *), uint8_t *
         gs_threads = t->next;
         --gs_numthreads;
         gs_mutex_unlock(&gs_threads_mutex);
+        gs_channel_pending_release(t->channel_leases);
         gs_shared_worker_cleanup(t->shared_leases, INT64_MIN);
         free(t->args);
         free(t);
@@ -3750,6 +3786,9 @@ R"GSRT(GS_API uint8_t *gs_thread_join(gs_handle h, int64_t *size, uint8_t **msg,
     gs_mutex_lock(&gs_threads_mutex);
     gs_thread *t = gs_structured_get(h);
     if (!t) { gs_mutex_unlock(&gs_threads_mutex); gs_abort(GS_E_THREADID, file, line); }
+    if (t->parent != gs_current_thread_id) { gs_mutex_unlock(&gs_threads_mutex);
+        gs_abort_msg((const uint8_t *)"structured worker belongs to another program instance", 53,
+                     file, line); }
     if (t->id == gs_current_thread_id) { gs_mutex_unlock(&gs_threads_mutex); gs_abort(GS_E_THREADSELF, file, line); }
     while (!t->completed) gs_cond_wait(&gs_threads_done, &gs_threads_mutex);
     gs_thread **slot = &gs_threads; while (*slot != t) slot = &(*slot)->next; *slot = t->next;
@@ -3767,20 +3806,24 @@ R"GSRT(GS_API uint8_t gs_thread_cancel(gs_handle h, const char *file, int line) 
     gs_mutex_lock(&gs_threads_mutex);
     gs_thread *t = gs_structured_get(h);
     if (!t) { gs_mutex_unlock(&gs_threads_mutex); gs_abort(GS_E_THREADID, file, line); }
+    if (t->parent != gs_current_thread_id) { gs_mutex_unlock(&gs_threads_mutex);
+        gs_abort_msg((const uint8_t *)"structured worker belongs to another program instance", 53,
+                     file, line); }
     if (!t->contained) { gs_mutex_unlock(&gs_threads_mutex);
         gs_abort_msg((const uint8_t *)"only a structured contained worker can be cancelled", 52,
                      file, line); }
     uint8_t active = !t->completed;
-    t->cancelled = 1;
-    for (;;) {
-        int changed = 0;
-        for (gs_thread *c = gs_threads; c; c = c->next)
-            if (c->structured && c->contained && !c->cancelled) {
-                gs_thread *p = gs_threads;
-                while (p && p->id != c->parent) p = p->next;
-                if (p && p->cancelled) { c->cancelled = 1; changed = 1; }
-            }
-        if (!changed) break;
+    gs_cancel_store(&t->cancelled);
+    for (gs_thread *c = gs_threads; c; c = c->next) {
+        if (!c->structured || !c->contained) continue;
+        int64_t ancestor = c->parent;
+        while (ancestor >= 0 && ancestor != t->id) {
+            gs_thread *p = gs_threads;
+            while (p && p->id != ancestor) p = p->next;
+            if (!p) break;
+            ancestor = p->parent;
+        }
+        if (ancestor == t->id) gs_cancel_store(&c->cancelled);
     }
     gs_cond_broadcast(&gs_threads_done);
     gs_mutex_unlock(&gs_threads_mutex);
@@ -3790,20 +3833,32 @@ R"GSRT(GS_API uint8_t gs_thread_cancel(gs_handle h, const char *file, int line) 
 
 )GSRT"
 R"GSRT(GS_API uint8_t gs_thread_cancelled(void) {
-    return gs_current_structured && gs_current_structured->cancelled;
+    return gs_current_structured && gs_cancel_load(&gs_current_structured->cancelled);
 }
 
 )GSRT"
 R"GSRT(GS_API void gs_structured_cleanup(int64_t parent) {
+    int woke = 0;
+    /* Mark every contained descendant before waiting for any direct child. */
+    gs_mutex_lock(&gs_threads_mutex);
+    for (gs_thread *c = gs_threads; c; c = c->next) {
+        if (!c->structured || !c->contained) continue;
+        int64_t ancestor = c->parent;
+        while (ancestor >= 0 && ancestor != parent) {
+            gs_thread *p = gs_threads;
+            while (p && p->id != ancestor) p = p->next;
+            if (!p) break;
+            ancestor = p->parent;
+        }
+        if (ancestor == parent) { gs_cancel_store(&c->cancelled); woke = 1; }
+    }
+    gs_mutex_unlock(&gs_threads_mutex);
+    if (woke) gs_channels_cancel_wakeup();
     for (;;) {
         gs_mutex_lock(&gs_threads_mutex);
         gs_thread *t = gs_threads;
         while (t && (!t->structured || t->parent != parent)) t = t->next;
         if (!t) { gs_mutex_unlock(&gs_threads_mutex); return; }
-        if (t->contained) t->cancelled = 1;
-        gs_mutex_unlock(&gs_threads_mutex);
-        if (t->contained) gs_channels_cancel_wakeup();
-        gs_mutex_lock(&gs_threads_mutex);
         while (!t->completed) gs_cond_wait(&gs_threads_done, &gs_threads_mutex);
         gs_thread **slot = &gs_threads;
         while (*slot != t) slot = &(*slot)->next;
@@ -4009,21 +4064,28 @@ R"GSRT(/* First-class channels. Stable state pointers are indexed by opaque
 typedef struct gs_channel_state {
     gs_qnode *head, *tail;
     int64_t count, limit;
-    uint64_t generation;
+    uint64_t generation, refs, slot;
     int closed;
     gs_mutex mutex;
     gs_cond cond;
 } gs_channel_state;
+typedef struct gs_channel_lease {
+    struct gs_channel_lease *next;
+    gs_handle handle;
+} gs_channel_lease;
 static gs_channel_state **gs_channels;
 static int64_t gs_nchannels, gs_channelcap;
 static uint64_t gs_channel_generation;
 static gs_mutex gs_channels_mutex = GS_MUTEX_INIT;
 static gs_cond gs_channels_changed = GS_COND_INIT;
+static GS_TLS gs_channel_lease *gs_channel_context;
+static GS_TLS gs_channel_lease *gs_channel_pending;
 
 )GSRT"
 R"GSRT(static void gs_channels_cancel_wakeup(void) {
     gs_mutex_lock(&gs_channels_mutex);
     for (int64_t i = 0; i < gs_nchannels; i++) {
+        if (!gs_channels[i]) continue;
         gs_mutex_lock(&gs_channels[i]->mutex);
         gs_cond_broadcast(&gs_channels[i]->cond);
         gs_mutex_unlock(&gs_channels[i]->mutex);
@@ -4033,10 +4095,16 @@ R"GSRT(static void gs_channels_cancel_wakeup(void) {
 }
 
 )GSRT"
+R"GSRT(static gs_channel_state *gs_channel_find(gs_handle h) {
+    return h.slot < (uint64_t)gs_nchannels && gs_channels[h.slot] &&
+           gs_channels[h.slot]->generation == h.generation ? gs_channels[h.slot] : NULL;
+}
+
+)GSRT"
 R"GSRT(static gs_channel_state *gs_channel_get(gs_handle h, const char *file, int line) {
     gs_mutex_lock(&gs_channels_mutex);
-    gs_channel_state *s = h.slot < (uint64_t)gs_nchannels ? gs_channels[h.slot] : NULL;
-    if (!s || s->generation != h.generation) {
+    gs_channel_state *s = gs_channel_find(h);
+    if (!s) {
         gs_mutex_unlock(&gs_channels_mutex);
         gs_abort_msg((const uint8_t *)"invalid channel handle", 22, file, line);
     }
@@ -4045,23 +4113,113 @@ R"GSRT(static gs_channel_state *gs_channel_get(gs_handle h, const char *file, in
 }
 
 )GSRT"
+R"GSRT(GS_API void gs_channel_handoff(gs_handle h, const char *file, int line) {
+    for (gs_channel_lease *p = gs_channel_pending; p; p = p->next)
+        if (p->handle.slot == h.slot && p->handle.generation == h.generation) return;
+    int owned = 0;
+    for (gs_channel_lease *p = gs_channel_context; p; p = p->next)
+        if (p->handle.slot == h.slot && p->handle.generation == h.generation) { owned = 1; break; }
+    if (!owned) gs_abort_msg((const uint8_t *)"channel is not owned by this program instance", 45,
+                             file, line);
+    gs_channel_lease *lease = (gs_channel_lease *)malloc(sizeof(*lease));
+    if (!lease) gs_panic("out of memory retaining a channel for a worker");
+    gs_mutex_lock(&gs_channels_mutex);
+    gs_channel_state *s = gs_channel_find(h);
+    if (!s) {
+        gs_mutex_unlock(&gs_channels_mutex); free(lease);
+        gs_abort_msg((const uint8_t *)"invalid channel handle", 22, file, line);
+    }
+    if (s->refs == UINT64_MAX) gs_panic("channel reference count exhausted");
+    s->refs++;
+    gs_mutex_unlock(&gs_channels_mutex);
+    lease->handle = h; lease->next = gs_channel_pending; gs_channel_pending = lease;
+}
+
+)GSRT"
+R"GSRT(GS_API void *gs_channel_pending_take(void) {
+    void *p = gs_channel_pending; gs_channel_pending = NULL; return p;
+}
+
+)GSRT"
+R"GSRT(GS_API void gs_channel_context_begin(void *leases) {
+    if (gs_channel_context) gs_panic("channel context already initialized");
+    gs_channel_context = (gs_channel_lease *)leases;
+}
+
+)GSRT"
+R"GSRT(static void gs_channel_release_list(gs_channel_lease *leases) {
+    while (leases) {
+        gs_channel_lease *next = leases->next;
+        gs_mutex_lock(&gs_channels_mutex);
+        gs_channel_state *s = gs_channel_find(leases->handle);
+        if (!s || !s->refs) gs_panic("corrupt channel ownership");
+        if (--s->refs == 0) {
+            gs_channels[s->slot] = NULL;
+            while (gs_nchannels && !gs_channels[gs_nchannels - 1]) gs_nchannels--;
+            gs_qnode *node = s->head;
+            while (node) { gs_qnode *n = node->next; free(node); node = n; }
+            gs_cond_destroy(&s->cond); gs_mutex_destroy(&s->mutex); free(s);
+        }
+        gs_mutex_unlock(&gs_channels_mutex);
+        free(leases); leases = next;
+    }
+}
+
+)GSRT"
+R"GSRT(GS_API void gs_channel_pending_release(void *leases) {
+    gs_channel_release_list((gs_channel_lease *)leases);
+}
+
+)GSRT"
+R"GSRT(GS_API void gs_channel_context_cleanup(void) {
+    /* Pending handoffs can survive a contained abort during spawn setup. */
+    gs_channel_lease *leases = gs_channel_pending;
+    gs_channel_pending = NULL;
+    if (leases) {
+        gs_channel_lease *tail = leases;
+        while (tail->next) tail = tail->next;
+        tail->next = gs_channel_context;
+    } else leases = gs_channel_context;
+    gs_channel_context = NULL;
+    gs_channel_release_list(leases);
+}
+
+)GSRT"
 R"GSRT(GS_API gs_handle gs_channel_create(int64_t limit, const char *file, int line) {
     if (limit <= 0) gs_abort(GS_E_QBOUND, file, line);
     gs_channel_state *s = (gs_channel_state *)calloc(1, sizeof(*s));
     if (!s) gs_panic("out of memory creating a channel");
+    gs_channel_lease *own = (gs_channel_lease *)malloc(sizeof(*own));
+    if (!own) { free(s); gs_panic("out of memory retaining a channel"); }
     s->limit = limit;
     gs_mutex_init(&s->mutex); gs_cond_init(&s->cond);
     gs_mutex_lock(&gs_channels_mutex);
-    if (gs_nchannels == gs_channelcap) {
-        int64_t cap = gs_channelcap ? gs_channelcap * 2 : 16;
+    int64_t slot = 0;
+    while (slot < gs_nchannels && gs_channels[slot]) slot++;
+    if (slot == gs_nchannels && gs_nchannels == gs_channelcap) {
+        int64_t cap;
+        if (!gs_channelcap) {
+            if (16 > SIZE_MAX / sizeof(*gs_channels)) gs_panic("channel registry exhausted");
+            cap = 16;
+        } else {
+            if (gs_channelcap > INT64_MAX / 2 ||
+                (uint64_t)gs_channelcap * 2 > SIZE_MAX / sizeof(*gs_channels))
+                gs_panic("channel registry exhausted");
+            cap = gs_channelcap * 2;
+        }
         gs_channel_state **p = (gs_channel_state **)realloc(gs_channels, (size_t)cap * sizeof(*p));
         if (!p) gs_panic("out of memory recording a channel");
+        memset(p + gs_channelcap, 0, (size_t)(cap - gs_channelcap) * sizeof(*p));
         gs_channels = p; gs_channelcap = cap;
     }
+    if (gs_channel_generation == UINT64_MAX) gs_panic("channel generation space exhausted");
     s->generation = ++gs_channel_generation;
-    gs_handle h = { (uint64_t)gs_nchannels, s->generation };
-    gs_channels[gs_nchannels++] = s;
+    s->refs = 1; s->slot = (uint64_t)slot;
+    gs_handle h = { (uint64_t)slot, s->generation };
+    gs_channels[slot] = s;
+    if (slot == gs_nchannels) gs_nchannels++;
     gs_mutex_unlock(&gs_channels_mutex);
+    own->handle = h; own->next = gs_channel_context; gs_channel_context = own;
     return h;
 }
 
@@ -4091,7 +4249,7 @@ R"GSRT(GS_API gs_qnode *gs_channel_receive(gs_handle h, int wait, const char *fi
     gs_mutex_lock(&s->mutex);
     while (wait && !s->head && !s->closed && !gs_thread_cancelled())
         gs_cond_wait(&s->cond, &s->mutex);
-    gs_qnode *n = s->head;
+    gs_qnode *n = gs_thread_cancelled() ? NULL : s->head;
     if (n) {
         s->head = n->next; if (!s->head) s->tail = NULL; s->count--;
     }

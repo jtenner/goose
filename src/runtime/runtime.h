@@ -975,13 +975,18 @@ GS_API int64_t gs_thread_start(void (*run)(void (*)(uint8_t *), uint8_t *),
    gs_free_msg, or to NULL and no bytes. */
 GS_API uint8_t gs_thread_wait(int64_t id, uint8_t **msg, int64_t *len,
                                const char *file, int line);
-typedef struct { uint64_t slot, generation; } gs_handle;
+typedef struct { uint64_t slot, generation; } gs_handle GS_ALIGN1;
 GS_API uint8_t *gs_thread_join(gs_handle h, int64_t *size, uint8_t **msg, int64_t *len,
                                const char *file, int line);
 GS_API uint8_t gs_thread_cancel(gs_handle h, const char *file, int line);
 GS_API uint8_t gs_thread_cancelled(void);
 GS_API void gs_thread_publish_result(const void *data, int64_t size);
 GS_API void gs_structured_cleanup(int64_t parent);
+GS_API void gs_channel_handoff(gs_handle h, const char *file, int line);
+GS_API void *gs_channel_pending_take(void);
+GS_API void gs_channel_context_begin(void *leases);
+GS_API void gs_channel_context_cleanup(void);
+GS_API void gs_channel_pending_release(void *leases);
 GS_API void gs_free_msg(uint8_t *msg);
 
 /* Opaque capabilities have no user-visible fields or byte image. Stable
