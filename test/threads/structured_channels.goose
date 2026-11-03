@@ -20,6 +20,9 @@ thread_fn blocked_send(ch: Channel<i64>) -> i64 {
 
 thread_fn fail_result() -> i64 { abort("structured failure") }
 
+struct LargeResult { prefix: u8, values: i64[40] }
+thread_fn large_result() -> LargeResult { LargeResult { 9, [6; 40] } }
+
 fn main() {
     let a = channel<i64>(1);
     let b = channel<i64>(1);
@@ -56,4 +59,7 @@ fn main() {
     var why: u8[>..] = [];
     let failed_value, failed_ok = thread_join(failed, why);
     print(failed_value, " ", failed_ok, " ", why.len > 0);
+    let large = thread_spawn_join(large_result);
+    let large_value, large_ok = thread_join(large);
+    print(large_value.prefix, " ", large_value.values[39], " ", large_ok);
 }

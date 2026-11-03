@@ -4647,8 +4647,8 @@ model; explicit native shared capabilities follow §11.4.
   `thread_spawn_contained_join(worker, args…) -> Thread<T>`, where `T` is the
   worker's result type. `Thread<T>` is an opaque typed handle: it is not a
   reference, address or shared-memory capability, cannot be serialized or
-  passed through a queue, and can be passed to another worker only as a direct
-  worker argument. The handle owns the right to join exactly once.
+  passed through a queue or to another worker. The spawning program instance
+  owns the right to join exactly once.
   `thread_join(handle) -> T, bool` waits for cleanup and consumes that right;
   the boolean is true and `T` is the worker's copied result after a normal
   return. `thread_join(handle, msg) -> T, bool` additionally appends a contained
