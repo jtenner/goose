@@ -84,7 +84,8 @@ bool)`. On success it copies one recursively admissible fixed-size flat value
 into a new anonymous owner, with its private header in the capability registry.
 Strings, slices, references, runtime-sized arrays,
 function values, native capabilities and variable-mode ADTs are rejected
-anywhere inside `T`. `shared_pointer_copy` returns a complete snapshot;
+anywhere inside `T`, in every type context after generic substitution.
+`shared_pointer_copy` returns a complete snapshot;
 `shared_pointer_store` replaces it atomically with respect to other copy/store
 operations. Neither exposes a Goose reference or raw address.
 
@@ -96,14 +97,31 @@ close its owner. Stale and wrong-type operations abort. Counting uses the
 existing lock-free u64 substrate; supported native targets are unchanged and
 TinyCC remains rejected.
 
-A direct pointer can cross `thread_spawn`; the runtime retains a worker-owned
-handle and allocation lease through return or contained abort. It can also be
+A direct pointer can cross `thread_spawn`; the runtime creates a worker-owned
+claim distinct from the caller's handle and retains an allocation lease through
+return or contained abort. Cleanup releases that claim only while it remains
+live, so explicit release, queue transfer and nested handoff cannot
+double-release it. It can also be
 the exact element type of a typed queue. Successful `qput` transfers the handle
 and invalidates the sender; a full-queue failure leaves it with the sender. A
 successful receive transfers it to the receiver. A poll/timed-get miss returns
 an invalid zero handle with false. Shutdown releases undelivered handles. This
 narrow exception does not apply to wrappers and does not make capabilities
 serializable or valid in FFI.
+
+Worker-created owners with queued or otherwise retained pointer claims remain
+mapped after their creating worker exits. The orphan is reclaimed after both
+its worker leases and its last pointer claim end. A queue claim is marked
+queue-owned on put and adopted by the receiving thread on get; queue teardown
+releases claims that were never received.
+
+The u64 reference-count update is an always-lock-free atomic operation on the
+supported targets. Descriptor creation, invalidation and reclamation still run
+under the capability-registry mutex, so retain and release as complete
+operations are thread-safe but not lock-free.
+
+This allocation API always creates a fresh anonymous owner. It does not yet
+provide allocation inside a caller-supplied existing `SharedOwner`.
 
 ## Atomic regions and indexed job tables
 

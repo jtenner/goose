@@ -4706,7 +4706,9 @@ invalid. `T` must be a fixed-size flat value whose recursive shape contains no
 native capability, reference, slice, runtime-length array, string, function
 value, or variable-mode ADT. This is checked after generic substitution.
 Fixed arrays and fixed-mode structs/ADTs are admitted only when every contained
-value is admissible. The private metadata and payload have no FFI layout.
+value is admissible. The check applies wherever a `SharedPointer<T>` type is
+validated, not only at allocation calls. The private metadata and payload have
+no FFI layout.
 
 `shared_pointer_copy(p) -> T` copies the current value out and
 `shared_pointer_store(p, value)` copies a new value in. Neither yields a
@@ -4729,9 +4731,13 @@ u64 substrate and target restrictions as `SharedAtomicU64`; there is no mutex
 fallback and no general garbage collector.
 
 A direct `SharedPointer<T>` is additionally permitted as a worker argument.
-Handoff retains a worker-owned handle before native thread creation; normal
-return, spawn failure, and contained abort release it. The allocation lease is
-held too. Wrapping a pointer in another value does not gain this exception,
+Handoff creates a distinct worker-owned retained handle before native thread
+creation and writes it into the worker packet; the caller's handle remains
+live. Normal return, spawn failure, and contained abort release the worker
+claim only if it is still live. Explicit release, queue transfer, duplicate
+handoffs, and nested spawns make cleanup skip a stale claim instead of
+releasing it twice. The allocation lease is held too. Wrapping a pointer in
+another value does not gain this exception,
 and pointer-containing worker globals remain forbidden.
 
 As the sole queue exception to flat byte images, the element type may be
@@ -4743,6 +4749,21 @@ queued handle to the receiver. A timed/nonblocking miss returns an invalid
 zero handle with false; use or release aborts. Shutdown releases handles still
 owned by queues. This does not make pointers serializable, byte-convertible,
 or FFI-compatible.
+
+An owner created by a worker becomes orphaned at worker cleanup, but live
+pointer claims and queued claims keep it mapped. It is reclaimed only after
+its last worker lease and pointer claim end. A successful put marks the new
+claim queue-owned; a successful get adopts it into the receiving thread's
+cleanup context. Queue destruction releases undelivered claims.
+
+The reference-count update uses the target's always-lock-free u64 atomic
+operation. Retain and release also take the capability-registry mutex while
+creating, invalidating, or reclaiming descriptors; the complete operations are
+thread-safe, not claimed to be lock-free.
+
+This allocation form always creates and returns a fresh anonymous owner.
+Allocation inside a caller-supplied existing owner is not part of the form and
+must not be inferred from the phrase "stored in an owner".
 
 ### 11.5 Native file mappings, subranges, byte buffers, and advice
 
