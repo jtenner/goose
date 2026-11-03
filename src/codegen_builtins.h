@@ -375,22 +375,30 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
         case B_THREAD_CANCELLED: return { "gs_thread_cancelled()" };
         case B_THREAD_CANCEL: {
             auto h = GenX(an[0]);
-            return { cat("gs_thread_cancel(", h, ", ", LocArgs(ln), ")") };
+            auto v = T();
+            L("uint8_t ", v, " = gs_thread_cancel(", h, ", ", LocArgs(ln), ");");
+            return { v };
         }
         case B_CHANNEL: {
             usesthreads = true;
             auto limit = an.empty() ? string("INT64_MAX") : GenX(an[0]);
-            return { cat("gs_channel_create(", limit, ", ", LocArgs(ln), ")") };
+            auto v = T();
+            L("gs_handle ", v, " = gs_channel_create(", limit, ", ", LocArgs(ln), ");");
+            return { v };
         }
         case B_CHANNEL_CLOSE: {
             auto h = GenX(an[0]);
-            return { cat("gs_channel_close(", h, ", ", LocArgs(ln), ")") };
+            auto v = T();
+            L("uint8_t ", v, " = gs_channel_close(", h, ", ", LocArgs(ln), ");");
+            return { v };
         }
         case B_CHANNEL_WAIT_ANY: {
             auto hs = T();
             L("gs_handle ", hs, "[", an.size(), "];");
             for (size_t i = 0; i < an.size(); i++) L(hs, "[", i, "] = ", GenX(an[i]), ";");
-            return { cat("gs_channel_wait_any(", hs, ", ", an.size(), ", ", LocArgs(ln), ")") };
+            auto v = T();
+            L("int64_t ", v, " = gs_channel_wait_any(", hs, ", ", an.size(), ", ", LocArgs(ln), ");");
+            return { v };
         }
         case B_CHANNEL_SEND: case B_CHANNEL_TRY_SEND: {
             auto t = an[1]->exprtype; auto h = GenX(an[0]); auto ok = T();
@@ -1410,8 +1418,15 @@ inline vector<string> CodeGen::EmitThreadSpawn(Call *c, vector<Node *> &an) {
     string stk;
     auto base = BytesTemp(stk);
     vector<string> sharedcaps;
+    vector<string> channels;
     for (size_t i = 0; i < sp->argtypes.size(); i++) {
         auto pt = sp->argtypes[i];
+        if (pt->kind == TY_NATIVE && pt->native->kind == NK_CHANNEL) {
+            auto handle = Snapshot(pt, GenPure(an[1 + i]));
+            channels.push_back(handle);
+            EmitValStore(stk, pt, handle);
+            continue;
+        }
         if (IsSharedSendable(pt) && pt->native->kind != NK_THREAD &&
             pt->native->kind != NK_CHANNEL) {
             auto cap = Snapshot(pt, GenPure(an[1 + i]));
@@ -1495,6 +1510,8 @@ inline vector<string> CodeGen::EmitThreadSpawn(Call *c, vector<Node *> &an) {
     // Emitted here, not returned as text: a discarded result would drop the spawn.
     for (auto &cap : sharedcaps)
         L("gs_shared_handoff((gs_shared_cap){", cap, ".slot, ", cap, ".generation}, ", LocArgs(c->line), ");");
+    for (auto &channel : channels)
+        L("gs_channel_handoff(", channel, ", ", LocArgs(c->line), ");");
     auto id = T();
     auto structured = c->builtin == B_THREAD_SPAWN_JOIN ||
                       c->builtin == B_THREAD_SPAWN_CONTAINED_JOIN;

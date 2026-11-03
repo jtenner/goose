@@ -1189,7 +1189,7 @@ inline void CodeGen::EmitBench() {
 
 inline void CodeGen::EmitMain() {
     Append(code, "int main(int argc, char **argv) {\n    gs_program_init(argc, argv);\n",
-           MainCall(), usesthreads ? "    gs_structured_cleanup(-1);\n    gs_shared_worker_cleanup(NULL, -1);\n" : "",
+           MainCall(), usesthreads ? "    gs_structured_cleanup(-1);\n    gs_channel_context_cleanup();\n    gs_shared_worker_cleanup(NULL, -1);\n" : "",
            "    gs_rt_stats();\n    return 0;\n}\n");
 }
 
