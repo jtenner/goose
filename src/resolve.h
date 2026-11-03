@@ -71,10 +71,11 @@ inline void ResolveTypeNames(Ast &ast, const vector<TypeExpr *> *activated = nul
         int native = NativeKindForName(nm->name);
         if (native >= 0 && !ast.LookupStruct(nm->name, nm->ns) &&
             !ast.LookupEnum(nm->name, nm->ns) && !ast.LookupAlias(nm->name, nm->ns)) {
-            if (!nm->args.empty() || nm->varmode)
+            if ((native == NK_POINTER ? nm->args.size() != 1 : !nm->args.empty()) || nm->varmode)
                 ErrorAt(t, nm, "native capabilities take no type arguments or variable mode");
             t->kind = TY_NATIVE;
             t->nativekind = (NativeKind)native;
+            if (native == NK_POINTER) t->nativearg = nm->args[0];
         } else if (auto s = ast.LookupStruct(nm->name, nm->ns)) {
             if (nm->varmode)
                 ErrorAt(t, nm, cat("struct ", nm->name,

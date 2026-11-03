@@ -69,10 +69,10 @@ enum TypeKind {
     TY_VOID,        // Typecheck-created: the "type" of statements and valueless blocks.
 };
 
-enum NativeKind { NK_OWNER, NK_VIEW, NK_ACCESS, NK_ATOMIC_U32, NK_ATOMIC_U64, NK_UNSAFE_PTR, NK_COUNT };
+enum NativeKind { NK_OWNER, NK_VIEW, NK_ACCESS, NK_ATOMIC_U32, NK_ATOMIC_U64, NK_UNSAFE_PTR, NK_POINTER, NK_COUNT };
 inline const char *NativeName(int k) {
     static const char *names[] = { "SharedOwner", "SharedView", "SharedAccess",
-                                   "SharedAtomicU32", "SharedAtomicU64", "UnsafePtr" };
+                                   "SharedAtomicU32", "SharedAtomicU64", "UnsafePtr", "SharedPointer" };
     return names[k];
 }
 
@@ -331,6 +331,7 @@ struct TypeExpr {
     // On a TY_INT: an index or bound type (TypeIndex). Outside the union,
     // since intstorage is the member a TY_INT uses.
     TypeIndex *ix = nullptr;
+    TypeExpr *nativearg = nullptr;   // SharedPointer<T>; null for other native kinds.
     union {                          // Active member selected by kind:
         NativeKind nativekind;      //   TY_NATIVE
         IntStorage intstorage;       //   TY_INT
@@ -354,7 +355,8 @@ struct TypeExpr {
 // The views of a type's shape that every pass asks for.
 inline bool IsSharedSendable(const TypeExpr *t) {
     return t->kind == TY_NATIVE && (t->nativekind == NK_VIEW ||
-           t->nativekind == NK_ATOMIC_U32 || t->nativekind == NK_ATOMIC_U64);
+           t->nativekind == NK_ATOMIC_U32 || t->nativekind == NK_ATOMIC_U64 ||
+           t->nativekind == NK_POINTER);
 }
 inline bool IsRefOrSlice(const TypeExpr *t) { return t->kind == TY_REF || t->kind == TY_SLICE; }
 inline bool IsOptional(const TypeExpr *t) { return t->kind == TY_REF && t->ref->optional; }

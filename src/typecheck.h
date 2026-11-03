@@ -995,7 +995,8 @@ struct TypeCheck {
         switch (a->kind) {
             case TY_INT:  return a->intstorage == b->intstorage && SameIndex(a, b);
             case TY_FLT:  return a->fltstorage == b->fltstorage;
-            case TY_NATIVE: return a->nativekind == b->nativekind;
+            case TY_NATIVE: return a->nativekind == b->nativekind &&
+                (!a->nativearg || (b->nativearg && TypeEq(a->nativearg, b->nativearg)));
             case TY_BOOL: case TY_VOID: case TY_FN: return true;
             case TY_STRUCT: {
                 if (a->struc->st != b->struc->st) return false;
@@ -1107,6 +1108,13 @@ struct TypeCheck {
 
     TypeExpr *SubstRaw(TypeExpr *t) {
         switch (t->kind) {
+            case TY_NATIVE: {
+                if (!t->nativearg) return t;
+                auto a = Subst(t->nativearg);
+                if (a == t->nativearg) return t;
+                auto n = ast.NewType(TY_NATIVE, t->line); n->nativekind = t->nativekind;
+                n->nativearg = a; return n;
+            }
             case TY_GENERIC: {
                 // An exemplar's binding is the type it stands for wherever it
                 // has got to, whatever a callee's own type variable of that

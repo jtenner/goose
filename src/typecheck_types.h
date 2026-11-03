@@ -708,7 +708,10 @@ inline void TypeCheck::ValidateType(TypeExpr *t, Line l, int pos) {
             return;
         }
         case TY_FLT: return;
-        case TY_BOOL: case TY_NATIVE: return;
+        case TY_BOOL: return;
+        case TY_NATIVE:
+            if (t->nativearg) ValidateType(t->nativearg, l, VT_LOCAL);
+            return;
         case TY_VOID:
             Error(l, "expression has no value here");
         case TY_FN:
