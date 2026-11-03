@@ -81,7 +81,8 @@ worker pool with indexed completion flags and disjoint result ranges.
 
 `shared_pointer_alloc<T>(value)` returns `(SharedPointer<T>, SharedOwner,
 bool)`. On success it copies one recursively admissible fixed-size flat value
-into a new anonymous owner. Strings, slices, references, runtime-sized arrays,
+into a new anonymous owner, with its private header in the capability registry.
+Strings, slices, references, runtime-sized arrays,
 function values, native capabilities and variable-mode ADTs are rejected
 anywhere inside `T`. `shared_pointer_copy` returns a complete snapshot;
 `shared_pointer_store` replaces it atomically with respect to other copy/store

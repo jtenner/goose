@@ -4748,13 +4748,13 @@ an eight-byte-multiple stride. Actual atomic cells retain natural alignment.
 
 `SharedPointer<T>` is an opaque, typed capability for one value stored in an
 anonymous `SharedOwner` allocation. `shared_pointer_alloc<T>(value)` returns
-`(SharedPointer<T>, SharedOwner, bool)`: on success the owner contains a
-private runtime header and a copy of `value`; on failure both capabilities are
+`(SharedPointer<T>, SharedOwner, bool)`: on success the owner contains a copy
+of `value` and the capability registry contains its private metadata; on failure both capabilities are
 invalid. `T` must be a fixed-size flat value whose recursive shape contains no
 native capability, reference, slice, runtime-length array, string, function
 value, or variable-mode ADT. This is checked after generic substitution.
 Fixed arrays and fixed-mode structs/ADTs are admitted only when every contained
-value is admissible. The private header and payload have no FFI layout.
+value is admissible. The private metadata and payload have no FFI layout.
 
 `shared_pointer_copy(p) -> T` copies the current value out and
 `shared_pointer_store(p, value)` copies a new value in. Neither yields a
