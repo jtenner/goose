@@ -97,3 +97,12 @@ def check_unsafe_atomics(exe, base, cc=None, *, runtime=None, extra=()):
         code, out, err = tc.run_capture([exe, '--strict-worker-native', '--check', source])
         if code == 0 or f'unsafe native operation unsafe_atomic_{op}' not in err:
             raise RuntimeError(f'strict worker contract did not reject raw atomic {op}\n' + out + err)
+    for op in ('fetch_sub', 'exchange', 'fetch_and', 'fetch_or', 'fetch_xor'):
+        source = base / f'dynamic-order-{op}.goose'
+        tc.write_text(source, f'fn f(order: u8[:]) {{ unsafe_atomic_{op}<u32>(8, 1, order); }} fn main() {{}}')
+        code, out, err = tc.run_capture([exe, '--check', source])
+        if code == 0 or 'memory order must be a compile-time string' not in out + err:
+            raise RuntimeError(f'{op}: dynamic order was not rejected\n' + out + err)
+        check(f'capability-address-{op}',
+              f'let o, ok = shared_alloc(8); let a = shared_atomic_u32(o, 0, 0); unsafe_atomic_{op}<u32>(a, 1, "Relaxed")',
+              'expected a value of type u64')
