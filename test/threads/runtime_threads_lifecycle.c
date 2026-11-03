@@ -212,6 +212,36 @@ int main(void) {
 #endif
     /* Main's one stack, in its one region; a worker's GS_MAX_STACKS. */
     gs_rt_init(0, NULL, 1, 1, GS_MAX_STACKS);
+    /* Rollback is one spawn transaction, never an actor sweep. In particular,
+       INT64_MIN cannot collide with and revoke an unrelated queue claim. */
+    uint8_t pointer_ok;
+    int64_t pointer_value = 7, pointer_out = 0;
+    gs_shared_cap queue_owner;
+    gs_shared_cap queue_pointer = gs_shared_pointer_alloc(&pointer_value, sizeof pointer_value,
+        &queue_owner, &pointer_ok, __FILE__, __LINE__);
+    check(pointer_ok, "allocate rollback queue pointer");
+    gs_shared_pointer_queue(queue_pointer, __FILE__, __LINE__);
+    gs_shared_worker_cleanup(NULL, INT64_MIN);
+    gs_shared_pointer_copy(queue_pointer, &pointer_out, sizeof pointer_out, __FILE__, __LINE__);
+    check(pointer_out == pointer_value, "rollback actor cannot revoke queue claim");
+    gs_shared_pointer_adopt(queue_pointer, __FILE__, __LINE__);
+    gs_shared_pointer_release(queue_pointer, __FILE__, __LINE__);
+    check(gs_shared_close(queue_owner, __FILE__, __LINE__), "close rollback queue owner");
+
+    gs_shared_cap rollback_owner;
+    gs_shared_cap original = gs_shared_pointer_alloc(&pointer_value, sizeof pointer_value,
+        &rollback_owner, &pointer_ok, __FILE__, __LINE__);
+    check(pointer_ok, "allocate spawn rollback pointer");
+    gs_shared_cap packet = gs_shared_pointer_retain(original, __FILE__, __LINE__);
+    gs_shared_handoff(packet, __FILE__, __LINE__);
+    void *leases = gs_shared_pending_take();
+    gs_shared_worker_commit(leases, 123);
+    gs_shared_worker_rollback(leases);
+    pointer_out = 0;
+    gs_shared_pointer_copy(original, &pointer_out, sizeof pointer_out, __FILE__, __LINE__);
+    check(pointer_out == pointer_value, "spawn rollback preserves caller claim");
+    gs_shared_pointer_release(original, __FILE__, __LINE__);
+    check(gs_shared_close(rollback_owner, __FILE__, __LINE__), "close spawn rollback owner");
     check(gs_hardware_threads() >= 1, "hardware_threads() reports at least one worker");
     GS(0)->top[0] = 99;
     long allocations = counter_add(&live_allocations, 0);
