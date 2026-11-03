@@ -29,7 +29,8 @@ path and the offending declaration's file, line and column. Only selected
 constant branches participate. Coordinator-only calls are unaffected.
 
 Strict mode also rejects `unsafe_ptr_from_handle`, `unsafe_handle_from_ptr`,
-`unsafe_ptr_add`, `unsafe_load` and `unsafe_store` anywhere in that graph.
+`unsafe_ptr_add`, `unsafe_load`, `unsafe_store`, and every `unsafe_atomic_*`
+builtin anywhere in that graph.
 There is no Goose function exemption. Put necessary raw-memory work behind a
 narrow, audited native declaration instead. Safe shared capabilities and their
 existing atomic operations remain allowed; no new atomics are introduced.
