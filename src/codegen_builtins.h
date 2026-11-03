@@ -51,6 +51,19 @@ inline string CodeGen::LenCast(const Loc &lv) {
 inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
     auto an = c->ArgNodes();
     auto ln = c->line;
+    if (c->builtin >= B_SHARED_POINTER_ALLOC && c->builtin <= B_SHARED_POINTER_RELEASE) {
+        usesthreads = true; vector<string> a; for (auto n : an) a.push_back(Snapshot(n->exprtype, GenPure(n)));
+        if (c->builtin == B_SHARED_POINTER_ALLOC) {
+            auto p = T(), o = T(), ok = T(); L("gs_shared_cap ", o, "; uint8_t ", ok, ";");
+            L("gs_shared_cap ", p, " = gs_shared_pointer_alloc(&", a[0], ", ", FixedSize(c->qtype), ", &", o, ", &", ok, ", ", LocArgs(ln), ");");
+            return {p, o, ok};
+        }
+        if (c->builtin == B_SHARED_POINTER_COPY) { auto v = T(); L(CT(c->qtype), " ", v, ";");
+            L("gs_shared_pointer_copy(", a[0], ", &", v, ", ", FixedSize(c->qtype), ", ", LocArgs(ln), ");"); return {v}; }
+        if (c->builtin == B_SHARED_POINTER_STORE) { L("gs_shared_pointer_store(", a[0], ", &", a[1], ", ", FixedSize(c->qtype), ", ", LocArgs(ln), ");"); return {}; }
+        if (c->builtin == B_SHARED_POINTER_RETAIN) { auto v = T(); L("gs_shared_cap ", v, " = gs_shared_pointer_retain(", a[0], ", ", LocArgs(ln), ");"); return {v}; }
+        L("gs_shared_pointer_release(", a[0], ", ", LocArgs(ln), ");"); return {};
+    }
     if (c->builtin >= B_UNSAFE_PTR_FROM_HANDLE && c->builtin <= B_UNSAFE_STORE)
         return EmitUnsafeBuiltin(c);
     if (c->builtin >= B_SHARED_ALLOC && c->builtin <= B_MEMORY_COPY) {
@@ -323,7 +336,13 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
             // Emitted here, not returned as text: a discarded result would
             // drop the put.
             auto ok = T();
-            if (IsResz(t)) {
+            if (t->kind == TY_NATIVE && t->nativekind == NK_POINTER) {
+                auto src = Snapshot(t, GenPure(an[0])), queued = T();
+                L("gs_shared_cap ", queued, " = gs_shared_pointer_retain(", src, ", ", LocArgs(ln), ");");
+                L("uint8_t ", ok, " = gs_qput(&", q, ", &", queued, ", sizeof ", queued, ");");
+                L("if (", ok, ") gs_shared_pointer_release(", src, ", ", LocArgs(ln), ");");
+                L("else gs_shared_pointer_release(", queued, ", ", LocArgs(ln), ");");
+            } else if (IsResz(t)) {
                 auto src = GenLoc(an[0]);
                 if (src.t->kind == TY_REF) DerefLoc(src);
                 string stk;

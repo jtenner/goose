@@ -69,6 +69,11 @@ inline int RecvKindOf(TypeExpr *t) {
 
 //        enum            name                min max  args  rets recv            grows          flags
 #define BUILTINS \
+    F(B_SHARED_POINTER_ALLOC, "shared_pointer_alloc", 1, 1, "", "", 0, "", BF_TYARGS) \
+    F(B_SHARED_POINTER_COPY, "shared_pointer_copy", 1, 1, "", "", 0, "", 0) \
+    F(B_SHARED_POINTER_STORE, "shared_pointer_store", 2, 2, "", "", 0, "", 0) \
+    F(B_SHARED_POINTER_RETAIN, "shared_pointer_retain", 1, 1, "", "", 0, "", 0) \
+    F(B_SHARED_POINTER_RELEASE, "shared_pointer_release", 1, 1, "", "", 0, "", 0) \
     F(B_SHARED_MAP, "shared_map_readonly", 2, 2, "", "", 0, "", 0) \
     F(B_SHARED_ADVICE, "shared_page_advice", 4, 4, "", "", 0, "", 0) \
     F(B_MEMORY_READ_BYTES, "memory_read_bytes", 3, 3, "", "", 0, "", 0) \
