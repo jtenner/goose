@@ -52,6 +52,11 @@ fn main() {
     atomic_store(total, 18446744073709551615, "SeqCst");
     assert(atomic_fetch_add(total, 1, "Relaxed") == 18446744073709551615);
     assert(atomic_load(total, "Relaxed") == 0);
+    assert(atomic_fetch_sub(total, 1, "Release") == 0);
+    assert(atomic_exchange(total, 15, "Acquire") == 18446744073709551615);
+    assert(atomic_fetch_and(total, 7, "SeqCst") == 15);
+    assert(atomic_fetch_or(total, 8, "Relaxed") == 7);
+    assert(atomic_fetch_xor(total, 3, "Relaxed") == 15);
     assert(shared_close(o));
     let p, yes = shared_alloc(64); assert(yes);
     let ready = shared_atomic_u32(p, 0, 0);
