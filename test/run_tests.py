@@ -2316,6 +2316,7 @@ def main():
         for script in ("packed_word_rejection.py", "packed_word_check.py",
                        "packed_word.py", "packed_word_contracts.py", "packed_word_residency.py", "packed_word_editor.py"):
             r.show_task(packed_word_acceptance, script)
+        r.show_task(packed_word_acceptance, "channel_handle_alignment.py")
 
     r.section("driver, diagnostics and language server")
 
