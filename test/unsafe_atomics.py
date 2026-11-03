@@ -26,9 +26,21 @@ def check_unsafe_atomics(exe, base, cc=None, *, runtime=None, extra=()):
                                     ('fetch_and', ', 1', ()),
                                     ('fetch_or', ', 1', ()),
                                     ('fetch_xor', ', 1', ())]:
-                check(f'{width}-{op}-{order}',
-                      f'unsafe_atomic_{op}<{width}>(8{values}, "{order}")',
-                      f'invalid memory order for atomic {op}' if order in bad else None)
+                source = check(f'{width}-{op}-{order}',
+                               f'unsafe_atomic_{op}<{width}>(8{values}, "{order}")',
+                               f'invalid memory order for atomic {op}' if order in bad else None)
+                if op in ('fetch_sub', 'exchange', 'fetch_and', 'fetch_or', 'fetch_xor'):
+                    cfile = source.with_suffix('.c')
+                    code, out, err = tc.run_capture([exe, '-O0', '-o', cfile, source])
+                    if code:
+                        raise RuntimeError(out + err)
+                    needle = '__atomic_' + ('exchange_n' if op == 'exchange' else op) + '('
+                    emitted = next((line for line in cfile.read_text().splitlines() if needle in line), '')
+                    order_macro = '__ATOMIC_' + {'Relaxed': 'RELAXED', 'Acquire': 'ACQUIRE',
+                                                  'Release': 'RELEASE', 'AcqRel': 'ACQ_REL',
+                                                  'SeqCst': 'SEQ_CST'}[order]
+                    if order_macro not in emitted:
+                        raise RuntimeError(f'{source}: {op} {order} emitted without {order_macro}: {emitted}')
             for failure in orders:
                 valid = failure == 'Relaxed' or (failure == 'Acquire' and order in ('Acquire', 'AcqRel', 'SeqCst')) or (failure == order == 'SeqCst')
                 check(f'{width}-cas-{order}-{failure}',
