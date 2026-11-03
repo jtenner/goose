@@ -97,26 +97,33 @@ close its owner. Stale and wrong-type operations abort. Counting uses the
 existing lock-free u64 substrate; supported native targets are unchanged and
 TinyCC remains rejected.
 
-A direct pointer can cross `thread_spawn`; the runtime creates a worker-owned
-claim distinct from the caller's handle and retains an allocation lease through
-return or contained abort. Cleanup releases that claim only while it remains
-live, so explicit release, queue transfer and nested handoff cannot
-double-release it. It can also be
+A direct pointer can cross `thread_spawn`. A stored pointer expression is
+borrowed and gets a distinct worker claim; a temporary pointer result is an
+owned claim transferred into the spawn transaction. This applies to ordinary
+function results as well as builtins. The registry removes packet claims from
+parent cleanup while pending, assigns them to the child before native creation,
+and rolls back only that transaction on creation failure. Cleanup releases a
+worker claim only while it remains live, so explicit release, queue transfer
+and nested handoff cannot double-release it. It can also be
 the exact element type of a typed queue. Successful `qput` transfers the handle
 and invalidates the sender; a full-queue failure leaves it with the sender. A
 successful receive transfers it to the receiver. A poll/timed-get miss returns
 an invalid zero handle with false. Shutdown releases undelivered handles. This
 narrow exception does not apply to wrappers and does not make capabilities
 serializable or valid in FFI.
-Passing a named pointer handle does not consume it. A fresh
-`shared_pointer_retain(p)` used directly as the spawn argument is consumed once
-the separate worker claim is installed, avoiding an unreachable caller claim.
+Passing a stored handle does not consume it. Any temporary pointer result is
+transferred, without special-casing `shared_pointer_retain` syntax. A function
+returning an existing alias transfers that claim; retain before returning when
+another alias must remain authoritative.
 
 Worker-created owners with queued or otherwise retained pointer claims remain
 mapped after their creating worker exits. The orphan is reclaimed after both
 its worker leases and its last pointer claim end. A queue claim is marked
-queue-owned on put and adopted by the receiving thread on get; queue teardown
-releases claims that were never received.
+queue-owned on put and adopted by the receiving thread on get. Shutdown closes
+admission and detaches nodes under the queue mutex, releasing claims that were
+never received exactly once. It deliberately leaves the closed queue state
+allocated until process teardown so detached blocked or racing workers cannot
+use freed mutex, condition or queue storage; no worker join is added.
 
 The u64 reference-count update is an always-lock-free atomic operation on the
 supported targets. Descriptor creation, invalidation and reclamation still run
