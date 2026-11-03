@@ -98,6 +98,11 @@ inline int RecvKindOf(TypeExpr *t) {
     F(B_UNSAFE_ATOMIC_LOAD, "unsafe_atomic_load", 2, 2, "", "", 0, "", BF_TYARGS) \
     F(B_UNSAFE_ATOMIC_STORE, "unsafe_atomic_store", 3, 3, "", "", 0, "", BF_TYARGS) \
     F(B_UNSAFE_ATOMIC_ADD, "unsafe_atomic_fetch_add", 3, 3, "", "", 0, "", BF_TYARGS) \
+    F(B_UNSAFE_ATOMIC_SUB, "unsafe_atomic_fetch_sub", 3, 3, "", "", 0, "", BF_TYARGS) \
+    F(B_UNSAFE_ATOMIC_EXCHANGE, "unsafe_atomic_exchange", 3, 3, "", "", 0, "", BF_TYARGS) \
+    F(B_UNSAFE_ATOMIC_AND, "unsafe_atomic_fetch_and", 3, 3, "", "", 0, "", BF_TYARGS) \
+    F(B_UNSAFE_ATOMIC_OR, "unsafe_atomic_fetch_or", 3, 3, "", "", 0, "", BF_TYARGS) \
+    F(B_UNSAFE_ATOMIC_XOR, "unsafe_atomic_fetch_xor", 3, 3, "", "", 0, "", BF_TYARGS) \
     F(B_UNSAFE_ATOMIC_CAS, "unsafe_atomic_compare_exchange", 5, 5, "", "", 0, "", BF_TYARGS) \
     F(B_SHARED_ALLOC, "shared_alloc", 1, 1, "", "", 0, "", 0) \
     F(B_SHARED_VIEW, "shared_view", 3, 3, "", "", 0, "", 0) \

@@ -120,7 +120,11 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
             return {a[1], ok};
         }
         auto t = T();
-        L(CT(c->qtype), " ", t, " = __atomic_", bk == B_UNSAFE_ATOMIC_LOAD ? "load_n" : "fetch_add",
+        const char *op = bk == B_UNSAFE_ATOMIC_LOAD ? "load" : bk == B_UNSAFE_ATOMIC_EXCHANGE ? "exchange"
+                         : bk == B_UNSAFE_ATOMIC_ADD ? "fetch_add" : bk == B_UNSAFE_ATOMIC_SUB ? "fetch_sub"
+                         : bk == B_UNSAFE_ATOMIC_AND ? "fetch_and" : bk == B_UNSAFE_ATOMIC_OR ? "fetch_or" : "fetch_xor";
+        L(CT(c->qtype), " ", t, " = __atomic_", op,
+          bk == B_UNSAFE_ATOMIC_LOAD || bk == B_UNSAFE_ATOMIC_EXCHANGE ? "_n" : "",
           "(", ptr, bk == B_UNSAFE_ATOMIC_LOAD ? "" : cat(", ", a[1]), ", ", order, ");");
         return {t};
     }

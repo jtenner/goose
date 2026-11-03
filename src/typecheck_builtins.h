@@ -117,7 +117,11 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
     if ((d.kind >= B_SHARED_ATOMIC32 && d.kind <= B_ATOMIC_CAS) || rawatomic) {
         auto bk = d.kind;
         if (rawatomic) {
-            static const BuiltinKind kinds[] = {B_ATOMIC_LOCKFREE, B_ATOMIC_LOAD, B_ATOMIC_STORE, B_ATOMIC_ADD, B_ATOMIC_CAS};
+            static const BuiltinKind kinds[] = {
+                B_ATOMIC_LOCKFREE, B_ATOMIC_LOAD, B_ATOMIC_STORE, B_ATOMIC_ADD,
+                B_ATOMIC_SUB, B_ATOMIC_EXCHANGE, B_ATOMIC_AND, B_ATOMIC_OR,
+                B_ATOMIC_XOR, B_ATOMIC_CAS
+            };
             bk = kinds[d.kind - B_UNSAFE_ATOMIC_LOCKFREE];
         }
         auto native = [&](size_t i, NativeKind k) {
