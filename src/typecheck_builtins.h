@@ -30,15 +30,26 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
             return v.type;
         };
         if (d.kind == B_SHARED_POINTER_ALLOC) {
+            if (args.size() != 1 && args.size() != 3)
+                Error(c, "shared_pointer_alloc takes a value, or an owner, offset, and value");
             if (c->tyargs.size() != 1) Error(c, "shared_pointer_alloc needs exactly one type argument");
             auto t = Subst(c->tyargs[0]); ValidateType(t, c->line, VT_LOCAL);
-            if (ClassOf(t) != SC_FIXED || !IsFlat(t) || Reaches(t, [](TypeExpr *x) {
-                    return x->kind == TY_NATIVE || x->kind == TY_REF || x->kind == TY_SLICE || x->kind == TY_FN;
-                })) Error(c, cat("SharedPointer value type must be recursively fixed and flat, not ", TypeStr(t)));
-            CheckArg(args[0], t); auto p = ast.NewType(TY_NATIVE, c->line);
+            if (!SharedPointerPayloadOk(t))
+                Error(c, cat("SharedPointer value type must be recursively fixed and flat, not ", TypeStr(t)));
+            if (args.size() == 3) {
+                auto owner = CheckValue(args[0], nullptr);
+                if (owner.type->kind != TY_NATIVE || owner.type->nativekind != NK_OWNER)
+                    Error(c, "shared_pointer_alloc requires SharedOwner for argument 1");
+                CheckIntAny(args[1]); CheckArg(args[2], t);
+            } else CheckArg(args[0], t);
+            auto p = ast.NewType(TY_NATIVE, c->line);
             p->nativekind = NK_POINTER; p->nativearg = t; c->qtype = t;
             Val pv; pv.type = p; Val ov; ov.type = ast.NewType(TY_NATIVE, c->line); ov.type->nativekind = NK_OWNER;
-            Val bv; bv.type = ast.booltype; c->rettypes = {p, ov.type, bv.type}; lastcallrets = {pv, ov, bv}; return pv;
+            Val bv; bv.type = ast.booltype;
+            c->rettypes = args.size() == 1 ? vector<TypeExpr *>{p, ov.type, bv.type}
+                                           : vector<TypeExpr *>{p, bv.type};
+            lastcallrets = args.size() == 1 ? vector<Val>{pv, ov, bv} : vector<Val>{pv, bv};
+            return pv;
         }
         auto p = pointer(0); c->qtype = p->nativearg;
         if (d.kind == B_SHARED_POINTER_STORE) CheckArg(args[1], p->nativearg);

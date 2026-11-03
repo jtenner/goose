@@ -1033,6 +1033,10 @@ GS_API void gs_shared_pointer_copy(gs_shared_cap pointer, void *value, uint64_t 
     const char *file, int line);
 GS_API void gs_shared_pointer_store(gs_shared_cap pointer, const void *value, uint64_t size,
     const char *file, int line);
+GS_API gs_shared_cap gs_shared_pointer_alloc_in(gs_shared_cap owner, uint64_t offset,
+    const void *value, uint64_t size, uint8_t *ok, const char *file, int line);
+GS_API void gs_shared_pointer_queue(gs_shared_cap pointer, const char *file, int line);
+GS_API void gs_shared_pointer_adopt(gs_shared_cap pointer, const char *file, int line);
 
 /* One queue per flat element type the program uses (the compiler emits a
    gs_queue global per type, which main sets up before anything can use it).
@@ -1058,6 +1062,7 @@ GS_API void gs_qlimit(gs_queue *q, int64_t n, const char *file, int line);
 /* Frees a queue and the messages left in it, once no thread program can
    use it (goose_exit); gs_qinit makes it again. */
 GS_API void gs_qfree(gs_queue *q);
+GS_API void gs_qdestroy(gs_queue *q, int pointer_elements);
 
 #ifndef GS_RUNTIME_OBJECT
 
