@@ -119,9 +119,18 @@ The u64 reference-count update is an always-lock-free atomic operation on the
 supported targets. Descriptor creation, invalidation and reclamation still run
 under the capability-registry mutex, so retain and release as complete
 operations are thread-safe but not lock-free.
+Pointer-only programs emit the same supported-frontend and always-lock-free
+u64/generation assertions as shared atomic capabilities. There is no
+`libatomic` or mutex fallback; TinyCC and unsupported native frontends remain
+explicitly rejected.
 
-This allocation API always creates a fresh anonymous owner. It does not yet
-provide allocation inside a caller-supplied existing `SharedOwner`.
+`shared_pointer_alloc<T>(owner, offset, value)` registers a checked payload
+range in an existing writable anonymous owner and returns `(pointer, ok)`. The
+owner is creator-thread-only; the range must be in bounds and disjoint from
+ordinary borrows, atomic regions and other live pointer objects. Those bytes
+remain unavailable to borrows and atomic registration until the last claim is
+released. The one-argument convenience form creates a fresh owner and returns
+`(pointer, owner, ok)` through the same registration path.
 
 ## Atomic regions and indexed job tables
 
