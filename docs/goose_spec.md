@@ -3630,6 +3630,13 @@ specialization has its own versions), and `extern simd fn` is an error.
 
 #### Explicit fixed-width vectors
 
+**Fork status.** The named types and their width-specific splat, checked
+load/store and shuffle operations are implemented as fixed-array values. The C
+backend's existing vector-expression path lowers the floating shapes to vector
+extensions; extending that lowering to integer operations while retaining the
+scalar overflow and division aborts is proposed, not implemented. The scalar
+fallback is therefore the current semantics for those integer operations.
+
 The native SIMD extension provides the fixed-width value types `i8x16`,
 `u8x16`, `i16x8`, `u16x8`, `i32x4`, `u32x4`, `i64x2`, `u64x2`, `f32x4` and
 `f64x2`, and the corresponding 32-byte and 64-byte types obtained by doubling
@@ -3671,6 +3678,9 @@ value copying under §11.2.
 
 #### Explicit storage alignment
 
+**Fork status.** This syntax and its layout rules are proposed. They are not
+accepted by the current parser and no implementation may rely on them yet.
+
 `align(N)` immediately before a global, local or struct field declaration
 requests an address divisible by the positive power-of-two byte constant `N`.
 `N` may not exceed 64. The annotation changes placement, not the value's type,
@@ -3694,6 +3704,11 @@ semantic scalar fallback. A backend that cannot represent the requested
 storage alignment must reject it explicitly rather than silently lower the
 alignment. A backend may ignore the performance request of `simd`, but may not
 change vector results, observable aborts, output or layout.
+
+Build-time vectorization feedback for a `simd fn` hot loop is also proposed,
+not implemented. Such feedback must be advisory, must identify the function
+and loop, and must not change whether compilation succeeds unless a future
+separate opt-in gate requests that behavior.
 
 ### 7.13 `inline fn`: inlined whatever its size
 
