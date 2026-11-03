@@ -118,6 +118,18 @@ inline int RecvKindOf(TypeExpr *t) {
     F(B_THREAD_SPAWN,     "thread_spawn",     1, 99,   "",   "i", 0,              "",            0) \
     F(B_THREAD_SPAWN_CONTAINED, "thread_spawn_contained", 1, 99, "", "i", 0,       "",            0) \
     F(B_THREAD_WAIT,      "thread_wait",      1,  2,   "",   "",  0,              "append to",   BF_OUTARG) \
+    F(B_THREAD_SPAWN_JOIN, "thread_spawn_join", 1, 99, "", "", 0, "", 0) \
+    F(B_THREAD_SPAWN_CONTAINED_JOIN, "thread_spawn_contained_join", 1, 99, "", "", 0, "", 0) \
+    F(B_THREAD_JOIN,      "thread_join",      1, 2, "", "", 0, "append to", BF_OUTARG) \
+    F(B_THREAD_CANCEL,    "thread_cancel",    1, 1, "", "b", 0, "", 0) \
+    F(B_THREAD_CANCELLED, "thread_cancelled", 0, 0, "", "b", 0, "", 0) \
+    F(B_CHANNEL,          "channel",          0, 1, "", "", 0, "", BF_TYARGS) \
+    F(B_CHANNEL_SEND,     "channel_send",     2, 2, "", "b", 0, "", 0) \
+    F(B_CHANNEL_TRY_SEND, "channel_try_send", 2, 2, "", "b", 0, "", 0) \
+    F(B_CHANNEL_RECEIVE,  "channel_receive",  1, 1, "", "", 0, "", 0) \
+    F(B_CHANNEL_TRY_RECEIVE, "channel_try_receive", 1, 1, "", "", 0, "", 0) \
+    F(B_CHANNEL_CLOSE,    "channel_close",    1, 1, "", "b", 0, "", 0) \
+    F(B_CHANNEL_WAIT_ANY, "channel_wait_any", 1, 99, "", "i", 0, "", 0) \
     F(B_QPUT,             "qput",             1,  1,   "",   "",  0,              "",            0) \
     F(B_QGET,             "qget",             0,  1,   "",   "",  0,              "",            BF_TYARGS) \
     F(B_QPOLL,            "qpoll",            0,  0,   "",   "",  0,              "",            BF_TYARGS) \

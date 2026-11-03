@@ -1055,13 +1055,20 @@ R"GSRT(GS_API int64_t gs_hardware_threads(void);
    abort ends run early. */
 GS_API int64_t gs_thread_start(void (*run)(void (*)(uint8_t *), uint8_t *),
                                void (*release)(void), void (*entry)(uint8_t *),
-                               const void *args, int64_t argsize, int contained);
+                               const void *args, int64_t argsize, int contained, int structured);
 /* Whether the worker returned rather than aborted, once it has ended. Where
    `msg` is not NULL, the first such wait for a worker that aborted takes its
    message: `msg` and `len` are set to it, which the caller frees with
    gs_free_msg, or to NULL and no bytes. */
 GS_API uint8_t gs_thread_wait(int64_t id, uint8_t **msg, int64_t *len,
                                const char *file, int line);
+typedef struct { uint64_t slot, generation; } gs_handle;
+GS_API uint8_t *gs_thread_join(gs_handle h, int64_t *size, uint8_t **msg, int64_t *len,
+                               const char *file, int line);
+GS_API uint8_t gs_thread_cancel(gs_handle h, const char *file, int line);
+GS_API uint8_t gs_thread_cancelled(void);
+GS_API void gs_thread_publish_result(const void *data, int64_t size);
+GS_API void gs_structured_cleanup(int64_t parent);
 GS_API void gs_free_msg(uint8_t *msg);
 
 )GSRT"
@@ -1141,6 +1148,13 @@ GS_API void gs_qlimit(gs_queue *q, int64_t n, const char *file, int line);
 /* Frees a queue and the messages left in it, once no thread program can
    use it (goose_exit); gs_qinit makes it again. */
 GS_API void gs_qfree(gs_queue *q);
+GS_API gs_handle gs_channel_create(int64_t limit, const char *file, int line);
+GS_API uint8_t gs_channel_send(gs_handle h, const void *data, int64_t size, int wait,
+                               const char *file, int line);
+GS_API gs_qnode *gs_channel_receive(gs_handle h, int wait, const char *file, int line);
+GS_API uint8_t gs_channel_close(gs_handle h, const char *file, int line);
+GS_API int64_t gs_channel_wait_any(const gs_handle *hs, int64_t n,
+                                   const char *file, int line);
 
 )GSRT"
 R"GSRT(#ifndef GS_RUNTIME_OBJECT
@@ -1220,7 +1234,14 @@ static void gs_thread_release(void) {
 )GSRT"
 R"GSRT(static int64_t gs_thread_spawn(void (*entry)(uint8_t *), const void *args, int64_t argsize,
                                int contained) {
-    return gs_thread_start(gs_thread_run, gs_thread_release, entry, args, argsize, contained);
+    return gs_thread_start(gs_thread_run, gs_thread_release, entry, args, argsize, contained, 0);
+}
+static gs_handle gs_thread_spawn_structured(void (*entry)(uint8_t *), const void *args,
+                                             int64_t argsize, int contained) {
+    int64_t id = gs_thread_start(gs_thread_run, gs_thread_release, entry, args, argsize,
+                                 contained, 1);
+    gs_handle h = { (uint64_t)id, (uint64_t)id + 1 };
+    return h;
 }
 #endif
 
@@ -3522,13 +3543,21 @@ R"GSRT(/* ----------------------------------------------------------------------
 R"GSRT(typedef struct gs_thread {
     struct gs_thread *next;
     int64_t id;
+    int64_t parent;
     void (*run)(void (*)(uint8_t *), uint8_t *);
     void (*release)(void);
     void (*entry)(uint8_t *args);
     uint8_t *args;
     int contained;
+    int structured, completed, cancelled, aborted;
+    uint8_t *result, *abort_msg;
+    int64_t result_size, abort_len;
     void *shared_leases;
 } gs_thread;
+
+)GSRT"
+R"GSRT(static GS_TLS gs_thread *gs_current_structured;
+static void gs_channels_cancel_wakeup(void);
 
 )GSRT"
 R"GSRT(static gs_thread *gs_threads;
@@ -3597,6 +3626,7 @@ static void *gs_thread_main(void *p)
 #endif
 {
     gs_thread *t = (gs_thread *)p;
+    gs_current_structured = t->structured ? t : NULL;
     gs_regions_begin(gs_workerregions);
     gs_native_stack_init();
     gs_current_thread_id = t->id;
@@ -3604,6 +3634,7 @@ static void *gs_thread_main(void *p)
     gs_contained contain;
     if (t->contained) aborted = gs_run_contained(t, &contain);
     else t->run(t->entry, t->args);
+    gs_structured_cleanup(t->id);
     gs_shared_worker_cleanup(t->shared_leases, t->id);
     t->release();
     free(t->args);
@@ -3614,11 +3645,17 @@ R"GSRT(    /* Publish completion only after all Goose storage has been released.
        No waiter retains a pointer to this record. The detached native thread
        releases its own final OS stack/TLS state on returning below. */
     gs_mutex_lock(&gs_threads_mutex);
-    gs_thread **slot = &gs_threads;
-    while (*slot != t) slot = &(*slot)->next;
-    *slot = t->next;
-    if (aborted) gs_aborted_add(t->id, contain.msg, contain.len);
-    free(t);
+    if (t->structured) {
+        t->completed = 1;
+        t->aborted = aborted;
+        if (aborted) { t->abort_msg = contain.msg; t->abort_len = contain.len; }
+    } else {
+        gs_thread **slot = &gs_threads;
+        while (*slot != t) slot = &(*slot)->next;
+        *slot = t->next;
+        if (aborted) gs_aborted_add(t->id, contain.msg, contain.len);
+        free(t);
+    }
     gs_cond_broadcast(&gs_threads_done);
     gs_mutex_unlock(&gs_threads_mutex);
     #ifdef _WIN32
@@ -3631,7 +3668,7 @@ R"GSRT(    /* Publish completion only after all Goose storage has been released.
 )GSRT"
 R"GSRT(GS_API int64_t gs_thread_start(void (*run)(void (*)(uint8_t *), uint8_t *),
                                void (*release)(void), void (*entry)(uint8_t *),
-                               const void *args, int64_t argsize, int contained) {
+                               const void *args, int64_t argsize, int contained, int structured) {
     if (argsize < 0 || (uint64_t)argsize > SIZE_MAX)
         gs_panic("invalid thread argument size");
     gs_thread *t = (gs_thread *)malloc(sizeof(gs_thread));
@@ -3640,6 +3677,12 @@ R"GSRT(GS_API int64_t gs_thread_start(void (*run)(void (*)(uint8_t *), uint8_t *
     t->release = release;
     t->entry = entry;
     t->contained = contained;
+    t->parent = gs_current_thread_id;
+    t->structured = structured;
+    t->completed = t->aborted = 0;
+    t->cancelled = structured && contained && gs_thread_cancelled();
+    t->result = t->abort_msg = NULL;
+    t->result_size = t->abort_len = 0;
     t->args = (uint8_t *)malloc(argsize ? (size_t)argsize : 1);
     if (!t->args) {
         free(t);
@@ -3681,6 +3724,93 @@ R"GSRT(GS_API int64_t gs_thread_start(void (*run)(void (*)(uint8_t *), uint8_t *
     }
     gs_mutex_unlock(&gs_threads_mutex);
     return id;
+}
+
+)GSRT"
+R"GSRT(GS_API void gs_thread_publish_result(const void *data, int64_t size) {
+    gs_thread *t = gs_current_structured;
+    if (!t || size < 0 || (uint64_t)size > SIZE_MAX) gs_panic("invalid structured result");
+    t->result = (uint8_t *)malloc(size ? (size_t)size : 1);
+    if (!t->result) gs_panic("out of memory publishing structured result");
+    if (size) memcpy(t->result, data, (size_t)size);
+    t->result_size = size;
+}
+
+)GSRT"
+R"GSRT(static gs_thread *gs_structured_get(gs_handle h) {
+    if (h.generation != h.slot + 1 || h.slot > (uint64_t)INT64_MAX) return NULL;
+    gs_thread *t = gs_threads;
+    while (t && t->id != (int64_t)h.slot) t = t->next;
+    return t && t->structured ? t : NULL;
+}
+
+)GSRT"
+R"GSRT(GS_API uint8_t *gs_thread_join(gs_handle h, int64_t *size, uint8_t **msg, int64_t *len,
+                               const char *file, int line) {
+    gs_mutex_lock(&gs_threads_mutex);
+    gs_thread *t = gs_structured_get(h);
+    if (!t) { gs_mutex_unlock(&gs_threads_mutex); gs_abort(GS_E_THREADID, file, line); }
+    if (t->id == gs_current_thread_id) { gs_mutex_unlock(&gs_threads_mutex); gs_abort(GS_E_THREADSELF, file, line); }
+    while (!t->completed) gs_cond_wait(&gs_threads_done, &gs_threads_mutex);
+    gs_thread **slot = &gs_threads; while (*slot != t) slot = &(*slot)->next; *slot = t->next;
+    uint8_t *result = t->result; *size = t->result_size;
+    if (msg) { *msg = t->abort_msg; *len = t->abort_len; }
+    else free(t->abort_msg);
+    if (t->aborted) { free(result); result = NULL; *size = 0; }
+    free(t);
+    gs_mutex_unlock(&gs_threads_mutex);
+    return result;
+}
+
+)GSRT"
+R"GSRT(GS_API uint8_t gs_thread_cancel(gs_handle h, const char *file, int line) {
+    gs_mutex_lock(&gs_threads_mutex);
+    gs_thread *t = gs_structured_get(h);
+    if (!t) { gs_mutex_unlock(&gs_threads_mutex); gs_abort(GS_E_THREADID, file, line); }
+    if (!t->contained) { gs_mutex_unlock(&gs_threads_mutex);
+        gs_abort_msg((const uint8_t *)"only a structured contained worker can be cancelled", 52,
+                     file, line); }
+    uint8_t active = !t->completed;
+    t->cancelled = 1;
+    for (;;) {
+        int changed = 0;
+        for (gs_thread *c = gs_threads; c; c = c->next)
+            if (c->structured && c->contained && !c->cancelled) {
+                gs_thread *p = gs_threads;
+                while (p && p->id != c->parent) p = p->next;
+                if (p && p->cancelled) { c->cancelled = 1; changed = 1; }
+            }
+        if (!changed) break;
+    }
+    gs_cond_broadcast(&gs_threads_done);
+    gs_mutex_unlock(&gs_threads_mutex);
+    gs_channels_cancel_wakeup();
+    return active;
+}
+
+)GSRT"
+R"GSRT(GS_API uint8_t gs_thread_cancelled(void) {
+    return gs_current_structured && gs_current_structured->cancelled;
+}
+
+)GSRT"
+R"GSRT(GS_API void gs_structured_cleanup(int64_t parent) {
+    for (;;) {
+        gs_mutex_lock(&gs_threads_mutex);
+        gs_thread *t = gs_threads;
+        while (t && (!t->structured || t->parent != parent)) t = t->next;
+        if (!t) { gs_mutex_unlock(&gs_threads_mutex); return; }
+        if (t->contained) t->cancelled = 1;
+        gs_mutex_unlock(&gs_threads_mutex);
+        if (t->contained) gs_channels_cancel_wakeup();
+        gs_mutex_lock(&gs_threads_mutex);
+        while (!t->completed) gs_cond_wait(&gs_threads_done, &gs_threads_mutex);
+        gs_thread **slot = &gs_threads;
+        while (*slot != t) slot = &(*slot)->next;
+        *slot = t->next;
+        free(t->result); free(t->abort_msg); free(t);
+        gs_mutex_unlock(&gs_threads_mutex);
+    }
 }
 
 )GSRT"
@@ -3871,6 +4001,131 @@ GS_API void gs_qfree(gs_queue *q) {
     #endif
     free(s);
     *q = NULL;
+}
+
+)GSRT"
+R"GSRT(/* First-class channels. Stable state pointers are indexed by opaque
+   (slot,generation) handles; channel payloads remain copied queue images. */
+typedef struct gs_channel_state {
+    gs_qnode *head, *tail;
+    int64_t count, limit;
+    uint64_t generation;
+    int closed;
+    gs_mutex mutex;
+    gs_cond cond;
+} gs_channel_state;
+static gs_channel_state **gs_channels;
+static int64_t gs_nchannels, gs_channelcap;
+static uint64_t gs_channel_generation;
+static gs_mutex gs_channels_mutex = GS_MUTEX_INIT;
+static gs_cond gs_channels_changed = GS_COND_INIT;
+
+)GSRT"
+R"GSRT(static void gs_channels_cancel_wakeup(void) {
+    gs_mutex_lock(&gs_channels_mutex);
+    for (int64_t i = 0; i < gs_nchannels; i++) {
+        gs_mutex_lock(&gs_channels[i]->mutex);
+        gs_cond_broadcast(&gs_channels[i]->cond);
+        gs_mutex_unlock(&gs_channels[i]->mutex);
+    }
+    gs_cond_broadcast(&gs_channels_changed);
+    gs_mutex_unlock(&gs_channels_mutex);
+}
+
+)GSRT"
+R"GSRT(static gs_channel_state *gs_channel_get(gs_handle h, const char *file, int line) {
+    gs_mutex_lock(&gs_channels_mutex);
+    gs_channel_state *s = h.slot < (uint64_t)gs_nchannels ? gs_channels[h.slot] : NULL;
+    if (!s || s->generation != h.generation) {
+        gs_mutex_unlock(&gs_channels_mutex);
+        gs_abort_msg((const uint8_t *)"invalid channel handle", 22, file, line);
+    }
+    gs_mutex_unlock(&gs_channels_mutex);
+    return s;
+}
+
+)GSRT"
+R"GSRT(GS_API gs_handle gs_channel_create(int64_t limit, const char *file, int line) {
+    if (limit <= 0) gs_abort(GS_E_QBOUND, file, line);
+    gs_channel_state *s = (gs_channel_state *)calloc(1, sizeof(*s));
+    if (!s) gs_panic("out of memory creating a channel");
+    s->limit = limit;
+    gs_mutex_init(&s->mutex); gs_cond_init(&s->cond);
+    gs_mutex_lock(&gs_channels_mutex);
+    if (gs_nchannels == gs_channelcap) {
+        int64_t cap = gs_channelcap ? gs_channelcap * 2 : 16;
+        gs_channel_state **p = (gs_channel_state **)realloc(gs_channels, (size_t)cap * sizeof(*p));
+        if (!p) gs_panic("out of memory recording a channel");
+        gs_channels = p; gs_channelcap = cap;
+    }
+    s->generation = ++gs_channel_generation;
+    gs_handle h = { (uint64_t)gs_nchannels, s->generation };
+    gs_channels[gs_nchannels++] = s;
+    gs_mutex_unlock(&gs_channels_mutex);
+    return h;
+}
+
+)GSRT"
+R"GSRT(GS_API uint8_t gs_channel_send(gs_handle h, const void *data, int64_t size, int wait,
+                               const char *file, int line) {
+    gs_channel_state *s = gs_channel_get(h, file, line);
+    gs_qnode *n = (gs_qnode *)malloc(sizeof(*n) + (size_t)size);
+    if (!n) gs_panic("out of memory sending on a channel");
+    n->next = NULL; n->size = size; memcpy(n + 1, data, (size_t)size);
+    gs_mutex_lock(&s->mutex);
+    while (wait && !s->closed && s->count >= s->limit && !gs_thread_cancelled())
+        gs_cond_wait(&s->cond, &s->mutex);
+    if (s->closed || s->count >= s->limit || gs_thread_cancelled()) {
+        gs_mutex_unlock(&s->mutex); free(n); return 0;
+    }
+    s->count++; if (s->tail) s->tail->next = n; else s->head = n; s->tail = n;
+    gs_cond_broadcast(&s->cond); gs_mutex_unlock(&s->mutex);
+    gs_mutex_lock(&gs_channels_mutex); gs_cond_broadcast(&gs_channels_changed);
+    gs_mutex_unlock(&gs_channels_mutex);
+    return 1;
+}
+
+)GSRT"
+R"GSRT(GS_API gs_qnode *gs_channel_receive(gs_handle h, int wait, const char *file, int line) {
+    gs_channel_state *s = gs_channel_get(h, file, line);
+    gs_mutex_lock(&s->mutex);
+    while (wait && !s->head && !s->closed && !gs_thread_cancelled())
+        gs_cond_wait(&s->cond, &s->mutex);
+    gs_qnode *n = s->head;
+    if (n) {
+        s->head = n->next; if (!s->head) s->tail = NULL; s->count--;
+    }
+    gs_cond_broadcast(&s->cond); gs_mutex_unlock(&s->mutex);
+    return n;
+}
+
+)GSRT"
+R"GSRT(GS_API uint8_t gs_channel_close(gs_handle h, const char *file, int line) {
+    gs_channel_state *s = gs_channel_get(h, file, line);
+    gs_mutex_lock(&s->mutex); uint8_t first = !s->closed; s->closed = 1;
+    gs_cond_broadcast(&s->cond); gs_mutex_unlock(&s->mutex);
+    gs_mutex_lock(&gs_channels_mutex); gs_cond_broadcast(&gs_channels_changed);
+    gs_mutex_unlock(&gs_channels_mutex); return first;
+}
+
+)GSRT"
+R"GSRT(GS_API int64_t gs_channel_wait_any(const gs_handle *hs, int64_t n,
+                                   const char *file, int line) {
+    gs_mutex_lock(&gs_channels_mutex);
+    for (;;) {
+        if (gs_thread_cancelled()) { gs_mutex_unlock(&gs_channels_mutex); return -1; }
+        for (int64_t i = 0; i < n; i++) {
+            gs_channel_state *s = hs[i].slot < (uint64_t)gs_nchannels
+                ? gs_channels[hs[i].slot] : NULL;
+            if (!s || s->generation != hs[i].generation) {
+                gs_mutex_unlock(&gs_channels_mutex);
+                gs_abort_msg((const uint8_t *)"invalid channel handle", 22, file, line);
+            }
+            gs_mutex_lock(&s->mutex); int ready = s->head || s->closed; gs_mutex_unlock(&s->mutex);
+            if (ready) { gs_mutex_unlock(&gs_channels_mutex); return i; }
+        }
+        gs_cond_wait(&gs_channels_changed, &gs_channels_mutex);
+    }
 }
 
 )GSRT"

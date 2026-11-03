@@ -595,6 +595,7 @@ struct TypeCheck {
     // it, so that the substituted type shows what the variable is bound to.
     static bool NamesGeneric(const TypeExpr *t, string_view name) {
         switch (t->kind) {
+            case TY_NATIVE: return t->native->arg && NamesGeneric(t->native->arg, name);
             case TY_GENERIC: return t->named->name == name;
             case TY_STRUCT:
                 for (auto a : t->struc->args) if (NamesGeneric(a, name)) return true;
@@ -979,6 +980,7 @@ struct TypeCheck {
                 return;
             case TY_SLICE: SizeNames(t->sub, f); return;
             case TY_REF: SizeNames(t->ref->sub, f); return;
+            case TY_NATIVE: if (t->native->arg) SizeNames(t->native->arg, f); return;
             case TY_STRUCT: for (auto a : t->struc->args) SizeNames(a, f); return;
             case TY_ENUM: for (auto a : t->enu->args) SizeNames(a, f); return;
             case TY_VARIANT: SizeNames(t->var->adt, f); return;
@@ -995,7 +997,10 @@ struct TypeCheck {
         switch (a->kind) {
             case TY_INT:  return a->intstorage == b->intstorage && SameIndex(a, b);
             case TY_FLT:  return a->fltstorage == b->fltstorage;
-            case TY_NATIVE: return a->nativekind == b->nativekind;
+            case TY_NATIVE:
+                return a->native->kind == b->native->kind &&
+                       ((!a->native->arg && !b->native->arg) ||
+                        (a->native->arg && b->native->arg && TypeEq(a->native->arg, b->native->arg)));
             case TY_BOOL: case TY_VOID: case TY_FN: return true;
             case TY_STRUCT: {
                 if (a->struc->st != b->struc->st) return false;
@@ -1107,6 +1112,16 @@ struct TypeCheck {
 
     TypeExpr *SubstRaw(TypeExpr *t) {
         switch (t->kind) {
+            case TY_NATIVE: {
+                if (!t->native->arg) return t;
+                auto arg = Subst(t->native->arg);
+                if (arg == t->native->arg) return t;
+                auto n = ast.NewType(TY_NATIVE, t->line);
+                n->native = ast.NewDetail<TypeNative>();
+                n->native->kind = t->native->kind;
+                n->native->arg = arg;
+                return n;
+            }
             case TY_GENERIC: {
                 // An exemplar's binding is the type it stands for wherever it
                 // has got to, whatever a callee's own type variable of that
