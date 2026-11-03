@@ -84,6 +84,12 @@ def check_unsafe_atomics(exe, base, cc=None, *, runtime=None, extra=()):
                 raise RuntimeError('missing non-lock-free width rejection\n' + out + err)
         check(f'{width}-no-type', 'unsafe_atomic_load(8, "Relaxed")', 'exactly one type argument')
         check(f'{width}-address-type', f'unsafe_atomic_load<{width}>(true, "Relaxed")', 'u64')
+        for op in ('load', 'store', 'fetch_add', 'fetch_sub', 'exchange',
+                   'fetch_and', 'fetch_or', 'fetch_xor', 'compare_exchange'):
+            values = '' if op == 'load' else ', 1' if op != 'compare_exchange' else ', 0, 1'
+            order_args = ', "Relaxed"' if op != 'compare_exchange' else ', "Relaxed", "Relaxed"'
+            check(f'{width}-{op}-bad-type', f'unsafe_atomic_{op}<i32>(8{values}{order_args})',
+                  'unsafe atomic type must be u32 or u64')
     # Integer addresses must not bypass the opt-in worker unsafe restriction.
     for op in ('fetch_add', 'fetch_sub', 'exchange', 'fetch_and', 'fetch_or', 'fetch_xor'):
         source = base / f'strict-{op}.goose'
