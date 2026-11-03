@@ -362,7 +362,7 @@ struct TypeExpr {
 inline bool IsSharedSendable(const TypeExpr *t) {
     return t->kind == TY_NATIVE && (t->native->kind == NK_VIEW ||
            t->native->kind == NK_ATOMIC_U32 || t->native->kind == NK_ATOMIC_U64 ||
-           t->native->kind == NK_THREAD || t->native->kind == NK_CHANNEL);
+           t->native->kind == NK_CHANNEL);
 }
 inline bool IsRefOrSlice(const TypeExpr *t) { return t->kind == TY_REF || t->kind == TY_SLICE; }
 inline bool IsOptional(const TypeExpr *t) { return t->kind == TY_REF && t->ref->optional; }
