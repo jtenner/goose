@@ -108,6 +108,9 @@ successful receive transfers it to the receiver. A poll/timed-get miss returns
 an invalid zero handle with false. Shutdown releases undelivered handles. This
 narrow exception does not apply to wrappers and does not make capabilities
 serializable or valid in FFI.
+Passing a named pointer handle does not consume it. A fresh
+`shared_pointer_retain(p)` used directly as the spawn argument is consumed once
+the separate worker claim is installed, avoiding an unreachable caller claim.
 
 Worker-created owners with queued or otherwise retained pointer claims remain
 mapped after their creating worker exits. The orphan is reclaimed after both

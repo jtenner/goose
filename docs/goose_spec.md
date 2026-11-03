@@ -4787,6 +4787,10 @@ handoffs, and nested spawns make cleanup skip a stale claim instead of
 releasing it twice. The allocation lease is held too. Wrapping a pointer in
 another value does not gain this exception,
 and pointer-containing worker globals remain forbidden.
+When the argument expression itself is `shared_pointer_retain(p)`, that fresh
+temporary claim is consumed after the distinct worker claim has been installed;
+it does not remain as an unreachable caller claim. A named handle argument is
+never consumed and remains live in the caller.
 
 As the sole queue exception to flat byte images, the element type may be
 exactly `SharedPointer<T>`, never a wrapper or another native capability.
