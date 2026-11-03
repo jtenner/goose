@@ -1,8 +1,8 @@
 # Native memory
 
 Native memory is separate from Goose arrays, references and copied worker
-globals. `SharedOwner`, `SharedView`, `SharedAccess`, `SharedAtomicU32` and
-`SharedAtomicU64` are opaque compiler types. Safe Goose cannot construct their
+globals. `SharedOwner`, `SharedView`, `SharedAccess`, `SharedAtomicU32`,
+`SharedAtomicU64` and `SharedPointer<T>` are opaque compiler types. Safe Goose cannot construct their
 fields, convert integers to them, serialize them, or send them through queues
 or C signatures. Copying a capability copies its authority; it does not create
 a second allocation or a second right to free storage.
@@ -76,6 +76,33 @@ memory. Borrow creation, view creation and worker handoff are setup operations.
 
 See [the shared job sample](../samples/32_shared_jobs.goose) for a complete
 worker pool with indexed completion flags and disjoint result ranges.
+
+## Typed shared pointers
+
+`shared_pointer_alloc<T>(value)` returns `(SharedPointer<T>, SharedOwner,
+bool)`. On success it copies one recursively admissible fixed-size flat value
+into a new anonymous owner. Strings, slices, references, runtime-sized arrays,
+function values, native capabilities and variable-mode ADTs are rejected
+anywhere inside `T`. `shared_pointer_copy` returns a complete snapshot;
+`shared_pointer_store` replaces it atomically with respect to other copy/store
+operations. Neither exposes a Goose reference or raw address.
+
+Assignment aliases one retained claim; it does not increment the count.
+`shared_pointer_retain` creates a distinct retained handle, and
+`shared_pointer_release` invalidates that handle and its aliases. Each retained
+handle prevents owner close. The last release removes the object but does not
+close its owner. Stale and wrong-type operations abort. Counting uses the
+existing lock-free u64 substrate; supported native targets are unchanged and
+TinyCC remains rejected.
+
+A direct pointer can cross `thread_spawn`; the runtime retains a worker-owned
+handle and allocation lease through return or contained abort. It can also be
+the exact element type of a typed queue. Successful `qput` transfers the handle
+and invalidates the sender; a full-queue failure leaves it with the sender. A
+successful receive transfers it to the receiver. A poll/timed-get miss returns
+an invalid zero handle with false. Shutdown releases undelivered handles. This
+narrow exception does not apply to wrappers and does not make capabilities
+serializable or valid in FFI.
 
 ## Atomic regions and indexed job tables
 
