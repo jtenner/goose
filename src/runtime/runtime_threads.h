@@ -597,19 +597,21 @@ GS_API gs_shared_cap gs_shared_pointer_alloc(const void *value, uint64_t size,
 }
 GS_API gs_shared_cap gs_shared_pointer_retain(gs_shared_cap p, const char *file, int line) {
     gs_mutex_lock(&gs_shared_mutex); gs_shared_record *obj = gs_shared_pointer_object(p, gs_shared_at(p.slot)->size, file, line);
-    if (obj->refs == UINT64_MAX) gs_shared_bad("shared pointer reference count overflow", file, line);
+    if (__atomic_load_n(&obj->refs, __ATOMIC_ACQUIRE) == UINT64_MAX)
+        gs_shared_bad("shared pointer reference count overflow", file, line);
     uint64_t i = gs_shared_slot(); if (i == UINT64_MAX) gs_shared_bad("out of memory retaining shared pointer", file, line);
     gs_shared_record *c = gs_shared_at(i); c->allocation = obj->allocation;
     /* Slabs are not contiguous: preserve the object slot from the source claim. */
     c->offset = gs_shared_at(p.slot)->offset; c->size = obj->size; c->workers = obj->generation;
-    obj->refs++; gs_shared_at(obj->allocation)->pointers++;
+    __atomic_fetch_add(&obj->refs, 1, __ATOMIC_ACQ_REL); gs_shared_at(obj->allocation)->pointers++;
     gs_shared_cap out = gs_shared_finish(i, GS_SH_POINTER); gs_mutex_unlock(&gs_shared_mutex); return out;
 }
 GS_API void gs_shared_pointer_release(gs_shared_cap p, const char *file, int line) {
     gs_mutex_lock(&gs_shared_mutex); gs_shared_record *obj = gs_shared_pointer_object(p, gs_shared_at(p.slot)->size, file, line);
     gs_shared_record *claim = gs_shared_at(p.slot), *owner = gs_shared_at(obj->allocation);
-    gs_shared_publish(claim, 0); claim->kind = 0; obj->refs--; owner->pointers--;
-    if (!obj->refs) { gs_shared_publish(obj, 0); obj->kind = 0; }
+    gs_shared_publish(claim, 0); claim->kind = 0;
+    uint64_t oldrefs = __atomic_fetch_sub(&obj->refs, 1, __ATOMIC_ACQ_REL); owner->pointers--;
+    if (oldrefs == 1) { gs_shared_publish(obj, 0); obj->kind = 0; }
     gs_mutex_unlock(&gs_shared_mutex);
 }
 GS_API void gs_shared_pointer_copy(gs_shared_cap p, void *value, uint64_t size, const char *file, int line) {
@@ -782,8 +784,9 @@ GS_API void gs_shared_worker_cleanup(void *leases, int64_t actor) {
         if (p->pointer.generation) {
             gs_shared_record *claim = gs_shared_get(p->pointer, "runtime", 0);
             gs_shared_record *obj = gs_shared_pointer_object(p->pointer, claim->size, "runtime", 0);
-            gs_shared_publish(claim, 0); claim->kind = 0; obj->refs--; r->pointers--;
-            if (!obj->refs) { gs_shared_publish(obj, 0); obj->kind = 0; }
+            gs_shared_publish(claim, 0); claim->kind = 0;
+            uint64_t oldrefs = __atomic_fetch_sub(&obj->refs, 1, __ATOMIC_ACQ_REL); r->pointers--;
+            if (oldrefs == 1) { gs_shared_publish(obj, 0); obj->kind = 0; }
         }
         free(p); p = next;
     }
