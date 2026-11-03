@@ -3583,6 +3583,73 @@ loop. The cost is code size: the function's body appears once per version.
 functions with bodies, including nested and generic ones (each
 specialization has its own versions), and `extern simd fn` is an error.
 
+#### Explicit fixed-width vectors
+
+The native SIMD extension provides the fixed-width value types `i8x16`,
+`u8x16`, `i16x8`, `u16x8`, `i32x4`, `u32x4`, `i64x2`, `u64x2`, `f32x4` and
+`f64x2`, and the corresponding 32-byte and 64-byte types obtained by doubling
+or quadrupling the lane count. A vector has exactly the stated number of
+lanes, in increasing memory order, and occupies exactly 16, 32 or 64 bytes.
+It is flat, has no references or hidden state, and its stored alignment is one
+byte unless the containing storage requests a greater alignment explicitly.
+Consequently adding a vector field does not add implicit padding to a packed
+struct and does not change the offsets of following fields.
+
+`+`, `-`, `*` and `/` apply lane by lane to two vectors of the same type;
+unary `-` applies lane by lane to signed and floating vectors. Integer lanes
+use their declared widths and the ordinary checked or wrapping rules of the
+corresponding scalar operation. Each floating lane performs the corresponding
+scalar operation with one rounding. Ordinary multiplication followed by
+addition is not fused; only `mul_add` has the exception above.
+
+`splat<T>(x)` makes every lane of vector type `T` equal to `x`.
+`vector_load<T>(xs, first)` reads the lanes of `T` from consecutive elements
+of the scalar slice `xs`, and `vector_store(xs, first, v)` writes them. Each
+operation checks the whole half-open element range before accessing it and
+aborts as the corresponding scalar indexing would; no partial access occurs.
+The slice element type must be the vector's lane type. These operations do not
+grant permission to read array capacity or padding beyond the slice length.
+`shuffle(v, i0, ...)` takes exactly one compile-time integer index per result
+lane, each in `0..v.lanes`, and returns the same vector type with lane `k`
+copied from input lane `ik`. Evaluation and aliasing are as if all input lanes
+were copied before any result is stored.
+
+The C backend lowers these values and operations to GCC/Clang vector
+extensions when that frontend supports the complete vector width. Its scalar
+fallback performs the same checked accesses and lane operations. TinyCC and
+other unsupported frontends use that fallback rather than accepting a native
+vector ABI. Vector values are not permitted in `extern` or `export` signatures;
+their C ABI is deliberately unspecified. The extension does not expose raw
+addresses, atomic vector operations, or a way to convert a safe shared-memory
+capability to a vector pointer. A worker receives vectors by ordinary flat
+value copying under §11.2.
+
+#### Explicit storage alignment
+
+`align(N)` immediately before a global, local or struct field declaration
+requests an address divisible by the positive power-of-two byte constant `N`.
+`N` may not exceed 64. The annotation changes placement, not the value's type,
+size or access permissions. On a local or global the implementation may place
+padding outside the value. On a packed struct field it inserts explicit bytes
+before that field; those bytes are part of the struct's fixed layout and its
+layout fingerprint, are initialized to zero, and are ignored by equality and
+formatting. Arrays retain their ordinary stride, so aligning an array aligns
+its first element only; an element type is not silently padded.
+
+An aligned field is rejected in a variable-size packed prefix or anywhere its
+required offset cannot be a configuration-independent constant. Alignment
+never weakens array, slice, shared-memory or raw-pointer bounds. In particular,
+`vector_load` and `vector_store` remain checked and use unaligned operations
+when their actual address is not suitably aligned. Capability wrappers retain
+the byte alignment required by §11.4; annotating storage containing one does
+not change the registry cell's alignment or create new authority.
+
+These vector and alignment forms are optional native optimizations with a
+semantic scalar fallback. A backend that cannot represent the requested
+storage alignment must reject it explicitly rather than silently lower the
+alignment. A backend may ignore the performance request of `simd`, but may not
+change vector results, observable aborts, output or layout.
+
 ### 7.13 `inline fn`: inlined whatever its size
 
 ```goose
@@ -4805,8 +4872,7 @@ came from is `design/stdlib_design.md`). The math types of §6.1 are its
 Deliberately out of scope for v1: error-value conventions (§7.9); move
 operations for resizables; nested root owners and arrays of root owners;
 two-way growth arrays; inline compaction / copying GC for pools; mixed-type pools;
-alignment annotations and explicit vector types (`simd fn`, §7.12, only
-widens the instruction set a function is built for); dynamic stacks;
+dynamic stacks;
 labeled break; namespace privacy, re-exports and nesting (§11.1).
 
 ---
@@ -4993,14 +5059,12 @@ its resolution is described.
 9. **Concurrency surface finalization** — queue fairness/capacity, select,
    worker-local init, flat-type relaxation for self-contained
    relative-reference values (send whole trees through queues).
-10. **SIMD/alignment** — measure whether packed layouts cost real SIMD
-    performance; consider opt-in aligned types if so. Related: narrow-lane
-    elementwise ops (§6.1) should vectorize now that arithmetic runs at the
-    element width; verify with the particle/sum benchmarks. `simd fn`
-    (§7.12) gives a function versions for the wider instruction sets; what
-    remains open is alignment, and whether a function should be able to
-    say which versions it wants (an AVX-512 version is not faster for
-    every loop).
+10. **SIMD version selection** — explicit vectors and storage alignment are
+    specified in §7.12. What remains open is whether a function should be able
+    to say which instruction-set versions it wants (an AVX-512 version is not
+    faster for every loop), and whether a future revision should replace the
+    required per-call CPU test with cached per-program or per-thread dispatch.
+    The latter is not permitted by the current §7.12 call semantics.
 13. **Labels for `break`** — if early-out patterns demand them.
 15. **Wasm fallback** — index-based reference representation details
     (`docs/design/wasm.md` compares the options).
