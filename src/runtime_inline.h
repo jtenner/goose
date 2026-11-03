@@ -1112,6 +1112,8 @@ GS_API void gs_shared_copy(gs_shared_cap dst, uint64_t doff, gs_shared_cap src, 
                             uint64_t size, const char *file, int line);
 GS_API void gs_shared_handoff(gs_shared_cap cap, const char *file, int line);
 GS_API void *gs_shared_pending_take(void);
+GS_API void gs_shared_worker_commit(void *leases, int64_t actor);
+GS_API void gs_shared_worker_rollback(void *leases);
 GS_API void gs_shared_worker_cleanup(void *leases, int64_t actor);
 GS_API gs_shared_cap gs_shared_pointer_alloc(const void *value, uint64_t size,
     gs_shared_cap *owner, uint8_t *ok, const char *file, int line);
@@ -3664,6 +3666,7 @@ R"GSRT(GS_API int64_t gs_thread_start(void (*run)(void (*)(uint8_t *), uint8_t *
     if (gs_numthreads == INT64_MAX) gs_panic("thread id space exhausted");
     int64_t id = gs_numthreads++;
     t->id = id;
+    gs_shared_worker_commit(t->shared_leases, id);
     t->next = gs_threads;
     gs_threads = t;
     int failed;
@@ -3687,7 +3690,7 @@ R"GSRT(GS_API int64_t gs_thread_start(void (*run)(void (*)(uint8_t *), uint8_t *
         gs_threads = t->next;
         --gs_numthreads;
         gs_mutex_unlock(&gs_threads_mutex);
-        gs_shared_worker_cleanup(t->shared_leases, INT64_MIN);
+        gs_shared_worker_rollback(t->shared_leases);
         free(t->args);
         free(t);
         gs_panic("cannot create thread");
@@ -3745,6 +3748,7 @@ R"GSRT(/* ----------------------------------------------------------------------
 R"GSRT(struct gs_qstate {
     gs_qnode *head, *tail;
     int64_t count, limit;
+    int closing;
     gs_mutex mutex;
     gs_cond cond;
 };
@@ -3788,6 +3792,7 @@ R"GSRT(GS_API void gs_qinit(gs_queue *q) {
     s->head = s->tail = NULL;
     s->count = 0;
     s->limit = INT64_MAX;
+    s->closing = 0;
     gs_mutex_init(&s->mutex);
     #if defined(_WIN32) || defined(__APPLE__)
         gs_cond_init(&s->cond);
@@ -3813,7 +3818,7 @@ GS_API uint8_t gs_qput(gs_queue *q, const void *data, int64_t size) {
     n->size = size;
     memcpy(n + 1, data, (size_t)size);
     gs_mutex_lock(&s->mutex);
-    if (s->count >= s->limit) {
+    if (s->closing || s->count >= s->limit) {
         gs_mutex_unlock(&s->mutex);
         free(n);
         return 0;
@@ -3891,8 +3896,10 @@ R"GSRT(GS_API void gs_qdestroy(gs_queue *q, int pointer_elements) {
     struct gs_qstate *s = *q;
     if (!s) return;
     gs_mutex_lock(&s->mutex);
+    s->closing = 1;
     gs_qnode *n = s->head;
     s->head = s->tail = NULL; s->count = 0;
+    gs_cond_broadcast(&s->cond);
     gs_mutex_unlock(&s->mutex);
     while (n) {
         gs_qnode *next = n->next;
@@ -3903,7 +3910,8 @@ R"GSRT(GS_API void gs_qdestroy(gs_queue *q, int pointer_elements) {
         }
         free(n); n = next;
     }
-    free(s); *q = NULL;
+    /* Detached workers may still be inside or about to enter this queue.
+       Keep its closed synchronization state until process teardown. */
 }
 
 )GSRT"
@@ -3945,6 +3953,8 @@ GS_API void gs_rt_stop(void) {
 #define GS_SH_ATOMIC64 5
 #define GS_SH_POINTER_OBJECT 6
 #define GS_SH_POINTER 7
+#define GS_SHARED_QUEUE_ACTOR INT64_MIN
+#define GS_SHARED_PENDING_ACTOR (INT64_MIN + 1)
 #ifdef GS_SEPARATE_RUNTIME
 gs_shared_record *gs_shared_slabs[GS_SHARED_SLABS];
 #endif
@@ -4167,7 +4177,6 @@ GS_API void gs_shared_pointer_store(gs_shared_cap p, const void *value, uint64_t
     gs_shared_record *obj = gs_shared_pointer_object(claim, size, file, line);
     memcpy(obj->data, value, (size_t)size); gs_mutex_unlock(&gs_shared_mutex);
 }
-#define GS_SHARED_QUEUE_ACTOR INT64_MIN
 GS_API void gs_shared_pointer_queue(gs_shared_cap p, const char *file, int line) {
     gs_mutex_lock(&gs_shared_mutex);
     gs_shared_record *claim = gs_shared_pointer_claim(p, file, line);
@@ -4263,9 +4272,9 @@ GS_API gs_shared_cap gs_shared_borrow_range(gs_shared_cap view, uint64_t offset,
                                            const char *file, int line) {
     return gs_shared_borrow_impl(view, offset, size, 0, file, line);
 }
+GS_API void gs_shared_release(gs_shared_cap access, const char *file, int line) {
 )GSRT"
-R"GSRT(GS_API void gs_shared_release(gs_shared_cap access, const char *file, int line) {
-    gs_mutex_lock(&gs_shared_mutex);
+R"GSRT(    gs_mutex_lock(&gs_shared_mutex);
     gs_shared_record *r = gs_shared_get(access, file, line);
     if (r->kind != GS_SH_ACCESS || r->actor != gs_current_thread_id)
         gs_shared_bad("invalid shared access authorization", file, line);
@@ -4324,11 +4333,38 @@ GS_API void gs_shared_handoff(gs_shared_cap cap, const char *file, int line) {
     if (!p) gs_shared_bad("out of memory retaining shared worker lease", file, line);
     p->allocation = r->allocation; p->generation = owner->generation;
     p->pointer = r->kind == GS_SH_POINTER ? cap : (gs_shared_cap){0, 0};
+    if (r->kind == GS_SH_POINTER) r->actor = GS_SHARED_PENDING_ACTOR;
     p->next = gs_shared_pending; gs_shared_pending = p; owner->workers++;
     gs_mutex_unlock(&gs_shared_mutex);
 }
 GS_API void *gs_shared_pending_take(void) {
     void *p = gs_shared_pending; gs_shared_pending = NULL; return p;
+}
+GS_API void gs_shared_worker_commit(void *leases, int64_t actor) {
+    gs_mutex_lock(&gs_shared_mutex);
+    for (gs_shared_lease *p = (gs_shared_lease *)leases; p; p = p->next) {
+        if (!p->pointer.generation) continue;
+        gs_shared_record *claim = gs_shared_pointer_claim(p->pointer, "runtime", 0);
+        if (claim->actor != GS_SHARED_PENDING_ACTOR)
+            gs_shared_bad("corrupt pending shared pointer claim", "runtime", 0);
+        claim->actor = actor;
+    }
+    gs_mutex_unlock(&gs_shared_mutex);
+}
+GS_API void gs_shared_worker_rollback(void *leases) {
+    gs_mutex_lock(&gs_shared_mutex);
+    gs_shared_lease *p = (gs_shared_lease *)leases;
+    while (p) {
+        gs_shared_lease *next = p->next;
+        gs_shared_record *owner = gs_shared_at(p->allocation);
+        if (owner->kind != GS_SH_OWNER || owner->generation != p->generation || !owner->workers)
+            gs_shared_bad("corrupt shared worker lease", "runtime", 0);
+        owner->workers--;
+        if (p->pointer.generation)
+            gs_shared_pointer_release_locked(p->pointer, 0, "runtime", 0);
+        free(p); p = next;
+    }
+    gs_mutex_unlock(&gs_shared_mutex);
 }
 GS_API void gs_shared_worker_cleanup(void *leases, int64_t actor) {
     gs_mutex_lock(&gs_shared_mutex);
@@ -4347,7 +4383,7 @@ GS_API void gs_shared_worker_cleanup(void *leases, int64_t actor) {
             gs_shared_pointer_release_locked(p->pointer, 0, "runtime", 0);
         free(p); p = next;
     }
-    for (uint64_t i = 0; i < gs_shared_highwater; i++) {
+    if (actor >= -1) for (uint64_t i = 0; i < gs_shared_highwater; i++) {
         gs_shared_record *r = gs_shared_at(i);
         if (r->kind == GS_SH_ACCESS && r->actor == actor) { gs_shared_publish(r, 0); r->kind = 0; }
         if (r->kind == GS_SH_POINTER && r->actor == actor) {

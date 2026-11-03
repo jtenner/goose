@@ -1326,17 +1326,19 @@ inline vector<string> CodeGen::EmitThreadSpawn(Call *c, vector<Node *> &an) {
     string stk;
     auto base = BytesTemp(stk);
     vector<string> sharedcaps;
-    vector<string> pointertemps;
     for (size_t i = 0; i < sp->argtypes.size(); i++) {
         auto pt = sp->argtypes[i];
         if (IsSharedSendable(pt)) {
             auto cap = Snapshot(pt, GenPure(an[1 + i]));
             if (pt->kind == TY_NATIVE && pt->nativekind == NK_POINTER) {
-                if (auto ac = Is<Call>(an[1 + i]); ac && ac->builtin == B_SHARED_POINTER_RETAIN)
-                    pointertemps.push_back(cap);
-                auto worker = T();
-                L("gs_shared_cap ", worker, " = gs_shared_pointer_retain(", cap, ", ", LocArgs(c->line), ");");
-                cap = worker;
+                auto n = an[1 + i];
+                bool stored = Is<Ident>(n) || Is<Index>(n) ||
+                    (Is<Dot>(n) && Is<Dot>(n)->IsField());
+                if (stored) {
+                    auto worker = T();
+                    L("gs_shared_cap ", worker, " = gs_shared_pointer_retain(", cap, ", ", LocArgs(c->line), ");");
+                    cap = worker;
+                }
             }
             sharedcaps.push_back(cap);
             EmitValStore(stk, pt, cap);
@@ -1421,8 +1423,6 @@ inline vector<string> CodeGen::EmitThreadSpawn(Call *c, vector<Node *> &an) {
     auto id = T();
     L("int64_t ", id, " = gs_thread_spawn(", thunk, ", ", base, ", ", Top(stk), " - ", base,
       c->builtin == B_THREAD_SPAWN_CONTAINED ? ", 1);" : ", 0);");
-    for (auto &cap : pointertemps)
-        L("gs_shared_pointer_release(", cap, ", ", LocArgs(c->line), ");");
     return { id };
 }
 
