@@ -1370,6 +1370,7 @@ struct CodeGen {
     // varints, and thread/queue machinery call into the runtime.
 
     unordered_map<string, string> queues;   // Element type mangle -> queue global.
+    unordered_set<string> pointerqueues;    // Queue globals holding SharedPointer<T> claims.
 
     string QueueFor(TypeExpr *t);
     Loc RecvLoc(Node *n);

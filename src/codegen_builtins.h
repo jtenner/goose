@@ -7,11 +7,19 @@ namespace goose {
 
 inline string CodeGen::QueueFor(TypeExpr *t) {
     usesthreads = true;
+    if (t->kind == TY_NATIVE && t->nativekind == NK_POINTER && !shared_atomic64) {
+        shared_atomic64 = true;
+        Append(head, "\n#if defined(__TINYC__) || (!defined(__GNUC__) && !defined(__clang__))\n"
+                     "#error Native shared pointers require GCC or Clang; this backend is unsupported\n#endif\n"
+                     "#if __GCC_ATOMIC_LLONG_LOCK_FREE != 2\n"
+                     "#error Native shared pointer reference counts and generation validation require always-lock-free 64-bit atomics\n#endif\n");
+    }
     auto m = Mangle(t);
     auto it = queues.find(m);
     if (it != queues.end()) return it->second;
     auto name = Unique(cat("gs_q_", m));
     Append(data, "static gs_queue ", name, " = GS_QUEUE_INIT;\n");
+    if (t->kind == TY_NATIVE && t->nativekind == NK_POINTER) pointerqueues.insert(name);
     return queues[m] = name;
 }
 
@@ -52,11 +60,24 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
     auto an = c->ArgNodes();
     auto ln = c->line;
     if (c->builtin >= B_SHARED_POINTER_ALLOC && c->builtin <= B_SHARED_POINTER_RELEASE) {
-        usesthreads = true; vector<string> a; for (auto n : an) a.push_back(Snapshot(n->exprtype, GenPure(n)));
+        usesthreads = true;
+        if (!shared_atomic64) {
+            shared_atomic64 = true;
+            Append(head, "\n#if defined(__TINYC__) || (!defined(__GNUC__) && !defined(__clang__))\n"
+                         "#error Native shared pointers require GCC or Clang; this backend is unsupported\n#endif\n"
+                         "#if __GCC_ATOMIC_LLONG_LOCK_FREE != 2\n"
+                         "#error Native shared pointer reference counts and generation validation require always-lock-free 64-bit atomics\n#endif\n");
+        }
+        vector<string> a; for (auto n : an) a.push_back(Snapshot(n->exprtype, GenPure(n)));
         if (c->builtin == B_SHARED_POINTER_ALLOC) {
-            auto p = T(), o = T(), ok = T(); L("gs_shared_cap ", o, "; uint8_t ", ok, ";");
-            L("gs_shared_cap ", p, " = gs_shared_pointer_alloc(&", a[0], ", ", FixedSize(c->qtype), ", &", o, ", &", ok, ", ", LocArgs(ln), ");");
-            return {p, o, ok};
+            auto p = T(), ok = T(); L("uint8_t ", ok, ";");
+            if (a.size() == 1) {
+                auto o = T(); L("gs_shared_cap ", o, ";");
+                L("gs_shared_cap ", p, " = gs_shared_pointer_alloc(&", a[0], ", ", FixedSize(c->qtype), ", &", o, ", &", ok, ", ", LocArgs(ln), ");");
+                return {p, o, ok};
+            }
+            L("gs_shared_cap ", p, " = gs_shared_pointer_alloc_in(", a[0], ", ", a[1], ", &", a[2], ", ", FixedSize(c->qtype), ", &", ok, ", ", LocArgs(ln), ");");
+            return {p, ok};
         }
         if (c->builtin == B_SHARED_POINTER_COPY) { auto v = T(); L(CT(c->qtype), " ", v, ";");
             L("gs_shared_pointer_copy(", a[0], ", &", v, ", ", FixedSize(c->qtype), ", ", LocArgs(ln), ");"); return {v}; }
@@ -339,9 +360,10 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
             if (t->kind == TY_NATIVE && t->nativekind == NK_POINTER) {
                 auto src = Snapshot(t, GenPure(an[0])), queued = T();
                 L("gs_shared_cap ", queued, " = gs_shared_pointer_retain(", src, ", ", LocArgs(ln), ");");
+                L("gs_shared_pointer_queue(", queued, ", ", LocArgs(ln), ");");
                 L("uint8_t ", ok, " = gs_qput(&", q, ", &", queued, ", sizeof ", queued, ");");
                 L("if (", ok, ") gs_shared_pointer_release(", src, ", ", LocArgs(ln), ");");
-                L("else gs_shared_pointer_release(", queued, ", ", LocArgs(ln), ");");
+                L("else { gs_shared_pointer_adopt(", queued, ", ", LocArgs(ln), "); gs_shared_pointer_release(", queued, ", ", LocArgs(ln), "); }");
             } else if (IsResz(t)) {
                 auto src = GenLoc(an[0]);
                 if (src.t->kind == TY_REF) DerefLoc(src);
@@ -465,6 +487,8 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
                 L("GS_MEMCPY(&", tv, ", ", nn, " + 1, sizeof(", tv, "));");
                 L("free(", nn, ");");
             }
+            if (t->kind == TY_NATIVE && t->nativekind == NK_POINTER)
+                L("if (", nn, ") gs_shared_pointer_adopt(", tv, ", ", LocArgs(ln), ");");
             return poll ? vector<string> { tv, got } : vector<string> { tv };
         }
         case B_PUSH: return EmitPush(an, ln);
@@ -1301,10 +1325,18 @@ inline vector<string> CodeGen::EmitThreadSpawn(Call *c, vector<Node *> &an) {
     string stk;
     auto base = BytesTemp(stk);
     vector<string> sharedcaps;
+    vector<string> pointertemps;
     for (size_t i = 0; i < sp->argtypes.size(); i++) {
         auto pt = sp->argtypes[i];
         if (IsSharedSendable(pt)) {
             auto cap = Snapshot(pt, GenPure(an[1 + i]));
+            if (pt->kind == TY_NATIVE && pt->nativekind == NK_POINTER) {
+                if (auto ac = Is<Call>(an[1 + i]); ac && ac->builtin == B_SHARED_POINTER_RETAIN)
+                    pointertemps.push_back(cap);
+                auto worker = T();
+                L("gs_shared_cap ", worker, " = gs_shared_pointer_retain(", cap, ", ", LocArgs(c->line), ");");
+                cap = worker;
+            }
             sharedcaps.push_back(cap);
             EmitValStore(stk, pt, cap);
             continue;
@@ -1388,6 +1420,8 @@ inline vector<string> CodeGen::EmitThreadSpawn(Call *c, vector<Node *> &an) {
     auto id = T();
     L("int64_t ", id, " = gs_thread_spawn(", thunk, ", ", base, ", ", Top(stk), " - ", base,
       c->builtin == B_THREAD_SPAWN_CONTAINED ? ", 1);" : ", 0);");
+    for (auto &cap : pointertemps)
+        L("gs_shared_pointer_release(", cap, ", ", LocArgs(c->line), ");");
     return { id };
 }
 

@@ -463,6 +463,14 @@ inline bool TypeCheck::IsFlat(TypeExpr *t) {
     }
 }
 
+inline bool TypeCheck::SharedPointerPayloadOk(TypeExpr *t) {
+    return ClassOf(t) == SC_FIXED && IsFlat(t) && !HoldsIndexT(t) &&
+        !Reaches(t, [](TypeExpr *x) {
+            return x->kind == TY_NATIVE || x->kind == TY_REF ||
+                   x->kind == TY_SLICE || x->kind == TY_FN;
+        });
+}
+
 // Whether t, or a type a value of it reaches through references, slices,
 // arrays and fields, satisfies pred. Each struct, enum and variant type is
 // entered once, as a recursive type reaches itself again; a variant type
@@ -710,7 +718,12 @@ inline void TypeCheck::ValidateType(TypeExpr *t, Line l, int pos) {
         case TY_FLT: return;
         case TY_BOOL: return;
         case TY_NATIVE:
-            if (t->nativearg) ValidateType(t->nativearg, l, VT_LOCAL);
+            if (t->nativearg) {
+                ValidateType(t->nativearg, l, VT_LOCAL);
+                if (!SharedPointerPayloadOk(t->nativearg))
+                    Error(l, cat("SharedPointer value type must be recursively fixed and flat, not ",
+                                 TypeStr(t->nativearg)));
+            }
             return;
         case TY_VOID:
             Error(l, "expression has no value here");
