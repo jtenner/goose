@@ -4606,7 +4606,8 @@ introduces the dynamic-stack-block machinery this needs.)
 ### 11.4 Explicit native memory capabilities
 
 This optional native extension adds `SharedOwner`, `SharedView`,
-`SharedAccess`, `SharedAtomicU32` and `SharedAtomicU64`. These are distinct
+`SharedAccess`, `SharedAtomicU32`, `SharedAtomicU64` and `SharedPointer<T>`.
+These are distinct
 opaque fixed-size types, not integers, ordinary references, or byte images.
 They have no public constructor, fields, numeric cast, default value, or
 serialization form. Capability-containing values are non-flat and cannot be
@@ -4696,6 +4697,52 @@ rejects the required TLS runtime. Capability value wrappers shall have byte
 alignment for packed fields, arrays, returns and worker packets; internal
 64-bit generation descriptors shall have at least eight-byte alignment and
 an eight-byte-multiple stride. Actual atomic cells retain natural alignment.
+
+`SharedPointer<T>` is an opaque, typed capability for one value stored in an
+anonymous `SharedOwner` allocation. `shared_pointer_alloc<T>(value)` returns
+`(SharedPointer<T>, SharedOwner, bool)`: on success the owner contains a
+private runtime header and a copy of `value`; on failure both capabilities are
+invalid. `T` must be a fixed-size flat value whose recursive shape contains no
+native capability, reference, slice, runtime-length array, string, function
+value, or variable-mode ADT. This is checked after generic substitution.
+Fixed arrays and fixed-mode structs/ADTs are admitted only when every contained
+value is admissible. The private header and payload have no FFI layout.
+
+`shared_pointer_copy(p) -> T` copies the current value out and
+`shared_pointer_store(p, value)` copies a new value in. Neither yields a
+reference or slice. Copy-out and store are linearized by the object's internal
+synchronization, so concurrent operations cannot data-race and copy-out sees
+one complete stored value. `shared_pointer_retain(p)` atomically increments
+the reference count and returns a fresh handle. `shared_pointer_release(p)`
+atomically decrements it and invalidates that handle and all bitwise copies of
+it. Plain assignment copies only handle authority and does not retain. A
+released, stale, wrong-type, or allocation-generation-mismatched handle
+aborts; reference-count overflow also aborts. The last release destroys the
+pointer object but leaves its owner mapping for explicit close.
+
+Every live retained pointer is an owner-close hold: `shared_close(owner)`
+returns false until all pointer handles are released, in addition to its
+existing borrow and worker-lease conditions. Operations validate and pin the
+allocation generation for their duration. They never expose a raw address,
+ordinary borrow, or atomic capability. The count uses the same always-lock-free
+u64 substrate and target restrictions as `SharedAtomicU64`; there is no mutex
+fallback and no general garbage collector.
+
+A direct `SharedPointer<T>` is additionally permitted as a worker argument.
+Handoff retains a worker-owned handle before native thread creation; normal
+return, spawn failure, and contained abort release it. The allocation lease is
+held too. Wrapping a pointer in another value does not gain this exception,
+and pointer-containing worker globals remain forbidden.
+
+As the sole queue exception to flat byte images, the element type may be
+exactly `SharedPointer<T>`, never a wrapper or another native capability.
+Successful `qput(p)` transfers that retained handle to the queue without a
+count change and invalidates the sender's handle and its bitwise copies. A
+refused bounded put transfers nothing. A successful receive transfers the
+queued handle to the receiver. A timed/nonblocking miss returns an invalid
+zero handle with false; use or release aborts. Shutdown releases handles still
+owned by queues. This does not make pointers serializable, byte-convertible,
+or FFI-compatible.
 
 ### 11.5 Native file mappings, subranges, byte buffers, and advice
 
