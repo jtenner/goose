@@ -4645,7 +4645,9 @@ model; explicit native shared capabilities follow §11.4.
   the same T.
 
   `channel_send(ch, value) -> bool` waits for capacity in a bounded channel and
-  returns true after copying the value. It returns false without queueing when
+  evaluates and captures `ch` before evaluating `value`, following the general
+  left-to-right evaluation rule. The same rule applies to `channel_try_send`.
+  It returns true after copying the value and false without queueing when
   the channel is closed or the calling structured worker is cancelled.
   `channel_try_send` is the non-blocking form. `channel_receive(ch) -> T, bool`
   waits for a value and `channel_try_receive(ch) -> T, bool` does not; false
