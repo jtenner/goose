@@ -3585,14 +3585,12 @@ specialization has its own versions), and `extern simd fn` is an error.
 
 #### Explicit fixed-width vectors
 
-**Fork status.** The named types and their width-specific splat, checked
-load/store and shuffle operations are implemented. The explicit vector marker
-and its C-boundary rejection are specified here for the following implementation
-checkpoint. The C
-backend's existing vector-expression path lowers the floating shapes to vector
-extensions; extending that lowering to integer operations while retaining the
-scalar overflow and division aborts is proposed, not implemented. The scalar
-fallback is therefore the current semantics for those integer operations.
+**Fork status.** The explicit vector types, their C-boundary rejection, lane
+arithmetic and their width-specific splat, checked load/store and shuffle
+operations are implemented. GCC and Clang lower supported arithmetic and
+operations to C vector extensions; debug overflow and division paths retain
+the scalar checks described below. Other backends use the semantic scalar
+fallback.
 
 The native SIMD extension provides the fixed-width value types `i8x16`,
 `u8x16`, `i16x8`, `u16x8`, `i32x4`, `u32x4`, `i64x2`, `u64x2`, `f32x4` and
@@ -3605,6 +3603,10 @@ state, and its stored alignment is one
 byte unless the containing storage requests a greater alignment explicitly.
 Consequently adding a vector field does not add implicit padding to a packed
 struct and does not change the offsets of following fields.
+Its nominal vector identity is retained by aliases, generic substitution,
+inference, overload selection, reflection, worker copying and queue type keys:
+`vector u32[4]` and ordinary `u32[4]` have the same byte image but are never
+interchangeable types or queue payload identities.
 
 `+`, `-`, `*` and `/` apply lane by lane to two vectors of the same type;
 unary `-` applies lane by lane to signed and floating vectors. Integer lanes
@@ -3625,12 +3627,13 @@ checked in `0..v.lanes`, and returns the same vector type with lane `k`
 copied from input lane `ik`. Evaluation and aliasing are as if all input lanes
 were copied before any result is stored.
 
-The C backend lowers lane arithmetic to GCC/Clang vector extensions when that
-frontend supports the complete vector width. Splat, checked load/store and
-shuffle currently use their scalar Goose definitions; native lowering for
-those operations is proposed and must not be inferred from the vector type's
-existence. The scalar
-fallback performs the same checked accesses and lane operations. TinyCC and
+The C backend lowers lane arithmetic, splat, checked load/store and shuffle to
+GCC/Clang vector extensions when that frontend supports the complete vector
+width. Load and store perform their complete bounds check before the one vector
+access, so a failing store writes no lane. A shuffle whose indices are compile-
+time constants uses the frontend's shuffle primitive after checking every
+index; a dynamic shuffle uses the scalar fallback. The scalar fallback performs
+the same checked accesses and lane operations. TinyCC and
 other unsupported frontends use that fallback rather than accepting a native
 vector ABI. Vector values are not permitted in `extern` or `export` signatures;
 their C ABI is deliberately unspecified. The extension does not expose raw
@@ -3640,8 +3643,9 @@ value copying under §11.2.
 
 #### Explicit storage alignment
 
-**Fork status.** This syntax and the layout rules below are implemented by the
-fork. Earlier fork revisions must not be assumed to accept it.
+**Fork status.** This syntax and the supported layout rules below are
+implemented by the fork. Earlier fork revisions must not be assumed to accept
+it.
 
 `align(N)` immediately before a global, local or struct field declaration
 requests an address divisible by the positive power-of-two byte constant `N`.
@@ -3658,6 +3662,11 @@ every element—not only the first—has the alignment promised by its fields. A
 packed outer struct likewise pads and raises its own alignment when it contains
 such an element.
 
+The generated C represents every one of those bytes explicitly and gives the
+containing C type the same alignment. Its `offsetof`, `sizeof` and array stride
+must equal Goose's computed offsets and fixed size even under the packed C
+region; a field alignment attribute inside `#pragma pack(1)` is not sufficient.
+
 An aligned field is rejected in a variable-size packed prefix or anywhere its
 required offset cannot be a configuration-independent constant. Alignment
 never weakens array, slice, shared-memory or raw-pointer bounds. In particular,
@@ -3666,18 +3675,30 @@ when their actual address is not suitably aligned. Capability wrappers retain
 the byte alignment required by §11.4; annotating storage containing one does
 not change the registry cell's alignment or create new authority.
 
+The current native implementation supports explicitly aligned scalar globals
+and locals and fixed structs and fixed arrays containing aligned fields. It
+rejects aligned element types in limited, variable, grow-only or resizable
+arrays, queues and worker argument packets: those representations place a
+runtime prefix before elements or payload and do not yet carry an aligned
+offset. Worker copies of global storage allocate the globals block at its
+computed alignment. These rejections are layout limitations, not permission to
+silently weaken an alignment request.
+
 These vector and alignment forms are optional native optimizations with a
 semantic scalar fallback. A backend that cannot represent the requested
 storage alignment must reject it explicitly rather than silently lower the
 alignment. A backend may ignore the performance request of `simd`, but may not
 change vector results, observable aborts, output or layout.
 
-With `--simd-feedback`, a native `build` or `run` asks the selected C compiler
+With `--simd-feedback`, a native `build` asks the selected C compiler
 for vectorization remarks. For every loop originating in a `simd fn`, Goose
 prints whether each emitted instruction-set version vectorized; a missed loop
 includes the C compiler's reason where it supplies one. The feedback is
-advisory, names the Goose function and source line, and never changes whether
-compilation succeeds. `check`, `lsp`, C-only output, TinyCC and native compilers
+advisory, names the Goose function, the loop's Goose source line and the
+instruction-set version, and never changes whether compilation succeeds. A
+loop or version for which the compiler emits no positive remark is reported as
+missed, not silently omitted; where Clang supplies no reason Goose says so.
+`run` (the TinyCC JIT), `check`, `lsp`, C-only output, TinyCC and native compilers
 without a supported remark interface reject the option explicitly rather than
 printing guessed feedback. This feedback is implemented by the fork for Clang
 native builds; the other compiler interfaces remain explicitly unsupported.
