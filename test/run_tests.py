@@ -2215,6 +2215,23 @@ def main():
             if missing:
                 r.fail(f"vec-clang {name}.goose", f"no vector operations on {', '.join(missing)}")
                 return
+            explicit = gendir / "simd-explicit.c"
+            code, out, err = r.goose("-O2", "-o", explicit, HERE / "codegen" / "simd_explicit.goose")
+            explicit_text = explicit.read_text(encoding="utf-8") if code == 0 else ""
+            if (code != 0 or "GS_VST(gs_vu32_4," not in explicit_text or
+                    "#if GS_VEC && !GS_DEBUG" not in explicit_text):
+                r.fail("vec-clang simd_explicit.goose",
+                       out + err + "missing unsigned vector lowering or signed debug guard")
+                return
+            aligned = gendir / "aligned-storage.c"
+            code, out, err = r.goose("-O2", "-o", aligned, HERE / "codegen" / "aligned_storage.goose")
+            aligned_text = aligned.read_text(encoding="utf-8") if code == 0 else ""
+            required_align = ("GS_ALIGNAS(16) a4_u32 lanes_g", "GS_ALIGNAS(16) LaneBlock_g payload_g",
+                              "GS_ALIGNAS(32) Outer_g global_g", "GS_ALIGNAS(64) a2_Outer_g values_g")
+            if code != 0 or any(piece not in aligned_text for piece in required_align):
+                r.fail("aligned-storage generated C", out + err + "missing: " +
+                       ", ".join(piece for piece in required_align if piece not in aligned_text))
+                return
             # The generated code's tests are indented; runtime.h's are not.
             opens = len(re.findall(r"^\s+#if GS_VEC$", ctext, re.M))
             elses = len(re.findall(r"^\s+#else$", ctext, re.M))
@@ -2524,8 +2541,23 @@ def main():
             else:
                 r.fail(f"goose {what}", text)
     r.show_task(driver_verbs)
+    def run_bench_script(script):
+        """Share the native benchmark lock with parallel test-runner slots.
+
+        The compiler deliberately does not wait on this process-wide resource;
+        the harness has a bounded retry so its own benchmark groups can still
+        run concurrently with unrelated test setup without bypassing the lock.
+        """
+        deadline = time.monotonic() + 120
+        while True:
+            result = tc.run_capture([sys.executable, HERE / script, exe])
+            if "shared-native benchmark lock unavailable or occupied" not in result[1] + result[2]:
+                return result
+            if time.monotonic() >= deadline:
+                return result
+            time.sleep(0.25)
     def bench_declarations():
-        code, out, err = tc.run_capture([sys.executable, HERE / "bench_declarations.py", exe])
+        code, out, err = run_bench_script("bench_declarations.py")
         if code:
             r.fail("benchmark declarations", out + err)
         else:
@@ -2538,7 +2570,7 @@ def main():
                                   ("bench_checksums.py", "benchmark checksums"),
                                   ("bench_thermal.py", "benchmark thermal"),
                                   ("bench_report.py", "benchmark reports")):
-                code, out, err = tc.run_capture([sys.executable, HERE / script, exe])
+                code, out, err = run_bench_script(script)
                 if code:
                     r.fail(label, out + err)
                 else:
@@ -2546,7 +2578,7 @@ def main():
         r.show_task(bench_runtime)
     if cc and jit:
         def bench_compatibility():
-            code, out, err = tc.run_capture([sys.executable, HERE / "bench_compatibility.py", exe])
+            code, out, err = run_bench_script("bench_compatibility.py")
             if code:
                 r.fail("benchmark compatibility", out + err)
             else:
