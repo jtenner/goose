@@ -3602,15 +3602,15 @@ corresponding scalar operation. Each floating lane performs the corresponding
 scalar operation with one rounding. Ordinary multiplication followed by
 addition is not fused; only `mul_add` has the exception above.
 
-`splat<T>(x)` makes every lane of vector type `T` equal to `x`.
-`vector_load<T>(xs, first)` reads the lanes of `T` from consecutive elements
-of the scalar slice `xs`, and `vector_store(xs, first, v)` writes them. Each
+`splat_T(x)` makes every lane of vector type `T` equal to `x`.
+`vector_load_T(xs, first)` reads the lanes of `T` from consecutive elements
+of the scalar slice `xs`, and `vector_store_T(xs, first, v)` writes them. Each
 operation checks the whole half-open element range before accessing it and
 aborts as the corresponding scalar indexing would; no partial access occurs.
 The slice element type must be the vector's lane type. These operations do not
 grant permission to read array capacity or padding beyond the slice length.
-`shuffle(v, i0, ...)` takes exactly one compile-time integer index per result
-lane, each in `0..v.lanes`, and returns the same vector type with lane `k`
+`shuffle_T(v, i0, ...)` takes exactly one integer index per result lane, each
+checked in `0..v.lanes`, and returns the same vector type with lane `k`
 copied from input lane `ik`. Evaluation and aliasing are as if all input lanes
 were copied before any result is stored.
 
