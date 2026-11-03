@@ -9,6 +9,7 @@
 - [slot_pool](#slot_pool)
 - [slice_pool](#slice_pool)
 - [vec](#vec)
+- [simd_vectors](#simd_vectors)
 - [math](#math)
 - [os](#os)
 - [ffi](#ffi)
@@ -789,6 +790,15 @@ supported when `T` has a default.
 
 See the [slice-pool benchmark report](../bench/slice_pool.md) for comparisons
 against `reusable[]`, including preserved function-call boundaries.
+
+## simd_vectors
+
+`import simd_vectors;` provides the packed fixed-array aliases named in spec
+§7.12 (`f32x4`, `u32x8`, and the other 16-, 32- and 64-byte lane shapes).
+For each type `T`, `splat_T`, `vector_load_T`, `vector_store_T` and `shuffle_T`
+provide construction, checked consecutive slice access and lane permutation.
+They are ordinary flat Goose values and retain scalar behavior on backends
+without C vector extensions.
 
 ## vec
 
