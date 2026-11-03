@@ -84,4 +84,15 @@ def check_native_memory_backend(exe, clang, base):
         if tiny_pointer.returncode == 0 or "require GCC or Clang" not in tiny_pointer.stderr:
             raise RuntimeError("pointer-only gate accepted TinyCC:\n" +
                                tiny_pointer.stdout + tiny_pointer.stderr)
+        queue_source = root / "pointer_queue_shutdown.goose"
+        queue_source.write_text('fn main() { let p, o, ok = shared_pointer_alloc<i64>(7); '
+                                'assert(ok && qput(p)); }\n')
+        queue_c = root / "pointer_queue_shutdown.c"
+        built = subprocess.run([str(exe), "-O2", "-o", str(queue_c), str(queue_source)],
+                               capture_output=True, text=True, timeout=60)
+        if built.returncode:
+            raise RuntimeError(built.stdout + built.stderr)
+        queue_text = queue_c.read_text()
+        if not re.search(r"gs_qdestroy\(&gs_q_.*?, 1\);", queue_text):
+            raise RuntimeError("pointer queue emitted no pointer-aware shutdown release")
     return None
