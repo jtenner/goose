@@ -3670,8 +3670,11 @@ checked in `0..v.lanes`, and returns the same vector type with lane `k`
 copied from input lane `ik`. Evaluation and aliasing are as if all input lanes
 were copied before any result is stored.
 
-The C backend lowers these values and operations to GCC/Clang vector
-extensions when that frontend supports the complete vector width. Its scalar
+The C backend lowers lane arithmetic to GCC/Clang vector extensions when that
+frontend supports the complete vector width. Splat, checked load/store and
+shuffle currently use their scalar Goose definitions; native lowering for
+those operations is proposed and must not be inferred from the vector type's
+existence. The scalar
 fallback performs the same checked accesses and lane operations. TinyCC and
 other unsupported frontends use that fallback rather than accepting a native
 vector ABI. Vector values are not permitted in `extern` or `export` signatures;
@@ -3682,9 +3685,8 @@ value copying under §11.2.
 
 #### Explicit storage alignment
 
-**Fork status.** This syntax and its layout rules are implemented only after
-the corresponding implementation checkpoint; earlier fork revisions must not
-be assumed to accept it.
+**Fork status.** This syntax and the layout rules below are implemented by the
+fork. Earlier fork revisions must not be assumed to accept it.
 
 `align(N)` immediately before a global, local or struct field declaration
 requests an address divisible by the positive power-of-two byte constant `N`.
@@ -3722,8 +3724,8 @@ includes the C compiler's reason where it supplies one. The feedback is
 advisory, names the Goose function and source line, and never changes whether
 compilation succeeds. `check`, `lsp`, C-only output, TinyCC and native compilers
 without a supported remark interface reject the option explicitly rather than
-printing guessed feedback. This feedback is specified here for the following
-implementation checkpoint.
+printing guessed feedback. This feedback is implemented by the fork for Clang
+native builds; the other compiler interfaces remain explicitly unsupported.
 
 ### 7.13 `inline fn`: inlined whatever its size
 
