@@ -499,12 +499,17 @@ inline void CodeGen::UseFieldView(Dot *d, Loc &lv) {
 // into a huge native frame by HoistAggregateDecls or by a C compiler's
 // inliner. Reuse follows the existing scope watermarks, including
 // break/continue/return-from.
-inline void CodeGen::FixedLocal(TypeExpr *t, string &name, const string &init, bool forlocal) {
+inline void CodeGen::FixedLocal(TypeExpr *t, string &name, const string &init, bool forlocal,
+                               int64_t align) {
+    align = std::max(align, TypeAlign(t));
+    auto ap = align > 1 ? cat("GS_ALIGNAS(", align, ") ") : string();
     if (!LargeFixedOnStack(t)) {
-        L(CT(t), " ", name, init.empty() ? ";" : cat(" = ", init, ";"));
+        L(ap, CT(t), " ", name, init.empty() ? ";" : cat(" = ", init, ";"));
         return;
     }
     auto stk = AllocStk(forlocal);
+    if (align > 1)
+        L(Top(stk), " += (-(uintptr_t)", Top(stk), ") & ", align - 1, ";");
     L(CT(t), " *", name, " = (", CT(t), " *)", Top(stk), ";");
     SaveBase(forlocal, stk, cat("(uint8_t *)", name));
     Bump(stk, cat("sizeof(", CT(t), ")"));

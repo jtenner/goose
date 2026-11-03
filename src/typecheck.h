@@ -3407,6 +3407,7 @@ struct TypeCheck {
                 vd->name = name;
                 vd->line = g->line;
                 vd->isvar = g->isvar;
+                vd->align = g->align;
                 vd->isglobal = true;
                 vd->globalindex = globalindex++;
                 vd->reusable = g->reusable;

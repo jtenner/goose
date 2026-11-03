@@ -187,6 +187,8 @@ inline StructInst *TypeCheck::GetStructInst(TypeExpr *t) {
         if (st->fields[i].ispad) continue;
         auto ft = inst->ftypes[i];
         ValidateType(ft, st->line, VT_FIELD);
+        if (st->fields[i].align > 1 && (st->isroot || ClassOf(ft) != SC_FIXED))
+            Error(st->line, "aligned struct fields require fixed packed storage");
         if (auto zs = ZeroSizeKind(ft))
             Error(st->line, cat("field ", st->fields[i].name, " of struct ", st->name,
                                 " cannot be ", zs, ": ", TypeStr(ft), " (§3.4)"));
@@ -294,6 +296,8 @@ inline void TypeCheck::BuildVariant(EnumInst *inst, size_t vi) {
         if (v.fields[i].ispad) continue;
         auto ft = inst->vftypes[vi][i];
         ValidateType(ft, en->line, VT_FIELD);
+        if (v.fields[i].align > 1)
+            Error(en->line, "align is supported on struct fields, not variant payloads");
         if (auto zs = ZeroSizeKind(ft))
             Error(en->line, cat("field ", v.fields[i].name, " of variant ", en->name, ".", v.name,
                                 " cannot be ", zs, ": ", TypeStr(ft), " (§3.4)"));

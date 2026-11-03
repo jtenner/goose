@@ -2522,6 +2522,7 @@ inline void TypeCheck::CheckVarDecl(VarDecl *vd, bool global) {
         d->name = vd->names[i];
         d->line = vd->line;
         d->isvar = vd->isvar;
+        d->align = vd->align;
         d->reusable = vd->reusable;
         d->resulttemp = vd->results;
         d->depth = CurDepth();
@@ -2540,6 +2541,8 @@ inline void TypeCheck::CheckVarDecl(VarDecl *vd, bool global) {
         if (t->kind == TY_VOID) Error(vd, "initializer has no value");
         if (t->kind == TY_FN)
             Error(vd, "function values are compile-time only and cannot be stored (§7.6)");
+        if (vd->align > 1 && ClassOf(t) != SC_FIXED)
+            Error(vd, "align applies only to fixed-size storage");
         d->type = t;
         if (global) CheckVarExtent(d, vd);
         if (v && IsRefOrSlice(t)) {

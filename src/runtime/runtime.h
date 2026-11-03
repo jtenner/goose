@@ -52,6 +52,13 @@
 
 #ifndef GS_EMBEDDED_JIT
 #include <stdint.h>
+#if defined(_MSC_VER)
+#define GS_ALIGNAS(n) __declspec(align(n))
+#elif (defined(__GNUC__) || defined(__clang__)) && !defined(__TINYC__)
+#define GS_ALIGNAS(n) __attribute__((aligned(n)))
+#else
+#define GS_ALIGNAS(n) GS_ALIGN_REQUIRES_NATIVE_BACKEND
+#endif
 #include <stddef.h>
 #include <string.h>
 #include <stdio.h>

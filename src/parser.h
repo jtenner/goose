@@ -331,6 +331,21 @@ struct Parser {
         return name;
     }
 
+    bool AtAlign() { return lex.tok == T_IDENT && lex.attr == "align"; }
+
+    int ParseAlign() {
+        if (!AtAlign()) return 1;
+        lex.Next();
+        Expect(T_LPAREN, "align annotation");
+        if (lex.tok != T_INTLIT) Error("align requires an integer constant");
+        auto n = lex.ival;
+        lex.Next();
+        Expect(T_RPAREN, "align annotation");
+        if (n < 1 || n > 64 || (n & (n - 1)))
+            Error("align requires a positive power of two no greater than 64");
+        return (int)n;
+    }
+
     // A `>` that may be the first half of a `>>` closing two nested generic lists.
     void ExpectClosingAngle(const char *context) {
         if (lex.tok == T_SHR || lex.tok == T_GT) Role(R_ANGLE_CLOSE);
@@ -397,6 +412,12 @@ struct Parser {
     // broken; nor is one past the name of a struct, an enum or a function,
     // which stands with what was parsed before the error (ParseMembers).
     void ParseTopDecl() {
+        if (AtAlign()) {
+            auto vd = ParseVarDecl(true);
+            Expect(T_SEMI, "global declaration");
+            ast.topdecls.push_back(vd);
+            return;
+        }
         ast.CheckCancel();
         auto mark = ast.Mark();
         auto startp = lex.attr.data();
@@ -706,6 +727,7 @@ struct Parser {
                     lex.Next();
                 }
             } else {
+                f.align = ParseAlign();
                 // `const f: T` is `let f: const T` (§3.2).
                 auto constq = IsNext(T_CONST);
                 f.isconst = constq || IsNext(T_LET);
@@ -1036,6 +1058,7 @@ struct Parser {
     VarDecl *ParseVarDecl(bool isglobal) {
         auto line = CurLine();
         auto doc = lex.doc;
+        auto align = ParseAlign();
         auto reusable = 0;
         if (IsNext(T_REUSABLE)) {
             reusable = RU_SLOTS;
@@ -1050,6 +1073,7 @@ struct Parser {
         else if (IsNext(T_CONST)) { isvar = false; isconst = true; }
         else { Error("let, var or const expected"); }
         auto vd = New<VarDecl>(line, isvar);
+        vd->align = align;
         vd->isconst = isconst;
         vd->reusable = reusable;
         vd->isglobal = isglobal;
@@ -2171,6 +2195,12 @@ struct Parser {
     // One statement of b, or its tail; returns false once the block has
     // ended (its `}` consumed, by a guard's rest of the block included).
     bool ParseStatement(Block *b) {
+        if (AtAlign()) {
+            auto vd = ParseVarDecl(false);
+            Expect(T_SEMI, "variable declaration");
+            b->stmts.push_back(vd);
+            return true;
+        }
         if (AtBench() || AtInline() || AtCheckfree()) goto nestedfndecl;
         switch (lex.tok) {
             case T_LET: case T_VAR: case T_CONST: case T_REUSABLE: {

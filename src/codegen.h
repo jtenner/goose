@@ -307,7 +307,8 @@ struct CodeGen {
     }
     // Declare a value, replacing name with its C lvalue when stored on a
     // data stack. A binding survives its block; a temporary its statement.
-    void FixedLocal(TypeExpr *t, string &name, const string &init = "", bool forlocal = false);
+    void FixedLocal(TypeExpr *t, string &name, const string &init = "", bool forlocal = false,
+                    int64_t align = 1);
     // A limited array of static capacity, `T[..k]`: a C value of a length
     // and k slots, which any other array or slice of T constructs by copy
     // (§4.2, AdaptToFixed).
@@ -352,6 +353,7 @@ struct CodeGen {
     struct Layout {
         vector<int64_t> offs;
         int64_t size = 0;
+        int64_t align = 1;
     };
     map<pair<const void *, int>, Layout> layouts;   // StructInst / (EnumInst, variant).
 
@@ -360,6 +362,7 @@ struct CodeGen {
     const Layout &StructLayout(StructInst *si);
     const Layout &VariantLayout(EnumInst *ei, int vi);
     int64_t FixedSize(TypeExpr *t);
+    int64_t TypeAlign(TypeExpr *t);
 
     // ------------------------------------------------------------------
     // Naming: one global identifier space for types, functions, globals, and

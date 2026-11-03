@@ -564,6 +564,13 @@ inline string CodeGen::HoistAggregateDecls(string &b) {
 // them, which the wider instruction sets would otherwise let it do.
 inline void CodeGen::EmitSimdVersions(FnSpec *sp, const string &name, const string &params,
                                       const string &fnbody) {
+    auto source = sp->sf->line.fileidx >= 0 && sp->sf->line.fileidx < (int)ast.sources.size()
+                    ? ast.sources[sp->sf->line.fileidx].first : string("?");
+    auto marker = [&](int lv) {
+        return cat("#line ", sp->sf->line.line, " ",
+                   CStr(cat(source, "#simd-", sp->sf->name, "-v", lv, ".goose")), "\n");
+    };
+    auto reset = "#line 1 \"goose-generated.c\"\n";
     // The parameter list is `type name` declarations whose types are
     // typedef names or pointers to them; the names forward the call.
     string args;
@@ -584,12 +591,13 @@ inline void CodeGen::EmitSimdVersions(FnSpec *sp, const string &name, const stri
     // it whatever the target's mode (runtime.h).
     for (int lv = SIMD_LEVELS; lv >= 1; lv--) {
         versions[lv] = Unique(cat(name, "_simd", lv));
-        Append(code, "#if GS_SIMD >= ", lv,
+        Append(code, "#if GS_SIMD >= ", lv, "\n", marker(lv),
                "\n#undef GS_MUL_ADD_MODE\n#define GS_MUL_ADD_MODE fused\nGS_SIMD_TARGET", lv,
                " static ", ret, " ", versions[lv], "(", params, ") {\n", fnbody,
-               "}\n#undef GS_MUL_ADD_MODE\n#define GS_MUL_ADD_MODE GS_MUL_ADD_BASE\n#endif\n");
+               "}\n", reset,
+               "#undef GS_MUL_ADD_MODE\n#define GS_MUL_ADD_MODE GS_MUL_ADD_BASE\n#endif\n");
     }
-    Append(code, "static ", ret, " ", name, "(", params, ") {\n",
+    Append(code, marker(0), "static ", ret, " ", name, "(", params, ") {\n",
            "#if GS_SIMD >= 1\n    switch (gs_simd_level()) {\n");
     for (int lv = SIMD_LEVELS; lv >= 1; lv--) {
         if (lv > 1) Append(code, "#if GS_SIMD >= ", lv, "\n");
@@ -598,7 +606,7 @@ inline void CodeGen::EmitSimdVersions(FnSpec *sp, const string &name, const stri
         else Append(code, "    case ", lv, ": return ", call, ";\n");
         if (lv > 1) Append(code, "#endif\n");
     }
-    Append(code, "    }\n#endif\n", fnbody, "}\n\n");
+    Append(code, "    }\n#endif\n", fnbody, "}\n", reset, "\n");
 }
 
 inline void CodeGen::EmitSpec(FnSpec *sp, bool er) {
@@ -835,7 +843,11 @@ inline void CodeGen::EmitGlobalDecls() {
             auto reg = [&](const string &s) { gstkexprs.insert(s); };
             // A member of the instance block (gs_globals_t), and its
             // dedicated stack where it has one.
-            auto member = [&](const string &decl) { Append(gblock, "    ", decl, ";\n"); };
+            auto member = [&](const string &decl) {
+                auto a = std::max<int64_t>(d->align, TypeAlign(d->type));
+                Append(gblock, "    ", a > 1 ? cat("GS_ALIGNAS(", a, ") ") : string(),
+                       decl, ";\n");
+            };
             gnames[d] = cat("GS_GL->", name);
             if (IsRoot(d->type)) {
                 member(cat(CT(d->type), " ", name));
@@ -886,7 +898,9 @@ inline void CodeGen::EmitGlobalDecls() {
                 // be assigned as a whole.
                 if (!d->isvar && d->type->cq && !PrefVar(d) &&
                     StaticInitX(g->inits[di], d->type, init)) {
-                    Append(data, "static const ", VarCT(d), " ", name, " = ", init, ";\n");
+                    auto a = std::max<int64_t>(d->align, TypeAlign(d->type));
+                    Append(data, a > 1 ? cat("GS_ALIGNAS(", a, ") ") : string(),
+                           "static const ", VarCT(d), " ", name, " = ", init, ";\n");
                     gstatic[d] = g->inits[di];
                     gnames[d] = cat("(*(", VarCT(d), " *)&", name, ")");
                 } else {
