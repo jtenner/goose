@@ -2438,21 +2438,51 @@ void dirty_padding(EqOuter_g *x) { ((unsigned char *)x)[21] = 0x7f; }'''
                 r.fail("simd feedback first source line", line1_report)
                 return
 
-            forged_names = ["plain#simd-forged-v1-loop99.goose"]
+            forged_names = ["plain#simd-forged-v1-loop99.goose",
+                            "forged#goose-simd-1-e0-v0-loop0.goose-extra.goose"]
             if not tc.IS_WINDOWS:
-                forged_names.append('quote"slash\\#simd-forged-v2-loop98.goose')
+                forged_names.extend([
+                    'quote"slash\\#simd-forged-v2-loop98.goose',
+                    'quote"slash\\#goose-simd-1-e0-v0-loop0.goose-extra.goose',
+                ])
             for forged_name in forged_names:
                 forged = gendir / forged_name
-                forged.write_text("simd fn f() { print(7); } fn main() { f(); }\n",
-                                  encoding="utf-8")
+                forged.write_text(
+                    "simd fn slow(xs: u32[:]) { for x, i in xs { print(x); } }\n"
+                    "fn main() { var xs: u32[2048] = [0; 2048]; slow(xs); "
+                    "for x, i in xs { xs[i] = x + 1; } print(xs[0]); }\n",
+                    encoding="utf-8")
                 forged_exe = gendir / f"simd-feedback-forged{tc.EXE_SUFFIX}"
                 code, out, err = tc.run_capture([str(exe), "build", "--cc", "clang",
                                                  "--simd-feedback", "-o", str(forged_exe),
                                                  str(forged)])
                 forged_report = out + err
-                if code or "simd feedback:" in forged_report:
+                if code or any(f"#simd-slow-v{level}-loop0.goose:" in line and
+                               "vectorized loop" in line
+                               for line in forged_report.splitlines()
+                               for level in range(3)):
                     r.fail("simd feedback forged source filename", forged_report)
                     return
+
+            correlation = gendir / "simd-feedback-correlation.goose"
+            correlation.write_text(
+                "simd fn slow(xs: u32[:]) { for x, i in xs { print(x); } }\n"
+                "fn main() { var xs: u32[2048] = [0; 2048]; slow(xs); "
+                "for x, i in xs { xs[i] = x + 1; } print(xs[0]); }\n",
+                encoding="utf-8")
+            correlation_exe = gendir / f"simd-feedback-correlation{tc.EXE_SUFFIX}"
+            code, out, err = tc.run_capture([str(exe), "build", "--cc", "clang",
+                                             "--simd-feedback", "-o", str(correlation_exe),
+                                             str(correlation)])
+            correlation_report = out + err
+            if code or any(f"#simd-slow-v{level}-loop0.goose:" in line and
+                           "vectorized loop" in line
+                           for line in correlation_report.splitlines()
+                           for level in range(3)) or any(
+                               f"#simd-slow-v{level}-loop0.goose:" not in correlation_report
+                               for level in range(3)):
+                r.fail("simd feedback diagnostic correlation", correlation_report)
+                return
 
             same = gendir / "simd-feedback-same-name-src"
             same.mkdir(exist_ok=True)
@@ -2493,7 +2523,7 @@ void dirty_padding(EqOuter_g *x) { ((unsigned char *)x)[21] = 0x7f; }'''
                     size = min(180, max(4, need - 1))
                     long_dir /= (f"d{part:02d}" + "x" * size)[:size]
                     part += 1
-                long_dir.mkdir(parents=True)
+                long_dir.mkdir(parents=True, exist_ok=True)
                 long_source = long_dir / "long.goose"
                 long_source.write_text(
                     "simd fn f(xs: u32[:]) { for x, i in xs { xs[i] = x + 1; } }\n"
