@@ -113,7 +113,9 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
             string v;
             if (c->builtin == B_SIMD_STORE) v = Snapshot(t, GenXD(an[2], t));
             L("if (", first, " < 0 || ", slice, ".len < ", lanes, " || ", first,
-              " > ", slice, ".len - ", lanes, ") gs_abort(GS_E_ASSERT, ", LocArgs(ln), ");");
+              " > ", slice, ".len - ", lanes, ") gs_idxfail(", first, " < 0 || ",
+              first, " >= ", slice, ".len ? ", first, " : ", slice, ".len, ",
+              slice, ".len, ", LocArgs(ln), ");");
             if (c->builtin == B_SIMD_LOAD) {
                 L(CT(t), " ", out, ";");
                 L("#if GS_VEC");

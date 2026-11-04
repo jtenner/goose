@@ -641,6 +641,7 @@ inline string CodeGen::CT(TypeExpr *t, bool unaligned) {
             if (a.akind == A_FIXED) {
                 auto k = ArrSize(t->arr);
                 auto al = TypeAlign(t);
+                if (al > 1) usesalign = true;
                 Append(d, "typedef struct ", al > 1 ? cat("GS_ALIGNAS(", al, ") ") : string(),
                        "{ ", e, " e[", k ? k : 1, "]; } ", name, ";\n");
             } else {
@@ -653,6 +654,7 @@ inline string CodeGen::CT(TypeExpr *t, bool unaligned) {
         case TY_STRUCT: {
             auto si = SI(t);
             auto al = TypeAlign(t);
+            if (al > 1) usesalign = true;
             Append(d, "struct ", al > 1 ? cat("GS_ALIGNAS(", al, ") ") : string(),
                    name, " {\n");
             if (EmptyLayout(si->st->fields)) Append(d, "    uint8_t gs_empty;\n");
@@ -1349,6 +1351,9 @@ inline bool CodeGen::BitwiseEq(TypeExpr *t) {
     if (!IsFix(t)) return false;
     switch (t->kind) {
         case TY_STRUCT: case TY_VARIANT:
+            // Raised struct alignment creates internal and/or trailing gaps
+            // that §7.12 excludes from equality, including through nesting.
+            if (t->kind == TY_STRUCT && TypeAlign(t) > 1) return false;
             for (auto &run : FieldRuns(t))
                 for (size_t i = 0; i < run.fields->size(); i++)
                     if ((*run.fields)[i].ispad || !BitwiseEq((*run.ftypes)[i])) return false;

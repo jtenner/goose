@@ -834,6 +834,8 @@ inline void TypeCheck::ValidateType(TypeExpr *t, Line l, int pos) {
             RequireComplete(t, l);
             ValidateType(t->arr->sub, l, VT_ELEM);
             auto ec = ClassOf(t->arr->sub);
+            if (t->arr->akind != A_FIXED && HoldsAlignedT(t->arr->sub))
+                Error(l, "aligned element types are unsupported in non-fixed arrays");
             switch (t->arr->akind) {
                 case A_FIXED:
                     ArraySize(t->arr);

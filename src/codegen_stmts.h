@@ -61,8 +61,13 @@ inline void CodeGen::SimdLoopLine(Line line) {
     if (!curspec || !curspec->sf->issimd || line.fileidx < 0 ||
         line.fileidx >= (int)ast.sources.size()) return;
     auto source = ast.sources[line.fileidx].first;
-    L("#line ", line.line, " ", CStr(cat(source, "#simd-", curspec->sf->name,
-                                           "-version@-loop", simdloopn++, ".goose")));
+    L("#ifdef GS_SIMD_FEEDBACK");
+    // #endif is the first logical line after #line; number it one before the
+    // Goose loop so the loop itself retains its real source line.
+    L("#line ", std::max(1, line.line - 1), " ",
+      CStr(cat(source, "#simd-", curspec->sf->name,
+               "-version@-loop", simdloopn++, ".goose")));
+    L("#endif");
 }
 
 // The scope of a Goose loop, opened ahead of the C loop or loops that run its
@@ -690,6 +695,8 @@ inline void CodeGen::BindLocal(VarDef *d, Node *init, bool forlocal) {
     auto t = d->type;
     auto align = std::max<int64_t>(d->align, TypeAlign(t));
     auto ap = align > 1 ? cat("GS_ALIGNAS(", align, ") ") : string();
+    if (align > 1 && !IsResz(t) && !IsBytesT(t) &&
+        (IsRoot(t) || !LargeFixedOnStack(t))) usesalign = true;
     if (IsRoot(t)) {
         auto sl = Is<StructLit>(init);
         assert(sl && sl->sinst->st->isroot);

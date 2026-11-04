@@ -779,8 +779,8 @@ Options:
 R"(  --cc name|path        The C compiler: msvc, clang-cl, clang, gcc, cc or a
                         path (or GOOSE_CC; by default the first one found).
   --standalone          Compile the runtime into the program rather than link
-  --simd-feedback       Print Clang vectorization remarks for simd fn loops.
                         the runtime object built once per C compiler.
+  --simd-feedback       Print Clang vectorization remarks for simd fn loops.
   -v                    Print each command the build runs and what it prints.
   --dry-run             Print the commands the build would run, and run none.
 )");
@@ -2078,6 +2078,12 @@ int Main(int argc, char **argv, bool &measuring) {
             if (stats) fprintf(msgs, "wrote %s (%d bytes)\n", headername.c_str(), (int)header.size());
         }
         if (jit && !nocgen) {
+            // Explicit alignment is a semantic storage promise (§7.12), not
+            // an optimization TinyCC may discard.
+            if (cg.usesalign)
+                throw CompileError { "JIT mode does not support align(N) storage yet "
+                                     "(TinyCC cannot represent the requested alignment); "
+                                     "compile with -o and a C compiler instead" };
             // TinyCC's in-memory runner rejects a thread-local section, and
             // the runtime keeps each worker's data stacks in one.
             if (cg.usesthreads)

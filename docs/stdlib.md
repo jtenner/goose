@@ -793,7 +793,7 @@ against `reusable[]`, including preserved function-call boundaries.
 
 ## simd_vectors
 
-`import simd_vectors;` provides the packed fixed-array aliases named in spec
+`import simd_vectors;` provides the nominal fixed-vector aliases named in spec
 §7.12 (`f32x4`, `u32x8`, and the other 16-, 32- and 64-byte lane shapes).
 For each type `T`, `splat_T`, `vector_load_T`, `vector_store_T` and `shuffle_T`
 provide construction, checked consecutive slice access and lane permutation.

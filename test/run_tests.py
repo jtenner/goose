@@ -2063,7 +2063,8 @@ _Static_assert(_Alignof(Block_g) == 64, "Block alignment");
 _Static_assert(offsetof(Nested_g, payload_g) == 64, "Nested.payload offset");
 _Static_assert(sizeof(Nested_g) == 192, "Nested size");
 _Static_assert(sizeof(a2_Nested_g) == 384, "Nested array stride");
-_Static_assert(_Alignof(a2_Nested_g) == 64, "Nested array alignment");'''
+_Static_assert(_Alignof(a2_Nested_g) == 64, "Nested array alignment");
+void dirty_padding(EqOuter_g *x) { ((unsigned char *)x)[21] = 0x7f; }'''
             if marker not in text:
                 r.fail(f"aligned storage layout {label}", "generated source has no data section")
                 return
@@ -2274,7 +2275,7 @@ _Static_assert(_Alignof(a2_Nested_g) == 64, "Nested array alignment");'''
             code, out, err = r.goose("-O2", "-o", store_bounds,
                                      HERE / "runtime" / "simd_vector_store_bounds.goose")
             store_text = store_bounds.read_text(encoding="utf-8") if code == 0 else ""
-            check_at = store_text.find("gs_abort(GS_E_ASSERT")
+            check_at = store_text.find("gs_idxfail(")
             store_at = store_text.find("GS_VST(gs_vu32_4, t")
             if code != 0 or check_at < 0 or store_at < 0 or check_at > store_at:
                 r.fail("simd store all-or-nothing bounds check",
@@ -2340,8 +2341,14 @@ _Static_assert(_Alignof(a2_Nested_g) == 64, "Nested array alignment");'''
                 return
             expected = set(re.findall(r'"([^"\n]*#simd-[^"\n]*-loop\d+\.goose)"',
                                       cfile.read_text(encoding="utf-8")))
+            generated = cfile.read_text(encoding="utf-8")
+            if "#ifdef GS_SIMD_FEEDBACK" not in generated or "goose-generated.c" in generated:
+                r.fail("simd feedback marker guards",
+                       "SIMD source markers are not feedback-only or reset to a synthetic file")
+                return
             locations = re.findall(r'#line (\d+) "([^"\n]*#simd-[^"\n]*-loop\d+\.goose)"',
-                                   cfile.read_text(encoding="utf-8"))
+                                   generated)
+            locations = [(str(int(line) + 1), marker) for line, marker in locations]
             output_exe = gendir / f"simd-feedback{tc.EXE_SUFFIX}"
             code, out, err = tc.run_capture([str(exe), "build", "--cc", "clang",
                                              "--simd-feedback", "-o", str(output_exe), str(source)])
@@ -2486,6 +2493,15 @@ _Static_assert(_Alignof(a2_Nested_g) == 64, "Nested array alignment");'''
         if jit:
             code, out, err = tc.run_capture([exe, "run", probe])
             checks.append(("run", code == 0 and out.strip() == "verbs", out + err))
+            aligned = gendir / "verbs_aligned.goose"
+            tc.write_text(aligned, "align(16) var x: u32 = 1;\n"
+                                   "fn main() { x++; print(x); }\n")
+            want = "JIT mode does not support align(N) storage yet " \
+                   "(TinyCC cannot represent the requested alignment)"
+            for label, command in (("run aligned (refused)", [exe, "run", aligned]),
+                                   ("--jit aligned (refused)", [exe, "--jit", aligned])):
+                code, out, err = tc.run_capture(command)
+                checks.append((label, code == 1 and want in err, out + err))
         code, out, err = tc.run_capture([exe, "check", probe])
         checks.append(("check", code == 0 and not out and not err, out + err))
         code, out, err = tc.run_capture([exe, "check", "--stats", probe])

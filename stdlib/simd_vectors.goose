@@ -1,7 +1,7 @@
-// Explicit fixed-width SIMD values (spec §7.12). These aliases deliberately
-// retain the language's fixed-array representation: packed, byte-aligned,
-// flat and available to scalar-only backends. The C backend recognizes the
-// same shapes for its GS_VEC expression lowering.
+// Explicit fixed-width SIMD values (spec §7.12). Each alias names a nominal
+// vector type with packed, byte-aligned, flat storage that remains available
+// to scalar-only backends. The C backend recognizes the same shapes for its
+// GS_VEC expression lowering.
 
 type i8x16 = vector i8[16];
 type i8x32 = vector i8[32];

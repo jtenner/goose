@@ -70,6 +70,7 @@ struct Builder {
         vector<string> f = opts.debug ? vector<string> { "-O0", "-g" }
                                       : vector<string> { "-O2" };
         if (opts.simd_feedback) {
+            f.push_back("-DGS_SIMD_FEEDBACK=1");
             f.push_back("-Rpass=loop-vectorize");
             f.push_back("-Rpass-missed=loop-vectorize");
             f.push_back("-Rpass-analysis=loop-vectorize");
@@ -128,7 +129,10 @@ struct Builder {
                             auto start = directive + 6;
                             auto end = generated.find_first_not_of("0123456789", start);
                             loops.insert(loop);
-                            looplines[loop] = generated.substr(start, end - start);
+                            // Feedback-only markers close their #ifdef on the
+                            // numbered line; the loop is the following line.
+                            looplines[loop] = std::to_string(
+                                std::stoll(generated.substr(start, end - start)) + 1);
                         }
                     }
                     p = q + 6;

@@ -177,6 +177,7 @@ struct CodeGen {
     bool emittingexporttypes = false;
     string exportprotos;
     bool usesthreads = false;
+    bool usesalign = false;   // Generated program storage emits GS_ALIGNAS.
     bool library = false;
     // Measurement only, and unsound: emit the whole `return ... from`
     // machinery but none of the post-call discriminant checks, so a program

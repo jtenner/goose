@@ -332,7 +332,24 @@ struct Parser {
     }
 
     bool AtAlign() {
-        return lex.tok == T_IDENT && lex.attr == "align" && lex.PeekTok() == T_LPAREN;
+        if (lex.tok != T_IDENT || lex.attr != "align" || lex.PeekTok() != T_LPAREN)
+            return false;
+        // `align` remains an ordinary function name. Treat align(N) as the
+        // storage annotation only when its complete annotation is followed
+        // by the declaration it modifies.
+        auto copy = lex;
+        try {
+            copy.Next();                 // (
+            copy.Next();                 // N
+            if (copy.tok != T_INTLIT) return false;
+            copy.Next();
+            if (copy.tok != T_RPAREN) return false;
+            copy.Next();
+        } catch (CompileError &) {
+            return false;
+        }
+        return copy.tok == T_IDENT || copy.tok == T_LET || copy.tok == T_VAR ||
+               copy.tok == T_CONST || copy.tok == T_REUSABLE;
     }
 
     int ParseAlign() {
@@ -1122,7 +1139,10 @@ struct Parser {
         // to a read-only slice value. Where no reference or slice follows,
         // the value's contents are read-only: `const i64[3]`.
         auto constq = IsNext(T_CONST);
-        auto vectorq = lex.tok == T_IDENT && lex.attr == "vector";
+        // `vector` is contextual only in `vector <scalar>[N]`; a user type
+        // named vector remains an ordinary unresolved type.
+        auto vectorq = lex.tok == T_IDENT && lex.attr == "vector" &&
+                       IsPrimTypeToken(lex.PeekTok());
         if (vectorq) lex.Next();
         auto t = ParseTypePrimary();
         auto qualify = [&](TypeExpr *n) {

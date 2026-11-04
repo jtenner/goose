@@ -504,6 +504,7 @@ inline void CodeGen::FixedLocal(TypeExpr *t, string &name, const string &init, b
     align = std::max(align, TypeAlign(t));
     auto ap = align > 1 ? cat("GS_ALIGNAS(", align, ") ") : string();
     if (!LargeFixedOnStack(t)) {
+        if (align > 1) usesalign = true;
         L(ap, CT(t), " ", name, init.empty() ? ";" : cat(" = ", init, ";"));
         return;
     }
