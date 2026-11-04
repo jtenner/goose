@@ -390,7 +390,14 @@ int main(void) {
        gs_rt_stop, which takes the aborted workers' records (the message
        above among them), main's regions and the fault handling, so that a
        program can start again in the process and end as cleanly. */
+    int owns_signal_stack = 0;
+#ifndef _WIN32
+    owns_signal_stack = gs_sigstack != NULL;
+#endif
     gs_thread_release();
+    gs_release_regions();
+    check(counter_add(&live_allocations, 0) == allocations + 1 - owns_signal_stack,
+          "thread and region release account for the owned signal stack and abort records");
     gs_rt_stop();
     /* The shared generation registry remains for the process lifetime. */
     check(gs_shared_slabs[0] != NULL, "shared registry slab survives program stop");
