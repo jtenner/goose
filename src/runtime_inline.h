@@ -4523,6 +4523,32 @@ static void gs_shared_publish(gs_shared_record *r, uint64_t generation) {
     __atomic_exchange_n(&r->generation, generation, __ATOMIC_SEQ_CST);
 #endif
 }
+/* SharedPointer is rejected as a public capability on MSVC, but the common
+   runtime object still contains its registry implementation. Keep that
+   implementation compilable there while using the same native 64-bit atomic
+   substrate as the supported GCC/Clang path. Interlocked operations are
+   stronger than the acquire/acq-rel orders required here. */
+static uint64_t gs_shared_ref_load(uint64_t *refs) {
+#ifdef _MSC_VER
+    return (uint64_t)InterlockedCompareExchange64((volatile LONG64 *)refs, 0, 0);
+#else
+    return __atomic_load_n(refs, __ATOMIC_ACQUIRE);
+#endif
+}
+static uint64_t gs_shared_ref_add(uint64_t *refs) {
+#ifdef _MSC_VER
+    return (uint64_t)InterlockedExchangeAdd64((volatile LONG64 *)refs, 1);
+#else
+    return __atomic_fetch_add(refs, 1, __ATOMIC_ACQ_REL);
+#endif
+}
+static uint64_t gs_shared_ref_sub(uint64_t *refs) {
+#ifdef _MSC_VER
+    return (uint64_t)InterlockedExchangeAdd64((volatile LONG64 *)refs, -1);
+#else
+    return __atomic_fetch_sub(refs, 1, __ATOMIC_ACQ_REL);
+#endif
+}
 static GS_NORETURN void gs_shared_bad(const char *msg, const char *file, int line) {
     gs_mutex_unlock(&gs_shared_mutex);
     gs_abort_msg((const uint8_t *)msg, (int64_t)strlen(msg), file, line);
@@ -4640,7 +4666,7 @@ static void gs_shared_pointer_release_locked(gs_shared_cap p, int strict,
     uint64_t allocation = obj->allocation;
     gs_shared_record *owner = gs_shared_at(allocation);
     gs_shared_publish(claim, 0); claim->kind = 0;
-    uint64_t oldrefs = __atomic_fetch_sub(&obj->refs, 1, __ATOMIC_ACQ_REL);
+    uint64_t oldrefs = gs_shared_ref_sub(&obj->refs);
     owner->pointers--;
     if (oldrefs == 1) { gs_shared_publish(obj, 0); obj->kind = 0; }
     if (owner->orphan && !owner->workers && !owner->pointers) gs_shared_unmap(allocation);
@@ -4659,7 +4685,8 @@ static gs_shared_cap gs_shared_pointer_register(gs_shared_cap owner, uint64_t of
             v->allocation == owner.slot && gs_shared_overlap(v->offset, v->size, offset, size))
             gs_shared_bad("conflicting shared pointer range", file, line);
     }
-    uint64_t oi = gs_shared_slot();
+)GSRT"
+R"GSRT(    uint64_t oi = gs_shared_slot();
     if (oi == UINT64_MAX) return invalid;
     gs_shared_record *object = gs_shared_at(oi);
     object->allocation = owner.slot; object->offset = offset;
@@ -4676,8 +4703,7 @@ static gs_shared_cap gs_shared_pointer_register(gs_shared_cap owner, uint64_t of
 GS_API gs_shared_cap gs_shared_pointer_alloc_in(gs_shared_cap owner, uint64_t offset,
     const void *value, uint64_t size, uint8_t *ok, const char *file, int line) {
     gs_mutex_lock(&gs_shared_mutex);
-)GSRT"
-R"GSRT(    gs_shared_cap p = gs_shared_pointer_register(owner, offset, value, size, ok, file, line);
+    gs_shared_cap p = gs_shared_pointer_register(owner, offset, value, size, ok, file, line);
     gs_mutex_unlock(&gs_shared_mutex); return p;
 }
 GS_API gs_shared_cap gs_shared_pointer_alloc(const void *value, uint64_t size,
@@ -4696,14 +4722,14 @@ GS_API gs_shared_cap gs_shared_pointer_retain(gs_shared_cap p, const char *file,
     gs_mutex_lock(&gs_shared_mutex);
     gs_shared_record *source = gs_shared_pointer_claim(p, file, line);
     gs_shared_record *obj = gs_shared_pointer_object(source, source->size, file, line);
-    if (__atomic_load_n(&obj->refs, __ATOMIC_ACQUIRE) == UINT64_MAX)
+    if (gs_shared_ref_load(&obj->refs) == UINT64_MAX)
         gs_shared_bad("shared pointer reference count overflow", file, line);
     uint64_t i = gs_shared_slot(); if (i == UINT64_MAX) gs_shared_bad("out of memory retaining shared pointer", file, line);
     gs_shared_record *c = gs_shared_at(i); c->allocation = obj->allocation;
     /* Slabs are not contiguous: preserve the object slot from the source claim. */
     c->offset = source->offset; c->size = obj->size; c->workers = obj->generation;
     c->actor = gs_current_thread_id;
-    __atomic_fetch_add(&obj->refs, 1, __ATOMIC_ACQ_REL); gs_shared_at(obj->allocation)->pointers++;
+    gs_shared_ref_add(&obj->refs); gs_shared_at(obj->allocation)->pointers++;
     gs_shared_cap out = gs_shared_finish(i, GS_SH_POINTER); gs_mutex_unlock(&gs_shared_mutex); return out;
 }
 GS_API void gs_shared_pointer_release(gs_shared_cap p, const char *file, int line) {
@@ -4798,7 +4824,8 @@ static gs_shared_cap gs_shared_borrow_impl(gs_shared_cap view, uint64_t offset, 
             v->allocation == r->allocation &&
             !(v->kind == GS_SH_ACCESS && v->readonly && r->readonly) &&
             gs_shared_overlap(v->offset, v->size, absolute, size))
-            gs_shared_bad("conflicting shared range access", file, line);
+)GSRT"
+R"GSRT(            gs_shared_bad("conflicting shared range access", file, line);
     }
     uint64_t i = gs_shared_slot();
     if (i == UINT64_MAX) gs_shared_bad("out of memory borrowing shared view", file, line);
@@ -4816,8 +4843,7 @@ GS_API gs_shared_cap gs_shared_borrow_range(gs_shared_cap view, uint64_t offset,
     return gs_shared_borrow_impl(view, offset, size, 0, file, line);
 }
 GS_API void gs_shared_release(gs_shared_cap access, const char *file, int line) {
-)GSRT"
-R"GSRT(    gs_mutex_lock(&gs_shared_mutex);
+    gs_mutex_lock(&gs_shared_mutex);
     gs_shared_record *r = gs_shared_get(access, file, line);
     if (r->kind != GS_SH_ACCESS || r->actor != gs_current_thread_id)
         gs_shared_bad("invalid shared access authorization", file, line);
@@ -4882,7 +4908,7 @@ GS_API gs_shared_cap gs_shared_handoff(gs_shared_cap cap, int consume,
     gs_shared_cap packet = cap;
     if (pointer) {
         gs_shared_record *obj = gs_shared_pointer_object(r, r->size, file, line);
-        if (__atomic_load_n(&obj->refs, __ATOMIC_ACQUIRE) == UINT64_MAX) {
+        if (gs_shared_ref_load(&obj->refs) == UINT64_MAX) {
             free(p); gs_shared_bad("shared pointer reference count overflow", file, line);
         }
         uint64_t i = gs_shared_slot();
@@ -4893,7 +4919,7 @@ GS_API gs_shared_cap gs_shared_handoff(gs_shared_cap cap, int consume,
         claim->allocation = obj->allocation; claim->offset = r->offset;
         claim->size = obj->size; claim->workers = obj->generation;
         claim->actor = GS_SHARED_PENDING_ACTOR;
-        __atomic_fetch_add(&obj->refs, 1, __ATOMIC_ACQ_REL);
+        gs_shared_ref_add(&obj->refs);
         owner->pointers++;
         packet = gs_shared_finish(i, GS_SH_POINTER);
         if (consume) gs_shared_pointer_release_locked(cap, 1, file, line);
@@ -4950,7 +4976,8 @@ GS_API void gs_shared_worker_cleanup(void *leases, int64_t actor) {
     else p = (gs_shared_lease *)leases;
     while (p) {
         gs_shared_lease *next = p->next;
-        gs_shared_record *r = gs_shared_at(p->allocation);
+)GSRT"
+R"GSRT(        gs_shared_record *r = gs_shared_at(p->allocation);
         if (r->kind != GS_SH_OWNER || r->generation != p->generation || !r->workers)
             gs_shared_bad("corrupt shared worker lease", "runtime", 0);
         r->workers--;
@@ -4969,8 +4996,7 @@ GS_API void gs_shared_worker_cleanup(void *leases, int64_t actor) {
     }
     for (uint64_t i = 0; i < gs_shared_highwater; i++) {
         gs_shared_record *r = gs_shared_at(i);
-)GSRT"
-R"GSRT(        if (r->kind == GS_SH_OWNER && r->orphan && !r->workers && !r->pointers)
+        if (r->kind == GS_SH_OWNER && r->orphan && !r->workers && !r->pointers)
             gs_shared_unmap(i);
     }
     gs_mutex_unlock(&gs_shared_mutex);
