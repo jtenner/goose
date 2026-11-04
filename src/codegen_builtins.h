@@ -431,8 +431,10 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
                 return { t };
             }
             // thread_wait(id, msg): the abort's message, which this wait takes
-            // if no wait has, appended to msg.
-            auto id = GenX(an[0]);
+            // if no wait has, appended to msg. Evaluate and preserve both
+            // arguments before the blocking wait, even when no message arrives.
+            auto id = Snapshot(an[0]->exprtype, GenPure(an[0]));
+            auto out = RecvLoc(an[1]);
             auto m = T(), n = T();
             L("uint8_t *", m, ";");
             L("int64_t ", n, ";");
@@ -440,7 +442,7 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
               ");");
             L("if (", m, ") {");
             ind++;
-            AppendBytes(RecvLoc(an[1]), m, n, ln);
+            AppendBytes(out, m, n, ln);
             L("gs_free_msg(", m, ");");
             ind--;
             L("}");
@@ -448,14 +450,17 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
         }
         case B_THREAD_JOIN: {
             usesthreads = true;
-            auto rt = c->rettypes[0]; auto h = GenX(an[0]);
+            auto rt = c->rettypes[0];
+            auto h = an.size() == 2 ? Snapshot(an[0]->exprtype, GenPure(an[0])) : GenX(an[0]);
+            Loc out;
+            if (an.size() == 2) out = RecvLoc(an[1]);
             auto n = T(), p = T(), msg = T(), mlen = T();
             L("int64_t ", n, ", ", mlen, " = 0; uint8_t *", msg, " = NULL;");
             L("uint8_t *", p, " = gs_thread_join(", h, ", &", n, ", ",
               an.size() == 2 ? cat("&", msg, ", &", mlen) : string("NULL, NULL"),
               ", ", LocArgs(ln), ");");
             if (an.size() == 2) {
-                L("if (", msg, ") {"); ind++; AppendBytes(RecvLoc(an[1]), msg, mlen, ln);
+                L("if (", msg, ") {"); ind++; AppendBytes(out, msg, mlen, ln);
                 L("gs_free_msg(", msg, ");"); ind--; L("}");
             }
             auto ok = T(); L("uint8_t ", ok, " = ", p, " != NULL;");

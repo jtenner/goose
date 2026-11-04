@@ -3855,6 +3855,8 @@ inline FnSpec *TypeCheck::EnsureThreadSpec(SFunction *sf, Line l) {
     spec->views.resize(spec->argtypes.size(), noview);
     sf->specs.push_back(spec);
     CheckSpecBody(spec, nullptr, l);
+    if (spec->rets.size() > 1)
+        Error(l, cat("thread_fn ", sf->name, " may return at most one value"));
     if (!spec->rets.empty() && !IsFlat(spec->rets[0]))
         Error(l, cat("thread_fn result must be flat (§11.2), not ", TypeStr(spec->rets[0])));
     if (!spec->rets.empty() && HoldsAlignedT(spec->rets[0]))
