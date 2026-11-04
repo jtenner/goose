@@ -442,7 +442,7 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
               ");");
             L("if (", m, ") {");
             ind++;
-            AppendBytes(out, m, n, ln);
+            AppendBytes(out, m, n, ln, m);
             L("gs_free_msg(", m, ");");
             ind--;
             L("}");
@@ -460,7 +460,7 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
               an.size() == 2 ? cat("&", msg, ", &", mlen) : string("NULL, NULL"),
               ", ", LocArgs(ln), ");");
             if (an.size() == 2) {
-                L("if (", msg, ") {"); ind++; AppendBytes(out, msg, mlen, ln);
+                L("if (", msg, ") {"); ind++; AppendBytes(out, msg, mlen, ln, msg);
                 L("gs_free_msg(", msg, ");"); ind--; L("}");
             }
             auto ok = T(); L("uint8_t ", ok, " = ", p, " != NULL;");
@@ -1953,13 +1953,21 @@ inline void CodeGen::PayloadOf(Node *n, string &src, string &sz) {
 // `n` bytes at `src` appended to a growable u8 array, in the two shapes
 // format appends text to: a resizable writes at its stack top, a limited
 // array copies under a capacity check.
-inline void CodeGen::AppendBytes(const Loc &lv, const string &src, const string &n, Line ln) {
+inline void CodeGen::AppendBytes(const Loc &lv, const string &src, const string &n, Line ln,
+                                 const string &freeonabort) {
     auto v = ArrayView(lv);
     if (lv.t->arr->akind == A_LIMITED) {
         auto ol = T();
         L("int64_t ", ol, " = ", v.len, ";");
-        L("if (", ol, " + ", n, " > ", LimitedCap(lv), ") gs_abort(GS_E_CAPACITY, ",
-          LocArgs(ln), ");");
+        L("if (", ol, " + ", n, " > ", LimitedCap(lv), ") {");
+        ind++;
+        // A wait/join transfers ownership of its diagnostic to generated
+        // code before the append. A bounded append can abort its contained
+        // caller, so release that transferred buffer before the longjmp.
+        if (!freeonabort.empty()) L("gs_free_msg(", freeonabort, ");");
+        L("gs_abort(GS_E_CAPACITY, ", LocArgs(ln), ");");
+        ind--;
+        L("}");
         L(CopyFn(), "(", ElemAddr(v, ol), ", ", src, ", (size_t)", n, ");");
         L(v.lenlv, " = (", LenCast(lv), ")(", ol, " + ", n, ");");
         return;
