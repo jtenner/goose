@@ -3682,8 +3682,9 @@ not change the registry cell's alignment or create new authority.
 The current native implementation supports explicitly aligned scalar globals
 and locals and fixed structs and fixed arrays containing aligned fields. It
 rejects aligned element types in limited, variable, grow-only or resizable
-arrays, queues and worker argument packets: those representations place a
-runtime prefix before elements or payload and do not yet carry an aligned
+arrays, queues (including `Channel<T>`), and worker argument/result packets
+(including `Thread<T>` results): those representations place a runtime prefix
+before elements or payload and do not yet carry an aligned
 offset. Worker copies of global storage allocate the globals block at its
 computed alignment. These rejections are layout limitations, not permission to
 silently weaken an alignment request.
