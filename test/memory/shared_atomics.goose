@@ -1,4 +1,6 @@
 // no-jit
+import os;
+
 thread_fn claim(next: SharedAtomicU32, total: SharedAtomicU64, flags: SharedView) {
     loop {
         let job = atomic_fetch_add(next, 1, "Relaxed");
@@ -13,6 +15,26 @@ thread_fn publication(flag: SharedAtomicU32, data: SharedView) {
     memory_write<u64>(a, 1, 123456789, false);
     shared_release(a);
     atomic_store(flag, 1, "Release");
+}
+thread_fn publication_rmw32(flag: SharedAtomicU32, data: SharedView, op: i64) {
+    let a = shared_borrow(data);
+    memory_write<u64>(a, 0, (1000 + op) as u64, false);
+    shared_release(a);
+    if op == 0 { atomic_fetch_sub(flag, 1, "Release"); }
+    if op == 1 { atomic_exchange(flag, 1, "Release"); }
+    if op == 2 { atomic_fetch_and(flag, 1, "Release"); }
+    if op == 3 { atomic_fetch_or(flag, 1, "Release"); }
+    if op == 4 { atomic_fetch_xor(flag, 1, "Release"); }
+}
+thread_fn publication_rmw64(flag: SharedAtomicU64, data: SharedView, op: i64) {
+    let a = shared_borrow(data);
+    memory_write<u64>(a, 0, (2000 + op) as u64, false);
+    shared_release(a);
+    if op == 0 { atomic_fetch_sub(flag, 1, "Release"); }
+    if op == 1 { atomic_exchange(flag, 1, "Release"); }
+    if op == 2 { atomic_fetch_and(flag, 1, "Release"); }
+    if op == 3 { atomic_fetch_or(flag, 1, "Release"); }
+    if op == 4 { atomic_fetch_xor(flag, 1, "Release"); }
 }
 thread_fn atomic_bad(kind: i64) {
     let o, ok = shared_alloc(64); assert(ok);
@@ -52,6 +74,12 @@ fn main() {
     atomic_store(total, 18446744073709551615, "SeqCst");
     assert(atomic_fetch_add(total, 1, "Relaxed") == 18446744073709551615);
     assert(atomic_load(total, "Relaxed") == 0);
+    assert(atomic_fetch_sub(total, 1, "Release") == 0);
+    assert(atomic_exchange(total, 15, "Acquire") == 18446744073709551615);
+    assert(atomic_fetch_and(total, 7, "SeqCst") == 15);
+    assert(atomic_fetch_or(total, 8, "Relaxed") == 7);
+    assert(atomic_fetch_xor(total, 3, "Relaxed") == 15);
+    assert(atomic_load(total, "Relaxed") == 12);
     assert(shared_close(o));
     let p, yes = shared_alloc(64); assert(yes);
     let ready = shared_atomic_u32(p, 0, 0);
@@ -62,6 +90,28 @@ fn main() {
     assert(memory_read<u64>(a, 1, false) == 123456789);
     shared_release(a);
     assert(thread_wait(worker)); assert(shared_close(p));
+    let pub, pub_ok = shared_alloc(256); assert(pub_ok);
+    var pub_workers: i64[>..] = [];
+    for op in 5 {
+        let initial = if op == 0 { 2 } else if op == 2 { 3 } else { 0 };
+        let flag32 = shared_atomic_u32(pub, op * 4, initial as u32);
+        let flag64 = shared_atomic_u64(pub, 24 + op * 8, initial as u64);
+        let data32 = shared_view(pub, 64 + op * 8, 8);
+        let data64 = shared_view(pub, 104 + op * 8, 8);
+        pub_workers.push(thread_spawn(publication_rmw32, flag32, data32, op));
+        pub_workers.push(thread_spawn(publication_rmw64, flag64, data64, op));
+        let deadline = clock_ns() + 5000000000;
+        while atomic_load(flag32, "Acquire") != 1 { assert(clock_ns() < deadline); }
+        while atomic_load(flag64, "Acquire") != 1 { assert(clock_ns() < deadline); }
+        let a32 = shared_borrow(data32);
+        assert(memory_read<u64>(a32, 0, false) == (1000 + op) as u64);
+        shared_release(a32);
+        let a64 = shared_borrow(data64);
+        assert(memory_read<u64>(a64, 0, false) == (2000 + op) as u64);
+        shared_release(a64);
+    }
+    for id in pub_workers { assert(thread_wait(id)); }
+    assert(shared_close(pub));
     for kind in 6 { assert(!thread_wait(thread_spawn_contained(atomic_bad, kind))); }
     print("shared atomics ok");
 }

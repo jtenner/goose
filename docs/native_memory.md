@@ -301,6 +301,11 @@ Each builtin requires exactly one type argument, `u32` or `u64`. Addresses are
 | `unsafe_atomic_load<T>(address, order)` | `T` |
 | `unsafe_atomic_store<T>(address, value, order)` | no result |
 | `unsafe_atomic_fetch_add<T>(address, value, order)` | previous `T`, wrapping addition |
+| `unsafe_atomic_fetch_sub<T>(address, value, order)` | previous `T`, wrapping subtraction |
+| `unsafe_atomic_exchange<T>(address, value, order)` | previous `T` |
+| `unsafe_atomic_fetch_and<T>(address, value, order)` | previous `T` |
+| `unsafe_atomic_fetch_or<T>(address, value, order)` | previous `T` |
+| `unsafe_atomic_fetch_xor<T>(address, value, order)` | previous `T` |
 | `unsafe_atomic_compare_exchange<T>(address, expected, desired, success_order, failure_order)` | observed `T`, success `bool` |
 
 Compare-exchange is strong (no spurious failure). On success the observed value
@@ -308,7 +313,10 @@ is the original expected value; on failure it is the actual value of the cell.
 Orders use the existing compile-time strings `Relaxed`, `Acquire`, `Release`,
 `AcqRel`, and `SeqCst`, with the same load, store and failure-order restrictions
 as capability atomics. Load rejects Release/AcqRel, store rejects Acquire/AcqRel;
-CAS failure rejects Release/AcqRel and orders stronger than the success order.
+all read-modify-write operations accept all five orders. CAS failure rejects
+Release/AcqRel and orders stronger than the success order. Exchange and every
+fetch operation return the value that preceded the update; addition and
+subtraction wrap at the selected width.
 
 **The caller owns the address, its alignment, its lifetime, and the rule that
 the cell is touched only through these operations.** The caller must provide
