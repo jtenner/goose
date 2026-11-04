@@ -512,16 +512,15 @@ inline bool TypeCheck::HoldsAlignedT(TypeExpr *t) {
             case TY_SLICE: return walk(u->sub);
             case TY_ARRAY: return walk(u->arr->sub);
             case TY_STRUCT: {
-                if (!seen.insert({ TY_STRUCT, u->struc->st }).second) return false;
                 auto si = GetStructInst(u);
+                if (!seen.insert({ TY_STRUCT, si }).second) return false;
                 for (auto &f : si->st->fields) if (f.align > 1) return true;
                 for (auto ft : si->ftypes) if (walk(ft)) return true;
                 return false;
             }
             case TY_ENUM: case TY_VARIANT: {
-                auto en = u->kind == TY_ENUM ? u->enu->en : u->var->adt->enu->en;
-                if (!seen.insert({ TY_ENUM, en }).second) return false;
                 auto ei = u->kind == TY_ENUM ? GetEnumInst(u) : GetEnumInst(u->var->adt);
+                if (!seen.insert({ TY_ENUM, ei }).second) return false;
                 for (auto &v : ei->en->variants)
                     for (auto &f : v.fields) if (f.align > 1) return true;
                 for (auto &fields : ei->vftypes)

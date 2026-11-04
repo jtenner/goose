@@ -116,15 +116,25 @@ struct Builder {
                         break;
                     }
                 set<string> loops;
+                map<string, string> looplines;
                 for (size_t p = 0; (p = generated.find("#simd-", p)) != string::npos;) {
                     auto q = generated.find(".goose", p);
                     if (q == string::npos) break;
                     auto b = generated.rfind('"', p);
-                    if (b != string::npos && generated.substr(p, q + 6 - p).find("-loop") != string::npos)
-                        loops.insert(generated.substr(b + 1, q + 5 - b));
+                    if (b != string::npos && generated.substr(p, q + 6 - p).find("-loop") != string::npos) {
+                        auto directive = generated.rfind("#line ", b);
+                        if (directive != string::npos && generated.find('\n', directive) > b) {
+                            auto loop = generated.substr(b + 1, q + 5 - b);
+                            auto start = directive + 6;
+                            auto end = generated.find_first_not_of("0123456789", start);
+                            loops.insert(loop);
+                            looplines[loop] = generated.substr(start, end - start);
+                        }
+                    }
                     p = q + 6;
                 }
                 set<string> explained;
+                set<string> vectorized;
                 string pending, pendingloc;
                 for (size_t b = 0; b < r.output.size();) {
                     auto e = r.output.find('\n', b);
@@ -144,20 +154,26 @@ struct Builder {
                         auto remark = line.substr(line.find("remark:"));
                         fprintf(msgs, "simd feedback: %s: %s\n", pendingloc.c_str(), remark.c_str());
                         explained.insert(pending);
+                        if (remark.find("[-Rpass=loop-vectorize]") != string::npos)
+                            vectorized.insert(pending);
                         pending.clear();
                         pendingloc.clear();
                     } else if (line.find("remark:") != string::npos) {
                         for (auto &loop : loops) if (line.find(loop) != string::npos) {
                             fprintf(msgs, "simd feedback: %s\n", line.c_str());
                             explained.insert(loop);
+                            if (line.find("[-Rpass=loop-vectorize]") != string::npos)
+                                vectorized.insert(loop);
                         }
                     }
                     if (e == string::npos) break;
                     b = e + 1;
                 }
-                for (auto &loop : loops) if (!explained.count(loop))
-                    fprintf(msgs, "simd feedback: %s: missed: compiler supplied no loop-vectorize reason\n",
-                            loop.c_str());
+                for (auto &loop : loops) if (!vectorized.count(loop))
+                    fprintf(msgs, "simd feedback: %s:%s: missed: %s\n", loop.c_str(),
+                            looplines[loop].c_str(), explained.count(loop)
+                                ? "compiler supplied no positive vectorization remark; see remarks above"
+                                : "compiler supplied no loop-vectorize reason");
             }
             return true;
         }

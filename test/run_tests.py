@@ -2129,7 +2129,7 @@ _Static_assert(_Alignof(a2_Nested_g) == 64, "Nested array alignment");'''
                        f"expected all addresses mod 64 zero, got {result!r}")
 
         r.show_task(aligned_address_probe, cc, cc.name)
-        if clang.cc != cc.cc:
+        if clang and clang.cc != cc.cc:
             r.show_task(aligned_address_probe, clang, "clang")
 
         # The same coverage test through clang, release and debug. A compiler
@@ -2354,6 +2354,27 @@ _Static_assert(_Alignof(a2_Nested_g) == 64, "Nested array alignment");'''
                 if explicit_out is not None and r.check_stdout("simd_explicit", f"clang-{label}", explicit_out):
                     r.ok(f"{label}-clang simd_explicit.goose")
 
+            # Invalid constant immediates must remain Goose runtime aborts
+            # under both vector and scalar C lowering, at either inlining level.
+            for name in ("simd_shuffle_constant_bounds", "simd_store_argument_order"):
+                for gopt in ("-O0", "-O2"):
+                    source = gendir / f"{name}-{gopt[1:]}.c"
+                    code, out, err = r.goose(gopt, "-o", source, HERE / "runtime" / f"{name}.goose")
+                    if code:
+                        r.fail(f"simd abort cgen {name} {gopt}", out + err)
+                        continue
+                    for on in ("0", "1"):
+                        label = f"clang-{gopt}-vec{on}"
+                        target = gendir / f"{name}-{gopt[1:]}-{on}{tc.EXE_SUFFIX}"
+                        ok, log = clang.compile(source, target, opt=2, warn="off",
+                                                defines=[f"GS_VEC={on}"], runtime=r.runtime)
+                        if not ok:
+                            r.fail(f"{label} {name}", log)
+                            continue
+                        output = r.run_expected([target], name, f"{label} {name}")
+                        if output is not None and r.check_stdout(name, label, output):
+                            r.ok(f"{label} {name}")
+
         def clang_simd_feedback():
             source = HERE / "codegen" / "simd_versions.goose"
             cfile = gendir / "simd-feedback-inventory.c"
@@ -2363,6 +2384,8 @@ _Static_assert(_Alignof(a2_Nested_g) == 64, "Nested array alignment");'''
                 return
             expected = set(re.findall(r'"([^"\n]*#simd-[^"\n]*-loop\d+\.goose)"',
                                       cfile.read_text(encoding="utf-8")))
+            locations = re.findall(r'#line (\d+) "([^"\n]*#simd-[^"\n]*-loop\d+\.goose)"',
+                                   cfile.read_text(encoding="utf-8"))
             output_exe = gendir / f"simd-feedback{tc.EXE_SUFFIX}"
             code, out, err = tc.run_capture([str(exe), "build", "--cc", "clang",
                                              "--simd-feedback", "-o", str(output_exe), str(source)])
@@ -2378,6 +2401,9 @@ _Static_assert(_Alignof(a2_Nested_g) == 64, "Nested array alignment");'''
                 return
             if "vectorized loop" not in report or "missed:" not in report:
                 r.fail("simd feedback statuses", report)
+                return
+            if any(f"{marker}:{line}:" not in report for line, marker in locations):
+                r.fail("simd feedback source lines", report)
                 return
             r.ok("simd feedback maps every emitted version loop with status")
 
