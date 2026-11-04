@@ -785,6 +785,9 @@ inline void TypeCheck::ValidateType(TypeExpr *t, Line l, int pos) {
                     if (HoldsIndexT(t->native->arg))
                         Error(l, cat(TypeStr(t), " cannot cross thread contexts: its payload holds an "
                                      "index type (§3.11)"));
+                    if (HoldsAlignedT(t->native->arg))
+                        Error(l, cat(NativeName(t->native->kind),
+                                     " payload cannot contain aligned values"));
                 }
             }
             return;
