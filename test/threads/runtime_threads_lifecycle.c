@@ -340,8 +340,10 @@ int main(void) {
        program can start again in the process and end as cleanly. */
     gs_thread_release();
     gs_rt_stop();
-    check(counter_add(&live_allocations, 0) == 0,
-          "stopping releases main's stack block and the abort records");
+    /* The shared generation registry remains for the process lifetime. */
+    check(gs_shared_slabs[0] != NULL, "shared registry slab survives program stop");
+    check(counter_add(&live_allocations, 0) == 1,
+          "stopping releases program allocations and retains only the shared registry slab");
     check(counter_add(&live_regions, 0) == 0, "stopping releases main's reservation");
 #ifndef _WIN32
     struct sigaction after;
@@ -359,7 +361,7 @@ int main(void) {
     check_baseline(allocations + 3, regions);
     gs_thread_release();
     gs_rt_stop();
-    check(counter_add(&live_allocations, 0) == 0 && counter_add(&live_regions, 0) == 0,
+    check(counter_add(&live_allocations, 0) == 1 && counter_add(&live_regions, 0) == 0,
           "the program started again ends as cleanly");
     puts("runtime thread cleanup ok");
     return 0;
