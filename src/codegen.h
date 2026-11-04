@@ -1117,6 +1117,7 @@ struct CodeGen {
     string VecLoad(const string &vt, int64_t n, const string &v, bool scalar);
     void GenElemwiseLeaves(TypeExpr *t, const string &dst,
                            const function<string(TypeExpr *, const string &)> &leaf);
+    void ZeroAlignedPadding(TypeExpr *t, const string &dst);
     void ElemwiseOperands(Binary *b, string &l, string &r);
     string GenElemwise(Binary *b, const string &l, const string &r);
     string GenSlice(SliceExpr *se, const string &into = "");

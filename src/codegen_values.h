@@ -1865,6 +1865,7 @@ inline void CodeGen::GenElemwiseInto(TypeExpr *t, TType op, Line line, const str
         return ArithX(op, tt, a, c, line, false, a, c);
     });
     if (vec) L("#endif");
+    ZeroAlignedPadding(t, dst);
 }
 
 // Elementwise negation (§6.1), member by member as above: member i of the
@@ -1893,6 +1894,7 @@ inline void CodeGen::GenElemwiseNegInto(TypeExpr *t, Line line, const string &x,
                    OvfLocArgs(tt->intstorage, line), ")");
     });
     if (vec) L("#endif");
+    ZeroAlignedPadding(t, dst);
 }
 
 // Whether t is all floats of one width, 2, 4, 8 or 16 of them in 16, 32 or
@@ -2026,6 +2028,45 @@ inline void CodeGen::GenElemwiseLeaves(TypeExpr *t, const string &dst,
     };
     // Struct field paths start at the value; array paths at .e — handled
     // uniformly since the outer type is one of the two.
+    rec(t, "");
+}
+
+// Elementwise arithmetic writes only numeric leaves. Alignment gaps are part
+// of the fixed byte image and must still be initialized (§7.12), including
+// gaps inside nested structs and every element of a fixed array. Do this after
+// the leaf stores so dst may alias either operand without being cleared first.
+inline void CodeGen::ZeroAlignedPadding(TypeExpr *t, const string &dst) {
+    if (TypeAlign(t) <= 1) return;
+    function<void(TypeExpr *, const string &)> rec = [&](TypeExpr *tt, const string &path) {
+        if (tt->kind == TY_ARRAY) {
+            assert(tt->arr->akind == A_FIXED);
+            auto iv = T();
+            L("for (int64_t ", iv, " = 0; ", iv, " < ", ArrSize(tt->arr), "; ", iv,
+              "++) {");
+            ind++;
+            rec(tt->arr->sub, cat(path, ".e[", iv, "]"));
+            ind--;
+            L("}");
+            return;
+        }
+        assert(tt->kind == TY_STRUCT);
+        auto si = SI(tt);
+        auto &lo = StructLayout(si);
+        int64_t cur = 0;
+        for (size_t i = 0; i < si->st->fields.size(); i++) {
+            if (lo.offs[i] > cur)
+                L("GS_MEMZERO(((uint8_t *)&", dst, path, ") + ", cur, ", ",
+                  lo.offs[i] - cur, ");");
+            cur = lo.offs[i];
+            if (si->st->fields[i].ispad) continue;
+            if (TypeAlign(si->ftypes[i]) > 1)
+                rec(si->ftypes[i], cat(path, ".", Sanitize(si->st->fields[i].name)));
+            cur += FixedSize(si->ftypes[i]);
+        }
+        if (lo.size > cur)
+            L("GS_MEMZERO(((uint8_t *)&", dst, path, ") + ", cur, ", ", lo.size - cur,
+              ");");
+    };
     rec(t, "");
 }
 

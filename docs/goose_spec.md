@@ -5399,8 +5399,11 @@ its resolution is described.
     specified in §7.12. What remains open is whether a function should be able
     to say which instruction-set versions it wants (an AVX-512 version is not
     faster for every loop), and whether a future revision should replace the
-    required per-call CPU test with cached per-program or per-thread dispatch.
-    The latter is not permitted by the current §7.12 call semantics.
+    required per-call level test and branch with a cached selected function
+    target (once-only per-program or per-thread dispatch). Feature detection
+    itself may be cached, as it is now, but §7.12 still requires every call to
+    test the level and select a version; removing that per-call dispatch is not
+    permitted by the current call semantics.
 13. **Labels for `break`** — if early-out patterns demand them.
 15. **Wasm fallback** — index-based reference representation details
     (`docs/design/wasm.md` compares the options).
