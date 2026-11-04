@@ -51,6 +51,76 @@ inline string CodeGen::LenCast(const Loc &lv) {
 inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
     auto an = c->ArgNodes();
     auto ln = c->line;
+    if (c->builtin >= B_SIMD_SPLAT && c->builtin <= B_SIMD_SHUFFLE) {
+        auto t = c->qtype;
+        auto lane = t->arr->sub;
+        auto lanes = ArrSize(t->arr);
+        auto vt = ExplicitVecType(t);
+        auto out = T();
+        if (c->builtin == B_SIMD_SPLAT) {
+            auto x = Snapshot(lane, GenXD(an[0], lane));
+            L(CT(t), " ", out, ";");
+            string init;
+            for (int64_t i = 0; i < lanes; i++) Append(init, i ? ", " : "", x);
+            L("#if GS_VEC");
+            L("GS_VST(", vt, ", &", out, ", ((", vt, "){", init, "}));");
+            L("#else");
+            auto i = T();
+            L("for (int64_t ", i, " = 0; ", i, " < ", lanes, "; ", i, "++) ",
+              out, ".e[", i, "] = ", x, ";");
+            L("#endif");
+            return {out};
+        }
+        if (c->builtin == B_SIMD_LOAD || c->builtin == B_SIMD_STORE) {
+            auto slice = Snapshot(an[0]->exprtype, GenXD(an[0], an[0]->exprtype));
+            auto first = Snapshot(ast.inttypes[IS_I64], GenXD(an[1], ast.inttypes[IS_I64]));
+            L("if (", first, " < 0 || ", slice, ".len < ", lanes, " || ", first,
+              " > ", slice, ".len - ", lanes, ") gs_abort(GS_E_ASSERT, ", LocArgs(ln), ");");
+            if (c->builtin == B_SIMD_LOAD) {
+                L(CT(t), " ", out, ";");
+                L("#if GS_VEC");
+                L("GS_VST(", vt, ", &", out, ", GS_VLD(", vt, ", ", slice,
+                  ".data + ", first, "));");
+                L("#else");
+                L("GS_MEMCPY(&", out, ", ", slice, ".data + ", first, ", ", FixedSize(t), ");");
+                L("#endif");
+                return {out};
+            }
+            auto v = Snapshot(t, GenXD(an[2], t));
+            L("#if GS_VEC");
+            L("GS_VST(", vt, ", ", slice, ".data + ", first, ", GS_VLD(", vt, ", &", v, "));");
+            L("#else");
+            L("GS_MEMCPY(", slice, ".data + ", first, ", &", v, ", ", FixedSize(t), ");");
+            L("#endif");
+            return {};
+        }
+        auto v = Snapshot(t, GenXD(an[0], t));
+        vector<string> ix;
+        bool constants = true;
+        for (size_t k = 1; k < an.size(); k++) constants &= Is<IntLit>(an[k]) != nullptr;
+        for (size_t k = 1; k < an.size(); k++) {
+            auto x = GenXD(an[k], ast.inttypes[IS_I64]);
+            ix.push_back(constants ? x : Snapshot(ast.inttypes[IS_I64], x));
+        }
+        for (auto &i : ix)
+            L("if (", i, " < 0 || ", i, " >= ", lanes, ") gs_abort(GS_E_ASSERT, ", LocArgs(ln), ");");
+        L(CT(t), " ", out, ";");
+        if (constants) {
+            string args, mask;
+            for (auto &i : ix) { Append(args, args.empty() ? "" : ", ", i); Append(mask, mask.empty() ? "" : ", ", i); }
+            auto mt = ExplicitMaskVecType(t);
+            L("#if GS_VEC && defined(__clang__)");
+            L("GS_VST(", vt, ", &", out, ", __builtin_shufflevector(GS_VLD(", vt, ", &", v,
+              "), GS_VLD(", vt, ", &", v, "), ", args, "));");
+            L("#elif GS_VEC && defined(__GNUC__)");
+            L("GS_VST(", vt, ", &", out, ", __builtin_shuffle(GS_VLD(", vt, ", &", v,
+              "), (", mt, "){", mask, "}));");
+            L("#else");
+        }
+        for (size_t k = 0; k < ix.size(); k++) L(out, ".e[", k, "] = ", v, ".e[", ix[k], "];");
+        if (constants) L("#endif");
+        return {out};
+    }
     if (c->builtin >= B_UNSAFE_PTR_FROM_HANDLE && c->builtin <= B_UNSAFE_STORE)
         return EmitUnsafeBuiltin(c);
     if (c->builtin >= B_SHARED_ALLOC && c->builtin <= B_MEMORY_COPY) {
@@ -1441,7 +1511,8 @@ inline void CodeGen::EmitThreadThunk(FnSpec *sp, int64_t stacks) {
     if (ki.needssp) args.push_back("0");
     // A worker has no caller: its function's failures report its declaration.
     if (ki.located) args.push_back(CallerLoc(sp->sf->line));
-    Append(b, "    gs_gl = calloc(1, sizeof(gs_globals_t));\n"
+    Append(b, "    gs_gl = gs_aligned_calloc(sizeof(gs_globals_t), ",
+              std::max<int64_t>(gblockalign, 8), ");\n"
               "    if (!gs_gl) gs_panic(\"out of memory copying globals\");\n");
     for (auto d : ThreadGlobals(sp)) {
         auto gn = gnames[d];

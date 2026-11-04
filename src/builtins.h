@@ -69,6 +69,10 @@ inline int RecvKindOf(TypeExpr *t) {
 
 //        enum            name                min max  args  rets recv            grows          flags
 #define BUILTINS \
+    F(B_SIMD_SPLAT, "__simd_splat", 1, 1, "", "", 0, "", BF_TYARGS) \
+    F(B_SIMD_LOAD, "__simd_load", 2, 2, "", "", 0, "", BF_TYARGS) \
+    F(B_SIMD_STORE, "__simd_store", 3, 3, "", "", 0, "", BF_TYARGS) \
+    F(B_SIMD_SHUFFLE, "__simd_shuffle", 2, 65, "", "", 0, "", BF_TYARGS) \
     F(B_SHARED_MAP, "shared_map_readonly", 2, 2, "", "", 0, "", 0) \
     F(B_SHARED_ADVICE, "shared_page_advice", 4, 4, "", "", 0, "", 0) \
     F(B_MEMORY_READ_BYTES, "memory_read_bytes", 3, 3, "", "", 0, "", 0) \

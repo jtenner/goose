@@ -1301,6 +1301,8 @@ struct TypeCheck {
     bool IsFlat(TypeExpr *t);
     bool Reaches(TypeExpr *t, const function<bool(TypeExpr *)> &pred);
     bool HoldsIndexT(TypeExpr *t);
+    bool HoldsVectorT(TypeExpr *t);
+    bool HoldsAlignedT(TypeExpr *t);
     SFunction *TextFn();
     void CheckfreeCallee(Node *at, SFunction *callee);
     bool HoldsPlainRef(TypeExpr *t);

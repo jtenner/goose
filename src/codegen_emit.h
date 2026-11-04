@@ -405,6 +405,7 @@ inline void CodeGen::ResetFnState() {
     cscopes.clear();
     body.clear();
     tmpn = 0;
+    simdloopn = 0;
     stknext = 0;
     stkmax = 0;
     ind = 1;
@@ -571,6 +572,16 @@ inline void CodeGen::EmitSimdVersions(FnSpec *sp, const string &name, const stri
                    CStr(cat(source, "#simd-", sp->sf->name, "-v", lv, ".goose")), "\n");
     };
     auto reset = "#line 1 \"goose-generated.c\"\n";
+    auto versionbody = [&](int lv) {
+        auto out = fnbody;
+        const string token = "version@";
+        for (size_t p = 0; (p = out.find(token, p)) != string::npos;) {
+            auto replacement = cat("v", lv);
+            out.replace(p, token.size(), replacement);
+            p += replacement.size();
+        }
+        return out;
+    };
     // The parameter list is `type name` declarations whose types are
     // typedef names or pointers to them; the names forward the call.
     string args;
@@ -593,7 +604,7 @@ inline void CodeGen::EmitSimdVersions(FnSpec *sp, const string &name, const stri
         versions[lv] = Unique(cat(name, "_simd", lv));
         Append(code, "#if GS_SIMD >= ", lv, "\n", marker(lv),
                "\n#undef GS_MUL_ADD_MODE\n#define GS_MUL_ADD_MODE fused\nGS_SIMD_TARGET", lv,
-               " static ", ret, " ", versions[lv], "(", params, ") {\n", fnbody,
+               " static ", ret, " ", versions[lv], "(", params, ") {\n", versionbody(lv),
                "}\n", reset,
                "#undef GS_MUL_ADD_MODE\n#define GS_MUL_ADD_MODE GS_MUL_ADD_BASE\n#endif\n");
     }
@@ -606,7 +617,7 @@ inline void CodeGen::EmitSimdVersions(FnSpec *sp, const string &name, const stri
         else Append(code, "    case ", lv, ": return ", call, ";\n");
         if (lv > 1) Append(code, "#endif\n");
     }
-    Append(code, "    }\n#endif\n", fnbody, "}\n", reset, "\n");
+    Append(code, "    }\n#endif\n", versionbody(0), "}\n", reset, "\n");
 }
 
 inline void CodeGen::EmitSpec(FnSpec *sp, bool er) {
@@ -845,6 +856,7 @@ inline void CodeGen::EmitGlobalDecls() {
             // dedicated stack where it has one.
             auto member = [&](const string &decl) {
                 auto a = std::max<int64_t>(d->align, TypeAlign(d->type));
+                gblockalign = std::max(gblockalign, a);
                 Append(gblock, "    ", a > 1 ? cat("GS_ALIGNAS(", a, ") ") : string(),
                        decl, ";\n");
             };

@@ -1167,23 +1167,23 @@ inline void CodeGen::StructLitAt(StructLit *sl, const string &base, bool inroot)
     };
     if (et->kind == TY_STRUCT) {
         auto si = SI(et);
-        // Nothing writes the C object of a struct or a variant without
-        // fields, and copying one nothing wrote is undefined.
-        if (LastRealField(si->st->fields) < 0) L("GS_MEMZERO(&", base, ", sizeof(", base, "));");
+        // Padding has a deterministic zero image, including explicit
+        // alignment gaps and the rounded tail.
+        L("GS_MEMZERO(&", base, ", sizeof(", base, "));");
         fieldset(base, si->st->fields, si->ftypes, StructLayout(si), 0);
         return;
     }
     if (et->kind == TY_VARIANT) {
         auto ei = EIVar(et);
         auto vi = ei->en->VariantIndex(et->var->variant);
-        if (LastRealField(ei->en->variants[vi].fields) < 0)
-            L("GS_MEMZERO(&", base, ", sizeof(", base, "));");
+        L("GS_MEMZERO(&", base, ", sizeof(", base, "));");
         fieldset(base, ei->en->variants[vi].fields, ei->vftypes[vi], VariantLayout(ei, vi), 0);
         return;
     }
     assert(et->kind == TY_ENUM && !et->enu->varmode && sl->variant);
     auto ei = EIOf(et);
     auto vi = ei->en->VariantIndex(sl->variant);
+    L("GS_MEMZERO(&", base, ", sizeof(", base, "));");
     L(base, ".tag = ", TagConst(ei, vi), ";");
     if (!EmptyLayout(ei->en->variants[vi].fields))
         fieldset(cat(base, ".u.v_", Sanitize(ei->en->variants[vi].name)),
