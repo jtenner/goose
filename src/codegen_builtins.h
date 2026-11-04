@@ -1324,6 +1324,8 @@ inline vector<string> CodeGen::EmitThreadSpawn(Call *c, vector<Node *> &an) {
     auto thunk = EnsureThreadThunk(sp);
     string stk;
     auto base = BytesTemp(stk);
+    struct Handoff { string cap, dest; bool pointer; int consume; };
+    vector<Handoff> handoffs;
     function<bool(Node *)> stored_pointer = [&](Node *n) {
         if (Is<Ident>(n)) return true;
         if (auto d = Is<Dot>(n); d && d->IsField()) return stored_pointer(d->obj);
@@ -1336,15 +1338,9 @@ inline vector<string> CodeGen::EmitThreadSpawn(Call *c, vector<Node *> &an) {
             auto cap = Snapshot(pt, GenPure(an[1 + i]));
             bool pointer = pt->kind == TY_NATIVE && pt->nativekind == NK_POINTER;
             int consume = pointer && !stored_pointer(an[1 + i]);
-            if (pointer) {
-                auto worker = T();
-                L("gs_shared_cap ", worker, " = gs_shared_handoff((gs_shared_cap){", cap,
-                  ".slot, ", cap, ".generation}, ", consume, ", ", LocArgs(c->line), ");");
-                cap = worker;
-            } else {
-                L("(void)gs_shared_handoff((gs_shared_cap){", cap, ".slot, ", cap,
-                  ".generation}, 0, ", LocArgs(c->line), ");");
-            }
+            auto dest = T();
+            L("uint8_t *", dest, " = ", Top(stk), ";");
+            handoffs.push_back({cap, dest, pointer, consume});
             EmitValStore(stk, pt, cap);
             continue;
         }
@@ -1421,8 +1417,17 @@ inline vector<string> CodeGen::EmitThreadSpawn(Call *c, vector<Node *> &an) {
         L("int64_t ", sz, " = ", Top(stk), " - (", szp, " + 8);");
         L("GS_MEMCPY(", szp, ", &", sz, ", 8);");
     }
-    // Handoffs were prepared as each argument was evaluated. A later
-    // contained abort reclaims that thread's pending transaction.
+    // A later argument may itself spawn. Prepare no TLS pending leases
+    // until all Goose evaluation is complete, so nested spawns cannot take
+    // the outer packet's claims. Patch pointer fields to the distinct claims
+    // only after retaining them; typed views/atomic fields keep their image.
+    for (auto &h : handoffs) {
+        auto worker = T();
+        L("gs_shared_cap ", worker, " = gs_shared_handoff((gs_shared_cap){", h.cap,
+          ".slot, ", h.cap, ".generation}, ", h.consume, ", ", LocArgs(c->line), ");");
+        if (h.pointer)
+            L("GS_MEMCPY(", h.dest, ", &", worker, ", sizeof ", worker, ");");
+    }
     auto id = T();
     L("int64_t ", id, " = gs_thread_spawn(", thunk, ", ", base, ", ", Top(stk), " - ", base,
       c->builtin == B_THREAD_SPAWN_CONTAINED ? ", 1);" : ", 0);");
