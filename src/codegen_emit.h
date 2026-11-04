@@ -1194,6 +1194,13 @@ inline string CodeGen::ExportHeader() {
     // exported signatures and the type definitions spell their scalars by;
     // a host's unit that has them already may repeat them.
     string header = "#pragma once\n#include <stdint.h>\n"
+                    "#if defined(_MSC_VER)\n"
+                    "#define GS_ALIGNAS(n) __declspec(align(n))\n"
+                    "#elif (defined(__GNUC__) || defined(__clang__)) && !defined(__TINYC__)\n"
+                    "#define GS_ALIGNAS(n) __attribute__((aligned(n)))\n"
+                    "#else\n#define GS_ALIGNAS(n) GS_ALIGN_REQUIRES_NATIVE_BACKEND\n#endif\n"
+                    // Public references and scalar signatures use the same
+                    // alignment-one aliases as the runtime, with the same C ABI.
                     "#if (defined(__GNUC__) || defined(__clang__)) && !defined(__TINYC__)\n"
                     "#define GS_ALIGN1 __attribute__((aligned(1)))\n"
                     "#else\n#define GS_ALIGN1\n#endif\n"

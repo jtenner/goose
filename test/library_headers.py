@@ -50,8 +50,10 @@ def check_library_headers(exe, cc, base, *, extra=()):
 #include <string.h>
 #ifdef __cplusplus
 #define STATIC_ASSERT static_assert
+#define ALIGNOF alignof
 #else
 #define STATIC_ASSERT _Static_assert
+#define ALIGNOF _Alignof
 #endif
 struct PackingProbe { uint8_t prefix; uint64_t word; };
 STATIC_ASSERT(offsetof(struct PackingProbe, word) > 1, "header restores packing");
@@ -61,6 +63,9 @@ STATIC_ASSERT(offsetof(struct PackingProbe, word) > 1, "header restores packing"
 STATIC_ASSERT(sizeof(ApiPacked_g) == 9, "packed nested layout");
 STATIC_ASSERT(offsetof(ApiPacked_g, inner_g) == 1, "packed nested offset");
 STATIC_ASSERT(offsetof(ApiPacked_g, values_g) == 5, "packed array offset");
+STATIC_ASSERT(sizeof(ApiAligned_g) == 32, "aligned struct size");
+STATIC_ASSERT(ALIGNOF(ApiAligned_g) == 16, "aligned struct alignment");
+STATIC_ASSERT(offsetof(ApiAligned_g, value_g) == 16, "aligned field offset");
 STATIC_ASSERT(sizeof(ApiRefOnly_g) == 4, "complete reference pointee");
 STATIC_ASSERT(sizeof(ApiSliceOnly_g) == 4, "complete slice element");
 int main(int argc, char **argv) {
@@ -72,6 +77,10 @@ int main(int argc, char **argv) {
     ApiPacked_g (*copy)(ApiPacked_g) = packed;
     p = copy(p); assert(p.prefix_g == 1 && p.inner_g.value_g == 42);
     assert(p.values_g.e[0] == 2 && p.values_g.e[1] == 3);
+    ApiAligned_g a = { 0 };
+    a.tag_g = 1; a.value_g = 42;
+    ApiAligned_g (*aligned_copy)(ApiAligned_g) = aligned;
+    a = aligned_copy(a); assert(a.tag_g == 1 && a.value_g == 42);
     ApiRefOnly_g r = { 42 };
     uint32_t (*ref)(ApiRefOnly_g *) = reference;
     assert(ref(&r) == 42);
@@ -128,6 +137,11 @@ int main(int argc, char **argv) {
                             source, "-o", cfile]):
                     continue
                 decls = header.read_text(encoding="utf-8")
+                if source.stem == "public" and level == 0 and cc.style != "msvc":
+                    if "#define GS_ALIGNAS(n) GS_ALIGN_REQUIRES_NATIVE_BACKEND" not in decls:
+                        failures.append(f"{header}: missing unsupported alignment backend sentinel")
+                    run([cc.cc, "-std=c11", "-D__TINYC__", "-x", "c", "-fsyntax-only", header],
+                        expected=1)
                 # Private implementation types are not part of the API.
                 if any(n in decls for n in ("gs_shared_cap", "gs_shared_atomic_cap",
                                             "Private", "Box_g")):
