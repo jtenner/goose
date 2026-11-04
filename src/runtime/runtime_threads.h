@@ -892,7 +892,17 @@ GS_API int64_t gs_channel_wait_any(const gs_handle *hs, int64_t n,
                 gs_abort_msg((const uint8_t *)"invalid channel handle", 22, file, line);
             }
             gs_mutex_lock(&s->mutex); int ready = s->head || s->closed; gs_mutex_unlock(&s->mutex);
-            if (ready) { gs_mutex_unlock(&gs_channels_mutex); return i; }
+            if (ready) {
+                /* The channel may have become ready after an earlier duplicate
+                   was examined. At this instant every identical handle names
+                   the same ready state, so return its lowest occurrence. */
+                int64_t first = i;
+                for (int64_t j = 0; j < i; j++)
+                    if (hs[j].slot == hs[i].slot && hs[j].generation == hs[i].generation) {
+                        first = j; break;
+                    }
+                gs_mutex_unlock(&gs_channels_mutex); return first;
+            }
         }
         gs_cond_wait(&gs_channels_changed, &gs_channels_mutex);
     }
