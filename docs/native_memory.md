@@ -97,14 +97,19 @@ close its owner. Stale and wrong-type operations abort. Counting uses the
 existing lock-free u64 substrate; supported native targets are unchanged and
 TinyCC remains rejected.
 
-A direct pointer can cross `thread_spawn`. A stored pointer expression is
-borrowed and gets a distinct worker claim; a temporary pointer result is an
-owned claim transferred into the spawn transaction. This applies to ordinary
-function results as well as builtins. The registry removes packet claims from
-parent cleanup while pending, assigns them to the child before native creation,
-and rolls back only that transaction on creation failure. Cleanup releases a
-worker claim only while it remains live, so explicit release, queue transfer
-and nested handoff cannot double-release it. It can also be
+A direct pointer can cross `thread_spawn`. Every argument gets a distinct
+retained packet claim. A stored pointer expression is borrowed and keeps its
+source claim; a temporary pointer result has its source claim consumed in the
+same registry transaction that creates the packet claim. A field or index is
+stored only when its entire receiver path is stored, not when rooted in a call,
+literal or control-expression temporary. This applies to ordinary function
+results as well as builtins. Packet claims are pending until assigned to the
+child before native creation, and only that transaction is rolled back on
+creation failure. A lease releases its claim only while it still owns that
+exact live claim, so explicit release, queue transfer and nested transfer do
+not let an earlier lease revoke the later owner. Duplicate use of one consumed
+temporary is stale-handle misuse; it aborts outside runtime locks and contained
+cleanup reclaims any packet claims already prepared. It can also be
 the exact element type of a typed queue. Successful `qput` transfers the handle
 and invalidates the sender; a full-queue failure leaves it with the sender. A
 successful receive transfers it to the receiver. A poll/timed-get miss returns
@@ -112,9 +117,10 @@ an invalid zero handle with false. Shutdown releases undelivered handles. This
 narrow exception does not apply to wrappers and does not make capabilities
 serializable or valid in FFI.
 Passing a stored handle does not consume it. Any temporary pointer result is
-transferred, without special-casing `shared_pointer_retain` syntax. A function
-returning an existing alias transfers that claim; retain before returning when
-another alias must remain authoritative.
+consumed after a distinct packet claim is retained, without special-casing
+`shared_pointer_retain` syntax. A function returning an existing alias
+transfers that source claim; retain before returning when another alias must
+remain authoritative.
 
 Worker-created owners with queued or otherwise retained pointer claims remain
 mapped after their creating worker exits. The orphan is reclaimed after both

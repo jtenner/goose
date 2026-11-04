@@ -4731,21 +4731,36 @@ u64 substrate and target restrictions as `SharedAtomicU64`; there is no mutex
 fallback and no general garbage collector.
 
 A direct `SharedPointer<T>` is additionally permitted as a worker argument.
-Handoff writes a worker-owned claim into the worker packet. A stored pointer
-expression (a variable, field or indexed location) is borrowed: spawn creates
-a distinct claim and the stored caller handle remains live. A temporary
-pointer result is an owned claim transferred directly into the spawn
-transaction. This value-category rule applies equally to builtin and ordinary
-function results; it does not inspect which function produced the result.
-Returning an alias therefore transfers that claim's ownership, and code which
-must preserve another alias returns a freshly retained claim. Normal return,
-spawn failure, and contained abort release the worker claim only if it is
-still live. Explicit release, queue transfer, duplicate handoffs, and nested
-spawns make cleanup skip a stale claim instead of releasing it twice. The
-allocation lease is held too. Wrapping a pointer in another value does not
-gain this exception, and pointer-containing worker globals remain forbidden.
-Before native spawn can race parent cleanup, the registry marks every packet
-claim pending and removes it from parent actor cleanup. Once the child id
+Every handoff retains a distinct worker-owned claim and writes that new claim
+into the worker packet. A stored pointer expression is borrowed, so its source
+claim remains live. A temporary pointer result is consumed after the distinct
+packet claim has been made: the source claim becomes stale immediately, while
+the packet claim remains independently live. This value-category rule applies
+equally to builtin and ordinary function results; it does not inspect which
+function produced the result. Returning an alias therefore transfers that
+claim's ownership, and code which must preserve another alias returns a
+freshly retained claim.
+
+For this rule, a variable is stored. A field or indexed expression is stored
+only when every receiver on its path is itself stored; a path rooted in a call,
+literal, control-expression result, or another §9.2 temporary is temporary.
+Thus the spelling of a final field or index does not turn a temporary aggregate
+into stored ownership. Wrapping a pointer in another value does not gain the
+worker-argument exception, and pointer-containing worker globals remain
+forbidden.
+
+Retain-and-consume is one registry transaction. Reusing the same temporary
+claim for a second argument is stale-handle misuse and aborts before thread
+registration, after releasing the registry mutex; already prepared packet
+claims are then reclaimed by ordinary contained cleanup. Normal return, spawn
+failure, and contained abort release each worker claim only if that lease still
+owns that exact live claim. Explicit release, queue transfer, and a nested
+spawn transfer ownership away from the earlier lease, whose later cleanup must
+not release the transferred claim. Multiple stored arguments instead receive
+distinct claims and are valid. The allocation lease is held independently for
+each packet argument too.
+Before native spawn can race parent cleanup, every new packet claim is marked
+pending and is never owned by the parent's incoming lease. Once the child id
 exists, all claims in that transaction are assigned to the child before native
 thread creation. Native creation failure rolls back only that transaction's
 leases and claims; it performs no actor sweep and cannot affect queue-owned or
