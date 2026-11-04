@@ -3558,7 +3558,7 @@ R"GSRT(typedef struct gs_thread {
     void (*entry)(uint8_t *args);
     uint8_t *args;
     int contained;
-    int structured, completed, cancelled, aborted;
+    int structured, completed, cancelled, closing, aborted;
     uint8_t *result, *abort_msg;
     int64_t result_size, abort_len;
     void *shared_leases;
@@ -3589,8 +3589,42 @@ static void gs_cancel_store(int *p) {
 )GSRT"
 R"GSRT(static gs_thread *gs_threads;
 static int64_t gs_numthreads;
+static int gs_main_closing;
 static gs_mutex gs_threads_mutex = GS_MUTEX_INIT;
 static gs_cond gs_threads_done = GS_COND_INIT;
+
+)GSRT"
+R"GSRT(/* Called with gs_threads_mutex held. Legacy detached workers deliberately
+   break the structured ancestry used for cancellation and cleanup. */
+static gs_thread *gs_thread_find(int64_t id) {
+    gs_thread *t = gs_threads;
+    while (t && t->id != id) t = t->next;
+    return t;
+}
+
+)GSRT"
+R"GSRT(static int gs_structured_descends_from(gs_thread *child, int64_t ancestor) {
+    int64_t id = child->parent;
+    while (id >= 0 && id != ancestor) {
+        gs_thread *parent = gs_thread_find(id);
+        if (!parent || !parent->structured) return 0;
+        id = parent->parent;
+    }
+    return id == ancestor;
+}
+
+)GSRT"
+R"GSRT(static int gs_structured_scope_cancelled(int64_t parent) {
+    int64_t id = parent;
+    while (id >= 0) {
+        gs_thread *scope = gs_thread_find(id);
+        if (!scope) return 0;
+        if (scope->closing || (scope->structured && gs_cancel_load(&scope->cancelled))) return 1;
+        if (!scope->structured) return 0;
+        id = scope->parent;
+    }
+    return gs_main_closing;
+}
 
 )GSRT"
 R"GSRT(/* The contained workers that aborted, from which thread_wait answers: a bit
@@ -3708,7 +3742,7 @@ R"GSRT(GS_API int64_t gs_thread_start(void (*run)(void (*)(uint8_t *), uint8_t *
     t->contained = contained;
     t->parent = gs_current_thread_id;
     t->structured = structured;
-    t->completed = t->aborted = 0;
+    t->completed = t->closing = t->aborted = 0;
     t->cancelled = 0;
     t->result = t->abort_msg = NULL;
     t->result_size = t->abort_len = 0;
@@ -3724,11 +3758,8 @@ R"GSRT(GS_API int64_t gs_thread_start(void (*run)(void (*)(uint8_t *), uint8_t *
     if (gs_numthreads == INT64_MAX) gs_panic("thread id space exhausted");
     int64_t id = gs_numthreads++;
     t->id = id;
-    if (structured && contained && t->parent >= 0) {
-        gs_thread *parent = gs_threads;
-        while (parent && parent->id != t->parent) parent = parent->next;
-        if (parent && gs_cancel_load(&parent->cancelled)) gs_cancel_store(&t->cancelled);
-    }
+    if (structured && contained && gs_structured_scope_cancelled(t->parent))
+        gs_cancel_store(&t->cancelled);
     t->next = gs_threads;
     gs_threads = t;
     int failed;
@@ -3816,14 +3847,7 @@ R"GSRT(GS_API uint8_t gs_thread_cancel(gs_handle h, const char *file, int line) 
     gs_cancel_store(&t->cancelled);
     for (gs_thread *c = gs_threads; c; c = c->next) {
         if (!c->structured || !c->contained) continue;
-        int64_t ancestor = c->parent;
-        while (ancestor >= 0 && ancestor != t->id) {
-            gs_thread *p = gs_threads;
-            while (p && p->id != ancestor) p = p->next;
-            if (!p) break;
-            ancestor = p->parent;
-        }
-        if (ancestor == t->id) gs_cancel_store(&c->cancelled);
+        if (gs_structured_descends_from(c, t->id)) gs_cancel_store(&c->cancelled);
     }
     gs_cond_broadcast(&gs_threads_done);
     gs_mutex_unlock(&gs_threads_mutex);
@@ -3841,16 +3865,17 @@ R"GSRT(GS_API void gs_structured_cleanup(int64_t parent) {
     int woke = 0;
     /* Mark every contained descendant before waiting for any direct child. */
     gs_mutex_lock(&gs_threads_mutex);
+    if (parent < 0) gs_main_closing = 1;
+    else {
+        gs_thread *scope = gs_thread_find(parent);
+        if (!scope) gs_panic("corrupt structured cleanup scope");
+        scope->closing = 1;
+    }
     for (gs_thread *c = gs_threads; c; c = c->next) {
         if (!c->structured || !c->contained) continue;
-        int64_t ancestor = c->parent;
-        while (ancestor >= 0 && ancestor != parent) {
-            gs_thread *p = gs_threads;
-            while (p && p->id != ancestor) p = p->next;
-            if (!p) break;
-            ancestor = p->parent;
+        if (gs_structured_descends_from(c, parent)) {
+            gs_cancel_store(&c->cancelled); woke = 1;
         }
-        if (ancestor == parent) { gs_cancel_store(&c->cancelled); woke = 1; }
     }
     gs_mutex_unlock(&gs_threads_mutex);
     if (woke) gs_channels_cancel_wakeup();
