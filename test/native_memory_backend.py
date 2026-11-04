@@ -95,4 +95,26 @@ def check_native_memory_backend(exe, clang, base):
         queue_text = queue_c.read_text()
         if not re.search(r"gs_qdestroy\(&gs_q_.*?, 1\);", queue_text):
             raise RuntimeError("pointer queue emitted no pointer-aware shutdown release")
+
+        adopt_source = root / "pointer_queue_adopt.goose"
+        adopt_source.write_text(
+            'fn main() { let p, o, ok = shared_pointer_alloc<i64>(7); '
+            'assert(ok && qput(p)); let a, got = qpoll<SharedPointer<i64>>(); '
+            'assert(got); shared_pointer_release(a); '
+            'let q, qo, qok = shared_pointer_alloc<i64>(9); '
+            'assert(qok && qput(q)); let b = qget<SharedPointer<i64>>(); '
+            'shared_pointer_release(b); assert(shared_close(o)); assert(shared_close(qo)); }\n')
+        adopt_c = root / "pointer_queue_adopt.c"
+        built = subprocess.run([str(exe), "-O2", "-o", str(adopt_c), str(adopt_source)],
+                               capture_output=True, text=True, timeout=60)
+        if built.returncode:
+            raise RuntimeError(built.stdout + built.stderr)
+        adopt_text = adopt_c.read_text()
+        for operation in ("gs_qpoll", "gs_qget"):
+            start = adopt_text.find(" = " + operation + "(")
+            window = adopt_text[start:start + 1000] if start >= 0 else ""
+            adopted, freed = window.find("gs_shared_pointer_adopt("), window.find("free(")
+            if adopted < 0 or freed < 0 or adopted > freed:
+                raise RuntimeError(operation +
+                                   " does not adopt the pointer claim before freeing its queue node")
     return None

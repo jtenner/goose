@@ -68,22 +68,35 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
                          "#if __GCC_ATOMIC_LLONG_LOCK_FREE != 2\n"
                          "#error Native shared pointer reference counts and generation validation require always-lock-free 64-bit atomics\n#endif\n");
         }
-        vector<string> a; for (auto n : an) a.push_back(Snapshot(n->exprtype, GenPure(n)));
+        auto arg = [&](size_t i) { return Snapshot(an[i]->exprtype, GenPure(an[i])); };
+        auto payload = [&](Node *n) {
+            // The accepted conversion belongs to SharedPointer<T>'s T, not
+            // to the expression representation left behind by inlining.
+            auto v = T();
+            FixedLocal(c->qtype, v);
+            GenAny(n, Dst { DK_LVALUE, v, c->qtype });
+            return v;
+        };
         if (c->builtin == B_SHARED_POINTER_ALLOC) {
             auto p = T(), ok = T(); L("uint8_t ", ok, ";");
-            if (a.size() == 1) {
+            if (an.size() == 1) {
+                auto v = payload(an[0]);
                 auto o = T(); L("gs_shared_cap ", o, ";");
-                L("gs_shared_cap ", p, " = gs_shared_pointer_alloc(&", a[0], ", ", FixedSize(c->qtype), ", &", o, ", &", ok, ", ", LocArgs(ln), ");");
+                L("gs_shared_cap ", p, " = gs_shared_pointer_alloc(&", v, ", ", FixedSize(c->qtype), ", &", o, ", &", ok, ", ", LocArgs(ln), ");");
                 return {p, o, ok};
             }
-            L("gs_shared_cap ", p, " = gs_shared_pointer_alloc_in(", a[0], ", ", a[1], ", &", a[2], ", ", FixedSize(c->qtype), ", &", ok, ", ", LocArgs(ln), ");");
+            auto owner = arg(0), offset = arg(1), v = payload(an[2]);
+            L("gs_shared_cap ", p, " = gs_shared_pointer_alloc_in(", owner, ", ", offset,
+              ", &", v, ", ", FixedSize(c->qtype), ", &", ok, ", ", LocArgs(ln), ");");
             return {p, ok};
         }
+        auto pointer = arg(0);
         if (c->builtin == B_SHARED_POINTER_COPY) { auto v = T(); FixedLocal(c->qtype, v);
-            L("gs_shared_pointer_copy(", a[0], ", &", v, ", ", FixedSize(c->qtype), ", ", LocArgs(ln), ");"); return {v}; }
-        if (c->builtin == B_SHARED_POINTER_STORE) { L("gs_shared_pointer_store(", a[0], ", &", a[1], ", ", FixedSize(c->qtype), ", ", LocArgs(ln), ");"); return {}; }
-        if (c->builtin == B_SHARED_POINTER_RETAIN) { auto v = T(); L("gs_shared_cap ", v, " = gs_shared_pointer_retain(", a[0], ", ", LocArgs(ln), ");"); return {v}; }
-        L("gs_shared_pointer_release(", a[0], ", ", LocArgs(ln), ");"); return {};
+            L("gs_shared_pointer_copy(", pointer, ", &", v, ", ", FixedSize(c->qtype), ", ", LocArgs(ln), ");"); return {v}; }
+        if (c->builtin == B_SHARED_POINTER_STORE) { auto v = payload(an[1]);
+            L("gs_shared_pointer_store(", pointer, ", &", v, ", ", FixedSize(c->qtype), ", ", LocArgs(ln), ");"); return {}; }
+        if (c->builtin == B_SHARED_POINTER_RETAIN) { auto v = T(); L("gs_shared_cap ", v, " = gs_shared_pointer_retain(", pointer, ", ", LocArgs(ln), ");"); return {v}; }
+        L("gs_shared_pointer_release(", pointer, ", ", LocArgs(ln), ");"); return {};
     }
     if (c->builtin >= B_SIMD_SPLAT && c->builtin <= B_SIMD_SHUFFLE) {
         auto t = c->qtype;
@@ -717,14 +730,16 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
                 L("free(", nn, ");");
             } else if (poll) {
                 L("GS_MEMZERO(&", tv, ", sizeof(", tv, "));");
-                L("if (", nn, ") { GS_MEMCPY(&", tv, ", ", nn, " + 1, sizeof(", tv,
-                  ")); free(", nn, "); }");
+                L("if (", nn, ") { GS_MEMCPY(&", tv, ", ", nn, " + 1, sizeof(", tv, "));");
+                if (t->kind == TY_NATIVE && t->native->kind == NK_POINTER)
+                    L("gs_shared_pointer_adopt(", tv, ", ", LocArgs(ln), ");");
+                L("free(", nn, "); }");
             } else {
                 L("GS_MEMCPY(&", tv, ", ", nn, " + 1, sizeof(", tv, "));");
+                if (t->kind == TY_NATIVE && t->native->kind == NK_POINTER)
+                    L("gs_shared_pointer_adopt(", tv, ", ", LocArgs(ln), ");");
                 L("free(", nn, ");");
             }
-            if (t->kind == TY_NATIVE && t->native->kind == NK_POINTER)
-                L("if (", nn, ") gs_shared_pointer_adopt(", tv, ", ", LocArgs(ln), ");");
             return poll ? vector<string> { tv, got } : vector<string> { tv };
         }
         case B_PUSH: return EmitPush(an, ln);
