@@ -1,8 +1,11 @@
 // Native-only address/layout probe: TinyCC deliberately rejects align(N).
 extern fn mod64(p: u32&) -> u64;
+extern fn dirty_padding(x: EqOuter&);
 
 struct Block { tag: u8, align(64) value: u32 }
 struct Nested { prefix: u8, payload: Block }
+struct EqBlock { a: u8, b: u8, c: u8, d: u8, e: u8, align(16) value: u32 }
+struct EqOuter { prefix: u8, inner: EqBlock, suffix: u8 }
 
 var before: u8 = 1;
 align(64) var global: u32 = 2;
@@ -24,6 +27,14 @@ fn main() {
     assert_zero_padding(x);
     assert_zero_padding(values[0]);
     assert_zero_padding(values[1]);
+    let equal = EqOuter {
+        prefix: 1,
+        inner: EqBlock { a: 2, b: 3, c: 4, d: 5, e: 6, value: 7 },
+        suffix: 8,
+    };
+    var changed = equal;
+    dirty_padding(changed);
+    assert(equal == changed);
     print(mod64(global), " ", mod64(x.payload.value), " ",
           mod64(values[0].payload.value), " ", mod64(values[1].payload.value), " ");
     assert(thread_wait(thread_spawn(worker)));

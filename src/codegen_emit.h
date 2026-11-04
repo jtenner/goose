@@ -572,10 +572,13 @@ inline void CodeGen::EmitSimdVersions(FnSpec *sp, const string &name, const stri
     auto source = sp->sf->line.fileidx >= 0 && sp->sf->line.fileidx < (int)ast.sources.size()
                     ? ast.sources[sp->sf->line.fileidx].first : string("?");
     auto marker = [&](int lv) {
-        return cat("#line ", sp->sf->line.line, " ",
-                   CStr(cat(source, "#simd-", sp->sf->name, "-v", lv, ".goose")), "\n");
+        // The closing #endif consumes the first logical line after #line.
+        return cat("#ifdef GS_SIMD_FEEDBACK\n#line ", std::max(1, sp->sf->line.line - 1), " ",
+                   CStr(cat(source, "#simd-", sp->sf->name, "-v", lv, ".goose")),
+                   "\n#endif\n");
     };
-    auto reset = "#line 1 \"goose-generated.c\"\n";
+    auto reset = cat("#ifdef GS_SIMD_FEEDBACK\n#line ", std::max(1, sp->sf->end.line - 1),
+                     " ", CStr(source), "\n#endif\n");
     auto versionbody = [&](int lv) {
         auto out = fnbody;
         const string token = "version@";
@@ -861,6 +864,7 @@ inline void CodeGen::EmitGlobalDecls() {
             auto member = [&](const string &decl) {
                 auto a = std::max<int64_t>(d->align, TypeAlign(d->type));
                 gblockalign = std::max(gblockalign, a);
+                if (a > 1) usesalign = true;
                 Append(gblock, "    ", a > 1 ? cat("GS_ALIGNAS(", a, ") ") : string(),
                        decl, ";\n");
             };
@@ -915,6 +919,7 @@ inline void CodeGen::EmitGlobalDecls() {
                 if (!d->isvar && d->type->cq && !PrefVar(d) &&
                     StaticInitX(g->inits[di], d->type, init)) {
                     auto a = std::max<int64_t>(d->align, TypeAlign(d->type));
+                    if (a > 1) usesalign = true;
                     Append(data, a > 1 ? cat("GS_ALIGNAS(", a, ") ") : string(),
                            "static const ", VarCT(d), " ", name, " = ", init, ";\n");
                     gstatic[d] = g->inits[di];
