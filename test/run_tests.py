@@ -2390,6 +2390,10 @@ void dirty_padding(EqOuter_g *x) { ((unsigned char *)x)[21] = 0x7f; }'''
                 r.fail("simd feedback marker guards",
                        "SIMD source markers are not feedback-only or reset to a synthetic file")
                 return
+            if generated.count('"version@"') != 3:
+                r.fail("simd feedback marker substitution",
+                       "SIMD versioning rewrote user text or omitted a function version")
+                return
             locations = re.findall(r'#line (\d+) "([^"\n]*#simd-[^"\n]*-loop\d+\.goose)"',
                                    generated)
             locations = [(str(int(line) + 1), marker) for line, marker in locations]

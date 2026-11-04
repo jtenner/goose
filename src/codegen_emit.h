@@ -581,11 +581,27 @@ inline void CodeGen::EmitSimdVersions(FnSpec *sp, const string &name, const stri
                      " ", CStr(source), "\n#endif\n");
     auto versionbody = [&](int lv) {
         auto out = fnbody;
+        // Only compiler-owned loop-marker #line directives carry the version
+        // placeholder. User text in the body can contain `version@` too (in
+        // particular a custom abort string whose byte length is already
+        // fixed), and must remain byte-for-byte unchanged.
         const string token = "version@";
-        for (size_t p = 0; (p = out.find(token, p)) != string::npos;) {
-            auto replacement = cat("v", lv);
-            out.replace(p, token.size(), replacement);
-            p += replacement.size();
+        const string loopmarker = cat("#simd-", sp->sf->name, "-", token, "-loop");
+        for (size_t b = 0; b < out.size();) {
+            auto e = out.find('\n', b);
+            if (e == string::npos) e = out.size();
+            auto q = b;
+            while (q < e && (out[q] == ' ' || out[q] == '\t')) q++;
+            if (out.compare(q, 6, "#line ") == 0) {
+                auto p = out.rfind(loopmarker, e);
+                if (p != string::npos && p >= q) {
+                    p += loopmarker.find(token);
+                    auto replacement = cat("v", lv);
+                    out.replace(p, token.size(), replacement);
+                    e -= token.size() - replacement.size();
+                }
+            }
+            b = e < out.size() ? e + 1 : out.size();
         }
         return out;
     };
