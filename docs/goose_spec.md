@@ -3667,6 +3667,8 @@ operation checks the whole half-open element range before accessing it and
 aborts as the corresponding scalar indexing would; no partial access occurs.
 The slice element type must be the vector's lane type. These operations do not
 grant permission to read array capacity or padding beyond the slice length.
+All arguments are evaluated once, left to right, before the range check,
+including the value argument of a store whose range is invalid.
 `shuffle_T(v, i0, ...)` takes exactly one integer index per result lane, each
 checked in `0..v.lanes`, and returns the same vector type with lane `k`
 copied from input lane `ik`. Evaluation and aliasing are as if all input lanes
@@ -3678,8 +3680,10 @@ width. Load and store perform their complete bounds check before the one vector
 access, so a failing store writes no lane. A shuffle whose indices are compile-
 time constants uses the frontend's shuffle primitive after checking every
 index; a dynamic shuffle uses the scalar fallback. The scalar fallback performs
-the same checked accesses and lane operations. TinyCC and
-other unsupported frontends use that fallback rather than accepting a native
+the same checked accesses and lane operations.
+An out-of-range constant shuffle index also takes the checked fallback: native
+C compiler restrictions must not turn its Goose runtime abort into a build
+failure. TinyCC and other unsupported frontends use that fallback rather than accepting a native
 vector ABI. Vector values are not permitted in `extern` or `export` signatures;
 their C ABI is deliberately unspecified. The extension does not expose raw
 addresses, atomic vector operations, or a way to convert a safe shared-memory
