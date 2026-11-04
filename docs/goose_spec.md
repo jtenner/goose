@@ -4807,6 +4807,11 @@ spawn transfer ownership away from the earlier lease, whose later cleanup must
 not release the transferred claim. Multiple stored arguments instead receive
 distinct claims and are valid. The allocation lease is held independently for
 each packet argument too.
+All spawn argument expressions are evaluated once, left to right, before any
+packet handoff is prepared. A nested spawn while evaluating an argument owns
+only its own transaction; it cannot commit or release leases intended for the
+outer spawn. After argument evaluation, the packet's capability fields are
+replaced with the prepared worker claims before native thread creation.
 Before native spawn can race parent cleanup, every new packet claim is marked
 pending and is never owned by the parent's incoming lease. Once the child id
 exists, all claims in that transaction are assigned to the child before native
