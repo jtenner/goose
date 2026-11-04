@@ -323,7 +323,11 @@ int main(void) {
        instance (main has none here), then the regions. */
     gs_thread_release();
     gs_release_regions();
-    check(counter_add(&live_allocations, 0) == 1, "test releases its main stack block");
+    /* Releasing main drops its stack block and region table. The two
+       process-lifetime allocations left by this fixture are the contained
+       abort message no wait takes and the initialized shared registry slab. */
+    check(counter_add(&live_allocations, 0) == allocations - 2,
+          "test releases its main stack block");
     check(counter_add(&live_regions, 0) == 0, "test releases its main reservation");
     puts("runtime thread cleanup ok");
     return 0;
