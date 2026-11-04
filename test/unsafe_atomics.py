@@ -20,17 +20,36 @@ def check_unsafe_atomics(exe, base, cc=None, *, runtime=None, extra=()):
         for order in orders:
             for op, values, bad in [('load', '', ('Release', 'AcqRel')),
                                     ('store', ', 1', ('Acquire', 'AcqRel')),
-                                    ('fetch_add', ', 1', ())]:
-                check(f'{width}-{op}-{order}',
-                      f'unsafe_atomic_{op}<{width}>(8{values}, "{order}")',
-                      f'invalid memory order for atomic {op}' if order in bad else None)
+                                    ('fetch_add', ', 1', ()),
+                                    ('fetch_sub', ', 1', ()),
+                                    ('exchange', ', 1', ()),
+                                    ('fetch_and', ', 1', ()),
+                                    ('fetch_or', ', 1', ()),
+                                    ('fetch_xor', ', 1', ())]:
+                source = check(f'{width}-{op}-{order}',
+                               f'unsafe_atomic_{op}<{width}>(8{values}, "{order}")',
+                               f'invalid memory order for atomic {op}' if order in bad else None)
+                if op in ('fetch_sub', 'exchange', 'fetch_and', 'fetch_or', 'fetch_xor'):
+                    cfile = source.with_suffix('.c')
+                    code, out, err = tc.run_capture([exe, '-O0', '-o', cfile, source])
+                    if code:
+                        raise RuntimeError(out + err)
+                    needle = '__atomic_' + ('exchange_n' if op == 'exchange' else op) + '('
+                    emitted = next((line for line in cfile.read_text().splitlines() if needle in line), '')
+                    order_macro = '__ATOMIC_' + {'Relaxed': 'RELAXED', 'Acquire': 'ACQUIRE',
+                                                  'Release': 'RELEASE', 'AcqRel': 'ACQ_REL',
+                                                  'SeqCst': 'SEQ_CST'}[order]
+                    if order_macro not in emitted:
+                        raise RuntimeError(f'{source}: {op} {order} emitted without {order_macro}: {emitted}')
             for failure in orders:
                 valid = failure == 'Relaxed' or (failure == 'Acquire' and order in ('Acquire', 'AcqRel', 'SeqCst')) or (failure == order == 'SeqCst')
                 check(f'{width}-cas-{order}-{failure}',
                       f'unsafe_atomic_compare_exchange<{width}>(8, 0, 1, "{order}", "{failure}")',
                       None if valid else 'invalid compare_exchange failure order')
         for op, values in [('load', ', "Relaxed"'), ('store', ', 1, "Release"'),
-                           ('fetch_add', ', 1, "AcqRel"'),
+                           ('fetch_add', ', 1, "AcqRel"'), ('fetch_sub', ', 1, "AcqRel"'),
+                           ('exchange', ', 1, "AcqRel"'), ('fetch_and', ', 1, "AcqRel"'),
+                           ('fetch_or', ', 1, "AcqRel"'), ('fetch_xor', ', 1, "AcqRel"'),
                            ('compare_exchange', ', 0, 1, "SeqCst", "Acquire"')]:
             source = check(f'emit-{width}-{op}', f'unsafe_atomic_{op}<{width}>(8{values})')
             cfile = source.with_suffix('.c')
@@ -38,7 +57,11 @@ def check_unsafe_atomics(exe, base, cc=None, *, runtime=None, extra=()):
             if code:
                 raise RuntimeError(out + err)
             text = cfile.read_text()
-            needle = '__atomic_' + {'load': 'load_n', 'store': 'store_n', 'fetch_add': 'fetch_add', 'compare_exchange': 'compare_exchange_n'}[op] + '('
+            needle = '__atomic_' + {'load': 'load_n', 'store': 'store_n', 'exchange': 'exchange_n',
+                                     'fetch_add': 'fetch_add', 'fetch_sub': 'fetch_sub',
+                                     'fetch_and': 'fetch_and', 'fetch_or': 'fetch_or',
+                                     'fetch_xor': 'fetch_xor',
+                                     'compare_exchange': 'compare_exchange_n'}[op] + '('
             if needle not in text or 'unsafe atomic address is null, misaligned' not in text:
                 raise RuntimeError(f'{source}: missing native operation or alignment diagnostic')
             body = text[text.index('/* ---- generated'): ] if '/* ---- generated' in text else text[text.index('_Static_assert(__atomic_always_lock_free'): ]
@@ -73,9 +96,25 @@ def check_unsafe_atomics(exe, base, cc=None, *, runtime=None, extra=()):
                 raise RuntimeError('missing non-lock-free width rejection\n' + out + err)
         check(f'{width}-no-type', 'unsafe_atomic_load(8, "Relaxed")', 'exactly one type argument')
         check(f'{width}-address-type', f'unsafe_atomic_load<{width}>(true, "Relaxed")', 'u64')
+        for op in ('load', 'store', 'fetch_add', 'fetch_sub', 'exchange',
+                   'fetch_and', 'fetch_or', 'fetch_xor', 'compare_exchange'):
+            values = '' if op == 'load' else ', 1' if op != 'compare_exchange' else ', 0, 1'
+            order_args = ', "Relaxed"' if op != 'compare_exchange' else ', "Relaxed", "Relaxed"'
+            check(f'{width}-{op}-bad-type', f'unsafe_atomic_{op}<i32>(8{values}{order_args})',
+                  'unsafe atomic type must be u32 or u64')
     # Integer addresses must not bypass the opt-in worker unsafe restriction.
-    source = base / 'strict.goose'
-    tc.write_text(source, 'thread_fn worker(a: u64) { unsafe_atomic_fetch_add<u64>(a, 1, "Relaxed"); } fn main() { thread_wait(thread_spawn(worker, 8)); }')
-    code, out, err = tc.run_capture([exe, '--strict-worker-native', '--check', source])
-    if code == 0 or 'unsafe native operation unsafe_atomic_fetch_add' not in err:
-        raise RuntimeError('strict worker contract did not reject raw atomic\n' + out + err)
+    for op in ('fetch_add', 'fetch_sub', 'exchange', 'fetch_and', 'fetch_or', 'fetch_xor'):
+        source = base / f'strict-{op}.goose'
+        tc.write_text(source, f'thread_fn worker(a: u64) {{ unsafe_atomic_{op}<u64>(a, 1, "Relaxed"); }} fn main() {{ thread_wait(thread_spawn(worker, 8)); }}')
+        code, out, err = tc.run_capture([exe, '--strict-worker-native', '--check', source])
+        if code == 0 or f'unsafe native operation unsafe_atomic_{op}' not in err:
+            raise RuntimeError(f'strict worker contract did not reject raw atomic {op}\n' + out + err)
+    for op in ('fetch_sub', 'exchange', 'fetch_and', 'fetch_or', 'fetch_xor'):
+        source = base / f'dynamic-order-{op}.goose'
+        tc.write_text(source, f'fn f(order: u8[:]) {{ unsafe_atomic_{op}<u32>(8, 1, order); }} fn main() {{}}')
+        code, out, err = tc.run_capture([exe, '--check', source])
+        if code == 0 or 'memory order must be a compile-time string' not in out + err:
+            raise RuntimeError(f'{op}: dynamic order was not rejected\n' + out + err)
+        check(f'capability-address-{op}',
+              f'let o, ok = shared_alloc(8); let a = shared_atomic_u32(o, 0, 0); unsafe_atomic_{op}<u32>(a, 1, "Relaxed")',
+              'expected a value of type u64')

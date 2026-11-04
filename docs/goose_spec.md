@@ -4697,6 +4697,17 @@ alignment for packed fields, arrays, returns and worker packets; internal
 64-bit generation descriptors shall have at least eight-byte alignment and
 an eight-byte-multiple stride. Actual atomic cells retain natural alignment.
 
+The jtenner fork additionally defines the deliberately unsafe raw-address
+family `unsafe_atomic_load/store/exchange/fetch_add/fetch_sub/fetch_and/
+fetch_or/fetch_xor/compare_exchange<T>` and `unsafe_atomic_is_lock_free<T>`
+for exactly `T = u32` or `u64`; its complete caller obligations and supported
+backend matrix are specified in `docs/native_memory.md`. This family grants no
+safe capability authority, performs no registry or lifetime validation, and
+is rejected by strict worker-native checking. It uses the same compile-time
+order matrix, old-value results, width wrapping, always-lock-free requirement,
+and no-fallback rule as the capability operations above. Safe capabilities
+cannot be converted to raw addresses.
+
 ### 11.5 Native file mappings, subranges, byte buffers, and advice
 
 `shared_map_readonly(path, bytes) -> SharedOwner, bool` maps an explicit
