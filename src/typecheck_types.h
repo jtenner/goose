@@ -508,8 +508,10 @@ inline bool TypeCheck::HoldsAlignedT(TypeExpr *t) {
     function<bool(TypeExpr *)> walk = [&](TypeExpr *u) -> bool {
         if (!u) return false;  // Explicit pad fields have no value type.
         switch (u->kind) {
-            case TY_REF: return walk(u->ref->sub);
-            case TY_SLICE: return walk(u->sub);
+            // Alignment belongs to inline storage, not a descriptor's
+            // pointee. Following references also expands growing generic
+            // types before normal validation can diagnose them.
+            case TY_REF: case TY_SLICE: return false;
             case TY_ARRAY: return walk(u->arr->sub);
             case TY_STRUCT: {
                 auto si = GetStructInst(u);
