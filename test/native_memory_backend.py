@@ -84,6 +84,46 @@ def check_native_memory_backend(exe, clang, base):
         if tiny_pointer.returncode == 0 or "require GCC or Clang" not in tiny_pointer.stderr:
             raise RuntimeError("pointer-only gate accepted TinyCC:\n" +
                                tiny_pointer.stdout + tiny_pointer.stderr)
+
+        # SharedPointer remains an unsupported public capability on MSVC, but
+        # the separately compiled common runtime always includes its registry
+        # implementation. Its internal reference-count primitives must
+        # therefore select Interlocked operations rather than leave GCC-only
+        # __atomic builtins in the MSVC path.
+        runtime_text = (Path(__file__).parents[1] / "src" / "runtime" /
+                        "runtime_threads.h").read_text()
+        helpers = re.search(r"static void gs_shared_publish\(.*?"
+                            r"(?=static GS_NORETURN void gs_shared_bad)",
+                            runtime_text, re.S)
+        if not helpers:
+            raise RuntimeError("cannot find shared registry atomic helpers")
+        helper_text = helpers[0]
+        for token in ("__atomic_", "__ATOMIC_"):
+            if runtime_text.count(token) != helper_text.count(token):
+                raise RuntimeError("unguarded GCC atomic remains outside shared registry helpers: " +
+                                   token)
+        msvc_probe = ("#define _MSC_VER 1930\n"
+                      "typedef unsigned long long uint64_t; typedef long long LONG64;\n"
+                      "typedef struct { uint64_t generation; } gs_shared_record;\n"
+                      "static LONG64 InterlockedExchange64(volatile LONG64 *p, LONG64 v) "
+                      "{ LONG64 old = *p; *p = v; return old; }\n"
+                      "static LONG64 InterlockedCompareExchange64(volatile LONG64 *p, LONG64 v, "
+                      "LONG64 expected) { LONG64 old = *p; if (old == expected) *p = v; return old; }\n"
+                      "static LONG64 InterlockedExchangeAdd64(volatile LONG64 *p, LONG64 v) "
+                      "{ LONG64 old = *p; *p += v; return old; }\n" + helper_text +
+                      "\nint probe(void) { gs_shared_record r = { 0 }; "
+                      "gs_shared_publish(&r, 1); return (int)(gs_shared_ref_add(&r.generation) + "
+                      "gs_shared_ref_sub(&r.generation) + gs_shared_ref_load(&r.generation)); }\n")
+        msvc_helpers = compile_c(msvc_probe, "x86_64-unknown-linux-gnu")
+        if msvc_helpers.returncode:
+            raise RuntimeError("shared registry helpers fail in the MSVC branch:\n" +
+                               msvc_helpers.stdout + msvc_helpers.stderr)
+        preprocessed = subprocess.run([str(clang.cc), "-target", "x86_64-unknown-linux-gnu",
+                                       "-ffreestanding", "-std=c11", "-E", "-P", "-x", "c", "-"],
+                                      input=msvc_probe, capture_output=True, text=True, timeout=60)
+        if preprocessed.returncode or "__atomic_" in preprocessed.stdout or "__ATOMIC_" in preprocessed.stdout:
+            raise RuntimeError("MSVC shared registry path retains GCC atomic builtins:\n" +
+                               preprocessed.stdout + preprocessed.stderr)
         queue_source = root / "pointer_queue_shutdown.goose"
         queue_source.write_text('fn main() { let p, o, ok = shared_pointer_alloc<i64>(7); '
                                 'assert(ok && qput(p)); }\n')
