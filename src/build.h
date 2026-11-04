@@ -111,15 +111,22 @@ struct Builder {
         if (r.started && r.code == 0) {
             if (opts.simd_feedback) {
                 string generated;
+                string generatedpath;
                 for (auto &arg : argv)
                     if (arg.size() >= 2 && arg.substr(arg.size() - 2) == ".c") {
                         LoadFile(arg, generated);
+                        generatedpath = arg;
                         break;
                     }
                 set<string> loops;
+                set<string> scopes;
                 set<string> sources;
                 map<string, string> looplines;
                 map<string, string> loopdisplay;
+                map<string, string> loopsuffix;
+                map<string, string> loopqualifier;
+                map<string, string> loopgroup;
+                map<string, set<string>> groupqualifiers;
                 auto digits = [](const string &s, size_t b, size_t e) {
                     if (b == e) return false;
                     for (auto i = b; i < e; i++) if (!isdigit((uint8_t)s[i])) return false;
@@ -204,8 +211,19 @@ struct Builder {
                                 digits(file, loop + 5, file.size() - 6)) {
                                 loops.insert(file);
                                 sources.insert(metasource);
+                                auto suffix = file.substr(version);
                                 loopdisplay[file] = cat(metasource, "#simd-", metafn,
-                                                        file.substr(version));
+                                                        suffix);
+                                loopsuffix[file] = suffix;
+                                loopqualifier[file] = cat("[spec=",
+                                                          file.substr(prefix.size(),
+                                                                      element - prefix.size()),
+                                                          ",element=", file[element + 2], "]");
+                                auto scope = file;
+                                scope.replace(loop, string::npos, ".goose");
+                                scopes.insert(scope);
+                                loopgroup[file] = cat(metasource, "#simd-", metafn);
+                                groupqualifiers[loopgroup[file]].insert(loopqualifier[file]);
                                 // Feedback-only markers close their #ifdef on the
                                 // numbered line; the loop is the following line.
                                 looplines[file] = std::to_string(lineno + 1);
@@ -217,6 +235,10 @@ struct Builder {
                     }
                     b = e < generated.size() ? e + 1 : generated.size();
                 }
+                for (auto &[loop, display] : loopdisplay)
+                    if (groupqualifiers[loopgroup[loop]].size() > 1)
+                        display.insert(display.size() - loopsuffix[loop].size(),
+                                       loopqualifier[loop]);
                 set<string> explained;
                 set<string> vectorized;
                 // Clang brackets an inlined-loop remark with notes naming the
@@ -231,19 +253,38 @@ struct Builder {
                 };
                 vector<SimdRemark> remarks;
                 vector<map<string, string>> boundaries(1);
-                auto diagnostic = [&](const string &line, string_view kind,
+                auto diagnostic = [&](const string &line, string &kind,
                                       size_t &tag, string &file, string &location) {
-                    auto marker = cat(": ", kind, ":");
-                    tag = line.find(marker);
-                    if (tag == string::npos || !tag) return false;
-                    auto col = line.rfind(':', tag - 1);
-                    auto row = col == string::npos || !col ? string::npos
-                                                            : line.rfind(':', col - 1);
-                    if (row == string::npos || !digits(line, row + 1, col) ||
-                        !digits(line, col + 1, tag)) return false;
-                    file = line.substr(0, row);
-                    location = line.substr(0, tag);
-                    return true;
+                    tag = string::npos;
+                    for (string_view candidate : { string_view("remark"),
+                                                   string_view("note") }) {
+                        auto marker = cat(": ", candidate, ":");
+                        auto pos = line.rfind(marker);
+                        while (pos != string::npos && pos) {
+                            auto col = line.rfind(':', pos - 1);
+                            auto row = col == string::npos || !col ? string::npos
+                                                                    : line.rfind(':', col - 1);
+                            if (row != string::npos && digits(line, row + 1, col) &&
+                                digits(line, col + 1, pos)) {
+                                auto candidatefile = line.substr(0, row);
+                                if (!sources.count(candidatefile) &&
+                                    candidatefile != generatedpath &&
+                                    !loops.count(candidatefile) && !scopes.count(candidatefile)) {
+                                    pos = line.rfind(marker, pos - 1);
+                                    continue;
+                                }
+                                if (tag == string::npos || pos > tag) {
+                                    tag = pos;
+                                    kind = candidate;
+                                    file = std::move(candidatefile);
+                                    location = line.substr(0, pos);
+                                }
+                                break;
+                            }
+                            pos = line.rfind(marker, pos - 1);
+                        }
+                    }
+                    return tag != string::npos;
                 };
                 auto report = [&](const string &loop, const string &location,
                                   const string &remark) {
@@ -257,8 +298,8 @@ struct Builder {
                     auto line = r.output.substr(b, e == string::npos ? string::npos : e - b);
                     const string lostmsg = "could not determine the original source location for ";
                     size_t tag = 0;
-                    string file, location;
-                    if (diagnostic(line, "remark", tag, file, location)) {
+                    string kind, file, location;
+                    if (diagnostic(line, kind, tag, file, location) && kind == "remark") {
                         SimdRemark remark { line.substr(tag + 2), {} };
                         for (auto &loop : loops) {
                             if (file != loop || sources.count(file)) continue;
@@ -268,7 +309,7 @@ struct Builder {
                         }
                         remarks.push_back(std::move(remark));
                         boundaries.emplace_back();
-                    } else if (diagnostic(line, "note", tag, file, location)) {
+                    } else if (tag != string::npos && kind == "note") {
                         auto body = tag + 8;
                         if (line.compare(body, lostmsg.size(), lostmsg) == 0) {
                             auto at = line.substr(body + lostmsg.size());
