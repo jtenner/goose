@@ -504,16 +504,32 @@ inline bool TypeCheck::HoldsVectorT(TypeExpr *t) {
 }
 
 inline bool TypeCheck::HoldsAlignedT(TypeExpr *t) {
-    return Reaches(t, [&](TypeExpr *u) {
-        if (u->kind == TY_STRUCT) {
-            for (auto &f : GetStructInst(u)->st->fields) if (f.align > 1) return true;
+    set<pair<TypeKind, void *>> seen;
+    function<bool(TypeExpr *)> walk = [&](TypeExpr *u) -> bool {
+        switch (u->kind) {
+            case TY_REF: return walk(u->ref->sub);
+            case TY_SLICE: return walk(u->sub);
+            case TY_ARRAY: return walk(u->arr->sub);
+            case TY_STRUCT: {
+                auto si = GetStructInst(u);
+                if (!seen.insert({ TY_STRUCT, si->st }).second) return false;
+                for (auto &f : si->st->fields) if (f.align > 1) return true;
+                for (auto ft : si->ftypes) if (walk(ft)) return true;
+                return false;
+            }
+            case TY_ENUM: case TY_VARIANT: {
+                auto ei = u->kind == TY_ENUM ? GetEnumInst(u) : GetEnumInst(u->var->adt);
+                if (!seen.insert({ TY_ENUM, ei->en }).second) return false;
+                for (auto &v : ei->en->variants)
+                    for (auto &f : v.fields) if (f.align > 1) return true;
+                for (auto &fields : ei->vftypes)
+                    for (auto ft : fields) if (walk(ft)) return true;
+                return false;
+            }
+            default: return false;
         }
-        if (u->kind == TY_ENUM) {
-            for (auto &v : GetEnumInst(u)->en->variants)
-                for (auto &f : v.fields) if (f.align > 1) return true;
-        }
-        return false;
-    });
+    };
+    return walk(t);
 }
 
 // Whether a value of type t can hold a plain reference or a slice at any
