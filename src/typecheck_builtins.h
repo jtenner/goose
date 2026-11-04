@@ -38,7 +38,9 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
         if (d.kind == B_SIMD_LOAD || d.kind == B_SIMD_STORE) {
             auto slice = ast.SliceOf(lane, c->line);
             if (d.kind == B_SIMD_LOAD) slice = ast.ConstOf(slice);
-            CheckArg(args[0], slice);
+            auto sv = CheckArg(args[0], slice);
+            if (d.kind == B_SIMD_STORE && (!sv.writable || sv.type->cq))
+                Error(args[0], "cannot assign through this path (const or read-only)");
             CheckArg(args[1], ast.inttypes[IS_I64]);
             if (d.kind == B_SIMD_STORE) CheckArg(args[2], t);
             c->qtype = t;
