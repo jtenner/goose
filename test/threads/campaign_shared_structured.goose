@@ -18,6 +18,17 @@ thread_fn cancelled(p: SharedPointer<i64>, ch: Channel<i64>) -> i64 {
     assert(!ok && thread_cancelled());
     shared_pointer_copy(p)
 }
+fn release_argument(p: SharedPointer<i64>) -> i64 {
+    shared_pointer_release(p);
+    0
+}
+thread_fn unused(p: SharedPointer<i64>, value: i64) {}
+thread_fn invalidated_argument(p: SharedPointer<i64>) -> i64 {
+    // All arguments finish before handoff: the later expression invalidates
+    // the earlier stored claim and the spawn must abort without holding locks.
+    thread_spawn(unused, p, release_argument(p));
+    0
+}
 fn main() {
     let owner, ok = shared_alloc(16);
     assert(ok);
@@ -35,6 +46,9 @@ fn main() {
     assert(thread_cancel(blocked));
     let final, done = thread_join(blocked);
     assert(done && final == 7);
+    let invalidated = thread_spawn_contained_join(invalidated_argument, pointer);
+    let ignored, survived = thread_join(invalidated);
+    assert(!survived && shared_pointer_copy(pointer) == 7);
     shared_pointer_release(pointer);
     assert(shared_close(owner));
     print(result, " ", message, " ", final);

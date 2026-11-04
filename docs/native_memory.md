@@ -3,8 +3,9 @@
 Native memory is separate from Goose arrays, references and copied worker
 globals. `SharedOwner`, `SharedView`, `SharedAccess`, `SharedAtomicU32`,
 `SharedAtomicU64` and `SharedPointer<T>` are opaque compiler types. Safe Goose cannot construct their
-fields, convert integers to them, serialize them, or send them through queues
-or C signatures. Copying a capability copies its authority; it does not create
+fields, convert integers to them, serialize them, or use them in C signatures.
+Queues reject capabilities except for the direct `SharedPointer<T>` transfer
+described below. Copying a capability copies its authority; it does not create
 a second allocation or a second right to free storage.
 
 The concurrency types `Thread<T>` and `Channel<T>` are opaque runtime tokens,

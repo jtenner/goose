@@ -416,6 +416,7 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
             auto t = Subst(c->tyargs[0]); ValidateType(t, c->line, VT_LOCAL);
             if (!IsFlat(t)) Error(c, cat("channel payload must be flat (§11.2), not ", TypeStr(t)));
             if (HoldsIndexT(t)) ThreadIndexError(c, t);
+            if (HoldsAlignedT(t)) Error(c, "aligned values are unsupported in channels");
             if (!args.empty()) CheckArg(args[0], ast.inttypes[IS_I64]);
             Val v; v.type = ast.NewType(TY_NATIVE, c->line);
             v.type->native = ast.NewDetail<TypeNative>(); v.type->native->kind = NK_CHANNEL;
