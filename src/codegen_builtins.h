@@ -74,6 +74,10 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
         if (c->builtin == B_SIMD_LOAD || c->builtin == B_SIMD_STORE) {
             auto slice = Snapshot(an[0]->exprtype, GenXD(an[0], an[0]->exprtype));
             auto first = Snapshot(ast.inttypes[IS_I64], GenXD(an[1], ast.inttypes[IS_I64]));
+            // Calls evaluate every argument before entering the operation,
+            // even when its complete-range check will fail.
+            string v;
+            if (c->builtin == B_SIMD_STORE) v = Snapshot(t, GenXD(an[2], t));
             L("if (", first, " < 0 || ", slice, ".len < ", lanes, " || ", first,
               " > ", slice, ".len - ", lanes, ") gs_abort(GS_E_ASSERT, ", LocArgs(ln), ");");
             if (c->builtin == B_SIMD_LOAD) {
@@ -86,7 +90,6 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
                 L("#endif");
                 return {out};
             }
-            auto v = Snapshot(t, GenXD(an[2], t));
             L("#if GS_VEC");
             L("GS_VST(", vt, ", ", slice, ".data + ", first, ", GS_VLD(", vt, ", &", v, "));");
             L("#else");
@@ -97,7 +100,12 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
         auto v = Snapshot(t, GenXD(an[0], t));
         vector<string> ix;
         bool constants = true;
-        for (size_t k = 1; k < an.size(); k++) constants &= Is<IntLit>(an[k]) != nullptr;
+        for (size_t k = 1; k < an.size(); k++) {
+            auto lit = Is<IntLit>(an[k]);
+            // Clang diagnoses an invalid shuffle immediate before the
+            // emitted bounds check can run. Preserve the Goose abort.
+            constants &= lit && lit->val >= 0 && lit->val < lanes;
+        }
         for (size_t k = 1; k < an.size(); k++) {
             auto x = GenXD(an[k], ast.inttypes[IS_I64]);
             ix.push_back(constants ? x : Snapshot(ast.inttypes[IS_I64], x));
