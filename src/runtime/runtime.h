@@ -63,6 +63,9 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef _MSC_VER
+#include <malloc.h>
+#endif
 #include <math.h>
 #endif
 
@@ -1118,6 +1121,25 @@ static void gs_rt_stats(void) {
 }
 
 #if GS_NEED_THREADS
+static void *gs_aligned_calloc(size_t n, size_t alignment) {
+    void *p = NULL;
+#ifdef _MSC_VER
+    p = _aligned_malloc(n ? n : 1, alignment);
+#else
+    if (posix_memalign(&p, alignment, n ? n : 1) != 0) p = NULL;
+#endif
+    if (p) memset(p, 0, n);
+    return p;
+}
+
+static void gs_aligned_free(void *p) {
+#ifdef _MSC_VER
+    _aligned_free(p);
+#else
+    free(p);
+#endif
+}
+
 /* A worker's thread program: its entry thunk opens the stack block, whose
    count the compiler knows, and allocates the globals instance. */
 static void gs_thread_run(void (*entry)(uint8_t *), uint8_t *args) {
@@ -1128,7 +1150,7 @@ static void gs_thread_run(void (*entry)(uint8_t *), uint8_t *args) {
 /* What the thread program holds once it has returned or aborted; the
    runtime releases the regions after this. */
 static void gs_thread_release(void) {
-    free(gs_gl);
+    gs_aligned_free(gs_gl);
     gs_gl = NULL;
     free(gs_stks);
     gs_stks = NULL;

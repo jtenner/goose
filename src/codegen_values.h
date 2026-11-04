@@ -1949,6 +1949,21 @@ inline string CodeGen::IntVecType(IntStorage is, int64_t n) {
     return cat("gs_vu", IntSize(is) * 8, "_", n);
 }
 
+inline string CodeGen::ExplicitVecType(TypeExpr *t) {
+    assert(t->simdvector && t->kind == TY_ARRAY && t->arr->akind == A_FIXED);
+    auto lane = t->arr->sub;
+    return lane->kind == TY_FLT ? VecType(lane->fltstorage, ArrSize(t->arr))
+                                : IntVecType(lane->intstorage, ArrSize(t->arr));
+}
+
+inline string CodeGen::ExplicitMaskVecType(TypeExpr *t) {
+    auto lane = t->arr->sub;
+    IntStorage is = lane->kind == TY_FLT
+        ? (lane->fltstorage == FS_F32 ? IS_U32 : IS_U64)
+        : (lane->intstorage < IS_U8 ? (IntStorage)(lane->intstorage + 4) : lane->intstorage);
+    return IntVecType(is, ArrSize(t->arr));
+}
+
 // An operand of a vector operation in a new temp: a scalar of the lanes'
 // type, or a value of type t.
 inline string CodeGen::VecOperand(TypeExpr *t, FltStorage fs, const string &x, bool scalar) {

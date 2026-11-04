@@ -57,6 +57,14 @@ inline void CodeGen::GenStmt(Node *n) {
 // the watermarks of declarations it ran past, so the continue label
 // sits after the fallthrough restores rather than sharing them.
 
+inline void CodeGen::SimdLoopLine(Line line) {
+    if (!curspec || !curspec->sf->issimd || line.fileidx < 0 ||
+        line.fileidx >= (int)ast.sources.size()) return;
+    auto source = ast.sources[line.fileidx].first;
+    L("#line ", line.line, " ", CStr(cat(source, "#simd-", curspec->sf->name,
+                                           "-version@-loop", simdloopn++, ".goose")));
+}
+
 // The scope of a Goose loop, opened ahead of the C loop or loops that run its
 // body: the divisors fixed for the loop (HoistDivisors), declared in front of
 // it, its break and continue labels, where its break values go, and its
@@ -94,6 +102,7 @@ inline void CodeGen::GenLoopBody(const function<void()> &condexit, Block *bodyb,
                                  const string &forhead, Node *cond, size_t first,
                                  vector<const VarDef *> binders) {
     auto lp = OpenLoop(bodyb, cond, binders, d);
+    SimdLoopLine(bodyb->line);
     L(forhead.empty() ? "for (;;) {" : forhead);
     ind++;
     // The condition is the loop's exit, a branch that stays, so only the
@@ -510,11 +519,13 @@ inline void CodeGen::GenBlocked(ForLoop *f, int k, const string &more, const str
         NameScope ns(*this);
         L(f->stripk ? "/* loop shape: strip-mined by " : "/* loop shape: sum terms in blocks of ",
           k, " */");
+        SimdLoopLine(f->line);
         L("while (", more, ") {");
         ind++;
         auto l = T();
         auto inner = cat("for (int64_t ", l, " = 0; ", l, " < ", k, "; ", l, "++, ", step, ") {");
         if (f->stripk) {
+            SimdLoopLine(f->line);
             L(inner);
             ind++;
             bind();
@@ -528,6 +539,7 @@ inline void CodeGen::GenBlocked(ForLoop *f, int k, const string &more, const str
             auto sum = GenLoc(a->lval);
             auto terms = T();
             L(CT(sum.t), " ", terms, "[", k, "];");
+            SimdLoopLine(f->line);
             L(inner);
             ind++;
             bind();
@@ -541,6 +553,7 @@ inline void CodeGen::GenBlocked(ForLoop *f, int k, const string &more, const str
             ind--;
             L("}");
             auto l2 = T();
+            SimdLoopLine(f->line);
             L("for (int64_t ", l2, " = 0; ", l2, " < ", k, "; ", l2, "++) ", sum.s, " = ", sum.s,
               " + ", terms, "[", l2, "];");
         }
@@ -551,6 +564,7 @@ inline void CodeGen::GenBlocked(ForLoop *f, int k, const string &more, const str
     cscopes[si].defers.clear();
     cscopes[si].usedcnt = false;
     cscopes[si].cntlbl = Lbl();
+    SimdLoopLine(f->line);
     L("for (; ", cond, "; ", step, ") {");
     ind++;
     bind();

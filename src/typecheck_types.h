@@ -499,6 +499,23 @@ inline bool TypeCheck::HoldsIndexT(TypeExpr *t) {
     return Reaches(t, [](TypeExpr *t) { return t->kind == TY_INT && t->ix; });
 }
 
+inline bool TypeCheck::HoldsVectorT(TypeExpr *t) {
+    return Reaches(t, [](TypeExpr *t) { return t->simdvector; });
+}
+
+inline bool TypeCheck::HoldsAlignedT(TypeExpr *t) {
+    return Reaches(t, [&](TypeExpr *u) {
+        if (u->kind == TY_STRUCT) {
+            for (auto &f : GetStructInst(u)->st->fields) if (f.align > 1) return true;
+        }
+        if (u->kind == TY_ENUM) {
+            for (auto &v : GetEnumInst(u)->en->variants)
+                for (auto &f : v.fields) if (f.align > 1) return true;
+        }
+        return false;
+    });
+}
+
 // Whether a value of type t can hold a plain reference or a slice at any
 // depth -- the only kinds that can point into an arbitrary array. A
 // self-relative reference points within its own root array and an
@@ -757,6 +774,8 @@ inline void TypeCheck::ValidateType(TypeExpr *t, Line l, int pos) {
                              t->enu->en->name, " binds its payloads only by value (§3.5): use "
                              "it in variable mode (", t->enu->en->name, "..), whose payloads "
                              "bind by reference, or make the references `in pool`"));
+            if (inst->validated && HoldsAlignedT(t))
+                Error(l, "aligned types are unsupported in enum payloads");
             return;
         }
         case TY_VARIANT: {
@@ -770,11 +789,15 @@ inline void TypeCheck::ValidateType(TypeExpr *t, Line l, int pos) {
                                  " contains itself by value"));
                 BuildVariant(inst, vi);
             }
+            if (inst->validated && HoldsAlignedT(t))
+                Error(l, "aligned types are unsupported in enum payloads");
             break;
         }
         case TY_ARRAY: {
             RequireComplete(t, l);
             ValidateType(t->arr->sub, l, VT_ELEM);
+            if (t->arr->akind != A_FIXED && HoldsAlignedT(t->arr->sub))
+                Error(l, "aligned element types are unsupported in non-fixed arrays");
             auto ec = ClassOf(t->arr->sub);
             switch (t->arr->akind) {
                 case A_FIXED:

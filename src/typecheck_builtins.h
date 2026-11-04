@@ -22,6 +22,35 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
         Error(c, cat(d.name, " takes ", (int64_t)d.minargs,
                      d.minargs == d.maxargs ? string() : cat("-", (int64_t)d.maxargs),
                      " argument(s), ", (int64_t)args.size(), " given"));
+    if (d.kind >= B_SIMD_SPLAT && d.kind <= B_SIMD_SHUFFLE) {
+        if (c->tyargs.size() != 1) Error(c, cat(d.name, " needs one explicit vector type"));
+        auto t = Subst(c->tyargs[0]);
+        ValidateType(t, c->line, VT_LOCAL);
+        if (!t->simdvector) Error(c, cat(d.name, " type argument must be an explicit vector"));
+        auto lane = t->arr->sub;
+        auto lanes = ArraySize(t->arr);
+        auto result = [&]() { Val v; v.type = t; c->rettypes.push_back(t); return v; };
+        if (d.kind == B_SIMD_SPLAT) {
+            CheckArg(args[0], lane);
+            c->qtype = t;
+            return result();
+        }
+        if (d.kind == B_SIMD_LOAD || d.kind == B_SIMD_STORE) {
+            auto slice = ast.SliceOf(lane, c->line);
+            if (d.kind == B_SIMD_LOAD) slice = ast.ConstOf(slice);
+            CheckArg(args[0], slice);
+            CheckArg(args[1], ast.inttypes[IS_I64]);
+            if (d.kind == B_SIMD_STORE) CheckArg(args[2], t);
+            c->qtype = t;
+            return d.kind == B_SIMD_LOAD ? result() : VoidVal();
+        }
+        if ((int64_t)args.size() != lanes + 1)
+            Error(c, cat(d.name, " needs one index per vector lane"));
+        CheckArg(args[0], t);
+        for (size_t i = 1; i < args.size(); i++) CheckArg(args[i], ast.inttypes[IS_I64]);
+        c->qtype = t;
+        return result();
+    }
     if (d.kind >= B_UNSAFE_PTR_FROM_HANDLE && d.kind <= B_UNSAFE_STORE) {
         auto pointer = [&]() {
             auto v = CheckValue(args[0], nullptr);
@@ -283,6 +312,8 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
                 DestScope ds(*this, Dest {});
                 for (size_t i = 0; i < spec->argtypes.size(); i++) {
                     if (HoldsIndexT(spec->argtypes[i])) ThreadIndexError(c, spec->argtypes[i]);
+                    if (HoldsAlignedT(spec->argtypes[i]))
+                        Error(c, "aligned values are unsupported in worker argument packets");
                     CheckArg(args[1 + i], spec->argtypes[i]);
                 }
             }
@@ -306,6 +337,7 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
             if (av.type->kind == TY_VOID || av.type->kind == TY_FN || !IsFlat(av.type))
                 Error(c, cat("queue elements must be flat (§11.2), not ", TypeStr(av.type)));
             if (HoldsIndexT(av.type)) ThreadIndexError(c, av.type);
+            if (HoldsAlignedT(av.type)) Error(c, "aligned values are unsupported in queues");
             // false when the queue is full (§11.2); a call statement drops it.
             Val ok;
             ok.type = ast.booltype;
@@ -321,6 +353,7 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
             if (!IsFlat(t))
                 Error(c, cat("queue elements must be flat (§11.2), not ", TypeStr(t)));
             if (HoldsIndexT(t)) ThreadIndexError(c, t);
+            if (HoldsAlignedT(t)) Error(c, "aligned values are unsupported in queues");
             // A limit, or a wait's milliseconds.
             if (!args.empty()) CheckArg(args[0], ast.inttypes[IS_I64]);
             if (d.kind == B_QLIMIT) {

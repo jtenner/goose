@@ -109,14 +109,53 @@ struct Builder {
         if (!logfile.empty()) WriteFileMakingDirs(logfile, r.output);
         if (r.started && r.code == 0) {
             if (opts.simd_feedback) {
+                string generated;
+                for (auto &arg : argv)
+                    if (arg.size() >= 2 && arg.substr(arg.size() - 2) == ".c") {
+                        LoadFile(arg, generated);
+                        break;
+                    }
+                set<string> loops;
+                for (size_t p = 0; (p = generated.find("#simd-", p)) != string::npos;) {
+                    auto q = generated.find(".goose", p);
+                    if (q == string::npos) break;
+                    auto b = generated.rfind('"', p);
+                    if (b != string::npos && generated.substr(p, q + 6 - p).find("-loop") != string::npos)
+                        loops.insert(generated.substr(b + 1, q + 5 - b));
+                    p = q + 6;
+                }
+                set<string> explained;
+                string pending, pendingloc;
                 for (size_t b = 0; b < r.output.size();) {
                     auto e = r.output.find('\n', b);
                     auto line = r.output.substr(b, e == string::npos ? string::npos : e - b);
-                    if (line.find(".goose:") != string::npos)
-                        fprintf(msgs, "simd feedback: %s\n", line.c_str());
+                    const string lostmsg = "could not determine the original source location for ";
+                    auto lost = line.find(lostmsg);
+                    if (lost != string::npos) {
+                        auto at = line.substr(lost + lostmsg.size());
+                        for (auto &loop : loops) if (at.find(loop) == 0) {
+                            pending = loop;
+                            pendingloc = at;
+                            break;
+                        }
+                    } else if (line.find("remark:") != string::npos && !pending.empty()) {
+                        auto remark = line.substr(line.find("remark:"));
+                        fprintf(msgs, "simd feedback: %s: %s\n", pendingloc.c_str(), remark.c_str());
+                        explained.insert(pending);
+                        pending.clear();
+                        pendingloc.clear();
+                    } else if (line.find("remark:") != string::npos) {
+                        for (auto &loop : loops) if (line.find(loop) != string::npos) {
+                            fprintf(msgs, "simd feedback: %s\n", line.c_str());
+                            explained.insert(loop);
+                        }
+                    }
                     if (e == string::npos) break;
                     b = e + 1;
                 }
+                for (auto &loop : loops) if (!explained.count(loop))
+                    fprintf(msgs, "simd feedback: %s: missed: compiler supplied no loop-vectorize reason\n",
+                            loop.c_str());
             }
             return true;
         }

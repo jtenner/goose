@@ -101,6 +101,7 @@ struct CodeGen {
     // stacks of the resizable ones. Accessed through GS_GL, main's static
     // instance directly or a worker's through the thread-local gs_gl.
     string gblock;
+    int64_t gblockalign = 1;
     set<const VarDef *> unusedliteralglobals;
     void FindUnusedLiteralGlobals();
     // The globals a thread program uses, in declaration order: what a spawn
@@ -576,6 +577,7 @@ struct CodeGen {
     string body;
     int ind = 1;
     int tmpn = 0;
+    int simdloopn = 0;
     int stknext = 0, stkmax = 0;
     string spexpr;                       // "gs_sp" inside functions, "0" at global init.
     set<string> fnused;                  // Local C identifiers.
@@ -1107,6 +1109,8 @@ struct CodeGen {
     bool IntVecShape(TypeExpr *t, IntStorage &is, int64_t &n);
     string VecType(FltStorage fs, int64_t n);
     string IntVecType(IntStorage is, int64_t n);
+    string ExplicitVecType(TypeExpr *t);
+    string ExplicitMaskVecType(TypeExpr *t);
     string VecOperand(TypeExpr *t, FltStorage fs, const string &x, bool scalar);
     string IntVecOperand(TypeExpr *t, IntStorage is, const string &x, bool scalar);
     string VecLoad(const string &vt, int64_t n, const string &v, bool scalar);
@@ -1238,6 +1242,7 @@ struct CodeGen {
     void GenLoopBody(const function<void()> &condexit, Block *bodyb, Dst d,
                      const string &forhead = "", Node *cond = nullptr, size_t first = 0,
                      vector<const VarDef *> binders = {});
+    void SimdLoopLine(Line line);
     static bool StraightCode(Node *n);
     bool InStraightLoop();
     static bool CallsRecursive(Node *n);
