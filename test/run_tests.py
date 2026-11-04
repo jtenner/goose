@@ -2358,7 +2358,8 @@ _Static_assert(_Alignof(a2_Nested_g) == 64, "Nested array alignment");'''
             if "vectorized loop" not in report or "missed:" not in report:
                 r.fail("simd feedback statuses", report)
                 return
-            if any(f"{marker}:{line}:" not in report for line, marker in locations):
+            if any(f"{marker[marker.find('#simd-'):]}:{line}:" not in report
+                   for line, marker in locations):
                 r.fail("simd feedback source lines", report)
                 return
             r.ok("simd feedback maps every emitted version loop with status")
