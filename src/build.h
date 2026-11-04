@@ -117,6 +117,7 @@ struct Builder {
                         break;
                     }
                 set<string> loops;
+                set<string> sources;
                 map<string, string> looplines;
                 map<string, string> loopdisplay;
                 auto digits = [](const string &s, size_t b, size_t e) {
@@ -202,6 +203,7 @@ struct Builder {
                                 digits(file, version + 2, loop) &&
                                 digits(file, loop + 5, file.size() - 6)) {
                                 loops.insert(file);
+                                sources.insert(metasource);
                                 loopdisplay[file] = cat(metasource, "#simd-", metafn,
                                                         file.substr(version));
                                 // Feedback-only markers close their #ifdef on the
@@ -217,16 +219,34 @@ struct Builder {
                 }
                 set<string> explained;
                 set<string> vectorized;
-                // Clang prints a primary remark followed by one or more notes
-                // naming the logical #line files that contributed to an
-                // inlined loop. Keep the primary for those notes; `pending`
-                // also tolerates a toolchain that prints the note first.
-                string lastremark;
-                set<string> lastloops;
-                vector<pair<string, string>> pending;
+                // Clang brackets an inlined-loop remark with notes naming the
+                // logical #line file: one before the primary diagnostic and
+                // one after it. A note on just one side can instead belong to
+                // the neighbouring diagnostic. Correlate only the intersection
+                // of the two boundaries so an unrelated remark cannot inherit
+                // a loop merely because it was printed immediately before it.
+                struct SimdRemark {
+                    string text;
+                    map<string, string> direct;
+                };
+                vector<SimdRemark> remarks;
+                vector<map<string, string>> boundaries(1);
+                auto diagnostic = [&](const string &line, string_view kind,
+                                      size_t &tag, string &file, string &location) {
+                    auto marker = cat(": ", kind, ":");
+                    tag = line.find(marker);
+                    if (tag == string::npos || !tag) return false;
+                    auto col = line.rfind(':', tag - 1);
+                    auto row = col == string::npos || !col ? string::npos
+                                                            : line.rfind(':', col - 1);
+                    if (row == string::npos || !digits(line, row + 1, col) ||
+                        !digits(line, col + 1, tag)) return false;
+                    file = line.substr(0, row);
+                    location = line.substr(0, tag);
+                    return true;
+                };
                 auto report = [&](const string &loop, const string &location,
                                   const string &remark) {
-                    if (!lastloops.insert(loop).second) return;
                     fprintf(msgs, "simd feedback: %s: %s\n", location.c_str(), remark.c_str());
                     explained.insert(loop);
                     if (remark.find("[-Rpass=loop-vectorize]") != string::npos)
@@ -236,38 +256,61 @@ struct Builder {
                     auto e = r.output.find('\n', b);
                     auto line = r.output.substr(b, e == string::npos ? string::npos : e - b);
                     const string lostmsg = "could not determine the original source location for ";
-                    auto lost = line.find(lostmsg);
-                    auto remarkpos = line.find("remark:");
-                    if (remarkpos != string::npos) {
-                        lastremark = line.substr(remarkpos);
-                        lastloops.clear();
-                        for (auto &[loop, location] : pending)
-                            report(loop, location, lastremark);
-                        pending.clear();
+                    size_t tag = 0;
+                    string file, location;
+                    if (diagnostic(line, "remark", tag, file, location)) {
+                        SimdRemark remark { line.substr(tag + 2), {} };
                         for (auto &loop : loops) {
-                            auto pos = line.find(loop);
-                            if (pos == string::npos) continue;
-                            auto shown = loopdisplay[loop] + line.substr(pos + loop.size());
-                            fprintf(msgs, "simd feedback: %s\n", shown.c_str());
-                            lastloops.insert(loop);
-                            explained.insert(loop);
-                            if (lastremark.find("[-Rpass=loop-vectorize]") != string::npos)
-                                vectorized.insert(loop);
-                        }
-                    } else if (lost != string::npos) {
-                        auto at = line.substr(lost + lostmsg.size());
-                        for (auto &loop : loops) {
-                            auto pos = at.find(loop);
-                            if (pos == string::npos) continue;
-                            auto location = loopdisplay[loop] + at.substr(pos + loop.size());
-                            if (lastremark.empty()) pending.push_back({ loop, location });
-                            else report(loop, location, lastremark);
+                            if (file != loop || sources.count(file)) continue;
+                            remark.direct[loop] = loopdisplay[loop] +
+                                                  location.substr(file.size());
                             break;
+                        }
+                        remarks.push_back(std::move(remark));
+                        boundaries.emplace_back();
+                    } else if (diagnostic(line, "note", tag, file, location)) {
+                        auto body = tag + 8;
+                        if (line.compare(body, lostmsg.size(), lostmsg) == 0) {
+                            auto at = line.substr(body + lostmsg.size());
+                            for (auto &loop : loops) {
+                                if (at.size() <= loop.size() || at[loop.size()] != ':' ||
+                                    at.compare(0, loop.size(), loop) != 0) continue;
+                                auto scope = loop;
+                                auto suffix = scope.rfind("-loop", scope.size() - 6);
+                                scope.replace(suffix, string::npos, ".goose");
+                                if (!sources.count(file) && file != scope) continue;
+                                boundaries.back()[loop] = loopdisplay[loop] +
+                                                          at.substr(loop.size());
+                                break;
+                            }
                         }
                     }
                     if (e == string::npos) break;
                     b = e + 1;
                 }
+                vector<map<string, string>> assigned;
+                assigned.reserve(remarks.size());
+                for (size_t i = 0; i < remarks.size(); i++) {
+                    assigned.push_back(remarks[i].direct);
+                    for (auto &[loop, location] : boundaries[i])
+                        if (boundaries[i + 1].count(loop)) assigned[i][loop] = location;
+                }
+                // The first/last primary may have no outer note. Attribute a
+                // loop at that edge only when the neighbouring primary already
+                // accounts for every other possibility on the shared boundary.
+                if (remarks.size() == 1) {
+                    for (auto &[loop, location] : boundaries[0]) assigned[0][loop] = location;
+                    for (auto &[loop, location] : boundaries[1]) assigned[0][loop] = location;
+                } else if (!remarks.empty()) {
+                    for (auto &[loop, location] : boundaries[1])
+                        if (!assigned[1].count(loop)) assigned[0][loop] = location;
+                    auto last = remarks.size() - 1;
+                    for (auto &[loop, location] : boundaries[last])
+                        if (!assigned[last - 1].count(loop)) assigned[last][loop] = location;
+                }
+                for (size_t i = 0; i < remarks.size(); i++)
+                    for (auto &[loop, location] : assigned[i])
+                        report(loop, location, remarks[i].text);
                 for (auto &loop : loops) if (!vectorized.count(loop))
                     fprintf(msgs, "simd feedback: %s:%s: missed: %s\n",
                             loopdisplay[loop].c_str(),
