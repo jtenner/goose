@@ -118,24 +118,72 @@ struct Builder {
                     }
                 set<string> loops;
                 map<string, string> looplines;
-                for (size_t p = 0; (p = generated.find("#simd-", p)) != string::npos;) {
-                    auto q = generated.find(".goose", p);
-                    if (q == string::npos) break;
-                    auto b = generated.rfind('"', p);
-                    if (b != string::npos && generated.substr(p, q + 6 - p).find("-loop") != string::npos) {
-                        auto directive = generated.rfind("#line ", b);
-                        if (directive != string::npos && generated.find('\n', directive) > b) {
-                            auto loop = generated.substr(b + 1, q + 5 - b);
-                            auto start = directive + 6;
-                            auto end = generated.find_first_not_of("0123456789", start);
-                            loops.insert(loop);
-                            // Feedback-only markers close their #ifdef on the
-                            // numbered line; the loop is the following line.
-                            looplines[loop] = std::to_string(
-                                std::stoll(generated.substr(start, end - start)) + 1);
+                auto digits = [](const string &s, size_t b, size_t e) {
+                    if (b == e) return false;
+                    for (auto i = b; i < e; i++) if (!isdigit((uint8_t)s[i])) return false;
+                    return true;
+                };
+                auto cstr = [&](size_t &p, size_t e, string &out) {
+                    if (p >= e || generated[p++] != '"') return false;
+                    while (p < e) {
+                        auto c = generated[p++];
+                        if (c == '"') return true;
+                        if (c != '\\') { out += c; continue; }
+                        if (p >= e) return false;
+                        c = generated[p++];
+                        if (c == '"' || c == '\\') { out += c; continue; }
+                        if (c < '0' || c > '7' || p + 1 >= e ||
+                            generated[p] < '0' || generated[p] > '7' ||
+                            generated[p + 1] < '0' || generated[p + 1] > '7') return false;
+                        out += (char)(((c - '0') << 6) | ((generated[p] - '0') << 3) |
+                                      (generated[p + 1] - '0'));
+                        p += 2;
+                    }
+                    return false;
+                };
+                for (size_t b = 0; b < generated.size();) {
+                    auto e = generated.find('\n', b);
+                    if (e == string::npos) e = generated.size();
+                    auto p = b;
+                    while (p < e && (generated[p] == ' ' || generated[p] == '\t')) p++;
+                    if (generated.compare(p, 6, "#line ") == 0) {
+                        p += 6;
+                        int64_t lineno = 0;
+                        auto nb = p;
+                        auto ne = p;
+                        bool overflow = false;
+                        while (p < e && isdigit((uint8_t)generated[p])) {
+                            auto digit = generated[p] - '0';
+                            if (lineno > (std::numeric_limits<int64_t>::max() - digit) / 10)
+                                overflow = true;
+                            else if (!overflow) lineno = lineno * 10 + digit;
+                            p++;
+                        }
+                        ne = p;
+                        while (p < e && (generated[p] == ' ' || generated[p] == '\t')) p++;
+                        string file;
+                        if (!overflow && ne > nb &&
+                            lineno < std::numeric_limits<int64_t>::max() && cstr(p, e, file)) {
+                            while (p < e && (generated[p] == ' ' || generated[p] == '\t')) p++;
+                            auto ext = file.size() >= 6 &&
+                                       file.compare(file.size() - 6, 6, ".goose") == 0;
+                            auto loop = ext ? file.rfind("-loop", file.size() - 6)
+                                            : string::npos;
+                            auto version = loop == string::npos ? string::npos
+                                                                : file.rfind("-v", loop);
+                            auto marker = version == string::npos ? string::npos
+                                                                  : file.rfind("#simd-", version);
+                            if (p == e && marker != string::npos &&
+                                digits(file, version + 2, loop) &&
+                                digits(file, loop + 5, file.size() - 6)) {
+                                loops.insert(file);
+                                // Feedback-only markers close their #ifdef on the
+                                // numbered line; the loop is the following line.
+                                looplines[file] = std::to_string(lineno + 1);
+                            }
                         }
                     }
-                    p = q + 6;
+                    b = e < generated.size() ? e + 1 : generated.size();
                 }
                 set<string> explained;
                 set<string> vectorized;

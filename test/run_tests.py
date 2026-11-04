@@ -2417,6 +2417,18 @@ void dirty_padding(EqOuter_g *x) { ((unsigned char *)x)[21] = 0x7f; }'''
                    for line, marker in locations):
                 r.fail("simd feedback source lines", report)
                 return
+            line1 = gendir / "simd-feedback-line1.goose"
+            line1.write_text("simd fn f() { for i in 8 { print(i); } } fn main() { f(); }\n",
+                             encoding="utf-8")
+            line1_exe = gendir / f"simd-feedback-line1{tc.EXE_SUFFIX}"
+            code, out, err = tc.run_capture([str(exe), "build", "--cc", "clang",
+                                             "--simd-feedback", "-o", str(line1_exe),
+                                             str(line1)])
+            line1_report = out + err
+            if code or any(f"#simd-f-v{level}-loop0.goose:1:" not in line1_report
+                           for level in range(3)):
+                r.fail("simd feedback first source line", line1_report)
+                return
             r.ok("simd feedback maps every emitted version loop with status")
 
         if args.profile == "sanitize":
