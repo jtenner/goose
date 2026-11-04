@@ -2390,11 +2390,20 @@ void dirty_padding(EqOuter_g *x) { ((unsigned char *)x)[21] = 0x7f; }'''
                 generated)
             displays = {}
             locations = []
+            parsed_inventory = []
+            group_qualifiers = {}
             for source_hex, fn_hex, line, marker in inventory:
                 source_name = bytes.fromhex(source_hex).decode("utf-8")
                 fn_name = bytes.fromhex(fn_hex).decode("utf-8")
                 suffix = re.search(r'(-v\d+-loop\d+\.goose)$', marker).group(1)
-                display = f"{source_name}#simd-{fn_name}{suffix}"
+                identity = re.match(r'#goose-simd-(\d+)-e([01])-', marker)
+                qualifier = (f"[spec={identity.group(1)},"
+                             f"element={identity.group(2)}]")
+                group = f"{source_name}#simd-{fn_name}"
+                group_qualifiers.setdefault(group, set()).add(qualifier)
+                parsed_inventory.append((line, marker, group, qualifier, suffix))
+            for line, marker, group, qualifier, suffix in parsed_inventory:
+                display = group + (qualifier if len(group_qualifiers[group]) > 1 else "") + suffix
                 displays[marker] = display
                 locations.append((str(int(line) + 1), display))
             expected = set(displays.values())
@@ -2484,6 +2493,26 @@ void dirty_padding(EqOuter_g *x) { ((unsigned char *)x)[21] = 0x7f; }'''
                 r.fail("simd feedback diagnostic correlation", correlation_report)
                 return
 
+            if not tc.IS_WINDOWS:
+                diagnostic_name = gendir / "x:1:1: remark: fake.goose"
+                diagnostic_name.write_text(
+                    "simd fn fast(xs: u32[:]) { for x, i in xs { xs[i] = x + 1; } }\n"
+                    "fn main() { var xs: u32[2048] = [0; 2048]; fast(xs); "
+                    "print(xs[0]); }\n",
+                    encoding="utf-8")
+                diagnostic_exe = gendir / f"simd-feedback-diagnostic-name{tc.EXE_SUFFIX}"
+                code, out, err = tc.run_capture([
+                    str(exe), "build", "--cc", "clang", "--simd-feedback",
+                    "-o", str(diagnostic_exe), str(diagnostic_name)])
+                diagnostic_report = out + err
+                if code or any(not any(f"#simd-fast-v{level}-loop0.goose:" in line and
+                                       "remark: vectorized loop" in line
+                                       for line in diagnostic_report.splitlines())
+                                       for level in range(3)):
+                    r.fail("simd feedback diagnostic-shaped source filename",
+                           diagnostic_report)
+                    return
+
             same = gendir / "simd-feedback-same-name-src"
             same.mkdir(exist_ok=True)
             same_other = same / "other.goose"
@@ -2509,6 +2538,26 @@ void dirty_padding(EqOuter_g *x) { ((unsigned char *)x)[21] = 0x7f; }'''
                                    for line in same_report.splitlines())
                            for source in same_sources for level in range(3)):
                 r.fail("simd feedback same-named module functions", same_report)
+                return
+
+            generic = gendir / "simd-feedback-generic.goose"
+            generic.write_text(
+                "simd fn total<T>(xs: T[:]) -> T { var s: T = 0; "
+                "for x in xs { s += x; } return s; }\n"
+                "fn main() { var xs: u32[2048] = [1; 2048]; "
+                "var ys: f64[2048] = [1.0; 2048]; "
+                "print(total(xs), total(ys)); }\n",
+                encoding="utf-8")
+            generic_exe = gendir / f"simd-feedback-generic{tc.EXE_SUFFIX}"
+            code, out, err = tc.run_capture([str(exe), "build", "--cc", "clang",
+                                             "--simd-feedback", "-o", str(generic_exe),
+                                             str(generic)])
+            generic_report = out + err
+            generic_specs = set(re.findall(
+                r'#simd-total\[spec=(\d+),element=[01]\]-v\d+-loop\d+\.goose',
+                generic_report))
+            if code or len(generic_specs) < 2:
+                r.fail("simd feedback generic specialization identity", generic_report)
                 return
 
             try:
