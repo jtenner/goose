@@ -54,4 +54,45 @@ def check_native_memory_backend(exe, clang, base):
         aligned = compile_c(layout, "i386-unknown-linux-gnu", "i486")
         if aligned.returncode:
             raise RuntimeError("descriptor generations lack 8-byte slab alignment:\n" + aligned.stderr)
+
+        pointer_source = root / "pointer_only.goose"
+        pointer_source.write_text('fn main() { let p, o, ok = shared_pointer_alloc<i64>(7); '
+                                  'assert(ok); shared_pointer_release(p); assert(shared_close(o)); }\n')
+        pointer_c = root / "pointer_only.c"
+        built = subprocess.run([str(exe), "-O2", "-o", str(pointer_c), str(pointer_source)],
+                               capture_output=True, text=True, timeout=60)
+        if built.returncode:
+            raise RuntimeError(built.stdout + built.stderr)
+        pointer_text = pointer_c.read_text()
+        backend_gate = re.search(r"^#if defined\(__TINYC__\) \|\| \(!defined\(__GNUC__\) && !defined\(__clang__\)\)\n"
+                                 r"#error Native shared pointers require GCC or Clang; this backend is unsupported\n"
+                                 r"#endif$",
+                                 pointer_text, re.M | re.S)
+        lock_gate = re.search(r"^#if __GCC_ATOMIC_LLONG_LOCK_FREE != 2\n"
+                              r"#error Native shared pointer.*?^#endif$",
+                              pointer_text, re.M | re.S)
+        if not backend_gate or not lock_gate:
+            raise RuntimeError("pointer-only program emitted no complete backend/lock-free gate")
+        pointer_gates = backend_gate[0] + "\n" + lock_gate[0]
+        unsupported_pointer = compile_c(pointer_gates + "\nint probe;\n",
+                                        "i386-unknown-linux-gnu", "i486")
+        if unsupported_pointer.returncode == 0 or "shared pointer" not in unsupported_pointer.stderr:
+            raise RuntimeError("pointer-only gate accepted non-lock-free u64 target:\n" +
+                               unsupported_pointer.stdout + unsupported_pointer.stderr)
+        tiny_pointer = compile_c("#define __TINYC__ 1\n" + pointer_gates + "\nint probe;\n",
+                                 "x86_64-unknown-linux-gnu")
+        if tiny_pointer.returncode == 0 or "require GCC or Clang" not in tiny_pointer.stderr:
+            raise RuntimeError("pointer-only gate accepted TinyCC:\n" +
+                               tiny_pointer.stdout + tiny_pointer.stderr)
+        queue_source = root / "pointer_queue_shutdown.goose"
+        queue_source.write_text('fn main() { let p, o, ok = shared_pointer_alloc<i64>(7); '
+                                'assert(ok && qput(p)); }\n')
+        queue_c = root / "pointer_queue_shutdown.c"
+        built = subprocess.run([str(exe), "-O2", "-o", str(queue_c), str(queue_source)],
+                               capture_output=True, text=True, timeout=60)
+        if built.returncode:
+            raise RuntimeError(built.stdout + built.stderr)
+        queue_text = queue_c.read_text()
+        if not re.search(r"gs_qdestroy\(&gs_q_.*?, 1\);", queue_text):
+            raise RuntimeError("pointer queue emitted no pointer-aware shutdown release")
     return None

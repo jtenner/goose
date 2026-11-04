@@ -70,11 +70,11 @@ enum TypeKind {
 };
 
 enum NativeKind { NK_OWNER, NK_VIEW, NK_ACCESS, NK_ATOMIC_U32, NK_ATOMIC_U64, NK_UNSAFE_PTR,
-                  NK_THREAD, NK_CHANNEL, NK_COUNT };
+                  NK_THREAD, NK_CHANNEL, NK_POINTER, NK_COUNT };
 inline const char *NativeName(int k) {
     static const char *names[] = { "SharedOwner", "SharedView", "SharedAccess",
                                    "SharedAtomicU32", "SharedAtomicU64", "UnsafePtr",
-                                   "Thread", "Channel" };
+                                   "Thread", "Channel", "SharedPointer" };
     return names[k];
 }
 
@@ -246,7 +246,7 @@ struct TypeDetail { virtual ~TypeDetail() {} };
 
 struct TypeNative : TypeDetail {     // TY_NATIVE
     NativeKind kind = NK_OWNER;
-    TypeExpr *arg = nullptr;         // Thread<T>/Channel<T>; null for other native types.
+    TypeExpr *arg = nullptr;         // Thread<T>/Channel<T>/SharedPointer<T>; null otherwise.
 };
 
 struct TypeStruct : TypeDetail {     // TY_STRUCT
@@ -362,7 +362,7 @@ struct TypeExpr {
 inline bool IsSharedSendable(const TypeExpr *t) {
     return t->kind == TY_NATIVE && (t->native->kind == NK_VIEW ||
            t->native->kind == NK_ATOMIC_U32 || t->native->kind == NK_ATOMIC_U64 ||
-           t->native->kind == NK_CHANNEL);
+           t->native->kind == NK_CHANNEL || t->native->kind == NK_POINTER);
 }
 inline bool IsRefOrSlice(const TypeExpr *t) { return t->kind == TY_REF || t->kind == TY_SLICE; }
 inline bool IsOptional(const TypeExpr *t) { return t->kind == TY_REF && t->ref->optional; }

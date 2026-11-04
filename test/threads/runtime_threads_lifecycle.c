@@ -225,6 +225,62 @@ static void check_channel_lifecycle(void) {
 int main(void) {
     /* Main's one stack, in its one region; a worker's GS_MAX_STACKS. */
     gs_rt_init(0, NULL, 1, 1, GS_MAX_STACKS);
+    /* Rollback is one spawn transaction, never an actor sweep. In particular,
+       INT64_MIN cannot collide with and revoke an unrelated queue claim. */
+    uint8_t pointer_ok;
+    int64_t pointer_value = 7, pointer_out = 0;
+    gs_shared_cap queue_owner;
+    gs_shared_cap queue_pointer = gs_shared_pointer_alloc(&pointer_value, sizeof pointer_value,
+        &queue_owner, &pointer_ok, __FILE__, __LINE__);
+    check(pointer_ok, "allocate rollback queue pointer");
+    gs_shared_pointer_queue(queue_pointer, __FILE__, __LINE__);
+    gs_shared_worker_cleanup(NULL, INT64_MIN);
+    gs_shared_pointer_copy(queue_pointer, &pointer_out, sizeof pointer_out, __FILE__, __LINE__);
+    check(pointer_out == pointer_value, "rollback actor cannot revoke queue claim");
+    gs_shared_pointer_adopt(queue_pointer, __FILE__, __LINE__);
+    gs_shared_pointer_release(queue_pointer, __FILE__, __LINE__);
+    check(gs_shared_close(queue_owner, __FILE__, __LINE__), "close rollback queue owner");
+
+    gs_shared_cap rollback_owner;
+    gs_shared_cap original = gs_shared_pointer_alloc(&pointer_value, sizeof pointer_value,
+        &rollback_owner, &pointer_ok, __FILE__, __LINE__);
+    check(pointer_ok, "allocate spawn rollback pointer");
+    gs_shared_cap packet = gs_shared_handoff(original, 0, __FILE__, __LINE__);
+    void *leases = gs_shared_pending_take();
+    check(gs_shared_worker_commit(leases, 123), "commit spawn rollback pointer");
+    gs_shared_worker_rollback(leases);
+    pointer_out = 0;
+    gs_shared_pointer_copy(original, &pointer_out, sizeof pointer_out, __FILE__, __LINE__);
+    check(pointer_out == pointer_value, "spawn rollback preserves caller claim");
+    gs_shared_pointer_release(original, __FILE__, __LINE__);
+    check(gs_shared_close(rollback_owner, __FILE__, __LINE__), "close spawn rollback owner");
+
+    gs_shared_cap atomic_owner;
+    original = gs_shared_pointer_alloc(&pointer_value, sizeof pointer_value,
+        &atomic_owner, &pointer_ok, __FILE__, __LINE__);
+    check(pointer_ok, "allocate atomic commit pointer");
+    gs_shared_cap first = gs_shared_handoff(original, 0, __FILE__, __LINE__);
+    gs_shared_cap second = gs_shared_handoff(original, 0, __FILE__, __LINE__);
+    leases = gs_shared_pending_take();
+    gs_shared_lease *lease = (gs_shared_lease *)leases;
+    check(lease && lease->next, "two claims in commit transaction");
+    /* Corrupt the later-validated claim to prove preflight does not mutate
+       the valid prefix. Restore it before rollback so cleanup remains a
+       separate, valid operation. */
+    gs_mutex_lock(&gs_shared_mutex);
+    gs_shared_record *first_claim = gs_shared_at(first.slot);
+    gs_shared_record *second_claim = gs_shared_at(second.slot);
+    first_claim->actor = 777;
+    gs_mutex_unlock(&gs_shared_mutex);
+    check(!gs_shared_worker_commit(leases, 123), "commit rejects invalid transaction");
+    gs_mutex_lock(&gs_shared_mutex);
+    check(second_claim->actor == GS_SHARED_PENDING_ACTOR,
+          "failed commit leaves valid prefix pending");
+    first_claim->actor = GS_SHARED_PENDING_ACTOR;
+    gs_mutex_unlock(&gs_shared_mutex);
+    gs_shared_worker_rollback(leases);
+    gs_shared_pointer_release(original, __FILE__, __LINE__);
+    check(gs_shared_close(atomic_owner, __FILE__, __LINE__), "close atomic commit owner");
     check(gs_hardware_threads() >= 1, "hardware_threads() reports at least one worker");
     GS(0)->top[0] = 99;
     check_channel_lifecycle();
@@ -319,7 +375,11 @@ int main(void) {
        instance (main has none here), then the regions. */
     gs_thread_release();
     gs_release_regions();
-    check(counter_add(&live_allocations, 0) == 1, "test releases its main stack block");
+    /* Releasing main drops its stack block and region table. The two
+       process-lifetime allocations left by this fixture are the contained
+       abort message no wait takes and the initialized shared registry slab. */
+    check(counter_add(&live_allocations, 0) == allocations - 2,
+          "test releases its main stack block");
     check(counter_add(&live_regions, 0) == 0, "test releases its main reservation");
     puts("runtime thread cleanup ok");
     return 0;

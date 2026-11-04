@@ -116,16 +116,16 @@ static void spawning(uint8_t *args) {
     (void)args;
     uint8_t ok; gs_shared_cap owner = gs_shared_alloc(4096, &ok); check(ok, "parent allocation");
     gs_shared_cap view = gs_shared_view(owner, 0, 4096, __FILE__, __LINE__);
-    gs_shared_handoff(view, __FILE__, __LINE__);
+    gs_shared_handoff(view, 0, __FILE__, __LINE__);
     child_id = gs_thread_spawn(wait_gate, &view, sizeof view, 0);
 }
 static void pending_abort(uint8_t *args) {
     (void)args;
     uint8_t ok; gs_shared_cap owner = gs_shared_alloc(4096, &ok); check(ok, "pending allocation");
     gs_shared_cap view = gs_shared_view(owner, 0, 4096, __FILE__, __LINE__);
-    gs_shared_handoff(view, __FILE__, __LINE__);
+    gs_shared_handoff(view, 0, __FILE__, __LINE__);
     gs_shared_cap invalid = {0, 0};
-    gs_shared_handoff(invalid, __FILE__, __LINE__);
+    gs_shared_handoff(invalid, 0, __FILE__, __LINE__);
 }
 static void joined(int64_t id, int expected) {
     uint8_t *msg; int64_t len;
@@ -193,7 +193,7 @@ int main(void) {
 
     gs_shared_cap owner = gs_shared_alloc(4096, &ok); check(ok, "main allocation");
     gs_shared_cap view = gs_shared_view(owner, 0, 4096, __FILE__, __LINE__);
-    gate = 0; gs_shared_handoff(view, __FILE__, __LINE__);
+    gate = 0; gs_shared_handoff(view, 0, __FILE__, __LINE__);
     int64_t id = gs_thread_spawn(wait_gate, &view, sizeof view, 0);
     check(!gs_shared_close(owner, __FILE__, __LINE__), "pre-start lease prevents close");
     open_gate(); joined(id, 1);

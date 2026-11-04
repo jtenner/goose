@@ -71,10 +71,10 @@ inline void ResolveTypeNames(Ast &ast, const vector<TypeExpr *> *activated = nul
         int native = NativeKindForName(nm->name);
         if (native >= 0 && !ast.LookupStruct(nm->name, nm->ns) &&
             !ast.LookupEnum(nm->name, nm->ns) && !ast.LookupAlias(nm->name, nm->ns)) {
-            auto generic = native == NK_THREAD || native == NK_CHANNEL;
+            auto generic = native == NK_THREAD || native == NK_CHANNEL || native == NK_POINTER;
             if ((generic ? nm->args.size() != 1 : !nm->args.empty()) || nm->varmode)
                 ErrorAt(t, nm, generic
-                    ? "Thread and Channel take exactly one type argument and no variable mode"
+                    ? "Thread, Channel and SharedPointer take exactly one type argument and no variable mode"
                     : "native capabilities take no type arguments or variable mode");
             t->kind = TY_NATIVE;
             auto d = ast.NewDetail<TypeNative>();

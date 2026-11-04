@@ -1008,7 +1008,7 @@ typedef struct GS_SHARED_ALIGN8 gs_shared_record {
     uint64_t generation, allocation, offset, size, identity;
     uint8_t *data;
     int64_t actor;
-    uint64_t workers;
+    uint64_t workers, pointers, refs;
     int kind, readonly, filemap, orphan;
 } gs_shared_record;
 GS_API gs_shared_record *gs_shared_slabs[GS_SHARED_SLABS];
@@ -1029,9 +1029,24 @@ GS_API void gs_shared_write(gs_shared_cap access, uint64_t offset, const void *v
                              int big, const char *file, int line);
 GS_API void gs_shared_copy(gs_shared_cap dst, uint64_t doff, gs_shared_cap src, uint64_t soff,
                             uint64_t size, const char *file, int line);
-GS_API void gs_shared_handoff(gs_shared_cap cap, const char *file, int line);
+GS_API gs_shared_cap gs_shared_handoff(gs_shared_cap cap, int consume,
+                                       const char *file, int line);
 GS_API void *gs_shared_pending_take(void);
+GS_API uint8_t gs_shared_worker_commit(void *leases, int64_t actor);
+GS_API void gs_shared_worker_rollback(void *leases);
 GS_API void gs_shared_worker_cleanup(void *leases, int64_t actor);
+GS_API gs_shared_cap gs_shared_pointer_alloc(const void *value, uint64_t size,
+    gs_shared_cap *owner, uint8_t *ok, const char *file, int line);
+GS_API gs_shared_cap gs_shared_pointer_retain(gs_shared_cap pointer, const char *file, int line);
+GS_API void gs_shared_pointer_release(gs_shared_cap pointer, const char *file, int line);
+GS_API void gs_shared_pointer_copy(gs_shared_cap pointer, void *value, uint64_t size,
+    const char *file, int line);
+GS_API void gs_shared_pointer_store(gs_shared_cap pointer, const void *value, uint64_t size,
+    const char *file, int line);
+GS_API gs_shared_cap gs_shared_pointer_alloc_in(gs_shared_cap owner, uint64_t offset,
+    const void *value, uint64_t size, uint8_t *ok, const char *file, int line);
+GS_API void gs_shared_pointer_queue(gs_shared_cap pointer, const char *file, int line);
+GS_API void gs_shared_pointer_adopt(gs_shared_cap pointer, const char *file, int line);
 
 /* One queue per flat element type the program uses (the compiler emits a
    gs_queue global per type, which main sets up before anything can use it).
@@ -1061,6 +1076,7 @@ GS_API gs_qnode *gs_channel_receive(gs_handle h, int wait, const char *file, int
 GS_API uint8_t gs_channel_close(gs_handle h, const char *file, int line);
 GS_API int64_t gs_channel_wait_any(const gs_handle *hs, int64_t n,
                                    const char *file, int line);
+GS_API void gs_qdestroy(gs_queue *q, int pointer_elements);
 
 #ifndef GS_RUNTIME_OBJECT
 
