@@ -2043,6 +2043,51 @@ def main():
         r.show_task(runtime_lifecycle, "runtime_shared_lifecycle", "memory")
         r.show_task(runtime_lifecycle, "runtime_trim_memory", "runtime")
 
+        # align(N) is a physical native layout contract, not a generated-text
+        # hint. Compile assertions in the generated translation unit and run
+        # address probes for local/global/fixed-array/worker copies.
+        def aligned_address_probe(tool, label):
+            source = HERE / "native" / "aligned_storage_addresses.src"
+            native = HERE / "native" / "aligned_storage_addresses.c"
+            cfile = gendir / f"aligned-storage-{label}.c"
+            code, out, err = r.goose("-O2", "-o", cfile, source)
+            if code:
+                r.fail(f"aligned storage cgen {label}", out + err)
+                return
+            text = cfile.read_text(encoding="utf-8")
+            marker = "/* ---- data ---- */"
+            assertions = r'''#include <stddef.h>
+_Static_assert(offsetof(Block_g, value_g) == 64, "Block.value offset");
+_Static_assert(sizeof(Block_g) == 128, "Block size");
+_Static_assert(_Alignof(Block_g) == 64, "Block alignment");
+_Static_assert(offsetof(Nested_g, payload_g) == 64, "Nested.payload offset");
+_Static_assert(sizeof(Nested_g) == 192, "Nested size");
+_Static_assert(sizeof(a2_Nested_g) == 384, "Nested array stride");
+_Static_assert(_Alignof(a2_Nested_g) == 64, "Nested array alignment");'''
+            if marker not in text:
+                r.fail(f"aligned storage layout {label}", "generated source has no data section")
+                return
+            at = text.rfind(marker)
+            cfile.write_text(text[:at] + assertions + "\n" + text[at:], encoding="utf-8")
+            executable = gendir / f"aligned-storage-{label}{tc.EXE_SUFFIX}"
+            ok, log = tool.compile([cfile, native], executable, opt=2, warn="off",
+                                   strict_decls=True, runtime=r.runtime,
+                                   log=gendir / f"aligned-storage-{label}.log")
+            if not ok:
+                r.fail(f"aligned storage cc {label}", log)
+                return
+            result = r.run_expected([executable], "aligned_storage_addresses",
+                                    f"aligned storage {label}")
+            if result is not None and result == "0 0 0 0 \n0 ":
+                r.ok(f"aligned storage layout and addresses {label}")
+            elif result is not None:
+                r.fail(f"aligned storage addresses {label}",
+                       f"expected all addresses mod 64 zero, got {result!r}")
+
+        r.show_task(aligned_address_probe, cc, cc.name)
+        if clang and clang.cc != cc.cc:
+            r.show_task(aligned_address_probe, clang, "clang")
+
         # The same coverage test through clang, release and debug. A compiler
         # that accepts more C than the standard does is not what checks the
         # generated C is actually valid: a call to a function defined only in
@@ -2215,6 +2260,26 @@ def main():
             if missing:
                 r.fail(f"vec-clang {name}.goose", f"no vector operations on {', '.join(missing)}")
                 return
+            explicit = gendir / "simd-explicit.c"
+            code, out, err = r.goose("-O2", "-o", explicit, HERE / "codegen" / "simd_explicit.goose")
+            explicit_text = explicit.read_text(encoding="utf-8") if code == 0 else ""
+            explicit_ops = ("((gs_vf32_4){", "GS_VLD(gs_vf32_4, t", "GS_VST(gs_vf32_4, t",
+                            "__builtin_shufflevector", "__builtin_shuffle")
+            if (code != 0 or any(op not in explicit_text for op in explicit_ops) or
+                    "#if GS_VEC && !GS_DEBUG" not in explicit_text):
+                r.fail("vec-clang simd_explicit.goose",
+                       out + err + "missing native splat/load/store/shuffle or signed debug guard")
+                return
+            store_bounds = gendir / "simd-store-bounds.c"
+            code, out, err = r.goose("-O2", "-o", store_bounds,
+                                     HERE / "runtime" / "simd_vector_store_bounds.goose")
+            store_text = store_bounds.read_text(encoding="utf-8") if code == 0 else ""
+            check_at = store_text.find("gs_abort(GS_E_ASSERT")
+            store_at = store_text.find("GS_VST(gs_vu32_4, t")
+            if code != 0 or check_at < 0 or store_at < 0 or check_at > store_at:
+                r.fail("simd store all-or-nothing bounds check",
+                       out + err + "full bounds check does not precede native store")
+                return
             # The generated code's tests are indented; runtime.h's are not.
             opens = len(re.findall(r"^\s+#if GS_VEC$", ctext, re.M))
             elses = len(re.findall(r"^\s+#else$", ctext, re.M))
@@ -2233,6 +2298,71 @@ def main():
                 out = r.run_expected([out_exe], name, f"clang-{label} {name}.goose")
                 if out is not None and r.check_stdout(name, f"clang-{label}", out):
                     r.ok(f"{label}-clang {name}.goose")
+                explicit_exe = gendir / f"simd-explicit-clang-{on}{tc.EXE_SUFFIX}"
+                ok, log = clang.compile(explicit, explicit_exe, opt=2, warn="off", strict_decls=True,
+                                        defines=[f"GS_VEC={on}"], runtime=r.runtime,
+                                        log=gendir / f"simd-explicit-clang-{on}.log")
+                if not ok:
+                    r.fail(f"{label}-clang simd_explicit.goose", "\n".join(log.splitlines()[:8]))
+                    continue
+                explicit_out = r.run_expected([explicit_exe], "simd_explicit",
+                                              f"clang-{label} simd_explicit.goose")
+                if explicit_out is not None and r.check_stdout("simd_explicit", f"clang-{label}", explicit_out):
+                    r.ok(f"{label}-clang simd_explicit.goose")
+
+            # Invalid constant immediates must remain Goose runtime aborts
+            # under both vector and scalar C lowering, at either inlining level.
+            for name in ("simd_shuffle_constant_bounds", "simd_store_argument_order"):
+                for gopt in ("-O0", "-O2"):
+                    source = gendir / f"{name}-{gopt[1:]}.c"
+                    code, out, err = r.goose(gopt, "-o", source, HERE / "runtime" / f"{name}.goose")
+                    if code:
+                        r.fail(f"simd abort cgen {name} {gopt}", out + err)
+                        continue
+                    for on in ("0", "1"):
+                        label = f"clang-{gopt}-vec{on}"
+                        target = gendir / f"{name}-{gopt[1:]}-{on}{tc.EXE_SUFFIX}"
+                        ok, log = clang.compile(source, target, opt=2, warn="off",
+                                                defines=[f"GS_VEC={on}"], runtime=r.runtime)
+                        if not ok:
+                            r.fail(f"{label} {name}", log)
+                            continue
+                        output = r.run_expected([target], name, f"{label} {name}")
+                        if output is not None and r.check_stdout(name, label, output):
+                            r.ok(f"{label} {name}")
+
+        def clang_simd_feedback():
+            source = HERE / "codegen" / "simd_versions.goose"
+            cfile = gendir / "simd-feedback-inventory.c"
+            code, out, err = r.goose("-O2", "-o", cfile, source)
+            if code:
+                r.fail("simd feedback inventory", out + err)
+                return
+            expected = set(re.findall(r'"([^"\n]*#simd-[^"\n]*-loop\d+\.goose)"',
+                                      cfile.read_text(encoding="utf-8")))
+            locations = re.findall(r'#line (\d+) "([^"\n]*#simd-[^"\n]*-loop\d+\.goose)"',
+                                   cfile.read_text(encoding="utf-8"))
+            output_exe = gendir / f"simd-feedback{tc.EXE_SUFFIX}"
+            code, out, err = tc.run_capture([str(exe), "build", "--cc", "clang",
+                                             "--simd-feedback", "-o", str(output_exe), str(source)])
+            report = out + err
+            if code:
+                r.fail("simd feedback build", report)
+                return
+            reported = {marker for marker in expected
+                        if marker in report or marker[marker.find("#simd-"):] in report}
+            if reported != expected or "could not determine the original source location" in report:
+                r.fail("simd feedback loop mapping",
+                       f"reported {len(reported)}/{len(expected)} loops\n{report}")
+                return
+            if "vectorized loop" not in report or "missed:" not in report:
+                r.fail("simd feedback statuses", report)
+                return
+            if any(f"{marker[marker.find('#simd-'):]}:{line}:" not in report
+                   for line, marker in locations):
+                r.fail("simd feedback source lines", report)
+                return
+            r.ok("simd feedback maps every emitted version loop with status")
 
         if args.profile == "sanitize":
             pass  # The full generated-C suite already ran through Clang.
@@ -2247,6 +2377,7 @@ def main():
                         clang_simd_named("base64_encode", "base64_decode"))
             r.show_task(clang_mul_add)
             r.show_task(clang_vec)
+            r.show_task(clang_simd_feedback)
 
     def unsafe_atomic_contract():
         from unsafe_atomics import check_unsafe_atomics
@@ -2525,8 +2656,23 @@ def main():
             else:
                 r.fail(f"goose {what}", text)
     r.show_task(driver_verbs)
+    def run_bench_script(script):
+        """Share the native benchmark lock with parallel test-runner slots.
+
+        The compiler deliberately does not wait on this process-wide resource;
+        the harness has a bounded retry so its own benchmark groups can still
+        run concurrently with unrelated test setup without bypassing the lock.
+        """
+        deadline = time.monotonic() + 120
+        while True:
+            result = tc.run_capture([sys.executable, HERE / script, exe])
+            if "shared-native benchmark lock unavailable or occupied" not in result[1] + result[2]:
+                return result
+            if time.monotonic() >= deadline:
+                return result
+            time.sleep(0.25)
     def bench_declarations():
-        code, out, err = tc.run_capture([sys.executable, HERE / "bench_declarations.py", exe])
+        code, out, err = run_bench_script("bench_declarations.py")
         if code:
             r.fail("benchmark declarations", out + err)
         else:
@@ -2539,7 +2685,7 @@ def main():
                                   ("bench_checksums.py", "benchmark checksums"),
                                   ("bench_thermal.py", "benchmark thermal"),
                                   ("bench_report.py", "benchmark reports")):
-                code, out, err = tc.run_capture([sys.executable, HERE / script, exe])
+                code, out, err = run_bench_script(script)
                 if code:
                     r.fail(label, out + err)
                 else:
@@ -2547,7 +2693,7 @@ def main():
         r.show_task(bench_runtime)
     if cc and jit:
         def bench_compatibility():
-            code, out, err = tc.run_capture([sys.executable, HERE / "bench_compatibility.py", exe])
+            code, out, err = run_bench_script("bench_compatibility.py")
             if code:
                 r.fail("benchmark compatibility", out + err)
             else:

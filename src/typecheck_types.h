@@ -187,6 +187,8 @@ inline StructInst *TypeCheck::GetStructInst(TypeExpr *t) {
         if (st->fields[i].ispad) continue;
         auto ft = inst->ftypes[i];
         ValidateType(ft, st->line, VT_FIELD);
+        if (st->fields[i].align > 1 && (st->isroot || ClassOf(ft) != SC_FIXED))
+            Error(st->line, "aligned struct fields require fixed packed storage");
         if (auto zs = ZeroSizeKind(ft))
             Error(st->line, cat("field ", st->fields[i].name, " of struct ", st->name,
                                 " cannot be ", zs, ": ", TypeStr(ft), " (§3.4)"));
@@ -294,6 +296,8 @@ inline void TypeCheck::BuildVariant(EnumInst *inst, size_t vi) {
         if (v.fields[i].ispad) continue;
         auto ft = inst->vftypes[vi][i];
         ValidateType(ft, en->line, VT_FIELD);
+        if (v.fields[i].align > 1)
+            Error(en->line, "align is supported on struct fields, not variant payloads");
         if (auto zs = ZeroSizeKind(ft))
             Error(en->line, cat("field ", v.fields[i].name, " of variant ", en->name, ".", v.name,
                                 " cannot be ", zs, ": ", TypeStr(ft), " (§3.4)"));
@@ -502,6 +506,42 @@ inline bool TypeCheck::Reaches(TypeExpr *t, const function<bool(TypeExpr *)> &pr
 // keeps the array's length nor is checked against it (§3.11).
 inline bool TypeCheck::HoldsIndexT(TypeExpr *t) {
     return Reaches(t, [](TypeExpr *t) { return t->kind == TY_INT && t->ix; });
+}
+
+inline bool TypeCheck::HoldsVectorT(TypeExpr *t) {
+    return Reaches(t, [](TypeExpr *t) { return t->simdvector; });
+}
+
+inline bool TypeCheck::HoldsAlignedT(TypeExpr *t) {
+    set<pair<TypeKind, void *>> seen;
+    function<bool(TypeExpr *)> walk = [&](TypeExpr *u) -> bool {
+        if (!u) return false;  // Explicit pad fields have no value type.
+        switch (u->kind) {
+            // Alignment belongs to inline storage, not a descriptor's
+            // pointee. Following references also expands growing generic
+            // types before normal validation can diagnose them.
+            case TY_REF: case TY_SLICE: return false;
+            case TY_ARRAY: return walk(u->arr->sub);
+            case TY_STRUCT: {
+                auto si = GetStructInst(u);
+                if (!seen.insert({ TY_STRUCT, si }).second) return false;
+                for (auto &f : si->st->fields) if (f.align > 1) return true;
+                for (auto ft : si->ftypes) if (walk(ft)) return true;
+                return false;
+            }
+            case TY_ENUM: case TY_VARIANT: {
+                auto ei = u->kind == TY_ENUM ? GetEnumInst(u) : GetEnumInst(u->var->adt);
+                if (!seen.insert({ TY_ENUM, ei }).second) return false;
+                for (auto &v : ei->en->variants)
+                    for (auto &f : v.fields) if (f.align > 1) return true;
+                for (auto &fields : ei->vftypes)
+                    for (auto ft : fields) if (walk(ft)) return true;
+                return false;
+            }
+            default: return false;
+        }
+    };
+    return walk(t);
 }
 
 // Whether a value of type t can hold a plain reference or a slice at any
@@ -766,6 +806,8 @@ inline void TypeCheck::ValidateType(TypeExpr *t, Line l, int pos) {
                              t->enu->en->name, " binds its payloads only by value (§3.5): use "
                              "it in variable mode (", t->enu->en->name, "..), whose payloads "
                              "bind by reference, or make the references `in pool`"));
+            if (inst->validated && HoldsAlignedT(t))
+                Error(l, "aligned types are unsupported in enum payloads");
             return;
         }
         case TY_VARIANT: {
@@ -779,6 +821,8 @@ inline void TypeCheck::ValidateType(TypeExpr *t, Line l, int pos) {
                                  " contains itself by value"));
                 BuildVariant(inst, vi);
             }
+            if (inst->validated && HoldsAlignedT(t))
+                Error(l, "aligned types are unsupported in enum payloads");
             break;
         }
         case TY_ARRAY: {
@@ -788,6 +832,16 @@ inline void TypeCheck::ValidateType(TypeExpr *t, Line l, int pos) {
             switch (t->arr->akind) {
                 case A_FIXED:
                     ArraySize(t->arr);
+                    if (t->simdvector) {
+                        auto lanes = t->arr->size;
+                        auto lane = t->arr->sub;
+                        auto bytes = lanes * (lane->kind == TY_FLT ?
+                            (lane->fltstorage == FS_F32 ? 4 : 8) : IntBits(lane->intstorage) / 8);
+                        if (lane->kind == TY_INT && (lane->intstorage == IS_VARINT || lane->ix))
+                            Error(l, "vector integer lanes require exact i/u8/16/32/64 types");
+                        if (bytes != 16 && bytes != 32 && bytes != 64)
+                            Error(l, cat("vector size must be 16, 32 or 64 bytes; found ", bytes));
+                    }
                     if (ec != SC_FIXED)
                         Error(l, cat("fixed array elements must be fixed-size: ",
                                      TypeStr(t->arr->sub)));

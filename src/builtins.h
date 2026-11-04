@@ -74,6 +74,10 @@ inline int RecvKindOf(TypeExpr *t) {
     F(B_SHARED_POINTER_STORE, "shared_pointer_store", 2, 2, "", "", 0, "", 0) \
     F(B_SHARED_POINTER_RETAIN, "shared_pointer_retain", 1, 1, "", "", 0, "", 0) \
     F(B_SHARED_POINTER_RELEASE, "shared_pointer_release", 1, 1, "", "", 0, "", 0) \
+    F(B_SIMD_SPLAT, "__simd_splat", 1, 1, "", "", 0, "", BF_TYARGS) \
+    F(B_SIMD_LOAD, "__simd_load", 2, 2, "", "", 0, "", BF_TYARGS) \
+    F(B_SIMD_STORE, "__simd_store", 3, 3, "", "", 0, "", BF_TYARGS) \
+    F(B_SIMD_SHUFFLE, "__simd_shuffle", 2, 65, "", "", 0, "", BF_TYARGS) \
     F(B_SHARED_MAP, "shared_map_readonly", 2, 2, "", "", 0, "", 0) \
     F(B_SHARED_ADVICE, "shared_page_advice", 4, 4, "", "", 0, "", 0) \
     F(B_MEMORY_READ_BYTES, "memory_read_bytes", 3, 3, "", "", 0, "", 0) \

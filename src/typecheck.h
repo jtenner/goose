@@ -993,7 +993,7 @@ struct TypeCheck {
 
     bool TypeEq(TypeExpr *a, TypeExpr *b) {
         if (a == b) return true;
-        if (a->kind != b->kind || a->cq != b->cq) return false;
+        if (a->kind != b->kind || a->cq != b->cq || a->simdvector != b->simdvector) return false;
         switch (a->kind) {
             case TY_INT:  return a->intstorage == b->intstorage && SameIndex(a, b);
             case TY_FLT:  return a->fltstorage == b->fltstorage;
@@ -1317,6 +1317,8 @@ struct TypeCheck {
     bool SharedPointerPayloadOk(TypeExpr *t);
     bool Reaches(TypeExpr *t, const function<bool(TypeExpr *)> &pred);
     bool HoldsIndexT(TypeExpr *t);
+    bool HoldsVectorT(TypeExpr *t);
+    bool HoldsAlignedT(TypeExpr *t);
     SFunction *TextFn();
     void CheckfreeCallee(Node *at, SFunction *callee);
     bool HoldsPlainRef(TypeExpr *t);
@@ -3423,6 +3425,7 @@ struct TypeCheck {
                 vd->name = name;
                 vd->line = g->line;
                 vd->isvar = g->isvar;
+                vd->align = g->align;
                 vd->isglobal = true;
                 vd->globalindex = globalindex++;
                 vd->reusable = g->reusable;

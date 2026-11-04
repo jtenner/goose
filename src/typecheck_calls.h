@@ -2559,6 +2559,10 @@ inline void TypeCheck::CheckfreeCallee(Node *at, SFunction *callee) {
 // A fixed-size value C takes by value (§7.10): a scalar, bool, or a flat
 // fixed struct or array (packed, no references).
 inline bool TypeCheck::ExternValueOk(TypeExpr *t, string &why) {
+    if (HoldsVectorT(t)) {
+        why = "explicit vectors have no public C ABI (§7.12)";
+        return false;
+    }
     if (HoldsIndexT(t)) {
         why = "C code is not checked against the array an index type names (§3.11)";
         return false;
@@ -3792,6 +3796,8 @@ inline FnSpec *TypeCheck::EnsureThreadSpec(SFunction *sf, Line l) {
         ValidateType(t, sf->line, VT_PARAM);
         if (!IsFlat(t) && !IsSharedSendable(t))
             Error(l, cat("thread_fn parameters must be flat (§11.2), not ", TypeStr(t)));
+        if (HoldsAlignedT(t))
+            Error(l, "aligned values are unsupported in worker argument packets");
         spec->argtypes.push_back(t);
     }
     spec->roots.resize(spec->argtypes.size());

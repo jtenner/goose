@@ -288,6 +288,7 @@ inline Node *VarDecl::Clone1(Ast &ast) const {
     auto vd = ast.New<VarDecl>(line, isvar);
     vd->isconst = isconst;
     vd->reusable = reusable;
+    vd->align = align;
     vd->isglobal = isglobal;
     vd->byref = byref;
     vd->results = results;

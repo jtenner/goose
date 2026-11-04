@@ -13,7 +13,7 @@ namespace goose {
 
 inline bool CodeGen::TEq(TypeExpr *a, TypeExpr *b) {
     if (a == b) return true;
-    if (a->kind != b->kind) return false;
+    if (a->kind != b->kind || a->simdvector != b->simdvector) return false;
     switch (a->kind) {
         case TY_INT:  return a->intstorage == b->intstorage;
         case TY_FLT:  return a->fltstorage == b->fltstorage;
@@ -279,10 +279,13 @@ inline CodeGen::Layout CodeGen::LayoutFields(const vector<Field> &fields,
             }
             continue;
         }
+        auto a = std::max<int64_t>(f.align, TypeAlign(ftypes[i]));
+        off = (off + a - 1) / a * a;
+        lo.align = std::max(lo.align, a);
         lo.offs.push_back(off);
         off += FixedSize(ftypes[i]);
     }
-    lo.size = off;
+    lo.size = (off + lo.align - 1) / lo.align * lo.align;
     return lo;
 }
 
@@ -342,6 +345,33 @@ inline int64_t CodeGen::FixedSize(TypeExpr *t) {
             }
         }
         default: assert(false); return 0;
+    }
+}
+
+inline int64_t CodeGen::TypeAlign(TypeExpr *t) {
+    switch (t->kind) {
+        case TY_STRUCT: return IsWord(t) ? 1 : StructLayout(SI(t)).align;
+        case TY_ARRAY: {
+            auto a = TypeAlign(t->arr->sub);
+            if (t->arr->akind != A_FIXED && a > 1)
+                Fail(t->line, "aligned element types are unsupported in non-fixed arrays");
+            return t->arr->akind == A_FIXED ? a : 1;
+        }
+        case TY_VARIANT: {
+            auto ei = EIVar(t);
+            auto vi = ei->en->VariantIndex(t->var->variant);
+            if (VariantLayout(ei, vi).align > 1)
+                Fail(t->line, "aligned types are unsupported in enum payloads");
+            return 1;
+        }
+        case TY_ENUM: {
+            auto ei = EIOf(t);
+            for (size_t vi = 0; vi < ei->en->variants.size(); vi++)
+                if (VariantLayout(ei, (int)vi).align > 1)
+                    Fail(t->line, "aligned types are unsupported in enum payloads");
+            return 1;
+        }
+        default: return 1;  // Goose packed values otherwise promise byte alignment.
     }
 }
 
@@ -416,7 +446,7 @@ inline string CodeGen::Mangle(TypeExpr *t) {
 // layout, keep sharing their C types too.
 inline bool CodeGen::SameMangle(TypeExpr *a, TypeExpr *b) {
     if (a == b) return true;
-    if (a->kind != b->kind) return false;
+    if (a->kind != b->kind || a->simdvector != b->simdvector) return false;
     auto sameargs = [&](const vector<TypeExpr *> &x, const vector<TypeExpr *> &y) {
         if (x.size() != y.size()) return false;
         for (size_t i = 0; i < x.size(); i++)
@@ -453,6 +483,11 @@ inline bool CodeGen::SameMangle(TypeExpr *a, TypeExpr *b) {
 }
 
 inline string CodeGen::RawMangle(TypeExpr *t) {
+    if (t->simdvector) {
+        TypeExpr plain = *t;
+        plain.simdvector = false;
+        return cat("vec_", RawMangle(&plain));
+    }
     switch (t->kind) {
         case TY_INT: {
             if (t->intstorage == IS_VARINT) return "vi";
@@ -605,7 +640,9 @@ inline string CodeGen::CT(TypeExpr *t, bool unaligned) {
             auto e = CT(a.sub, false);
             if (a.akind == A_FIXED) {
                 auto k = ArrSize(t->arr);
-                Append(d, "typedef struct { ", e, " e[", k ? k : 1, "]; } ", name, ";\n");
+                auto al = TypeAlign(t);
+                Append(d, "typedef struct ", al > 1 ? cat("GS_ALIGNAS(", al, ") ") : string(),
+                       "{ ", e, " e[", k ? k : 1, "]; } ", name, ";\n");
             } else {
                 assert(a.akind == A_LIMITED && ArrSize(t->arr) >= 0);
                 Append(d, "typedef struct { ", IntCT(LenStore(t->arr), false), " len; ", e, " e[",
@@ -615,7 +652,9 @@ inline string CodeGen::CT(TypeExpr *t, bool unaligned) {
         }
         case TY_STRUCT: {
             auto si = SI(t);
-            Append(d, "struct ", name, " {\n");
+            auto al = TypeAlign(t);
+            Append(d, "struct ", al > 1 ? cat("GS_ALIGNAS(", al, ") ") : string(),
+                   name, " {\n");
             if (EmptyLayout(si->st->fields)) Append(d, "    uint8_t gs_empty;\n");
             else if (si->st->isroot) {
                 for (size_t i = 0; i < si->ftypes.size(); i++) {
@@ -694,16 +733,19 @@ inline void CodeGen::EmitCFields(string &d, const vector<Field> &fields,
     vector<TypeExpr *> pret(ftypes.begin(), ftypes.begin() + n);
     auto lo = LayoutFields(pre, pret);
     auto npad = 0;
+    int64_t cur = 0;
     for (size_t i = 0; i < n; i++) {
         auto &f = fields[i];
+        auto gap = lo.offs[i] - cur;
+        if (gap > 0) Append(d, "    uint8_t gs_pad", npad++, "[", gap, "];\n");
+        cur = lo.offs[i];
         if (f.ispad) {
-            auto next = i + 1 < n ? lo.offs[i + 1] : lo.size;
-            auto sz = next - lo.offs[i];
-            if (sz > 0) Append(d, "    uint8_t gs_pad", npad++, "[", sz, "];\n");
             continue;
         }
         Append(d, "    ", CT(ftypes[i], false), " ", Sanitize(f.name), ";\n");
+        cur += FixedSize(ftypes[i]);
     }
+    if (lo.size > cur) Append(d, "    uint8_t gs_pad", npad++, "[", lo.size - cur, "];\n");
     for (auto i = n; i < fields.size(); i++) {
         EmitCoreTypes();
         Append(d, "    ", RzCT(ftypes[i]), " ", Sanitize(fields[i].name), ";\n");

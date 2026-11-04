@@ -70,10 +70,20 @@ R"GSRT(/* The POSIX and BSD declarations the runtime uses (sigaltstack, stack_t,
 )GSRT"
 R"GSRT(#ifndef GS_EMBEDDED_JIT
 #include <stdint.h>
+#if defined(_MSC_VER)
+#define GS_ALIGNAS(n) __declspec(align(n))
+#elif (defined(__GNUC__) || defined(__clang__)) && !defined(__TINYC__)
+#define GS_ALIGNAS(n) __attribute__((aligned(n)))
+#else
+#define GS_ALIGNAS(n) GS_ALIGN_REQUIRES_NATIVE_BACKEND
+#endif
 #include <stddef.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef _MSC_VER
+#include <malloc.h>
+#endif
 #include <math.h>
 #endif
 
@@ -333,6 +343,18 @@ typedef double gs_vf64_8 __attribute__((vector_size(64), aligned(1), may_alias))
 typedef float gs_vf32_4 __attribute__((vector_size(16), aligned(1), may_alias));
 typedef float gs_vf32_8 __attribute__((vector_size(32), aligned(1), may_alias));
 typedef float gs_vf32_16 __attribute__((vector_size(64), aligned(1), may_alias));
+typedef uint8_t gs_vu8_16 __attribute__((vector_size(16), aligned(1), may_alias));
+typedef uint8_t gs_vu8_32 __attribute__((vector_size(32), aligned(1), may_alias));
+typedef uint8_t gs_vu8_64 __attribute__((vector_size(64), aligned(1), may_alias));
+typedef uint16_t gs_vu16_8 __attribute__((vector_size(16), aligned(1), may_alias));
+typedef uint16_t gs_vu16_16 __attribute__((vector_size(32), aligned(1), may_alias));
+typedef uint16_t gs_vu16_32 __attribute__((vector_size(64), aligned(1), may_alias));
+typedef uint32_t gs_vu32_4 __attribute__((vector_size(16), aligned(1), may_alias));
+typedef uint32_t gs_vu32_8 __attribute__((vector_size(32), aligned(1), may_alias));
+typedef uint32_t gs_vu32_16 __attribute__((vector_size(64), aligned(1), may_alias));
+typedef uint64_t gs_vu64_2 __attribute__((vector_size(16), aligned(1), may_alias));
+typedef uint64_t gs_vu64_4 __attribute__((vector_size(32), aligned(1), may_alias));
+typedef uint64_t gs_vu64_8 __attribute__((vector_size(64), aligned(1), may_alias));
 #define GS_VLD(V, p) (*(const V *)(const void *)(p))
 #define GS_VST(V, p, x) ((void)(*(V *)(void *)(p) = (x)))
 #else
@@ -1226,7 +1248,28 @@ static void gs_rt_stats(void) {
 
 )GSRT"
 R"GSRT(#if GS_NEED_THREADS
-/* A worker's thread program: its entry thunk opens the stack block, whose
+static void *gs_aligned_calloc(size_t n, size_t alignment) {
+    void *p = NULL;
+#ifdef _MSC_VER
+    p = _aligned_malloc(n ? n : 1, alignment);
+#else
+    if (posix_memalign(&p, alignment, n ? n : 1) != 0) p = NULL;
+#endif
+    if (p) memset(p, 0, n);
+    return p;
+}
+
+)GSRT"
+R"GSRT(static void gs_aligned_free(void *p) {
+#ifdef _MSC_VER
+    _aligned_free(p);
+#else
+    free(p);
+#endif
+}
+
+)GSRT"
+R"GSRT(/* A worker's thread program: its entry thunk opens the stack block, whose
    count the compiler knows, and allocates the globals instance. */
 static void gs_thread_run(void (*entry)(uint8_t *), uint8_t *args) {
     entry(args);
@@ -1237,7 +1280,7 @@ static void gs_thread_run(void (*entry)(uint8_t *), uint8_t *args) {
 R"GSRT(/* What the thread program holds once it has returned or aborted; the
    runtime releases the regions after this. */
 static void gs_thread_release(void) {
-    free(gs_gl);
+    gs_aligned_free(gs_gl);
     gs_gl = NULL;
     free(gs_stks);
     gs_stks = NULL;
