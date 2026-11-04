@@ -14,6 +14,9 @@ import std;
 // Bytes shifted within their alphabet: a select per element, vectorized.
 simd fn caesar(dst: u8[:], src: u8[:], k: u8) {
     assert(dst.len == src.len);
+    // The version-marker rewrite must never touch user string literals.
+    var marker_probe: u8[>..] = [];
+    assert(marker_probe.check_length(0, "version@") == 0);
     for c, i in src {
         var d = c;
         if c - 'a' < 26 { d = 'a' + (c - 'a' + k) % 26; }
