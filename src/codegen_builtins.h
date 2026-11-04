@@ -1325,22 +1325,22 @@ inline vector<string> CodeGen::EmitThreadSpawn(Call *c, vector<Node *> &an) {
     auto thunk = EnsureThreadThunk(sp);
     string stk;
     auto base = BytesTemp(stk);
-    vector<string> sharedcaps;
+    function<bool(Node *)> stored_pointer = [&](Node *n) {
+        if (Is<Ident>(n)) return true;
+        if (auto d = Is<Dot>(n); d && d->IsField()) return stored_pointer(d->obj);
+        if (auto ix = Is<Index>(n)) return stored_pointer(ix->obj);
+        return false;
+    };
     for (size_t i = 0; i < sp->argtypes.size(); i++) {
         auto pt = sp->argtypes[i];
         if (IsSharedSendable(pt)) {
             auto cap = Snapshot(pt, GenPure(an[1 + i]));
-            if (pt->kind == TY_NATIVE && pt->nativekind == NK_POINTER) {
-                auto n = an[1 + i];
-                bool stored = Is<Ident>(n) || Is<Index>(n) ||
-                    (Is<Dot>(n) && Is<Dot>(n)->IsField());
-                if (stored) {
-                    auto worker = T();
-                    L("gs_shared_cap ", worker, " = gs_shared_pointer_retain(", cap, ", ", LocArgs(c->line), ");");
-                    cap = worker;
-                }
-            }
-            sharedcaps.push_back(cap);
+            int consume = pt->kind == TY_NATIVE && pt->nativekind == NK_POINTER &&
+                          !stored_pointer(an[1 + i]);
+            auto worker = T();
+            L("gs_shared_cap ", worker, " = gs_shared_handoff((gs_shared_cap){", cap,
+              ".slot, ", cap, ".generation}, ", consume, ", ", LocArgs(c->line), ");");
+            cap = worker;
             EmitValStore(stk, pt, cap);
             continue;
         }
@@ -1417,9 +1417,8 @@ inline vector<string> CodeGen::EmitThreadSpawn(Call *c, vector<Node *> &an) {
         L("int64_t ", sz, " = ", Top(stk), " - (", szp, " + 8);");
         L("GS_MEMCPY(", szp, ", &", sz, ", 8);");
     }
-    // Emitted here, not returned as text: a discarded result would drop the spawn.
-    for (auto &cap : sharedcaps)
-        L("gs_shared_handoff((gs_shared_cap){", cap, ".slot, ", cap, ".generation}, ", LocArgs(c->line), ");");
+    // Handoffs were prepared as each argument was evaluated. A later
+    // contained abort reclaims that thread's pending transaction.
     auto id = T();
     L("int64_t ", id, " = gs_thread_spawn(", thunk, ", ", base, ", ", Top(stk), " - ", base,
       c->builtin == B_THREAD_SPAWN_CONTAINED ? ", 1);" : ", 0);");
