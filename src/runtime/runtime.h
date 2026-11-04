@@ -963,13 +963,25 @@ GS_API int64_t gs_hardware_threads(void);
    abort ends run early. */
 GS_API int64_t gs_thread_start(void (*run)(void (*)(uint8_t *), uint8_t *),
                                void (*release)(void), void (*entry)(uint8_t *),
-                               const void *args, int64_t argsize, int contained);
+                               const void *args, int64_t argsize, int contained, int structured);
 /* Whether the worker returned rather than aborted, once it has ended. Where
    `msg` is not NULL, the first such wait for a worker that aborted takes its
    message: `msg` and `len` are set to it, which the caller frees with
    gs_free_msg, or to NULL and no bytes. */
 GS_API uint8_t gs_thread_wait(int64_t id, uint8_t **msg, int64_t *len,
                                const char *file, int line);
+typedef struct { uint64_t slot, generation; } gs_handle GS_ALIGN1;
+GS_API uint8_t *gs_thread_join(gs_handle h, int64_t *size, uint8_t **msg, int64_t *len,
+                               const char *file, int line);
+GS_API uint8_t gs_thread_cancel(gs_handle h, const char *file, int line);
+GS_API uint8_t gs_thread_cancelled(void);
+GS_API void gs_thread_publish_result(const void *data, int64_t size);
+GS_API void gs_structured_cleanup(int64_t parent);
+GS_API void gs_channel_handoff(gs_handle h, const char *file, int line);
+GS_API void *gs_channel_pending_take(void);
+GS_API void gs_channel_context_begin(void *leases);
+GS_API void gs_channel_context_cleanup(void);
+GS_API void gs_channel_pending_release(void *leases);
 GS_API void gs_free_msg(uint8_t *msg);
 
 /* Opaque capabilities have no user-visible fields or byte image. Stable
@@ -1042,6 +1054,13 @@ GS_API gs_qnode *gs_qget(gs_queue *q);
 GS_API gs_qnode *gs_qwait(gs_queue *q, int64_t ms);
 GS_API gs_qnode *gs_qpoll(gs_queue *q);
 GS_API void gs_qlimit(gs_queue *q, int64_t n, const char *file, int line);
+GS_API gs_handle gs_channel_create(int64_t limit, const char *file, int line);
+GS_API uint8_t gs_channel_send(gs_handle h, const void *data, int64_t size, int wait,
+                               const char *file, int line);
+GS_API gs_qnode *gs_channel_receive(gs_handle h, int wait, const char *file, int line);
+GS_API uint8_t gs_channel_close(gs_handle h, const char *file, int line);
+GS_API int64_t gs_channel_wait_any(const gs_handle *hs, int64_t n,
+                                   const char *file, int line);
 
 #ifndef GS_RUNTIME_OBJECT
 
@@ -1110,7 +1129,14 @@ static void gs_thread_release(void) {
 
 static int64_t gs_thread_spawn(void (*entry)(uint8_t *), const void *args, int64_t argsize,
                                int contained) {
-    return gs_thread_start(gs_thread_run, gs_thread_release, entry, args, argsize, contained);
+    return gs_thread_start(gs_thread_run, gs_thread_release, entry, args, argsize, contained, 0);
+}
+static gs_handle gs_thread_spawn_structured(void (*entry)(uint8_t *), const void *args,
+                                             int64_t argsize, int contained) {
+    int64_t id = gs_thread_start(gs_thread_run, gs_thread_release, entry, args, argsize,
+                                 contained, 1);
+    gs_handle h = { (uint64_t)id, (uint64_t)id + 1 };
+    return h;
 }
 #endif
 

@@ -17,7 +17,9 @@ inline bool CodeGen::TEq(TypeExpr *a, TypeExpr *b) {
     switch (a->kind) {
         case TY_INT:  return a->intstorage == b->intstorage;
         case TY_FLT:  return a->fltstorage == b->fltstorage;
-        case TY_NATIVE: return a->nativekind == b->nativekind;
+        case TY_NATIVE: return a->native->kind == b->native->kind &&
+            ((!a->native->arg && !b->native->arg) ||
+             (a->native->arg && b->native->arg && SameMangle(a->native->arg, b->native->arg)));
             case TY_BOOL: case TY_VOID: case TY_FN: return true;
         case TY_STRUCT: return SI(a) == SI(b);
         case TY_ENUM:   return EIOf(a) == EIOf(b) && a->enu->varmode == b->enu->varmode;
@@ -303,8 +305,8 @@ inline int64_t CodeGen::FixedSize(TypeExpr *t) {
         case TY_INT:  assert(t->intstorage != IS_VARINT); return IntSize(t->intstorage);
         case TY_FLT:  return t->fltstorage == FS_F32 ? 4 : 8;
         case TY_BOOL: return 1;
-        case TY_NATIVE: return t->nativekind == NK_UNSAFE_PTR ? 8
-            : t->nativekind == NK_ATOMIC_U32 || t->nativekind == NK_ATOMIC_U64 ? 24 : 16;
+        case TY_NATIVE: return t->native->kind == NK_UNSAFE_PTR ? 8
+            : t->native->kind == NK_ATOMIC_U32 || t->native->kind == NK_ATOMIC_U64 ? 24 : 16;
         case TY_REF:
             if (t->ref->lenstorage >= 0) {
                 assert(t->ref->lenstorage != IS_VARINT);
@@ -463,7 +465,9 @@ inline string CodeGen::RawMangle(TypeExpr *t) {
         }
         case TY_FLT: return t->fltstorage == FS_F32 ? "f32" : "f64";
         case TY_BOOL: return "b";
-        case TY_NATIVE: return NativeName(t->nativekind);
+        case TY_NATIVE: return t->native->arg
+            ? cat(NativeName(t->native->kind), "_", Mangle(t->native->arg))
+            : NativeName(t->native->kind);
         case TY_STRUCT: {
             auto s = Sanitize(t->struc->st->ns, t->struc->st->name);
             for (auto a : t->struc->args) Append(s, "_", Mangle(a));
@@ -535,8 +539,9 @@ inline string CodeGen::CT(TypeExpr *t, bool unaligned) {
                                                    : (unaligned ? "gs_f64" : "double");
         case TY_BOOL: return "uint8_t";
         case TY_NATIVE:
-            if (t->nativekind == NK_UNSAFE_PTR) { EmitUnsafePtrType(); return "gs_unsafe_ptr"; }
-            return t->nativekind == NK_ATOMIC_U32 || t->nativekind == NK_ATOMIC_U64
+            if (t->native->kind == NK_UNSAFE_PTR) { EmitUnsafePtrType(); return "gs_unsafe_ptr"; }
+            if (t->native->kind == NK_THREAD || t->native->kind == NK_CHANNEL) return "gs_handle";
+            return t->native->kind == NK_ATOMIC_U32 || t->native->kind == NK_ATOMIC_U64
                 ? "gs_shared_atomic_cap" : "gs_shared_cap";
         case TY_VOID: return "void";
         case TY_REF: {

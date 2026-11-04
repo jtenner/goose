@@ -472,6 +472,7 @@ inline bool TypeCheck::Reaches(TypeExpr *t, const function<bool(TypeExpr *)> &pr
     function<bool(TypeExpr *)> walk = [&](TypeExpr *t) -> bool {
         if (pred(t)) return true;
         switch (t->kind) {
+            case TY_NATIVE: return t->native->arg && walk(t->native->arg);
             case TY_REF: return walk(t->ref->sub);
             case TY_SLICE: return walk(t->sub);
             case TY_ARRAY: return walk(t->arr->sub);
@@ -708,7 +709,18 @@ inline void TypeCheck::ValidateType(TypeExpr *t, Line l, int pos) {
             return;
         }
         case TY_FLT: return;
-        case TY_BOOL: case TY_NATIVE: return;
+        case TY_BOOL: return;
+        case TY_NATIVE:
+            if (t->native->arg) {
+                ValidateType(t->native->arg, l, VT_LOCAL);
+                if (!IsFlat(t->native->arg))
+                    Error(l, cat(NativeName(t->native->kind), " payload must be flat (§11.2), not ",
+                                 TypeStr(t->native->arg)));
+                if (HoldsIndexT(t->native->arg))
+                    Error(l, cat(TypeStr(t), " cannot cross thread contexts: its payload holds an "
+                                 "index type (§3.11)"));
+            }
+            return;
         case TY_VOID:
             Error(l, "expression has no value here");
         case TY_FN:

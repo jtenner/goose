@@ -25,14 +25,15 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
     if (d.kind >= B_UNSAFE_PTR_FROM_HANDLE && d.kind <= B_UNSAFE_STORE) {
         auto pointer = [&]() {
             auto v = CheckValue(args[0], nullptr);
-            if (v.type->kind != TY_NATIVE || v.type->nativekind != NK_UNSAFE_PTR)
+            if (v.type->kind != TY_NATIVE || v.type->native->kind != NK_UNSAFE_PTR)
                 Error(c, cat(d.name, " requires UnsafePtr for argument 1"));
         };
         auto result = [&](TypeExpr *t) {
             Val v; v.type = t; c->rettypes.push_back(t); return v;
         };
         auto ptrtype = ast.NewType(TY_NATIVE, c->line);
-        ptrtype->nativekind = NK_UNSAFE_PTR;
+        ptrtype->native = ast.NewDetail<TypeNative>();
+        ptrtype->native->kind = NK_UNSAFE_PTR;
         switch (d.kind) {
             case B_UNSAFE_PTR_FROM_HANDLE:
                 CheckArg(args[0], ast.inttypes[IS_U64]); return result(ptrtype);
@@ -57,11 +58,12 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
     }
     if (d.kind >= B_SHARED_ALLOC && d.kind <= B_MEMORY_COPY) {
         auto captype = [&](NativeKind k) {
-            auto t = ast.NewType(TY_NATIVE, c->line); t->nativekind = k; return t;
+            auto t = ast.NewType(TY_NATIVE, c->line); t->native = ast.NewDetail<TypeNative>();
+            t->native->kind = k; return t;
         };
         auto cap = [&](size_t i, NativeKind k) {
             auto v = CheckValue(args[i], nullptr);
-            if (v.type->kind != TY_NATIVE || v.type->nativekind != k)
+            if (v.type->kind != TY_NATIVE || v.type->native->kind != k)
                 Error(c, cat(d.name, " requires ", NativeName(k), " for argument ", i + 1));
         };
         auto number = [&](size_t i) { CheckIntAny(args[i]); };
@@ -78,7 +80,7 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
                 number(0); return result(captype(NK_OWNER), true);
             case B_SHARED_VIEW: {
                 auto v = CheckValue(args[0], nullptr);
-                if (v.type->kind != TY_NATIVE || (v.type->nativekind != NK_OWNER && v.type->nativekind != NK_VIEW))
+                if (v.type->kind != TY_NATIVE || (v.type->native->kind != NK_OWNER && v.type->native->kind != NK_VIEW))
                     Error(c, "shared_view requires an owner or view");
                 number(1); number(2); return result(captype(NK_VIEW));
             }
@@ -86,7 +88,7 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
                 cap(0, NK_OWNER); return result(ast.booltype);
             case B_SHARED_SIZE: {
                 auto v = CheckValue(args[0], nullptr);
-                if (v.type->kind != TY_NATIVE || v.type->nativekind > NK_ACCESS)
+                if (v.type->kind != TY_NATIVE || v.type->native->kind > NK_ACCESS)
                     Error(c, "shared_size requires an owner, view, or access");
                 return result(ast.inttypes[IS_U64]);
             }
@@ -126,7 +128,7 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
         }
         auto native = [&](size_t i, NativeKind k) {
             auto v = CheckValue(args[i], nullptr);
-            if (v.type->kind != TY_NATIVE || v.type->nativekind != k)
+            if (v.type->kind != TY_NATIVE || v.type->native->kind != k)
                 Error(c, cat(d.name, " requires ", NativeName(k)));
         };
         auto result = [&](TypeExpr *t, bool second = false) {
@@ -134,7 +136,8 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
             if (second) { Val b; b.type = ast.booltype; c->rettypes.push_back(b.type); lastcallrets = {v, b}; }
             return v;
         };
-        auto nt = [&](NativeKind k) { auto t = ast.NewType(TY_NATIVE, c->line); t->nativekind = k; return t; };
+        auto nt = [&](NativeKind k) { auto t = ast.NewType(TY_NATIVE, c->line);
+            t->native = ast.NewDetail<TypeNative>(); t->native->kind = k; return t; };
         if (bk <= B_SHARED_ATOMIC_ARRAY64) {
             bool u32 = bk == B_SHARED_ATOMIC32 || bk == B_SHARED_ATOMIC_ARRAY32;
             native(0, NK_OWNER); CheckIntAny(args[1]);
@@ -157,9 +160,9 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
             if (bk != B_ATOMIC_LOCKFREE) CheckArg(args[0], ast.inttypes[IS_U64]);
         } else {
             auto v = CheckValue(args[0], nullptr);
-            if (v.type->kind != TY_NATIVE || (v.type->nativekind != NK_ATOMIC_U32 && v.type->nativekind != NK_ATOMIC_U64))
+            if (v.type->kind != TY_NATIVE || (v.type->native->kind != NK_ATOMIC_U32 && v.type->native->kind != NK_ATOMIC_U64))
                 Error(c, cat(d.name, " requires SharedAtomicU32 or SharedAtomicU64"));
-            scalar = ast.inttypes[v.type->nativekind == NK_ATOMIC_U32 ? IS_U32 : IS_U64];
+            scalar = ast.inttypes[v.type->native->kind == NK_ATOMIC_U32 ? IS_U32 : IS_U64];
         }
         c->qtype = scalar;
         if (bk == B_ATOMIC_LOCKFREE) return result(ast.booltype);
@@ -189,13 +192,14 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
     if (d.kind >= B_SHARED_MAP && d.kind <= B_MEMORY_WRITE_BYTES) {
         if (d.kind == B_SHARED_MAP) {
             CheckArg(args[0], cu8slice); CheckIntAny(args[1]);
-            auto t = ast.NewType(TY_NATIVE, c->line); t->nativekind = NK_OWNER;
+            auto t = ast.NewType(TY_NATIVE, c->line); t->native = ast.NewDetail<TypeNative>();
+            t->native->kind = NK_OWNER;
             Val v; v.type = t; Val ok; ok.type = ast.booltype;
             c->rettypes = {t, ast.booltype}; lastcallrets = {v, ok}; return v;
         }
         auto v = CheckValue(args[0], nullptr);
         auto kind = d.kind == B_SHARED_ADVICE ? NK_VIEW : NK_ACCESS;
-        if (v.type->kind != TY_NATIVE || v.type->nativekind != kind)
+        if (v.type->kind != TY_NATIVE || v.type->native->kind != kind)
             Error(c, cat(d.name, " requires ", NativeName(kind)));
         CheckIntAny(args[1]);
         if (d.kind == B_SHARED_ADVICE) {
@@ -242,7 +246,8 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
             else CheckIntAny(args[0]);
             reachable = false;
             return VoidVal();
-        case B_THREAD_SPAWN: case B_THREAD_SPAWN_CONTAINED: {
+        case B_THREAD_SPAWN: case B_THREAD_SPAWN_CONTAINED:
+        case B_THREAD_SPAWN_JOIN: case B_THREAD_SPAWN_CONTAINED_JOIN: {
             auto wid = Is<Ident>(args[0]);
             vector<SFunction *> workers;
             // A variable in scope, a type parameter or a nested function of the
@@ -292,7 +297,20 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
             }
             c->spec = spec;
             Val v;
-            v.type = ast.inttypes[IS_I64];
+            auto structured = d.kind == B_THREAD_SPAWN_JOIN ||
+                              d.kind == B_THREAD_SPAWN_CONTAINED_JOIN;
+            if (!structured && !spec->rets.empty())
+                Error(c, cat(d.name, " cannot discard ", wsf->name,
+                             "'s result; use thread_spawn_join"));
+            if (structured && spec->rets.empty())
+                Error(c, cat(d.name, " requires a thread_fn with one result"));
+            if (structured && HoldsIndexT(spec->rets[0])) ThreadIndexError(c, spec->rets[0]);
+            if (structured) {
+                v.type = ast.NewType(TY_NATIVE, c->line);
+                v.type->native = ast.NewDetail<TypeNative>();
+                v.type->native->kind = NK_THREAD;
+                v.type->native->arg = spec->rets[0];
+            } else v.type = ast.inttypes[IS_I64];
             return v;
         }
         case B_THREAD_WAIT: {
@@ -303,6 +321,70 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
             Val v;
             v.type = ast.booltype;
             return v;
+        }
+        case B_THREAD_JOIN: {
+            auto h = CheckValue(args[0], nullptr);
+            if (h.type->kind != TY_NATIVE || h.type->native->kind != NK_THREAD)
+                Error(c, "thread_join requires Thread<T>");
+            if (args.size() == 2) CheckByteOut(c, args[1], "thread_join(handle, msg)");
+            auto t = h.type->native->arg;
+            c->rettypes = { t, ast.booltype };
+            Val first; first.type = t; first.Set(TempRoot(), false);
+            Val ok; ok.type = ast.booltype;
+            lastcallrets = { first, ok };
+            return first;
+        }
+        case B_THREAD_CANCEL: {
+            auto h = CheckValue(args[0], nullptr);
+            if (h.type->kind != TY_NATIVE || h.type->native->kind != NK_THREAD)
+                Error(c, "thread_cancel requires Thread<T>");
+            Val v; v.type = ast.booltype; return v;
+        }
+        case B_THREAD_CANCELLED: { Val v; v.type = ast.booltype; return v; }
+        case B_CHANNEL: {
+            if (c->tyargs.size() != 1) Error(c, "channel<T> needs exactly one type argument");
+            auto t = Subst(c->tyargs[0]); ValidateType(t, c->line, VT_LOCAL);
+            if (!IsFlat(t)) Error(c, cat("channel payload must be flat (§11.2), not ", TypeStr(t)));
+            if (HoldsIndexT(t)) ThreadIndexError(c, t);
+            if (!args.empty()) CheckArg(args[0], ast.inttypes[IS_I64]);
+            Val v; v.type = ast.NewType(TY_NATIVE, c->line);
+            v.type->native = ast.NewDetail<TypeNative>(); v.type->native->kind = NK_CHANNEL;
+            v.type->native->arg = t; return v;
+        }
+        case B_CHANNEL_SEND: case B_CHANNEL_TRY_SEND: {
+            auto h = CheckValue(args[0], nullptr);
+            if (h.type->kind != TY_NATIVE || h.type->native->kind != NK_CHANNEL)
+                Error(c, cat(d.name, " requires Channel<T>"));
+            if (HoldsIndexT(h.type->native->arg)) ThreadIndexError(c, h.type->native->arg);
+            CheckArg(args[1], h.type->native->arg);
+            Val v; v.type = ast.booltype; return v;
+        }
+        case B_CHANNEL_RECEIVE: case B_CHANNEL_TRY_RECEIVE: {
+            auto h = CheckValue(args[0], nullptr);
+            if (h.type->kind != TY_NATIVE || h.type->native->kind != NK_CHANNEL)
+                Error(c, cat(d.name, " requires Channel<T>"));
+            if (HoldsIndexT(h.type->native->arg)) ThreadIndexError(c, h.type->native->arg);
+            auto t = h.type->native->arg; c->rettypes = { t, ast.booltype };
+            Val first; first.type = t; first.Set(TempRoot(), false);
+            Val ok; ok.type = ast.booltype; lastcallrets = { first, ok }; return first;
+        }
+        case B_CHANNEL_CLOSE: {
+            auto h = CheckValue(args[0], nullptr);
+            if (h.type->kind != TY_NATIVE || h.type->native->kind != NK_CHANNEL)
+                Error(c, "channel_close requires Channel<T>");
+            Val v; v.type = ast.booltype; return v;
+        }
+        case B_CHANNEL_WAIT_ANY: {
+            TypeExpr *t = nullptr;
+            for (auto a : args) {
+                auto h = CheckValue(a, nullptr);
+                if (h.type->kind != TY_NATIVE || h.type->native->kind != NK_CHANNEL)
+                    Error(c, "channel_wait_any requires Channel<T> arguments");
+                if (t && !TypeEq(t, h.type->native->arg))
+                    Error(c, "channel_wait_any channels must have the same payload type");
+                t = h.type->native->arg;
+            }
+            Val v; v.type = ast.inttypes[IS_I64]; return v;
         }
         case B_QPUT: {
             auto av = CheckValue(args[0], nullptr);
