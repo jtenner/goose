@@ -20,6 +20,9 @@ thread_fn produce_owned() {
     let pointer, owner, ok = shared_pointer_alloc<Pair>(Pair { left: 51, right: 52 });
     assert(ok && qput(pointer));
 }
+thread_fn read_twice(a: SharedPointer<Pair>, b: SharedPointer<Pair>) {
+    assert(shared_pointer_copy(a).left == shared_pointer_copy(b).left);
+}
 
 fn main() {
     let p, owner, ok = shared_pointer_alloc<Pair>(Pair { left: 1, right: 2 });
@@ -54,6 +57,7 @@ fn main() {
     for i in 4 { ids.push(thread_spawn(read, shared)); }
     for i in 4 { assert(thread_wait(ids[i])); }
     assert(thread_wait(thread_spawn(nested, shared)));
+    assert(thread_wait(thread_spawn(read_twice, shared, shared)));
     assert(thread_wait(thread_spawn(put_arg, shared)));
     let from_worker = qget<SharedPointer<Pair>>();
     assert(shared_pointer_copy(from_worker).left == 9);
