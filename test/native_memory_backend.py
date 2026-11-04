@@ -92,28 +92,40 @@ def check_native_memory_backend(exe, clang, base):
         # __atomic builtins in the MSVC path.
         runtime_text = (Path(__file__).parents[1] / "src" / "runtime" /
                         "runtime_threads.h").read_text()
+        cancel_helpers = re.search(r"static int gs_cancel_load\(.*?"
+                                   r"(?=static gs_thread \*gs_threads)",
+                                   runtime_text, re.S)
         helpers = re.search(r"static void gs_shared_publish\(.*?"
                             r"(?=static GS_NORETURN void gs_shared_bad)",
                             runtime_text, re.S)
-        if not helpers:
-            raise RuntimeError("cannot find shared registry atomic helpers")
+        if not cancel_helpers or not helpers:
+            raise RuntimeError("cannot find guarded common-runtime atomic helpers")
+        cancel_helper_text = cancel_helpers[0]
         helper_text = helpers[0]
+        guarded_text = cancel_helper_text + helper_text
         for token in ("__atomic_", "__ATOMIC_"):
-            if runtime_text.count(token) != helper_text.count(token):
-                raise RuntimeError("unguarded GCC atomic remains outside shared registry helpers: " +
+            if runtime_text.count(token) != guarded_text.count(token):
+                raise RuntimeError("unguarded GCC atomic remains outside common-runtime helpers: " +
                                    token)
         msvc_probe = ("#define _MSC_VER 1930\n"
-                      "typedef unsigned long long uint64_t; typedef long long LONG64;\n"
+                      "typedef unsigned long long uint64_t; typedef long LONG; "
+                      "typedef long long LONG64;\n"
                       "typedef struct { uint64_t generation; } gs_shared_record;\n"
+                      "static LONG InterlockedCompareExchange(volatile LONG *p, LONG v, LONG expected) "
+                      "{ LONG old = *p; if (old == expected) *p = v; return old; }\n"
+                      "static LONG InterlockedExchange(volatile LONG *p, LONG v) "
+                      "{ LONG old = *p; *p = v; return old; }\n"
                       "static LONG64 InterlockedExchange64(volatile LONG64 *p, LONG64 v) "
                       "{ LONG64 old = *p; *p = v; return old; }\n"
                       "static LONG64 InterlockedCompareExchange64(volatile LONG64 *p, LONG64 v, "
                       "LONG64 expected) { LONG64 old = *p; if (old == expected) *p = v; return old; }\n"
                       "static LONG64 InterlockedExchangeAdd64(volatile LONG64 *p, LONG64 v) "
-                      "{ LONG64 old = *p; *p += v; return old; }\n" + helper_text +
-                      "\nint probe(void) { gs_shared_record r = { 0 }; "
+                      "{ LONG64 old = *p; *p += v; return old; }\n" + cancel_helper_text +
+                      helper_text + "\nint probe(void) { int cancelled = 0; "
+                      "gs_cancel_store(&cancelled); gs_shared_record r = { 0 }; "
                       "gs_shared_publish(&r, 1); return (int)(gs_shared_ref_add(&r.generation) + "
-                      "gs_shared_ref_sub(&r.generation) + gs_shared_ref_load(&r.generation)); }\n")
+                      "gs_shared_ref_sub(&r.generation) + gs_shared_ref_load(&r.generation) + "
+                      "gs_cancel_load(&cancelled)); }\n")
         msvc_helpers = compile_c(msvc_probe, "x86_64-unknown-linux-gnu")
         if msvc_helpers.returncode:
             raise RuntimeError("shared registry helpers fail in the MSVC branch:\n" +
