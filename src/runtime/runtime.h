@@ -1017,9 +1017,10 @@ GS_API void gs_shared_write(gs_shared_cap access, uint64_t offset, const void *v
                              int big, const char *file, int line);
 GS_API void gs_shared_copy(gs_shared_cap dst, uint64_t doff, gs_shared_cap src, uint64_t soff,
                             uint64_t size, const char *file, int line);
-GS_API void gs_shared_handoff(gs_shared_cap cap, const char *file, int line);
+GS_API gs_shared_cap gs_shared_handoff(gs_shared_cap cap, int consume,
+                                       const char *file, int line);
 GS_API void *gs_shared_pending_take(void);
-GS_API void gs_shared_worker_commit(void *leases, int64_t actor);
+GS_API uint8_t gs_shared_worker_commit(void *leases, int64_t actor);
 GS_API void gs_shared_worker_rollback(void *leases);
 GS_API void gs_shared_worker_cleanup(void *leases, int64_t actor);
 GS_API gs_shared_cap gs_shared_pointer_alloc(const void *value, uint64_t size,
