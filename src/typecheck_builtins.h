@@ -428,6 +428,7 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
                 Error(c, cat(d.name, " requires Channel<T>"));
             if (HoldsIndexT(h.type->native->arg)) ThreadIndexError(c, h.type->native->arg);
             CheckArg(args[1], h.type->native->arg);
+            c->qtype = h.type->native->arg;
             Val v; v.type = ast.booltype; return v;
         }
         case B_CHANNEL_RECEIVE: case B_CHANNEL_TRY_RECEIVE: {

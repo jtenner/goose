@@ -2449,6 +2449,30 @@ _Static_assert(_Alignof(a2_Nested_g) == 64, "Nested array alignment");'''
             r.show_task(packed_word_acceptance, script)
         r.show_task(packed_word_acceptance, "channel_handle_alignment.py")
 
+    def cancelled_standalone():
+        # This builtin must include its runtime even when no spawn/channel
+        # elsewhere in the program would enable threading on its behalf.
+        for level in (0, 2):
+            source = gendir / f"cancelled-standalone-{level}.c"
+            code, out, err = r.goose(f"-O{level}", "--standalone", "-o", source,
+                                     HERE / "threads" / "cancelled_main.goose")
+            if code:
+                r.fail("cancelled standalone generation", out + err)
+                continue
+            for label, backend in (("native", cc), ("clang", clang)):
+                if not backend:
+                    continue
+                binary = gendir / f"cancelled-standalone-{label}-{level}{tc.EXE_SUFFIX}"
+                ok, log = backend.compile(source, binary, opt=level, extra=extra,
+                                          strict_decls=True)
+                if not ok:
+                    r.fail("cancelled standalone " + label, log)
+                else:
+                    r.check_run("cancelled_main", f"cancelled standalone {label} O{level}",
+                                *tc.run_capture([binary]))
+    if cc:
+        r.show_task(cancelled_standalone)
+
     r.section("driver, diagnostics and language server")
 
     def driver_verbs():

@@ -3672,12 +3672,11 @@ must equal Goose's computed offsets and fixed size even under the packed C
 region; a field alignment attribute inside `#pragma pack(1)` is not sufficient.
 
 An aligned field is rejected in a variable-size packed prefix or anywhere its
-required offset cannot be a configuration-independent constant. Alignment
-validation applies to the complete containing layout after generic substitution,
+required offset cannot be a configuration-independent constant. Validation
+applies to the complete containing layout after generic substitution,
 including alignment inherited from nested fields; a fixed annotated field does
 not make a variable-size containing struct eligible.
-Alignment
-never weakens array, slice, shared-memory or raw-pointer bounds. In particular,
+Alignment never weakens array, slice, shared-memory or raw-pointer bounds. In particular,
 `vector_load` and `vector_store` remain checked and use unaligned operations
 when their actual address is not suitably aligned. Capability wrappers retain
 the byte alignment required by §11.4; annotating storage containing one does
