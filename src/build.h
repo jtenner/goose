@@ -118,35 +118,56 @@ struct Builder {
                     }
                 set<string> loops;
                 map<string, string> looplines;
+                map<string, string> loopdisplay;
                 auto digits = [](const string &s, size_t b, size_t e) {
                     if (b == e) return false;
                     for (auto i = b; i < e; i++) if (!isdigit((uint8_t)s[i])) return false;
                     return true;
                 };
-                auto cstr = [&](size_t &p, size_t e, string &out) {
-                    if (p >= e || generated[p++] != '"') return false;
-                    while (p < e) {
-                        auto c = generated[p++];
-                        if (c == '"') return true;
-                        if (c != '\\') { out += c; continue; }
-                        if (p >= e) return false;
-                        c = generated[p++];
-                        if (c == '"' || c == '\\') { out += c; continue; }
-                        if (c < '0' || c > '7' || p + 1 >= e ||
-                            generated[p] < '0' || generated[p] > '7' ||
-                            generated[p + 1] < '0' || generated[p + 1] > '7') return false;
-                        out += (char)(((c - '0') << 6) | ((generated[p] - '0') << 3) |
-                                      (generated[p + 1] - '0'));
-                        p += 2;
+                auto unhex = [](string_view in, string &out) {
+                    auto nibble = [](char c) {
+                        if (c >= '0' && c <= '9') return c - '0';
+                        if (c >= 'a' && c <= 'f') return c - 'a' + 10;
+                        return -1;
+                    };
+                    if (in.size() % 2) return false;
+                    out.clear();
+                    out.reserve(in.size() / 2);
+                    for (size_t i = 0; i < in.size(); i += 2) {
+                        auto hi = nibble(in[i]), lo = nibble(in[i + 1]);
+                        if (hi < 0 || lo < 0) return false;
+                        out += (char)((hi << 4) | lo);
                     }
-                    return false;
+                    return true;
                 };
+                constexpr string_view metaprefix = "/*goose-simd-loop:";
+                bool guarded = false, metadata = false;
+                string metasource, metafn;
                 for (size_t b = 0; b < generated.size();) {
                     auto e = generated.find('\n', b);
                     if (e == string::npos) e = generated.size();
                     auto p = b;
                     while (p < e && (generated[p] == ' ' || generated[p] == '\t')) p++;
-                    if (generated.compare(p, 6, "#line ") == 0) {
+                    auto q = e;
+                    while (q > p && (generated[q - 1] == ' ' || generated[q - 1] == '\t' ||
+                                     generated[q - 1] == '\r')) q--;
+                    string_view text(generated.data() + p, q - p);
+                    if (text == "#ifdef GS_SIMD_FEEDBACK") {
+                        guarded = true;
+                        metadata = false;
+                    } else if (guarded && text.substr(0, metaprefix.size()) == metaprefix &&
+                               text.size() >= metaprefix.size() + 2 &&
+                               text.substr(text.size() - 2) == "*/") {
+                        auto body = text.substr(metaprefix.size(),
+                                                text.size() - metaprefix.size() - 2);
+                        auto sep = body.find(':');
+                        metadata = sep != string_view::npos &&
+                                   body.find(':', sep + 1) == string_view::npos &&
+                                   unhex(body.substr(0, sep), metasource) &&
+                                   unhex(body.substr(sep + 1), metafn) &&
+                                   !metasource.empty() && !metafn.empty();
+                        if (!metadata) guarded = false;
+                    } else if (guarded && metadata && text.substr(0, 6) == "#line ") {
                         p += 6;
                         int64_t lineno = 0;
                         auto nb = p;
@@ -160,69 +181,96 @@ struct Builder {
                             p++;
                         }
                         ne = p;
-                        while (p < e && (generated[p] == ' ' || generated[p] == '\t')) p++;
-                        string file;
-                        if (!overflow && ne > nb &&
-                            lineno < std::numeric_limits<int64_t>::max() && cstr(p, e, file)) {
-                            while (p < e && (generated[p] == ' ' || generated[p] == '\t')) p++;
+                        while (p < q && (generated[p] == ' ' || generated[p] == '\t')) p++;
+                        if (!overflow && ne > nb && lineno < std::numeric_limits<int64_t>::max() &&
+                            p + 2 <= q && generated[p] == '"' && generated[q - 1] == '"') {
+                            string file(generated.data() + p + 1, q - p - 2);
                             auto ext = file.size() >= 6 &&
                                        file.compare(file.size() - 6, 6, ".goose") == 0;
                             auto loop = ext ? file.rfind("-loop", file.size() - 6)
                                             : string::npos;
                             auto version = loop == string::npos ? string::npos
                                                                 : file.rfind("-v", loop);
-                            auto marker = version == string::npos ? string::npos
-                                                                  : file.rfind("#simd-", version);
-                            if (p == e && marker != string::npos &&
+                            constexpr string_view prefix = "#goose-simd-";
+                            auto element = version == string::npos ? string::npos
+                                                                   : file.rfind("-e", version);
+                            if (file.compare(0, prefix.size(), prefix) == 0 &&
+                                element != string::npos &&
+                                digits(file, prefix.size(), element) &&
+                                element + 3 == version &&
+                                (file[element + 2] == '0' || file[element + 2] == '1') &&
                                 digits(file, version + 2, loop) &&
                                 digits(file, loop + 5, file.size() - 6)) {
                                 loops.insert(file);
+                                loopdisplay[file] = cat(metasource, "#simd-", metafn,
+                                                        file.substr(version));
                                 // Feedback-only markers close their #ifdef on the
                                 // numbered line; the loop is the following line.
                                 looplines[file] = std::to_string(lineno + 1);
                             }
                         }
+                        guarded = metadata = false;
+                    } else {
+                        guarded = metadata = false;
                     }
                     b = e < generated.size() ? e + 1 : generated.size();
                 }
                 set<string> explained;
                 set<string> vectorized;
-                string pending, pendingloc;
+                // Clang prints a primary remark followed by one or more notes
+                // naming the logical #line files that contributed to an
+                // inlined loop. Keep the primary for those notes; `pending`
+                // also tolerates a toolchain that prints the note first.
+                string lastremark;
+                set<string> lastloops;
+                vector<pair<string, string>> pending;
+                auto report = [&](const string &loop, const string &location,
+                                  const string &remark) {
+                    if (!lastloops.insert(loop).second) return;
+                    fprintf(msgs, "simd feedback: %s: %s\n", location.c_str(), remark.c_str());
+                    explained.insert(loop);
+                    if (remark.find("[-Rpass=loop-vectorize]") != string::npos)
+                        vectorized.insert(loop);
+                };
                 for (size_t b = 0; b < r.output.size();) {
                     auto e = r.output.find('\n', b);
                     auto line = r.output.substr(b, e == string::npos ? string::npos : e - b);
                     const string lostmsg = "could not determine the original source location for ";
                     auto lost = line.find(lostmsg);
-                    if (lost != string::npos) {
+                    auto remarkpos = line.find("remark:");
+                    if (remarkpos != string::npos) {
+                        lastremark = line.substr(remarkpos);
+                        lastloops.clear();
+                        for (auto &[loop, location] : pending)
+                            report(loop, location, lastremark);
+                        pending.clear();
+                        for (auto &loop : loops) {
+                            auto pos = line.find(loop);
+                            if (pos == string::npos) continue;
+                            auto shown = loopdisplay[loop] + line.substr(pos + loop.size());
+                            fprintf(msgs, "simd feedback: %s\n", shown.c_str());
+                            lastloops.insert(loop);
+                            explained.insert(loop);
+                            if (lastremark.find("[-Rpass=loop-vectorize]") != string::npos)
+                                vectorized.insert(loop);
+                        }
+                    } else if (lost != string::npos) {
                         auto at = line.substr(lost + lostmsg.size());
                         for (auto &loop : loops) {
-                            auto identity = loop.substr(loop.find("#simd-"));
-                            if (at.find(loop) != 0 && at.find(identity) == string::npos) continue;
-                            pending = loop;
-                            pendingloc = at;
+                            auto pos = at.find(loop);
+                            if (pos == string::npos) continue;
+                            auto location = loopdisplay[loop] + at.substr(pos + loop.size());
+                            if (lastremark.empty()) pending.push_back({ loop, location });
+                            else report(loop, location, lastremark);
                             break;
-                        }
-                    } else if (line.find("remark:") != string::npos && !pending.empty()) {
-                        auto remark = line.substr(line.find("remark:"));
-                        fprintf(msgs, "simd feedback: %s: %s\n", pendingloc.c_str(), remark.c_str());
-                        explained.insert(pending);
-                        if (remark.find("[-Rpass=loop-vectorize]") != string::npos)
-                            vectorized.insert(pending);
-                        pending.clear();
-                        pendingloc.clear();
-                    } else if (line.find("remark:") != string::npos) {
-                        for (auto &loop : loops) if (line.find(loop) != string::npos) {
-                            fprintf(msgs, "simd feedback: %s\n", line.c_str());
-                            explained.insert(loop);
-                            if (line.find("[-Rpass=loop-vectorize]") != string::npos)
-                                vectorized.insert(loop);
                         }
                     }
                     if (e == string::npos) break;
                     b = e + 1;
                 }
                 for (auto &loop : loops) if (!vectorized.count(loop))
-                    fprintf(msgs, "simd feedback: %s:%s: missed: %s\n", loop.c_str(),
+                    fprintf(msgs, "simd feedback: %s:%s: missed: %s\n",
+                            loopdisplay[loop].c_str(),
                             looplines[loop].c_str(), explained.count(loop)
                                 ? "compiler supplied no positive vectorization remark; see remarks above"
                                 : "compiler supplied no loop-vectorize reason");

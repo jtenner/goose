@@ -574,11 +574,12 @@ inline void CodeGen::EmitSimdVersions(FnSpec *sp, const string &name, const stri
     auto marker = [&](int lv) {
         // The closing #endif consumes the first logical line after #line.
         return cat("#ifdef GS_SIMD_FEEDBACK\n#line ", std::max(0, sp->sf->line.line - 1), " ",
-                   CStr(cat(source, "#simd-", sp->sf->name, "-v", lv, ".goose")),
+                   CStr(cat("#goose-simd-", sp->id, "-e", emiter ? 1 : 0,
+                            "-v", lv, ".goose")),
                    "\n#endif\n");
     };
     auto reset = cat("#ifdef GS_SIMD_FEEDBACK\n#line ", std::max(0, sp->sf->end.line - 1),
-                     " ", CStr(source), "\n#endif\n");
+                     " ", CStr(source, false), "\n#endif\n");
     auto versionbody = [&](int lv) {
         auto out = fnbody;
         // Only compiler-owned loop-marker #line directives carry the version
@@ -586,7 +587,8 @@ inline void CodeGen::EmitSimdVersions(FnSpec *sp, const string &name, const stri
         // particular a custom abort string whose byte length is already
         // fixed), and must remain byte-for-byte unchanged.
         const string token = "version@";
-        const string loopmarker = cat("#simd-", sp->sf->name, "-", token, "-loop");
+        const string loopmarker = cat("#goose-simd-", sp->id, "-e", emiter ? 1 : 0,
+                                      "-", token, "-loop");
         for (size_t b = 0; b < out.size();) {
             auto e = out.find('\n', b);
             if (e == string::npos) e = out.size();
