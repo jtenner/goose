@@ -6,6 +6,7 @@ struct Block { tag: u8, align(64) value: u32 }
 struct Nested { prefix: u8, payload: Block }
 struct EqBlock { a: u8, b: u8, c: u8, d: u8, e: u8, align(16) value: u32 }
 struct EqOuter { prefix: u8, inner: EqBlock, suffix: u8 }
+struct SignedBlock { a: i32, align(16) b: i32 }
 
 var before: u8 = 1;
 align(64) var global: u32 = 2;
@@ -20,6 +21,13 @@ fn assert_zero_padding(x: Nested) {
     for i in 65..128 { assert(raw[i] == 0); }
     for i in 132..192 { assert(raw[i] == 0); }
 }
+fn assert_zero_signed_padding(x: SignedBlock) {
+    let wrapped = [x];
+    let raw = bytes_of(wrapped);
+    assert(raw.len == 32);
+    for i in 4..16 { assert(raw[i] == 0); }
+    for i in 20..32 { assert(raw[i] == 0); }
+}
 
 fn main() {
     let x = Nested { prefix: 3, payload: Block { tag: 4, value: 5 } };
@@ -27,6 +35,16 @@ fn main() {
     assert_zero_padding(x);
     assert_zero_padding(values[0]);
     assert_zero_padding(values[1]);
+    let sum = x + x;
+    assert_zero_padding(sum);
+    var compound = x;
+    compound += x;
+    assert_zero_padding(compound);
+    let sums = values + values;
+    assert_zero_padding(sums[0]);
+    assert_zero_padding(sums[1]);
+    let negative = -SignedBlock { a: 11, b: 13 };
+    assert_zero_signed_padding(negative);
     let equal = EqOuter {
         prefix: 1,
         inner: EqBlock { a: 2, b: 3, c: 4, d: 5, e: 6, value: 7 },
