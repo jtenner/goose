@@ -569,11 +569,11 @@ inline void CodeGen::EmitSimdVersions(FnSpec *sp, const string &name, const stri
                     ? ast.sources[sp->sf->line.fileidx].first : string("?");
     auto marker = [&](int lv) {
         // The closing #endif consumes the first logical line after #line.
-        return cat("#ifdef GS_SIMD_FEEDBACK\n#line ", std::max(1, sp->sf->line.line - 1), " ",
+        return cat("#ifdef GS_SIMD_FEEDBACK\n#line ", std::max(0, sp->sf->line.line - 1), " ",
                    CStr(cat(source, "#simd-", sp->sf->name, "-v", lv, ".goose")),
                    "\n#endif\n");
     };
-    auto reset = cat("#ifdef GS_SIMD_FEEDBACK\n#line ", std::max(1, sp->sf->end.line - 1),
+    auto reset = cat("#ifdef GS_SIMD_FEEDBACK\n#line ", std::max(0, sp->sf->end.line - 1),
                      " ", CStr(source), "\n#endif\n");
     auto versionbody = [&](int lv) {
         auto out = fnbody;

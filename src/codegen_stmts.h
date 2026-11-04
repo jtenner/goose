@@ -64,7 +64,7 @@ inline void CodeGen::SimdLoopLine(Line line) {
     L("#ifdef GS_SIMD_FEEDBACK");
     // #endif is the first logical line after #line; number it one before the
     // Goose loop so the loop itself retains its real source line.
-    L("#line ", std::max(1, line.line - 1), " ",
+    L("#line ", std::max(0, line.line - 1), " ",
       CStr(cat(source, "#simd-", curspec->sf->name,
                "-version@-loop", simdloopn++, ".goose")));
     L("#endif");
