@@ -101,6 +101,7 @@ struct CodeGen {
     // stacks of the resizable ones. Accessed through GS_GL, main's static
     // instance directly or a worker's through the thread-local gs_gl.
     string gblock;
+    int64_t gblockalign = 1;
     set<const VarDef *> unusedliteralglobals;
     void FindUnusedLiteralGlobals();
     // The globals a thread program uses, in declaration order: what a spawn
@@ -307,7 +308,8 @@ struct CodeGen {
     }
     // Declare a value, replacing name with its C lvalue when stored on a
     // data stack. A binding survives its block; a temporary its statement.
-    void FixedLocal(TypeExpr *t, string &name, const string &init = "", bool forlocal = false);
+    void FixedLocal(TypeExpr *t, string &name, const string &init = "", bool forlocal = false,
+                    int64_t align = 1);
     // A limited array of static capacity, `T[..k]`: a C value of a length
     // and k slots, which any other array or slice of T constructs by copy
     // (§4.2, AdaptToFixed).
@@ -352,6 +354,7 @@ struct CodeGen {
     struct Layout {
         vector<int64_t> offs;
         int64_t size = 0;
+        int64_t align = 1;
     };
     map<pair<const void *, int>, Layout> layouts;   // StructInst / (EnumInst, variant).
 
@@ -360,6 +363,7 @@ struct CodeGen {
     const Layout &StructLayout(StructInst *si);
     const Layout &VariantLayout(EnumInst *ei, int vi);
     int64_t FixedSize(TypeExpr *t);
+    int64_t TypeAlign(TypeExpr *t);
 
     // ------------------------------------------------------------------
     // Naming: one global identifier space for types, functions, globals, and
@@ -573,6 +577,7 @@ struct CodeGen {
     string body;
     int ind = 1;
     int tmpn = 0;
+    int simdloopn = 0;
     int stknext = 0, stkmax = 0;
     string spexpr;                       // "gs_sp" inside functions, "0" at global init.
     set<string> fnused;                  // Local C identifiers.
@@ -1101,8 +1106,13 @@ struct CodeGen {
                          bool lscalar = false, bool rscalar = false);
     void GenElemwiseNegInto(TypeExpr *t, Line line, const string &x, const string &dst);
     bool VecShape(TypeExpr *t, FltStorage &fs, int64_t &n);
+    bool IntVecShape(TypeExpr *t, IntStorage &is, int64_t &n);
     string VecType(FltStorage fs, int64_t n);
+    string IntVecType(IntStorage is, int64_t n);
+    string ExplicitVecType(TypeExpr *t);
+    string ExplicitMaskVecType(TypeExpr *t);
     string VecOperand(TypeExpr *t, FltStorage fs, const string &x, bool scalar);
+    string IntVecOperand(TypeExpr *t, IntStorage is, const string &x, bool scalar);
     string VecLoad(const string &vt, int64_t n, const string &v, bool scalar);
     void GenElemwiseLeaves(TypeExpr *t, const string &dst,
                            const function<string(TypeExpr *, const string &)> &leaf);
@@ -1232,6 +1242,7 @@ struct CodeGen {
     void GenLoopBody(const function<void()> &condexit, Block *bodyb, Dst d,
                      const string &forhead = "", Node *cond = nullptr, size_t first = 0,
                      vector<const VarDef *> binders = {});
+    void SimdLoopLine(Line line);
     static bool StraightCode(Node *n);
     bool InStraightLoop();
     static bool CallsRecursive(Node *n);
