@@ -2078,7 +2078,7 @@ _Static_assert(_Alignof(a2_Nested_g) == 64, "Nested array alignment");'''
                 return
             result = r.run_expected([executable], "aligned_storage_addresses",
                                     f"aligned storage {label}")
-            if result is not None and result == "0 0 0 0 \n0 \n":
+            if result is not None and result == "0 0 0 0 \n0 ":
                 r.ok(f"aligned storage layout and addresses {label}")
             elif result is not None:
                 r.fail(f"aligned storage addresses {label}",

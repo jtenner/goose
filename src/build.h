@@ -133,7 +133,9 @@ struct Builder {
                     auto lost = line.find(lostmsg);
                     if (lost != string::npos) {
                         auto at = line.substr(lost + lostmsg.size());
-                        for (auto &loop : loops) if (at.find(loop) == 0) {
+                        for (auto &loop : loops) {
+                            auto identity = loop.substr(loop.find("#simd-"));
+                            if (at.find(loop) != 0 && at.find(identity) == string::npos) continue;
                             pending = loop;
                             pendingloc = at;
                             break;
