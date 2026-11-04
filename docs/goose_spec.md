@@ -3718,6 +3718,10 @@ region; a field alignment attribute inside `#pragma pack(1)` is not sufficient.
 
 An aligned field is rejected in a variable-size packed prefix or anywhere its
 required offset cannot be a configuration-independent constant. Alignment
+validation applies to the complete containing layout after generic substitution,
+including alignment inherited from nested fields; a fixed annotated field does
+not make a variable-size containing struct eligible.
+Alignment
 never weakens array, slice, shared-memory or raw-pointer bounds. In particular,
 `vector_load` and `vector_store` remain checked and use unaligned operations
 when their actual address is not suitably aligned. Capability wrappers retain
@@ -4766,7 +4770,9 @@ model; explicit native shared capabilities follow §11.4.
   `qlimit<T>(n)` gives it one of `n` messages; lowering a limit below what
   the queue holds keeps the messages queued, and puts fail until fewer than
   `n` remain. A limit of zero or less aborts with a runtime diagnostic.
-* **Structured workers**: a `thread_fn` may declare one flat result. A worker
+* **Structured workers**: a `thread_fn` may declare one flat result. Large fixed
+  results use Goose data-stack storage as ordinary fixed-value returns do;
+  publishing a worker result does not impose a native-stack size limit. A worker
   with a result is started by
   `thread_spawn_join(worker, args…) -> Thread<T>` or
   `thread_spawn_contained_join(worker, args…) -> Thread<T>`, where `T` is the
@@ -4799,7 +4805,9 @@ model; explicit native shared capabilities follow §11.4.
 * **Cooperative cancellation** applies only to structured contained workers.
   `thread_cancel(handle) -> bool` requests cancellation and returns false only
   when that handle's worker has already completed. `thread_cancelled() -> bool`
-  observes the request in the worker. A request is inherited by its structured
+  observes the request in the worker and returns false in main, including a
+  program with no spawns. This behavior also applies to standalone native builds.
+  A request is inherited by its structured
   contained descendants registered later, through any intervening structured
   workers; an intervening legacy detached worker is outside that cancellation
   scope. Cancellation is not an asynchronous abort: ordinary
@@ -4828,6 +4836,9 @@ model; explicit native shared capabilities follow §11.4.
   `channel_send(ch, value) -> bool` waits for capacity in a bounded channel and
   evaluates and captures `ch` before evaluating `value`, following the general
   left-to-right evaluation rule. The same rule applies to `channel_try_send`.
+  The ordinary accepted conversion to the channel's payload type is performed
+  before serialization, including fixed or limited arrays copied into a
+  resizable-array payload. Each argument is evaluated only once.
   It returns true after copying the value and false without queueing when
   the channel is closed or the calling structured worker is cancelled.
   `channel_try_send` is the non-blocking form. `channel_receive(ch) -> T, bool`
@@ -4983,7 +4994,9 @@ no FFI layout.
 
 `shared_pointer_copy(p) -> T` copies the current value out and
 `shared_pointer_store(p, value)` copies a new value in. Neither yields a
-reference or slice. Copy-out and store are linearized by the object's internal
+reference or slice. Copy-out uses ordinary Goose value storage, including
+data-stack storage for large fixed values; it adds no native-stack size limit.
+Copy-out and store are linearized by the object's internal
 synchronization, so concurrent operations cannot data-race and copy-out sees
 one complete stored value. `shared_pointer_retain(p)` atomically increments
 the reference count and returns a fresh handle. `shared_pointer_release(p)`
