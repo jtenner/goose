@@ -2047,15 +2047,15 @@ def main():
         # hint. Compile assertions in the generated translation unit and run
         # address probes for local/global/fixed-array/worker copies.
         def aligned_address_probe(tool, label):
-            source = HERE / "native" / "aligned_storage_addresses.goose"
-            native = source.with_suffix(".c")
+            source = HERE / "native" / "aligned_storage_addresses.src"
+            native = HERE / "native" / "aligned_storage_addresses.c"
             cfile = gendir / f"aligned-storage-{label}.c"
             code, out, err = r.goose("-O2", "-o", cfile, source)
             if code:
                 r.fail(f"aligned storage cgen {label}", out + err)
                 return
             text = cfile.read_text(encoding="utf-8")
-            marker = "#pragma pack(pop)"
+            marker = "/* ---- data ---- */"
             assertions = r'''#include <stddef.h>
 _Static_assert(offsetof(Block_g, value_g) == 64, "Block.value offset");
 _Static_assert(sizeof(Block_g) == 128, "Block size");
@@ -2065,9 +2065,10 @@ _Static_assert(sizeof(Nested_g) == 192, "Nested size");
 _Static_assert(sizeof(a2_Nested_g) == 384, "Nested array stride");
 _Static_assert(_Alignof(a2_Nested_g) == 64, "Nested array alignment");'''
             if marker not in text:
-                r.fail(f"aligned storage layout {label}", "generated type section has no pack end")
+                r.fail(f"aligned storage layout {label}", "generated source has no data section")
                 return
-            cfile.write_text(text.replace(marker, marker + "\n" + assertions, 1), encoding="utf-8")
+            at = text.rfind(marker)
+            cfile.write_text(text[:at] + assertions + "\n" + text[at:], encoding="utf-8")
             executable = gendir / f"aligned-storage-{label}{tc.EXE_SUFFIX}"
             ok, log = tool.compile([cfile, native], executable, opt=2, warn="off",
                                    strict_decls=True, runtime=r.runtime,
@@ -2084,7 +2085,7 @@ _Static_assert(_Alignof(a2_Nested_g) == 64, "Nested array alignment");'''
                        f"expected all addresses mod 64 zero, got {result!r}")
 
         r.show_task(aligned_address_probe, cc, cc.name)
-        if clang.id != cc.id:
+        if clang.cc != cc.cc:
             r.show_task(aligned_address_probe, clang, "clang")
 
         # The same coverage test through clang, release and debug. A compiler
@@ -2319,7 +2320,7 @@ _Static_assert(_Alignof(a2_Nested_g) == 64, "Nested array alignment");'''
             expected = set(re.findall(r'"([^"\n]*#simd-[^"\n]*-loop\d+\.goose)"',
                                       cfile.read_text(encoding="utf-8")))
             output_exe = gendir / f"simd-feedback{tc.EXE_SUFFIX}"
-            code, out, err = tc.run_capture([str(exe), "build", "--cc", str(clang.cc),
+            code, out, err = tc.run_capture([str(exe), "build", "--cc", "clang",
                                              "--simd-feedback", "-o", str(output_exe), str(source)])
             report = out + err
             if code:

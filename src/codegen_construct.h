@@ -1165,25 +1165,37 @@ inline void CodeGen::StructLitAt(StructLit *sl, const string &base, bool inroot)
             GenAny(init, Dst { DK_LVALUE, path, ft });
         }
     };
+    auto zeropadding = [&](const string &b, const vector<Field> &fields,
+                           const vector<TypeExpr *> &ftypes, const Layout &lo) {
+        int64_t cur = 0;
+        for (size_t i = 0; i < fields.size(); i++) {
+            if (lo.offs[i] > cur)
+                L("GS_MEMZERO(((uint8_t *)&", b, ") + ", cur, ", ", lo.offs[i] - cur, ");");
+            cur = lo.offs[i];
+            if (!fields[i].ispad) cur += FixedSize(ftypes[i]);
+        }
+        if (lo.size > cur)
+            L("GS_MEMZERO(((uint8_t *)&", b, ") + ", cur, ", ", lo.size - cur, ");");
+    };
     if (et->kind == TY_STRUCT) {
         auto si = SI(et);
-        // Padding has a deterministic zero image, including explicit
-        // alignment gaps and the rounded tail.
-        L("GS_MEMZERO(&", base, ", sizeof(", base, "));");
-        fieldset(base, si->st->fields, si->ftypes, StructLayout(si), 0);
+        auto lo = StructLayout(si);
+        if (LastRealField(si->st->fields) < 0) L("GS_MEMZERO(&", base, ", sizeof(", base, "));");
+        fieldset(base, si->st->fields, si->ftypes, lo, 0);
+        if (lo.align > 1) zeropadding(base, si->st->fields, si->ftypes, lo);
         return;
     }
     if (et->kind == TY_VARIANT) {
         auto ei = EIVar(et);
         auto vi = ei->en->VariantIndex(et->var->variant);
-        L("GS_MEMZERO(&", base, ", sizeof(", base, "));");
+        if (LastRealField(ei->en->variants[vi].fields) < 0)
+            L("GS_MEMZERO(&", base, ", sizeof(", base, "));");
         fieldset(base, ei->en->variants[vi].fields, ei->vftypes[vi], VariantLayout(ei, vi), 0);
         return;
     }
     assert(et->kind == TY_ENUM && !et->enu->varmode && sl->variant);
     auto ei = EIOf(et);
     auto vi = ei->en->VariantIndex(sl->variant);
-    L("GS_MEMZERO(&", base, ", sizeof(", base, "));");
     L(base, ".tag = ", TagConst(ei, vi), ";");
     if (!EmptyLayout(ei->en->variants[vi].fields))
         fieldset(cat(base, ".u.v_", Sanitize(ei->en->variants[vi].name)),

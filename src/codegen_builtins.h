@@ -102,8 +102,7 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
             auto x = GenXD(an[k], ast.inttypes[IS_I64]);
             ix.push_back(constants ? x : Snapshot(ast.inttypes[IS_I64], x));
         }
-        for (auto &i : ix)
-            L("if (", i, " < 0 || ", i, " >= ", lanes, ") gs_abort(GS_E_ASSERT, ", LocArgs(ln), ");");
+        for (auto &i : ix) L("(void)GS_IDX(", i, ", ", lanes, ", ", LocArgs(ln), ");");
         L(CT(t), " ", out, ";");
         if (constants) {
             string args, mask;
