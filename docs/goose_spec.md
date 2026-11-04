@@ -4641,6 +4641,93 @@ model; explicit native shared capabilities follow §11.4.
   `qlimit<T>(n)` gives it one of `n` messages; lowering a limit below what
   the queue holds keeps the messages queued, and puts fail until fewer than
   `n` remain. A limit of zero or less aborts with a runtime diagnostic.
+* **Structured workers**: a `thread_fn` may declare one flat result. A worker
+  with a result is started by
+  `thread_spawn_join(worker, args…) -> Thread<T>` or
+  `thread_spawn_contained_join(worker, args…) -> Thread<T>`, where `T` is the
+  worker's result type. `Thread<T>` is an opaque typed handle: it is not a
+  reference, address or shared-memory capability, cannot be serialized or
+  passed through a queue or to another worker. The spawning program instance
+  owns the right to join exactly once.
+  `thread_join(handle) -> T, bool` waits for cleanup and consumes that right;
+  the boolean is true and `T` is the worker's copied result after a normal
+  return. `thread_join(handle, msg) -> T, bool` additionally appends a contained
+  abort's diagnostic to `msg`. On abort it returns false and T's zero value.
+  Joining an already consumed, invalid or current-worker handle aborts. Dropping
+  a handle does not cancel or leak a worker: the worker remains in its
+  containing scope and its completion is reclaimed during scope cleanup.
+  A structured worker cannot outlive the worker that spawned it. Before a
+  worker returns or aborts, cleanup first requests cancellation of every
+  contained descendant, then joins every unjoined direct structured child.
+  Cancelling the whole descendant set before any join prevents one child from
+  keeping another blocked during cleanup. Main performs the same cleanup before
+  normal return. The cleanup request remains active until those joins finish:
+  a structured contained descendant registered later inherits it through its
+  structured ancestry, including through a non-contained structured worker.
+  Registration and inheritance are one synchronized operation, so their race
+  has the same result in either order. A legacy detached worker breaks that
+  ancestry and retains its existing lifetime and cancellation behavior.
+  Result images are owned by the completion until a successful join,
+  then copied into the joiner's storage and freed; abort and scope cleanup free
+  them without exposing a partial value. No completed structured-worker record
+  remains after its join or containing-scope cleanup.
+* **Cooperative cancellation** applies only to structured contained workers.
+  `thread_cancel(handle) -> bool` requests cancellation and returns false only
+  when that handle's worker has already completed. `thread_cancelled() -> bool`
+  observes the request in the worker. A request is inherited by its structured
+  contained descendants registered later, through any intervening structured
+  workers; an intervening legacy detached worker is outside that cancellation
+  scope. Cancellation is not an asynchronous abort: ordinary
+  Goose code continues until it observes the request or returns. It does wake
+  the worker from a blocked channel send, receive or wait-any operation; that
+  operation returns its unsuccessful/cancelled result. Once requested,
+  cancellation takes priority over channel readiness: a later send or receive
+  also returns unsuccessful without committing or consuming a queued value,
+  and wait-any returns `-1`. Scope cleanup still
+  waits for a worker that ignores cancellation, so cancellation cannot violate
+  ordinary value lifetimes or native cleanup.
+* **First-class channels**: `channel<T>() -> Channel<T>` creates an unbounded
+  channel and `channel<T>(n) -> Channel<T>` creates one bounded to `n` queued
+  messages; `n <= 0` aborts. `T` must be flat. `Channel<T>` is an opaque typed
+  handle, not a reference or shared-memory capability. Copies name the same
+  channel and may cross worker boundaries directly. A program instance retains
+  a channel once, however many local handle copies it has. Packing one or more
+  copies for a worker retains it once for the prospective child; spawn failure
+  rolls that retention back, and the child releases it on normal return or
+  contained abort. The creating main/worker instance releases its retention
+  during its normal/contained cleanup. The last release destroys queued
+  messages and synchronization state and makes the registry slot reusable with
+  a new generation. Each channel has its own FIFO even when another channel has
+  the same T.
+
+  `channel_send(ch, value) -> bool` waits for capacity in a bounded channel and
+  evaluates and captures `ch` before evaluating `value`, following the general
+  left-to-right evaluation rule. The same rule applies to `channel_try_send`.
+  It returns true after copying the value and false without queueing when
+  the channel is closed or the calling structured worker is cancelled.
+  `channel_try_send` is the non-blocking form. `channel_receive(ch) -> T, bool`
+  waits for a value and `channel_try_receive(ch) -> T, bool` does not; false
+  returns T's zero value. A close does not discard messages: receives drain
+  values already queued, then return false. `channel_close(ch) -> bool` closes
+  once, returning false on a repeated close, and wakes every blocked sender and
+  receiver. Sending after close fails. Close races are ordered by the channel's
+  synchronization: a send that committed first remains drainable; otherwise
+  it fails.
+
+  `channel_wait_any(ch0, ch1, …) -> i64` waits until at least one channel can
+  be received from and returns its zero-based argument index. All arguments
+  have the same payload type and at least one is required. Ready channels are
+  chosen by the lowest argument index at the instant the operation examines
+  them; readiness is only a notification, so another consumer may win the
+  subsequent receive. A closed channel is ready, including while it still has
+  values to drain. The call returns `-1` when its structured worker is
+  cancelled. Registration and wakeup are synchronized with send and close, so
+  a transition cannot be missed; spurious wakeups do not change the result.
+  Waiting on the same channel more than once is allowed and the lowest ready
+  occurrence wins.
+
+  Legacy per-type `qput`/`qget` queues and integer thread IDs keep their exact
+  behavior. They do not alias first-class channels or structured handles.
 
 ### 11.3 Dynamic stacks (future)
 
@@ -4819,9 +4906,11 @@ The language's own functions:
 | `abort(msg: u8[:])`, `exit(code: i64)` | end the program; both diverge (§9.3) |
 | `copy(x) -> T` | a fresh copy of the stored value `x` names (§4.1) |
 | `default<T>() -> T` | the value a fixed-size `T` has before anything is written to it (§4.2) |
-| `hardware_threads() -> i64`, `thread_spawn(worker, args…) -> i64`, `thread_spawn_contained(worker, args…) -> i64`, `thread_wait(id) -> bool`, `thread_wait(id, msg) -> bool` | workers (§11.2) |
+| `hardware_threads() -> i64`, `thread_spawn(worker, args…) -> i64`, `thread_spawn_contained(worker, args…) -> i64`, `thread_wait(id) -> bool`, `thread_wait(id, msg) -> bool` | legacy detached workers (§11.2) |
+| `thread_spawn_join(worker, args…) -> Thread<T>`, `thread_spawn_contained_join(worker, args…) -> Thread<T>`, `thread_join(handle) -> T, bool`, `thread_join(handle, msg) -> T, bool`, `thread_cancel(handle) -> bool`, `thread_cancelled() -> bool` | structured workers (§11.2) |
 | `qput(v) -> bool`, `qget<T>() -> T`, `qget<T>(ms) -> T, bool`, `qpoll<T>() -> T, bool` | the typed queues (§11.2) |
 | `qlimit<T>(n)` | a queue's limit of messages (§11.2) |
+| `channel<T>() -> Channel<T>`, `channel<T>(n) -> Channel<T>`, `channel_send(ch, value) -> bool`, `channel_try_send(ch, value) -> bool`, `channel_receive(ch) -> T, bool`, `channel_try_receive(ch) -> T, bool`, `channel_close(ch) -> bool`, `channel_wait_any(ch…) -> i64` | first-class channels (§11.2) |
 | `to_bytes(a) -> u8[>..]`, `to_bytes(a, out)` | an array's image (a varint byte count, then its element region), either fresh or appended to a growable `u8` array (§3.9, `design/serialization.md`) |
 | `bytes_of(a) -> u8[:]` | the element region alone, as a view: no copy, and never writable |
 | `from_bytes<T[>..]>(b: u8[:]) -> T[>..], bool` | a *verified* array from an untrusted image; empty and `false` if it is not one. Also builds `T[>..<]` and the `T[]` family |

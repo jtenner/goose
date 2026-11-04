@@ -3876,12 +3876,22 @@ preserves the isolation of ordinary Goose references and copied globals.
 | `thread_spawn_contained(worker, args…) -> i64` | starts a worker whose aborts end only that worker |
 | `thread_wait(id) -> bool` | blocks until that worker has ended and its storage is released; `false` if it was contained and aborted |
 | `thread_wait(id, msg) -> bool` | as `thread_wait(id)`, and the first such wait appends a contained worker's abort message to `msg` |
+| `thread_spawn_join(worker, args…) -> Thread<T>` | starts a result-returning structured worker owned by this program instance |
+| `thread_spawn_contained_join(worker, args…) -> Thread<T>` | the structured form whose abort is reported by its join |
+| `thread_join(handle) -> T, bool` | consumes the handle, waits through cleanup, and returns the copied result or T's zero value and `false` on contained abort |
+| `thread_join(handle, msg) -> T, bool` | as above, appending the contained abort diagnostic to `msg` |
+| `thread_cancel(handle) -> bool`, `thread_cancelled() -> bool` | requests and observes cooperative cancellation of a structured contained worker |
 | `hardware_threads() -> i64` | a sensible worker count, never more than the data stacks allow |
 | `qput(v) -> bool` | puts `v` on the queue for its type; `false`, at once, if the queue is full |
 | `qget<T>() -> T` | takes the next `T`, blocking |
 | `qget<T>(ms) -> T, bool` | the same, waiting at most `ms` milliseconds; else `T`'s zero value and `false` |
 | `qpoll<T>() -> T, bool` | takes one if there is one; else `T`'s zero value and `false` |
 | `qlimit<T>(n)` | lets the queue for `T` hold at most `n` messages |
+| `channel<T>() -> Channel<T>`, `channel<T>(n) -> Channel<T>` | creates an independent unbounded or bounded channel |
+| `channel_send(ch, v)`, `channel_try_send(ch, v) -> bool` | copies a value, waiting for bounded capacity or trying once |
+| `channel_receive(ch)`, `channel_try_receive(ch) -> T, bool` | receives a copied value, waiting or trying once |
+| `channel_close(ch) -> bool` | closes once; queued values remain drainable |
+| `channel_wait_any(ch…) -> i64` | waits for receive readiness and chooses the lowest ready argument |
 
 Ordinary values cross between programs through **typed queues**, one per
 type, and ordinary worker arguments and queue elements must be **flat**: no
@@ -3932,6 +3942,17 @@ any function a `thread_fn` reaches, unless it is a `let` whose references
 all lead to static data, as a string literal's do. Programs with threads
 need a real C compiler (`goose build`), since the in-process TinyCC
 backend cannot place thread-local storage. Spec §11.2.
+
+A structured worker returns one flat value. Its `Thread<T>` is one-shot and
+stays in the spawning program instance. A normal join transfers the result;
+a contained abort is observed at the join. On scope cleanup, unjoined
+structured children are joined, with contained children first asked to cancel.
+Cancellation is cooperative, but wakes blocked first-class channel operations.
+
+Unlike the legacy per-type queue, each `Channel<T>` is a separate FIFO.
+Bounded sends apply backpressure. Closing wakes senders and receivers, rejects
+later sends, and lets receivers drain values already committed. Wait-any does
+not consume; a competing receiver may win before the following receive.
 
 ### Contained workers
 
@@ -4317,8 +4338,8 @@ standard library, written in Goose under `stdlib/` and documented in
 | `abort(msg)`, `exit(code)` | end the program; neither returns | [20](#stopping-the-program) |
 | `copy(x) -> T` | a fresh copy of the stored value `x` names | [4](#copies-are-visible) |
 | `default<T>() -> T` | the value a fixed-size `T` has before anything is written to it, declared defaults applied | [8](#field-defaults) |
-| `hardware_threads()`, `thread_spawn(worker, args…)`, `thread_spawn_contained(worker, args…)`, `thread_wait(id)`, `thread_wait(id, msg)` | workers | [22](#22-threads) |
-| `qput(v)`, `qget<T>()`, `qpoll<T>()`, `qlimit<T>(n)` | the typed queues | [22](#22-threads) |
+| `hardware_threads()`, `thread_spawn(worker, args…)`, `thread_spawn_contained(worker, args…)`, `thread_wait(id)`, `thread_wait(id, msg)`, `thread_spawn_join(worker, args…)`, `thread_spawn_contained_join(worker, args…)`, `thread_join(handle)`, `thread_cancel(handle)`, `thread_cancelled()` | workers | [22](#22-threads) |
+| `qput(v)`, `qget<T>()`, `qpoll<T>()`, `qlimit<T>(n)`, `channel<T>()`, `channel_send(ch, v)`, `channel_try_send(ch, v)`, `channel_receive(ch)`, `channel_try_receive(ch)`, `channel_close(ch)`, `channel_wait_any(ch…)` | typed queues and channels | [22](#22-threads) |
 | `to_bytes(a)`, `to_bytes(a, out)`, `bytes_of(a)`, `from_bytes<T[>..]>(b)` | serialization | [23](#23-serialization) |
 | `embed_file(path)`, `embed_shader(…)` | a file's bytes, or a compiled shader, read at compile time | [21](#embed_file) |
 

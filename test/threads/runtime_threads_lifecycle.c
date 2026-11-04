@@ -205,6 +205,31 @@ static void check_completion_visibility(void) {
     }
 }
 
+static void check_channel_lifecycle(void) {
+    uint64_t generation = 0;
+    for (int round = 0; round < 256; ++round) {
+        gs_handle h = gs_channel_create(1, __FILE__, __LINE__);
+        check(h.slot == 0, "closed channel registry slot is reused");
+        check(h.generation > generation, "reused channel slot gets a new generation");
+        generation = h.generation;
+        int64_t value = round;
+        check(gs_channel_send(h, &value, sizeof value, 0, __FILE__, __LINE__),
+              "channel queues a copied message");
+        gs_channel_handoff(h, __FILE__, __LINE__);
+        void *child = gs_channel_pending_take();
+        gs_channel_lease *main_context = gs_channel_context;
+        gs_channel_context = NULL;
+        gs_channel_context_begin(child);
+        gs_channel_context_cleanup();
+        gs_channel_context = main_context;
+        check(gs_channels[0] && gs_channels[0]->refs == 1,
+              "worker-packet retention releases independently");
+        gs_channel_context_cleanup();
+        check(gs_nchannels == 0 && gs_channels[0] == NULL,
+              "last program-instance release reclaims channel state and messages");
+    }
+}
+
 int main(void) {
 #ifndef _WIN32
     struct sigaction before;
@@ -214,6 +239,7 @@ int main(void) {
     gs_rt_init(0, NULL, 1, 1, GS_MAX_STACKS);
     check(gs_hardware_threads() >= 1, "hardware_threads() reports at least one worker");
     GS(0)->top[0] = 99;
+    check_channel_lifecycle();
     long allocations = counter_add(&live_allocations, 0);
     long regions = counter_add(&live_regions, 0);
 #ifdef _WIN32

@@ -408,7 +408,9 @@ inline void CodeGen::CollectSpecs() {
                 // and thread_spawn assemble their text or packet on a stack.
                 for (auto &fs : c->fmtspecs) add(fs.second);
                 if (c->builtin == B_PRINT || c->builtin == B_THREAD_SPAWN ||
-                    c->builtin == B_THREAD_SPAWN_CONTAINED)
+                    c->builtin == B_THREAD_SPAWN_CONTAINED ||
+                    c->builtin == B_THREAD_SPAWN_JOIN ||
+                    c->builtin == B_THREAD_SPAWN_CONTAINED_JOIN)
                     si.needssp = true;
                 // A result is built as the call's own type (str() passed as
                 // a slice or returned as a u8[..16], say) before it is fitted.
