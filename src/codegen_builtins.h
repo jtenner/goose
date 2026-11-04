@@ -79,7 +79,7 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
             L("gs_shared_cap ", p, " = gs_shared_pointer_alloc_in(", a[0], ", ", a[1], ", &", a[2], ", ", FixedSize(c->qtype), ", &", ok, ", ", LocArgs(ln), ");");
             return {p, ok};
         }
-        if (c->builtin == B_SHARED_POINTER_COPY) { auto v = T(); L(CT(c->qtype), " ", v, ";");
+        if (c->builtin == B_SHARED_POINTER_COPY) { auto v = T(); FixedLocal(c->qtype, v);
             L("gs_shared_pointer_copy(", a[0], ", &", v, ", ", FixedSize(c->qtype), ", ", LocArgs(ln), ");"); return {v}; }
         if (c->builtin == B_SHARED_POINTER_STORE) { L("gs_shared_pointer_store(", a[0], ", &", a[1], ", ", FixedSize(c->qtype), ", ", LocArgs(ln), ");"); return {}; }
         if (c->builtin == B_SHARED_POINTER_RETAIN) { auto v = T(); L("gs_shared_cap ", v, " = gs_shared_pointer_retain(", a[0], ", ", LocArgs(ln), ");"); return {v}; }
@@ -487,7 +487,9 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
         case B_THREAD_SPAWN: case B_THREAD_SPAWN_CONTAINED:
         case B_THREAD_SPAWN_JOIN: case B_THREAD_SPAWN_CONTAINED_JOIN:
             return EmitThreadSpawn(c, an);
-        case B_THREAD_CANCELLED: return { "gs_thread_cancelled()" };
+        case B_THREAD_CANCELLED:
+            usesthreads = true;
+            return { "gs_thread_cancelled()" };
         case B_THREAD_CANCEL: {
             auto h = GenX(an[0]);
             auto v = T();
@@ -516,19 +518,34 @@ inline vector<string> CodeGen::EmitBuiltin(Call *c, Dst d0) {
             return { v };
         }
         case B_CHANNEL_SEND: case B_CHANNEL_TRY_SEND: {
-            auto t = an[1]->exprtype; auto h = GenPure(an[0]); auto ok = T();
+            auto t = c->qtype; auto h = GenPure(an[0]); auto ok = T();
             auto wait = c->builtin == B_CHANNEL_SEND ? "1" : "0";
             if (IsResz(t)) {
-                auto src = GenLoc(an[1]); if (src.t->kind == TY_REF) DerefLoc(src);
-                string stk; auto base = BytesTemp(stk); EmitRzImage(src, t, stk, ln);
+                // Construct the accepted payload conversion into its image;
+                // a stored argument may still have a fixed/limited layout.
+                string stk; auto base = BytesTemp(stk);
+                auto cnt = T(); L("int64_t ", cnt, " = 0;");
+                Bump(stk, "8");
+                if (IsFrameObj(t)) {
+                    auto pre = FoPrefixSize(t), pp = T(), header = T();
+                    L("uint8_t *", pp, " = ", Top(stk), ";");
+                    Bump(stk, pre);
+                    L(CT(t), " ", header, ";");
+                    GenConstruct(an[1], stk, t, header);
+                    L(cnt, " = ", FoTailHdr(t, header), ".len;");
+                    L("GS_MEMCPY(", pp, ", &", header, ", ", pre, ");");
+                } else GenConstruct(an[1], stk, t, cnt);
+                L("GS_MEMCPY(", base, ", &", cnt, ", 8);");
                 L("uint8_t ", ok, " = gs_channel_send(", h, ", ", base, ", ", Top(stk),
                   " - ", base, ", ", wait, ", ", LocArgs(ln), ");");
             } else if (IsBytesT(t)) {
-                auto p = GenPtr(an[1]);
-                L("uint8_t ", ok, " = gs_channel_send(", h, ", ", p, ", ", SizeX(t, p),
+                string stk; auto p = BytesTemp(stk);
+                GenConstruct(an[1], stk, t);
+                L("uint8_t ", ok, " = gs_channel_send(", h, ", ", p, ", ", Top(stk), " - ", p,
                   ", ", wait, ", ", LocArgs(ln), ");");
             } else {
-                auto tv = T(); FixedLocal(t, tv, GenX(an[1]));
+                auto tv = T(); FixedLocal(t, tv);
+                GenAny(an[1], Dst { DK_LVALUE, tv, t });
                 L("uint8_t ", ok, " = gs_channel_send(", h, ", &", tv, ", ", FixedSize(t),
                   ", ", wait, ", ", LocArgs(ln), ");");
             }
@@ -1758,7 +1775,15 @@ inline void CodeGen::EmitThreadThunk(FnSpec *sp, int64_t stacks) {
                    "    uint8_t *", resultbase, " = ", resultstk, ".top;\n");
             args.push_back(cat("&", resultstk));
         } else if (ki.cret < 0) {
-            Append(b, "    ", CT(rt), " ", result, " = {0};\n");
+            if (IsLargeFixed(rt)) {
+                regions++;
+                resultstk = "gs_worker_result_stk";
+                auto ptr = cat(result, "_ptr");
+                Append(b, "    gs_stack ", resultstk, "; gs_stack_init(&", resultstk, ");\n",
+                       "    ", CT(rt), " *", ptr, " = (", CT(rt), " *)", resultstk, ".top;\n",
+                       "    ", resultstk, ".top += sizeof(*", ptr, ");\n");
+                result = cat("(*", ptr, ")");
+            } else Append(b, "    ", CT(rt), " ", result, " = {0};\n");
             args.push_back(cat("&", result));
         }
     }

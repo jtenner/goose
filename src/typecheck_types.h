@@ -223,6 +223,8 @@ inline StructInst *TypeCheck::GetStructInst(TypeExpr *t) {
     inst->validated = true;
     typechain.pop_back();
     EndTypeBuild();
+    if ((inst->sclass == SC_VARIABLE || inst->sclass == SC_RESIZABLE) && HoldsAlignedT(t))
+        Error(st->line, "aligned struct fields require fixed packed storage");
     return inst;
 }
 
