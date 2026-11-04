@@ -1334,12 +1334,17 @@ inline vector<string> CodeGen::EmitThreadSpawn(Call *c, vector<Node *> &an) {
         auto pt = sp->argtypes[i];
         if (IsSharedSendable(pt)) {
             auto cap = Snapshot(pt, GenPure(an[1 + i]));
-            int consume = pt->kind == TY_NATIVE && pt->nativekind == NK_POINTER &&
-                          !stored_pointer(an[1 + i]);
-            auto worker = T();
-            L("gs_shared_cap ", worker, " = gs_shared_handoff((gs_shared_cap){", cap,
-              ".slot, ", cap, ".generation}, ", consume, ", ", LocArgs(c->line), ");");
-            cap = worker;
+            bool pointer = pt->kind == TY_NATIVE && pt->nativekind == NK_POINTER;
+            int consume = pointer && !stored_pointer(an[1 + i]);
+            if (pointer) {
+                auto worker = T();
+                L("gs_shared_cap ", worker, " = gs_shared_handoff((gs_shared_cap){", cap,
+                  ".slot, ", cap, ".generation}, ", consume, ", ", LocArgs(c->line), ");");
+                cap = worker;
+            } else {
+                L("(void)gs_shared_handoff((gs_shared_cap){", cap, ".slot, ", cap,
+                  ".generation}, 0, ", LocArgs(c->line), ");");
+            }
             EmitValStore(stk, pt, cap);
             continue;
         }
