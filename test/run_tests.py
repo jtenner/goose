@@ -2339,20 +2339,30 @@ void dirty_padding(EqOuter_g *x) { ((unsigned char *)x)[21] = 0x7f; }'''
             if code:
                 r.fail("simd feedback inventory", out + err)
                 return
-            expected = set(re.findall(r'"([^"\n]*#simd-[^"\n]*-loop\d+\.goose)"',
-                                      cfile.read_text(encoding="utf-8")))
             generated = cfile.read_text(encoding="utf-8")
-            if "#ifdef GS_SIMD_FEEDBACK" not in generated or "goose-generated.c" in generated:
+            inventory = re.findall(
+                r'/\*goose-simd-loop:([0-9a-f]+):([0-9a-f]+)\*/\s*'
+                r'#line (\d+) "(#goose-simd-\d+-e[01]-v\d+-loop\d+\.goose)"',
+                generated)
+            displays = {}
+            locations = []
+            for source_hex, fn_hex, line, marker in inventory:
+                source_name = bytes.fromhex(source_hex).decode("utf-8")
+                fn_name = bytes.fromhex(fn_hex).decode("utf-8")
+                suffix = re.search(r'(-v\d+-loop\d+\.goose)$', marker).group(1)
+                display = f"{source_name}#simd-{fn_name}{suffix}"
+                displays[marker] = display
+                locations.append((str(int(line) + 1), display))
+            expected = set(displays.values())
+            if ("#ifdef GS_SIMD_FEEDBACK" not in generated or
+                    "/*goose-simd-loop:" not in generated or not inventory):
                 r.fail("simd feedback marker guards",
-                       "SIMD source markers are not feedback-only or reset to a synthetic file")
+                       "SIMD loop markers lack compiler-owned feedback metadata")
                 return
             if generated.count('"version@"') != 3:
                 r.fail("simd feedback marker substitution",
                        "SIMD versioning rewrote user text or omitted a function version")
                 return
-            locations = re.findall(r'#line (\d+) "([^"\n]*#simd-[^"\n]*-loop\d+\.goose)"',
-                                   generated)
-            locations = [(str(int(line) + 1), marker) for line, marker in locations]
             output_exe = gendir / f"simd-feedback{tc.EXE_SUFFIX}"
             code, out, err = tc.run_capture([str(exe), "build", "--cc", "clang",
                                              "--simd-feedback", "-o", str(output_exe), str(source)])
@@ -2360,8 +2370,7 @@ void dirty_padding(EqOuter_g *x) { ((unsigned char *)x)[21] = 0x7f; }'''
             if code:
                 r.fail("simd feedback build", report)
                 return
-            reported = {marker for marker in expected
-                        if marker in report or marker[marker.find("#simd-"):] in report}
+            reported = {marker for marker in expected if marker in report}
             if reported != expected or "could not determine the original source location" in report:
                 r.fail("simd feedback loop mapping",
                        f"reported {len(reported)}/{len(expected)} loops\n{report}")
@@ -2369,8 +2378,7 @@ void dirty_padding(EqOuter_g *x) { ((unsigned char *)x)[21] = 0x7f; }'''
             if "vectorized loop" not in report or "missed:" not in report:
                 r.fail("simd feedback statuses", report)
                 return
-            if any(f"{marker[marker.find('#simd-'):]}:{line}:" not in report
-                   for line, marker in locations):
+            if any(f"{marker}:{line}:" not in report for line, marker in locations):
                 r.fail("simd feedback source lines", report)
                 return
             line1 = gendir / "simd-feedback-line1.goose"
@@ -2385,6 +2393,75 @@ void dirty_padding(EqOuter_g *x) { ((unsigned char *)x)[21] = 0x7f; }'''
                            for level in range(3)):
                 r.fail("simd feedback first source line", line1_report)
                 return
+
+            forged_names = ["plain#simd-forged-v1-loop99.goose"]
+            if not tc.IS_WINDOWS:
+                forged_names.append('quote"slash\\#simd-forged-v2-loop98.goose')
+            for forged_name in forged_names:
+                forged = gendir / forged_name
+                forged.write_text("simd fn f() { print(7); } fn main() { f(); }\n",
+                                  encoding="utf-8")
+                forged_exe = gendir / f"simd-feedback-forged{tc.EXE_SUFFIX}"
+                code, out, err = tc.run_capture([str(exe), "build", "--cc", "clang",
+                                                 "--simd-feedback", "-o", str(forged_exe),
+                                                 str(forged)])
+                forged_report = out + err
+                if code or "simd feedback:" in forged_report:
+                    r.fail("simd feedback forged source filename", forged_report)
+                    return
+
+            same = gendir / "simd-feedback-same-name-src"
+            same.mkdir(exist_ok=True)
+            same_other = same / "other.goose"
+            same_other.write_text(
+                "namespace other;\n"
+                "simd fn same(xs: u32[:]) { for x, i in xs { xs[i] = x + 1; } }\n",
+                encoding="utf-8")
+            same_main = same / "main.goose"
+            same_main.write_text(
+                "import other;\n"
+                "simd fn same(xs: u32[:]) { for x, i in xs { xs[i] = x + 1; } }\n"
+                "fn main() { var xs: u32[2048] = [0; 2048]; same(xs); "
+                "other::same(xs); }\n",
+                encoding="utf-8")
+            same_exe = gendir / f"simd-feedback-same-name{tc.EXE_SUFFIX}"
+            code, out, err = tc.run_capture([str(exe), "build", "--cc", "clang",
+                                             "--simd-feedback", "-o", str(same_exe),
+                                             str(same_main)])
+            same_report = out + err
+            same_sources = (same_main, same_other)
+            if code or any(not any(f"{source}#simd-same-v{level}-loop0.goose:" in line and
+                                   "vectorized loop" in line
+                                   for line in same_report.splitlines())
+                           for source in same_sources for level in range(3)):
+                r.fail("simd feedback same-named module functions", same_report)
+                return
+
+            try:
+                path_limit = os.pathconf(gendir, "PC_PATH_MAX")
+            except (AttributeError, OSError, ValueError):
+                path_limit = 0
+            if not tc.IS_WINDOWS and path_limit >= 4096:
+                long_dir = gendir
+                part = 0
+                while len(str(long_dir / "long.goose")) < 4020:
+                    need = 4020 - len(str(long_dir / "long.goose"))
+                    size = min(180, max(4, need - 1))
+                    long_dir /= (f"d{part:02d}" + "x" * size)[:size]
+                    part += 1
+                long_dir.mkdir(parents=True)
+                long_source = long_dir / "long.goose"
+                long_source.write_text(
+                    "simd fn f(xs: u32[:]) { for x, i in xs { xs[i] = x + 1; } }\n"
+                    "fn main() { var xs: u32[2048] = [0; 2048]; f(xs); }\n",
+                    encoding="utf-8")
+                long_exe = gendir / f"simd-feedback-long-path{tc.EXE_SUFFIX}"
+                code, out, err = tc.run_capture([str(exe), "build", "--cc", "clang",
+                                                 "--simd-feedback", "-o", str(long_exe),
+                                                 str(long_source)])
+                if code:
+                    r.fail("simd feedback long source path", out + err)
+                    return
             r.ok("simd feedback maps every emitted version loop with status")
 
         if args.profile == "sanitize":

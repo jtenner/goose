@@ -194,11 +194,12 @@ struct CodeGen {
 
     // A C string literal (quotes included) for arbitrary bytes; non-printables
     // as 3-digit octal so following characters can never extend an escape.
-    // MSVC takes at most 16380 bytes in one literal, so a long string becomes
-    // adjacent literals, a line of its text or at most 4000 bytes each.
-    static string CStr(string_view v) {
+    // MSVC takes at most 16380 bytes in one literal, so a long string normally
+    // becomes adjacent literals, a line of its text or at most 4000 bytes each.
+    // A preprocessor #line filename is one string token and passes false.
+    static string CStr(string_view v, bool splitlong = true) {
         string s = "\"";
-        auto split = v.size() > 4000;
+        auto split = splitlong && v.size() > 4000;
         size_t piece = 0;
         for (size_t i = 0; i < v.size(); i++) {
             auto c = v[i];
@@ -217,6 +218,21 @@ struct CodeGen {
         }
         s += '"';
         return s;
+    }
+
+    // Bytes embedded in compiler-owned generated-C comments. Hex has no C
+    // comment/string metacharacters, so even an adversarial source filename
+    // cannot imitate the surrounding feedback marker structure.
+    static string SimdMetaHex(string_view v) {
+        static constexpr char hex[] = "0123456789abcdef";
+        string out;
+        out.reserve(v.size() * 2);
+        for (auto c : v) {
+            auto u = (uint8_t)c;
+            out += hex[u >> 4];
+            out += hex[u & 15];
+        }
+        return out;
     }
 
     // Abort locations: the file path becomes one static string per source

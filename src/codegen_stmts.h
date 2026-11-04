@@ -62,10 +62,12 @@ inline void CodeGen::SimdLoopLine(Line line) {
         line.fileidx >= (int)ast.sources.size()) return;
     auto source = ast.sources[line.fileidx].first;
     L("#ifdef GS_SIMD_FEEDBACK");
+    L("/*goose-simd-loop:", SimdMetaHex(source), ":",
+      SimdMetaHex(curspec->sf->name), "*/");
     // #endif is the first logical line after #line; number it one before the
     // Goose loop so the loop itself retains its real source line.
     L("#line ", std::max(0, line.line - 1), " ",
-      CStr(cat(source, "#simd-", curspec->sf->name,
+      CStr(cat("#goose-simd-", curspec->id, "-e", emiter ? 1 : 0,
                "-version@-loop", simdloopn++, ".goose")));
     L("#endif");
 }
