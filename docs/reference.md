@@ -3373,6 +3373,41 @@ fn main() { print(checksum("goose"), " ", clamp01(1.5)); }
 16806 1.0
 ```
 
+### Fixed-width vectors and alignment
+
+The native SIMD extension defines `vector Lane[N]` values. `import simd_vectors;`
+provides `i8x16`, `u8x16`, `i16x8`, `u16x8`, `i32x4`, `u32x4`,
+`i64x2`, `u64x2`, `f32x4`, `f64x2`, and corresponding 32- and 64-byte
+aliases with twice and four times as many lanes. Vectors are flat, distinct
+from arrays, and stored with byte alignment by default. Arithmetic `+`, `-`,
+`*`, `/` is lane-wise; unary `-` applies to signed and floating lanes. Scalar
+width, overflow and rounding rules apply per lane.
+
+`splat_T(x)` fills a vector; `vector_load_T(xs, first)` and
+`vector_store_T(xs, first, v)` transfer consecutive lanes from or to a slice
+of the lane type. They check the entire range before accessing it, evaluate
+arguments once left to right, and never use capacity beyond the slice length.
+`shuffle_T(v, i0, ...)` takes one checked index per result lane and copies
+lanes as if from a snapshot. Vector signatures are forbidden in `extern` and
+`export` functions; their C ABI is unspecified. Native vector operations have
+scalar fallbacks with the same results and checks. Spec §7.12.
+
+`align(N)` before a global, local or struct field requests a positive
+power-of-two byte alignment up to 64. It changes placement, not type or access
+rights. An aligned field adds padding, raises the containing fixed struct's
+alignment, and rounds its size up, recursively, so array elements retain their
+alignment. Padding is zeroed and ignored by equality and formatting. Aligned
+fields in variable-size layouts are rejected, as are aligned element types in
+runtime-sized arrays, queues and worker argument or result packets. Alignment
+does not relax bounds or capability checks; vector loads and stores support
+unaligned addresses. Spec §7.12.
+
+Native `build --simd-feedback` reports each loop in a `simd fn` by Goose
+source line and emitted instruction-set version, including missed loops and
+compiler reasons when available. Feedback is advisory. The fork supports it
+for Clang native builds; `run`, `check`, `lsp`, C-only output, TinyCC and
+unsupported compiler interfaces reject it. Spec §7.12.
+
 ---
 
 ## 18. Generics and function values
@@ -3897,9 +3932,9 @@ Ordinary values cross between programs through **typed queues**, one per
 type, and ordinary worker arguments and queue elements must be **flat**: no
 references or slices at any depth. A flat Goose value is contiguous, so a job
 or a result carries real data, variable-size parts included, as one copy.
-Explicit `SharedView`, `SharedAtomicU32` and `SharedAtomicU64` values may also be
-direct worker arguments under the native lease protocol; they cannot be queue
-elements. A `thread_fn`'s parameters have no defaults.
+Direct `SharedView`, `SharedAtomicU32`, `SharedAtomicU64`, `Channel<T>` and
+`SharedPointer<T>` values can also cross worker boundaries under their respective
+ownership rules. Exactly `SharedPointer<T>` is also a typed queue exception. A `thread_fn`'s parameters have no defaults.
 
 <!-- check-only -->
 ```goose
@@ -3953,6 +3988,87 @@ Unlike the legacy per-type queue, each `Channel<T>` is a separate FIFO.
 Bounded sends apply backpressure. Closing wakes senders and receivers, rejects
 later sends, and lets receivers drain values already committed. Wait-any does
 not consume; a competing receiver may win before the following receive.
+
+### Structured joins, cancellation and channels
+
+`Thread<T>` cannot be sent to a worker or queue. Join consumes its single join
+right; invalid or repeated joins abort. A structured child cannot outlive its
+spawner. Cleanup requests cancellation of all contained descendants before
+joining unjoined direct children, including descendants registered during
+cleanup. Detached workers break this ancestry. A contained abort returns the
+zero result and `false`; the optional message receives its diagnostic.
+
+Only structured contained workers can be cancelled. `thread_cancel` returns
+false if the worker has already completed; `thread_cancelled` observes the
+request (and is false in main). Cancellation is cooperative, so code must
+check it and return. It wakes blocked channel operations and takes priority
+over readiness: sends and receives fail without transferring a value, and
+wait-any returns `-1`. Cleanup still waits for a worker that ignores it.
+
+Channels carry flat values by copy. Copies of a handle name the same channel;
+worker handoff retains it, and each program instance releases its retention at
+cleanup. A bounded capacity must be positive. Send and try-send return false
+on close or cancellation; receive and try-receive return a zero value and false
+when unsuccessful. Close succeeds once, wakes blocked operations, and leaves
+committed messages available to drain. A send racing close either commits
+before close or fails. `channel_wait_any` requires one or more channels of the
+same payload type, returns the lowest ready argument index, and treats a closed
+channel as ready. It is a notification, not a reservation; another receiver
+may consume the value first. Duplicate arguments are allowed. Spec §11.2.
+
+### Typed atomic cells
+
+`shared_atomic_u32/u64(owner, offset, initial)` registers an aligned cell;
+`shared_atomic_array_u32/u64(owner, offset, count, initial)` registers a
+positive number of cells and returns a typed view. `shared_atomic_view_u32/u64`
+derives a cell by index. Registered bytes cannot overlap another atomic region
+or an active ordinary borrow, and cannot be ordinarily borrowed until owner
+close, even through an earlier alias. Width, index, alignment and liveness are
+checked. Cells use native byte order. Spec §11.4.
+
+`atomic_load`, `atomic_store`, `atomic_exchange`, and
+`atomic_fetch_add/sub/and/or/xor` operate at the cell's unsigned width. Exchange
+and fetch return the old value; arithmetic wraps. Strong
+`atomic_compare_exchange(cell, expected, desired, success, failure)` returns
+the observed value and whether it exchanged. Orders are compile-time strings:
+`"Relaxed"`, `"Acquire"`, `"Release"`, `"AcqRel"`, `"SeqCst"`. Loads allow
+Relaxed, Acquire or SeqCst; stores allow Relaxed, Release or SeqCst; read-modify-write
+operations allow all five. CAS failure may be Relaxed with any success order,
+Acquire with Acquire, AcqRel or SeqCst success, or SeqCst with SeqCst success.
+Other combinations are errors. The native backend requires always-lock-free
+supported widths and does not fall back to mutexes or out-of-line helpers.
+Raw address `unsafe_atomic_*` operations require unsafe authority; safe
+capabilities cannot be converted to raw addresses. Spec §11.4.
+
+### SharedPointer
+
+`shared_pointer_alloc<T>(value) -> SharedPointer<T>, SharedOwner, bool` creates
+an anonymous owner and copies a value into it. The overload
+`shared_pointer_alloc<T>(owner, offset, value) -> SharedPointer<T>, bool` uses
+a checked range in an existing writable anonymous owner belonging to the caller.
+The range cannot overlap an ordinary borrow, atomic region or live pointer
+object; it remains reserved until the last claim is released. Failure returns
+an invalid pointer and leaves a supplied owner and its bytes unchanged.
+
+`T` must be fixed-size and recursively flat: no capabilities, references, slices,
+runtime-length arrays, strings, function values or variable-mode ADTs. Fixed
+arrays and fixed structs or ADTs qualify only if their contents do. This is
+checked after generic substitution wherever the type occurs. `shared_pointer_copy(p)`
+copies out a complete value; `shared_pointer_store(p, value)` copies one in.
+Neither exposes a reference. Each operation is synchronized, but a separate
+copy followed by a store is not an atomic read-modify-write transaction.
+
+Assignment aliases the same claim; it does not retain. `shared_pointer_retain(p)`
+creates a fresh claim; `shared_pointer_release(p)` invalidates that claim and
+all its bitwise copies. Stale or wrong-type uses abort. The last release destroys
+the object, while `shared_close(owner)` succeeds only after all claims and
+other holds are gone. Direct worker handoff creates a distinct worker claim:
+stored expressions remain live, while temporary claims are consumed. Exactly
+`SharedPointer<T>` may be sent through a typed queue: a successful `qput`
+transfers the claim and invalidates sender aliases; a refused put transfers
+nothing. The receiver owns the claim. Pointer wrappers do not gain these
+exceptions. Native support requires the always-lock-free u64 substrate; retain
+and release also use the registry mutex. Spec §11.4.
 
 ### Contained workers
 
