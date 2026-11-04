@@ -3605,9 +3605,47 @@ static void gs_cancel_store(int *p) {
 )GSRT"
 R"GSRT(static gs_thread *gs_threads;
 static int64_t gs_numthreads;
+/* Structured handles and legacy integer IDs share the runtime's monotonic
+   worker counter so parent/descendant bookkeeping has one namespace, but the
+   language APIs must not alias. Remember every structured ID after its record
+   is joined or reclaimed so a later legacy thread_wait still rejects it. */
+static uint8_t *gs_structuredbits;
+static int64_t gs_structuredbytes;
 static int gs_main_closing;
 static gs_mutex gs_threads_mutex = GS_MUTEX_INIT;
 static gs_cond gs_threads_done = GS_COND_INIT;
+
+)GSRT"
+R"GSRT(/* Called with gs_threads_mutex held. */
+static void gs_structured_id_add(int64_t id) {
+    if (id / 8 >= gs_structuredbytes) {
+        int64_t n = gs_structuredbytes ? gs_structuredbytes : 16;
+        while (n <= id / 8) {
+            if (n > INT64_MAX / 2) gs_panic("structured thread id space exhausted");
+            n *= 2;
+        }
+        if ((uint64_t)n > SIZE_MAX) gs_panic("structured thread id space exhausted");
+        uint8_t *bits = (uint8_t *)realloc(gs_structuredbits, (size_t)n);
+        if (!bits) gs_panic("out of memory recording a structured thread id");
+        memset(bits + gs_structuredbytes, 0, (size_t)(n - gs_structuredbytes));
+        gs_structuredbits = bits;
+        gs_structuredbytes = n;
+    }
+    gs_structuredbits[id / 8] |= (uint8_t)(1u << (id % 8));
+}
+
+)GSRT"
+R"GSRT(/* Spawn failure reuses its not-yet-issued ID, so it also rolls this mark back. */
+static void gs_structured_id_remove(int64_t id) {
+    if (id / 8 < gs_structuredbytes)
+        gs_structuredbits[id / 8] &= (uint8_t)~(1u << (id % 8));
+}
+
+)GSRT"
+R"GSRT(static int gs_structured_id(int64_t id) {
+    return id >= 0 && id / 8 < gs_structuredbytes &&
+           (gs_structuredbits[id / 8] >> (id % 8) & 1);
+}
 
 )GSRT"
 R"GSRT(/* Called with gs_threads_mutex held. Legacy detached workers deliberately
@@ -3774,6 +3812,7 @@ R"GSRT(GS_API int64_t gs_thread_start(void (*run)(void (*)(uint8_t *), uint8_t *
     if (gs_numthreads == INT64_MAX) gs_panic("thread id space exhausted");
     int64_t id = gs_numthreads++;
     t->id = id;
+    if (structured) gs_structured_id_add(id);
     if (structured && contained && gs_structured_scope_cancelled(t->parent))
         gs_cancel_store(&t->cancelled);
     if (!gs_shared_worker_commit(t->shared_leases, id)) {
@@ -3806,6 +3845,7 @@ R"GSRT(GS_API int64_t gs_thread_start(void (*run)(void (*)(uint8_t *), uint8_t *
     #endif
     if (failed) {
         gs_threads = t->next;
+        if (structured) gs_structured_id_remove(id);
         --gs_numthreads;
         gs_mutex_unlock(&gs_threads_mutex);
         gs_channel_pending_release(t->channel_leases);
@@ -3841,7 +3881,10 @@ R"GSRT(GS_API uint8_t *gs_thread_join(gs_handle h, int64_t *size, uint8_t **msg,
                                const char *file, int line) {
     gs_mutex_lock(&gs_threads_mutex);
     gs_thread *t = gs_structured_get(h);
-    if (!t) { gs_mutex_unlock(&gs_threads_mutex); gs_abort(GS_E_THREADID, file, line); }
+    if (!t) { gs_mutex_unlock(&gs_threads_mutex);
+        gs_abort_msg((const uint8_t *)"invalid or consumed structured thread handle",
+                     (int64_t)(sizeof("invalid or consumed structured thread handle") - 1),
+                     file, line); }
     if (t->parent != gs_current_thread_id) { gs_mutex_unlock(&gs_threads_mutex);
         gs_abort_msg((const uint8_t *)"structured worker belongs to another program instance", 53,
                      file, line); }
@@ -3861,12 +3904,16 @@ R"GSRT(GS_API uint8_t *gs_thread_join(gs_handle h, int64_t *size, uint8_t **msg,
 R"GSRT(GS_API uint8_t gs_thread_cancel(gs_handle h, const char *file, int line) {
     gs_mutex_lock(&gs_threads_mutex);
     gs_thread *t = gs_structured_get(h);
-    if (!t) { gs_mutex_unlock(&gs_threads_mutex); gs_abort(GS_E_THREADID, file, line); }
+    if (!t) { gs_mutex_unlock(&gs_threads_mutex);
+        gs_abort_msg((const uint8_t *)"invalid or consumed structured thread handle",
+                     (int64_t)(sizeof("invalid or consumed structured thread handle") - 1),
+                     file, line); }
     if (t->parent != gs_current_thread_id) { gs_mutex_unlock(&gs_threads_mutex);
         gs_abort_msg((const uint8_t *)"structured worker belongs to another program instance", 53,
                      file, line); }
     if (!t->contained) { gs_mutex_unlock(&gs_threads_mutex);
-        gs_abort_msg((const uint8_t *)"only a structured contained worker can be cancelled", 52,
+        gs_abort_msg((const uint8_t *)"only a structured contained worker can be cancelled",
+                     (int64_t)(sizeof("only a structured contained worker can be cancelled") - 1),
                      file, line); }
     uint8_t active = !t->completed;
     gs_cancel_store(&t->cancelled);
@@ -3928,6 +3975,12 @@ R"GSRT(GS_API uint8_t gs_thread_wait(int64_t id, uint8_t **msg, int64_t *len,
         /* A contained worker's abort returns to gs_thread_main, which locks. */
         gs_mutex_unlock(&gs_threads_mutex);
         gs_abort(err, file, line);
+    }
+    if (gs_structured_id(id)) {
+        gs_mutex_unlock(&gs_threads_mutex);
+        gs_abort_msg((const uint8_t *)"thread_wait on a structured worker id",
+                     (int64_t)(sizeof("thread_wait on a structured worker id") - 1),
+                     file, line);
     }
     for (;;) {
         gs_thread *t = gs_threads;
