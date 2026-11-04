@@ -2513,6 +2513,47 @@ void dirty_padding(EqOuter_g *x) { ((unsigned char *)x)[21] = 0x7f; }'''
                            diagnostic_report)
                     return
 
+                unicode_dir = gendir / "simd-feedback-josé"
+                unicode_dir.mkdir(exist_ok=True)
+                unicode_source = unicode_dir / "módulo.goose"
+                unicode_source.write_text(
+                    "simd fn fast(xs: u32[:]) { for x, i in xs { xs[i] = x + 1; } }\n"
+                    "fn main() { var xs: u32[2048] = [0; 2048]; fast(xs); }\n",
+                    encoding="utf-8")
+                unicode_exe = gendir / f"simd-feedback-unicode{tc.EXE_SUFFIX}"
+                code, out, err = tc.run_capture([
+                    str(exe), "build", "--cc", "clang", "--simd-feedback",
+                    "-o", str(unicode_exe), str(unicode_source)])
+                unicode_report = out + err
+                if code or any(not any(f"{unicode_source}#simd-fast-v{level}-loop0.goose:" in line
+                                       and "remark: vectorized loop" in line
+                                       for line in unicode_report.splitlines())
+                                       for level in range(3)):
+                    r.fail("simd feedback Unicode source path", unicode_report)
+                    return
+
+                unicode_stdlib = gendir / "simd-feedback-bibliothèque" / "stdlib"
+                shutil.copytree(HERE.parent / "stdlib", unicode_stdlib)
+                unicode_stdlib_source = gendir / "simd-feedback-unicode-stdlib.goose"
+                unicode_stdlib_source.write_text(
+                    "import base64;\n"
+                    "fn main() { var out: u8[>..] = []; "
+                    "base64::encode(out, \"feedback path\"); print(out.len); }\n",
+                    encoding="utf-8")
+                unicode_stdlib_exe = gendir / f"simd-feedback-unicode-stdlib{tc.EXE_SUFFIX}"
+                code, out, err = tc.run_capture([
+                    str(exe), "build", "--stdlib", str(unicode_stdlib), "--cc", "clang",
+                    "--simd-feedback", "-o", str(unicode_stdlib_exe),
+                    str(unicode_stdlib_source)])
+                unicode_stdlib_report = out + err
+                unicode_stdlib_base64 = unicode_stdlib / "base64.goose"
+                if code or any(not any(
+                        f"{unicode_stdlib_base64}#simd-encode-v{level}-loop0.goose:" in line
+                        for line in unicode_stdlib_report.splitlines())
+                        for level in range(3)):
+                    r.fail("simd feedback Unicode stdlib path", unicode_stdlib_report)
+                    return
+
             same = gendir / "simd-feedback-same-name-src"
             same.mkdir(exist_ok=True)
             same_other = same / "other.goose"

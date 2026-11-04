@@ -235,6 +235,14 @@ struct CodeGen {
         return out;
     }
 
+    // A #line filename for generated code after a SIMD version. Numeric C
+    // escapes are forbidden in an unevaluated string literal by newer Clang,
+    // and a source path is arbitrary bytes. Keep the directive ASCII and let
+    // the adjacent hex metadata carry the path used in user-facing feedback.
+    static string SimdSourceName(string_view v) {
+        return cat("#goose-source-", SimdMetaHex(v), ".goose");
+    }
+
     // Abort locations: the file path becomes one static string per source
     // file in the generated code; call sites pass it plus the line number.
     // A check in a standard library function fails where the program called

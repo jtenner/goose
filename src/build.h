@@ -150,7 +150,7 @@ struct Builder {
                 };
                 constexpr string_view metaprefix = "/*goose-simd-loop:";
                 bool guarded = false, metadata = false;
-                string metasource, metafn;
+                string metasource, metasourcealias, metafn;
                 for (size_t b = 0; b < generated.size();) {
                     auto e = generated.find('\n', b);
                     if (e == string::npos) e = generated.size();
@@ -169,11 +169,14 @@ struct Builder {
                         auto body = text.substr(metaprefix.size(),
                                                 text.size() - metaprefix.size() - 2);
                         auto sep = body.find(':');
+                        auto sourcehex = body.substr(0, sep);
                         metadata = sep != string_view::npos &&
                                    body.find(':', sep + 1) == string_view::npos &&
-                                   unhex(body.substr(0, sep), metasource) &&
+                                   unhex(sourcehex, metasource) &&
                                    unhex(body.substr(sep + 1), metafn) &&
                                    !metasource.empty() && !metafn.empty();
+                        if (metadata)
+                            metasourcealias = cat("#goose-source-", sourcehex, ".goose");
                         if (!metadata) guarded = false;
                     } else if (guarded && metadata && text.substr(0, 6) == "#line ") {
                         p += 6;
@@ -211,6 +214,7 @@ struct Builder {
                                 digits(file, loop + 5, file.size() - 6)) {
                                 loops.insert(file);
                                 sources.insert(metasource);
+                                sources.insert(metasourcealias);
                                 auto suffix = file.substr(version);
                                 loopdisplay[file] = cat(metasource, "#simd-", metafn,
                                                         suffix);

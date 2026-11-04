@@ -579,7 +579,7 @@ inline void CodeGen::EmitSimdVersions(FnSpec *sp, const string &name, const stri
                    "\n#endif\n");
     };
     auto reset = cat("#ifdef GS_SIMD_FEEDBACK\n#line ", std::max(0, sp->sf->end.line - 1),
-                     " ", CStr(source, false), "\n#endif\n");
+                     " ", CStr(SimdSourceName(source), false), "\n#endif\n");
     auto versionbody = [&](int lv) {
         auto out = fnbody;
         // Only compiler-owned loop-marker #line directives carry the version
