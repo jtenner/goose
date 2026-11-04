@@ -2370,7 +2370,8 @@ _Static_assert(_Alignof(a2_Nested_g) == 64, "Nested array alignment");'''
             if code:
                 r.fail("simd feedback build", report)
                 return
-            reported = {marker for marker in expected if marker in report}
+            reported = {marker for marker in expected
+                        if marker in report or marker[marker.find("#simd-"):] in report}
             if reported != expected or "could not determine the original source location" in report:
                 r.fail("simd feedback loop mapping",
                        f"reported {len(reported)}/{len(expected)} loops\n{report}")

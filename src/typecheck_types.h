@@ -506,6 +506,7 @@ inline bool TypeCheck::HoldsVectorT(TypeExpr *t) {
 inline bool TypeCheck::HoldsAlignedT(TypeExpr *t) {
     set<pair<TypeKind, void *>> seen;
     function<bool(TypeExpr *)> walk = [&](TypeExpr *u) -> bool {
+        if (!u) return false;  // Explicit pad fields have no value type.
         switch (u->kind) {
             case TY_REF: return walk(u->ref->sub);
             case TY_SLICE: return walk(u->sub);
