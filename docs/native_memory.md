@@ -1,8 +1,8 @@
 # Native memory
 
 Native memory is separate from Goose arrays, references and copied worker
-globals. `SharedOwner`, `SharedView`, `SharedAccess`, `SharedAtomicU32` and
-`SharedAtomicU64` are opaque compiler types. Safe Goose cannot construct their
+globals. `SharedOwner`, `SharedView`, `SharedAccess`, `SharedAtomicU32`,
+`SharedAtomicU64` and `SharedPointer<T>` are opaque compiler types. Safe Goose cannot construct their
 fields, convert integers to them, serialize them, or send them through queues
 or C signatures. Copying a capability copies its authority; it does not create
 a second allocation or a second right to free storage.
@@ -80,6 +80,77 @@ memory. Borrow creation, view creation and worker handoff are setup operations.
 
 See [the shared job sample](../samples/32_shared_jobs.goose) for a complete
 worker pool with indexed completion flags and disjoint result ranges.
+
+## Typed shared pointers
+
+`shared_pointer_alloc<T>(value)` returns `(SharedPointer<T>, SharedOwner,
+bool)`. On success it copies one recursively admissible fixed-size flat value
+into a new anonymous owner, with its private header in the capability registry.
+Strings, slices, references, runtime-sized arrays,
+function values, native capabilities and variable-mode ADTs are rejected
+anywhere inside `T`, in every type context after generic substitution.
+`shared_pointer_copy` returns a complete snapshot;
+`shared_pointer_store` replaces it atomically with respect to other copy/store
+operations. Neither exposes a Goose reference or raw address.
+
+Assignment aliases one retained claim; it does not increment the count.
+`shared_pointer_retain` creates a distinct retained handle, and
+`shared_pointer_release` invalidates that handle and its aliases. Each retained
+handle prevents owner close. The last release removes the object but does not
+close its owner. Stale and wrong-type operations abort. Counting uses the
+existing lock-free u64 substrate; supported native targets are unchanged and
+TinyCC remains rejected.
+
+A direct pointer can cross `thread_spawn`. Every argument gets a distinct
+retained packet claim. A stored pointer expression is borrowed and keeps its
+source claim; a temporary pointer result has its source claim consumed in the
+same registry transaction that creates the packet claim. A field or index is
+stored only when its entire receiver path is stored, not when rooted in a call,
+literal or control-expression temporary. This applies to ordinary function
+results as well as builtins. Packet claims are pending until assigned to the
+child before native creation, and only that transaction is rolled back on
+creation failure. A lease releases its claim only while it still owns that
+exact live claim, so explicit release, queue transfer and nested transfer do
+not let an earlier lease revoke the later owner. Duplicate use of one consumed
+temporary is stale-handle misuse; it aborts outside runtime locks and contained
+cleanup reclaims any packet claims already prepared. It can also be
+the exact element type of a typed queue. Successful `qput` transfers the handle
+and invalidates the sender; a full-queue failure leaves it with the sender. A
+successful receive transfers it to the receiver. A poll/timed-get miss returns
+an invalid zero handle with false. Shutdown releases undelivered handles. This
+narrow exception does not apply to wrappers and does not make capabilities
+serializable or valid in FFI.
+Passing a stored handle does not consume it. Any temporary pointer result is
+consumed after a distinct packet claim is retained, without special-casing
+`shared_pointer_retain` syntax. A function returning an existing alias
+transfers that source claim; retain before returning when another alias must
+remain authoritative.
+
+Worker-created owners with queued or otherwise retained pointer claims remain
+mapped after their creating worker exits. The orphan is reclaimed after both
+its worker leases and its last pointer claim end. A queue claim is marked
+queue-owned on put and adopted by the receiving thread on get. Shutdown closes
+admission and detaches nodes under the queue mutex, releasing claims that were
+never received exactly once. It deliberately leaves the closed queue state
+allocated until process teardown so detached blocked or racing workers cannot
+use freed mutex, condition or queue storage; no worker join is added.
+
+The u64 reference-count update is an always-lock-free atomic operation on the
+supported targets. Descriptor creation, invalidation and reclamation still run
+under the capability-registry mutex, so retain and release as complete
+operations are thread-safe but not lock-free.
+Pointer-only programs emit the same supported-frontend and always-lock-free
+u64/generation assertions as shared atomic capabilities. There is no
+`libatomic` or mutex fallback; TinyCC and unsupported native frontends remain
+explicitly rejected.
+
+`shared_pointer_alloc<T>(owner, offset, value)` registers a checked payload
+range in an existing writable anonymous owner and returns `(pointer, ok)`. The
+owner is creator-thread-only; the range must be in bounds and disjoint from
+ordinary borrows, atomic regions and other live pointer objects. Those bytes
+remain unavailable to borrows and atomic registration until the last claim is
+released. The one-argument convenience form creates a fresh owner and returns
+`(pointer, owner, ok)` through the same registration path.
 
 ## Atomic regions and indexed job tables
 

@@ -463,6 +463,14 @@ inline bool TypeCheck::IsFlat(TypeExpr *t) {
     }
 }
 
+inline bool TypeCheck::SharedPointerPayloadOk(TypeExpr *t) {
+    return ClassOf(t) == SC_FIXED && IsFlat(t) && !HoldsIndexT(t) &&
+        !Reaches(t, [](TypeExpr *x) {
+            return x->kind == TY_NATIVE || x->kind == TY_REF ||
+                   x->kind == TY_SLICE || x->kind == TY_FN;
+        });
+}
+
 // Whether t, or a type a value of it reaches through references, slices,
 // arrays and fields, satisfies pred. Each struct, enum and variant type is
 // entered once, as a recursive type reaches itself again; a variant type
@@ -726,12 +734,18 @@ inline void TypeCheck::ValidateType(TypeExpr *t, Line l, int pos) {
         case TY_NATIVE:
             if (t->native->arg) {
                 ValidateType(t->native->arg, l, VT_LOCAL);
-                if (!IsFlat(t->native->arg))
-                    Error(l, cat(NativeName(t->native->kind), " payload must be flat (§11.2), not ",
-                                 TypeStr(t->native->arg)));
-                if (HoldsIndexT(t->native->arg))
-                    Error(l, cat(TypeStr(t), " cannot cross thread contexts: its payload holds an "
-                                 "index type (§3.11)"));
+                if (t->native->kind == NK_POINTER) {
+                    if (!SharedPointerPayloadOk(t->native->arg))
+                        Error(l, cat("SharedPointer value type must be recursively fixed and flat, not ",
+                                     TypeStr(t->native->arg)));
+                } else {
+                    if (!IsFlat(t->native->arg))
+                        Error(l, cat(NativeName(t->native->kind), " payload must be flat (§11.2), not ",
+                                     TypeStr(t->native->arg)));
+                    if (HoldsIndexT(t->native->arg))
+                        Error(l, cat(TypeStr(t), " cannot cross thread contexts: its payload holds an "
+                                     "index type (§3.11)"));
+                }
             }
             return;
         case TY_VOID:

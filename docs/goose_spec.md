@@ -4741,7 +4741,8 @@ introduces the dynamic-stack-block machinery this needs.)
 ### 11.4 Explicit native memory capabilities
 
 This optional native extension adds `SharedOwner`, `SharedView`,
-`SharedAccess`, `SharedAtomicU32` and `SharedAtomicU64`. These are distinct
+`SharedAccess`, `SharedAtomicU32`, `SharedAtomicU64` and `SharedPointer<T>`.
+These are distinct
 opaque fixed-size types, not integers, ordinary references, or byte images.
 They have no public constructor, fields, numeric cast, default value, or
 serialization form. Capability-containing values are non-flat and cannot be
@@ -4842,6 +4843,123 @@ is rejected by strict worker-native checking. It uses the same compile-time
 order matrix, old-value results, width wrapping, always-lock-free requirement,
 and no-fallback rule as the capability operations above. Safe capabilities
 cannot be converted to raw addresses.
+
+`SharedPointer<T>` is an opaque, typed capability for one value stored in an
+anonymous `SharedOwner` allocation. `shared_pointer_alloc<T>(value)` returns
+`(SharedPointer<T>, SharedOwner, bool)`: on success the owner contains a copy
+of `value` and the capability registry contains its private metadata; on failure both capabilities are
+invalid. `T` must be a fixed-size flat value whose recursive shape contains no
+native capability, reference, slice, runtime-length array, string, function
+value, or variable-mode ADT. This is checked after generic substitution.
+Fixed arrays and fixed-mode structs/ADTs are admitted only when every contained
+value is admissible. The check applies wherever a `SharedPointer<T>` type is
+validated, not only at allocation calls. The private metadata and payload have
+no FFI layout.
+
+`shared_pointer_copy(p) -> T` copies the current value out and
+`shared_pointer_store(p, value)` copies a new value in. Neither yields a
+reference or slice. Copy-out and store are linearized by the object's internal
+synchronization, so concurrent operations cannot data-race and copy-out sees
+one complete stored value. `shared_pointer_retain(p)` atomically increments
+the reference count and returns a fresh handle. `shared_pointer_release(p)`
+atomically decrements it and invalidates that handle and all bitwise copies of
+it. Plain assignment copies only handle authority and does not retain. A
+released, stale, wrong-type, or allocation-generation-mismatched handle
+aborts; reference-count overflow also aborts. The last release destroys the
+pointer object but leaves its owner mapping for explicit close.
+
+Every live retained pointer is an owner-close hold: `shared_close(owner)`
+returns false until all pointer handles are released, in addition to its
+existing borrow and worker-lease conditions. Operations validate and pin the
+allocation generation for their duration. They never expose a raw address,
+ordinary borrow, or atomic capability. The count uses the same always-lock-free
+u64 substrate and target restrictions as `SharedAtomicU64`; there is no mutex
+fallback and no general garbage collector.
+
+A direct `SharedPointer<T>` is additionally permitted as a worker argument.
+Every handoff retains a distinct worker-owned claim and writes that new claim
+into the worker packet. A stored pointer expression is borrowed, so its source
+claim remains live. A temporary pointer result is consumed after the distinct
+packet claim has been made: the source claim becomes stale immediately, while
+the packet claim remains independently live. This value-category rule applies
+equally to builtin and ordinary function results; it does not inspect which
+function produced the result. Returning an alias therefore transfers that
+claim's ownership, and code which must preserve another alias returns a
+freshly retained claim.
+
+For this rule, a variable is stored. A field or indexed expression is stored
+only when every receiver on its path is itself stored; a path rooted in a call,
+literal, control-expression result, or another §9.2 temporary is temporary.
+Thus the spelling of a final field or index does not turn a temporary aggregate
+into stored ownership. Wrapping a pointer in another value does not gain the
+worker-argument exception, and pointer-containing worker globals remain
+forbidden.
+
+Retain-and-consume is one registry transaction. Reusing the same temporary
+claim for a second argument is stale-handle misuse and aborts before thread
+registration, after releasing the registry mutex; already prepared packet
+claims are then reclaimed by ordinary contained cleanup. Normal return, spawn
+failure, and contained abort release each worker claim only if that lease still
+owns that exact live claim. Explicit release, queue transfer, and a nested
+spawn transfer ownership away from the earlier lease, whose later cleanup must
+not release the transferred claim. Multiple stored arguments instead receive
+distinct claims and are valid. The allocation lease is held independently for
+each packet argument too.
+All spawn argument expressions are evaluated once, left to right, before any
+packet handoff is prepared. A nested spawn while evaluating an argument owns
+only its own transaction; it cannot commit or release leases intended for the
+outer spawn. After argument evaluation, the packet's capability fields are
+replaced with the prepared worker claims before native thread creation.
+Before native spawn can race parent cleanup, every new packet claim is marked
+pending and is never owned by the parent's incoming lease. Once the child id
+exists, all claims in that transaction are assigned to the child before native
+thread creation. Native creation failure rolls back only that transaction's
+leases and claims; it performs no actor sweep and cannot affect queue-owned or
+unrelated pending claims.
+
+As the sole queue exception to flat byte images, the element type may be
+exactly `SharedPointer<T>`, never a wrapper or another native capability.
+Successful `qput(p)` transfers that retained handle to the queue without a
+count change and invalidates the sender's handle and its bitwise copies. A
+refused bounded put transfers nothing. A successful receive transfers the
+queued handle to the receiver. A timed/nonblocking miss returns an invalid
+zero handle with false; use or release aborts. Shutdown releases handles still
+owned by queues. This does not make pointers serializable, byte-convertible,
+or FFI-compatible.
+
+An owner created by a worker becomes orphaned at worker cleanup, but live
+pointer claims and queued claims keep it mapped. It is reclaimed only after
+its last worker lease and pointer claim end. A successful put marks the new
+claim queue-owned; a successful get adopts it into the receiving thread's
+cleanup context. Normal shutdown closes queue admission and detaches all
+queued nodes under the queue mutex, then releases undelivered pointer claims
+exactly once. Queue state is not freed while detached workers might still
+enter or wait on it: it remains inert until process teardown. Puts racing
+closure are either admitted before the detach or refused afterward; blocked
+gets remain blocked for existing process teardown, so shutdown adds no
+unbounded worker join.
+
+The reference-count update uses the target's always-lock-free u64 atomic
+operation. Retain and release also take the capability-registry mutex while
+creating, invalidating, or reclaiming descriptors; the complete operations are
+thread-safe, not claimed to be lock-free.
+Even a program using no public atomic capability must emit the same GCC/Clang,
+always-lock-free u64 cell and generation assertions when it uses
+`SharedPointer<T>`. TinyCC, MSVC, a non-lock-free u64 width, and any path that
+would require `libatomic` or a mutex fallback are rejected before execution.
+
+`shared_pointer_alloc<T>(owner, offset, value) -> SharedPointer<T>, bool`
+places the copied value in a checked range of an existing writable anonymous
+owner. The owner must belong to the calling thread. The complete fixed-size
+payload range must be in bounds and must not overlap an ordinary borrow,
+registered atomic region, or another live shared-pointer object. Registration
+reserves those bytes until the last pointer claim is released; no ordinary
+borrow or atomic registration may overlap them meanwhile. Metadata remains in
+the existing capability registry, not in a second allocator. The one-argument
+`shared_pointer_alloc<T>(value)` convenience form creates a fresh owner and
+returns `(SharedPointer<T>, SharedOwner, bool)` using the same registration
+path. Failure leaves the supplied owner and bytes unchanged and returns an
+invalid pointer with false.
 
 ### 11.5 Native file mappings, subranges, byte buffers, and advice
 

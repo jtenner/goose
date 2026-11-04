@@ -1215,8 +1215,15 @@ inline void CodeGen::EmitBench() {
 }
 
 inline void CodeGen::EmitMain() {
+    string qcleanup;
+    vector<string> qnames;
+    for (auto &[m, q] : queues) qnames.push_back(q);
+    sort(qnames.begin(), qnames.end());
+    for (auto &q : qnames)
+        Append(qcleanup, "    gs_qdestroy(&", q, ", ", pointerqueues.count(q) ? 1 : 0, ");\n");
     Append(code, "int main(int argc, char **argv) {\n    gs_program_init(argc, argv);\n",
-           MainCall(), usesthreads ? "    gs_structured_cleanup(-1);\n    gs_channel_context_cleanup();\n    gs_shared_worker_cleanup(NULL, -1);\n" : "",
+           MainCall(), usesthreads ? "    gs_structured_cleanup(-1);\n" : "",
+           qcleanup, usesthreads ? "    gs_channel_context_cleanup();\n    gs_shared_worker_cleanup(NULL, -1);\n" : "",
            "    gs_rt_stats();\n    return 0;\n}\n");
 }
 
