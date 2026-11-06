@@ -170,6 +170,41 @@ a.equal(new DataView(x.other.buffer).getBigInt64(1,true),values[9]);
 a.equal(new DataView(x.memory.buffer).getBigInt64(1,true),0n);"""
     run([args.node, '-e', js, binary_module])
     count += 1
+    bounded = out / 'bounded-conversion.goose'
+    bounded.write_text("""fn main() {
+    var value = -3.75;
+    for i in 8 {
+        assert((value as! i64) == i / 2 - 3);
+        value += 0.5;
+    }
+    var single: f32 = -3.75;
+    for i in 8 {
+        assert((single as! i16) == i / 2 - 3);
+        single += 0.5;
+    }
+    var unsigned_value = 300.5;
+    assert((unsigned_value as! u8) == 44);
+    assert((unsigned_value as! u64) == 300);
+    var negative = -3.75;
+    assert((negative as! u64) == 18446744073709551613);
+    var lower = -9223372036854775808.0;
+    assert((lower as! i64) == -9223372036854775808);
+    var upper = 9223372036854774784.0;
+    assert((upper as! i64) == 9223372036854774784);
+}\n""")
+    for opt in (0, 2):
+        wasm = out / f'bounded-conversion-O{opt}.wasm'
+        c, native = out / f'bounded-conversion-O{opt}.c', out / f'bounded-conversion-O{opt}.native'
+        run([exe, f'-O{opt}', '--standalone', '-o', c, bounded])
+        run([args.cc, f'-O{opt}', c, '-pthread', '-lm', '-ldl', '-o', native])
+        assert run([native]).stdout == b''
+        run([exe, f'-O{opt}', '--target', 'wasm', '-o', wasm, bounded])
+        run([args.validator, 'validate', wasm])
+        run([args.node, ROOT / 'test' / 'wasm_conversion.mjs', wasm])
+        count += 1
+        if args.wasmtime_python:
+            assert run([args.wasmtime_python, ROOT / 'test' / 'wasmtime_host.py', wasm]).stdout == b''
+            count += 1
     # Known runtime failures must occur for the same operation, not just any trap.
     failures = [
         ('assert', 'assert(false);', b'assert failed'),

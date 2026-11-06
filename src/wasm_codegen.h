@@ -13,7 +13,8 @@ struct WasmCodeGen {
     uint32_t framebase = 0, framesize = 0;
     uint32_t reservefn, initfn, startfn;
     uint32_t beginprint, printint, printfloat, printbool, printbytes, endprint;
-    uint32_t failfn, exitfn, fmodfn, f2ifn;
+    uint32_t failfn, exitfn, fmodfn, f2islowfn;
+    uint32_t f2ifn = UINT32_MAX;
     struct Slot { TypeExpr *type; uint32_t local = 0, offset = 0; bool memory = false, global = false; };
     unordered_map<VarDef *, Slot> globals, slots;
     unordered_map<FnSpec *, uint32_t> functions;
@@ -115,6 +116,8 @@ struct WasmCodeGen {
                                           : (IsUnsigned(from->intstorage) ? 0xba : 0xb9));
         } else if (from->kind == TY_FLT && to->kind == TY_INT) {
             if (f == WasmModule::F32) code.Byte(0xbb);
+            if (f2ifn == UINT32_MAX)
+                f2ifn = module.AddFn("goose.float_to_int", {WasmModule::F64}, {WasmModule::I64});
             code.Call(f2ifn);
         } else if (f != t && from->kind == TY_FLT && to->kind == TY_FLT) {
             code.Byte(t == WasmModule::F32 ? 0xb6 : 0xbb);
@@ -594,6 +597,20 @@ struct WasmCodeGen {
         assert(labels.empty() && scopes.empty() && targets.empty());
         module.functions[fn - module.imports.size()].code = std::move(code);
     }
+    void EmitFloatToInt() {
+        StartFunction(f2ifn, nullptr);
+        // As in the native gs_f2iwrap fast path: ordered comparisons exclude
+        // NaN and guard trunc_f64_s's exact nontrapping interval. Other values
+        // retain the existing modulo-2^64 host conversion.
+        code.Get(0); code.F64(-0x1p63); code.Byte(0x66); // f64.ge
+        code.Get(0); code.F64(0x1p63); code.Byte(0x63);  // f64.lt
+        code.Byte(0x71); // i32.and
+        Open(0x04, WasmModule::I64);
+        code.Get(0); code.Byte(0xb0); // i64.trunc_f64_s
+        code.Byte(0x05); code.Get(0); code.Call(f2islowfn);
+        Close();
+        EndFunction();
+    }
     void EmitReserve() {
         StartFunction(reservefn, nullptr);
         auto old = Local(WasmModule::I32), end = Local(WasmModule::I64), pages = Local(WasmModule::I32);
@@ -643,7 +660,7 @@ struct WasmCodeGen {
         failfn = module.ImportFn("fail_v1", {WasmModule::I32, WasmModule::I32, WasmModule::I32, WasmModule::I32}, {});
         exitfn = module.ImportFn("exit_v1", {WasmModule::I32}, {});
         fmodfn = module.ImportFn("fmod_v1", {WasmModule::F64, WasmModule::F64}, {WasmModule::F64});
-        f2ifn = module.ImportFn("float_to_int_v1", {WasmModule::F64}, {WasmModule::I64});
+        f2islowfn = module.ImportFn("float_to_int_v1", {WasmModule::F64}, {WasmModule::I64});
         reservefn = module.AddFn("goose.reserve_frame", {WasmModule::I32}, {WasmModule::I32});
         for (auto sp : ast.fnspecs) if (sp->live) {
             if (sp->sf->isextern) Fail(sp->sf->line, "native extern functions need an explicit Wasm host adapter");
@@ -680,6 +697,7 @@ struct WasmCodeGen {
             for (auto r : sp->rets) { (void)r; code.Byte(0x1a); }
         }
         EndFunction();
+        if (f2ifn != UINT32_MAX) EmitFloatToInt();
         module.exports.push_back({"memory", 2, 0});
         module.exports.push_back({"_start", 0, startfn});
         return module.Finish();
