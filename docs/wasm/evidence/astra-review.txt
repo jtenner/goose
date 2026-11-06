@@ -1,0 +1,47 @@
+Independent scalar Wasm review
+
+Base: upstream/master 7b90f91d91845f4ef1712e16ed053f395e4e6e1c.
+Reviewed uncommitted source. No repository source edits, no subagents, no Claude, and no performance timing.
+
+Confirmed findings
+
+1. P1: Null comparison reads a narrowed optional's pointee instead of its address.
+Location: src/wasm_codegen.h:289-304, with Gen(Ident) decay at 398-404.
+Valid trigger:
+fn main() { var a=false; let p:bool?=&a; if p { print(p != null); } }
+Native stdout: true\n. Wasm stdout: false\n. Both backends exit zero. This occurs at O0 and O2. Replacing bool/false with i64/0 causes emitted Wasm validation failure: i64.ne expects an i64 right operand but receives i32.const. Null on the left, such as null != p, is wrongly rejected as an unsupported value layout before output. Floating optional null tests also select float comparison opcodes for i32 addresses.
+Evidence: results2.json and results3.json; narrowed_bool_null.goose and corresponding native/Wasm artifacts. C backend dedicated null handling in src/codegen_nodes.h:179-209 reads the declared reference slot even if the expression type has been narrowed.
+Risk: Silent wrong control decisions in supported scalar code; other legal comparisons emit invalid modules or fail compilation.
+Suggested fix: Lower null comparisons before general scalar operands. Generate null as i32 zero and read a variable's reference address without decay. Handle either operand position. Test == and !=, both null positions, before and after flow narrowing, and bool/int/f32/f64 pointees at O0/O2.
+
+2. P1: Floating reference identity chooses a float comparison instruction.
+Location: src/wasm_codegen.h:289-298.
+Valid trigger:
+fn main() { var a=1.5; var b=2.5; let p=&a; let q=&b; print(p .== q,",",p .!= q); }
+Native stdout: false,true\n. Wasm compiler succeeds, but Node rejects the emitted module: f64.eq expected f64, found local.get of type i32. O0/O2 both fail. The f32 form also fails with f32.eq on an i32 address. Even p .== p with a null f64 optional fails validation.
+Evidence: results.json, results2.json, results4.json; float_ref_compare.goose, float32_ref_identity.goose, null_identity.goose and emitted artifacts.
+Risk: Legal scalar reference identity programs cannot run.
+Suggested fix: Handle .== and .!= as address comparisons before pointee-type arithmetic selection. Keep the declared reference address semantics used in src/codegen_nodes.h:123-144. Test equal and distinct objects, both float widths, optional nulls, and int/bool controls.
+
+3. P2: Scalar reference rebinding reaches arithmetic lowering.
+Location: src/wasm_codegen.h:501-508 and 520-527.
+Valid trigger:
+fn main() { var a=1; var b=2; var r=&a; r .= &b; r += 3; print(a,",",b,",",r); }
+Native stdout: 1,5,5\n. Wasm rejects the valid program with 'wasm target: arithmetic needs a scalar numeric type' at O0/O2. AssignOp leaves T_DOTASSIGN unchanged, and Assign treats every operation other than T_ASSIGN as arithmetic.
+Evidence: results.json and rebind.goose artifacts. C backend handles T_DOTASSIGN as GenRebind at src/codegen_nodes.h:876.
+Risk: Ordinary scalar aliases cannot be rebound despite support for plain scalar references. The diagnostic describes an arithmetic problem rather than the missing reference operation.
+Suggested fix: Handle scalar reference rebinding as a direct write of the RHS reference address, without loading the old pointee or invoking Arithmetic. Keep '=' writes through a reference and '.=' writes to its slot distinct. Test rebind followed by mutation, optional reference to null/non-null, reference assignment RHS evaluation order, and O0/O2.
+
+Checks and scope
+
+Read all of src/wasm_codegen.h, src/wasm_binary.h, scripts/run_wasm.mjs, test/wasm_backend.py, test/wasmtime_host.py, test/wasm_runtime.mjs, test/wasm_binary.cpp, test/wasm/*.goose, and docs/design/native-wasm.md. Read all changed lines in src/main.cpp and CMakeLists.txt, and relevant C-backend, typechecker, and runtime code for comparison. No unread changed files in the requested scope. The unchanged remainder of src/main.cpp and CMakeLists.txt was not reviewed.
+
+Independent O0/O2 native-versus-Node checks passed for compound assignment with an RHS that mutates the destination, reference casts, integer/bool identity, reference increment, nested defers, reference-returning conditional functions, and nested f32/f64 tail branches. Invalid test inputs were rejected by the frontend and are not findings. The full provided test suite was inspected but not rerun by this reviewer. No Wasmtime execution was performed by this reviewer.
+
+Resource review: guest scalar frames grow before stores and restore on normal function return; address-taken slots are authoritative in memory. The memory32 reservation arithmetic uses i64 before narrowing. These source checks do not establish measured performance. Host printing allocates buffers per rendered piece and copies the completed line; compiler emission introduces locals and static diagnostic data per operation. No benchmark or architecture claim is made. Future multi-memory, compound layouts, serialization, nonlocal exception fallback, workers, and optimization were explicitly out of implementation scope and are not findings.
+
+Executable provenance
+
+All reproduction runs used build-wasm-dev/goose SHA256 470f4da20c0ddecc36378f5e69024d45fa0d4f2c89d12705df045eca761ab56d, size 42790208, mtime 2026-11-06 22:57:51.018867760 UTC. Hash was checked before and after execution. The reviewed wasm_codegen.h is SHA256 c1cda8dd120a7c773e7822d350805b2ebfec10bd409ecad103cd60c4d5fb9aba and predates that executable. main.cpp has a later mtime, 22:58:28 UTC, so these results do not prove the latest driver edits were compiled. A final rebuild is required before validation claims. provenance.json records all source hashes/mtimes; snapshot/ preserves the reviewed code.
+
+All commands, subprocess exit statuses, stdout, and stderr are in results.json through results4.json. Review-only harnesses, Goose programs, generated C, native executables, Wasm modules, snapshots, and this report are confined to /tmp/goose-wasm-astra-review.

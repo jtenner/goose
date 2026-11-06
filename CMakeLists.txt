@@ -57,6 +57,8 @@ add_executable(goose
     src/optimize_loops.h
     src/optimize_reassoc.h
     src/bce.h
+    src/wasm_binary.h
+    src/wasm_codegen.h
     src/codegen.h
     src/codegen_types.h
     src/codegen_frames.h

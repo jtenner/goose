@@ -39,6 +39,8 @@
 #include "codegen_stacks.h"
 #include "codegen_nodes.h"
 #include "runtime_inline.h"
+#include "wasm_binary.h"
+#include "wasm_codegen.h"
 #include "process.h"
 #include "jit.h"
 #include "progress.h"
@@ -691,6 +693,7 @@ R"(  --stats               Print what the compile did: the declarations parsed,
                         K, M, G or T suffix (default 2G).
   --stacks              Report the data stacks the program and each worker can
                         take, and the cap that puts on hardware_threads().
+  --target wasm         Emit a direct Wasm module (initial scalar target).
   --no-bce              Keep every bounds check.
   --bce-lines           Report the bounds checks elided and kept on each line.
   --specs               Print the specializations of each function.
@@ -890,6 +893,7 @@ Options:
                         starts the program through goose_init and may end it
                         through goose_exit.
   --include header.h    Have the C include this header (may be repeated).
+  --target wasm         Emit WebAssembly directly (scalar target; see docs/design/native-wasm.md).
   --jit                 Also run the program in this process.
   --emit-runtime out.c  Write the runtime's C.
   --<package>-link msvc|cc
@@ -1361,6 +1365,7 @@ int Main(int argc, char **argv) {
     string outname, headername, stdlibdir, shaderfile, shadersource, dumpfile;
     auto dump = false, dumpdocs = false, tokens = false, parseonly = false, specs = false;
     auto nocgen = false;
+    auto wasm = false;
     auto roundtrip = false, multitest = false;
     auto nobce = false, bcetest = false, bcelines = false, norfcheck = false;
     auto stacks = false;
@@ -1413,6 +1418,12 @@ int Main(int argc, char **argv) {
         else if (arg == "--bce-lines") bcelines = true;
         // Unsound; a measurement aid only (see CodeGen::norfcheck).
         else if (arg == "--unsafe-no-rf-check") norfcheck = true;
+        else if (arg == "--target") {
+            if (i + 1 == argc || string(argv[++i]) != "wasm") {
+                fprintf(stderr, "--target requires wasm\n"); return 1;
+            }
+            wasm = true;
+        }
         else if (arg == "--jit") forcejit = true;
         else if (arg == "--standalone") standalone = true;
         else if (arg == "--multi-test") multitest = true;
@@ -1513,6 +1524,13 @@ int Main(int argc, char **argv) {
     // C goes to the program's build directory (build.h).
     BuildOptions buildopts;
     string builddir;
+    if (wasm && (verb == "run" || forcejit || !headername.empty() || stacks ||
+                 debug || standalone || !includenames.empty() || !cdefines.empty() ||
+                 !progargs.empty() || dryrun)) {
+        fprintf(stderr, "--target wasm emits a module; JIT, native runtime options, "
+                        "headers, stack reports and program arguments are not supported\n");
+        return 1;
+    }
     if (verb == "run") {
         if (!outname.empty()) {
             fprintf(stderr, "goose run takes no -o: it compiles and runs the program in this "
@@ -1526,7 +1544,7 @@ int Main(int argc, char **argv) {
         // Parsing is what fetches: every package the root declares is
         // fetched as its entry is reached.
         parseonly = true;
-    } else if (verb == "build") {
+    } else if (verb == "build" && !wasm) {
         if (multitest || !headername.empty()) {
             fprintf(stderr, "goose build takes one program and no --header; the flag form "
                             "(-o out.c) writes the C for a C host\n");
@@ -1558,7 +1576,7 @@ int Main(int argc, char **argv) {
     // With no output file the program is compiled into this process and run,
     // which is what --jit asks for explicitly; a build writes the C to its
     // build directory instead.
-    auto jit = verb != "build" && (forcejit || outname.empty());
+    auto jit = !wasm && verb != "build" && (forcejit || outname.empty());
     if (!headername.empty() && (jit || multitest)) {
         fprintf(stderr, "--header requires C output for a single input file\n");
         return 1;
@@ -1690,6 +1708,14 @@ int Main(int argc, char **argv) {
         // --stacks needs the generated program's bounds, so --check runs
         // the backend for them and writes nothing.
         if (nocgen && !stacks) return 0;
+        if (wasm) {
+            WasmCodeGen wg(ast);
+            auto bytes = wg.Run();
+            if (!WriteFileMakingDirs(outfile, bytes))
+                throw CompileError {cat("cannot write Wasm output file: ", outfile)};
+            if (stats) fprintf(msgs, "wrote %s (%zu Wasm bytes)\n", outfile.c_str(), bytes.size());
+            return 0;
+        }
         // Sidecar headers share --include's position after generated types.
         // They belong to every loaded package, not just those with a native
         // part: a header-only adapter needs no separate compilation or loading.
@@ -1795,6 +1821,10 @@ int Main(int argc, char **argv) {
     auto run = [&](const string &file) -> int {
         filename = file;
         outfile = outname;
+        if (wasm && outfile.empty()) {
+            auto path = filesystem::path(file); path.replace_extension(".wasm");
+            outfile = path.string();
+        }
         if (multitest && !outfile.empty()) {
             auto base = file.substr(file.find_last_of("/\\") + 1);
             auto stem = base.substr(0, base.find_last_of('.'));
@@ -1802,8 +1832,11 @@ int Main(int argc, char **argv) {
                  pos = outfile.find('%', pos + stem.size()))
                 outfile.replace(pos, 1, stem);
         }
+        if (wasm && filesystem::weakly_canonical(outfile) == filesystem::weakly_canonical(file)) {
+            fprintf(stderr, "Wasm output must not overwrite the Goose source\n"); return 1;
+        }
         includes = includenames;
-        if (verb == "build") {
+        if (verb == "build" && !wasm) {
             builddir = ProgramBuildDir(file);
             std::error_code ec;
             filesystem::create_directories(filesystem::path(builddir), ec);
@@ -1830,7 +1863,7 @@ int Main(int argc, char **argv) {
             // (CMakeLists.txt).
             auto code = RunOnCompilerStack(compile);
             if (code) return code;
-            if (verb == "build") {
+            if (verb == "build" && !wasm) {
                 if (nocgen) return 0;
                 // The native parts first, so that the link can take their
                 // response files: a builtin package's from the compiler's

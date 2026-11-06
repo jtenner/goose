@@ -160,3 +160,17 @@ Audio, gfx, and UI layers/devices were unavailable; the runner reported its
 skips. Physics was built in. The sample portion reported 52 passing checks.
 The preliminary fork baseline was stopped when the user changed the base; it
 is not the upstream baseline.
+
+## Encoder reference
+
+The nearby `starshine-mb` checkout, revision
+`b28144a7c50f1dc360825f7f68220022101b9921`, was inspected after the initial
+encoder worked. Its `src/binary/encode.mbt`, `encode_control.mbt`, and LEB and
+memory-argument boundary tests informed additional checks for u32 field limits
+and multi-byte memory-index/offset order. No Starshine source was copied.
+The Goose writer uses the same standard `flags, memory index, offset` order.
+Its emitted memories use Memory32; unsigned module fields are bounded to u32.
+Future EH emission must respect tag-section placement before globals, rather
+than order sections solely by their numeric IDs.
+
+Reference: [Starshine encoder](https://github.com/jtenner/starshine-mb/blob/b28144a7c50f1dc360825f7f68220022101b9921/src/binary/encode.mbt).

@@ -17,6 +17,7 @@
 - [12. Environment and files](#12-environment-and-files)
 - [13. Exit status](#13-exit-status)
 - [14. Options for working on the compiler](#14-options-for-working-on-the-compiler)
+- [15. Direct WebAssembly output](#15-direct-webassembly-output)
 
 </details>
 
@@ -506,3 +507,49 @@ writes nothing. It checks the result as a format does, and that formatting
 it again changes nothing, and it skips a file that does not parse. Setting
 `GOOSE_ROUNDS` in the environment makes the typechecker trace what keeps a
 recursive cycle's rounds going.
+
+## 15. Direct WebAssembly output
+
+The initial direct backend emits scalar programs without generating C:
+
+```sh
+goose --target wasm -O2 -o out/main.wasm main.goose
+goose build --target wasm -o out/main.wasm main.goose
+node scripts/run_wasm.mjs out/main.wasm
+```
+
+Without `-o`, the module goes beside the source with a `.wasm` extension.
+The native C path remains the default. `goose run --target wasm` and `--jit`
+are not supported; use the host adapter to run the emitted module. The initial
+host is Node.js 24.22.2 or an engine with the same supported Wasm features.
+The repository also has an optional Wasmtime test adapter.
+
+Supported code includes scalar integer/bool/float functions, ordinary calls and
+recursion, optimized inline bodies, scalar frame references, scalar globals,
+`if`, range/count `for`, `while`, `loop`, early blocks, and local or fully
+inlined returns with scalar `defer` cleanup. Print accepts scalar values,
+scalar optionals, and literal byte strings. Numeric operations use release
+wrapping rules. Debug overflow checking is not implemented on this target;
+`--debug` is rejected.
+
+This is an incomplete backend. Goose data-stack memory assignment, arrays and
+compound values, slices, relative/root/pool references, serialization, multiple
+return values, remaining nonlocal call boundaries, native extern adapters,
+OS services, and workers are not implemented. Such reached operations produce
+a target diagnostic instead of a partial module. `check --target wasm` still
+checks the language; it does not prove target support. See the
+[ABI and stage gates](design/native-wasm.md) for the complete plan and current
+validation scope.
+
+Run its separate differential suite with:
+
+```sh
+python3 test/wasm_backend.py --exe build/goose
+# Also execute with Wasmtime (install wasmtime==49.0.0 in a test environment):
+python3 test/wasm_backend.py --exe build/goose --wasmtime-python /path/to/python
+```
+
+The suite needs `node`, `wasm-tools`, a C compiler, and a C++20 compiler on
+PATH. It validates binary modules and compares their output with separately
+compiled native C, including real frame growth and failed growth. It does not
+replace the native suite.
