@@ -1,3 +1,5 @@
+// warning: redundant &: value is passed by reference without it
+// warning: redundant &: global is passed by reference without it
 var global: i64 = 11;
 fn update(x: i64&) { x += 4; }
 recursive fn depth(n: i64) -> i64 {

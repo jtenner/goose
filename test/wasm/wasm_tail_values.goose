@@ -1,3 +1,4 @@
+// warning: redundant &: n binds by reference here without it
 fn nested(x: f32) -> f64 { { x } }
 fn conditional(b: bool, x: f32, y: f32) -> f64 { if b { x } else { y } }
 fn early(x: f32) -> f64 { block { x } }
