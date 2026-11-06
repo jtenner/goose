@@ -399,10 +399,13 @@ int main(void) {
     check(counter_add(&live_allocations, 0) == allocations + 1 - owns_signal_stack,
           "thread and region release account for the owned signal stack and abort records");
     gs_rt_stop();
-    /* The shared generation registry remains for the process lifetime. */
+    /* Shared generation slabs and the empty channel slot table remain for the process lifetime. */
     check(gs_shared_slabs[0] != NULL, "shared registry slab survives program stop");
-    check(counter_add(&live_allocations, 0) == 1,
-          "stopping releases program allocations and retains only the shared registry slab");
+    check(gs_channels != NULL && gs_nchannels == 0 && gs_channels[0] == NULL &&
+          gs_channel_context == NULL && gs_channel_pending == NULL,
+          "only the empty channel slot table survives program stop");
+    check(counter_add(&live_allocations, 0) == 2,
+          "stopping retains only the shared slab and empty channel slot table");
     check(counter_add(&live_regions, 0) == 0, "stopping releases main's reservation");
 #ifndef _WIN32
     struct sigaction after;
@@ -420,7 +423,7 @@ int main(void) {
     check_baseline(allocations + 3, regions);
     gs_thread_release();
     gs_rt_stop();
-    check(counter_add(&live_allocations, 0) == 1 && counter_add(&live_regions, 0) == 0,
+    check(counter_add(&live_allocations, 0) == 2 && counter_add(&live_regions, 0) == 0,
           "the program started again ends as cleanly");
     puts("runtime thread cleanup ok");
     return 0;

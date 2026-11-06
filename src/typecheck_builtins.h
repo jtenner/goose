@@ -25,7 +25,7 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
     if (d.kind >= B_SHARED_POINTER_ALLOC && d.kind <= B_SHARED_POINTER_RELEASE) {
         auto pointer = [&](size_t i) {
             auto v = CheckValue(args[i], nullptr);
-            if (v.type->kind != TY_NATIVE || v.type->nativekind != NK_POINTER)
+            if (v.type->kind != TY_NATIVE || v.type->native->kind != NK_POINTER)
                 Error(c, cat(d.name, " requires SharedPointer<T>"));
             return v.type;
         };
@@ -38,22 +38,24 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
                 Error(c, cat("SharedPointer value type must be recursively fixed and flat, not ", TypeStr(t)));
             if (args.size() == 3) {
                 auto owner = CheckValue(args[0], nullptr);
-                if (owner.type->kind != TY_NATIVE || owner.type->nativekind != NK_OWNER)
+                if (owner.type->kind != TY_NATIVE || owner.type->native->kind != NK_OWNER)
                     Error(c, "shared_pointer_alloc requires SharedOwner for argument 1");
                 CheckIntAny(args[1]); CheckArg(args[2], t);
             } else CheckArg(args[0], t);
             auto p = ast.NewType(TY_NATIVE, c->line);
-            p->nativekind = NK_POINTER; p->nativearg = t; c->qtype = t;
-            Val pv; pv.type = p; Val ov; ov.type = ast.NewType(TY_NATIVE, c->line); ov.type->nativekind = NK_OWNER;
+            p->native = ast.NewDetail<TypeNative>();
+            p->native->kind = NK_POINTER; p->native->arg = t; c->qtype = t;
+            Val pv; pv.type = p; Val ov; ov.type = ast.NewType(TY_NATIVE, c->line);
+            ov.type->native = ast.NewDetail<TypeNative>(); ov.type->native->kind = NK_OWNER;
             Val bv; bv.type = ast.booltype;
             c->rettypes = args.size() == 1 ? vector<TypeExpr *>{p, ov.type, bv.type}
                                            : vector<TypeExpr *>{p, bv.type};
             lastcallrets = args.size() == 1 ? vector<Val>{pv, ov, bv} : vector<Val>{pv, bv};
             return pv;
         }
-        auto p = pointer(0); c->qtype = p->nativearg;
-        if (d.kind == B_SHARED_POINTER_STORE) CheckArg(args[1], p->nativearg);
-        if (d.kind == B_SHARED_POINTER_COPY) { c->rettypes.push_back(p->nativearg); Val v; v.type = p->nativearg; return v; }
+        auto p = pointer(0); c->qtype = p->native->arg;
+        if (d.kind == B_SHARED_POINTER_STORE) CheckArg(args[1], p->native->arg);
+        if (d.kind == B_SHARED_POINTER_COPY) { c->rettypes.push_back(p->native->arg); Val v; v.type = p->native->arg; return v; }
         if (d.kind == B_SHARED_POINTER_RETAIN) { c->rettypes.push_back(p); Val v; v.type = p; return v; }
         return VoidVal();
     }
@@ -460,7 +462,7 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
             auto av = CheckValue(args[0], nullptr);
             NoUntypedEmptyArray(av, args[0], d.name);
             if (av.type->kind == TY_VOID || av.type->kind == TY_FN ||
-                (!IsFlat(av.type) && !(av.type->kind == TY_NATIVE && av.type->nativekind == NK_POINTER)))
+                (!IsFlat(av.type) && !(av.type->kind == TY_NATIVE && av.type->native->kind == NK_POINTER)))
                 Error(c, cat("queue elements must be flat (§11.2), not ", TypeStr(av.type)));
             if (HoldsIndexT(av.type)) ThreadIndexError(c, av.type);
             if (HoldsAlignedT(av.type)) Error(c, "aligned values are unsupported in queues");
@@ -476,7 +478,7 @@ inline Val TypeCheck::CheckBuiltin(Call *c, const BuiltinDef &d, vector<Node *> 
                              " needs exactly one explicit type argument"));
             auto t = Subst(c->tyargs[0]);
             ValidateType(t, c->line, VT_LOCAL);
-            if (!IsFlat(t) && !(t->kind == TY_NATIVE && t->nativekind == NK_POINTER))
+            if (!IsFlat(t) && !(t->kind == TY_NATIVE && t->native->kind == NK_POINTER))
                 Error(c, cat("queue elements must be flat (§11.2), not ", TypeStr(t)));
             if (HoldsIndexT(t)) ThreadIndexError(c, t);
             if (HoldsAlignedT(t)) Error(c, "aligned values are unsupported in queues");
