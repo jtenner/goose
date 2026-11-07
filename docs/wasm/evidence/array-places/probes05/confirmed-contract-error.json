@@ -1,0 +1,12 @@
+{
+  "scope": "New private ArrayPlace contract; current source-language lowering does not produce the thin known-nonzero prefixed-data form.",
+  "case": "thin memory2, base16, image offset3, prefix8, index0, stride1",
+  "expected": 8589934619,
+  "node_actual": 27,
+  "wasmtime_actual": 27,
+  "module_sha256": "5e287d8965ba40b73b61f55b3dd5b14cd9540c3dd66fe3f96e4189262f3c82be",
+  "validation_exit": 0,
+  "node_exit": 1,
+  "wasmtime_exit": 1,
+  "fix_not_applied_when_captured": true
+}

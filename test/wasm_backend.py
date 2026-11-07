@@ -61,6 +61,8 @@ def main():
     p.add_argument('--validator', default='wasm-tools')
     p.add_argument('--cc', default='cc')
     p.add_argument('--cxx', default='c++')
+    p.add_argument('--shader-library', type=Path, default=ROOT / 'build' / 'libgoose_shaderc.a',
+                   help='normal compiler shader library needed by the array-place test helper')
     p.add_argument('--out', type=Path, default=ROOT / 'build' / 'gen' / 'wasm')
     p.add_argument('--wasmtime-python', type=Path, help='Python with optional wasmtime==49.0.0')
     args = p.parse_args()
@@ -92,6 +94,21 @@ def main():
     count += 1
     if args.wasmtime_python:
         run([args.wasmtime_python, ROOT / 'test' / 'wasm_copy_matrix.py', copy_matrix])
+        count += 1
+    # Exercise private place forms before widening source-language admission.
+    # The real AST pass definitions use the normal compiler shader library.
+    shader_library = args.shader_library.resolve()
+    if not shader_library.is_file():
+        p.error(f'array-place test requires the compiler shader library: {shader_library}')
+    places_exe, places_wasm = out / 'array-places', out / 'array-places.wasm'
+    run([args.cxx, '-std=c++20', '-O0', ROOT / 'test' / 'wasm_array_places.cpp',
+         shader_library, '-lm', '-pthread', '-ldl', '-o', places_exe], timeout=180)
+    run([places_exe, places_wasm])
+    run([args.validator, 'validate', places_wasm])
+    run([args.node, ROOT / 'test' / 'wasm_array_places.mjs', places_wasm])
+    count += 1
+    if args.wasmtime_python:
+        run([args.wasmtime_python, ROOT / 'test' / 'wasm_array_places.py', places_wasm])
         count += 1
     fixed_layout = out / 'fixed-layout'
     run([args.cxx, '-std=c++20', '-O2', ROOT / 'test' / 'wasm_fixed_layout.cpp', '-o', fixed_layout])

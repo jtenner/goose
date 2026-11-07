@@ -1,0 +1,26 @@
+[
+  [
+    "release-build",
+    [
+      "cmake",
+      "--build",
+      "build",
+      "--parallel",
+      "2"
+    ]
+  ],
+  [
+    "freeze",
+    [
+      "python3",
+      "/tmp/goose-wasm-array-places-20261107/build02/freeze.py"
+    ]
+  ],
+  [
+    "accepted-modules",
+    [
+      "python3",
+      "/tmp/goose-wasm-array-places-20261107/build02/compare.py"
+    ]
+  ]
+]

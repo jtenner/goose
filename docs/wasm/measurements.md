@@ -130,3 +130,27 @@ Use a fresh coordinated measurement scope with explicit host controls,
 affinity, repetitions, warmups and decision limits. If a shared-path change
 causes a clear measured loss, park it. No scalar timing grant is reused and no
 performance acceptance is claimed by this queued handoff.
+
+
+## Pending array-place compiler measurements
+
+The [array-place refactor](evidence/array-places.md) retains the accepted source
+ABI and byte-identical modules for all 226 current parent pairs. This is not a
+compiler CPU, RSS or allocation result. Compare parent compiler `c9519e59`
+(commit `b04500bb`) with corrected compiler `5b68b041` from their frozen source
+manifests. The private thin-known-memory address correction has failing-first
+and passing-after checks in two engines; current source lowering does not emit
+that form.
+
+Use matched shared scalar/reference/aggregate controls, constructor sizes
+32/256/4096, path depths 1/2/8, concrete and dynamic memory identities,
+copies, equality, loops, mutations and print snapshots. Record paired compiler
+CPU and wall time, peak RSS, allocation counts/bytes, module/code/helper size,
+and locals. Separate cold process costs from warm or cached work. Small value
+structs avoid a new heap wrapper but can still add compiler copy and query
+work. Restored logical tops do not show released physical memory.
+
+The handoff needs fresh coordinated scope, exact source/tool/build identities,
+normal host and affinity controls, declared warmups/repetitions and qualified
+uncertainty. Park a clear measured shared-path loss. No scalar grant is reused
+and no speed or physical-memory gain is claimed by this queued work.

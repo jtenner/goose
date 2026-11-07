@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_array_places.py", line 79, in <module>
+    main()
+    ~~~~^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_array_places.py", line 50, in main
+    assert actual == ptr(2, 27 + index), f'{mode} element lost its memory identity: {actual}'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: thin element lost its memory identity: 27

@@ -1,0 +1,36 @@
+[
+  [
+    "source-identity",
+    [
+      "python3",
+      "/tmp/goose-wasm-array-places-20261107/full-wasm01/verify-source.py"
+    ]
+  ],
+  [
+    "full-wasm01",
+    [
+      "mise",
+      "exec",
+      "wasm-tools@1.262.0",
+      "node@24.22.2",
+      "--",
+      "python3",
+      "test/wasm_backend.py",
+      "--exe",
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "--out",
+      "/tmp/goose-wasm-array-places-20261107/full-wasm01/artifacts",
+      "--wasmtime-python",
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "--shader-library",
+      "/home/dev/Projects/goose-wasm-backend/build/libgoose_shaderc.a"
+    ]
+  ],
+  [
+    "source-identity-after",
+    [
+      "python3",
+      "/tmp/goose-wasm-array-places-20261107/full-wasm01/verify-source.py"
+    ]
+  ]
+]

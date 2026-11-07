@@ -1,0 +1,1163 @@
+diff --git a/src/wasm_arrays.h b/src/wasm_arrays.h
+index 9c734596..97198d14 100644
+--- a/src/wasm_arrays.h
++++ b/src/wasm_arrays.h
+@@ -15,100 +15,242 @@ inline TypeExpr *WasmCodeGen::ArrayType(Node *n) {
+ 
+ inline TypeExpr *WasmCodeGen::ArrayElement(Node *n) { return ArrayType(n)->arr->sub; }
+ 
+-inline void WasmCodeGen::LoadArrayField(uint32_t header, TypeExpr *array, int memory, uint32_t offset) {
+-    code.Get(header);
+-    auto bytes = IntSize(ArrayPrefix(array->arr).storage);
++inline WasmCodeGen::ArrayLayoutFacts WasmCodeGen::ArrayLayout(TypeExpr *array, Line line) {
++    if (!array || array->kind != TY_ARRAY) Fail(line, "missing checked array layout");
++    Type(array);
++    auto growable = IsResz(array);
++    return {array, array->arr->sub,
++            growable ? ArrayImage::GrowableHeader : DataArray(array) ? ArrayImage::PrefixedData : ArrayImage::Inline,
++            Size(array->arr->sub), ArrSize(array->arr),
++            growable ? ArrayPrefixLayout {IS_U64, 8, 0} : ArrayPrefix(array->arr), VarintPrefix(array)};
++}
++
++inline WasmCodeGen::ArrayPlace WasmCodeGen::ArrayFromPlace(FixedPlace image, Line line) {
++    auto layout = ArrayLayout(image.type, line);
++    if (!image.packed && image.memory < 0) Fail(line, "array place is missing its memory proof");
++    if (layout.image != ArrayImage::PrefixedData && image.memory > 0)
++        Fail(line, "this array image needs the pending reference ABI");
++    if (layout.image == ArrayImage::GrowableHeader && (image.memory != 0 || image.packed))
++        Fail(line, "growable array headers require a Memory 0 place");
++    return {image, layout, layout.image == ArrayImage::GrowableHeader ? -1 : image.memory,
++            nullptr, ArrayOrigin::ParentPlace};
++}
++
++inline WasmCodeGen::ArrayPlace WasmCodeGen::ArrayOwner(VarDef *owner, FixedPlace image, Line line) {
++    if (!TEq(owner->type, image.type)) Fail(line, "array owner has an inconsistent stored layout");
++    auto place = ArrayFromPlace(image, line);
++    place.owner = owner; place.origin = ArrayOrigin::PlannedOwner;
++    if (place.layout.image == ArrayImage::GrowableHeader)
++        place.elementMemory = storage.Memory(owner, current);
++    return place;
++}
++
++inline WasmCodeGen::ArrayPlace WasmCodeGen::FrameArrayOwner(VarDef *owner, const Slot &slot, Line line) {
++    if (!slot.memory || DataArray(slot.type)) Fail(line, "array header is missing its planned frame slot");
++    auto place = ArrayOwner(owner, {slot.type, slot.global ? NoLocal : framebase, slot.offset, 0, false, true}, line);
++    place.ownerSlot = &slot;
++    return place;
++}
++
++inline int WasmCodeGen::ArrayAllocationMemory(VarDef *owner, const Slot *slot,
++                                            const FixedPlace *destination, Line line) {
++    if (destination) return destination->memory;
++    if (owner && storage.owners.count(owner)) return storage.Memory(owner, current);
++    if (!slot || !slot->memory) Fail(line, "array allocation is missing its storage plan");
++    return 0; // The remaining allocation is the checked Memory 0 frame slot.
++}
++
++inline WasmCodeGen::ArrayPlace WasmCodeGen::CaptureArrayBorrow(
++        TypeExpr *array, uint32_t value, uint8_t representation, ArrayOrigin origin, Line line) {
++    // This bridge is the current scalar emitter's borrowed-array transport,
++    // not an array-value ABI. Inline borrows have a Memory 0 ABI proof.
++    if (representation != LegacyArrayBorrowType(array))
++        Fail(line, "incompatible borrowed array representation");
++    auto packed = representation == WasmModule::I64;
++    auto place = ArrayFromPlace({array, value, 0, packed ? -1 : 0, packed, false}, line);
++    place.origin = origin;
++    return place;
++}
++
++inline WasmCodeGen::ArrayPlace WasmCodeGen::RefineArrayOwner(ArrayPlace place, Node *n) {
++    if (auto address = Is<Unary>(n); address && address->op == T_BITAND) n = address->child;
++    auto id = Is<Ident>(n);
++    if (id && id->vdef && id->vdef->type->kind == TY_ARRAY &&
++        (InlineArray(id->vdef->type) || storage.owners.count(id->vdef))) {
++        place.owner = id->vdef; place.origin = ArrayOrigin::PlannedOwner;
++        place.elementMemory = storage.owners.count(id->vdef) ? storage.Memory(id->vdef, current) : 0;
++        if (place.layout.image == ArrayImage::PrefixedData) place.image.memory = place.elementMemory;
++    }
++    return place;
++}
++
++inline WasmCodeGen::ArrayPlace WasmCodeGen::ResolveArray(Node *n) {
++    auto array = ArrayType(n);
++    if (auto field = Is<Dot>(n); field && field->IsField()) {
++        auto place = ResolvePlace(n);
++        if (!TEq(place.type, array)) Fail(n->line, "array adaptation needs the pending destination lowering");
++        // Retain the checked Memory 0 field ingress until the reference ABI widens.
++        PlaceAddress(place, LegacyArrayBorrowType(array), n->line);
++        auto address = Local(LegacyArrayBorrowType(array)); code.Set(address);
++        return CaptureArrayBorrow(array, address, LegacyArrayBorrowType(array), ArrayOrigin::ParentPlace, n->line);
++    }
++    Gen(n); Convert(n->exprtype, array);
++    auto address = Local(LegacyArrayBorrowType(array)); code.Set(address);
++    return RefineArrayOwner(CaptureArrayBorrow(array, address, LegacyArrayBorrowType(array),
++                                              ArrayOrigin::ReferenceABI, n->line), n);
++}
++
++inline WasmCodeGen::ArrayPlace WasmCodeGen::ArrayFromReference(TypeExpr *reference, uint32_t value, Line line) {
++    // The caller performed the existing null check before capturing this value.
++    if (reference->kind != TY_REF || reference->ref->sub->kind != TY_ARRAY)
++        Fail(line, "array reference is missing its checked pointee");
++    return CaptureArrayBorrow(reference->ref->sub, value, Type(reference), ArrayOrigin::ReferenceABI, line);
++}
++
++inline void WasmCodeGen::EmitKnownOffset(const FixedPlace &place, uint32_t memory, Line line) {
++    if (place.memory < 0 || (uint32_t)place.memory != memory)
++        Fail(line, "array address is missing its concrete memory proof");
++    if (place.address == NoLocal) { code.I32((int32_t)place.offset); return; }
++    if (place.offset && !place.bounded) {
++        EmitPackedAddress(place, line); code.Byte(0xa7); return;
++    }
++    code.Get(place.address);
++    if (place.packed) code.Byte(0xa7);
++    if (place.offset) { code.I32((int32_t)place.offset); code.Byte(0x6a); }
++}
++
++inline void WasmCodeGen::EmitPackedAddress(const FixedPlace &place, Line line) {
++    if (!place.packed && place.memory < 0) Fail(line, "packed address is missing its memory proof");
++    if (place.address == NoLocal) {
++        if (place.memory < 0) Fail(line, "constant address is missing its memory proof");
++        code.I64(((int64_t)place.memory << 32) | place.offset); return;
++    }
++    if (!place.packed && place.memory > 0 && !place.bounded) {
++        auto offset = place; offset.memory = 0;
++        PlaceAddress(offset, WasmModule::I64, line);
++        code.I64((int64_t)place.memory << 32); code.Byte(0x84);
++    } else PlaceAddress(place, WasmModule::I64, line);
++}
++
++inline void WasmCodeGen::EmitMemoryZeroReference(const FixedPlace &place, Line line) {
++    if (place.address == NoLocal) {
++        if (place.memory != 0) Fail(line, "this thin reference requires memory zero");
++        code.I32((int32_t)place.offset); return;
++    }
++    PlaceAddress(place, WasmModule::I32, line);
++}
++
++inline void WasmCodeGen::EmitArrayReference(const ArrayPlace &place, TypeExpr *reference, Line line) {
++    if (reference->kind != TY_REF || !TEq(reference->ref->sub, place.layout.type))
++        Fail(line, "array reference has an inconsistent stored layout");
++    if (Type(reference) == WasmModule::I32) EmitMemoryZeroReference(place.image, line);
++    else EmitPackedAddress(place.image, line);
++}
++
++inline void WasmCodeGen::LoadArrayField(const ArrayPlace &place, uint32_t offset) {
++    const auto &image = place.image;
++    if (offset > UINT32_MAX - image.offset) Fail(image.type->line, "array field exceeds memory32");
++    auto bytes = IntSize(place.layout.prefix.storage);
+     auto opcode = (uint8_t)(bytes == 1 ? 0x31 : bytes == 2 ? 0x33 : bytes == 4 ? 0x35 : 0x29);
+-    if (!DataArray(array)) code.Mem(opcode, 0, offset);
+-    else if (memory >= 0) { code.Byte(0xa7); code.Mem(opcode, (uint32_t)memory, offset); }
+-    else code.Call(memories->Access(opcode, offset));
++    if (place.ownerSlot) Address(*place.ownerSlot);
++    else code.Get(image.address);
++    auto displacement = place.ownerSlot ? offset : image.offset + offset;
++    if (image.memory >= 0) {
++        if (image.packed) code.Byte(0xa7);
++        code.Mem(opcode, (uint32_t)image.memory, displacement);
++    } else code.Call(memories->Access(opcode, displacement));
++}
++
++inline void WasmCodeGen::PrepareArrayFieldStore(const ArrayPlace &place, uint32_t offset) {
++    if (offset > UINT32_MAX - place.image.offset) Fail(place.layout.type->line, "array field exceeds memory32");
++    if (place.ownerSlot) Address(*place.ownerSlot);
++    else code.Get(place.image.address);
++}
++
++inline void WasmCodeGen::StoreArrayField(const ArrayPlace &place, uint32_t offset) {
++    const auto &image = place.image;
++    if (offset > UINT32_MAX - image.offset) Fail(image.type->line, "array field exceeds memory32");
++    auto displacement = place.ownerSlot ? offset : image.offset + offset;
++    auto bytes = IntSize(place.layout.prefix.storage);
++    auto opcode = (uint8_t)(bytes == 1 ? 0x3c : bytes == 2 ? 0x3d : bytes == 4 ? 0x3e : 0x37);
++    if (image.memory >= 0) {
++        if (image.packed) {
++            auto value = Local(WasmModule::I64); code.Set(value); code.Byte(0xa7); code.Get(value);
++        }
++        code.Mem(opcode, (uint32_t)image.memory, displacement);
++    } else code.Call(memories->Access(opcode, image.offset + offset));
+ }
+ 
+-inline void WasmCodeGen::ArrayLength(uint32_t header, TypeExpr *array, int memory, int prefix) {
+-    if (array->arr->akind == A_FIXED) { code.I64(ArrSize(array->arr)); return; }
+-    if (IsResz(array)) { code.Get(header); code.Mem(0x29, 0, 8); return; }
+-    if (VarintPrefix(array)) {
+-        code.Get(header); code.Call(memories->ReadPrefix());
++inline void WasmCodeGen::ArrayLength(const ArrayPlace &place, int prefix) {
++    if (place.layout.prefix.length < 0) { code.I64(place.layout.capacity); return; }
++    if (place.layout.varint) {
++        EmitPackedAddress(place.image, place.layout.type->line); code.Call(memories->ReadPrefix());
+         if (prefix >= 0) code.Set((uint32_t)prefix);
+         else code.Byte(0x1a);
+         return;
+     }
+-    LoadArrayField(header, array, memory, (uint32_t)ArrayPrefix(array->arr).length);
++    LoadArrayField(place, (uint32_t)place.layout.prefix.length);
+ }
+ 
+-inline void WasmCodeGen::ArrayCapacity(uint32_t header, TypeExpr *array, int memory) {
+-    if (RuntimeLimited(array)) LoadArrayField(header, array, memory, 0);
+-    else code.I64(ArrSize(array->arr));
++inline void WasmCodeGen::ArrayCapacity(const ArrayPlace &place) {
++    if (RuntimeLimited(place.layout.type)) LoadArrayField(place, 0);
++    else code.I64(place.layout.capacity);
+ }
+ 
+-inline void WasmCodeGen::StoreArrayField(TypeExpr *array, int memory, uint32_t offset) {
+-    auto bytes = IntSize(ArrayPrefix(array->arr).storage);
+-    auto opcode = (uint8_t)(bytes == 1 ? 0x3c : bytes == 2 ? 0x3d : bytes == 4 ? 0x3e : 0x37);
+-    if (!DataArray(array)) code.Mem(opcode, 0, offset);
+-    else if (memory >= 0) {
+-        auto value = Local(WasmModule::I64); code.Set(value); code.Byte(0xa7); code.Get(value);
+-        code.Mem(opcode, (uint32_t)memory, offset);
+-    } else code.Call(memories->Access(opcode, offset));
++inline void WasmCodeGen::PrepareArrayLengthStore(const ArrayPlace &place) {
++    PrepareArrayFieldStore(place, (uint32_t)place.layout.prefix.length);
+ }
+ 
+-inline void WasmCodeGen::StoreArrayLength(TypeExpr *array, int memory) {
+-    if (IsResz(array)) { code.Mem(0x37, 0, 8); return; }
+-    StoreArrayField(array, memory, (uint32_t)ArrayPrefix(array->arr).length);
++inline void WasmCodeGen::StoreArrayLength(const ArrayPlace &place) {
++    StoreArrayField(place, (uint32_t)place.layout.prefix.length);
+ }
+ 
+-inline void WasmCodeGen::InitArrayCount(uint32_t header, TypeExpr *array, uint64_t count, int memory) {
+-    if (VarintPrefix(array)) {
++inline void WasmCodeGen::InitArrayCount(const ArrayPlace &place, uint64_t count) {
++    if (place.layout.varint) {
+         WasmBytes prefix; prefix.U(count);
+         for (uint32_t i = 0; i < prefix.bytes.size(); i++) {
+-            code.Get(header);
+-            if (memory >= 0) code.Byte(0xa7);
++            code.Get(place.image.address);
++            if (place.image.memory >= 0 && place.image.packed) code.Byte(0xa7);
+             code.I64((uint8_t)prefix.bytes[i]);
+-            if (memory >= 0) code.Mem(0x3c, (uint32_t)memory, i);
+-            else code.Call(memories->Access(0x3c, i));
++            if (place.image.memory >= 0) code.Mem(0x3c, (uint32_t)place.image.memory, place.image.offset + i);
++            else code.Call(memories->Access(0x3c, place.image.offset + i));
+         }
+         return;
+     }
+-    if (RuntimeLimited(array)) {
+-        code.Get(header); code.I64((int64_t)count); StoreArrayField(array, memory, 0);
++    if (RuntimeLimited(place.layout.type)) {
++        PrepareArrayFieldStore(place, 0); code.I64((int64_t)count); StoreArrayField(place, 0);
+     }
+-    code.Get(header); code.I64((int64_t)count); StoreArrayLength(array, memory);
++    PrepareArrayLengthStore(place); code.I64((int64_t)count); StoreArrayLength(place);
+ }
+ 
+-inline uint32_t WasmCodeGen::ArrayHeader(Node *n) {
+-    ArrayElement(n);
+-    auto t = n->exprtype;
+-    while (t->kind == TY_REF) t = t->ref->sub;
+-    if (auto field = Is<Dot>(n); field && field->IsField()) {
+-        auto place = ResolvePlace(n);
+-        if (!TEq(place.type, t)) Fail(n->line, "array adaptation needs the pending destination lowering");
+-        PlaceAddress(place, Type(t), n->line);
+-        auto header = Local(Type(t)); code.Set(header); return header;
+-    }
+-    Gen(n); Convert(n->exprtype, t);
+-    auto header = Local(Type(t)); code.Set(header);
+-    return header;
++inline WasmCodeGen::ArrayView WasmCodeGen::CaptureArrayView(
++        const ArrayPlace &place, uint32_t length, uint32_t prefix) {
++    // Callers retain their existing local allocation and evaluation order.
++    ArrayLength(place, prefix == NoLocal ? -1 : (int)prefix); code.Set(length);
++    return {place, length, prefix};
+ }
+ 
+-inline int WasmCodeGen::ArrayMemory(Node *n) {
+-    if (InlineArray(ArrayType(n))) return 0;
+-    if (auto u = Is<Unary>(n); u && u->op == T_BITAND) n = u->child;
+-    auto id = Is<Ident>(n);
+-    if (!id || !id->vdef || id->vdef->type->kind != TY_ARRAY || !storage.owners.count(id->vdef)) return -1;
+-    return storage.Memory(id->vdef, current);
+-}
+-
+-inline void WasmCodeGen::CopyBytes(uint32_t destination, int destinationMemory,
+-                                  uint32_t source, int sourceMemory, uint32_t bytes) {
+-    code.Get(destination);
+-    if (destinationMemory >= 0 && sourceMemory >= 0) {
+-        code.Byte(0xa7); code.Get(source); code.Byte(0xa7); code.Get(bytes);
+-        code.Copy((uint32_t)destinationMemory, (uint32_t)sourceMemory);
+-    } else if (destinationMemory == 0) {
+-        code.Byte(0xa7); code.Get(source); code.Get(bytes); code.Call(memories->CopyToFrame());
+-    } else if (sourceMemory == 0) {
+-        code.Get(source); code.Byte(0xa7); code.Get(bytes); code.Call(memories->CopyFromFrame());
++inline void WasmCodeGen::ViewLength(const ArrayView &view) {
++    if (view.length != NoLocal) code.Get(view.length);
++    else ArrayLength(view.place, view.prefixBytes == NoLocal ? -1 : (int)view.prefixBytes);
++}
++
++inline void WasmCodeGen::CopyBytes(const FixedPlace &destination, const FixedPlace &source,
++                                  uint32_t bytes, Line line, bool immediate) {
++    auto count = [&]() { if (immediate) code.I32((int32_t)bytes); else code.Get(bytes); };
++    if (destination.memory >= 0 && source.memory >= 0) {
++        EmitKnownOffset(destination, (uint32_t)destination.memory, line);
++        EmitKnownOffset(source, (uint32_t)source.memory, line); count();
++        code.Copy((uint32_t)destination.memory, (uint32_t)source.memory);
++    } else if (destination.memory == 0) {
++        EmitKnownOffset(destination, 0, line); EmitPackedAddress(source, line); count();
++        code.Call(memories->CopyToFrame());
++    } else if (source.memory == 0) {
++        EmitPackedAddress(destination, line); EmitKnownOffset(source, 0, line); count();
++        code.Call(memories->CopyFromFrame());
+     } else {
+-        code.Get(source); code.Get(bytes); code.Call(memories->Copy());
++        EmitPackedAddress(destination, line); EmitPackedAddress(source, line); count();
++        code.Call(memories->Copy());
+     }
+ }
+ 
+@@ -120,8 +262,9 @@ inline void WasmCodeGen::InitArrayCopy(VarDef *owner, const Slot &slot, Node *so
+     while (from && from->kind == TY_REF) from = from->ref->sub;
+     if (!from || !TEq(array, from))
+         Fail(source->line, "array adaptation needs the pending destination lowering");
+-    auto header = ArrayHeader(source);
+-    auto sourceMemory = ArrayMemory(source);
++    auto fromplace = ResolveArray(source);
++    auto header = fromplace.image.address;
++    auto sourceMemory = fromplace.elementMemory;
+     auto bytes = Local(WasmModule::I32), sourceBase = Local(WasmModule::I64);
+     int count = -1;
+     if (InlineArray(array)) {
+@@ -132,8 +275,8 @@ inline void WasmCodeGen::InitArrayCopy(VarDef *owner, const Slot &slot, Node *so
+         auto stride = Size(array->arr->sub);
+         auto decodedPrefix = VarintPrefix(array) ? (int)Local(WasmModule::I32) : -1;
+         count = (int)Local(WasmModule::I64);
+-        if (RuntimeLimited(array)) ArrayCapacity(header, array, sourceMemory);
+-        else ArrayLength(header, array, sourceMemory, decodedPrefix);
++        if (RuntimeLimited(array)) ArrayCapacity(fromplace);
++        else ArrayLength(fromplace, decodedPrefix);
+         code.Set(count);
+         code.Get(count); code.I64((UINT32_MAX - prefix) / stride); code.Byte(0x56);
+         Open(0x04); Trap(6, source->line); Close();
+@@ -151,7 +294,7 @@ inline void WasmCodeGen::InitArrayCopy(VarDef *owner, const Slot &slot, Node *so
+         code.Set(sourceBase);
+     }
+     auto destination = Local(WasmModule::I64);
+-    auto memory = InlineArray(array) ? 0 : storage.Memory(owner, current);
++    auto memory = ArrayAllocationMemory(owner, &slot, nullptr, owner->line);
+     if (InlineArray(array)) {
+         Address(slot); code.Byte(0xad); code.Set(destination);
+     } else {
+@@ -174,7 +317,8 @@ inline void WasmCodeGen::InitArrayCopy(VarDef *owner, const Slot &slot, Node *so
+             Address(slot); code.Get(count); code.Mem(0x37, 0, 8);
+         }
+     }
+-    CopyBytes(destination, memory, sourceBase, sourceMemory, bytes);
++    CopyBytes({array, destination, 0, memory, true, true},
++              {from, sourceBase, 0, sourceMemory, true, true}, bytes, source->line);
+ }
+ 
+ inline void WasmCodeGen::InitLimitedCapacity(VarDef *owner, const Slot &slot, ArrayLit *literal) {
+@@ -205,8 +349,9 @@ inline void WasmCodeGen::InitLimitedCapacity(VarDef *owner, const Slot &slot, Ar
+     code.Get(identity); code.Byte(0xad); code.I64(32); code.Byte(0x86);
+     code.Get(saved); code.Byte(0xad); code.Byte(0x84); code.Set(header);
+     code.Get(header); Write(slot);
+-    code.Get(header); code.Get(capacity); StoreArrayField(array, memory, 0);
+-    code.Get(header); code.I64(0); StoreArrayLength(array, memory);
++    auto place = ArrayOwner(owner, {array, header, 0, memory, true, true}, literal->line);
++    PrepareArrayFieldStore(place, 0); code.Get(capacity); StoreArrayField(place, 0);
++    PrepareArrayLengthStore(place); code.I64(0); StoreArrayLength(place);
+ }
+ 
+ inline void WasmCodeGen::InitByteString(VarDef *owner, const Slot *slot, StrLit *literal,
+@@ -219,7 +364,7 @@ inline void WasmCodeGen::InitByteString(VarDef *owner, const Slot *slot, StrLit
+     if (count > UINT32_MAX - prefix) Fail(line, "array allocation exceeds memory32");
+     if (prefix && prefix < 8 && count > ((1ull << (prefix * 8)) - 1))
+         Fail(line, "array length exceeds its stored prefix");
+-    auto memory = InlineArray(array) ? 0 : storage.Memory(owner, current);
++    auto memory = ArrayAllocationMemory(owner, slot, destination, line);
+     auto base = Local(WasmModule::I64);
+     if (InlineArray(array)) {
+         auto header = Local(WasmModule::I32);
+@@ -227,7 +372,8 @@ inline void WasmCodeGen::InitByteString(VarDef *owner, const Slot *slot, StrLit
+         else Address(*slot);
+         code.Set(header);
+         if (array->arr->akind == A_LIMITED) {
+-            code.Get(header); code.I64((int64_t)count); StoreArrayLength(array);
++            auto place = ArrayFromPlace({array, header, 0, memory, false, true}, literal->line);
++            PrepareArrayLengthStore(place); code.I64((int64_t)count); StoreArrayLength(place);
+         }
+         code.Get(header);
+         if (array->arr->akind == A_LIMITED) {
+@@ -251,20 +397,19 @@ inline void WasmCodeGen::InitByteString(VarDef *owner, const Slot *slot, StrLit
+         code.Get(saved); code.Byte(0xad); code.Byte(0x84); code.Set(base);
+         if (DataArray(array)) {
+             code.Get(base); Write(*slot);
+-            InitArrayCount(base, array, count, memory);
++            InitArrayCount(ArrayOwner(owner, {array, base, 0, memory, true, true}, literal->line), count);
+         } else {
+-            Address(*slot); code.Get(base); code.Mem(0x37);
+-            Address(*slot); code.I64((int64_t)count); code.Mem(0x37, 0, 8);
++            auto place = FrameArrayOwner(owner, *slot, literal->line);
++            PrepareArrayFieldStore(place, 0); code.Get(base); StoreArrayField(place, 0);
++            PrepareArrayLengthStore(place); code.I64((int64_t)count); StoreArrayLength(place);
+         }
+         if (prefix) { code.Get(base); code.I64(prefix); code.Byte(0x7c); code.Set(base); }
+     }
+     if (!count) return;
+     auto source = module.Data(literal->val);
+-    code.Get(base);
+-    if (memory >= 0) code.Byte(0xa7);
+-    code.I32((int32_t)source); code.I32((int32_t)count);
+-    if (memory >= 0) { code.Byte(0xfc); code.U(10); code.U((uint32_t)memory); code.U(0); }
+-    else code.Call(memories->CopyFromFrame());
++    CopyBytes({array->arr->sub, base, 0, memory, true, true},
++              {array->arr->sub, NoLocal, (uint32_t)source, 0, false, true},
++              (uint32_t)count, literal->line, true);
+ }
+ 
+ inline void WasmCodeGen::InitFilledArray(VarDef *owner, const Slot *slot, ArrayLit *literal,
+@@ -282,7 +427,7 @@ inline void WasmCodeGen::InitFilledArray(VarDef *owner, const Slot *slot, ArrayL
+         Fail(line, "array allocation exceeds memory32");
+     if (prefix && prefix < 8 && count > ((1ull << (prefix * 8)) - 1))
+         Fail(line, "array length exceeds its stored prefix");
+-    auto memory = InlineArray(array) ? 0 : storage.Memory(owner, current);
++    auto memory = ArrayAllocationMemory(owner, slot, destination, line);
+     auto base = Local(WasmModule::I64);
+     if (InlineArray(array)) {
+         auto capacity = (uint64_t)ArrSize(array->arr);
+@@ -293,7 +438,8 @@ inline void WasmCodeGen::InitFilledArray(VarDef *owner, const Slot *slot, ArrayL
+         else Address(*slot);
+         code.Set(header);
+         if (array->arr->akind == A_LIMITED) {
+-            code.Get(header); code.I64((int64_t)count); StoreArrayLength(array);
++            auto place = ArrayFromPlace({array, header, 0, memory, false, true}, literal->line);
++            PrepareArrayLengthStore(place); code.I64((int64_t)count); StoreArrayLength(place);
+         }
+         code.Get(header);
+         if (array->arr->akind == A_LIMITED) {
+@@ -317,10 +463,11 @@ inline void WasmCodeGen::InitFilledArray(VarDef *owner, const Slot *slot, ArrayL
+         code.Get(saved); code.Byte(0xad); code.Byte(0x84); code.Set(base);
+         if (DataArray(array)) {
+             code.Get(base); Write(*slot);
+-            InitArrayCount(base, array, count, memory);
++            InitArrayCount(ArrayOwner(owner, {array, base, 0, memory, true, true}, literal->line), count);
+         } else {
+-            Address(*slot); code.Get(base); code.Mem(0x37);
+-            Address(*slot); code.I64((int64_t)count); code.Mem(0x37, 0, 8);
++            auto place = FrameArrayOwner(owner, *slot, literal->line);
++            PrepareArrayFieldStore(place, 0); code.Get(base); StoreArrayField(place, 0);
++            PrepareArrayLengthStore(place); code.I64((int64_t)count); StoreArrayLength(place);
+         }
+     }
+     // The language evaluates even a zero-count fill once. Capturing before
+@@ -373,7 +520,8 @@ inline void WasmCodeGen::InitDataArray(VarDef *owner, const Slot &slot, ArrayLit
+     code.Get(identity); code.Byte(0xad); code.I64(32); code.Byte(0x86);
+     code.Get(saved); code.Byte(0xad); code.Byte(0x84); code.Set(header);
+     code.Get(header); Write(slot);
+-    InitArrayCount(header, array, count, memory);
++    auto place = ArrayOwner(owner, {array, header, 0, memory, true, true}, literal->line);
++    InitArrayCount(place, count);
+     // The complete payload is reserved before initializers call other code.
+     // Their stack bases are above this live owner in the storage plan.
+     if (!count) return;
+@@ -417,7 +565,7 @@ inline void WasmCodeGen::InitArray(VarDef *owner, const Slot &slot, Node *init,
+     if (!IsResz(array)) {
+         auto header = Local(WasmModule::I32);
+         Address(slot); code.Set(header);
+-        InlineArrayLiteral(array, header, literal);
++        InlineArrayLiteral(ArrayOwner(owner, {array, header, 0, 0, false, true}, literal->line), literal);
+         return;
+     }
+     auto memory = storage.Memory(owner, current);
+@@ -434,117 +582,128 @@ inline void WasmCodeGen::InitArray(VarDef *owner, const Slot &slot, Node *init,
+     }
+     auto header = Local(WasmModule::I32);
+     Address(slot); code.Set(header);
+-    code.Get(header); code.Get(identity); code.Byte(0xad); code.I64(32); code.Byte(0x86);
+-    code.Get(saved); code.Byte(0xad); code.Byte(0x84); code.Mem(0x37);
+-    code.Get(header); code.I64(0); code.Mem(0x37, 0, 8);
++    auto place = ArrayOwner(owner, {array, header, 0, 0, false, true}, literal->line);
++    PrepareArrayFieldStore(place, 0); code.Get(identity); code.Byte(0xad); code.I64(32); code.Byte(0x86);
++    code.Get(saved); code.Byte(0xad); code.Byte(0x84); StoreArrayField(place, 0);
++    PrepareArrayLengthStore(place); code.I64(0); StoreArrayLength(place);
+     for (auto value : literal->elems)
+-        PushArray(header, array, value, nullptr, value->line, memory);
++        PushArray(place, value, nullptr, value->line);
+ }
+ 
+-inline void WasmCodeGen::LoadElement(TypeExpr *element, int memory) {
++inline void WasmCodeGen::LoadElement(const ElementPlace &place) {
++    auto element = place.type;
+     if (Aggregate(element)) Fail(element->line, "aggregate element reads need a stored-value consumer");
+-    if (memory >= 0) { code.Byte(0xa7); LoadFixed(element, (uint32_t)memory); }
++    if (place.memory >= 0) { code.Byte(0xa7); LoadFixed(element, (uint32_t)place.memory); }
+     else Load(element);
+ }
+ 
+-inline void WasmCodeGen::StoreElement(TypeExpr *element, int memory) {
++inline void WasmCodeGen::StoreElement(const ElementPlace &place) {
++    auto element = place.type;
+     if (Aggregate(element)) Fail(element->line, "whole-aggregate assignment needs the pending destination lowering");
+-    if (memory >= 0) {
++    if (place.memory >= 0) {
+         auto value = Temp(element); code.Set(value); code.Byte(0xa7); code.Get(value);
+-        StoreFixed(element, (uint32_t)memory);
++        StoreFixed(element, (uint32_t)place.memory);
+     } else Store(element);
+ }
+ 
+-inline void WasmCodeGen::PushArray(uint32_t header, TypeExpr *array, Node *value,
+-                                  TypeExpr *result, Line line, int memory, PushScratch *scratch) {
+-    auto element = array->arr->sub;
++inline void WasmCodeGen::PushArray(const ArrayPlace &place, Node *value,
++                                  TypeExpr *result, Line line, PushScratch *scratch) {
++    auto element = place.layout.element;
++    auto header = place.image.address; auto memory = place.elementMemory;
+     Gen(value); Convert(value->exprtype, element);
+     auto item = scratch ? scratch->item : Temp(element); code.Set(item);
+-    // Read the current header after argument effects. A call used for the
+-    // value can itself append through another reference to this owner.
++    // Capture the receiver before argument effects, but read its count after them.
+     auto length = scratch ? scratch->length : Local(WasmModule::I64);
+     auto old = scratch ? scratch->old : Local(WasmModule::I32);
+-    ArrayLength(header, array, memory); code.Set(length);
+-    if (IsResz(array)) {
+-        if (memory >= 0) { code.I32((int32_t)Size(element)); code.Call(memories->Reserve(memory)); }
++    ArrayLength(place); code.Set(length);
++    if (place.layout.image == ArrayImage::GrowableHeader) {
++        if (memory >= 0) { code.I32((int32_t)place.layout.stride); code.Call(memories->Reserve(memory)); }
+         else {
+             code.Get(header); code.Mem(0x29); code.I64(32); code.Byte(0x88); code.Byte(0xa7);
+-            code.I32((int32_t)Size(element)); code.Call(memories->ReserveDynamic());
++            code.I32((int32_t)place.layout.stride); code.Call(memories->ReserveDynamic());
+         }
+         code.Set(old);
+         code.Get(header); code.Mem(0x29); code.I64(-4294967296ll); code.Byte(0x83);
+         code.Get(old); code.Byte(0xad); code.Byte(0x84);
+     } else {
+-        code.Get(length); ArrayCapacity(header, array, memory); code.Byte(0x5a);
++        code.Get(length); ArrayCapacity(place); code.Byte(0x5a);
+         Open(0x04); Trap(10, line); Close();
+-        ElementOffset(header, length, array, line, -1, scratch);
++        ElementOffset({place}, length, line, scratch);
+     }
+     auto address = scratch ? scratch->address : Local(WasmModule::I64);
+     if (scratch && memory >= 0) {
+         code.Set(address); code.Get(address); code.Byte(0xa7); code.Get(item);
+         StoreFixed(element, (uint32_t)memory);
+-    } else { code.Tee(address); code.Get(item); StoreElement(element, memory); }
+-    code.Get(header); code.Get(length); code.I64(1); code.Byte(0x7c); StoreArrayLength(array, memory);
++    } else { code.Tee(address); code.Get(item); StoreElement({element, memory}); }
++    PrepareArrayLengthStore(place); code.Get(length); code.I64(1); code.Byte(0x7c); StoreArrayLength(place);
+     if (!Void(result)) {
+         code.Get(address);
+         if (result->kind != TY_REF || !TEq(result->ref->sub, element)) {
+-            LoadElement(element, memory); Convert(element, result);
++            LoadElement({element, memory}); Convert(element, result);
+         } else if (Type(result) == WasmModule::I32) code.Byte(0xa7);
+     }
+-    (void)line;
+ }
+ 
+-inline void WasmCodeGen::ElementOffset(uint32_t header, uint32_t index, TypeExpr *array, Line line, int prefix,
++inline void WasmCodeGen::ElementOffset(const ArrayView &view, uint32_t index, Line line,
+                                      PushScratch *scratch) {
+-    auto element = array->arr->sub;
++    const auto &place = view.place;
++    const auto &layout = place.layout;
+     auto base = scratch ? scratch->base : Local(WasmModule::I64);
+     auto offset = scratch ? scratch->offset : Local(WasmModule::I64);
+-    code.Get(header);
+-    if (IsResz(array)) code.Mem(0x29);
+-    else if (!DataArray(array)) {
+-        if (array->arr->akind == A_LIMITED) {
+-            code.I32((int32_t)IntSize(LenStore(array->arr))); code.Byte(0x6a);
++    if (layout.image == ArrayImage::GrowableHeader) {
++        if (place.ownerSlot) { Address(*place.ownerSlot); code.Mem(0x29); }
++        else { code.Get(place.image.address); code.Mem(0x29, 0, place.image.offset); }
++    } else if (!place.image.packed) {
++        EmitKnownOffset(place.image, (uint32_t)place.image.memory, line);
++        if (layout.prefix.elements > 0) {
++            code.I32((int32_t)layout.prefix.elements); code.Byte(0x6a);
+         }
+         code.Byte(0xad);
+-    }
++    } else EmitPackedAddress(place.image, line);
+     code.Set(base);
+     code.Get(base); code.I64(UINT32_MAX); code.Byte(0x83);
+-    if (VarintPrefix(array)) {
+-        if (prefix >= 0) code.Get((uint32_t)prefix);
++    if (layout.varint) {
++        if (view.prefixBytes != NoLocal) code.Get(view.prefixBytes);
+         else {
+-            code.Get(header); code.Call(memories->ReadPrefix());
++            EmitPackedAddress(place.image, line); code.Call(memories->ReadPrefix());
+             auto width = Local(WasmModule::I32); code.Set(width); code.Byte(0x1a); code.Get(width);
+         }
+         code.Byte(0xad); code.Byte(0x7c);
+-    } else if (DataArray(array)) { code.I64(DataPrefix(array)); code.Byte(0x7c); }
+-    code.Get(index); code.I64(Size(element)); code.Byte(0x7e); code.Byte(0x7c); code.Tee(offset);
++    } else if (place.image.packed && layout.prefix.elements > 0) {
++        code.I64(layout.prefix.elements); code.Byte(0x7c);
++    }
++    code.Get(index); code.I64(layout.stride); code.Byte(0x7e); code.Byte(0x7c); code.Tee(offset);
+     code.I64(UINT32_MAX); code.Byte(0x56); Open(0x04); Trap(11, line); Close();
+     code.Get(base); code.I64(-4294967296ll); code.Byte(0x83); code.Get(offset); code.Byte(0x84);
+ }
+ 
+-inline pair<TypeExpr *, int> WasmCodeGen::ElementAddress(Index *index) {
+-    auto array = ArrayType(index->obj), element = array->arr->sub;
+-    auto header = ArrayHeader(index->obj);
+-    // C's IndexLoc snapshots the view before an index with statement
+-    // effects. Snapshot its length here as well; bases remain stable.
++inline WasmCodeGen::ElementPlace WasmCodeGen::ElementAddress(Index *index) {
++    auto place = ResolveArray(index->obj);
++    // Capture before index statements; the current admitted bases are stable.
+     auto length = Local(WasmModule::I64), position = Local(WasmModule::I64);
+-    auto prefix = VarintPrefix(array) ? (int)Local(WasmModule::I32) : -1;
+-    ArrayLength(header, array, ArrayMemory(index->obj), prefix); code.Set(length);
++    auto prefix = place.layout.varint ? Local(WasmModule::I32) : NoLocal;
++    auto view = CaptureArrayView(place, length, prefix);
+     Gen(index->idx); code.Set(position);
+     if (!index->nobc) {
+         code.Get(position); code.Get(length); code.Byte(0x5a);
+         Open(0x04); Trap(8, index->line); Close();
+     }
+-    ElementOffset(header, position, array, index->line, prefix);
+-    return {element, ArrayMemory(index->obj)};
++    ElementOffset(view, position, index->line);
++    return {place.layout.element, place.elementMemory, true};
++}
++
++inline WasmCodeGen::FixedPlace WasmCodeGen::CaptureElementPlace(const ElementPlace &element) {
++    auto address = Local(WasmModule::I64); code.Set(address);
++    return {element.type, address, 0, element.memory, true, element.bounded};
+ }
+ 
+ inline void WasmCodeGen::AssignElement(Index *index, Node *rhs, TType op, bool pointee, Line line) {
+-    auto [type, memory] = ElementAddress(index);
++    auto selected = ElementAddress(index);
++    auto type = selected.type; auto memory = selected.memory;
+     if (Nominal(type)) Fail(line, "whole-aggregate assignment needs the pending destination lowering");
+     auto address = Local(WasmModule::I64); code.Set(address);
+     if (pointee && type->kind == TY_REF && op != T_DOTASSIGN) {
+-        code.Get(address); LoadElement(type, memory); CheckNull(line, Type(type));
++        code.Get(address); LoadElement({type, memory}); CheckNull(line, Type(type));
+         if (type->ref->sub->kind == TY_ARRAY) Fail(line, "whole-array assignment needs the pending destination lowering");
+         if (Nominal(type->ref->sub)) Fail(line, "whole-aggregate assignment needs the pending destination lowering");
+         if (Type(type) == WasmModule::I32) address = Local(WasmModule::I32);
+@@ -556,47 +715,47 @@ inline void WasmCodeGen::AssignElement(Index *index, Node *rhs, TType op, bool p
+             ReferenceAddress(Find(source->vdef));
+         } else ReferenceValue(rhs, Type(type));
+     } else {
+-        if (op != T_ASSIGN) { code.Get(address); LoadElement(type, memory); }
++        if (op != T_ASSIGN) { code.Get(address); LoadElement({type, memory}); }
+         if (rhs) { Gen(rhs); Convert(rhs->exprtype, type); }
+         else if (type->kind == TY_FLT) {
+             if (type->fltstorage == FS_F32) code.F32(1); else code.F64(1);
+         } else code.I64(1);
+         if (op != T_ASSIGN) Arithmetic(op, type, line);
+     }
+-    auto value = Temp(type); code.Set(value); code.Get(address); code.Get(value); StoreElement(type, memory);
++    auto value = Temp(type); code.Set(value); code.Get(address); code.Get(value); StoreElement({type, memory});
+ }
+ 
+ inline void WasmCodeGen::ArrayBuiltin(Call *call, const vector<Node *> &arguments, TypeExpr *resulttype) {
+     auto array = ArrayType(arguments[0]), element = array->arr->sub;
+-    auto header = ArrayHeader(arguments[0]);
+-    auto memory = ArrayMemory(arguments[0]);
+-    if (call->builtin == B_LEN) { ArrayLength(header, array, memory); return; }
++    auto place = ResolveArray(arguments[0]);
++    auto header = place.image.address; auto memory = place.elementMemory;
++    if (call->builtin == B_LEN) { ArrayLength(place); return; }
+     if (VariableArray(array)) Fail(call->line, "variable-array mutation needs the pending destination lowering");
+-    if (call->builtin == B_CAP) { ArrayCapacity(header, array, memory); return; }
++    if (call->builtin == B_CAP) { ArrayCapacity(place); return; }
+     if (Nominal(element) && (call->builtin == B_PUSH || call->builtin == B_POP))
+         Fail(call->line, "aggregate push/pop needs the pending destination lowering");
+     if (call->builtin == B_PUSH) {
+-        PushArray(header, array, arguments[1], resulttype ? resulttype : call->exprtype,
+-                  call->line, memory); return;
++        PushArray(place, arguments[1], resulttype ? resulttype : call->exprtype, call->line); return;
+     }
+     auto length = Local(WasmModule::I64);
+-    ArrayLength(header, array, memory); code.Set(length);
++    ArrayLength(place); code.Set(length);
+     if (call->builtin == B_POP) {
+         code.Get(length); code.Byte(0x50); Open(0x04); Trap(9, call->line); Close();
+         code.Get(length); code.I64(1); code.Byte(0x7d); code.Set(length);
+     } else { code.I64(0); code.Set(length); }
+-    ElementOffset(header, length, array, call->line);
++    ElementOffset({place}, length, call->line);
+     auto address = Local(WasmModule::I64); code.Set(address);
+     int result = -1;
+     if (call->builtin == B_POP) {
+-        result = (int)Temp(element); code.Get(address); LoadElement(element, memory); code.Set(result);
++        result = (int)Temp(element); code.Get(address); LoadElement({element, memory}); code.Set(result);
+     }
+-    if (IsResz(array) && memory >= 0) { code.Get(address); code.Byte(0xa7); code.Byte(0x24); code.U(memory); }
+-    else if (IsResz(array)) {
++    if (place.layout.image == ArrayImage::GrowableHeader && memory >= 0) {
++        code.Get(address); code.Byte(0xa7); code.Byte(0x24); code.U(memory);
++    } else if (place.layout.image == ArrayImage::GrowableHeader) {
+         code.Get(header); code.Mem(0x29); code.I64(32); code.Byte(0x88); code.Byte(0xa7);
+         code.Get(address); code.Byte(0xa7); code.Call(memories->Top(true));
+     }
+-    code.Get(header); code.Get(length); StoreArrayLength(array, memory);
++    PrepareArrayLengthStore(place); code.Get(length); StoreArrayLength(place);
+     if (result >= 0) { code.Get(result); Convert(element, resulttype ? resulttype : call->exprtype); }
+ }
+ 
+@@ -607,21 +766,19 @@ inline void WasmCodeGen::ArrayEquality(Binary *node) {
+     if (Nominal(lefttype->arr->sub) || Nominal(righttype->arr->sub))
+         Fail(node->line, "aggregate array equality needs the pending value lowering");
+     auto element = lefttype->arr->sub;
+-    auto left = ArrayHeader(node->left), length = Local(WasmModule::I64);
+-    auto leftprefix = VarintPrefix(lefttype) ? (int)Local(WasmModule::I32) : -1;
+-    auto rightprefix = VarintPrefix(righttype) ? (int)Local(WasmModule::I32) : -1;
+-    ArrayLength(left, lefttype, ArrayMemory(node->left), leftprefix); code.Set(length);
+-    auto right = ArrayHeader(node->right);
++    auto left = ResolveArray(node->left); auto length = Local(WasmModule::I64);
++    auto leftprefix = VarintPrefix(lefttype) ? Local(WasmModule::I32) : NoLocal;
++    auto rightprefix = VarintPrefix(righttype) ? Local(WasmModule::I32) : NoLocal;
++    auto leftview = CaptureArrayView(left, length, leftprefix);
++    auto right = ResolveArray(node->right); ArrayView rightview {right, NoLocal, rightprefix};
+     auto result = Local(WasmModule::I32), position = Local(WasmModule::I64);
+     code.I32(0); code.Set(result);
+-    code.Get(length); ArrayLength(right, righttype, ArrayMemory(node->right), rightprefix); code.Byte(0x51); Open(0x04);
++    code.Get(length); ViewLength(rightview); code.Byte(0x51); Open(0x04);
+     code.I32(1); code.Set(result); code.I64(0); code.Set(position);
+     auto done = Open(), head = Open(0x03);
+     code.Get(position); code.Get(length); code.Byte(0x5a); Branch(done, true);
+-    ElementOffset(left, position, lefttype, node->line, leftprefix);
+-    LoadElement(element, ArrayMemory(node->left));
+-    ElementOffset(right, position, righttype, node->line, rightprefix);
+-    LoadElement(righttype->arr->sub, ArrayMemory(node->right));
++    ElementOffset(leftview, position, node->line); LoadElement({element, left.elementMemory});
++    ElementOffset(rightview, position, node->line); LoadElement({right.layout.element, right.elementMemory});
+     auto type = Type(element);
+     code.Byte(type == WasmModule::F32 ? 0x5b : type == WasmModule::F64 ? 0x61 :
+               type == WasmModule::I32 ? 0x46 : 0x51);
+@@ -647,12 +804,11 @@ inline void WasmCodeGen::CaptureArrayWalk(Node *n, ArrayWalk &walk) {
+         CaptureArrayWalk(index->obj, walk);
+         ArrayWalkStep step {index, Local(WasmModule::I64)};
+         if (ArrayPathHasStatements(index->idx)) {
+-            // Native IndexLoc freezes the parent view before an index that
+-            // emits statements. References below that view still reload.
++            // Freeze the parent before index statements; child reference slots still reload.
+             auto parent = LoadArrayWalk(walk);
+             step.length = Local(WasmModule::I64);
+-            ArrayLength(parent, ArrayType(index->obj), ArrayMemory(index->obj)); code.Set(step.length);
+-            walk.root = nullptr; walk.header = parent; walk.steps.clear();
++            CaptureArrayView(parent, step.length);
++            walk.root = nullptr; walk.captured = parent; walk.steps.clear();
+         }
+         Gen(index->idx); code.Set(step.position);
+         walk.steps.push_back(step);
+@@ -664,11 +820,12 @@ inline void WasmCodeGen::CaptureArrayWalk(Node *n, ArrayWalk &walk) {
+     }
+     auto id = Is<Ident>(n);
+     if (id && id->vdef && id->vdef->isvar && id->vdef->type->kind == TY_REF) walk.root = n;
+-    else walk.header = ArrayHeader(n); // A call or temporary is evaluated once.
++    else walk.captured = ResolveArray(n);
+ }
+ 
+-inline uint32_t WasmCodeGen::LoadArrayWalk(const ArrayWalk &walk) {
+-    auto header = walk.root ? ArrayHeader(walk.root) : walk.header;
++inline WasmCodeGen::ArrayPlace WasmCodeGen::LoadArrayWalk(const ArrayWalk &walk) {
++    assert(walk.root || walk.captured);
++    auto place = walk.root ? ResolveArray(walk.root) : *walk.captured;
+     for (auto &step : walk.steps) {
+         auto index = step.node;
+         auto array = ArrayType(index->obj), element = array->arr->sub;
+@@ -676,15 +833,16 @@ inline uint32_t WasmCodeGen::LoadArrayWalk(const ArrayWalk &walk) {
+             Fail(index->line, "this array path needs the pending compound lowering");
+         if (!index->nobc) {
+             code.Get(step.position);
+-            if (step.length != UINT32_MAX) code.Get(step.length);
+-            else ArrayLength(header, array, ArrayMemory(index->obj));
++            ViewLength({place, step.length});
+             code.Byte(0x5a); Open(0x04); Trap(8, index->line); Close();
+         }
+-        ElementOffset(header, step.position, array, index->line);
+-        LoadElement(element, ArrayMemory(index->obj)); CheckNull(index->line, Type(element));
+-        header = Local(Type(element)); code.Set(header);
++        ElementOffset({place}, step.position, index->line);
++        LoadElement({element, place.elementMemory}); CheckNull(index->line, Type(element));
++        auto address = Local(Type(element)); code.Set(address);
++        // The loaded reference establishes its own target domain, not the slot's domain.
++        place = ArrayFromReference(element, address, index->line);
+     }
+-    return header;
++    return place;
+ }
+ 
+ inline void WasmCodeGen::ArrayFor(ForLoop *loop) {
+@@ -694,8 +852,12 @@ inline void WasmCodeGen::ArrayFor(ForLoop *loop) {
+     auto reload = id && id->vdef && id->vdef->isvar && id->vdef->type->kind == TY_REF;
+     optional<ArrayWalk> walk;
+     if (Is<Index>(loop->iter)) { walk.emplace(); CaptureArrayWalk(loop->iter, *walk); }
+-    auto header = reload || walk ? Local(Type(array)) : ArrayHeader(loop->iter);
+-    auto memory = ArrayMemory(loop->iter);
++    auto place = reload || walk
++        ? CaptureArrayBorrow(array, Local(LegacyArrayBorrowType(array)), LegacyArrayBorrowType(array),
++                             ArrayOrigin::ReferenceABI, loop->line)
++        : ResolveArray(loop->iter);
++    auto header = place.image.address;
++    auto memory = place.elementMemory;
+     auto copyAggregate = Nominal(loop->vdef->type);
+     if (copyAggregate) {
+         auto plan = storage.fixedvalues.find(loop->vdef);
+@@ -711,22 +873,21 @@ inline void WasmCodeGen::ArrayFor(ForLoop *loop) {
+     auto position = Local(WasmModule::I64); code.I64(0); code.Set(position);
+     auto end = Open(), head = Open(0x03);
+     if (walk) {
+-        auto currentheader = LoadArrayWalk(*walk); code.Get(currentheader); code.Set(header);
++        auto selected = LoadArrayWalk(*walk); code.Get(selected.image.address); code.Set(header);
+     } else if (reload) {
+-        auto currentheader = ArrayHeader(loop->iter); code.Get(currentheader); code.Set(header);
++        auto selected = ResolveArray(loop->iter); code.Get(selected.image.address); code.Set(header);
+     }
+     // Growth during iteration is permitted. Read the current count on each
+     // test rather than assuming the entry view has a fixed length.
+-    code.Get(position); ArrayLength(header, array, memory, prefix); code.Byte(0x5a); Branch(end, true);
+-    ElementOffset(header, position, array, loop->line, prefix);
++    code.Get(position); ArrayLength(place, prefix); code.Byte(0x5a); Branch(end, true);
++    ElementOffset({place, NoLocal, prefix < 0 ? NoLocal : (uint32_t)prefix}, position, loop->line);
+     if (copyAggregate) {
+-        auto source = Local(WasmModule::I64); code.Set(source);
++        auto selected = CaptureElementPlace({element, memory});
+         // The length test and fixed array image bound the whole selected element.
+-        FixedPlace selected {element, source, 0, 0, true, true};
+         CopyFixed(FreshOwner(loop->vdef, loop), selected, loop->line);
+     } else {
+         if (!loop->byref || element->kind == TY_REF) {
+-            LoadElement(element, memory); Convert(element, loop->vdef->type);
++            LoadElement({element, memory}); Convert(element, loop->vdef->type);
+         } else if (Type(loop->vdef->type) == WasmModule::I32) code.Byte(0xa7);
+         Write(Find(loop->vdef));
+     }
+diff --git a/src/wasm_codegen.h b/src/wasm_codegen.h
+index ef0af915..e5dff78d 100644
+--- a/src/wasm_codegen.h
++++ b/src/wasm_codegen.h
+@@ -28,6 +28,31 @@ struct WasmCodeGen : ValueLayout {
+         int memory = 0;
+         bool packed = false, bounded = false;
+     };
++    static constexpr uint32_t NoLocal = UINT32_MAX;
++    enum class ArrayImage { Inline, PrefixedData, GrowableHeader };
++    enum class ArrayOrigin { PlannedOwner, ParentPlace, ReferenceABI };
++    struct ArrayLayoutFacts {
++        TypeExpr *type, *element;
++        ArrayImage image;
++        uint32_t stride;
++        int64_t capacity;
++        ArrayPrefixLayout prefix;
++        bool varint;
++    };
++    struct ArrayPlace {
++        FixedPlace image;
++        ArrayLayoutFacts layout;
++        int elementMemory;
++        VarDef *owner = nullptr;
++        ArrayOrigin origin = ArrayOrigin::ReferenceABI;
++        const Slot *ownerSlot = nullptr; // Retain direct frame-owner address emission without a new local.
++    };
++    struct ArrayView {
++        ArrayPlace place;
++        uint32_t length = NoLocal, prefixBytes = NoLocal;
++    };
++    // The selected packed i64 address remains on the operand stack.
++    struct ElementPlace { TypeExpr *type; int memory; bool bounded = true; };
+     struct FreshFixedDestination {
+         FixedPlace place;
+         VarDef *root;
+@@ -148,7 +173,7 @@ struct WasmCodeGen : ValueLayout {
+                 auto element = t->arr->sub;
+                 if (Nominal(element) && InlineArray(t)) {
+                     RequireFixed(t, t->line);
+-                    return WasmModule::I32;
++                    return LegacyArrayBorrowType(t);
+                 }
+                 if (!support.ScalarElement(element))
+                     Fail(t->line, "compound array elements need the pending layout lowering");
+@@ -158,7 +183,7 @@ struct WasmCodeGen : ValueLayout {
+                     if ((uint64_t)ArrSize(t->arr) > (UINT32_MAX - prefix) / FixedSize(element))
+                         Fail(t->line, "array layout exceeds memory32");
+                 }
+-                return DataArray(t) ? WasmModule::I64 : WasmModule::I32;
++                return LegacyArrayBorrowType(t);
+             }
+             default: Fail(t->line, "this value layout is not implemented (scalar backend)");
+         }
+@@ -491,7 +516,7 @@ struct WasmCodeGen : ValueLayout {
+         } else if (auto field = Is<Dot>(n); field && field->IsField() && ActualType(n)->kind == TY_REF) {
+             ReadPlace(FieldPlace(field));
+         } else if (auto index = Is<Index>(n); index && ActualType(n)->kind == TY_REF) {
+-            auto element = ElementAddress(index); LoadElement(element.first, element.second);
++            auto element = ElementAddress(index); LoadElement(element);
+         } else if ((Is<Call>(n) || Is<InlineBlock>(n)) && ActualType(n)->kind == TY_REF) {
+             Gen(n, ActualType(n));
+         } else {
+@@ -578,11 +603,12 @@ struct WasmCodeGen : ValueLayout {
+             code.I32(0); code.I32((int32_t)offset); code.I32(4); code.Call(snapshotbytes);
+             code.Byte(0x05);
+         }
+-        auto memory = ArrayMemory(arg);
++        auto place = RefineArrayOwner(CaptureArrayBorrow(t, value, LegacyArrayBorrowType(t),
++                                                       ArrayOrigin::ReferenceABI, arg->line), arg);
+         auto length = Local(WasmModule::I64), zero = Local(WasmModule::I64);
+-        auto prefix = VarintPrefix(t) ? (int)Local(WasmModule::I32) : -1;
+-        ArrayLength(value, t, memory, prefix); code.Set(length);
+-        code.I64(0); code.Set(zero); ElementOffset(value, zero, t, arg->line, prefix);
++        auto prefix = place.layout.varint ? Local(WasmModule::I32) : NoLocal;
++        auto view = CaptureArrayView(place, length, prefix);
++        code.I64(0); code.Set(zero); ElementOffset(view, zero, arg->line);
+         auto address = Local(WasmModule::I64); code.Set(address);
+         code.Get(address); code.I64(32); code.Byte(0x88); code.Byte(0xa7);
+         code.Get(address); code.Byte(0xa7); code.Get(length); code.Byte(0xa7); code.Call(snapshotbytes);
+@@ -757,16 +783,18 @@ struct WasmCodeGen : ValueLayout {
+                     else if (n->exprtype->kind != TY_REF && !Aggregate(place.type)) {
+                         ReadPlace(place); Convert(place.type, n->exprtype);
+                     }
++                    else if (place.type->kind == TY_ARRAY && n->exprtype->kind == TY_REF)
++                        EmitArrayReference(ArrayFromPlace(place, n->line), n->exprtype, n->line);
+                     else PlaceAddress(place, Type(n->exprtype), n->line);
+                     return;
+                 }
+                 if (auto index = Is<Index>(v->child)) {
+                     auto element = ElementAddress(index);
+-                    if (element.first->kind == TY_REF) {
+-                        LoadElement(element.first, element.second);
+-                        Convert(element.first, n->exprtype);
++                    if (element.type->kind == TY_REF) {
++                        LoadElement(element);
++                        Convert(element.type, n->exprtype);
+                     } else if (n->exprtype->kind != TY_REF) {
+-                        LoadElement(element.first, element.second); Convert(element.first, n->exprtype);
++                        LoadElement(element); Convert(element.type, n->exprtype);
+                     } else if (Type(n->exprtype) == WasmModule::I32) code.Byte(0xa7);
+                     return;
+                 }
+@@ -803,24 +831,26 @@ struct WasmCodeGen : ValueLayout {
+         if (auto v = Is<Binary>(n)) { BinaryValue(v); return; }
+         if (auto v = Is<Index>(n)) {
+             auto element = ElementAddress(v);
+-            if (n->exprtype->kind != TY_REF || !TEq(n->exprtype->ref->sub, element.first)) {
+-                LoadElement(element.first, element.second); Convert(element.first, n->exprtype);
++            if (n->exprtype->kind != TY_REF || !TEq(n->exprtype->ref->sub, element.type)) {
++                LoadElement(element); Convert(element.type, n->exprtype);
+             } else if (Type(n->exprtype) == WasmModule::I32) code.Byte(0xa7);
+             return;
+         }
+         if (auto v = Is<Dot>(n); v && v->IsField()) {
+-            if (n->exprtype->kind == TY_ARRAY) { code.Get(ArrayHeader(n)); return; }
++            if (n->exprtype->kind == TY_ARRAY) { code.Get(ResolveArray(n).image.address); return; }
+             auto place = FieldPlace(v);
+-            if (n->exprtype->kind == TY_REF && TEq(n->exprtype->ref->sub, place.type))
+-                PlaceAddress(place, Type(n->exprtype), n->line);
+-            else { ReadPlace(place); Convert(place.type, n->exprtype); }
++            if (n->exprtype->kind == TY_REF && TEq(n->exprtype->ref->sub, place.type)) {
++                if (place.type->kind == TY_ARRAY)
++                    EmitArrayReference(ArrayFromPlace(place, n->line), n->exprtype, n->line);
++                else PlaceAddress(place, Type(n->exprtype), n->line);
++            } else { ReadPlace(place); Convert(place.type, n->exprtype); }
+             return;
+         }
+         if (auto v = Is<Dot>(n); v && (v->member == B_LEN || v->member == B_CAP)) {
+-            auto header = ArrayHeader(v->obj); auto array = ArrayType(v->obj);
+-            if (v->member == B_LEN) ArrayLength(header, array, ArrayMemory(v->obj));
++            auto place = ResolveArray(v->obj); auto array = place.layout.type;
++            if (v->member == B_LEN) ArrayLength(place);
+             else if (VariableArray(array)) Fail(v->line, "variable arrays have no static capacity");
+-            else ArrayCapacity(header, array, ArrayMemory(v->obj));
++            else ArrayCapacity(place);
+             return;
+         }
+         if (auto v = Is<AsCast>(n)) {
+@@ -1159,44 +1189,61 @@ struct WasmCodeGen : ValueLayout {
+     void ConstructFixed(FreshFixedDestination destination, Node *source);
+     void AssignField(Dot *field, Node *rhs, TType op, bool pointee, Line line);
+     bool FieldPath(Node *n);
+-    uint32_t ArrayHeader(Node *n);
+-    int ArrayMemory(Node *n);
+     TypeExpr *ArrayType(Node *n);
+     TypeExpr *ArrayElement(Node *n);
+-    void ArrayLength(uint32_t header, TypeExpr *array, int memory = -1, int prefix = -1);
+-    void ArrayCapacity(uint32_t header, TypeExpr *array, int memory = -1);
+-    void LoadArrayField(uint32_t header, TypeExpr *array, int memory, uint32_t offset);
+-    void StoreArrayField(TypeExpr *array, int memory, uint32_t offset);
+-    void StoreArrayLength(TypeExpr *array, int memory = -1);
+-    void InitArrayCount(uint32_t header, TypeExpr *array, uint64_t count, int memory);
++    uint8_t LegacyArrayBorrowType(TypeExpr *array) { return DataArray(array) ? WasmModule::I64 : WasmModule::I32; }
++    ArrayLayoutFacts ArrayLayout(TypeExpr *array, Line line);
++    ArrayPlace ArrayFromPlace(FixedPlace image, Line line);
++    ArrayPlace ArrayOwner(VarDef *owner, FixedPlace image, Line line);
++    ArrayPlace FrameArrayOwner(VarDef *owner, const Slot &slot, Line line);
++    int ArrayAllocationMemory(VarDef *owner, const Slot *slot, const FixedPlace *destination, Line line);
++    ArrayPlace CaptureArrayBorrow(TypeExpr *array, uint32_t value, uint8_t representation,
++                                  ArrayOrigin origin, Line line);
++    ArrayPlace RefineArrayOwner(ArrayPlace place, Node *n);
++    ArrayPlace ResolveArray(Node *n);
++    ArrayPlace ArrayFromReference(TypeExpr *reference, uint32_t value, Line line);
++    ArrayView CaptureArrayView(const ArrayPlace &place, uint32_t length, uint32_t prefix = NoLocal);
++    void ViewLength(const ArrayView &view);
++    void LoadArrayField(const ArrayPlace &place, uint32_t offset);
++    void PrepareArrayFieldStore(const ArrayPlace &place, uint32_t offset);
++    void StoreArrayField(const ArrayPlace &place, uint32_t offset);
++    void ArrayLength(const ArrayPlace &place, int prefix = -1);
++    void ArrayCapacity(const ArrayPlace &place);
++    void PrepareArrayLengthStore(const ArrayPlace &place);
++    void StoreArrayLength(const ArrayPlace &place);
++    void InitArrayCount(const ArrayPlace &place, uint64_t count);
++    void EmitKnownOffset(const FixedPlace &place, uint32_t memory, Line line);
++    void EmitPackedAddress(const FixedPlace &place, Line line);
++    void EmitMemoryZeroReference(const FixedPlace &place, Line line);
++    void EmitArrayReference(const ArrayPlace &place, TypeExpr *reference, Line line);
+     void InitArray(VarDef *owner, const Slot &slot, Node *init, VarDecl *declaration);
+     void InitArrayCopy(VarDef *owner, const Slot &slot, Node *source);
+-    void CopyBytes(uint32_t destination, int destinationMemory, uint32_t source, int sourceMemory,
+-                   uint32_t bytes);
++    void CopyBytes(const FixedPlace &destination, const FixedPlace &source, uint32_t bytes,
++                   Line line, bool immediate = false);
+     void InitFilledArray(VarDef *owner, const Slot *slot, ArrayLit *literal, const FixedPlace *destination = nullptr);
+     void InitByteString(VarDef *owner, const Slot *slot, StrLit *literal, const FixedPlace *destination = nullptr);
+-    void InlineArrayLiteral(TypeExpr *array, uint32_t header, ArrayLit *literal, bool reuse = false);
++    void InlineArrayLiteral(const ArrayPlace &place, ArrayLit *literal, bool reuse = false);
+     void InitDataArray(VarDef *owner, const Slot &slot, ArrayLit *literal);
+     void InitLimitedCapacity(VarDef *owner, const Slot &slot, ArrayLit *literal);
+-    void PushArray(uint32_t header, TypeExpr *array, Node *value, TypeExpr *result, Line line, int memory,
++    void PushArray(const ArrayPlace &place, Node *value, TypeExpr *result, Line line,
+                    PushScratch *scratch = nullptr);
+     void ArrayBuiltin(Call *call, const vector<Node *> &arguments, TypeExpr *resulttype = nullptr);
+     void ArrayEquality(Binary *node);
+-    pair<TypeExpr *, int> ElementAddress(Index *index);
+-    void ElementOffset(uint32_t header, uint32_t index, TypeExpr *array, Line line, int prefix = -1,
+-                       PushScratch *scratch = nullptr);
+-    void LoadElement(TypeExpr *element, int memory);
+-    void StoreElement(TypeExpr *element, int memory);
++    ElementPlace ElementAddress(Index *index);
++    FixedPlace CaptureElementPlace(const ElementPlace &element);
++    void ElementOffset(const ArrayView &view, uint32_t index, Line line, PushScratch *scratch = nullptr);
++    void LoadElement(const ElementPlace &element);
++    void StoreElement(const ElementPlace &element);
+     void AssignElement(Index *index, Node *rhs, TType op, bool pointee, Line line);
+-    struct ArrayWalkStep { Index *node; uint32_t position, length = UINT32_MAX; };
++    struct ArrayWalkStep { Index *node; uint32_t position, length = NoLocal; };
+     struct ArrayWalk {
+         Node *root = nullptr;
+-        uint32_t header = 0;
++        optional<ArrayPlace> captured;
+         vector<ArrayWalkStep> steps;
+     };
+     bool ArrayPathHasStatements(Node *n);
+     void CaptureArrayWalk(Node *n, ArrayWalk &walk);
+-    uint32_t LoadArrayWalk(const ArrayWalk &walk);
++    ArrayPlace LoadArrayWalk(const ArrayWalk &walk);
+     void ArrayFor(ForLoop *loop);
+ };
+ 
+diff --git a/src/wasm_fixed.h b/src/wasm_fixed.h
+index 24d57206..6f211532 100644
+--- a/src/wasm_fixed.h
++++ b/src/wasm_fixed.h
+@@ -176,9 +176,7 @@ inline WasmCodeGen::FixedPlace WasmCodeGen::ResolvePlace(Node *n) {
+         } else place = OwnerPlace(id->vdef);
+     } else if (auto field = Is<Dot>(n); field && field->IsField()) place = FieldPlace(field);
+     else if (auto index = Is<Index>(n)) {
+-        auto element = ElementAddress(index);
+-        auto address = Local(WasmModule::I64); code.Set(address);
+-        place = {element.first, address, 0, element.second, true, true};
++        place = CaptureElementPlace(ElementAddress(index));
+     } else if (auto address = Is<Unary>(n); address && address->op == T_BITAND)
+         return ResolvePlace(address->child);
+     else if (Is<Call>(n) || Is<InlineBlock>(n)) {
+@@ -223,25 +221,27 @@ inline void WasmCodeGen::AssignField(Dot *field, Node *rhs, TType op, bool point
+     StorePlace(place);
+ }
+ 
+-inline void WasmCodeGen::InlineArrayLiteral(TypeExpr *array, uint32_t header, ArrayLit *literal, bool reuse) {
++inline void WasmCodeGen::InlineArrayLiteral(const ArrayPlace &place, ArrayLit *literal, bool reuse) {
++    auto array = place.layout.type;
+     if (array->arr->akind == A_FIXED) {
+         if ((uint64_t)ArrSize(array->arr) != literal->elems.size())
+             Fail(literal->line, "this fixed array constructor needs the pending destination lowering");
+         auto element = array->arr->sub;
+         for (size_t i = 0; i < literal->elems.size(); i++) {
+-            code.Get(header); code.I32((int32_t)(i * Size(element))); code.Byte(0x6a);
++            EmitKnownOffset(place.image, (uint32_t)place.image.memory, literal->line);
++            code.I32((int32_t)(i * place.layout.stride)); code.Byte(0x6a);
+             auto value = literal->elems[i]; Gen(value); Convert(value->exprtype, element);
+-            StoreFixed(element);
++            StoreFixed(element, (uint32_t)place.elementMemory);
+         }
+     } else {
+-        code.Get(header); code.I64(0); StoreArrayLength(array);
++        PrepareArrayLengthStore(place); code.I64(0); StoreArrayLength(place);
+         optional<PushScratch> scratch;
+         if (reuse && !literal->elems.empty())
+             scratch = PushScratch {Temp(array->arr->sub), Local(WasmModule::I64),
+                                    Local(WasmModule::I32), Local(WasmModule::I64),
+                                    Local(WasmModule::I64), Local(WasmModule::I64)};
+         for (auto value : literal->elems)
+-            PushArray(header, array, value, nullptr, value->line, 0, scratch ? &*scratch : nullptr);
++            PushArray(place, value, nullptr, value->line, scratch ? &*scratch : nullptr);
+     }
+ }
+ 
+@@ -289,8 +289,8 @@ inline void WasmCodeGen::ConstructAggregateArray(FreshFixedDestination destinati
+         Fail(literal->line, "aggregate literal exceeds its checked array extent");
+     auto prefix = array->arr->akind == A_LIMITED ? (uint32_t)IntSize(LenStore(array->arr)) : 0u;
+     if (prefix) {
+-        StoreAddress(destination.place); code.I64((int64_t)literal->elems.size());
+-        StoreArrayField(array, 0, destination.place.offset);
++        auto place = ArrayFromPlace(destination.place, literal->line);
++        PrepareArrayLengthStore(place); code.I64((int64_t)literal->elems.size()); StoreArrayLength(place);
+     }
+     for (size_t i = 0; i < literal->elems.size(); i++) {
+         auto offset = (uint64_t)prefix + i * (uint64_t)stride;
+@@ -304,8 +304,9 @@ inline void WasmCodeGen::ConstructAggregateArray(FreshFixedDestination destinati
+         if (auto id = Is<Ident>(init); id && id->vdef && TEq(element, id->vdef->type)) {
+             auto &source = Find(id->vdef);
+             if (!source.memory) Fail(init->line, "fixed source owner is missing planned storage");
+-            PlaceAddress(child.place, WasmModule::I32, init->line); Address(source);
+-            code.I32((int32_t)stride); code.Copy(0, 0);
++            EmitKnownOffset(child.place, (uint32_t)child.place.memory, init->line);
++            Address(source); // A named fixed owner has a planned Memory 0 slot.
++            code.I32((int32_t)stride); code.Copy((uint32_t)child.place.memory, 0);
+         } else ConstructFixed(child, init);
+     }
+ }
+@@ -321,10 +322,11 @@ inline void WasmCodeGen::CopyFixed(FreshFixedDestination destination, FixedPlace
+         return;
+     }
+     auto dest = Local(WasmModule::I64), src = Local(WasmModule::I64), length = Local(WasmModule::I32);
+-    PlaceAddress(destination.place, WasmModule::I64, line); code.Set(dest);
+-    PlaceAddress(source, WasmModule::I64, line); code.Set(src);
++    EmitPackedAddress(destination.place, line); code.Set(dest);
++    EmitPackedAddress(source, line); code.Set(src);
+     code.I32((int32_t)destination.image); code.Set(length);
+-    CopyBytes(dest, 0, src, source.memory, length);
++    CopyBytes({destination.place.type, dest, 0, destination.place.memory, true, true},
++              {source.type, src, 0, source.memory, true, source.bounded}, length, line);
+ }
+ 
+ inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *source) {
+@@ -350,8 +352,8 @@ inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *sourc
+                 Fail(source->line, "aggregate array defaults need the pending destination lowering");
+             if (type->arr->akind == A_FIXED) zero(bytes);
+             else {
+-                StoreAddress(destination); code.I64(0);
+-                StoreArrayField(type, 0, destination.offset);
++                auto place = ArrayFromPlace(destination, source->line);
++                PrepareArrayLengthStore(place); code.I64(0); StoreArrayLength(place);
+             }
+             return;
+         }
+@@ -401,7 +403,7 @@ inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *sourc
+             if (literal->fillval) { InitFilledArray(nullptr, nullptr, literal, &destination); return; }
+             auto header = Local(WasmModule::I32);
+             PlaceAddress(destination, WasmModule::I32, source->line); code.Set(header);
+-            InlineArrayLiteral(type, header, literal, true); return;
++            InlineArrayLiteral(ArrayFromPlace({type, header, 0, 0, false, true}, source->line), literal, true); return;
+         }
+     }
+     auto from = ActualType(source);

@@ -1,0 +1,45 @@
+{
+  "status": "source audit and planned measurements; not performance acceptance",
+  "representation": [
+    "ArrayPlace carries layout, image address, concrete/dynamic memory, bounds, and origin.",
+    "ArrayView adds caller-allocated count/prefix captures; ElementPlace retains the stack address transport.",
+    "No new per-access heap object or new per-element vector is introduced. Existing ArrayWalk containers remain.",
+    "FrameArrayOwner keeps a constructor-scoped pointer to the stable caller Slot only to retain exact parent address emission. Its current uses do not escape the constructor call."
+  ],
+  "shared_callers": [
+    "literal/copy/fill/byte construction",
+    "counts and prefixes",
+    "index loads/stores and references",
+    "push/pop/clear",
+    "equality",
+    "mutable walks and iteration",
+    "print argument snapshots",
+    "fixed aggregate field/index places"
+  ],
+  "limits": [
+    "Source inspection is not an allocation or compiler-speed measurement.",
+    "Larger value structs and repeated layout queries can increase host compiler work even with identical emitted modules.",
+    "The thin-known-nonzero fix adds bank-bit materialization only to a private form unused by current accepted lowering.",
+    "No full backend or Stage D completion is claimed."
+  ],
+  "queued_measurement": {
+    "baseline": "b04500bbfcf55d935f6caa4d895cfa5b918edf2c / c9519e59d47ea996b84d249fee688704bfab0ed49cf5c1ef844e7daf3bdd60d2",
+    "candidate": "build02 frozen identity after successful build",
+    "scope": [
+      "shared accepted scalar/reference/aggregate families",
+      "32/256/4096-element literals",
+      "path depths1/2/8",
+      "concrete and dynamic data-memory identities",
+      "copy/equality/iteration/print snapshots",
+      "cold and warm compiler processes"
+    ],
+    "metrics": [
+      "paired compiler CPU/wall time",
+      "peakRSS",
+      "allocation counts and bytes",
+      "emitted module/code/local/helper size"
+    ],
+    "controls": "Fresh coordinated scope and exclusive nonblocking lease, exact tools/builds/source, host/affinity/warmup/sample and decision limits set before acquisition.",
+    "runtime_note": "Byte-identical accepted modules establish no emitted guest-code change. Do not claim a measured runtime or physical-memory gain from equality alone."
+  }
+}

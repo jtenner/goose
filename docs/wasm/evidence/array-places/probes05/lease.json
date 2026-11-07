@@ -1,0 +1,63 @@
+{
+  "owner": "Goose array-place functional unit",
+  "pid": 788958,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "source-identity",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-array-places-20261107/probes05/verify-source.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "probe-build",
+      "command": [
+        "c++",
+        "-std=c++20",
+        "-O0",
+        "test/wasm_array_places.cpp",
+        "/home/dev/Projects/goose-wasm-backend/build/libgoose_shaderc.a",
+        "-lm",
+        "-pthread",
+        "-ldl",
+        "-o",
+        "/tmp/goose-wasm-array-places-20261107/probes05/places"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "probe-module",
+      "command": [
+        "/tmp/goose-wasm-array-places-20261107/probes05/places",
+        "/tmp/goose-wasm-array-places-20261107/probes05/places.wasm"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "validate",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "--",
+        "wasm-tools",
+        "validate",
+        "/tmp/goose-wasm-array-places-20261107/probes05/places.wasm"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "engines",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-array-places-20261107/probes05/engines.py"
+      ],
+      "exit": 1
+    }
+  ],
+  "exit": 1,
+  "released_at": "2026-11-07T15:57:35.996715+00:00"
+}

@@ -1,0 +1,29 @@
+[
+  [
+    "source-identity",
+    [
+      "python3",
+      "/tmp/goose-wasm-array-places-20261107/compatibility01/verify-source.py"
+    ]
+  ],
+  [
+    "compatibility01",
+    [
+      "python3",
+      "test/backend_shared.py",
+      "--reference",
+      "build/goose-inline-checkpoint",
+      "--exe",
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "--out",
+      "/tmp/goose-wasm-array-places-20261107/compatibility01/exact"
+    ]
+  ],
+  [
+    "source-identity-after",
+    [
+      "python3",
+      "/tmp/goose-wasm-array-places-20261107/compatibility01/verify-source.py"
+    ]
+  ]
+]

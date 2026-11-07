@@ -1,0 +1,26 @@
+{
+  "finding": "P3: linked build02/build-identity.json absent from staged archive due broad build-* ignore",
+  "verified_before": "git check-ignore matched .gitignore:2; no index entry",
+  "correction": "Explicitly staged the exact saved file with git add -f; no ignore-rule or production change",
+  "archive_entries_checked": 81,
+  "all_archive_destinations_in_index_and_hash_correct": true,
+  "unchanged_reviewed_production_and_test_files": [
+    "src/wasm_arrays.h",
+    "src/wasm_codegen.h",
+    "src/wasm_fixed.h",
+    "test/wasm_backend.py",
+    "test/wasm_array_places.cpp",
+    "test/wasm_array_places.mjs",
+    "test/wasm_array_places.py"
+  ],
+  "independent_review_patch_sha256": "0cc95bcb2a025292f7afc03c451cf900ac33e2f1be1fc0b720db4503963082c9",
+  "reviewed_changed_file_count": 92,
+  "review_report_sha256": "8cb7fd704b84e6940d1616ff8db3ba746547d34f1d6431d54446de91182bdb71",
+  "inspection_limits": {
+    "partially_read_context_files": 6,
+    "supplemental_raw_files_with_unread_content": 3235,
+    "binary_limits": "byte/section/body-delta and identity/equality checks, not full instruction audit or new execution"
+  },
+  "validation_rerun": "not needed: archive/document-only correction; production and tests unchanged",
+  "performance_acceptance": "open"
+}

@@ -1,0 +1,24 @@
+[
+  {
+    "name": "node",
+    "command": [
+      "mise",
+      "exec",
+      "node@24.22.2",
+      "--",
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_places.mjs",
+      "/tmp/goose-wasm-array-places-20261107/probes06/places.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_places.py",
+      "/tmp/goose-wasm-array-places-20261107/probes06/places.wasm"
+    ],
+    "exit": 0
+  }
+]

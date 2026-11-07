@@ -170,6 +170,18 @@ guarded array operations.
 Independent Astra review found no confirmed correctness or design defect;
 performance acceptance and the remaining backend stages are still open.
 
+The array lowering now uses compiler-private `ArrayPlace`, `ArrayView` and
+`ElementPlace` facts for all current array paths, with unchanged source ABI and
+admission. The corrected increment passed 1,036 Wasm checks, the full native
+baseline, 52 exact comparisons and 226 byte-identical parent-module pairs.
+A new private thin-known-memory contract has the same failing-before and
+passing-after assertions in Node and Wasmtime. Independent Astra review found
+no confirmed production defect; its archive-only finding was corrected.
+See [array-place evidence](evidence/array-places.md) for preserved setup errors,
+provenance, limits and queued compiler-cost measurements. Canonical packed inline
+references, fresh aggregate data destinations and the remaining backend stages
+are still pending; this does not complete Stage D or performance acceptance.
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping

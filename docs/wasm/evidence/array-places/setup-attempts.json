@@ -1,0 +1,66 @@
+[
+  {
+    "unit": "probes01",
+    "exit": 1,
+    "raw_directory": "/tmp/goose-wasm-array-places-20261107/probes01",
+    "release": {
+      "owner_pid": 674510,
+      "owner_exited": true,
+      "children_reaped": true,
+      "lease_active": false,
+      "exact_owned_processes": [],
+      "nonblocking_exclusive_probe": "PASS",
+      "probe_released": true,
+      "checked_at": "2026-11-07T15:34:10.240745+00:00",
+      "exit": 1
+    }
+  },
+  {
+    "unit": "probes02",
+    "exit": 1,
+    "raw_directory": "/tmp/goose-wasm-array-places-20261107/probes02",
+    "release": {
+      "owner_pid": 677750,
+      "owner_exited": true,
+      "children_reaped": true,
+      "lease_active": false,
+      "exact_owned_processes": [],
+      "nonblocking_exclusive_probe": "PASS",
+      "probe_released": true,
+      "checked_at": "2026-11-07T15:36:56.147865+00:00",
+      "exit": 1
+    }
+  },
+  {
+    "unit": "probes03",
+    "exit": 1,
+    "raw_directory": "/tmp/goose-wasm-array-places-20261107/probes03",
+    "release": {
+      "owner_pid": 680181,
+      "owner_exited": true,
+      "children_reaped": true,
+      "lease_active": false,
+      "exact_owned_processes": [],
+      "nonblocking_exclusive_probe": "PASS",
+      "probe_released": true,
+      "checked_at": "2026-11-07T15:40:18.847496+00:00",
+      "exit": 1
+    }
+  },
+  {
+    "unit": "probes04",
+    "exit": 1,
+    "raw_directory": "/tmp/goose-wasm-array-places-20261107/probes04",
+    "release": {
+      "owner_pid": 686265,
+      "owner_exited": true,
+      "children_reaped": true,
+      "lease_active": false,
+      "exact_owned_processes": [],
+      "nonblocking_exclusive_probe": "PASS",
+      "probe_released": true,
+      "checked_at": "2026-11-07T15:45:35.467944+00:00",
+      "exit": 1
+    }
+  }
+]
