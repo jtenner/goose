@@ -9,6 +9,7 @@ struct WasmMemoryRuntime {
     uint32_t failure;
     unordered_map<uint32_t, uint32_t> reserves, accesses;
     uint32_t dynamicreserve = UINT32_MAX, gettop = UINT32_MAX, settop = UINT32_MAX;
+    uint32_t copyfromframe = UINT32_MAX;
 
     WasmMemoryRuntime(WasmModule &m, uint32_t fail) : module(m), failure(fail) {}
 
@@ -122,6 +123,21 @@ struct WasmMemoryRuntime {
         });
         Save(fn, std::move(c));
         return fn;
+    }
+
+    uint32_t CopyFromFrame() {
+        if (copyfromframe != UINT32_MAX) return copyfromframe;
+        copyfromframe = module.AddFn("goose.copy_from_frame",
+                                    {WasmModule::I64, WasmModule::I32, WasmModule::I32}, {});
+        WasmBytes c;
+        Dispatch(c, 0, 0x40,
+                 [&] { c.Get(0); c.I64(32); c.Byte(0x88); c.Byte(0xa7); },
+                 [&](uint32_t memory) {
+            c.Get(0); c.Byte(0xa7); c.Get(1); c.Get(2);
+            c.Byte(0xfc); c.U(10); c.U(memory); c.U(0); // memory.copy destination, source.
+        });
+        Save(copyfromframe, std::move(c));
+        return copyfromframe;
     }
 };
 

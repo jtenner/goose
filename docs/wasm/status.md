@@ -66,7 +66,7 @@ than one set of locals per element. Final validation passed 289 Wasm checks,
 all native groups across the full run and targeted setup correction, 52 exact
 comparisons and 62 byte-identical old modules. An independent Astra review
 found no confirmed production defect. See [variable-array evidence](evidence/variable-arrays.md).
-Strings, varints, variable elements and general by-value destinations
+Varints, variable elements and general by-value destinations
 remain pending. These checks establish module/local-count changes, not a
 compiler CPU/RSS or guest throughput result.
 
@@ -78,6 +78,15 @@ large dynamic bases and direct variable-owner cleanup exits. This stage passed
 independent Astra review found no confirmed defect. See [fill evidence](evidence/array-fills.md)
 for exact identities, the earlier native baseline's setup correction and
 remaining measurement/coverage limits.
+
+String literals now construct the admitted byte-array layouts, and byte-array
+printing preserves per-argument capture, null rendering, whole-line output and
+snapshot cleanup on exits. Static byte sources use bulk memory copy; dynamic
+memory identities use checked dispatch. The final frozen-adapter run passed
+323 checks, with 52 exact older-checkpoint comparisons and 72 unchanged prior
+modules. An independent Astra review found no confirmed defect. See
+[byte-string evidence](evidence/byte-strings.md) for the preserved adapter-update
+overlap, exact provenance, missing measurements and coverage limits.
 
 ## Host contract
 

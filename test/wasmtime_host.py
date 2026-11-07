@@ -61,19 +61,28 @@ def execute(path):
     store = wasmtime.Store(engine)
     linker = wasmtime.Linker(engine)
     pending = {}
+    snapshots = None
     serial = 0
+    snapshot_serial = 0
 
-    def read(caller, offset, length):
+    def read_memory(caller, identity, offset, length):
         offset &= 0xffffffff
         length &= 0xffffffff
-        memory = caller.get('memory')
+        identity &= 0xffffffff
+        memory = caller.get(f'data_memory_{identity}' if identity else 'memory')
+        if not isinstance(memory, wasmtime.Memory):
+            raise RuntimeError('invalid host memory identity')
         size = memory.data_len(caller)
         if offset > size or length > size - offset:
-            raise RuntimeError('host byte range is outside Memory 0')
+            raise RuntimeError('host byte range is outside linear memory' if identity
+                               else 'host byte range is outside Memory 0')
         return bytes(memory.read(caller, offset, offset + length))
 
+    def read(caller, offset, length):
+        return read_memory(caller, 0, offset, length)
+
     def dispatch(name, caller, args):
-        nonlocal serial
+        nonlocal serial, snapshot_serial, snapshots
         if name == 'print_begin_v1':
             serial += 1
             pending[serial] = []
@@ -92,6 +101,24 @@ def execute(path):
         elif name == 'print_bytes_v1':
             token, offset, length = args
             pending[token].append(read(caller, offset, length))
+        elif name == 'snapshot_memory_bytes_v1':
+            if snapshot_serial == 0x7fffffff:
+                raise RuntimeError('byte snapshot limit exceeded')
+            value = read_memory(caller, *args)
+            if snapshots is None:
+                snapshots = {}
+            snapshot_serial += 1
+            snapshots[snapshot_serial] = value
+            return snapshot_serial
+        elif name == 'print_snapshot_v1':
+            token, snapshot = args
+            if snapshots is None or snapshot not in snapshots:
+                raise RuntimeError('invalid byte snapshot')
+            pending[token].append(snapshots.pop(snapshot))
+        elif name == 'drop_snapshot_v1':
+            if snapshots is None or args[0] not in snapshots:
+                raise RuntimeError('invalid byte snapshot')
+            snapshots.pop(args[0])
         elif name == 'print_end_v1':
             sys.stdout.buffer.write(b''.join(pending.pop(args[0])) + b'\n')
         elif name == 'fail_v1':
@@ -128,6 +155,7 @@ def execute(path):
     instance = linker.instantiate(store, module)
     instance.exports(store)['_start'](store)
     assert not pending, 'unfinished print buffers remain'
+    assert not snapshots, 'unreleased byte snapshots remain'
 
 
 if __name__ == '__main__':

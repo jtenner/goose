@@ -54,6 +54,59 @@ inline int WasmCodeGen::ArrayMemory(Node *n) {
     return storage.Memory(id->vdef, current);
 }
 
+inline void WasmCodeGen::InitByteString(VarDef *owner, const Slot &slot, StrLit *literal) {
+    auto array = owner->type;
+    if (!ByteArray(array)) Fail(literal->line, "string literals require byte elements");
+    auto count = literal->val.size();
+    auto prefix = VariableArray(array) ? (uint32_t)IntSize(LenStore(array->arr)) : 0u;
+    if (count > UINT32_MAX - prefix) Fail(owner->line, "array allocation exceeds memory32");
+    if (prefix && prefix < 8 && count > ((1ull << (prefix * 8)) - 1))
+        Fail(owner->line, "array length exceeds its stored prefix");
+    auto memory = InlineArray(array) ? 0 : storage.Memory(owner, current);
+    auto base = Local(WasmModule::I64);
+    if (InlineArray(array)) {
+        auto header = Local(WasmModule::I32); Address(slot); code.Set(header);
+        if (array->arr->akind == A_LIMITED) {
+            code.Get(header); code.I64((int64_t)count); StoreArrayLength(array);
+        }
+        code.Get(header);
+        if (array->arr->akind == A_LIMITED) {
+            code.I32((int32_t)IntSize(LenStore(array->arr))); code.Byte(0x6a);
+        }
+        code.Byte(0xad); code.Set(base);
+    } else {
+        auto identity = Local(WasmModule::I32), saved = Local(WasmModule::I32);
+        if (memory >= 0) code.I32(memory);
+        else StackIndex(storage.owners.at(owner) + 1);
+        code.Set(identity);
+        auto bytes = prefix + (uint32_t)count;
+        if (memory >= 0) { code.I32((int32_t)bytes); code.Call(memories->Reserve(memory)); }
+        else { code.Get(identity); code.I32((int32_t)bytes); code.Call(memories->ReserveDynamic()); }
+        code.Set(saved);
+        if (!owner->isglobal) {
+            assert(!scopes.empty());
+            scopes.back().push_back({nullptr, memory >= 0 ? (uint32_t)memory : identity, saved, memory < 0});
+        }
+        code.Get(identity); code.Byte(0xad); code.I64(32); code.Byte(0x86);
+        code.Get(saved); code.Byte(0xad); code.Byte(0x84); code.Set(base);
+        if (VariableArray(array)) {
+            code.Get(base); Write(slot);
+            code.Get(base); code.I64((int64_t)count); StoreArrayLength(array, memory);
+        } else {
+            Address(slot); code.Get(base); code.Mem(0x37);
+            Address(slot); code.I64((int64_t)count); code.Mem(0x37, 0, 8);
+        }
+        if (prefix) { code.Get(base); code.I64(prefix); code.Byte(0x7c); code.Set(base); }
+    }
+    if (!count) return;
+    auto source = module.Data(literal->val);
+    code.Get(base);
+    if (memory >= 0) code.Byte(0xa7);
+    code.I32((int32_t)source); code.I32((int32_t)count);
+    if (memory >= 0) { code.Byte(0xfc); code.U(10); code.U((uint32_t)memory); code.U(0); }
+    else code.Call(memories->CopyFromFrame());
+}
+
 inline void WasmCodeGen::InitFilledArray(VarDef *owner, const Slot &slot, ArrayLit *literal) {
     auto array = owner->type, element = array->arr->sub;
     auto countnode = Is<IntLit>(literal->fillcount);
@@ -181,6 +234,7 @@ inline void WasmCodeGen::InitArray(VarDef *owner, const Slot &slot, Node *init) 
         if (!call->defaultinit) break;
         init = call->defaultinit;
     }
+    if (auto literal = Is<StrLit>(init)) { InitByteString(owner, slot, literal); return; }
     auto literal = Is<ArrayLit>(init);
     if (!literal || literal->capexpr)
         Fail(init->line, "this array constructor needs the pending destination lowering");

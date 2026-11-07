@@ -17,6 +17,9 @@ int main(int argc, char **argv) {
     add("reserve", runtime.ReserveDynamic());
     add("top", runtime.Top(false));
     add("restore", runtime.Top(true));
+    auto copy = runtime.CopyFromFrame();
+    if (runtime.CopyFromFrame() != copy) return 1;
+    add("copy_from_frame", copy);
     for (auto [name, op] : vector<pair<string, uint8_t>> {
              {"load64", 0x29}, {"store64", 0x37}, {"load8s", 0x30}, {"load8u", 0x31},
              {"load16s", 0x32}, {"load16u", 0x33}, {"load32s", 0x34}, {"load32u", 0x35},

@@ -41,6 +41,21 @@ for (let memory = 0; memory < 3; memory++) {
 for (let memory = 0; memory < 3; memory++)
     assert.equal(x.load64(pointer(memory, 3)), -(1n << 63n) + BigInt(memory));
 
+const pattern = new Uint8Array([0, 127, 128, 255]);
+new Uint8Array(x.memory0.buffer).set(pattern, 100);
+for (let memory = 0; memory < 3; memory++) {
+    x.copy_from_frame(pointer(memory, 1000), 100, pattern.length);
+    assert.deepEqual(new Uint8Array(x[`memory${memory}`].buffer, 1000, 4), pattern);
+}
+x.copy_from_frame(pointer(2, 65536), 65536, 0);
+for (const memory of [3, 0xffffffff])
+    assert.throws(() => x.copy_from_frame(pointer(memory, 1000), 100, 4), /memory failure 7/);
+assert.throws(() => x.copy_from_frame(pointer(2, 1000), 65535, 2), WebAssembly.RuntimeError);
+assert.deepEqual(new Uint8Array(x.memory2.buffer, 1000, 4), pattern);
+x.store8(pointer(2, 65535), 90n);
+assert.throws(() => x.copy_from_frame(pointer(2, 65535), 100, 2), WebAssembly.RuntimeError);
+assert.equal(x.load8u(pointer(2, 65535)), 90n);
+
 assert.equal(x.reserve1(65536 - 65), 65);
 assert.equal(x.top(1), 65536);
 assert.equal(x.memory1.buffer.byteLength, 65536);

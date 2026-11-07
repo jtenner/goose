@@ -17,6 +17,7 @@ struct WasmStoragePlan {
     unordered_map<FnSpec *, int> bases;
     uint32_t localmemories = 0;
     bool dataaddresses = false;
+    bool byteprints = false;
 
     explicit WasmStoragePlan(Ast &a, ValueLayout &l) : ast(a), layout(l) {}
 
@@ -72,7 +73,15 @@ struct WasmStoragePlan {
         }
         if (auto c = Is<Call>(n)) {
             if (c->defaultinit) { Walk(c->defaultinit, function, next); return; }
-            for (auto argument : c->ValueArgNodes()) Walk(argument, function, next);
+            for (auto argument : c->ValueArgNodes()) {
+                if (c->builtin == B_PRINT) {
+                    auto t = argument->exprtype;
+                    while (t && t->kind == TY_REF) t = t->ref->sub;
+                    if (t && t->kind == TY_ARRAY && t->arr->sub->kind == TY_INT &&
+                        t->arr->sub->intstorage == IS_U8) byteprints = true;
+                }
+                Walk(argument, function, next);
+            }
             if (c->fvbody) { Walk(c->fvbody, function, next); return; }
             if (c->builtin < 0 && c->spec) {
                 calltops[c] = next;

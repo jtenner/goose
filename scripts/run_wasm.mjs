@@ -42,7 +42,9 @@ export function formatFloat(value, width) {
 
 export function instantiate(bytes, write = b => fs.writeSync(1, b)) {
     const pending = new Map();
+    let snapshots;
     let serial = 0;
+    let snapshotSerial = 0;
     let instance;
     let started = false;
     const pieces = token => {
@@ -50,14 +52,19 @@ export function instantiate(bytes, write = b => fs.writeSync(1, b)) {
         if (!value) throw new GooseFailure('invalid print token');
         return value;
     };
-    const read = (offset, length) => {
+    const readMemory = (identity, offset, length) => {
         // Wasm passes i32 values signed. Treat address bits as memory32 offsets.
         offset >>>= 0; length >>>= 0;
-        const buffer = instance.exports.memory.buffer;
+        identity >>>= 0;
+        const memory = instance.exports[identity ? `data_memory_${identity}` : 'memory'];
+        if (!(memory instanceof WebAssembly.Memory)) throw new GooseFailure('invalid host memory identity');
+        const buffer = memory.buffer;
         if (offset > buffer.byteLength || length > buffer.byteLength - offset)
-            throw new GooseFailure('host byte range is outside Memory 0');
+            throw new GooseFailure(identity ? 'host byte range is outside linear memory'
+                                            : 'host byte range is outside Memory 0');
         return Buffer.from(buffer, offset, length);
     };
+    const read = (offset, length) => readMemory(0, offset, length);
     const imports = { goose: {
         print_begin_v1() {
             // A token denotes a pending line, not a guest pointer. Nested prints
@@ -73,6 +80,24 @@ export function instantiate(bytes, write = b => fs.writeSync(1, b)) {
         print_float_v1(token, value, width) { pieces(token).push(Buffer.from(formatFloat(value, width))); },
         print_bool_v1(token, value) { pieces(token).push(Buffer.from(value ? 'true' : 'false')); },
         print_bytes_v1(token, offset, length) { pieces(token).push(Buffer.from(read(offset, length))); },
+        snapshot_memory_bytes_v1(identity, offset, length) {
+            if (snapshotSerial === 0x7fffffff) throw new GooseFailure('byte snapshot limit exceeded');
+            const value = Buffer.from(readMemory(identity, offset, length));
+            const snapshot = ++snapshotSerial;
+            snapshots ??= new Map();
+            snapshots.set(snapshot, value);
+            return snapshot;
+        },
+        print_snapshot_v1(token, snapshot) {
+            const line = pieces(token);
+            const value = snapshots?.get(snapshot);
+            if (!value) throw new GooseFailure('invalid byte snapshot');
+            snapshots.delete(snapshot);
+            line.push(value);
+        },
+        drop_snapshot_v1(snapshot) {
+            if (!snapshots?.delete(snapshot)) throw new GooseFailure('invalid byte snapshot');
+        },
         print_end_v1(token) {
             const line = pieces(token);
             pending.delete(token);
@@ -98,11 +123,12 @@ export function instantiate(bytes, write = b => fs.writeSync(1, b)) {
     return {
         instance,
         get pendingPrints() { return pending.size; },
+        get pendingSnapshots() { return snapshots?.size ?? 0; },
         run() {
             if (started) throw new GooseFailure('a Goose instance can be started only once; reentry is not supported');
             started = true;
             try { instance.exports._start(); }
-            finally { pending.clear(); }
+            finally { pending.clear(); snapshots?.clear(); }
         },
     };
 }

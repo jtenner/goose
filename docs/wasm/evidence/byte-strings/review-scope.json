@@ -1,0 +1,35 @@
+{
+  "baseline": "8e8f4a9a6077509beaa30cf521ab91ecc9f1edd6",
+  "changed_files": [
+    "scripts/run_wasm.mjs",
+    "src/wasm_arrays.h",
+    "src/wasm_codegen.h",
+    "src/wasm_memory.h",
+    "src/wasm_storage.h",
+    "test/wasm_backend.py",
+    "test/wasm_memory.cpp",
+    "test/wasm_memory.mjs",
+    "test/wasm_memory.py",
+    "test/wasmtime_host.py",
+    "test/expected/wasm_byte_print.out",
+    "test/expected/wasm_byte_strings.out",
+    "test/wasm/wasm_byte_print.goose",
+    "test/wasm/wasm_byte_strings.goose",
+    "test/wasm_bytes.mjs"
+  ],
+  "context_files": [
+    "src/ast.h",
+    "src/codegen.h",
+    "src/codegen_builtins.h",
+    "src/codegen_calls.h",
+    "src/codegen_construct.h",
+    "src/codegen_frames.h",
+    "src/data_stacks.h",
+    "src/typecheck_nodes.h",
+    "src/value_layout.h",
+    "src/wasm_binary.h",
+    "test/backend_shared.py",
+    "test/wasm_multimemory.mjs"
+  ],
+  "compiler_sha256": "09491aaf99a5da41f0ca9df7b9a10fb2e5989832faf40c01d656b0805b9a46e5"
+}

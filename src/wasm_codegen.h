@@ -15,6 +15,8 @@ struct WasmCodeGen : ValueLayout {
     uint32_t framebase = 0, framesize = 0;
     uint32_t reservefn, initfn, startfn;
     uint32_t beginprint, printint, printfloat, printbool, printbytes, endprint;
+    uint32_t snapshotbytes = UINT32_MAX, printsnapshot = UINT32_MAX, dropsnapshot = UINT32_MAX;
+    uint32_t nextprint = 0;
     uint32_t failfn, exitfn, fmodfn, f2islowfn;
     uint32_t f2ifn = UINT32_MAX;
     struct Slot { TypeExpr *type; uint32_t local = 0, offset = 0; bool memory = false, global = false; };
@@ -23,8 +25,9 @@ struct WasmCodeGen : ValueLayout {
     set<VarDef *> addressed;
     struct CleanupAction {
         Defer *deferred = nullptr;
-        uint32_t memory = 0, top = 0;
+        uint32_t memory = 0, top = 0; // Snapshot actions use memory as a compiler print id.
         bool dynamic = false;
+        uint32_t snapshot = UINT32_MAX;
     };
     vector<vector<CleanupAction>> scopes;
     struct Target {
@@ -49,6 +52,11 @@ struct WasmCodeGen : ValueLayout {
     bool InlineArray(TypeExpr *t) {
         return t->kind == TY_ARRAY && (t->arr->akind == A_FIXED ||
                (t->arr->akind == A_LIMITED && ArrSize(t->arr) >= 0));
+    }
+    TypeExpr *ByteArray(TypeExpr *t) {
+        while (t && t->kind == TY_REF) t = t->ref->sub;
+        return t && t->kind == TY_ARRAY && t->arr->sub->kind == TY_INT &&
+               t->arr->sub->intstorage == IS_U8 ? t : nullptr;
     }
     bool NeedsBase(FnSpec *sp) { return storage.counts.need[sp] && storage.Base(sp) < 0; }
     void StackIndex(uint32_t offset) {
@@ -296,7 +304,8 @@ struct WasmCodeGen : ValueLayout {
         for (size_t i = scopes.size(); i > bottom; i--) {
             auto list = scopes[i - 1];
             for (auto it = list.rbegin(); it != list.rend(); ++it) {
-                if (it->deferred) BlockValue(it->deferred->body, false);
+                if (it->snapshot != UINT32_MAX) { code.Get(it->snapshot); code.Call(dropsnapshot); }
+                else if (it->deferred) BlockValue(it->deferred->body, false);
                 else if (it->dynamic) {
                     code.Get(it->memory); code.Get(it->top); code.Call(memories->Top(true));
                 } else { code.Get(it->top); code.Byte(0x24); code.U(it->memory); }
@@ -462,15 +471,57 @@ struct WasmCodeGen : ValueLayout {
         } else if (t->kind == TY_BOOL) code.Call(printbool);
         else Fail(t->line, "printing this value layout is not implemented");
     }
+    uint32_t SnapshotByteArgument(Node *arg) {
+        auto t = arg->exprtype;
+        Gen(arg); auto value = Temp(t); code.Set(value);
+        int null = -1;
+        while (t->kind == TY_REF) {
+            if (null < 0) { null = (int)Local(WasmModule::I32); code.I32(0); code.Set(null); }
+            auto sub = t->ref->sub;
+            auto loaded = Temp(sub);
+            code.Get(null); code.Get(value); code.Byte(Type(t) == WasmModule::I64 ? 0x50 : 0x45);
+            code.Byte(0x72); Open(0x04); code.I32(1); code.Set(null);
+            code.Byte(0x05); code.Get(value); Load(sub); code.Set(loaded); Close();
+            value = loaded; t = sub;
+        }
+        if (null >= 0) {
+            code.Get(null); Open(0x04, WasmModule::I32);
+            auto offset = module.Data("null");
+            code.I32(0); code.I32((int32_t)offset); code.I32(4); code.Call(snapshotbytes);
+            code.Byte(0x05);
+        }
+        auto memory = ArrayMemory(arg);
+        auto length = Local(WasmModule::I64), zero = Local(WasmModule::I64);
+        ArrayLength(value, t, memory); code.Set(length);
+        code.I64(0); code.Set(zero); ElementOffset(value, zero, t, arg->line);
+        auto address = Local(WasmModule::I64); code.Set(address);
+        code.Get(address); code.I64(32); code.Byte(0x88); code.Byte(0xa7);
+        code.Get(address); code.Byte(0xa7); code.Get(length); code.Byte(0xa7); code.Call(snapshotbytes);
+        if (null >= 0) Close();
+        auto snapshot = Local(WasmModule::I32); code.Set(snapshot);
+        return snapshot;
+    }
     void Print(Call *c) {
         if (!c->fmtspecs.empty()) Fail(c->line, "custom formatting is not implemented");
+        // No type or literal denotes a captured byte snapshot in value.
         struct Piece { TypeExpr *type = nullptr; uint32_t value = 0; int null = -1; StrLit *literal = nullptr; };
         vector<Piece> pieces;
+        if (nextprint == UINT32_MAX) Fail(c->line, "too many emitted print calls");
+        auto printid = nextprint++;
+        bool hassnapshots = false;
         // Snapshot scalar arguments before opening a host line. A return in
         // any argument must leave no host buffer behind. References are read
         // now too, before a later argument can mutate their pointees.
         for (auto arg : c->ValueArgNodes()) {
             if (auto literal = Is<StrLit>(arg)) { pieces.push_back({nullptr, 0, -1, literal}); continue; }
+            if (ByteArray(arg->exprtype)) {
+                auto snapshot = SnapshotByteArgument(arg);
+                assert(!scopes.empty());
+                scopes.back().push_back({nullptr, printid, 0, false, snapshot});
+                hassnapshots = true;
+                pieces.push_back({nullptr, snapshot, -1, nullptr});
+                continue;
+            }
             auto t = arg->exprtype;
             Gen(arg); auto value = Temp(t); code.Set(value);
             int null = -1;
@@ -487,6 +538,9 @@ struct WasmCodeGen : ValueLayout {
         }
         auto token = Local(WasmModule::I32); code.Call(beginprint); code.Set(token);
         for (auto &p : pieces) {
+            if (!p.type && !p.literal) {
+                code.Get(token); code.Get(p.value); code.Call(printsnapshot); continue;
+            }
             if (p.literal) {
                 auto offset = module.Data(p.literal->val);
                 code.Get(token); code.I32((int32_t)offset); code.I32((int32_t)p.literal->val.size()); code.Call(printbytes);
@@ -500,6 +554,12 @@ struct WasmCodeGen : ValueLayout {
             } else PrintScalar(token, p.value, p.type);
         }
         code.Get(token); code.Call(endprint);
+        if (hassnapshots) {
+            auto &actions = scopes.back();
+            actions.erase(remove_if(actions.begin(), actions.end(), [&](const CleanupAction &action) {
+                return action.snapshot != UINT32_MAX && action.memory == printid;
+            }), actions.end());
+        }
     }
     void CallValue(Call *c) {
         if (c->defaultinit) { Gen(c->defaultinit); return; }
@@ -848,6 +908,12 @@ struct WasmCodeGen : ValueLayout {
         exitfn = module.ImportFn("exit_v1", {WasmModule::I32}, {});
         fmodfn = module.ImportFn("fmod_v1", {WasmModule::F64, WasmModule::F64}, {WasmModule::F64});
         f2islowfn = module.ImportFn("float_to_int_v1", {WasmModule::F64}, {WasmModule::I64});
+        if (storage.byteprints) {
+            snapshotbytes = module.ImportFn("snapshot_memory_bytes_v1",
+                                           {WasmModule::I32, WasmModule::I32, WasmModule::I32}, {WasmModule::I32});
+            printsnapshot = module.ImportFn("print_snapshot_v1", {WasmModule::I32, WasmModule::I32}, {});
+            dropsnapshot = module.ImportFn("drop_snapshot_v1", {WasmModule::I32}, {});
+        }
         if (FatPointers()) memories.emplace(module, failfn);
         reservefn = module.AddFn("goose.reserve_frame", {WasmModule::I32}, {WasmModule::I32});
         for (auto sp : ast.fnspecs) if (sp->live) {
@@ -911,6 +977,7 @@ struct WasmCodeGen : ValueLayout {
     void StoreArrayLength(TypeExpr *array, int memory = -1);
     void InitArray(VarDef *owner, const Slot &slot, Node *init);
     void InitFilledArray(VarDef *owner, const Slot &slot, ArrayLit *literal);
+    void InitByteString(VarDef *owner, const Slot &slot, StrLit *literal);
     void InitVariableArray(VarDef *owner, const Slot &slot, ArrayLit *literal);
     void PushArray(uint32_t header, TypeExpr *array, Node *value, TypeExpr *result, Line line, int memory);
     void ArrayBuiltin(Call *call, const vector<Node *> &arguments);

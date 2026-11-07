@@ -121,10 +121,11 @@ def main():
                                'wasm_inline_optional_references', 'wasm_array_equality',
                                'wasm_inline_equality_modes', 'wasm_inline_deferred_rebind',
                                'wasm_variable_arrays', 'wasm_variable_paths', 'wasm_variable_no_owner',
-                               'wasm_array_fills', 'wasm_variable_cleanup'):
+                               'wasm_array_fills', 'wasm_variable_cleanup',
+                               'wasm_byte_strings', 'wasm_byte_print'):
                 if source.stem == 'wasm_inline_arrays':
                     assert wasm.stat().st_size < 32768, 'unused global capacity was serialized'
-                persistent = '1' if source.stem in ('wasm_multimemory', 'wasm_variable_arrays', 'wasm_array_fills') else '0'
+                persistent = '1' if source.stem in ('wasm_multimemory', 'wasm_variable_arrays', 'wasm_array_fills', 'wasm_byte_strings') else '0'
                 mode = {'wasm_multimemory': 'growth', 'wasm_scoped_data_reuse': 'reuse',
                         'wasm_array_widths': 'typed-reuse', 'wasm_no_data_owner': 'no-data',
                         'wasm_inline_arrays': 'no-data', 'wasm_inline_reference_path': 'no-data',
@@ -132,9 +133,20 @@ def main():
                         'wasm_inline_nested_path': 'no-data', 'wasm_inline_boundaries': 'no-data',
                         'wasm_inline_equality_modes': 'no-data', 'wasm_variable_no_owner': 'no-data',
                         'wasm_variable_paths': 'variable-reuse',
-                        'wasm_array_fills': 'variable-growth'}.get(source.stem, '')
+                        'wasm_array_fills': 'variable-growth',
+                        'wasm_byte_strings': 'variable-growth',
+                        'wasm_byte_print': 'variable-growth'}.get(source.stem, '')
                 resource = run([args.node, ROOT / 'test' / 'wasm_multimemory.mjs', wasm, persistent, mode])
                 assert resource.stdout == reference.stdout, 'completed owner-state check changed output'
+                count += 1
+            if source.stem == 'wasm_byte_print':
+                checked = run([args.node, ROOT / 'test' / 'wasm_bytes.mjs', wasm])
+                assert checked.stdout == reference.stdout
+                for control, reason in [('missing-drop', b'unreleased byte snapshot at owner completion'),
+                                        ('alias-snapshot', b'byte argument was not captured before later effects')]:
+                    broken = run([args.node, ROOT / 'test' / 'wasm_bytes.mjs', wasm, control], ok=False)
+                    assert broken.returncode and reason in broken.stderr, (control, broken.stderr)
+                    count += 1
                 count += 1
             count += 1
     growth_source = out / 'frame-growth.goose'
@@ -331,6 +343,7 @@ a.equal(new DataView(x.memory.buffer).getBigInt64(1,true),65n<<56n);"""
     failures = [
         ('assert', 'assert(false);', b'assert failed'),
         ('zero', 'var n = 0; print(7 / n);', b'division by zero'),
+        ('byte-print-zero', 'var a: u8[] = [65]; var n = 0; print("bad=", a, 7 / n);', b'division by zero'),
         ('divoverflow', 'var n = -9223372036854775808; var m = -1; print(n / m);', b'overflow'),
         ('array-index', 'var a: i64[>..] = [1]; print("bad=", a[failure_index]);', b'out of bounds'),
         ('empty-pop', 'var a: i64[>..<] = []; print("bad=", a.pop());', b'empty'),

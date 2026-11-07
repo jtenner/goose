@@ -38,7 +38,8 @@ def main():
         return exports[name](store, *args)
 
     def pointer(memory, offset):
-        return (memory << 32) | offset
+        value = (memory << 32) | offset
+        return value - (1 << 64) if value >= 1 << 63 else value
 
     def size(memory):
         return exports[f'memory{memory}'].data_len(store)
@@ -62,6 +63,19 @@ def main():
         assert call('loadbool', pointer(memory, 41)) == 1
     for memory in range(3):
         assert call('load64', pointer(memory, 3)) == -(1 << 63) + memory
+    pattern = bytes([0, 127, 128, 255])
+    exports['memory0'].write(store, pattern, 100)
+    for memory in range(3):
+        call('copy_from_frame', pointer(memory, 1000), 100, len(pattern))
+        assert bytes(exports[f'memory{memory}'].read(store, 1000, 1004)) == pattern
+    call('copy_from_frame', pointer(2, 65536), 65536, 0)
+    for memory in (3, 0xffffffff):
+        throws(lambda: call('copy_from_frame', pointer(memory, 1000), 100, 4), 'memory failure 7')
+    throws(lambda: call('copy_from_frame', pointer(2, 1000), 65535, 2), 'out of bounds')
+    assert bytes(exports['memory2'].read(store, 1000, 1004)) == pattern
+    call('store8', pointer(2, 65535), 90)
+    throws(lambda: call('copy_from_frame', pointer(2, 65535), 100, 2), 'out of bounds')
+    assert call('load8u', pointer(2, 65535)) == 90
     assert call('reserve1', 65536 - 65) == 65
     assert call('reserve1', 1) == 65536
     assert size(1) == 131072 and size(2) == 65536

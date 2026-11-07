@@ -1,0 +1,18 @@
+{
+  "reason": "Lazy snapshot map; no compiler source/build input changed. Build was still active; no targeted or full Wasm tests had started.",
+  "files": {
+    "scripts/run_wasm.mjs": {
+      "before": "328af36a5afe2ed9917dfe7b5a51af01dc751c008ceef843bf33fd8d0d86be8c",
+      "after": "09edb1906ae445c5af9721e1a18ac11a93acbee41ad08ae7ec09ce867cf6d03d"
+    },
+    "test/wasmtime_host.py": {
+      "before": "96d52cc90aa6f0d95c22cb7c5e7797dfd6764c9380dda9ea65893734114fc550",
+      "after": "e33ecd91a5899841b844edfcad1ce57fc0c21bdc8a25d84eb67296862affb826"
+    },
+    "test/wasm_bytes.mjs": {
+      "before": "9e5a95471085408b34651a5ec5a27bf8d6d065cb1abfdbe4ea84d2b632a5986c",
+      "after": "732fea74c2f0d61c3ee1f9d47d243389162a1ed6adf6a62409d13e31e7482ab7"
+    }
+  },
+  "stage_status": "Acquired shared lease for build/tests; no performance samples.\nStart golden\ngolden exit 0\nStart promote\npromote exit 0\nStart build\nbuild exit 0\nStart targeted\ntargeted exit 0\nStart wasm\n"
+}

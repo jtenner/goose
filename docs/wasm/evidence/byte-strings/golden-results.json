@@ -1,0 +1,186 @@
+[
+  {
+    "name": "construct-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-array-fills-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-byte-strings-20261107/construct-O0.c",
+      "/tmp/goose-wasm-byte-strings-20261107/construct.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "construct-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-byte-strings-20261107/construct-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-byte-strings-20261107/construct-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "construct-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-byte-strings-20261107/construct-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "construct-O0-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-array-fills-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-byte-strings-20261107/construct-O0-before.wasm",
+      "/tmp/goose-wasm-byte-strings-20261107/construct.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "construct-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-array-fills-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-byte-strings-20261107/construct-O2.c",
+      "/tmp/goose-wasm-byte-strings-20261107/construct.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "construct-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-byte-strings-20261107/construct-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-byte-strings-20261107/construct-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "construct-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-byte-strings-20261107/construct-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "construct-O2-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-array-fills-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-byte-strings-20261107/construct-O2-before.wasm",
+      "/tmp/goose-wasm-byte-strings-20261107/construct.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "printing-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-array-fills-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-byte-strings-20261107/printing-O0.c",
+      "/tmp/goose-wasm-byte-strings-20261107/printing.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "printing-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-byte-strings-20261107/printing-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-byte-strings-20261107/printing-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "printing-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-byte-strings-20261107/printing-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "printing-O0-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-array-fills-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-byte-strings-20261107/printing-O0-before.wasm",
+      "/tmp/goose-wasm-byte-strings-20261107/printing.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "printing-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-array-fills-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-byte-strings-20261107/printing-O2.c",
+      "/tmp/goose-wasm-byte-strings-20261107/printing.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "printing-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-byte-strings-20261107/printing-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-byte-strings-20261107/printing-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "printing-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-byte-strings-20261107/printing-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "printing-O2-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-array-fills-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-byte-strings-20261107/printing-O2-before.wasm",
+      "/tmp/goose-wasm-byte-strings-20261107/printing.goose"
+    ],
+    "exit": 1
+  }
+]

@@ -1,0 +1,4 @@
+{
+  "correction": "The earlier before-testing description was too early. Its saved stage_status shows targeted checks completed and full Wasm testing started as the adapter edit was made. Preserve that record. After active checks finish, repeat only the Wasm suite with final frozen adapters; compiler source is unchanged.",
+  "observed_status": "Acquired shared lease for build/tests; no performance samples.\nStart golden\ngolden exit 0\nStart promote\npromote exit 0\nStart build\nbuild exit 0\nStart targeted\ntargeted exit 0\nStart wasm\nwasm exit 0\nStart compatibility\ncompatibility exit 0\nStart equivalence\nequivalence exit 0\nAll owned children reaped; shared lease released.\n"
+}

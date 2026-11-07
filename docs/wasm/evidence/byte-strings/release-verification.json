@@ -1,0 +1,130 @@
+{
+  "leases": [
+    {
+      "directory": "/tmp/goose-wasm-byte-strings-20261107",
+      "owner_pid": 3498337,
+      "owner_exited": true,
+      "children_reaped": true,
+      "active": false,
+      "commands": [
+        {
+          "name": "golden",
+          "command": [
+            "python3",
+            "/tmp/goose-wasm-byte-strings-20261107/golden.py"
+          ],
+          "exit": 0
+        },
+        {
+          "name": "promote",
+          "command": [
+            "python3",
+            "/tmp/goose-wasm-byte-strings-20261107/promote.py"
+          ],
+          "exit": 0
+        },
+        {
+          "name": "build",
+          "command": [
+            "cmake",
+            "--build",
+            "build",
+            "--parallel",
+            "2"
+          ],
+          "exit": 0
+        },
+        {
+          "name": "targeted",
+          "command": [
+            "mise",
+            "exec",
+            "wasm-tools@1.262.0",
+            "node@24.22.2",
+            "--",
+            "python3",
+            "/tmp/goose-wasm-byte-strings-20261107/targeted.py"
+          ],
+          "exit": 0
+        },
+        {
+          "name": "wasm",
+          "command": [
+            "mise",
+            "exec",
+            "wasm-tools@1.262.0",
+            "node@24.22.2",
+            "--",
+            "python3",
+            "test/wasm_backend.py",
+            "--exe",
+            "build/goose",
+            "--wasmtime-python",
+            "/tmp/goose-wasm-runtime-env/bin/python"
+          ],
+          "exit": 0
+        },
+        {
+          "name": "compatibility",
+          "command": [
+            "python3",
+            "test/backend_shared.py",
+            "--reference",
+            "build/goose-inline-checkpoint",
+            "--exe",
+            "build/goose",
+            "--out",
+            "/tmp/goose-wasm-byte-strings-20261107/native-compatibility"
+          ],
+          "exit": 0
+        },
+        {
+          "name": "equivalence",
+          "command": [
+            "python3",
+            "/tmp/goose-wasm-byte-strings-20261107/equivalence.py"
+          ],
+          "exit": 0
+        }
+      ]
+    },
+    {
+      "directory": "/tmp/goose-wasm-byte-strings-20261107/frozen-adapters",
+      "owner_pid": 3510593,
+      "owner_exited": true,
+      "children_reaped": true,
+      "active": false,
+      "commands": [
+        {
+          "name": "wasm",
+          "command": [
+            "mise",
+            "exec",
+            "wasm-tools@1.262.0",
+            "node@24.22.2",
+            "--",
+            "python3",
+            "test/wasm_backend.py",
+            "--exe",
+            "/tmp/goose-wasm-byte-strings-20261107/goose-tested",
+            "--wasmtime-python",
+            "/tmp/goose-wasm-runtime-env/bin/python"
+          ],
+          "exit": 0
+        }
+      ]
+    }
+  ],
+  "exact_owned_processes": [],
+  "nonblocking_exclusive_probe": "PASS",
+  "tested_source_manifest_matches": true,
+  "compiler_source_unchanged_during_build": true,
+  "adapter_manifest_changes_before_frozen_validation": [
+    "scripts/run_wasm.mjs",
+    "test/wasm_bytes.mjs",
+    "test/wasmtime_host.py"
+  ],
+  "compiler_sha256": "09491aaf99a5da41f0ca9df7b9a10fb2e5989832faf40c01d656b0805b9a46e5",
+  "wasm_checks_frozen_adapters": 323,
+  "raw_correction": "adapter-update-correction.json"
+}
