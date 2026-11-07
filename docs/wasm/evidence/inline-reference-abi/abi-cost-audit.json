@@ -1,0 +1,52 @@
+{
+  "status": "functional/static evidence only; performance acceptance open",
+  "canonical_rule": "With storage.dataaddresses true, ordinary references including fixed/static-limited array references use i64; only true growable-array header references stay i32. Thin programs retain i32 ordinary refs.",
+  "internal_transport": "BorrowedArrayAddressType changes with the canonical reference width; it is not a by-value array ABI. Existing call/result admission guards remain.",
+  "stored_layout": "Ordinary stored references remain8 bytes, growable owner descriptors16; prefixes/fields/frame ownership rules unchanged. Compound owner-reference fields remain rejected with the exact diagnostic.",
+  "shared_paths": [
+    "parameters/results and addressed spills",
+    "globals and stored reference loads/stores",
+    "null/identity and optional narrowing",
+    "direct/inline/callback results",
+    "array borrow/copy/iteration",
+    "mutable walks and field places",
+    "byte-print snapshots"
+  ],
+  "source_costs": [
+    "No new per-reference heap allocation, AST clone or unbounded function specialization is introduced.",
+    "Opaque packed inline references use checked memory dispatch where a thin ABI formerly implied Memory0; guest code/helper and call costs can change.",
+    "Known owner and field memory facts retain direct paths where already proved.",
+    "Larger engine locals/signatures and helper code can affect initialization, JIT code and retained engine memory."
+  ],
+  "evidence_limits": [
+    "32 focused Node memory/global pairs match exactly; Wasmtime checks outputs and guest assertions, not full memory images.",
+    "Two old thin parent cases are verified reuses, not new executions.",
+    "The representative new thin modules are byte-identical. Packed modules are expected to change; full corpus deltas are pending.",
+    "Currently admitted inline owners remain Memory0; nonzero inline source construction needs the later fresh-data destination proof and tests.",
+    "Equal addressable pages and logical tops do not show physical-memory release.",
+    "No controlled compiler CPU/RSS/allocation, instantiation, guest runtime or physical-memory result yet."
+  ],
+  "queued_measurement": {
+    "baseline_compiler": "5b68b041c3aba5c6bd6a6fa7e96a0b5a8aa5cc5558761b56efa5d83cacb1599a",
+    "candidate_compiler": "bcc336c9f3f06f604b6ecdb002f4f355dae24bca9691e5d1b16ca30dfef7148c",
+    "cases": [
+      "thin controls",
+      "packed array references through1/2/8 path steps",
+      "direct and opaque callee parameters",
+      "optional and stored references",
+      "copy/equality/mutable/by-value iteration",
+      "byte snapshots",
+      "owner counts and payload sizes"
+    ],
+    "metrics": [
+      "paired compiler CPU/wall time",
+      "allocation counts and bytes",
+      "peakRSS",
+      "module/local/helper size",
+      "engine initialization",
+      "guest execution",
+      "separate addressable-page and physical-memory observations"
+    ],
+    "controls": "Fresh coordinated scope and exclusive lease; frozen source/tools and actual case/count contract; declared affinity, host guard, repetitions/warmups and qualified decision limits before acquisition."
+  }
+}

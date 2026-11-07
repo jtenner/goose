@@ -1,0 +1,119 @@
+{
+  "errors": [],
+  "nonzero_exits": [
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/build01/parent/wasm_inline_ref_abi_thin-O0-native-emit.exit",
+      "exit": 1
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/build01/parent-checks.exit",
+      "exit": 1
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/build01/unit.exit",
+      "exit": 1
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/build02/parent/wasm_inline_ref_abi_thin-O0-emit.exit",
+      "exit": 1
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/build02/parent-checks.exit",
+      "exit": 1
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/build02/unit.exit",
+      "exit": 1
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_packed-O0-emit.exit",
+      "exit": 1
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent-checks.exit",
+      "exit": 1
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/build03/unit.exit",
+      "exit": 1
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/build04/candidate/owner-field-admission.exit",
+      "exit": 1
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/owner-field-admission.exit",
+      "exit": 1
+    }
+  ],
+  "nonempty_stderr": [
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/build01/parent/wasm_inline_ref_abi_thin-O0-native-emit.stderr",
+      "text": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_abi_thin.goose:21: error: optional value must be narrowed (if/guard/assert) before use\n    if link.maybe { assert(link.maybe[1] == 20); }\n                           ^~~~~~~~~~\n  in fn main() instantiated from /home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_abi_thin.goose:14\n"
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/build01/parent-checks.stderr",
+      "text": "Traceback (most recent call last):\n  File \"/tmp/goose-wasm-inline-ref-abi-20261107/build01/checks.py\", line 21, in <module>\n    run(name+'-native-emit',[exe,'-O'+str(opt),'--standalone','-o',c,source])\n    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/goose-wasm-inline-ref-abi-20261107/build01/checks.py\", line 13, in run\n    assert a.returncode==0,(name,a.returncode,a.stderr.decode(errors='replace'))\n           ^^^^^^^^^^^^^^^\nAssertionError: ('wasm_inline_ref_abi_thin-O0-native-emit', 1, '/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_abi_thin.goose:21: error: optional value must be narrowed (if/guard/assert) before use\\n    if link.maybe { assert(link.maybe[1] == 20); }\\n                           ^~~~~~~~~~\\n  in fn main() instantiated from /home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_abi_thin.goose:14\\n')\n"
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/build02/parent/wasm_inline_ref_abi_thin-O0-emit.stderr",
+      "text": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_abi_thin.goose:15: error: wasm target: out-of-line captured locals are not implemented\n"
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/build02/parent-checks.stderr",
+      "text": "Traceback (most recent call last):\n  File \"/tmp/goose-wasm-inline-ref-abi-20261107/build02/checks.py\", line 24, in <module>\n    run(name+'-emit',[exe,'-O'+str(opt),'--target','wasm','-o',module,source])\n    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/goose-wasm-inline-ref-abi-20261107/build02/checks.py\", line 13, in run\n    assert a.returncode==0,(name,a.returncode,a.stderr.decode(errors='replace'))\n           ^^^^^^^^^^^^^^^\nAssertionError: ('wasm_inline_ref_abi_thin-O0-emit', 1, '/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_abi_thin.goose:15: error: wasm target: out-of-line captured locals are not implemented\\n')\n"
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_packed-O0-emit.stderr",
+      "text": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_abi_packed.goose:48: error: wasm target: compound owner-reference fields need the pending destination lowering\n"
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent-checks.stderr",
+      "text": "Traceback (most recent call last):\n  File \"/tmp/goose-wasm-inline-ref-abi-20261107/build03/checks.py\", line 24, in <module>\n    run(name+'-emit',[exe,'-O'+str(opt),'--target','wasm','-o',module,source])\n    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/goose-wasm-inline-ref-abi-20261107/build03/checks.py\", line 13, in run\n    assert a.returncode==0,(name,a.returncode,a.stderr.decode(errors='replace'))\n           ^^^^^^^^^^^^^^^\nAssertionError: ('wasm_inline_ref_abi_packed-O0-emit', 1, '/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_abi_packed.goose:48: error: wasm target: compound owner-reference fields need the pending destination lowering\\n')\n"
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/build04/candidate/owner-field-admission.stderr",
+      "text": "/tmp/goose-wasm-inline-ref-abi-20261107/build04/rejected-owner-field.goose:48: error: wasm target: compound owner-reference fields need the pending destination lowering\n"
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/owner-field-admission.stderr",
+      "text": "/tmp/goose-wasm-inline-ref-abi-20261107/build04/rejected-owner-field.goose:48: error: wasm target: compound owner-reference fields need the pending destination lowering\n"
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/build04/release-build.stderr",
+      "text": "In file included from /home/dev/Projects/goose-wasm-backend/src/main.cpp:31:\n/home/dev/Projects/goose-wasm-backend/src/codegen.h: In constructor \u2018goose::CodeGen::CodeGen(goose::Ast&, std::string_view, const std::vector<std::__cxx11::basic_string<char> >&, bool, bool, int64_t)\u2019:\n/home/dev/Projects/goose-wasm-backend/src/codegen.h:1524:20: warning: unused variable \u2018n\u2019 [-Wunused-variable]\n 1524 |             size_t n = 0;\n      |                    ^\nIn file included from /home/dev/Projects/goose-wasm-backend/src/main.cpp:32:\n/home/dev/Projects/goose-wasm-backend/src/codegen_types.h: In member function \u2018void goose::CodeGen::EmitDefaultInto(const std::string&, goose::TypeExpr*)\u2019:\n/home/dev/Projects/goose-wasm-backend/src/codegen_types.h:1016:66: warning: unused parameter \u2018t\u2019 [-Wunused-parameter]\n 1016 | inline void CodeGen::EmitDefaultInto(const string &lv, TypeExpr *t) {\n      |                                                        ~~~~~~~~~~^\nIn file included from /home/dev/Projects/goose-wasm-backend/src/main.cpp:48:\n/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h: In member function \u2018uint8_t goose::WasmCodeGen::Type(goose::TypeExpr*)\u2019:\n/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h:186:51: warning: comparison of integer expressions of different signedness: \u2018uint64_t\u2019 {aka \u2018long unsigned int\u2019} and \u2018long int\u2019 [-Wsign-compare]\n  186 |                     if ((uint64_t)ArrSize(t->arr) > (UINT32_MAX - prefix) / FixedSize(element))\n      |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h: In member function \u2018void goose::WasmCodeGen::Gen(goose::Node*, goose::TypeExpr*)\u2019:\n/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h:822:66: warning: enumerated and non-enumerated type in conditional expression [-Wextra]\n  822 |                                       : s.type->kind == TY_ARRAY ? BorrowedArrayAddressType(s.type)\n      |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n  823 |                                       : FatPointers() ? WasmModule::I64 : WasmModule::I32;\n      |                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nIn file included from /home/dev/Projects/goose-wasm-backend/src/main.cpp:5:\nIn member function \u2018void goose::small_vector<T, N>::CopyInPlace(const goose::small_vector<T, N>&) [with T = goose::RootAlt; int N = 1]\u2019,\n    inlined from \u2018goose::small_vector<T, N>::small_vector(goose::small_vector<T, N>&&) [with T = goose::RootAlt; int N = 1]\u2019 at /home/dev/Projects/goose-wasm-backend/src/small_vector.h:86:24,\n    inlined from \u2018goose::Roots::Roots(goose::Roots&&)\u2019 at /home/dev/Projects/goose-wasm-backend/src/ast.h:526:8,\n    inlined from \u2018constexpr std::pair<_T1, _T2>::pair(_U1&&, _U2&&) [with _U1 = const goose::StoreEvent*; _U2 = goose::Roots; _T1 = const goose::StoreEvent*; _T2 = goose::Roots]\u2019 at /usr/include/c++/14/bits/stl_pair.h:444:35,\n    inlined from \u2018void goose::TypeCheck::ApplyCalleeStores(goose::FnSpec*, std::vector<goose::Val>&, goose::Node*, std::vector<int>*)\u2019 at /home/dev/Projects/goose-wasm-backend/src/typecheck_builtins.h:2158:27:\n/home/dev/Projects/goose-wasm-backend/src/small_vector.h:48:15: warning: \u2018*(unsigned char (*)[32])((char*)&<unnamed> + offsetof(goose::Roots, goose::Roots::alts.goose::small_vector<goose::RootAlt, 1>::<unnamed>))\u2019 may be used uninitialized [-Wmaybe-uninitialized]\n   48 |         memcpy(inl, (const void *)o.data(), sizeof(inl));\n      |         ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nIn file included from /home/dev/Projects/goose-wasm-backend/src/main.cpp:21:\n/home/dev/Projects/goose-wasm-backend/src/typecheck_builtins.h: In member function \u2018void goose::TypeCheck::ApplyCalleeStores(goose::FnSpec*, std::vector<goose::Val>&, goose::Node*, std::vector<int>*)\u2019:\n/home/dev/Projects/goose-wasm-backend/src/typecheck_builtins.h:2158:41: note: \u2018<anonymous>\u2019 declared here\n 2158 |             held.push_back({ &e, Roots {} });\n      |                                         ^\n"
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/compatibility01/exact/wasm_frames-wasm-O0-candidate.stderr",
+      "text": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_frames.goose:18: warning: redundant &: value is passed by reference without it (\u00a74.1)\n    update(&value);\n           ^~~~~~\n/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_frames.goose:20: warning: redundant &: global is passed by reference without it (\u00a74.1)\n    update(&global);\n           ^~~~~~~\n"
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/compatibility01/exact/wasm_frames-wasm-O0-reference.stderr",
+      "text": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_frames.goose:18: warning: redundant &: value is passed by reference without it (\u00a74.1)\n    update(&value);\n           ^~~~~~\n/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_frames.goose:20: warning: redundant &: global is passed by reference without it (\u00a74.1)\n    update(&global);\n           ^~~~~~~\n"
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/compatibility01/exact/wasm_frames-wasm-O2-candidate.stderr",
+      "text": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_frames.goose:18: warning: redundant &: value is passed by reference without it (\u00a74.1)\n    update(&value);\n           ^~~~~~\n/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_frames.goose:20: warning: redundant &: global is passed by reference without it (\u00a74.1)\n    update(&global);\n           ^~~~~~~\n"
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/compatibility01/exact/wasm_frames-wasm-O2-reference.stderr",
+      "text": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_frames.goose:18: warning: redundant &: value is passed by reference without it (\u00a74.1)\n    update(&value);\n           ^~~~~~\n/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_frames.goose:20: warning: redundant &: global is passed by reference without it (\u00a74.1)\n    update(&global);\n           ^~~~~~~\n"
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/compatibility01/exact/wasm_tail_values-wasm-O0-candidate.stderr",
+      "text": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_tail_values.goose:18: warning: redundant &: n binds by reference here without it (\u00a74.1)\n    let p: i64? = &n;\n                  ^~\n"
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/compatibility01/exact/wasm_tail_values-wasm-O0-reference.stderr",
+      "text": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_tail_values.goose:18: warning: redundant &: n binds by reference here without it (\u00a74.1)\n    let p: i64? = &n;\n                  ^~\n"
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/compatibility01/exact/wasm_tail_values-wasm-O2-candidate.stderr",
+      "text": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_tail_values.goose:18: warning: redundant &: n binds by reference here without it (\u00a74.1)\n    let p: i64? = &n;\n                  ^~\n"
+    },
+    {
+      "path": "/tmp/goose-wasm-inline-ref-abi-20261107/compatibility01/exact/wasm_tail_values-wasm-O2-reference.stderr",
+      "text": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_tail_values.goose:18: warning: redundant &: n binds by reference here without it (\u00a74.1)\n    let p: i64? = &n;\n                  ^~\n"
+    }
+  ]
+}

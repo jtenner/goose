@@ -1,0 +1,155 @@
+[
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/ast.h",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/src/ast.h",
+    "lines": 2967,
+    "sha256": "c6ba4a65898724f407ab3b43a2c391e483fe86345d8c95bc2d567bf58703f73e",
+    "inspection": "Hash verification only; isolated search hits are not counted as source review",
+    "read_ranges": [],
+    "unread_ranges": [
+      [
+        1,
+        2967
+      ]
+    ]
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/clone.h",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/src/clone.h",
+    "lines": 740,
+    "sha256": "340cb18ef42febacbdc76a516ace72e91b5b82944e9b20002c1ade5473099e54",
+    "inspection": "Selected source ranges reviewed",
+    "read_ranges": [
+      [
+        580,
+        617
+      ]
+    ],
+    "unread_ranges": [
+      [
+        1,
+        579
+      ],
+      [
+        618,
+        740
+      ]
+    ]
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/codegen_nodes.h",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/src/codegen_nodes.h",
+    "lines": 1297,
+    "sha256": "45cf9a85e1e9a8d09d3dda0c7fbf799d693272fa2d76a40adb9c11dd31a97362",
+    "inspection": "Hash verification only; isolated search hits are not counted as source review",
+    "read_ranges": [],
+    "unread_ranges": [
+      [
+        1,
+        1297
+      ]
+    ]
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/codegen_values.h",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/src/codegen_values.h",
+    "lines": 2060,
+    "sha256": "8d4daa25932f3fb610f50f70cf39b56d260878c35d5191bfca0368c568bd5b97",
+    "inspection": "Hash verification only; isolated search hits are not counted as source review",
+    "read_ranges": [],
+    "unread_ranges": [
+      [
+        1,
+        2060
+      ]
+    ]
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/main.cpp",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/src/main.cpp",
+    "lines": 2092,
+    "sha256": "9f2e05a0f7dd8cd7e565f71bac7d429592d505fe2722d94010db6cb06186119a",
+    "inspection": "Hash verification only; isolated search hits are not counted as source review",
+    "read_ranges": [],
+    "unread_ranges": [
+      [
+        1,
+        2092
+      ]
+    ]
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/typecheck_calls.h",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/src/typecheck_calls.h",
+    "lines": 4101,
+    "sha256": "b8e021e1d01c8e0f98c8334976b9a0496147bad0e8b3c112f9de5f11fe171a94",
+    "inspection": "Selected source ranges reviewed",
+    "read_ranges": [
+      [
+        3815,
+        3990
+      ]
+    ],
+    "unread_ranges": [
+      [
+        1,
+        3814
+      ],
+      [
+        3991,
+        4101
+      ]
+    ]
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/typecheck_exprs.h",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/src/typecheck_exprs.h",
+    "lines": 3427,
+    "sha256": "941f3c714673d0efafd350b6716f7b09b4d5277a6e5bfde42c816940e8ef8e19",
+    "inspection": "Hash verification only; isolated search hits are not counted as source review",
+    "read_ranges": [],
+    "unread_ranges": [
+      [
+        1,
+        3427
+      ]
+    ]
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/typecheck_flow.h",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/src/typecheck_flow.h",
+    "lines": 3242,
+    "sha256": "4f13bcfe0ac408cdca700bbf24719cec4595d3ad41fc0aa7deb3ecb83553410e",
+    "inspection": "Selected source ranges reviewed",
+    "read_ranges": [
+      [
+        2030,
+        2170
+      ]
+    ],
+    "unread_ranges": [
+      [
+        1,
+        2029
+      ],
+      [
+        2171,
+        3242
+      ]
+    ]
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/run_tests.py",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/run_tests.py",
+    "lines": 2882,
+    "sha256": "07d47102b36a3536999f787f3407cc94e376a0d6cf4112eb85750b412cc6b762",
+    "inspection": "Hash verification only; isolated search hits are not counted as source review",
+    "read_ranges": [],
+    "unread_ranges": [
+      [
+        1,
+        2882
+      ]
+    ]
+  }
+]

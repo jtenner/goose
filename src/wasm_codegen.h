@@ -106,7 +106,13 @@ struct WasmCodeGen : ValueLayout {
         if (Aggregate(t)) Fail(line, "by-value aggregates need the pending destination lowering");
     }
     bool FatPointers() const { return storage.dataaddresses; }
-    bool HeaderRef(TypeExpr *t) { return t->kind == TY_REF && IsResz(t->ref->sub); }
+    bool HeaderRef(TypeExpr *t) {
+        return t->kind == TY_REF && t->ref->sub->kind == TY_ARRAY && IsResz(t->ref->sub);
+    }
+    uint8_t ReferenceABI(TypeExpr *t) {
+        assert(t->kind == TY_REF);
+        return FatPointers() && !HeaderRef(t) ? WasmModule::I64 : WasmModule::I32;
+    }
     bool VariableArray(TypeExpr *t) { return t->kind == TY_ARRAY && t->arr->akind == A_VAR; }
     bool RuntimeLimited(TypeExpr *t) {
         return t->kind == TY_ARRAY && t->arr->akind == A_LIMITED && ArrSize(t->arr) < 0;
@@ -123,9 +129,6 @@ struct WasmCodeGen : ValueLayout {
         uint32_t bytes = 1;
         while (count >= 128) { count >>= 7; bytes++; }
         return bytes;
-    }
-    bool FrameRef(TypeExpr *t) {
-        return t->kind == TY_REF && t->ref->sub->kind == TY_ARRAY && !DataArray(t->ref->sub);
     }
     bool InlineArray(TypeExpr *t) {
         return t->kind == TY_ARRAY && (t->arr->akind == A_FIXED ||
@@ -166,14 +169,14 @@ struct WasmCodeGen : ValueLayout {
                 else Type(t->ref->sub);
                 // A resizable header is in Memory 0. Ordinary pointees may
                 // also lie in any assigned data memory.
-                return FatPointers() && !FrameRef(t) ? WasmModule::I64 : WasmModule::I32;
+                return ReferenceABI(t);
             case TY_ARRAY: {
                 if (!IsResz(t) && !InlineArray(t) && !DataArray(t))
                     Fail(t->line, "this array layout needs the pending compound lowering");
                 auto element = t->arr->sub;
                 if (Nominal(element) && InlineArray(t)) {
                     RequireFixed(t, t->line);
-                    return LegacyArrayBorrowType(t);
+                    return BorrowedArrayAddressType(t);
                 }
                 if (!support.ScalarElement(element))
                     Fail(t->line, "compound array elements need the pending layout lowering");
@@ -183,7 +186,7 @@ struct WasmCodeGen : ValueLayout {
                     if ((uint64_t)ArrSize(t->arr) > (UINT32_MAX - prefix) / FixedSize(element))
                         Fail(t->line, "array layout exceeds memory32");
                 }
-                return LegacyArrayBorrowType(t);
+                return BorrowedArrayAddressType(t);
             }
             default: Fail(t->line, "this value layout is not implemented (scalar backend)");
         }
@@ -338,12 +341,17 @@ struct WasmCodeGen : ValueLayout {
             Address(s);
             if (DataArray(s.type)) code.Mem(0x29);
             else if (s.type->kind != TY_ARRAY) LoadFixed(s.type);
+            else if (BorrowedArrayAddressType(s.type) == WasmModule::I64) code.Byte(0xad);
         }
         else code.Get(s.local);
     }
     void ReferenceAddress(const Slot &s) {
         if (DataArray(s.type)) Read(s);
-        else { Address(s); if (FatPointers() && s.type->kind != TY_ARRAY) code.Byte(0xad); }
+        else {
+            Address(s);
+            if (s.type->kind == TY_ARRAY ? BorrowedArrayAddressType(s.type) == WasmModule::I64
+                                        : FatPointers()) code.Byte(0xad);
+        }
     }
     void Write(const Slot &s) {
         if (s.memory) {
@@ -603,7 +611,7 @@ struct WasmCodeGen : ValueLayout {
             code.I32(0); code.I32((int32_t)offset); code.I32(4); code.Call(snapshotbytes);
             code.Byte(0x05);
         }
-        auto place = RefineArrayOwner(CaptureArrayBorrow(t, value, LegacyArrayBorrowType(t),
+        auto place = RefineArrayOwner(CaptureArrayBorrow(t, value, BorrowedArrayAddressType(t),
                                                        ArrayOrigin::ReferenceABI, arg->line), arg);
         auto length = Local(WasmModule::I64), zero = Local(WasmModule::I64);
         auto prefix = place.layout.varint ? Local(WasmModule::I32) : NoLocal;
@@ -811,7 +819,7 @@ struct WasmCodeGen : ValueLayout {
                 else ReferenceAddress(s);
                 if (n->exprtype->kind != TY_REF) {
                     auto pointertype = s.type->kind == TY_REF ? Type(s.type)
-                                      : s.type->kind == TY_ARRAY ? Type(s.type)
+                                      : s.type->kind == TY_ARRAY ? BorrowedArrayAddressType(s.type)
                                       : FatPointers() ? WasmModule::I64 : WasmModule::I32;
                     CheckNull(n->line, pointertype); Load(Operand(v->child->exprtype));
                 }
@@ -1191,7 +1199,11 @@ struct WasmCodeGen : ValueLayout {
     bool FieldPath(Node *n);
     TypeExpr *ArrayType(Node *n);
     TypeExpr *ArrayElement(Node *n);
-    uint8_t LegacyArrayBorrowType(TypeExpr *array) { return DataArray(array) ? WasmModule::I64 : WasmModule::I32; }
+    // Private Gen/Convert transport only. Array call values remain guarded.
+    uint8_t BorrowedArrayAddressType(TypeExpr *array) {
+        return DataArray(array) || (InlineArray(array) && FatPointers())
+                   ? WasmModule::I64 : WasmModule::I32;
+    }
     ArrayLayoutFacts ArrayLayout(TypeExpr *array, Line line);
     ArrayPlace ArrayFromPlace(FixedPlace image, Line line);
     ArrayPlace ArrayOwner(VarDef *owner, FixedPlace image, Line line);

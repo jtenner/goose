@@ -1,0 +1,28 @@
+[
+  [
+    "source-identity",
+    [
+      "python3",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/verify-source.py"
+    ]
+  ],
+  [
+    "callback-results",
+    [
+      "mise",
+      "exec",
+      "wasm-tools@1.262.0",
+      "node@24.22.2",
+      "--",
+      "python3",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/checks.py"
+    ]
+  ],
+  [
+    "source-identity-after",
+    [
+      "python3",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/verify-source.py"
+    ]
+  ]
+]

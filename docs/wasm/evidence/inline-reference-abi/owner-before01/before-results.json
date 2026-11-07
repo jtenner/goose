@@ -1,0 +1,122 @@
+[
+  {
+    "name": "healthy",
+    "command": [
+      "node",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/owner-before01/before/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/candidate/wasm_inline_ref_abi_packed-O0.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/owner-before01/healthy-instance"
+    ],
+    "actual_exit": 0,
+    "expected_exit": 0,
+    "guest_output_matches": true,
+    "recorded_instance": {
+      "completed": true,
+      "pendingPrints": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "2a9b7e226fc506c428c77b2a60555c5b6c6914c112d1725582abbb84131836c2"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "858c42d5ac2b3f6fb95820e5296c994c3e8f355ef1f016b0aef1d61b714d4516"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "969f25ff6a9ba1892b6b1a0a35765278a84274b3ef93c0cc85aee1af80019853"
+        },
+        {
+          "name": "data_memory_3",
+          "bytes": 65536,
+          "sha256": "ab52b1ad6426592b4127ec76d7b315710f006526ace6269e711d78e46d7d2347"
+        }
+      ],
+      "globals": []
+    },
+    "memory_matches_healthy": true
+  },
+  {
+    "name": "print-owner",
+    "command": [
+      "node",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/owner-before01/before/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/owner-before01/controls/print-owner.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/owner-before01/print-owner-instance"
+    ],
+    "actual_exit": 0,
+    "expected_exit": 1,
+    "guest_output_matches": true,
+    "recorded_instance": {
+      "completed": true,
+      "pendingPrints": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "2a9b7e226fc506c428c77b2a60555c5b6c6914c112d1725582abbb84131836c2"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "858c42d5ac2b3f6fb95820e5296c994c3e8f355ef1f016b0aef1d61b714d4516"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "969f25ff6a9ba1892b6b1a0a35765278a84274b3ef93c0cc85aee1af80019853"
+        },
+        {
+          "name": "data_memory_3",
+          "bytes": 65536,
+          "sha256": "ab52b1ad6426592b4127ec76d7b315710f006526ace6269e711d78e46d7d2347"
+        }
+      ],
+      "globals": []
+    },
+    "memory_matches_healthy": true
+  },
+  {
+    "name": "snapshot-owner",
+    "command": [
+      "node",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/owner-before01/before/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/owner-before01/controls/snapshot-owner.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/owner-before01/snapshot-owner-instance"
+    ],
+    "actual_exit": 0,
+    "expected_exit": 1,
+    "guest_output_matches": true,
+    "recorded_instance": {
+      "completed": true,
+      "pendingPrints": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "2a9b7e226fc506c428c77b2a60555c5b6c6914c112d1725582abbb84131836c2"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "858c42d5ac2b3f6fb95820e5296c994c3e8f355ef1f016b0aef1d61b714d4516"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "969f25ff6a9ba1892b6b1a0a35765278a84274b3ef93c0cc85aee1af80019853"
+        },
+        {
+          "name": "data_memory_3",
+          "bytes": 65536,
+          "sha256": "ab52b1ad6426592b4127ec76d7b315710f006526ace6269e711d78e46d7d2347"
+        }
+      ],
+      "globals": []
+    },
+    "memory_matches_healthy": true
+  }
+]

@@ -1,0 +1,40 @@
+{
+  "review": "/tmp/goose-wasm-inline-ref-abi-review-20261107/review/report.md",
+  "confirmed_production_defects": 0,
+  "confirmed_test_defect": "P2: post-run Node check observed print owners after terminal cleanup and never asserted snapshot owners.",
+  "before": "owner-before01: both valid damaged controls accepted with unchanged expected output and memory; same acceptance check failed.",
+  "after": "owner-after01: same acceptance check passes; specific controls reject pre-cleanup print/snapshot counts1; terminal counts0; 32 parent/candidate pairs rechecked.",
+  "callback_results": {
+    "families": 16,
+    "emitted_specializations": 24,
+    "fresh_guest_outcomes": 17,
+    "verified_reused_guest_outcomes": 3
+  },
+  "callback_case_record": "callback-results03/case-results.json",
+  "compiler_rebuilt_for_test_repair": false,
+  "compiler_sha256": "bcc336c9f3f06f604b6ecdb002f4f355dae24bca9691e5d1b16ca30dfef7148c",
+  "cpp_source_changed_after_build04": false,
+  "focused_Wasm_globals": "None exported; empty lists are not stack-top observations. Goose source globals stored in Memory0 are in full images. Separate derived owner tests observe exported tops.",
+  "cost_record_correction": "Original abi-cost-audit.json pending-corpus sentence is stale. Completed226pairs:172identical/54changed,totalmodule-313bytes,code-sections+405bytes,total-local-deltas-1..+6includinghelpers.",
+  "adapter_cost": "One optional completion-hook check after guest return; no new callback allocation in ordinary runs, guest imports or guest instructions. Test observer runs once per instance. No measured CPU/RSS/allocation claim.",
+  "measurement_handoff": "Compare both frozen compilers on matched source using the same corrected adapter, fresh coordinated scope/lease/host controls; compiler costs, initialization, runtime and physical-memory observations remain open.",
+  "final_full_suite": {
+    "unit": "full-wasm02",
+    "check_groups": 1073,
+    "exit": 0,
+    "source_and_test_inputs_before_after": "PASS",
+    "compiler_rebuilt": false,
+    "release": {
+      "owner_pid": 1660729,
+      "owner_exited": true,
+      "children_reaped": true,
+      "lease_active": false,
+      "exact_owned_processes": [],
+      "nonblocking_exclusive_probe": "PASS",
+      "probe_released": true,
+      "checked_at": "2026-11-07T18:13:43.337817+00:00",
+      "exit": 0
+    }
+  },
+  "coverage_limits": "Review read all135originalstaged files;9unchangedcontextfiles partial. Binary sections/bytes are not fullopcodeaudit. Nonzero inline source construction remains unadmitted; opaque-source binder damaged-length combination remains a gap."
+}

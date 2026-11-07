@@ -1,0 +1,1762 @@
+[
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_inline_ref_abi_thin.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "62025075eb2a14458708193dba6a3b2e89125b6eea7b4817ed8994f6119d0fe9"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_inline_ref_abi_thin.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "9d6cf5ea8b802c3e9ab88f653cbd2778d296a334308f8ab64f95f7cf7020376f"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_inline_ref_abi_packed.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "2a9b7e226fc506c428c77b2a60555c5b6c6914c112d1725582abbb84131836c2"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "858c42d5ac2b3f6fb95820e5296c994c3e8f355ef1f016b0aef1d61b714d4516"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "969f25ff6a9ba1892b6b1a0a35765278a84274b3ef93c0cc85aee1af80019853"
+        },
+        {
+          "name": "data_memory_3",
+          "bytes": 65536,
+          "sha256": "ab52b1ad6426592b4127ec76d7b315710f006526ace6269e711d78e46d7d2347"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_inline_ref_abi_packed.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "515291994c1fa13fae964f6a93056b9370c3137f1ee7626260a5e441ecd82e1d"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "858c42d5ac2b3f6fb95820e5296c994c3e8f355ef1f016b0aef1d61b714d4516"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "969f25ff6a9ba1892b6b1a0a35765278a84274b3ef93c0cc85aee1af80019853"
+        },
+        {
+          "name": "data_memory_3",
+          "bytes": 65536,
+          "sha256": "ab52b1ad6426592b4127ec76d7b315710f006526ace6269e711d78e46d7d2347"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_inline_mixed_references.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "483cbdd9d277314f9cb137588dc116e6681254c129a85502fa52b6834183d4c3"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "a2737ffa3ea79588298c9e14137bdd59d77928ec8daad8f4dbb72d625777f48f"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "4d8028c38ff668ec0e47c526d1eece91f7f1ec50f026c4852006b492168b29df"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_inline_mixed_references.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "9ab5ece8d2465f9db68141a77c40424d3d65b3b1d7af88979f918511fe56bfae"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "a2737ffa3ea79588298c9e14137bdd59d77928ec8daad8f4dbb72d625777f48f"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "49cf0d911b1c0a0112dde641114bff68443602f5f4ef853b26fbfeefdd730c25"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_inline_optional_references.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "a7767e8db7e70adc1c2773fdfda695195d9ef8d4e8b620b8e59e7c8f3356a21b"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "8a2fa253327672c6febe7e78caca111bc0a81a3f93de78464b6cb5fa0b9e54ef"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_inline_optional_references.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "45bbbd52c248948da34d6c753ded1f0a41627f554e5f6af671e8545e41360222"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "8a2fa253327672c6febe7e78caca111bc0a81a3f93de78464b6cb5fa0b9e54ef"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_inline_reference_path.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "47169f5f81c402559e4707af8a5c609fed0430286de129f0c4b7442817f9935c"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_inline_reference_path.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "47169f5f81c402559e4707af8a5c609fed0430286de129f0c4b7442817f9935c"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_inline_nested_path.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "7d95900740955bf2159f3794f9042a9243a2eb4379d9aae076f86851c147fe39"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_inline_nested_path.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "8a4a0b9b1f791dbad2638bf4c59336dac9eaa71c40f777ed5a22d31cb488a12b"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_inline_effect_path.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "b5cc0109e219fbbe23678c2a8922a2e141427d72e256b2a2a78acca90d3abac7"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_inline_effect_path.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "cfe02f18d74ae260119a55d0fc6ff570158dd0291b50d6f9ff28dc487ff065d5"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_inline_limited_path.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "00f5ce56bb5755c70b2003737760aea957bd4a5bfa0a44eaad376cdba4b24daf"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_inline_limited_path.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "00f5ce56bb5755c70b2003737760aea957bd4a5bfa0a44eaad376cdba4b24daf"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_byte_print.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "4d8d20c1082edf99d05e2f6e6141b92ef32837e9aea4615a687f2e5135b16b58"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "7b44931f89ad408f63033987bc49194ef1049ecff1d74eb672d1800b4d0d2fa7"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 131072,
+          "sha256": "f36b40e72abec05fdb467cf3e4bfd601a2790ea5b47ef500da6ce9603e1a735f"
+        },
+        {
+          "name": "data_memory_3",
+          "bytes": 65536,
+          "sha256": "de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31"
+        },
+        {
+          "name": "data_memory_4",
+          "bytes": 65536,
+          "sha256": "90dc791b51849f2dcd8f498d755da105bf4968d9d98b0596632da827611e85e4"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_byte_print.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "be33cd4566b34fc657c0abce1e8c33cfd520c1569ef91b9e85438b80d35e2d3f"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "7b44931f89ad408f63033987bc49194ef1049ecff1d74eb672d1800b4d0d2fa7"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 131072,
+          "sha256": "f36b40e72abec05fdb467cf3e4bfd601a2790ea5b47ef500da6ce9603e1a735f"
+        },
+        {
+          "name": "data_memory_3",
+          "bytes": 65536,
+          "sha256": "de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31"
+        },
+        {
+          "name": "data_memory_4",
+          "bytes": 65536,
+          "sha256": "90dc791b51849f2dcd8f498d755da105bf4968d9d98b0596632da827611e85e4"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_struct_refs.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "90912c5b7fb1923938d60db4f38e5886866a01f12d0aed00b2ce9637cfa09daf"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "cfa4248f86f81c67285977e86fba423c4efe50af5c4e377764d78645d6209ead"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "6c0f041538ee89c46415d10f24525c78298f471a69accc64241bdeac22f4fe90"
+        },
+        {
+          "name": "data_memory_3",
+          "bytes": 65536,
+          "sha256": "b712a66f032571cc100076e4e4581d0ca147f2df6acae106f4886851fcbfb527"
+        },
+        {
+          "name": "data_memory_4",
+          "bytes": 65536,
+          "sha256": "10473f30741962bbdffdf9b180a6b295f053d0c09bed6a0e80734b7d1c5f8054"
+        },
+        {
+          "name": "data_memory_5",
+          "bytes": 65536,
+          "sha256": "0a52805fd63c8dd5bbdfaed24051620c18b1555fce4e67665731eb20b442eddc"
+        },
+        {
+          "name": "data_memory_6",
+          "bytes": 65536,
+          "sha256": "399e6d30447faf6e218bbb0f91ba383f634bdf1f1aa951e48a3b7cc24ade9a0b"
+        },
+        {
+          "name": "data_memory_7",
+          "bytes": 65536,
+          "sha256": "08a33e779e54ed5761990e4a1f13ca5685b4aab4396e87f78588a6bac5263e9d"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_struct_refs.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "90912c5b7fb1923938d60db4f38e5886866a01f12d0aed00b2ce9637cfa09daf"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "cfa4248f86f81c67285977e86fba423c4efe50af5c4e377764d78645d6209ead"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "6c0f041538ee89c46415d10f24525c78298f471a69accc64241bdeac22f4fe90"
+        },
+        {
+          "name": "data_memory_3",
+          "bytes": 65536,
+          "sha256": "b712a66f032571cc100076e4e4581d0ca147f2df6acae106f4886851fcbfb527"
+        },
+        {
+          "name": "data_memory_4",
+          "bytes": 65536,
+          "sha256": "10473f30741962bbdffdf9b180a6b295f053d0c09bed6a0e80734b7d1c5f8054"
+        },
+        {
+          "name": "data_memory_5",
+          "bytes": 65536,
+          "sha256": "0a52805fd63c8dd5bbdfaed24051620c18b1555fce4e67665731eb20b442eddc"
+        },
+        {
+          "name": "data_memory_6",
+          "bytes": 65536,
+          "sha256": "399e6d30447faf6e218bbb0f91ba383f634bdf1f1aa951e48a3b7cc24ade9a0b"
+        },
+        {
+          "name": "data_memory_7",
+          "bytes": 65536,
+          "sha256": "08a33e779e54ed5761990e4a1f13ca5685b4aab4396e87f78588a6bac5263e9d"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_aggregate_array_walk_thin.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "b9fb83a23e419cabc0503820d29384e035909186824df72902be8a84e50cc3f5"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_aggregate_array_walk_thin.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "b9fb83a23e419cabc0503820d29384e035909186824df72902be8a84e50cc3f5"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_aggregate_array_walk_packed.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "36f65ed6b5c662353581305b91374f9b618c115753df9049b56c2ea54a0a4eac"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "30f44290b7bb159578b5381acaf9154f51c781e3b2637007833bc77ae3038ad8"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "5cf647f726077f57413280da20c248c74e558cffb5dd268749ecc1db1e0ca9d1"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_aggregate_array_walk_packed.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "36f65ed6b5c662353581305b91374f9b618c115753df9049b56c2ea54a0a4eac"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "30f44290b7bb159578b5381acaf9154f51c781e3b2637007833bc77ae3038ad8"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "5cf647f726077f57413280da20c248c74e558cffb5dd268749ecc1db1e0ca9d1"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_aggregate_iteration_walk_packed.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "893e00d85bc004039fb7674d7ac81375dfb8e0f7bc84ce9e71921702cb8dd702"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "30f44290b7bb159578b5381acaf9154f51c781e3b2637007833bc77ae3038ad8"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "757d699539fb65ff5fde98bb38be0ed802cac6c67d43e6d68a213310dddede85"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_aggregate_iteration_walk_packed.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "893e00d85bc004039fb7674d7ac81375dfb8e0f7bc84ce9e71921702cb8dd702"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "30f44290b7bb159578b5381acaf9154f51c781e3b2637007833bc77ae3038ad8"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "757d699539fb65ff5fde98bb38be0ed802cac6c67d43e6d68a213310dddede85"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_aggregate_iteration_callbacks.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "f7f516d18351868a5eec11649b283be5201611d5a34e19e8dc04e7ee10990e39"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_aggregate_iteration_callbacks.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "325e8f4a2b23d6ea8e99a5977181945617c0776a1e4d9964b23f9572d4f9e6c1"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_aggregate_iteration_paths.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "183bf48c218d6d65c7a9ff9d249eaf4f71b81b90a9158c8f5f920a5f039a83fa"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_aggregate_iteration_paths.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "183bf48c218d6d65c7a9ff9d249eaf4f71b81b90a9158c8f5f920a5f039a83fa"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_aggregate_iteration_refs_packed.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "24d756017fba90b610fca1849306d6724f109b175e61c038b32f663043e4763e"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "30f44290b7bb159578b5381acaf9154f51c781e3b2637007833bc77ae3038ad8"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "4572351fe1cd4ecde536487fc3a8c35423035516e39e3c007702e77c5f49e31d"
+        },
+        {
+          "name": "data_memory_3",
+          "bytes": 65536,
+          "sha256": "1e5eae75ccda3c954ccfbe1273ae7e405c613121fe5318b3d0aca935edd9be12"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "parent",
+    "source": "test/wasm/wasm_aggregate_iteration_refs_packed.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "24d756017fba90b610fca1849306d6724f109b175e61c038b32f663043e4763e"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "30f44290b7bb159578b5381acaf9154f51c781e3b2637007833bc77ae3038ad8"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "4572351fe1cd4ecde536487fc3a8c35423035516e39e3c007702e77c5f49e31d"
+        },
+        {
+          "name": "data_memory_3",
+          "bytes": 65536,
+          "sha256": "1e5eae75ccda3c954ccfbe1273ae7e405c613121fe5318b3d0aca935edd9be12"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_inline_ref_abi_thin.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "62025075eb2a14458708193dba6a3b2e89125b6eea7b4817ed8994f6119d0fe9"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_inline_ref_abi_thin.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "9d6cf5ea8b802c3e9ab88f653cbd2778d296a334308f8ab64f95f7cf7020376f"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_inline_ref_abi_packed.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "2a9b7e226fc506c428c77b2a60555c5b6c6914c112d1725582abbb84131836c2"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "858c42d5ac2b3f6fb95820e5296c994c3e8f355ef1f016b0aef1d61b714d4516"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "969f25ff6a9ba1892b6b1a0a35765278a84274b3ef93c0cc85aee1af80019853"
+        },
+        {
+          "name": "data_memory_3",
+          "bytes": 65536,
+          "sha256": "ab52b1ad6426592b4127ec76d7b315710f006526ace6269e711d78e46d7d2347"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_inline_ref_abi_packed.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "515291994c1fa13fae964f6a93056b9370c3137f1ee7626260a5e441ecd82e1d"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "858c42d5ac2b3f6fb95820e5296c994c3e8f355ef1f016b0aef1d61b714d4516"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "969f25ff6a9ba1892b6b1a0a35765278a84274b3ef93c0cc85aee1af80019853"
+        },
+        {
+          "name": "data_memory_3",
+          "bytes": 65536,
+          "sha256": "ab52b1ad6426592b4127ec76d7b315710f006526ace6269e711d78e46d7d2347"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_inline_mixed_references.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "483cbdd9d277314f9cb137588dc116e6681254c129a85502fa52b6834183d4c3"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "a2737ffa3ea79588298c9e14137bdd59d77928ec8daad8f4dbb72d625777f48f"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "4d8028c38ff668ec0e47c526d1eece91f7f1ec50f026c4852006b492168b29df"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_inline_mixed_references.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "9ab5ece8d2465f9db68141a77c40424d3d65b3b1d7af88979f918511fe56bfae"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "a2737ffa3ea79588298c9e14137bdd59d77928ec8daad8f4dbb72d625777f48f"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "49cf0d911b1c0a0112dde641114bff68443602f5f4ef853b26fbfeefdd730c25"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_inline_optional_references.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "a7767e8db7e70adc1c2773fdfda695195d9ef8d4e8b620b8e59e7c8f3356a21b"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "8a2fa253327672c6febe7e78caca111bc0a81a3f93de78464b6cb5fa0b9e54ef"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_inline_optional_references.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "45bbbd52c248948da34d6c753ded1f0a41627f554e5f6af671e8545e41360222"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "8a2fa253327672c6febe7e78caca111bc0a81a3f93de78464b6cb5fa0b9e54ef"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_inline_reference_path.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "47169f5f81c402559e4707af8a5c609fed0430286de129f0c4b7442817f9935c"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_inline_reference_path.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "47169f5f81c402559e4707af8a5c609fed0430286de129f0c4b7442817f9935c"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_inline_nested_path.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "7d95900740955bf2159f3794f9042a9243a2eb4379d9aae076f86851c147fe39"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_inline_nested_path.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "8a4a0b9b1f791dbad2638bf4c59336dac9eaa71c40f777ed5a22d31cb488a12b"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_inline_effect_path.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "b5cc0109e219fbbe23678c2a8922a2e141427d72e256b2a2a78acca90d3abac7"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_inline_effect_path.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "cfe02f18d74ae260119a55d0fc6ff570158dd0291b50d6f9ff28dc487ff065d5"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_inline_limited_path.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "00f5ce56bb5755c70b2003737760aea957bd4a5bfa0a44eaad376cdba4b24daf"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_inline_limited_path.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "00f5ce56bb5755c70b2003737760aea957bd4a5bfa0a44eaad376cdba4b24daf"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_byte_print.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "4d8d20c1082edf99d05e2f6e6141b92ef32837e9aea4615a687f2e5135b16b58"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "7b44931f89ad408f63033987bc49194ef1049ecff1d74eb672d1800b4d0d2fa7"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 131072,
+          "sha256": "f36b40e72abec05fdb467cf3e4bfd601a2790ea5b47ef500da6ce9603e1a735f"
+        },
+        {
+          "name": "data_memory_3",
+          "bytes": 65536,
+          "sha256": "de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31"
+        },
+        {
+          "name": "data_memory_4",
+          "bytes": 65536,
+          "sha256": "90dc791b51849f2dcd8f498d755da105bf4968d9d98b0596632da827611e85e4"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_byte_print.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "be33cd4566b34fc657c0abce1e8c33cfd520c1569ef91b9e85438b80d35e2d3f"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "7b44931f89ad408f63033987bc49194ef1049ecff1d74eb672d1800b4d0d2fa7"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 131072,
+          "sha256": "f36b40e72abec05fdb467cf3e4bfd601a2790ea5b47ef500da6ce9603e1a735f"
+        },
+        {
+          "name": "data_memory_3",
+          "bytes": 65536,
+          "sha256": "de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31"
+        },
+        {
+          "name": "data_memory_4",
+          "bytes": 65536,
+          "sha256": "90dc791b51849f2dcd8f498d755da105bf4968d9d98b0596632da827611e85e4"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_struct_refs.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "90912c5b7fb1923938d60db4f38e5886866a01f12d0aed00b2ce9637cfa09daf"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "cfa4248f86f81c67285977e86fba423c4efe50af5c4e377764d78645d6209ead"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "6c0f041538ee89c46415d10f24525c78298f471a69accc64241bdeac22f4fe90"
+        },
+        {
+          "name": "data_memory_3",
+          "bytes": 65536,
+          "sha256": "b712a66f032571cc100076e4e4581d0ca147f2df6acae106f4886851fcbfb527"
+        },
+        {
+          "name": "data_memory_4",
+          "bytes": 65536,
+          "sha256": "10473f30741962bbdffdf9b180a6b295f053d0c09bed6a0e80734b7d1c5f8054"
+        },
+        {
+          "name": "data_memory_5",
+          "bytes": 65536,
+          "sha256": "0a52805fd63c8dd5bbdfaed24051620c18b1555fce4e67665731eb20b442eddc"
+        },
+        {
+          "name": "data_memory_6",
+          "bytes": 65536,
+          "sha256": "399e6d30447faf6e218bbb0f91ba383f634bdf1f1aa951e48a3b7cc24ade9a0b"
+        },
+        {
+          "name": "data_memory_7",
+          "bytes": 65536,
+          "sha256": "08a33e779e54ed5761990e4a1f13ca5685b4aab4396e87f78588a6bac5263e9d"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_struct_refs.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "90912c5b7fb1923938d60db4f38e5886866a01f12d0aed00b2ce9637cfa09daf"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "cfa4248f86f81c67285977e86fba423c4efe50af5c4e377764d78645d6209ead"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "6c0f041538ee89c46415d10f24525c78298f471a69accc64241bdeac22f4fe90"
+        },
+        {
+          "name": "data_memory_3",
+          "bytes": 65536,
+          "sha256": "b712a66f032571cc100076e4e4581d0ca147f2df6acae106f4886851fcbfb527"
+        },
+        {
+          "name": "data_memory_4",
+          "bytes": 65536,
+          "sha256": "10473f30741962bbdffdf9b180a6b295f053d0c09bed6a0e80734b7d1c5f8054"
+        },
+        {
+          "name": "data_memory_5",
+          "bytes": 65536,
+          "sha256": "0a52805fd63c8dd5bbdfaed24051620c18b1555fce4e67665731eb20b442eddc"
+        },
+        {
+          "name": "data_memory_6",
+          "bytes": 65536,
+          "sha256": "399e6d30447faf6e218bbb0f91ba383f634bdf1f1aa951e48a3b7cc24ade9a0b"
+        },
+        {
+          "name": "data_memory_7",
+          "bytes": 65536,
+          "sha256": "08a33e779e54ed5761990e4a1f13ca5685b4aab4396e87f78588a6bac5263e9d"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_aggregate_array_walk_thin.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "b9fb83a23e419cabc0503820d29384e035909186824df72902be8a84e50cc3f5"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_aggregate_array_walk_thin.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "b9fb83a23e419cabc0503820d29384e035909186824df72902be8a84e50cc3f5"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_aggregate_array_walk_packed.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "36f65ed6b5c662353581305b91374f9b618c115753df9049b56c2ea54a0a4eac"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "30f44290b7bb159578b5381acaf9154f51c781e3b2637007833bc77ae3038ad8"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "5cf647f726077f57413280da20c248c74e558cffb5dd268749ecc1db1e0ca9d1"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_aggregate_array_walk_packed.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "36f65ed6b5c662353581305b91374f9b618c115753df9049b56c2ea54a0a4eac"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "30f44290b7bb159578b5381acaf9154f51c781e3b2637007833bc77ae3038ad8"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "5cf647f726077f57413280da20c248c74e558cffb5dd268749ecc1db1e0ca9d1"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_aggregate_iteration_walk_packed.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "893e00d85bc004039fb7674d7ac81375dfb8e0f7bc84ce9e71921702cb8dd702"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "30f44290b7bb159578b5381acaf9154f51c781e3b2637007833bc77ae3038ad8"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "757d699539fb65ff5fde98bb38be0ed802cac6c67d43e6d68a213310dddede85"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_aggregate_iteration_walk_packed.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "893e00d85bc004039fb7674d7ac81375dfb8e0f7bc84ce9e71921702cb8dd702"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "30f44290b7bb159578b5381acaf9154f51c781e3b2637007833bc77ae3038ad8"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "757d699539fb65ff5fde98bb38be0ed802cac6c67d43e6d68a213310dddede85"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_aggregate_iteration_callbacks.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "f7f516d18351868a5eec11649b283be5201611d5a34e19e8dc04e7ee10990e39"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_aggregate_iteration_callbacks.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "325e8f4a2b23d6ea8e99a5977181945617c0776a1e4d9964b23f9572d4f9e6c1"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_aggregate_iteration_paths.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "183bf48c218d6d65c7a9ff9d249eaf4f71b81b90a9158c8f5f920a5f039a83fa"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_aggregate_iteration_paths.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "183bf48c218d6d65c7a9ff9d249eaf4f71b81b90a9158c8f5f920a5f039a83fa"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_aggregate_iteration_refs_packed.goose",
+    "opt": 0,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "24d756017fba90b610fca1849306d6724f109b175e61c038b32f663043e4763e"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "30f44290b7bb159578b5381acaf9154f51c781e3b2637007833bc77ae3038ad8"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "4572351fe1cd4ecde536487fc3a8c35423035516e39e3c007702e77c5f49e31d"
+        },
+        {
+          "name": "data_memory_3",
+          "bytes": 65536,
+          "sha256": "1e5eae75ccda3c954ccfbe1273ae7e405c613121fe5318b3d0aca935edd9be12"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  },
+  {
+    "phase": "candidate",
+    "source": "test/wasm/wasm_aggregate_iteration_refs_packed.goose",
+    "opt": 2,
+    "observed": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "24d756017fba90b610fca1849306d6724f109b175e61c038b32f663043e4763e"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "30f44290b7bb159578b5381acaf9154f51c781e3b2637007833bc77ae3038ad8"
+        },
+        {
+          "name": "data_memory_2",
+          "bytes": 65536,
+          "sha256": "4572351fe1cd4ecde536487fc3a8c35423035516e39e3c007702e77c5f49e31d"
+        },
+        {
+          "name": "data_memory_3",
+          "bytes": 65536,
+          "sha256": "1e5eae75ccda3c954ccfbe1273ae7e405c613121fe5318b3d0aca935edd9be12"
+        }
+      ],
+      "globals": []
+    },
+    "matches_original_memory": true
+  }
+]

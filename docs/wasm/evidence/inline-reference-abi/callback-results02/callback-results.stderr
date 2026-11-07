@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/checks.py", line 24, in <module>
+    found=[x for x in text.splitlines() if re.search(r'\(func \$'+function+r'\.',x)];assert len(found)==1 and f'(param {rep}) (result {rep})' in found[0],(name,function,found)
+                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('parent-wasm_inline_ref_callback_thin-O0', 'relayMaybeFixed', ['  (func $relayMaybeFixed.5 (;16;) (type 9) (param i32) (result i32)', '  (func $relayMaybeFixed.6 (;17;) (type 9) (param i32) (result i32)'])

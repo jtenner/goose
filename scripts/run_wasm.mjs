@@ -126,10 +126,14 @@ export function instantiate(bytes, write = b => fs.writeSync(1, b)) {
         instance,
         get pendingPrints() { return pending.size; },
         get pendingSnapshots() { return snapshots?.size ?? 0; },
-        run() {
+        run(observeCompletion = undefined) {
             if (started) throw new GooseFailure('a Goose instance can be started only once; reentry is not supported');
             started = true;
-            try { instance.exports._start(); }
+            try {
+                instance.exports._start();
+                // Tests can observe guest ownership before terminal cleanup.
+                observeCompletion?.();
+            }
             finally { pending.clear(); snapshots?.clear(); }
         },
     };

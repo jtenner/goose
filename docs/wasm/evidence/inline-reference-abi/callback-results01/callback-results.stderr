@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results01/checks.py", line 17, in <module>
+    run(name+'-native-emit',[exe,'-O'+str(opt),'--standalone','-o',c,source]);run(name+'-native-build',['cc','-O'+str(opt),c,'-pthread','-lm','-ldl','-o',native]);a=run(name+'-native-run',[native]);assert a.stdout==expected and not a.stderr
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results01/checks.py", line 8, in run
+    assert a.returncode==0,(name,a.returncode,a.stderr.decode(errors='replace'))
+           ^^^^^^^^^^^^^^^
+AssertionError: ('parent-wasm_inline_ref_callback_thin-O0-native-emit', 1, '/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_callback_thin.goose:1: error: expected a value of type i64[2]&, got i64[2]\nrecursive fn relayFixed<F>(a: i64[2]&) -> i64[2]& { return F(a); }\n                                                           ^~~~\n  in fn relayFixed<F = {block at /home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_callback_thin.goose:6:47}>(i64[2]&) instantiated from /home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_callback_thin.goose:6\n  in fn main() instantiated from /home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_callback_thin.goose:3\n')

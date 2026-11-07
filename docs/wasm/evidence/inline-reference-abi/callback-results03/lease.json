@@ -1,0 +1,39 @@
+{
+  "owner": "Goose inline-reference ABI functional unit",
+  "pid": 1658292,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "source-identity",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results03/verify-source.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "callback-results",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results03/checks.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "source-identity-after",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results03/verify-source.py"
+      ],
+      "exit": 0
+    }
+  ],
+  "exit": 0,
+  "released_at": "2026-11-07T18:10:20.070703+00:00"
+}

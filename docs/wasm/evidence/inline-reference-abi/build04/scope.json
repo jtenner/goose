@@ -1,0 +1,46 @@
+{
+  "status": "prepared, not run",
+  "parent": "4c302e7ad2cebaae82ae18a08e9978329cc571a2",
+  "fixtures": [
+    "wasm_inline_ref_abi_thin",
+    "wasm_inline_ref_abi_packed",
+    "wasm_inline_mixed_references",
+    "wasm_inline_optional_references",
+    "wasm_inline_reference_path",
+    "wasm_inline_nested_path",
+    "wasm_inline_effect_path",
+    "wasm_inline_limited_path",
+    "wasm_byte_print",
+    "wasm_struct_refs",
+    "wasm_aggregate_array_walk_thin",
+    "wasm_aggregate_array_walk_packed",
+    "wasm_aggregate_iteration_walk_packed",
+    "wasm_aggregate_iteration_callbacks",
+    "wasm_aggregate_iteration_paths",
+    "wasm_aggregate_iteration_refs_packed"
+  ],
+  "optimizations": [
+    0,
+    2
+  ],
+  "engines": [
+    "Node24.22.2",
+    "Wasmtime49"
+  ],
+  "native_reference": "new fixtures only, emitted by retained parent",
+  "candidate_builds": 1,
+  "whole_memory_and_global_comparison": true,
+  "thin_new_fixture_modules_must_be_identical": true,
+  "ABI_shape_checks": 26,
+  "no_precision_timing": true,
+  "parent_cases": 32,
+  "candidate_cases": 32,
+  "native_reference_runs": 4,
+  "whole_memory_engine": "Node; exact all exported bytes and global values after synchronous completion",
+  "wasmtime_scope": "Expected stdout plus guest semantic assertions; no Wasmtime full-image comparison claim",
+  "parent_reused_cases": 2,
+  "parent_fresh_cases": 30,
+  "native_fresh_runs": 2,
+  "native_reused_runs": 2,
+  "owner_field_admission_controls": 2
+}

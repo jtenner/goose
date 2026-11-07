@@ -1,0 +1,9 @@
+{
+  "status": "prepared, not run",
+  "requires": "callback fixture parent-first unit passes; verified peer handback",
+  "compiler_unchanged": true,
+  "reason_for_full_Node_suite": "Shared adapter completion hook and permanent controls changed; callback return fixtures added.",
+  "before_owner_records": "Retained; their post-cleanup counts are not guest-owner coverage.",
+  "Wasmtime_and_native_oracles": "Same frozen compiler, new callbacks get direct native references.",
+  "no_timing": true
+}

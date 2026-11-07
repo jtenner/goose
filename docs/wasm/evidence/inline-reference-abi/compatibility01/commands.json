@@ -1,0 +1,36 @@
+[
+  [
+    "source-identity",
+    [
+      "python3",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/compatibility01/verify-source.py"
+    ]
+  ],
+  [
+    "compatibility01",
+    [
+      "python3",
+      "test/backend_shared.py",
+      "--reference",
+      "build/goose-inline-checkpoint",
+      "--exe",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/goose-tested",
+      "--out",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/compatibility01/exact"
+    ]
+  ],
+  [
+    "module-deltas",
+    [
+      "python3",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/compatibility01/module-deltas.py"
+    ]
+  ],
+  [
+    "source-identity-after",
+    [
+      "python3",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/compatibility01/verify-source.py"
+    ]
+  ]
+]

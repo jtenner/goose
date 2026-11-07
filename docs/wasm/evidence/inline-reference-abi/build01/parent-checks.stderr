@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-inline-ref-abi-20261107/build01/checks.py", line 21, in <module>
+    run(name+'-native-emit',[exe,'-O'+str(opt),'--standalone','-o',c,source])
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/goose-wasm-inline-ref-abi-20261107/build01/checks.py", line 13, in run
+    assert a.returncode==0,(name,a.returncode,a.stderr.decode(errors='replace'))
+           ^^^^^^^^^^^^^^^
+AssertionError: ('wasm_inline_ref_abi_thin-O0-native-emit', 1, '/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_abi_thin.goose:21: error: optional value must be narrowed (if/guard/assert) before use\n    if link.maybe { assert(link.maybe[1] == 20); }\n                           ^~~~~~~~~~\n  in fn main() instantiated from /home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_abi_thin.goose:14\n')

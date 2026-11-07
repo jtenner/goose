@@ -1,0 +1,14 @@
+[
+  {
+    "name": "parent-wasm_inline_ref_callback_thin-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results01/parent-wasm_inline_ref_callback_thin-O0.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_callback_thin.goose"
+    ],
+    "exit": 1
+  }
+]

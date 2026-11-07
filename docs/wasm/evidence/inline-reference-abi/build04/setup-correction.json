@@ -1,0 +1,8 @@
+{
+  "parent_attempt": "/tmp/goose-wasm-inline-ref-abi-20261107/build03",
+  "cause": "Existing target admission guard rejects growable owner-reference fields.",
+  "change": "Use supported header-reference locals, params and returns. Preserve original source as exact-reason rejection control.",
+  "production_source_changed": false,
+  "candidate_build_started": false,
+  "reused_passed_cases": "Thin fixture O0/O2 native/Node/Wasmtime/snapshots from build03, source hashes verified."
+}

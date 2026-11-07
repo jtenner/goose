@@ -1,0 +1,95 @@
+{
+  "cases": [
+    {
+      "source": "test/wasm/wasm_inline_ref_abi_thin.goose",
+      "opt": 0,
+      "module_bytes": 10491,
+      "module_sha256": "fe147f057a91a451d2dcfba3b7eeb4caaaab159d6e1dab4228844d7c113c2e9c",
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "62025075eb2a14458708193dba6a3b2e89125b6eea7b4817ed8994f6119d0fe9"
+        }
+      ],
+      "globals": [],
+      "parent_ordinary_array_reference_abi": "i32",
+      "reused_from": "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent"
+    },
+    {
+      "source": "test/wasm/wasm_inline_ref_abi_thin.goose",
+      "opt": 2,
+      "module_bytes": 10505,
+      "module_sha256": "985008d90b0bd8582d265f9ef29c55b68aff44e1bc82ceff57013e263d6820d5",
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "9d6cf5ea8b802c3e9ab88f653cbd2778d296a334308f8ab64f95f7cf7020376f"
+        }
+      ],
+      "globals": [],
+      "parent_ordinary_array_reference_abi": "i32",
+      "reused_from": "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent"
+    }
+  ],
+  "original_artifacts": [
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-native-emit.exit",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-native-build.stdout",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-wat.stderr",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-node.exit",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-native-emit.stderr",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-native-build.exit",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-wat.exit",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0.c",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2.c",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-validate.stdout",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-native-emit.stdout",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-wat.exit",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-native-run.stdout",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-native-run.stderr",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-native-build.exit",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-native-build.stderr",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-node.stdout",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-native-emit.stdout",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-emit.stderr",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-validate.stderr",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-wasmtime.stderr",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-wasmtime.exit",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-validate.stdout",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-wat.stdout",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-wasmtime.exit",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-validate.exit",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2.native",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-emit.stdout",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-native-emit.stderr",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-instance",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0.wasm",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-wat.stderr",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-native-run.exit",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-wat.stdout",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2.wasm",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-wasmtime.stdout",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-native-emit.exit",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0.native",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-native-build.stderr",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-native-run.exit",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-wasmtime.stderr",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-validate.exit",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-wasmtime.stdout",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-node.exit",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-native-run.stderr",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-validate.stderr",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-emit.stderr",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-native-build.stdout",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-emit.exit",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-emit.stdout",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-node.stderr",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-instance",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-node.stderr",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-emit.exit",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O2-node.stdout",
+    "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent/wasm_inline_ref_abi_thin-O0-native-run.stdout"
+  ],
+  "executed_again": false
+}

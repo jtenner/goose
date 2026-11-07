@@ -1,0 +1,15 @@
+{
+  "status": "prepared, not run",
+  "purpose": "Validate narrow correction of reviewP2 completion-owner assertion",
+  "compiler_builds": 0,
+  "new_guest_runs": 70,
+  "groups": {
+    "same_acceptance_checks": 3,
+    "specific_state_and_reason_controls": 3,
+    "corrected_parent_candidate_Node_matrix": 64
+  },
+  "no_Wasmtime_or_native_rerun": true,
+  "reason_for_Node_rerun": "Previous terminal-cleanup counts were not guest ownership coverage. Observe both containers before finally.",
+  "metadata_limit": "Focused modules export no globals; empty lists do not observe stack tops.",
+  "no_timing": true
+}

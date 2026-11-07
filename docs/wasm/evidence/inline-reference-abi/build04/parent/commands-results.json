@@ -1,0 +1,1329 @@
+[
+  {
+    "name": "owner-field-admission",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/must-not-exist.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/rejected-owner-field.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "wasm_inline_ref_abi_packed-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_ref_abi_packed-O0.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_abi_packed.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_ref_abi_packed-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_ref_abi_packed-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_ref_abi_packed-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_ref_abi_packed-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_ref_abi_packed-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_ref_abi_packed-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_ref_abi_packed-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_abi_packed.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_ref_abi_packed-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_ref_abi_packed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_ref_abi_packed-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_ref_abi_packed-O0.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_ref_abi_packed-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_ref_abi_packed-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_ref_abi_packed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_ref_abi_packed-O0-wat",
+    "command": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_ref_abi_packed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_ref_abi_packed-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_ref_abi_packed-O2.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_abi_packed.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_ref_abi_packed-O2-native-build",
+    "command": [
+      "cc",
+      "-O2",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_ref_abi_packed-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_ref_abi_packed-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_ref_abi_packed-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_ref_abi_packed-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_ref_abi_packed-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_ref_abi_packed-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_abi_packed.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_ref_abi_packed-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_ref_abi_packed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_ref_abi_packed-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_ref_abi_packed-O2.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_ref_abi_packed-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_ref_abi_packed-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_ref_abi_packed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_ref_abi_packed-O2-wat",
+    "command": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_ref_abi_packed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_mixed_references-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_mixed_references-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_mixed_references.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_mixed_references-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_mixed_references-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_mixed_references-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_mixed_references-O0.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_mixed_references-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_mixed_references-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_mixed_references-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_mixed_references-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_mixed_references-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_mixed_references.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_mixed_references-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_mixed_references-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_mixed_references-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_mixed_references-O2.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_mixed_references-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_mixed_references-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_mixed_references-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_optional_references-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_optional_references-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_optional_references.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_optional_references-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_optional_references-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_optional_references-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_optional_references-O0.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_optional_references-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_optional_references-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_optional_references-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_optional_references-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_optional_references-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_optional_references.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_optional_references-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_optional_references-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_optional_references-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_optional_references-O2.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_optional_references-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_optional_references-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_optional_references-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_reference_path-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_reference_path-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_reference_path.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_reference_path-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_reference_path-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_reference_path-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_reference_path-O0.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_reference_path-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_reference_path-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_reference_path-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_reference_path-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_reference_path-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_reference_path.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_reference_path-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_reference_path-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_reference_path-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_reference_path-O2.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_reference_path-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_reference_path-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_reference_path-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_nested_path-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_nested_path-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_nested_path.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_nested_path-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_nested_path-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_nested_path-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_nested_path-O0.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_nested_path-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_nested_path-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_nested_path-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_nested_path-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_nested_path-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_nested_path.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_nested_path-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_nested_path-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_nested_path-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_nested_path-O2.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_nested_path-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_nested_path-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_nested_path-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_effect_path-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_effect_path-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_effect_path.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_effect_path-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_effect_path-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_effect_path-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_effect_path-O0.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_effect_path-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_effect_path-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_effect_path-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_effect_path-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_effect_path-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_effect_path.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_effect_path-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_effect_path-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_effect_path-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_effect_path-O2.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_effect_path-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_effect_path-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_effect_path-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_limited_path-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_limited_path-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_limited_path.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_limited_path-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_limited_path-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_limited_path-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_limited_path-O0.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_limited_path-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_limited_path-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_limited_path-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_limited_path-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_limited_path-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_limited_path.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_limited_path-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_limited_path-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_limited_path-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_limited_path-O2.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_limited_path-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_inline_limited_path-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_inline_limited_path-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_byte_print-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_byte_print-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_byte_print.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_byte_print-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_byte_print-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_byte_print-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_byte_print-O0.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_byte_print-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_byte_print-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_byte_print-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_byte_print-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_byte_print-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_byte_print.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_byte_print-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_byte_print-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_byte_print-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_byte_print-O2.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_byte_print-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_byte_print-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_byte_print-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_struct_refs-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_struct_refs-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_struct_refs.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_struct_refs-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_struct_refs-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_struct_refs-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_struct_refs-O0.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_struct_refs-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_struct_refs-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_struct_refs-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_struct_refs-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_struct_refs-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_struct_refs.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_struct_refs-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_struct_refs-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_struct_refs-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_struct_refs-O2.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_struct_refs-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_struct_refs-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_struct_refs-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_array_walk_thin-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_array_walk_thin-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_array_walk_thin.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_array_walk_thin-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_array_walk_thin-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_array_walk_thin-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_array_walk_thin-O0.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_array_walk_thin-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_array_walk_thin-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_array_walk_thin-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_array_walk_thin-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_array_walk_thin-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_array_walk_thin.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_array_walk_thin-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_array_walk_thin-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_array_walk_thin-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_array_walk_thin-O2.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_array_walk_thin-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_array_walk_thin-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_array_walk_thin-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_array_walk_packed-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_array_walk_packed-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_array_walk_packed.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_array_walk_packed-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_array_walk_packed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_array_walk_packed-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_array_walk_packed-O0.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_array_walk_packed-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_array_walk_packed-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_array_walk_packed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_array_walk_packed-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_array_walk_packed-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_array_walk_packed.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_array_walk_packed-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_array_walk_packed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_array_walk_packed-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_array_walk_packed-O2.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_array_walk_packed-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_array_walk_packed-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_array_walk_packed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_walk_packed-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_walk_packed-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_iteration_walk_packed.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_walk_packed-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_walk_packed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_walk_packed-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_walk_packed-O0.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_walk_packed-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_walk_packed-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_walk_packed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_walk_packed-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_walk_packed-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_iteration_walk_packed.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_walk_packed-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_walk_packed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_walk_packed-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_walk_packed-O2.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_walk_packed-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_walk_packed-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_walk_packed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_callbacks-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_callbacks-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_iteration_callbacks.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_callbacks-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_callbacks-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_callbacks-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_callbacks-O0.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_callbacks-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_callbacks-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_callbacks-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_callbacks-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_callbacks-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_iteration_callbacks.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_callbacks-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_callbacks-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_callbacks-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_callbacks-O2.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_callbacks-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_callbacks-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_callbacks-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_paths-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_paths-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_iteration_paths.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_paths-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_paths-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_paths-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_paths-O0.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_paths-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_paths-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_paths-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_paths-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_paths-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_iteration_paths.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_paths-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_paths-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_paths-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_paths-O2.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_paths-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_paths-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_paths-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_refs_packed-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_refs_packed-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_iteration_refs_packed.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_refs_packed-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_refs_packed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_refs_packed-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_refs_packed-O0.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_refs_packed-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_refs_packed-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_refs_packed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_refs_packed-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_refs_packed-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_iteration_refs_packed.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_refs_packed-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_refs_packed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_refs_packed-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_refs_packed-O2.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_refs_packed-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm_aggregate_iteration_refs_packed-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/parent/wasm_aggregate_iteration_refs_packed-O2.wasm"
+    ],
+    "exit": 0
+  }
+]

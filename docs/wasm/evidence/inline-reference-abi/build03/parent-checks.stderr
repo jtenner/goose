@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-inline-ref-abi-20261107/build03/checks.py", line 24, in <module>
+    run(name+'-emit',[exe,'-O'+str(opt),'--target','wasm','-o',module,source])
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/goose-wasm-inline-ref-abi-20261107/build03/checks.py", line 13, in run
+    assert a.returncode==0,(name,a.returncode,a.stderr.decode(errors='replace'))
+           ^^^^^^^^^^^^^^^
+AssertionError: ('wasm_inline_ref_abi_packed-O0-emit', 1, '/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_abi_packed.goose:48: error: wasm target: compound owner-reference fields need the pending destination lowering\n')

@@ -133,7 +133,11 @@ def main():
             run([exe, f'-O{opt}', '--target', 'wasm', '-o', wasm, source])
             assert wasm.read_bytes()[:8] == b'\0asm\x01\0\0\0', 'invalid binary magic/version'
             run([args.validator, 'validate', wasm])
-            actual = run([args.node, ROOT / 'scripts' / 'run_wasm.mjs', wasm])
+            if source.stem.startswith('wasm_inline_ref_abi_'):
+                actual = run([args.node, ROOT / 'test' / 'wasm_reference_abi.mjs', wasm,
+                              out / f'{source.stem}-O{opt}-instance'])
+            else:
+                actual = run([args.node, ROOT / 'scripts' / 'run_wasm.mjs', wasm])
             assert actual.stdout == reference.stdout, (source, opt, actual.stdout, reference.stdout)
             assert not actual.stderr, (source, opt, actual.stderr)
             if args.wasmtime_python:
@@ -238,6 +242,14 @@ def main():
     count += check_iteration_modules(run, args.node, args.validator, args.wasmtime_python, out)
     count += check_iteration_limits(run, exe, out)
     count += check_iteration_footprint(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out)
+    owner_module = out / 'wasm_inline_ref_abi_packed-O0.wasm'
+    owner_controls = out / 'reference-owner-controls'
+    run([sys.executable, ROOT / 'test/wasm_reference_abi_controls.py', owner_module, owner_controls])
+    for kind in ('print-owner', 'snapshot-owner'):
+        run([args.validator, 'validate', owner_controls / f'{kind}.wasm'])
+    run([args.node, ROOT / 'test/wasm_reference_abi_controls.mjs', owner_module, owner_controls,
+         ROOT / 'test/expected/wasm_inline_ref_abi_packed.out', out / 'reference-owner-results.json'])
+    count += 3
     growth_source = out / 'frame-growth.goose'
     lines = ['recursive fn grow(n: i64) -> i64 {']
     for i in range(96):

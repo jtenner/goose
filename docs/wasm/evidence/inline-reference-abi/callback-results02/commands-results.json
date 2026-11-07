@@ -1,0 +1,85 @@
+[
+  {
+    "name": "parent-wasm_inline_ref_callback_thin-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/parent-wasm_inline_ref_callback_thin-O0.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_callback_thin.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "parent-wasm_inline_ref_callback_thin-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/parent-wasm_inline_ref_callback_thin-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/parent-wasm_inline_ref_callback_thin-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "parent-wasm_inline_ref_callback_thin-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/parent-wasm_inline_ref_callback_thin-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "parent-wasm_inline_ref_callback_thin-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/parent-wasm_inline_ref_callback_thin-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_callback_thin.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "parent-wasm_inline_ref_callback_thin-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/parent-wasm_inline_ref_callback_thin-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "parent-wasm_inline_ref_callback_thin-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/parent-wasm_inline_ref_callback_thin-O0.wasm",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/parent-wasm_inline_ref_callback_thin-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "parent-wasm_inline_ref_callback_thin-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/parent-wasm_inline_ref_callback_thin-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "parent-wasm_inline_ref_callback_thin-O0-wat",
+    "command": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/parent-wasm_inline_ref_callback_thin-O0.wasm"
+    ],
+    "exit": 0
+  }
+]

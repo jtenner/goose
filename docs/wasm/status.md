@@ -39,7 +39,7 @@ remain target diagnostics.
 
 The emitted modules use Memory32, i32/i64/f32/f64 scalar instructions,
 ordinary calls, block/loop/if branches, unaligned loads/stores, global/data
-sections, and checked `memory.grow`. Memory 0 frame addresses remain thin. When a growable-array interface is live, ordinary
+sections, and checked `memory.grow`. Memory 0 frame addresses remain thin. When the data-memory plan is active, ordinary
 references use packed i64 addresses; owner-header addresses remain i32 because
 all admitted headers reside in Memory 0. Stored owner references retain the
 16-byte layout. Known array memories use direct fixed-index loads/stores;
@@ -178,9 +178,23 @@ A new private thin-known-memory contract has the same failing-before and
 passing-after assertions in Node and Wasmtime. Independent Astra review found
 no confirmed production defect; its archive-only finding was corrected.
 See [array-place evidence](evidence/array-places.md) for preserved setup errors,
-provenance, limits and queued compiler-cost measurements. Canonical packed inline
-references, fresh aggregate data destinations and the remaining backend stages
-are still pending; this does not complete Stage D or performance acceptance.
+provenance, limits and queued compiler-cost measurements. That service checkpoint
+did not add packed inline references or fresh aggregate data destinations.
+It does not complete Stage D or performance acceptance.
+
+Canonical packed ordinary references now include fixed and static-limited
+arrays. True growable-owner header references remain thin, and stored widths
+and source admission stay unchanged. Focused checks pass 32 parent/candidate
+Node image pairs, both-engine output/assertions and 26 ABI signatures. The full
+final suite passed 1,073 check groups and the native baseline passed, with 52 older
+exact comparisons. Of 226 immediate-parent module pairs, 172 are identical and
+54 change under the new ABI; total module delta is -313, while code sections
+grow by 405 bytes. Independent review found no production ABI defect and one
+owner-observer test defect. Its failing-first controls, repair, callback-result
+coverage and final suite pass. Performance acceptance
+remains open. See
+[reference-ABI evidence](evidence/inline-reference-abi.md). Fresh aggregate data
+destinations, remaining layouts, results and adapters are still open.
 
 ## Host contract
 

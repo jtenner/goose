@@ -1,0 +1,3698 @@
+[
+  {
+    "source": "test/wasm/wasm_aggregate_array_callbacks.goose",
+    "opt": 0,
+    "module_bytes_delta": 49,
+    "code_section_bytes_delta": 23,
+    "type_count_delta": 1,
+    "function_count_delta": 1,
+    "local_slots_delta": 0,
+    "helpers_added": [
+      "goose.copy_to_frame"
+    ],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "goose.copy_to_frame",
+        "parent": null,
+        "candidate": {
+          "name": "goose.copy_to_frame",
+          "params": [
+            "i32",
+            "i64",
+            "i32"
+          ],
+          "results": [],
+          "locals": {},
+          "local_slots": 0,
+          "instruction_bytes": 95
+        }
+      },
+      {
+        "name": "invoke.2",
+        "parent": {
+          "name": "invoke.2",
+          "params": [
+            "i32"
+          ],
+          "results": [],
+          "locals": {
+            "i32": 12,
+            "i64": 26
+          },
+          "local_slots": 38,
+          "instruction_bytes": 607
+        },
+        "candidate": {
+          "name": "invoke.2",
+          "params": [
+            "i64"
+          ],
+          "results": [],
+          "locals": {
+            "i32": 5,
+            "i64": 33
+          },
+          "local_slots": 38,
+          "instruction_bytes": 601
+        }
+      },
+      {
+        "name": "invoke.3",
+        "parent": {
+          "name": "invoke.3",
+          "params": [
+            "i32"
+          ],
+          "results": [],
+          "locals": {
+            "i32": 12,
+            "i64": 26
+          },
+          "local_slots": 38,
+          "instruction_bytes": 607
+        },
+        "candidate": {
+          "name": "invoke.3",
+          "params": [
+            "i64"
+          ],
+          "results": [],
+          "locals": {
+            "i32": 5,
+            "i64": 33
+          },
+          "local_slots": 38,
+          "instruction_bytes": 601
+        }
+      },
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 7,
+            "i64": 21
+          },
+          "local_slots": 28,
+          "instruction_bytes": 478
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 5,
+            "i64": 23
+          },
+          "local_slots": 28,
+          "instruction_bytes": 482
+        }
+      },
+      {
+        "name": "work.1",
+        "parent": {
+          "name": "work.1",
+          "params": [
+            "i32",
+            "i64",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 14,
+            "i64": 51
+          },
+          "local_slots": 65,
+          "instruction_bytes": 1005
+        },
+        "candidate": {
+          "name": "work.1",
+          "params": [
+            "i64",
+            "i64",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 4,
+            "i64": 61
+          },
+          "local_slots": 65,
+          "instruction_bytes": 995
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_array_callbacks.goose",
+    "opt": 2,
+    "module_bytes_delta": 45,
+    "code_section_bytes_delta": 23,
+    "type_count_delta": 0,
+    "function_count_delta": 1,
+    "local_slots_delta": 0,
+    "helpers_added": [
+      "goose.copy_to_frame"
+    ],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "goose.copy_to_frame",
+        "parent": null,
+        "candidate": {
+          "name": "goose.copy_to_frame",
+          "params": [
+            "i32",
+            "i64",
+            "i32"
+          ],
+          "results": [],
+          "locals": {},
+          "local_slots": 0,
+          "instruction_bytes": 95
+        }
+      },
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 31,
+            "i64": 73
+          },
+          "local_slots": 104,
+          "instruction_bytes": 1670
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 13,
+            "i64": 91
+          },
+          "local_slots": 104,
+          "instruction_bytes": 1662
+        }
+      },
+      {
+        "name": "work.1",
+        "parent": {
+          "name": "work.1",
+          "params": [
+            "i32",
+            "i64",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 14,
+            "i64": 51
+          },
+          "local_slots": 65,
+          "instruction_bytes": 1005
+        },
+        "candidate": {
+          "name": "work.1",
+          "params": [
+            "i64",
+            "i64",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 4,
+            "i64": 61
+          },
+          "local_slots": 65,
+          "instruction_bytes": 995
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_array_cleanup.goose",
+    "opt": 0,
+    "module_bytes_delta": -7,
+    "code_section_bytes_delta": -7,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "check.1",
+        "parent": {
+          "name": "check.1",
+          "params": [
+            "i32",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 19,
+            "i64": 36
+          },
+          "local_slots": 55,
+          "instruction_bytes": 845
+        },
+        "candidate": {
+          "name": "check.1",
+          "params": [
+            "i64",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 15,
+            "i64": 40
+          },
+          "local_slots": 55,
+          "instruction_bytes": 844
+        }
+      },
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 9,
+            "i64": 18
+          },
+          "local_slots": 27,
+          "instruction_bytes": 649
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 8,
+            "i64": 19
+          },
+          "local_slots": 27,
+          "instruction_bytes": 651
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_array_cleanup.goose",
+    "opt": 2,
+    "module_bytes_delta": -7,
+    "code_section_bytes_delta": -7,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "check.1",
+        "parent": {
+          "name": "check.1",
+          "params": [
+            "i32",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 19,
+            "i64": 36
+          },
+          "local_slots": 55,
+          "instruction_bytes": 845
+        },
+        "candidate": {
+          "name": "check.1",
+          "params": [
+            "i64",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 15,
+            "i64": 40
+          },
+          "local_slots": 55,
+          "instruction_bytes": 844
+        }
+      },
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 9,
+            "i64": 18
+          },
+          "local_slots": 27,
+          "instruction_bytes": 649
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 8,
+            "i64": 19
+          },
+          "local_slots": 27,
+          "instruction_bytes": 651
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_array_hidden.goose",
+    "opt": 0,
+    "module_bytes_delta": -9,
+    "code_section_bytes_delta": -4,
+    "type_count_delta": -1,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 3,
+            "i64": 4
+          },
+          "local_slots": 7,
+          "instruction_bytes": 155
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 3,
+            "i64": 4
+          },
+          "local_slots": 7,
+          "instruction_bytes": 156
+        }
+      },
+      {
+        "name": "through.1",
+        "parent": {
+          "name": "through.1",
+          "params": [
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 3,
+            "i64": 6
+          },
+          "local_slots": 9,
+          "instruction_bytes": 106
+        },
+        "candidate": {
+          "name": "through.1",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 1,
+            "i64": 8
+          },
+          "local_slots": 9,
+          "instruction_bytes": 105
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_array_hidden.goose",
+    "opt": 2,
+    "module_bytes_delta": -9,
+    "code_section_bytes_delta": -4,
+    "type_count_delta": -1,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 3,
+            "i64": 4
+          },
+          "local_slots": 7,
+          "instruction_bytes": 155
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 3,
+            "i64": 4
+          },
+          "local_slots": 7,
+          "instruction_bytes": 156
+        }
+      },
+      {
+        "name": "through.1",
+        "parent": {
+          "name": "through.1",
+          "params": [
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 3,
+            "i64": 6
+          },
+          "local_slots": 9,
+          "instruction_bytes": 106
+        },
+        "candidate": {
+          "name": "through.1",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 1,
+            "i64": 8
+          },
+          "local_slots": 9,
+          "instruction_bytes": 105
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_array_nested_fields.goose",
+    "opt": 0,
+    "module_bytes_delta": 83,
+    "code_section_bytes_delta": 129,
+    "type_count_delta": 0,
+    "function_count_delta": 2,
+    "local_slots_delta": 0,
+    "helpers_added": [
+      "goose.memory_op.41",
+      "goose.memory_op.55"
+    ],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "goose.memory_op.41",
+        "parent": null,
+        "candidate": {
+          "name": "goose.memory_op.41",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {},
+          "local_slots": 0,
+          "instruction_bytes": 65
+        }
+      },
+      {
+        "name": "goose.memory_op.55",
+        "parent": null,
+        "candidate": {
+          "name": "goose.memory_op.55",
+          "params": [
+            "i64",
+            "i64"
+          ],
+          "results": [],
+          "locals": {},
+          "local_slots": 0,
+          "instruction_bytes": 71
+        }
+      },
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 47,
+            "i64": 124
+          },
+          "local_slots": 171,
+          "instruction_bytes": 2992
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 24,
+            "i64": 147
+          },
+          "local_slots": 171,
+          "instruction_bytes": 3040
+        }
+      },
+      {
+        "name": "read.1",
+        "parent": {
+          "name": "read.1",
+          "params": [
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 3,
+            "i64": 7
+          },
+          "local_slots": 10,
+          "instruction_bytes": 110
+        },
+        "candidate": {
+          "name": "read.1",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 1,
+            "i64": 9
+          },
+          "local_slots": 10,
+          "instruction_bytes": 107
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_array_nested_fields.goose",
+    "opt": 2,
+    "module_bytes_delta": 83,
+    "code_section_bytes_delta": 129,
+    "type_count_delta": 0,
+    "function_count_delta": 2,
+    "local_slots_delta": 0,
+    "helpers_added": [
+      "goose.memory_op.41",
+      "goose.memory_op.55"
+    ],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "goose.memory_op.41",
+        "parent": null,
+        "candidate": {
+          "name": "goose.memory_op.41",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {},
+          "local_slots": 0,
+          "instruction_bytes": 65
+        }
+      },
+      {
+        "name": "goose.memory_op.55",
+        "parent": null,
+        "candidate": {
+          "name": "goose.memory_op.55",
+          "params": [
+            "i64",
+            "i64"
+          ],
+          "results": [],
+          "locals": {},
+          "local_slots": 0,
+          "instruction_bytes": 71
+        }
+      },
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 47,
+            "i64": 124
+          },
+          "local_slots": 171,
+          "instruction_bytes": 2992
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 24,
+            "i64": 147
+          },
+          "local_slots": 171,
+          "instruction_bytes": 3040
+        }
+      },
+      {
+        "name": "read.1",
+        "parent": {
+          "name": "read.1",
+          "params": [
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 3,
+            "i64": 7
+          },
+          "local_slots": 10,
+          "instruction_bytes": 110
+        },
+        "candidate": {
+          "name": "read.1",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 1,
+            "i64": 9
+          },
+          "local_slots": 10,
+          "instruction_bytes": 107
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_array_packed.goose",
+    "opt": 0,
+    "module_bytes_delta": -219,
+    "code_section_bytes_delta": 8,
+    "type_count_delta": -1,
+    "function_count_delta": 1,
+    "local_slots_delta": -1,
+    "helpers_added": [
+      "goose.memory_op.61"
+    ],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "get.2",
+        "parent": {
+          "name": "get.2",
+          "params": [
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 3,
+            "i64": 6
+          },
+          "local_slots": 9,
+          "instruction_bytes": 102
+        },
+        "candidate": {
+          "name": "get.2",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 1,
+            "i64": 8
+          },
+          "local_slots": 9,
+          "instruction_bytes": 101
+        }
+      },
+      {
+        "name": "goose.memory_op.61",
+        "parent": null,
+        "candidate": {
+          "name": "goose.memory_op.61",
+          "params": [
+            "i64",
+            "i64"
+          ],
+          "results": [],
+          "locals": {},
+          "local_slots": 0,
+          "instruction_bytes": 86
+        }
+      },
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 25,
+            "i64": 116
+          },
+          "local_slots": 141,
+          "instruction_bytes": 2589
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 12,
+            "i64": 128
+          },
+          "local_slots": 140,
+          "instruction_bytes": 2565
+        }
+      },
+      {
+        "name": "read.1",
+        "parent": {
+          "name": "read.1",
+          "params": [
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 3,
+            "i64": 6
+          },
+          "local_slots": 9,
+          "instruction_bytes": 106
+        },
+        "candidate": {
+          "name": "read.1",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 1,
+            "i64": 8
+          },
+          "local_slots": 9,
+          "instruction_bytes": 103
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_array_packed.goose",
+    "opt": 2,
+    "module_bytes_delta": -219,
+    "code_section_bytes_delta": 8,
+    "type_count_delta": -1,
+    "function_count_delta": 1,
+    "local_slots_delta": -1,
+    "helpers_added": [
+      "goose.memory_op.61"
+    ],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "get.2",
+        "parent": {
+          "name": "get.2",
+          "params": [
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 3,
+            "i64": 6
+          },
+          "local_slots": 9,
+          "instruction_bytes": 102
+        },
+        "candidate": {
+          "name": "get.2",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 1,
+            "i64": 8
+          },
+          "local_slots": 9,
+          "instruction_bytes": 101
+        }
+      },
+      {
+        "name": "goose.memory_op.61",
+        "parent": null,
+        "candidate": {
+          "name": "goose.memory_op.61",
+          "params": [
+            "i64",
+            "i64"
+          ],
+          "results": [],
+          "locals": {},
+          "local_slots": 0,
+          "instruction_bytes": 86
+        }
+      },
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 25,
+            "i64": 116
+          },
+          "local_slots": 141,
+          "instruction_bytes": 2589
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 12,
+            "i64": 128
+          },
+          "local_slots": 140,
+          "instruction_bytes": 2565
+        }
+      },
+      {
+        "name": "read.1",
+        "parent": {
+          "name": "read.1",
+          "params": [
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 3,
+            "i64": 6
+          },
+          "local_slots": 9,
+          "instruction_bytes": 106
+        },
+        "candidate": {
+          "name": "read.1",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 1,
+            "i64": 8
+          },
+          "local_slots": 9,
+          "instruction_bytes": 103
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_array_walk_packed.goose",
+    "opt": 0,
+    "module_bytes_delta": -125,
+    "code_section_bytes_delta": -120,
+    "type_count_delta": -1,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "arrayref.2",
+        "parent": {
+          "name": "arrayref.2",
+          "params": [
+            "i32"
+          ],
+          "results": [
+            "i32"
+          ],
+          "locals": {
+            "i32": 2,
+            "i64": 1
+          },
+          "local_slots": 3,
+          "instruction_bytes": 29
+        },
+        "candidate": {
+          "name": "arrayref.2",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 1,
+            "i64": 2
+          },
+          "local_slots": 3,
+          "instruction_bytes": 29
+        }
+      },
+      {
+        "name": "choose.1",
+        "parent": {
+          "name": "choose.1",
+          "params": [
+            "i32",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 6,
+            "i64": 4
+          },
+          "local_slots": 10,
+          "instruction_bytes": 140
+        },
+        "candidate": {
+          "name": "choose.1",
+          "params": [
+            "i32",
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 4,
+            "i64": 6
+          },
+          "local_slots": 10,
+          "instruction_bytes": 138
+        }
+      },
+      {
+        "name": "elementref.3",
+        "parent": {
+          "name": "elementref.3",
+          "params": [
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 3,
+            "i64": 6
+          },
+          "local_slots": 9,
+          "instruction_bytes": 117
+        },
+        "candidate": {
+          "name": "elementref.3",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 1,
+            "i64": 8
+          },
+          "local_slots": 9,
+          "instruction_bytes": 116
+        }
+      },
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 59,
+            "i64": 153
+          },
+          "local_slots": 212,
+          "instruction_bytes": 3636
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 22,
+            "i64": 190
+          },
+          "local_slots": 212,
+          "instruction_bytes": 3629
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_array_walk_packed.goose",
+    "opt": 2,
+    "module_bytes_delta": -125,
+    "code_section_bytes_delta": -120,
+    "type_count_delta": -1,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "arrayref.2",
+        "parent": {
+          "name": "arrayref.2",
+          "params": [
+            "i32"
+          ],
+          "results": [
+            "i32"
+          ],
+          "locals": {
+            "i32": 2,
+            "i64": 1
+          },
+          "local_slots": 3,
+          "instruction_bytes": 29
+        },
+        "candidate": {
+          "name": "arrayref.2",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 1,
+            "i64": 2
+          },
+          "local_slots": 3,
+          "instruction_bytes": 29
+        }
+      },
+      {
+        "name": "choose.1",
+        "parent": {
+          "name": "choose.1",
+          "params": [
+            "i32",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 6,
+            "i64": 4
+          },
+          "local_slots": 10,
+          "instruction_bytes": 140
+        },
+        "candidate": {
+          "name": "choose.1",
+          "params": [
+            "i32",
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 4,
+            "i64": 6
+          },
+          "local_slots": 10,
+          "instruction_bytes": 138
+        }
+      },
+      {
+        "name": "elementref.3",
+        "parent": {
+          "name": "elementref.3",
+          "params": [
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 3,
+            "i64": 6
+          },
+          "local_slots": 9,
+          "instruction_bytes": 117
+        },
+        "candidate": {
+          "name": "elementref.3",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 1,
+            "i64": 8
+          },
+          "local_slots": 9,
+          "instruction_bytes": 116
+        }
+      },
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 59,
+            "i64": 153
+          },
+          "local_slots": 212,
+          "instruction_bytes": 3636
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 22,
+            "i64": 190
+          },
+          "local_slots": 212,
+          "instruction_bytes": 3629
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_iteration_checkpoint.goose",
+    "opt": 0,
+    "module_bytes_delta": 0,
+    "code_section_bytes_delta": 0,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 17,
+            "i64": 39
+          },
+          "local_slots": 56,
+          "instruction_bytes": 919
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 16,
+            "i64": 40
+          },
+          "local_slots": 56,
+          "instruction_bytes": 919
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_iteration_checkpoint.goose",
+    "opt": 2,
+    "module_bytes_delta": 0,
+    "code_section_bytes_delta": 0,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 17,
+            "i64": 39
+          },
+          "local_slots": 56,
+          "instruction_bytes": 919
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 16,
+            "i64": 40
+          },
+          "local_slots": 56,
+          "instruction_bytes": 919
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_iteration_cleanup.goose",
+    "opt": 0,
+    "module_bytes_delta": 76,
+    "code_section_bytes_delta": 54,
+    "type_count_delta": 0,
+    "function_count_delta": 1,
+    "local_slots_delta": 0,
+    "helpers_added": [
+      "goose.copy_to_frame"
+    ],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "check.1",
+        "parent": {
+          "name": "check.1",
+          "params": [
+            "i32",
+            "i32",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 35,
+            "i64": 61
+          },
+          "local_slots": 96,
+          "instruction_bytes": 1576
+        },
+        "candidate": {
+          "name": "check.1",
+          "params": [
+            "i64",
+            "i32",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 22,
+            "i64": 74
+          },
+          "local_slots": 96,
+          "instruction_bytes": 1560
+        }
+      },
+      {
+        "name": "goose.copy_to_frame",
+        "parent": null,
+        "candidate": {
+          "name": "goose.copy_to_frame",
+          "params": [
+            "i32",
+            "i64",
+            "i32"
+          ],
+          "results": [],
+          "locals": {},
+          "local_slots": 0,
+          "instruction_bytes": 78
+        }
+      },
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 18,
+            "i64": 44
+          },
+          "local_slots": 62,
+          "instruction_bytes": 1108
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 17,
+            "i64": 45
+          },
+          "local_slots": 62,
+          "instruction_bytes": 1110
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_iteration_cleanup.goose",
+    "opt": 2,
+    "module_bytes_delta": 76,
+    "code_section_bytes_delta": 54,
+    "type_count_delta": 0,
+    "function_count_delta": 1,
+    "local_slots_delta": 0,
+    "helpers_added": [
+      "goose.copy_to_frame"
+    ],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "check.1",
+        "parent": {
+          "name": "check.1",
+          "params": [
+            "i32",
+            "i32",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 35,
+            "i64": 61
+          },
+          "local_slots": 96,
+          "instruction_bytes": 1576
+        },
+        "candidate": {
+          "name": "check.1",
+          "params": [
+            "i64",
+            "i32",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 22,
+            "i64": 74
+          },
+          "local_slots": 96,
+          "instruction_bytes": 1560
+        }
+      },
+      {
+        "name": "goose.copy_to_frame",
+        "parent": null,
+        "candidate": {
+          "name": "goose.copy_to_frame",
+          "params": [
+            "i32",
+            "i64",
+            "i32"
+          ],
+          "results": [],
+          "locals": {},
+          "local_slots": 0,
+          "instruction_bytes": 78
+        }
+      },
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 18,
+            "i64": 44
+          },
+          "local_slots": 62,
+          "instruction_bytes": 1108
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 17,
+            "i64": 45
+          },
+          "local_slots": 62,
+          "instruction_bytes": 1110
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_iteration_refs_packed.goose",
+    "opt": 0,
+    "module_bytes_delta": -8,
+    "code_section_bytes_delta": -8,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 17,
+            "i64": 76
+          },
+          "local_slots": 93,
+          "instruction_bytes": 1433
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 14,
+            "i64": 79
+          },
+          "local_slots": 93,
+          "instruction_bytes": 1433
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_iteration_refs_packed.goose",
+    "opt": 2,
+    "module_bytes_delta": -8,
+    "code_section_bytes_delta": -8,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 17,
+            "i64": 76
+          },
+          "local_slots": 93,
+          "instruction_bytes": 1433
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 14,
+            "i64": 79
+          },
+          "local_slots": 93,
+          "instruction_bytes": 1433
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_iteration_walk_packed.goose",
+    "opt": 0,
+    "module_bytes_delta": 78,
+    "code_section_bytes_delta": 56,
+    "type_count_delta": 0,
+    "function_count_delta": 1,
+    "local_slots_delta": 0,
+    "helpers_added": [
+      "goose.copy_to_frame"
+    ],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "choose.1",
+        "parent": {
+          "name": "choose.1",
+          "params": [
+            "i32",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 6,
+            "i64": 4
+          },
+          "local_slots": 10,
+          "instruction_bytes": 140
+        },
+        "candidate": {
+          "name": "choose.1",
+          "params": [
+            "i32",
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 4,
+            "i64": 6
+          },
+          "local_slots": 10,
+          "instruction_bytes": 138
+        }
+      },
+      {
+        "name": "goose.copy_to_frame",
+        "parent": null,
+        "candidate": {
+          "name": "goose.copy_to_frame",
+          "params": [
+            "i32",
+            "i64",
+            "i32"
+          ],
+          "results": [],
+          "locals": {},
+          "local_slots": 0,
+          "instruction_bytes": 78
+        }
+      },
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 29,
+            "i64": 37
+          },
+          "local_slots": 66,
+          "instruction_bytes": 1072
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 19,
+            "i64": 47
+          },
+          "local_slots": 66,
+          "instruction_bytes": 1068
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_iteration_walk_packed.goose",
+    "opt": 2,
+    "module_bytes_delta": 78,
+    "code_section_bytes_delta": 56,
+    "type_count_delta": 0,
+    "function_count_delta": 1,
+    "local_slots_delta": 0,
+    "helpers_added": [
+      "goose.copy_to_frame"
+    ],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "choose.1",
+        "parent": {
+          "name": "choose.1",
+          "params": [
+            "i32",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 6,
+            "i64": 4
+          },
+          "local_slots": 10,
+          "instruction_bytes": 140
+        },
+        "candidate": {
+          "name": "choose.1",
+          "params": [
+            "i32",
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 4,
+            "i64": 6
+          },
+          "local_slots": 10,
+          "instruction_bytes": 138
+        }
+      },
+      {
+        "name": "goose.copy_to_frame",
+        "parent": null,
+        "candidate": {
+          "name": "goose.copy_to_frame",
+          "params": [
+            "i32",
+            "i64",
+            "i32"
+          ],
+          "results": [],
+          "locals": {},
+          "local_slots": 0,
+          "instruction_bytes": 78
+        }
+      },
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 29,
+            "i64": 37
+          },
+          "local_slots": 66,
+          "instruction_bytes": 1072
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 19,
+            "i64": 47
+          },
+          "local_slots": 66,
+          "instruction_bytes": 1068
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_array_copy.goose",
+    "opt": 0,
+    "module_bytes_delta": -12,
+    "code_section_bytes_delta": -12,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 1,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 97,
+            "i64": 287,
+            "f64": 6
+          },
+          "local_slots": 390,
+          "instruction_bytes": 6609
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 88,
+            "i64": 297,
+            "f64": 6
+          },
+          "local_slots": 391,
+          "instruction_bytes": 6622
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_array_copy.goose",
+    "opt": 2,
+    "module_bytes_delta": -12,
+    "code_section_bytes_delta": -12,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 1,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 97,
+            "i64": 289,
+            "f64": 6
+          },
+          "local_slots": 392,
+          "instruction_bytes": 6624
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 88,
+            "i64": 299,
+            "f64": 6
+          },
+          "local_slots": 393,
+          "instruction_bytes": 6637
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_array_copy_sources.goose",
+    "opt": 0,
+    "module_bytes_delta": 0,
+    "code_section_bytes_delta": 0,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 18,
+            "i64": 110
+          },
+          "local_slots": 128,
+          "instruction_bytes": 1940
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 17,
+            "i64": 111
+          },
+          "local_slots": 128,
+          "instruction_bytes": 1940
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_array_copy_sources.goose",
+    "opt": 2,
+    "module_bytes_delta": 0,
+    "code_section_bytes_delta": 0,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 20,
+            "i64": 130
+          },
+          "local_slots": 150,
+          "instruction_bytes": 2291
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 19,
+            "i64": 131
+          },
+          "local_slots": 150,
+          "instruction_bytes": 2291
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_array_equality.goose",
+    "opt": 0,
+    "module_bytes_delta": 6,
+    "code_section_bytes_delta": 0,
+    "type_count_delta": 1,
+    "function_count_delta": 0,
+    "local_slots_delta": 1,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 131,
+            "i64": 181,
+            "f64": 4
+          },
+          "local_slots": 316,
+          "instruction_bytes": 6113
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 93,
+            "i64": 220,
+            "f64": 4
+          },
+          "local_slots": 317,
+          "instruction_bytes": 6129
+        }
+      },
+      {
+        "name": "optional_same.2",
+        "parent": {
+          "name": "optional_same.2",
+          "params": [
+            "i32",
+            "i32"
+          ],
+          "results": [
+            "i32"
+          ],
+          "locals": {
+            "i32": 3
+          },
+          "local_slots": 3,
+          "instruction_bytes": 17
+        },
+        "candidate": {
+          "name": "optional_same.2",
+          "params": [
+            "i64",
+            "i64"
+          ],
+          "results": [
+            "i32"
+          ],
+          "locals": {
+            "i32": 3
+          },
+          "local_slots": 3,
+          "instruction_bytes": 17
+        }
+      },
+      {
+        "name": "optional_same.3",
+        "parent": {
+          "name": "optional_same.3",
+          "params": [
+            "i32",
+            "i32"
+          ],
+          "results": [
+            "i32"
+          ],
+          "locals": {
+            "i32": 3
+          },
+          "local_slots": 3,
+          "instruction_bytes": 17
+        },
+        "candidate": {
+          "name": "optional_same.3",
+          "params": [
+            "i64",
+            "i64"
+          ],
+          "results": [
+            "i32"
+          ],
+          "locals": {
+            "i32": 3
+          },
+          "local_slots": 3,
+          "instruction_bytes": 17
+        }
+      },
+      {
+        "name": "optional_same.4",
+        "parent": {
+          "name": "optional_same.4",
+          "params": [
+            "i32",
+            "i32"
+          ],
+          "results": [
+            "i32"
+          ],
+          "locals": {
+            "i32": 3
+          },
+          "local_slots": 3,
+          "instruction_bytes": 17
+        },
+        "candidate": {
+          "name": "optional_same.4",
+          "params": [
+            "i64",
+            "i64"
+          ],
+          "results": [
+            "i32"
+          ],
+          "locals": {
+            "i32": 3
+          },
+          "local_slots": 3,
+          "instruction_bytes": 17
+        }
+      },
+      {
+        "name": "optional_same.5",
+        "parent": {
+          "name": "optional_same.5",
+          "params": [
+            "i32",
+            "i32"
+          ],
+          "results": [
+            "i32"
+          ],
+          "locals": {
+            "i32": 3
+          },
+          "local_slots": 3,
+          "instruction_bytes": 17
+        },
+        "candidate": {
+          "name": "optional_same.5",
+          "params": [
+            "i64",
+            "i64"
+          ],
+          "results": [
+            "i32"
+          ],
+          "locals": {
+            "i32": 3
+          },
+          "local_slots": 3,
+          "instruction_bytes": 17
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_array_equality.goose",
+    "opt": 2,
+    "module_bytes_delta": 6,
+    "code_section_bytes_delta": 6,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 1,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 165,
+            "i64": 193,
+            "f64": 4
+          },
+          "local_slots": 362,
+          "instruction_bytes": 6798
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 119,
+            "i64": 240,
+            "f64": 4
+          },
+          "local_slots": 363,
+          "instruction_bytes": 6820
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_array_fills.goose",
+    "opt": 0,
+    "module_bytes_delta": -43,
+    "code_section_bytes_delta": -43,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 62,
+            "i64": 209,
+            "f32": 2
+          },
+          "local_slots": 273,
+          "instruction_bytes": 4601
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 50,
+            "i64": 221,
+            "f32": 2
+          },
+          "local_slots": 273,
+          "instruction_bytes": 4598
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_array_fills.goose",
+    "opt": 2,
+    "module_bytes_delta": -42,
+    "code_section_bytes_delta": -42,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 88,
+            "i64": 362,
+            "f32": 2
+          },
+          "local_slots": 452,
+          "instruction_bytes": 7633
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 76,
+            "i64": 374,
+            "f32": 2
+          },
+          "local_slots": 452,
+          "instruction_bytes": 7631
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_byte_print.goose",
+    "opt": 0,
+    "module_bytes_delta": -1,
+    "code_section_bytes_delta": -1,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 62,
+            "i64": 117
+          },
+          "local_slots": 179,
+          "instruction_bytes": 2848
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 53,
+            "i64": 126
+          },
+          "local_slots": 179,
+          "instruction_bytes": 2847
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_byte_print.goose",
+    "opt": 2,
+    "module_bytes_delta": 3,
+    "code_section_bytes_delta": 3,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 77,
+            "i64": 158
+          },
+          "local_slots": 235,
+          "instruction_bytes": 3740
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 68,
+            "i64": 167
+          },
+          "local_slots": 235,
+          "instruction_bytes": 3739
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_byte_strings.goose",
+    "opt": 0,
+    "module_bytes_delta": -1,
+    "code_section_bytes_delta": -1,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 1,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 38,
+            "i64": 118
+          },
+          "local_slots": 156,
+          "instruction_bytes": 2491
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 34,
+            "i64": 123
+          },
+          "local_slots": 157,
+          "instruction_bytes": 2502
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_byte_strings.goose",
+    "opt": 2,
+    "module_bytes_delta": -1,
+    "code_section_bytes_delta": -1,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 1,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 38,
+            "i64": 118
+          },
+          "local_slots": 156,
+          "instruction_bytes": 2491
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 34,
+            "i64": 123
+          },
+          "local_slots": 157,
+          "instruction_bytes": 2502
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_enum_cleanup.goose",
+    "opt": 0,
+    "module_bytes_delta": 0,
+    "code_section_bytes_delta": 0,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 16,
+            "i64": 27
+          },
+          "local_slots": 43,
+          "instruction_bytes": 736
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 13,
+            "i64": 30
+          },
+          "local_slots": 43,
+          "instruction_bytes": 736
+        }
+      },
+      {
+        "name": "read.1",
+        "parent": {
+          "name": "read.1",
+          "params": [
+            "i64",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 17,
+            "i64": 40
+          },
+          "local_slots": 57,
+          "instruction_bytes": 935
+        },
+        "candidate": {
+          "name": "read.1",
+          "params": [
+            "i64",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 13,
+            "i64": 44
+          },
+          "local_slots": 57,
+          "instruction_bytes": 935
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_enum_cleanup.goose",
+    "opt": 2,
+    "module_bytes_delta": 0,
+    "code_section_bytes_delta": 0,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 16,
+            "i64": 27
+          },
+          "local_slots": 43,
+          "instruction_bytes": 736
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 13,
+            "i64": 30
+          },
+          "local_slots": 43,
+          "instruction_bytes": 736
+        }
+      },
+      {
+        "name": "read.1",
+        "parent": {
+          "name": "read.1",
+          "params": [
+            "i64",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 17,
+            "i64": 40
+          },
+          "local_slots": 57,
+          "instruction_bytes": 935
+        },
+        "candidate": {
+          "name": "read.1",
+          "params": [
+            "i64",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 13,
+            "i64": 44
+          },
+          "local_slots": 57,
+          "instruction_bytes": 935
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_enum_containers.goose",
+    "opt": 0,
+    "module_bytes_delta": -10,
+    "code_section_bytes_delta": -10,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 1,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 68,
+            "i64": 187
+          },
+          "local_slots": 255,
+          "instruction_bytes": 4621
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 62,
+            "i64": 194
+          },
+          "local_slots": 256,
+          "instruction_bytes": 4631
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_enum_containers.goose",
+    "opt": 2,
+    "module_bytes_delta": -10,
+    "code_section_bytes_delta": -10,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 1,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 68,
+            "i64": 187
+          },
+          "local_slots": 255,
+          "instruction_bytes": 4621
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 62,
+            "i64": 194
+          },
+          "local_slots": 256,
+          "instruction_bytes": 4631
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_inline_deferred_rebind.goose",
+    "opt": 0,
+    "module_bytes_delta": -38,
+    "code_section_bytes_delta": -38,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "leave.1",
+        "parent": {
+          "name": "leave.1",
+          "params": [
+            "i32",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 50,
+            "i64": 106
+          },
+          "local_slots": 156,
+          "instruction_bytes": 2676
+        },
+        "candidate": {
+          "name": "leave.1",
+          "params": [
+            "i32",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 32,
+            "i64": 124
+          },
+          "local_slots": 156,
+          "instruction_bytes": 2662
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_inline_deferred_rebind.goose",
+    "opt": 2,
+    "module_bytes_delta": -38,
+    "code_section_bytes_delta": -38,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "leave.1",
+        "parent": {
+          "name": "leave.1",
+          "params": [
+            "i32",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 50,
+            "i64": 106
+          },
+          "local_slots": 156,
+          "instruction_bytes": 2676
+        },
+        "candidate": {
+          "name": "leave.1",
+          "params": [
+            "i32",
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 32,
+            "i64": 124
+          },
+          "local_slots": 156,
+          "instruction_bytes": 2662
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_inline_mixed_references.goose",
+    "opt": 0,
+    "module_bytes_delta": 75,
+    "code_section_bytes_delta": 33,
+    "type_count_delta": 0,
+    "function_count_delta": 2,
+    "local_slots_delta": 0,
+    "helpers_added": [
+      "goose.memory_op.49",
+      "goose.memory_op.60"
+    ],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "first.3",
+        "parent": {
+          "name": "first.3",
+          "params": [
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 3,
+            "i64": 6
+          },
+          "local_slots": 9,
+          "instruction_bytes": 106
+        },
+        "candidate": {
+          "name": "first.3",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 1,
+            "i64": 8
+          },
+          "local_slots": 9,
+          "instruction_bytes": 103
+        }
+      },
+      {
+        "name": "goose.memory_op.49",
+        "parent": null,
+        "candidate": {
+          "name": "goose.memory_op.49",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {},
+          "local_slots": 0,
+          "instruction_bytes": 65
+        }
+      },
+      {
+        "name": "goose.memory_op.60",
+        "parent": null,
+        "candidate": {
+          "name": "goose.memory_op.60",
+          "params": [
+            "i64",
+            "i64"
+          ],
+          "results": [],
+          "locals": {},
+          "local_slots": 0,
+          "instruction_bytes": 71
+        }
+      },
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 61,
+            "i64": 172
+          },
+          "local_slots": 233,
+          "instruction_bytes": 3948
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 29,
+            "i64": 206
+          },
+          "local_slots": 235,
+          "instruction_bytes": 3958
+        }
+      },
+      {
+        "name": "rebind.2",
+        "parent": {
+          "name": "rebind.2",
+          "params": [
+            "i32",
+            "i32"
+          ],
+          "results": [],
+          "locals": {
+            "i32": 4,
+            "i64": 5
+          },
+          "local_slots": 9,
+          "instruction_bytes": 112
+        },
+        "candidate": {
+          "name": "rebind.2",
+          "params": [
+            "i32",
+            "i64"
+          ],
+          "results": [],
+          "locals": {
+            "i32": 3,
+            "i64": 6
+          },
+          "local_slots": 9,
+          "instruction_bytes": 111
+        }
+      },
+      {
+        "name": "update.1",
+        "parent": {
+          "name": "update.1",
+          "params": [
+            "i32",
+            "i32",
+            "i64"
+          ],
+          "results": [],
+          "locals": {
+            "i32": 8,
+            "i64": 18
+          },
+          "local_slots": 26,
+          "instruction_bytes": 380
+        },
+        "candidate": {
+          "name": "update.1",
+          "params": [
+            "i64",
+            "i64",
+            "i64"
+          ],
+          "results": [],
+          "locals": {
+            "i32": 2,
+            "i64": 22
+          },
+          "local_slots": 24,
+          "instruction_bytes": 357
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_inline_mixed_references.goose",
+    "opt": 2,
+    "module_bytes_delta": 71,
+    "code_section_bytes_delta": 29,
+    "type_count_delta": 0,
+    "function_count_delta": 2,
+    "local_slots_delta": 0,
+    "helpers_added": [
+      "goose.memory_op.49",
+      "goose.memory_op.60"
+    ],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "goose.memory_op.49",
+        "parent": null,
+        "candidate": {
+          "name": "goose.memory_op.49",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {},
+          "local_slots": 0,
+          "instruction_bytes": 65
+        }
+      },
+      {
+        "name": "goose.memory_op.60",
+        "parent": null,
+        "candidate": {
+          "name": "goose.memory_op.60",
+          "params": [
+            "i64",
+            "i64"
+          ],
+          "results": [],
+          "locals": {},
+          "local_slots": 0,
+          "instruction_bytes": 71
+        }
+      },
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 78,
+            "i64": 202
+          },
+          "local_slots": 280,
+          "instruction_bytes": 4637
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 33,
+            "i64": 247
+          },
+          "local_slots": 280,
+          "instruction_bytes": 4618
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_inline_optional_references.goose",
+    "opt": 0,
+    "module_bytes_delta": 63,
+    "code_section_bytes_delta": 30,
+    "type_count_delta": 2,
+    "function_count_delta": 1,
+    "local_slots_delta": 0,
+    "helpers_added": [
+      "goose.memory_op.41"
+    ],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "goose.memory_op.41",
+        "parent": null,
+        "candidate": {
+          "name": "goose.memory_op.41",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {},
+          "local_slots": 0,
+          "instruction_bytes": 52
+        }
+      },
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 30,
+            "i64": 28
+          },
+          "local_slots": 58,
+          "instruction_bytes": 940
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 15,
+            "i64": 43
+          },
+          "local_slots": 58,
+          "instruction_bytes": 936
+        }
+      },
+      {
+        "name": "rebind.1",
+        "parent": {
+          "name": "rebind.1",
+          "params": [
+            "i32",
+            "i32"
+          ],
+          "results": [],
+          "locals": {
+            "i32": 7,
+            "i64": 10
+          },
+          "local_slots": 17,
+          "instruction_bytes": 220
+        },
+        "candidate": {
+          "name": "rebind.1",
+          "params": [
+            "i32",
+            "i64"
+          ],
+          "results": [],
+          "locals": {
+            "i32": 5,
+            "i64": 12
+          },
+          "local_slots": 17,
+          "instruction_bytes": 218
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_inline_optional_references.goose",
+    "opt": 2,
+    "module_bytes_delta": 62,
+    "code_section_bytes_delta": 36,
+    "type_count_delta": 1,
+    "function_count_delta": 1,
+    "local_slots_delta": 0,
+    "helpers_added": [
+      "goose.memory_op.41"
+    ],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "goose.memory_op.41",
+        "parent": null,
+        "candidate": {
+          "name": "goose.memory_op.41",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {},
+          "local_slots": 0,
+          "instruction_bytes": 52
+        }
+      },
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 38,
+            "i64": 38
+          },
+          "local_slots": 76,
+          "instruction_bytes": 1161
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 20,
+            "i64": 56
+          },
+          "local_slots": 76,
+          "instruction_bytes": 1155
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_runtime_limited.goose",
+    "opt": 0,
+    "module_bytes_delta": 0,
+    "code_section_bytes_delta": 0,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 48,
+            "i64": 272,
+            "f32": 6
+          },
+          "local_slots": 326,
+          "instruction_bytes": 5766
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 46,
+            "i64": 274,
+            "f32": 6
+          },
+          "local_slots": 326,
+          "instruction_bytes": 5766
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_runtime_limited.goose",
+    "opt": 2,
+    "module_bytes_delta": 0,
+    "code_section_bytes_delta": 0,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 51,
+            "i64": 293,
+            "f32": 6
+          },
+          "local_slots": 350,
+          "instruction_bytes": 6146
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 49,
+            "i64": 295,
+            "f32": 6
+          },
+          "local_slots": 350,
+          "instruction_bytes": 6146
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_struct_cleanup.goose",
+    "opt": 0,
+    "module_bytes_delta": 0,
+    "code_section_bytes_delta": 0,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "grow.1",
+        "parent": {
+          "name": "grow.1",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 6,
+            "i64": 9
+          },
+          "local_slots": 15,
+          "instruction_bytes": 223
+        },
+        "candidate": {
+          "name": "grow.1",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 5,
+            "i64": 10
+          },
+          "local_slots": 15,
+          "instruction_bytes": 223
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_struct_cleanup.goose",
+    "opt": 2,
+    "module_bytes_delta": 0,
+    "code_section_bytes_delta": 0,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 0,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 57,
+            "i64": 91
+          },
+          "local_slots": 148,
+          "instruction_bytes": 1985
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 56,
+            "i64": 92
+          },
+          "local_slots": 148,
+          "instruction_bytes": 1985
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_struct_refs.goose",
+    "opt": 0,
+    "module_bytes_delta": 27,
+    "code_section_bytes_delta": 27,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 6,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 68,
+            "i64": 214
+          },
+          "local_slots": 282,
+          "instruction_bytes": 5654
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 59,
+            "i64": 229
+          },
+          "local_slots": 288,
+          "instruction_bytes": 5705
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_struct_refs.goose",
+    "opt": 2,
+    "module_bytes_delta": 27,
+    "code_section_bytes_delta": 27,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 6,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 68,
+            "i64": 214
+          },
+          "local_slots": 282,
+          "instruction_bytes": 5654
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 59,
+            "i64": 229
+          },
+          "local_slots": 288,
+          "instruction_bytes": 5705
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_struct_review_fields_packed.goose",
+    "opt": 0,
+    "module_bytes_delta": -253,
+    "code_section_bytes_delta": -16,
+    "type_count_delta": 0,
+    "function_count_delta": 1,
+    "local_slots_delta": -1,
+    "helpers_added": [
+      "goose.copy_to_frame"
+    ],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "check.1",
+        "parent": {
+          "name": "check.1",
+          "params": [
+            "i64"
+          ],
+          "results": [],
+          "locals": {
+            "i32": 12,
+            "i64": 74,
+            "f32": 2,
+            "f64": 1
+          },
+          "local_slots": 89,
+          "instruction_bytes": 3063
+        },
+        "candidate": {
+          "name": "check.1",
+          "params": [
+            "i64"
+          ],
+          "results": [],
+          "locals": {
+            "i32": 4,
+            "i64": 81,
+            "f32": 2,
+            "f64": 1
+          },
+          "local_slots": 88,
+          "instruction_bytes": 3004
+        }
+      },
+      {
+        "name": "goose.copy_to_frame",
+        "parent": null,
+        "candidate": {
+          "name": "goose.copy_to_frame",
+          "params": [
+            "i32",
+            "i64",
+            "i32"
+          ],
+          "results": [],
+          "locals": {},
+          "local_slots": 0,
+          "instruction_bytes": 61
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_struct_review_fields_packed.goose",
+    "opt": 2,
+    "module_bytes_delta": -253,
+    "code_section_bytes_delta": -16,
+    "type_count_delta": 0,
+    "function_count_delta": 1,
+    "local_slots_delta": -1,
+    "helpers_added": [
+      "goose.copy_to_frame"
+    ],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "check.1",
+        "parent": {
+          "name": "check.1",
+          "params": [
+            "i64"
+          ],
+          "results": [],
+          "locals": {
+            "i32": 12,
+            "i64": 74,
+            "f32": 2,
+            "f64": 1
+          },
+          "local_slots": 89,
+          "instruction_bytes": 3063
+        },
+        "candidate": {
+          "name": "check.1",
+          "params": [
+            "i64"
+          ],
+          "results": [],
+          "locals": {
+            "i32": 4,
+            "i64": 81,
+            "f32": 2,
+            "f64": 1
+          },
+          "local_slots": 88,
+          "instruction_bytes": 3004
+        }
+      },
+      {
+        "name": "goose.copy_to_frame",
+        "parent": null,
+        "candidate": {
+          "name": "goose.copy_to_frame",
+          "params": [
+            "i32",
+            "i64",
+            "i32"
+          ],
+          "results": [],
+          "locals": {},
+          "local_slots": 0,
+          "instruction_bytes": 61
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_struct_review_reference_fields.goose",
+    "opt": 0,
+    "module_bytes_delta": 61,
+    "code_section_bytes_delta": 61,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 6,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 44,
+            "i64": 107
+          },
+          "local_slots": 151,
+          "instruction_bytes": 2662
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 28,
+            "i64": 129
+          },
+          "local_slots": 157,
+          "instruction_bytes": 2719
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_struct_review_reference_fields.goose",
+    "opt": 2,
+    "module_bytes_delta": 61,
+    "code_section_bytes_delta": 61,
+    "type_count_delta": 0,
+    "function_count_delta": 0,
+    "local_slots_delta": 6,
+    "helpers_added": [],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 44,
+            "i64": 107
+          },
+          "local_slots": 151,
+          "instruction_bytes": 2662
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 28,
+            "i64": 129
+          },
+          "local_slots": 157,
+          "instruction_bytes": 2719
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_variable_no_owner.goose",
+    "opt": 0,
+    "module_bytes_delta": 51,
+    "code_section_bytes_delta": 35,
+    "type_count_delta": -1,
+    "function_count_delta": 1,
+    "local_slots_delta": 0,
+    "helpers_added": [
+      "goose.memory_op.41"
+    ],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "goose.init",
+        "parent": {
+          "name": "goose.init",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 2
+          },
+          "local_slots": 2,
+          "instruction_bytes": 13
+        },
+        "candidate": {
+          "name": "goose.init",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 1,
+            "i64": 1
+          },
+          "local_slots": 2,
+          "instruction_bytes": 12
+        }
+      },
+      {
+        "name": "goose.memory_op.41",
+        "parent": null,
+        "candidate": {
+          "name": "goose.memory_op.41",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {},
+          "local_slots": 0,
+          "instruction_bytes": 39
+        }
+      },
+      {
+        "name": "read.1",
+        "parent": {
+          "name": "read.1",
+          "params": [
+            "i32"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 3,
+            "i64": 8
+          },
+          "local_slots": 11,
+          "instruction_bytes": 133
+        },
+        "candidate": {
+          "name": "read.1",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {
+            "i32": 1,
+            "i64": 10
+          },
+          "local_slots": 11,
+          "instruction_bytes": 130
+        }
+      }
+    ]
+  },
+  {
+    "source": "test/wasm/wasm_variable_no_owner.goose",
+    "opt": 2,
+    "module_bytes_delta": 56,
+    "code_section_bytes_delta": 35,
+    "type_count_delta": 0,
+    "function_count_delta": 1,
+    "local_slots_delta": 0,
+    "helpers_added": [
+      "goose.memory_op.41"
+    ],
+    "helpers_removed": [],
+    "changed_function_metadata": [
+      {
+        "name": "goose.init",
+        "parent": {
+          "name": "goose.init",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 2
+          },
+          "local_slots": 2,
+          "instruction_bytes": 13
+        },
+        "candidate": {
+          "name": "goose.init",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 1,
+            "i64": 1
+          },
+          "local_slots": 2,
+          "instruction_bytes": 12
+        }
+      },
+      {
+        "name": "goose.memory_op.41",
+        "parent": null,
+        "candidate": {
+          "name": "goose.memory_op.41",
+          "params": [
+            "i64"
+          ],
+          "results": [
+            "i64"
+          ],
+          "locals": {},
+          "local_slots": 0,
+          "instruction_bytes": 39
+        }
+      },
+      {
+        "name": "main.0",
+        "parent": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 6,
+            "i64": 9
+          },
+          "local_slots": 15,
+          "instruction_bytes": 188
+        },
+        "candidate": {
+          "name": "main.0",
+          "params": [],
+          "results": [],
+          "locals": {
+            "i32": 3,
+            "i64": 12
+          },
+          "local_slots": 15,
+          "instruction_bytes": 185
+        }
+      }
+    ]
+  }
+]

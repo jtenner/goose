@@ -1,0 +1,23 @@
+{
+  "scripts/run_wasm.mjs": "2fa4ffaef07215558cae6578dc5782c705fb9d5369e533eec53fc929763ed953",
+  "test/wasm_reference_abi.mjs": "465e768a7e64a56ad92213b3393bbe382bbf75730a32f040de15fd6fbdbdef6d",
+  "test/wasm_reference_abi_controls.py": "b94497f40a52b7a2e28a53a89b398f6e92e14503d97f9a9ceadb443cb8d6ce1a",
+  "test/wasm_reference_abi_controls.mjs": "e56a4a12023f5a1cf8a4f2bb589dfea3918fbf4a0c440e391e1dae6feaabe995",
+  "test/wasm_backend.py": "da2e16ec7be88b0d5b7de03b8d40044d4753014e37e871aa49efb9923cff301f",
+  "test/expected/wasm_inline_ref_abi_thin.out": "56f4c931e134c788b6e1854b308fdfdd8e218a2879e19734df909ec7ad52c8fe",
+  "test/expected/wasm_inline_ref_abi_packed.out": "56f4c931e134c788b6e1854b308fdfdd8e218a2879e19734df909ec7ad52c8fe",
+  "test/expected/wasm_inline_mixed_references.out": "b0d3baf9def8f7963c9e009f707ba6b57c66a7b5d0d9bf7f8ee791ccb77af152",
+  "test/expected/wasm_inline_optional_references.out": "6e5418dd6eb25e2c7c575e98b40f26c93f4c16f641cdb64aa1146ee709e4cea5",
+  "test/expected/wasm_inline_reference_path.out": "3941ca98b2e9f0243486ca8afa2ec4651e17e9de977cbf4749334991878bea79",
+  "test/expected/wasm_inline_nested_path.out": "b9f7100cc6b857218d52fd5d3e8b60bb83a1a1772c82e95ac19d98f993cd1c6b",
+  "test/expected/wasm_inline_effect_path.out": "50241908c7fb187657abef4a4e33fc6b3cef50efde546a599c8914e746c2347e",
+  "test/expected/wasm_inline_limited_path.out": "3941ca98b2e9f0243486ca8afa2ec4651e17e9de977cbf4749334991878bea79",
+  "test/expected/wasm_byte_print.out": "28f56ff4de9a808d73aa6203f86bcc322b9144a01d68b4dd21fb268ceff390f5",
+  "test/expected/wasm_struct_refs.out": "1670502826a753b9ab41d03fdfcb7b9f8e7a88272d8ce68d14538666f9e4b4a1",
+  "test/expected/wasm_aggregate_array_walk_thin.out": "d3cc23ec09363374d7928813bc83a24bff3b86f2c8c9856c12e465c542b5771a",
+  "test/expected/wasm_aggregate_array_walk_packed.out": "d3cc23ec09363374d7928813bc83a24bff3b86f2c8c9856c12e465c542b5771a",
+  "test/expected/wasm_aggregate_iteration_walk_packed.out": "10d32167a39d6bdd8289ce6952d5119df1c2a3f6a699332ce21c1b1203108543",
+  "test/expected/wasm_aggregate_iteration_callbacks.out": "afbf658baa6e4950feb11b9f496b8e921061d213d10b5e5ae03fcef2730824f9",
+  "test/expected/wasm_aggregate_iteration_paths.out": "fae81844dbc13e8a2cbc4c5872127bd73a71758cb0a542676befd75d1c6ba589",
+  "test/expected/wasm_aggregate_iteration_refs_packed.out": "310fb892f303b8279f799fe4fee44ae047dfc31b1498ba15b44601a186692e11"
+}

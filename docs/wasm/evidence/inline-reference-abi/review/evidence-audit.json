@@ -1,0 +1,275 @@
+{
+  "archive_entries": 121,
+  "build04/source-hashes.json": {
+    "entries": 86,
+    "mismatches": []
+  },
+  "build04/input-hashes.json": {
+    "entries": 37,
+    "mismatches": []
+  },
+  "validation-input-hashes.json": {
+    "entries": 4196,
+    "mismatches": []
+  },
+  "build04/harness-hashes.json": {
+    "entries": 12,
+    "mismatches": []
+  },
+  "/tmp/goose-wasm-inline-ref-abi-20261107/build04/goose-tested": "bcc336c9f3f06f604b6ecdb002f4f355dae24bca9691e5d1b16ca30dfef7148c",
+  "/tmp/goose-wasm-array-places-20261107/build02/goose-tested": "5b68b041c3aba5c6bd6a6fa7e96a0b5a8aa5cc5558761b56efa5d83cacb1599a",
+  "units": {
+    "build01": [
+      {
+        "name": "source-identity",
+        "exit": 0,
+        "stdout_bytes": 84,
+        "stderr_bytes": 0
+      },
+      {
+        "name": "parent-checks",
+        "exit": 1,
+        "stdout_bytes": 0,
+        "stderr_bytes": 898
+      }
+    ],
+    "build01-release": {
+      "owner_pid": 986578,
+      "owner_exited": true,
+      "children_reaped": true,
+      "lease_active": false,
+      "exact_owned_processes": [],
+      "nonblocking_exclusive_probe": "PASS",
+      "probe_released": true,
+      "checked_at": "2026-11-07T16:43:04.849900+00:00",
+      "exit": 1
+    },
+    "build02": [
+      {
+        "name": "source-identity",
+        "exit": 0,
+        "stdout_bytes": 84,
+        "stderr_bytes": 0
+      },
+      {
+        "name": "parent-checks",
+        "exit": 1,
+        "stdout_bytes": 0,
+        "stderr_bytes": 686
+      }
+    ],
+    "build02-release": {
+      "owner_pid": 987934,
+      "owner_exited": true,
+      "children_reaped": true,
+      "lease_active": false,
+      "exact_owned_processes": [],
+      "nonblocking_exclusive_probe": "PASS",
+      "probe_released": true,
+      "checked_at": "2026-11-07T16:44:14.389455+00:00",
+      "exit": 1
+    },
+    "build03": [
+      {
+        "name": "source-identity",
+        "exit": 0,
+        "stdout_bytes": 84,
+        "stderr_bytes": 0
+      },
+      {
+        "name": "parent-checks",
+        "exit": 1,
+        "stdout_bytes": 0,
+        "stderr_bytes": 712
+      }
+    ],
+    "build03-release": {
+      "owner_pid": 1021008,
+      "owner_exited": true,
+      "children_reaped": true,
+      "lease_active": false,
+      "exact_owned_processes": [],
+      "nonblocking_exclusive_probe": "PASS",
+      "probe_released": true,
+      "checked_at": "2026-11-07T16:45:56.247722+00:00",
+      "exit": 1
+    },
+    "build04": [
+      {
+        "name": "source-identity",
+        "exit": 0,
+        "stdout_bytes": 170,
+        "stderr_bytes": 0
+      },
+      {
+        "name": "parent-checks",
+        "exit": 0,
+        "stdout_bytes": 79,
+        "stderr_bytes": 0
+      },
+      {
+        "name": "release-build",
+        "exit": 0,
+        "stdout_bytes": 445,
+        "stderr_bytes": 4178
+      },
+      {
+        "name": "freeze",
+        "exit": 0,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "name": "candidate-checks",
+        "exit": 0,
+        "stdout_bytes": 82,
+        "stderr_bytes": 0
+      },
+      {
+        "name": "abi-shapes",
+        "exit": 0,
+        "stdout_bytes": 82,
+        "stderr_bytes": 0
+      },
+      {
+        "name": "source-identity-after",
+        "exit": 0,
+        "stdout_bytes": 170,
+        "stderr_bytes": 0
+      }
+    ],
+    "build04-release": {
+      "owner_pid": 1100787,
+      "owner_exited": true,
+      "children_reaped": true,
+      "lease_active": false,
+      "exact_owned_processes": [],
+      "nonblocking_exclusive_probe": "PASS",
+      "probe_released": true,
+      "checked_at": "2026-11-07T16:51:04.101372+00:00",
+      "exit": 0
+    },
+    "full-wasm01": [
+      {
+        "name": "source-identity",
+        "exit": 0,
+        "stdout_bytes": 57,
+        "stderr_bytes": 0
+      },
+      {
+        "name": "full-wasm01",
+        "exit": 0,
+        "stdout_bytes": 33,
+        "stderr_bytes": 0
+      },
+      {
+        "name": "source-identity-after",
+        "exit": 0,
+        "stdout_bytes": 57,
+        "stderr_bytes": 0
+      }
+    ],
+    "full-wasm01-release": {
+      "owner_pid": 1152835,
+      "owner_exited": true,
+      "children_reaped": true,
+      "lease_active": false,
+      "exact_owned_processes": [],
+      "nonblocking_exclusive_probe": "PASS",
+      "probe_released": true,
+      "checked_at": "2026-11-07T16:59:30.767409+00:00",
+      "exit": 0
+    },
+    "native-baseline01": [
+      {
+        "name": "source-identity",
+        "exit": 0,
+        "stdout_bytes": 57,
+        "stderr_bytes": 0
+      },
+      {
+        "name": "native-baseline01",
+        "exit": 0,
+        "stdout_bytes": 2914,
+        "stderr_bytes": 0
+      },
+      {
+        "name": "source-identity-after",
+        "exit": 0,
+        "stdout_bytes": 57,
+        "stderr_bytes": 0
+      }
+    ],
+    "native-baseline01-release": {
+      "owner_pid": 1202456,
+      "owner_exited": true,
+      "children_reaped": true,
+      "lease_active": false,
+      "exact_owned_processes": [],
+      "nonblocking_exclusive_probe": "PASS",
+      "probe_released": true,
+      "checked_at": "2026-11-07T17:03:55.829322+00:00",
+      "exit": 0
+    },
+    "compatibility01": [
+      {
+        "name": "source-identity",
+        "exit": 0,
+        "stdout_bytes": 57,
+        "stderr_bytes": 0
+      },
+      {
+        "name": "compatibility01",
+        "exit": 0,
+        "stdout_bytes": 75,
+        "stderr_bytes": 0
+      },
+      {
+        "name": "module-deltas",
+        "exit": 0,
+        "stdout_bytes": 205,
+        "stderr_bytes": 0
+      },
+      {
+        "name": "source-identity-after",
+        "exit": 0,
+        "stdout_bytes": 57,
+        "stderr_bytes": 0
+      }
+    ],
+    "compatibility01-release": {
+      "owner_pid": 1226834,
+      "owner_exited": true,
+      "children_reaped": true,
+      "lease_active": false,
+      "exact_owned_processes": [],
+      "nonblocking_exclusive_probe": "PASS",
+      "probe_released": true,
+      "checked_at": "2026-11-07T17:05:27.418154+00:00",
+      "exit": 0
+    }
+  },
+  "focused": {
+    "parent": {
+      "rows": 32,
+      "commands": 129,
+      "reused_rows": 2,
+      "memory_images": 80
+    },
+    "candidate": {
+      "rows": 32,
+      "commands": 129,
+      "reused_rows": 0,
+      "memory_images": 80
+    }
+  },
+  "module_deltas": {
+    "pairs": 226,
+    "same": 172,
+    "changed": 54,
+    "delta": -313,
+    "min": -253,
+    "max": 83
+  },
+  "errors": []
+}

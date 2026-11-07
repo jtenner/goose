@@ -1,0 +1,66 @@
+{
+  "owner": "Goose inline-reference ABI functional unit",
+  "pid": 1543174,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "source-identity",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/owner-after01/verify-source.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "same-acceptance-check",
+      "command": [
+        "mise",
+        "exec",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/owner-after01/before-check.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "specific-owner-controls",
+      "command": [
+        "mise",
+        "exec",
+        "node@24.22.2",
+        "--",
+        "node",
+        "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi_controls.mjs",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/build04/candidate/wasm_inline_ref_abi_packed-O0.wasm",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/owner-after01/controls",
+        "/home/dev/Projects/goose-wasm-backend/test/expected/wasm_inline_ref_abi_packed.out",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/owner-after01/owner-controls-results.json"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "corrected-observer-matrix",
+      "command": [
+        "mise",
+        "exec",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/owner-after01/observer-matrix.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "source-identity-after",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/owner-after01/verify-source.py"
+      ],
+      "exit": 0
+    }
+  ],
+  "exit": 0,
+  "released_at": "2026-11-07T17:45:12.855992+00:00"
+}

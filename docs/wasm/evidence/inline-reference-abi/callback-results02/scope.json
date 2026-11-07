@@ -1,0 +1,26 @@
+{
+  "status": "prepared, not run",
+  "purpose": "Fill review gap: checked callback returns a fixed/static-limited reference",
+  "optimizations": [
+    0,
+    2
+  ],
+  "modes": [
+    "thin",
+    "packed"
+  ],
+  "parent_cases": 4,
+  "candidate_cases": 4,
+  "native_C_references": 4,
+  "Node_guest_runs": 8,
+  "Wasmtime_guest_runs": 8,
+  "compiler_builds": 0,
+  "Node_full_memory_comparison": true,
+  "direct_and_inline_callback_callers": true,
+  "no_timing": true,
+  "callback_forms": [
+    "named functions with declared non-null reference results",
+    "checked blocks returning nullable reference values, null and non-null"
+  ],
+  "signature_checks": 16
+}

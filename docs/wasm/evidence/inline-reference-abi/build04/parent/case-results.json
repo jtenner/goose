@@ -1,0 +1,696 @@
+[
+  {
+    "source": "test/wasm/wasm_inline_ref_abi_thin.goose",
+    "opt": 0,
+    "module_bytes": 10491,
+    "module_sha256": "fe147f057a91a451d2dcfba3b7eeb4caaaab159d6e1dab4228844d7c113c2e9c",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "62025075eb2a14458708193dba6a3b2e89125b6eea7b4817ed8994f6119d0fe9"
+      }
+    ],
+    "globals": [],
+    "parent_ordinary_array_reference_abi": "i32",
+    "reused_from": "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent"
+  },
+  {
+    "source": "test/wasm/wasm_inline_ref_abi_thin.goose",
+    "opt": 2,
+    "module_bytes": 10505,
+    "module_sha256": "985008d90b0bd8582d265f9ef29c55b68aff44e1bc82ceff57013e263d6820d5",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "9d6cf5ea8b802c3e9ab88f653cbd2778d296a334308f8ab64f95f7cf7020376f"
+      }
+    ],
+    "globals": [],
+    "parent_ordinary_array_reference_abi": "i32",
+    "reused_from": "/tmp/goose-wasm-inline-ref-abi-20261107/build03/parent"
+  },
+  {
+    "source": "test/wasm/wasm_inline_ref_abi_packed.goose",
+    "opt": 0,
+    "module_bytes": 14220,
+    "module_sha256": "c4a522944dbb3138255a2551d8094031c24015aecd8f68f95829f6323d6f766c",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "2a9b7e226fc506c428c77b2a60555c5b6c6914c112d1725582abbb84131836c2"
+      },
+      {
+        "name": "data_memory_1",
+        "bytes": 65536,
+        "sha256": "858c42d5ac2b3f6fb95820e5296c994c3e8f355ef1f016b0aef1d61b714d4516"
+      },
+      {
+        "name": "data_memory_2",
+        "bytes": 65536,
+        "sha256": "969f25ff6a9ba1892b6b1a0a35765278a84274b3ef93c0cc85aee1af80019853"
+      },
+      {
+        "name": "data_memory_3",
+        "bytes": 65536,
+        "sha256": "ab52b1ad6426592b4127ec76d7b315710f006526ace6269e711d78e46d7d2347"
+      }
+    ],
+    "globals": [],
+    "parent_ordinary_array_reference_abi": "i32"
+  },
+  {
+    "source": "test/wasm/wasm_inline_ref_abi_packed.goose",
+    "opt": 2,
+    "module_bytes": 14237,
+    "module_sha256": "5939de4d7c8ec63ca75c90b4d6e44967e13910d7447ea4cc4c2db73254758d16",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "515291994c1fa13fae964f6a93056b9370c3137f1ee7626260a5e441ecd82e1d"
+      },
+      {
+        "name": "data_memory_1",
+        "bytes": 65536,
+        "sha256": "858c42d5ac2b3f6fb95820e5296c994c3e8f355ef1f016b0aef1d61b714d4516"
+      },
+      {
+        "name": "data_memory_2",
+        "bytes": 65536,
+        "sha256": "969f25ff6a9ba1892b6b1a0a35765278a84274b3ef93c0cc85aee1af80019853"
+      },
+      {
+        "name": "data_memory_3",
+        "bytes": 65536,
+        "sha256": "ab52b1ad6426592b4127ec76d7b315710f006526ace6269e711d78e46d7d2347"
+      }
+    ],
+    "globals": [],
+    "parent_ordinary_array_reference_abi": "i32"
+  },
+  {
+    "source": "test/wasm/wasm_inline_mixed_references.goose",
+    "opt": 0,
+    "module_bytes": 10957,
+    "module_sha256": "804c20007f76b5524c78614dd881ce013e4003402a14dd8b250c168f497db6e6",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "483cbdd9d277314f9cb137588dc116e6681254c129a85502fa52b6834183d4c3"
+      },
+      {
+        "name": "data_memory_1",
+        "bytes": 65536,
+        "sha256": "a2737ffa3ea79588298c9e14137bdd59d77928ec8daad8f4dbb72d625777f48f"
+      },
+      {
+        "name": "data_memory_2",
+        "bytes": 65536,
+        "sha256": "4d8028c38ff668ec0e47c526d1eece91f7f1ec50f026c4852006b492168b29df"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_inline_mixed_references.goose",
+    "opt": 2,
+    "module_bytes": 10914,
+    "module_sha256": "178595b14e0ca2d68fa9529d2fac74cb48c469fa5a14776be1edaef82797dff6",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "9ab5ece8d2465f9db68141a77c40424d3d65b3b1d7af88979f918511fe56bfae"
+      },
+      {
+        "name": "data_memory_1",
+        "bytes": 65536,
+        "sha256": "a2737ffa3ea79588298c9e14137bdd59d77928ec8daad8f4dbb72d625777f48f"
+      },
+      {
+        "name": "data_memory_2",
+        "bytes": 65536,
+        "sha256": "49cf0d911b1c0a0112dde641114bff68443602f5f4ef853b26fbfeefdd730c25"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_inline_optional_references.goose",
+    "opt": 0,
+    "module_bytes": 3345,
+    "module_sha256": "82c63e8812a1235a4cf5c3cad6a2a482ca3507911755b2c8689c00444c483ea3",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "a7767e8db7e70adc1c2773fdfda695195d9ef8d4e8b620b8e59e7c8f3356a21b"
+      },
+      {
+        "name": "data_memory_1",
+        "bytes": 65536,
+        "sha256": "8a2fa253327672c6febe7e78caca111bc0a81a3f93de78464b6cb5fa0b9e54ef"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_inline_optional_references.goose",
+    "opt": 2,
+    "module_bytes": 3330,
+    "module_sha256": "67c954049a8c6902aedf429272ad0113d59a027fee1dda937dce9c28ec6bf790",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "45bbbd52c248948da34d6c753ded1f0a41627f554e5f6af671e8545e41360222"
+      },
+      {
+        "name": "data_memory_1",
+        "bytes": 65536,
+        "sha256": "8a2fa253327672c6febe7e78caca111bc0a81a3f93de78464b6cb5fa0b9e54ef"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_inline_reference_path.goose",
+    "opt": 0,
+    "module_bytes": 1434,
+    "module_sha256": "4cbb4d5f7f11e086eaccc115a4dca987373d18f0faa334a59ac6b485ec1b31b5",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "47169f5f81c402559e4707af8a5c609fed0430286de129f0c4b7442817f9935c"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_inline_reference_path.goose",
+    "opt": 2,
+    "module_bytes": 1434,
+    "module_sha256": "4cbb4d5f7f11e086eaccc115a4dca987373d18f0faa334a59ac6b485ec1b31b5",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "47169f5f81c402559e4707af8a5c609fed0430286de129f0c4b7442817f9935c"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_inline_nested_path.goose",
+    "opt": 0,
+    "module_bytes": 5166,
+    "module_sha256": "ee0147b36a6d540153031dd848c793d148829ce3856e44e42713b4bc9186259d",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "7d95900740955bf2159f3794f9042a9243a2eb4379d9aae076f86851c147fe39"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_inline_nested_path.goose",
+    "opt": 2,
+    "module_bytes": 5044,
+    "module_sha256": "6680a5d94341a335a1c81ccb04367f24b50da2c73ba3c5b1e4760709017e3d89",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "8a4a0b9b1f791dbad2638bf4c59336dac9eaa71c40f777ed5a22d31cb488a12b"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_inline_effect_path.goose",
+    "opt": 0,
+    "module_bytes": 2283,
+    "module_sha256": "f2079bede163d513ff24649372242cd21620d04794deae38eea74f2d879cf3fe",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "b5cc0109e219fbbe23678c2a8922a2e141427d72e256b2a2a78acca90d3abac7"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_inline_effect_path.goose",
+    "opt": 2,
+    "module_bytes": 2162,
+    "module_sha256": "4c380a1525840ddcad7304b6fa78570d45a930d5b0d4efa888d58e19e441fc77",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "cfe02f18d74ae260119a55d0fc6ff570158dd0291b50d6f9ff28dc487ff065d5"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_inline_limited_path.goose",
+    "opt": 0,
+    "module_bytes": 2486,
+    "module_sha256": "3672fb02cc0416f241e3e54c9c9b403b8189f014d80367d4ae4c353e29a44408",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "00f5ce56bb5755c70b2003737760aea957bd4a5bfa0a44eaad376cdba4b24daf"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_inline_limited_path.goose",
+    "opt": 2,
+    "module_bytes": 2486,
+    "module_sha256": "3672fb02cc0416f241e3e54c9c9b403b8189f014d80367d4ae4c353e29a44408",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "00f5ce56bb5755c70b2003737760aea957bd4a5bfa0a44eaad376cdba4b24daf"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_byte_print.goose",
+    "opt": 0,
+    "module_bytes": 7689,
+    "module_sha256": "d0e9bc79994f8276928fb9c2031694402b245a4359beeec55f0e6625bad6cb77",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "4d8d20c1082edf99d05e2f6e6141b92ef32837e9aea4615a687f2e5135b16b58"
+      },
+      {
+        "name": "data_memory_1",
+        "bytes": 65536,
+        "sha256": "7b44931f89ad408f63033987bc49194ef1049ecff1d74eb672d1800b4d0d2fa7"
+      },
+      {
+        "name": "data_memory_2",
+        "bytes": 131072,
+        "sha256": "f36b40e72abec05fdb467cf3e4bfd601a2790ea5b47ef500da6ce9603e1a735f"
+      },
+      {
+        "name": "data_memory_3",
+        "bytes": 65536,
+        "sha256": "de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31"
+      },
+      {
+        "name": "data_memory_4",
+        "bytes": 65536,
+        "sha256": "90dc791b51849f2dcd8f498d755da105bf4968d9d98b0596632da827611e85e4"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_byte_print.goose",
+    "opt": 2,
+    "module_bytes": 8080,
+    "module_sha256": "e0d4f014f14c8f09b1ea5928f20e6f9be97ad9925df3fa0e39f3521070e4da60",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "be33cd4566b34fc657c0abce1e8c33cfd520c1569ef91b9e85438b80d35e2d3f"
+      },
+      {
+        "name": "data_memory_1",
+        "bytes": 65536,
+        "sha256": "7b44931f89ad408f63033987bc49194ef1049ecff1d74eb672d1800b4d0d2fa7"
+      },
+      {
+        "name": "data_memory_2",
+        "bytes": 131072,
+        "sha256": "f36b40e72abec05fdb467cf3e4bfd601a2790ea5b47ef500da6ce9603e1a735f"
+      },
+      {
+        "name": "data_memory_3",
+        "bytes": 65536,
+        "sha256": "de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31"
+      },
+      {
+        "name": "data_memory_4",
+        "bytes": 65536,
+        "sha256": "90dc791b51849f2dcd8f498d755da105bf4968d9d98b0596632da827611e85e4"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_struct_refs.goose",
+    "opt": 0,
+    "module_bytes": 14583,
+    "module_sha256": "8a9610046ab2ba8441410240bb4a76c5a919131de2592a2251b2352f4c6b879d",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "90912c5b7fb1923938d60db4f38e5886866a01f12d0aed00b2ce9637cfa09daf"
+      },
+      {
+        "name": "data_memory_1",
+        "bytes": 65536,
+        "sha256": "cfa4248f86f81c67285977e86fba423c4efe50af5c4e377764d78645d6209ead"
+      },
+      {
+        "name": "data_memory_2",
+        "bytes": 65536,
+        "sha256": "6c0f041538ee89c46415d10f24525c78298f471a69accc64241bdeac22f4fe90"
+      },
+      {
+        "name": "data_memory_3",
+        "bytes": 65536,
+        "sha256": "b712a66f032571cc100076e4e4581d0ca147f2df6acae106f4886851fcbfb527"
+      },
+      {
+        "name": "data_memory_4",
+        "bytes": 65536,
+        "sha256": "10473f30741962bbdffdf9b180a6b295f053d0c09bed6a0e80734b7d1c5f8054"
+      },
+      {
+        "name": "data_memory_5",
+        "bytes": 65536,
+        "sha256": "0a52805fd63c8dd5bbdfaed24051620c18b1555fce4e67665731eb20b442eddc"
+      },
+      {
+        "name": "data_memory_6",
+        "bytes": 65536,
+        "sha256": "399e6d30447faf6e218bbb0f91ba383f634bdf1f1aa951e48a3b7cc24ade9a0b"
+      },
+      {
+        "name": "data_memory_7",
+        "bytes": 65536,
+        "sha256": "08a33e779e54ed5761990e4a1f13ca5685b4aab4396e87f78588a6bac5263e9d"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_struct_refs.goose",
+    "opt": 2,
+    "module_bytes": 14583,
+    "module_sha256": "8a9610046ab2ba8441410240bb4a76c5a919131de2592a2251b2352f4c6b879d",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "90912c5b7fb1923938d60db4f38e5886866a01f12d0aed00b2ce9637cfa09daf"
+      },
+      {
+        "name": "data_memory_1",
+        "bytes": 65536,
+        "sha256": "cfa4248f86f81c67285977e86fba423c4efe50af5c4e377764d78645d6209ead"
+      },
+      {
+        "name": "data_memory_2",
+        "bytes": 65536,
+        "sha256": "6c0f041538ee89c46415d10f24525c78298f471a69accc64241bdeac22f4fe90"
+      },
+      {
+        "name": "data_memory_3",
+        "bytes": 65536,
+        "sha256": "b712a66f032571cc100076e4e4581d0ca147f2df6acae106f4886851fcbfb527"
+      },
+      {
+        "name": "data_memory_4",
+        "bytes": 65536,
+        "sha256": "10473f30741962bbdffdf9b180a6b295f053d0c09bed6a0e80734b7d1c5f8054"
+      },
+      {
+        "name": "data_memory_5",
+        "bytes": 65536,
+        "sha256": "0a52805fd63c8dd5bbdfaed24051620c18b1555fce4e67665731eb20b442eddc"
+      },
+      {
+        "name": "data_memory_6",
+        "bytes": 65536,
+        "sha256": "399e6d30447faf6e218bbb0f91ba383f634bdf1f1aa951e48a3b7cc24ade9a0b"
+      },
+      {
+        "name": "data_memory_7",
+        "bytes": 65536,
+        "sha256": "08a33e779e54ed5761990e4a1f13ca5685b4aab4396e87f78588a6bac5263e9d"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_array_walk_thin.goose",
+    "opt": 0,
+    "module_bytes": 8722,
+    "module_sha256": "ccb5637444c8d2956b4db7900e7b994658dca884cc7c4c3d6e08d8da94a6fbbc",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "b9fb83a23e419cabc0503820d29384e035909186824df72902be8a84e50cc3f5"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_array_walk_thin.goose",
+    "opt": 2,
+    "module_bytes": 8722,
+    "module_sha256": "ccb5637444c8d2956b4db7900e7b994658dca884cc7c4c3d6e08d8da94a6fbbc",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "b9fb83a23e419cabc0503820d29384e035909186824df72902be8a84e50cc3f5"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_array_walk_packed.goose",
+    "opt": 0,
+    "module_bytes": 10566,
+    "module_sha256": "ce3b051f2262c044f9993edab1334653a6625fb69c2eee1b81812b8afcafd372",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "36f65ed6b5c662353581305b91374f9b618c115753df9049b56c2ea54a0a4eac"
+      },
+      {
+        "name": "data_memory_1",
+        "bytes": 65536,
+        "sha256": "30f44290b7bb159578b5381acaf9154f51c781e3b2637007833bc77ae3038ad8"
+      },
+      {
+        "name": "data_memory_2",
+        "bytes": 65536,
+        "sha256": "5cf647f726077f57413280da20c248c74e558cffb5dd268749ecc1db1e0ca9d1"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_array_walk_packed.goose",
+    "opt": 2,
+    "module_bytes": 10566,
+    "module_sha256": "ce3b051f2262c044f9993edab1334653a6625fb69c2eee1b81812b8afcafd372",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "36f65ed6b5c662353581305b91374f9b618c115753df9049b56c2ea54a0a4eac"
+      },
+      {
+        "name": "data_memory_1",
+        "bytes": 65536,
+        "sha256": "30f44290b7bb159578b5381acaf9154f51c781e3b2637007833bc77ae3038ad8"
+      },
+      {
+        "name": "data_memory_2",
+        "bytes": 65536,
+        "sha256": "5cf647f726077f57413280da20c248c74e558cffb5dd268749ecc1db1e0ca9d1"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_iteration_walk_packed.goose",
+    "opt": 0,
+    "module_bytes": 3927,
+    "module_sha256": "be1cda376114cb941502ef4f420cbfebcbc3d81693afea41bb26ac25e3d612d7",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "893e00d85bc004039fb7674d7ac81375dfb8e0f7bc84ce9e71921702cb8dd702"
+      },
+      {
+        "name": "data_memory_1",
+        "bytes": 65536,
+        "sha256": "30f44290b7bb159578b5381acaf9154f51c781e3b2637007833bc77ae3038ad8"
+      },
+      {
+        "name": "data_memory_2",
+        "bytes": 65536,
+        "sha256": "757d699539fb65ff5fde98bb38be0ed802cac6c67d43e6d68a213310dddede85"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_iteration_walk_packed.goose",
+    "opt": 2,
+    "module_bytes": 3927,
+    "module_sha256": "be1cda376114cb941502ef4f420cbfebcbc3d81693afea41bb26ac25e3d612d7",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "893e00d85bc004039fb7674d7ac81375dfb8e0f7bc84ce9e71921702cb8dd702"
+      },
+      {
+        "name": "data_memory_1",
+        "bytes": 65536,
+        "sha256": "30f44290b7bb159578b5381acaf9154f51c781e3b2637007833bc77ae3038ad8"
+      },
+      {
+        "name": "data_memory_2",
+        "bytes": 65536,
+        "sha256": "757d699539fb65ff5fde98bb38be0ed802cac6c67d43e6d68a213310dddede85"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_iteration_callbacks.goose",
+    "opt": 0,
+    "module_bytes": 1784,
+    "module_sha256": "b1c3951498e140a1f3ac166c569ee1af1cdcef49a426ea029460572d1325f1b0",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "f7f516d18351868a5eec11649b283be5201611d5a34e19e8dc04e7ee10990e39"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_iteration_callbacks.goose",
+    "opt": 2,
+    "module_bytes": 1731,
+    "module_sha256": "1edf93277fd36933f3ba7d73f2bed92ba17ff929fc6b95738c26ffbe9b0b2a99",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "325e8f4a2b23d6ea8e99a5977181945617c0776a1e4d9964b23f9572d4f9e6c1"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_iteration_paths.goose",
+    "opt": 0,
+    "module_bytes": 3010,
+    "module_sha256": "e653df1e924079709ea0c74d0474e9e8a21e9afc64f6c1e589caab5cc887aa34",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "183bf48c218d6d65c7a9ff9d249eaf4f71b81b90a9158c8f5f920a5f039a83fa"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_iteration_paths.goose",
+    "opt": 2,
+    "module_bytes": 3010,
+    "module_sha256": "e653df1e924079709ea0c74d0474e9e8a21e9afc64f6c1e589caab5cc887aa34",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "183bf48c218d6d65c7a9ff9d249eaf4f71b81b90a9158c8f5f920a5f039a83fa"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_iteration_refs_packed.goose",
+    "opt": 0,
+    "module_bytes": 4544,
+    "module_sha256": "f2d42777a4512eec76280866dcd5858074025facc80f2259f289c5161d556a0d",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "24d756017fba90b610fca1849306d6724f109b175e61c038b32f663043e4763e"
+      },
+      {
+        "name": "data_memory_1",
+        "bytes": 65536,
+        "sha256": "30f44290b7bb159578b5381acaf9154f51c781e3b2637007833bc77ae3038ad8"
+      },
+      {
+        "name": "data_memory_2",
+        "bytes": 65536,
+        "sha256": "4572351fe1cd4ecde536487fc3a8c35423035516e39e3c007702e77c5f49e31d"
+      },
+      {
+        "name": "data_memory_3",
+        "bytes": 65536,
+        "sha256": "1e5eae75ccda3c954ccfbe1273ae7e405c613121fe5318b3d0aca935edd9be12"
+      }
+    ],
+    "globals": []
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_iteration_refs_packed.goose",
+    "opt": 2,
+    "module_bytes": 4544,
+    "module_sha256": "f2d42777a4512eec76280866dcd5858074025facc80f2259f289c5161d556a0d",
+    "memories": [
+      {
+        "name": "memory",
+        "bytes": 65536,
+        "sha256": "24d756017fba90b610fca1849306d6724f109b175e61c038b32f663043e4763e"
+      },
+      {
+        "name": "data_memory_1",
+        "bytes": 65536,
+        "sha256": "30f44290b7bb159578b5381acaf9154f51c781e3b2637007833bc77ae3038ad8"
+      },
+      {
+        "name": "data_memory_2",
+        "bytes": 65536,
+        "sha256": "4572351fe1cd4ecde536487fc3a8c35423035516e39e3c007702e77c5f49e31d"
+      },
+      {
+        "name": "data_memory_3",
+        "bytes": 65536,
+        "sha256": "1e5eae75ccda3c954ccfbe1273ae7e405c613121fe5318b3d0aca935edd9be12"
+      }
+    ],
+    "globals": []
+  }
+]

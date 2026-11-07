@@ -1,0 +1,66 @@
+[
+  {
+    "command": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/candidate/wasm_aggregate_array_walk_thin-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/candidate/wasm_inline_ref_abi_thin-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/candidate/wasm_aggregate_array_walk_thin-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/candidate/wasm_inline_ref_abi_thin-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/candidate/wasm_aggregate_array_walk_packed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/candidate/wasm_inline_ref_abi_packed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/candidate/wasm_aggregate_array_walk_packed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/candidate/wasm_inline_ref_abi_packed-O2.wasm"
+    ],
+    "exit": 0
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "status": "prepared, not run",
+  "purpose": "Failing-first reproduction of reviewP2 masked owner check",
+  "compiler_builds": 0,
+  "guest_runs": {
+    "healthy": 1,
+    "retained_print": 1,
+    "retained_snapshot": 1
+  },
+  "negative_controls": "Validate both damaged modules before execution; preserve expected guest output and memory.",
+  "original_files_unchanged": true,
+  "no_timing": true
+}

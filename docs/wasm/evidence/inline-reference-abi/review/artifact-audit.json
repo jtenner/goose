@@ -1,0 +1,459 @@
+{
+  "exact_pairs": 52,
+  "static_metadata_rows": 54,
+  "signature_checks": 26,
+  "signatures": [
+    {
+      "module": "wasm_aggregate_array_walk_thin-O0.wasm",
+      "function": "arrayref",
+      "params": [
+        "i32"
+      ],
+      "results": [
+        "i32"
+      ]
+    },
+    {
+      "module": "wasm_aggregate_array_walk_thin-O0.wasm",
+      "function": "elementref",
+      "params": [
+        "i32"
+      ],
+      "results": [
+        "i32"
+      ]
+    },
+    {
+      "module": "wasm_inline_ref_abi_thin-O0.wasm",
+      "function": "fixedref",
+      "params": [
+        "i32"
+      ],
+      "results": [
+        "i32"
+      ]
+    },
+    {
+      "module": "wasm_inline_ref_abi_thin-O0.wasm",
+      "function": "limitedref",
+      "params": [
+        "i32"
+      ],
+      "results": [
+        "i32"
+      ]
+    },
+    {
+      "module": "wasm_inline_ref_abi_thin-O0.wasm",
+      "function": "optionalref",
+      "params": [
+        "i32",
+        "i32"
+      ],
+      "results": [
+        "i32"
+      ]
+    },
+    {
+      "module": "wasm_inline_ref_abi_thin-O0.wasm",
+      "function": "choose",
+      "params": [
+        "i32",
+        "i32",
+        "i32"
+      ],
+      "results": [
+        "i32"
+      ]
+    },
+    {
+      "module": "wasm_aggregate_array_walk_thin-O2.wasm",
+      "function": "arrayref",
+      "params": [
+        "i32"
+      ],
+      "results": [
+        "i32"
+      ]
+    },
+    {
+      "module": "wasm_aggregate_array_walk_thin-O2.wasm",
+      "function": "elementref",
+      "params": [
+        "i32"
+      ],
+      "results": [
+        "i32"
+      ]
+    },
+    {
+      "module": "wasm_inline_ref_abi_thin-O2.wasm",
+      "function": "fixedref",
+      "params": [
+        "i32"
+      ],
+      "results": [
+        "i32"
+      ]
+    },
+    {
+      "module": "wasm_inline_ref_abi_thin-O2.wasm",
+      "function": "limitedref",
+      "params": [
+        "i32"
+      ],
+      "results": [
+        "i32"
+      ]
+    },
+    {
+      "module": "wasm_inline_ref_abi_thin-O2.wasm",
+      "function": "optionalref",
+      "params": [
+        "i32",
+        "i32"
+      ],
+      "results": [
+        "i32"
+      ]
+    },
+    {
+      "module": "wasm_inline_ref_abi_thin-O2.wasm",
+      "function": "choose",
+      "params": [
+        "i32",
+        "i32",
+        "i32"
+      ],
+      "results": [
+        "i32"
+      ]
+    },
+    {
+      "module": "wasm_aggregate_array_walk_packed-O0.wasm",
+      "function": "arrayref",
+      "params": [
+        "i64"
+      ],
+      "results": [
+        "i64"
+      ]
+    },
+    {
+      "module": "wasm_aggregate_array_walk_packed-O0.wasm",
+      "function": "elementref",
+      "params": [
+        "i64"
+      ],
+      "results": [
+        "i64"
+      ]
+    },
+    {
+      "module": "wasm_inline_ref_abi_packed-O0.wasm",
+      "function": "fixedref",
+      "params": [
+        "i64"
+      ],
+      "results": [
+        "i64"
+      ]
+    },
+    {
+      "module": "wasm_inline_ref_abi_packed-O0.wasm",
+      "function": "limitedref",
+      "params": [
+        "i64"
+      ],
+      "results": [
+        "i64"
+      ]
+    },
+    {
+      "module": "wasm_inline_ref_abi_packed-O0.wasm",
+      "function": "optionalref",
+      "params": [
+        "i64",
+        "i32"
+      ],
+      "results": [
+        "i64"
+      ]
+    },
+    {
+      "module": "wasm_inline_ref_abi_packed-O0.wasm",
+      "function": "choose",
+      "params": [
+        "i64",
+        "i64",
+        "i32"
+      ],
+      "results": [
+        "i64"
+      ]
+    },
+    {
+      "module": "wasm_inline_ref_abi_packed-O0.wasm",
+      "function": "headerref",
+      "params": [
+        "i32"
+      ],
+      "results": [
+        "i32"
+      ]
+    },
+    {
+      "module": "wasm_aggregate_array_walk_packed-O2.wasm",
+      "function": "arrayref",
+      "params": [
+        "i64"
+      ],
+      "results": [
+        "i64"
+      ]
+    },
+    {
+      "module": "wasm_aggregate_array_walk_packed-O2.wasm",
+      "function": "elementref",
+      "params": [
+        "i64"
+      ],
+      "results": [
+        "i64"
+      ]
+    },
+    {
+      "module": "wasm_inline_ref_abi_packed-O2.wasm",
+      "function": "fixedref",
+      "params": [
+        "i64"
+      ],
+      "results": [
+        "i64"
+      ]
+    },
+    {
+      "module": "wasm_inline_ref_abi_packed-O2.wasm",
+      "function": "limitedref",
+      "params": [
+        "i64"
+      ],
+      "results": [
+        "i64"
+      ]
+    },
+    {
+      "module": "wasm_inline_ref_abi_packed-O2.wasm",
+      "function": "optionalref",
+      "params": [
+        "i64",
+        "i32"
+      ],
+      "results": [
+        "i64"
+      ]
+    },
+    {
+      "module": "wasm_inline_ref_abi_packed-O2.wasm",
+      "function": "choose",
+      "params": [
+        "i64",
+        "i64",
+        "i32"
+      ],
+      "results": [
+        "i64"
+      ]
+    },
+    {
+      "module": "wasm_inline_ref_abi_packed-O2.wasm",
+      "function": "headerref",
+      "params": [
+        "i32"
+      ],
+      "results": [
+        "i32"
+      ]
+    }
+  ],
+  "exports": [
+    {
+      "case": "wasm_inline_ref_abi_thin-O0",
+      "globals_exported": 0,
+      "memories_exported": 1
+    },
+    {
+      "case": "wasm_inline_ref_abi_thin-O2",
+      "globals_exported": 0,
+      "memories_exported": 1
+    },
+    {
+      "case": "wasm_inline_ref_abi_packed-O0",
+      "globals_exported": 0,
+      "memories_exported": 4
+    },
+    {
+      "case": "wasm_inline_ref_abi_packed-O2",
+      "globals_exported": 0,
+      "memories_exported": 4
+    },
+    {
+      "case": "wasm_inline_mixed_references-O0",
+      "globals_exported": 0,
+      "memories_exported": 3
+    },
+    {
+      "case": "wasm_inline_mixed_references-O2",
+      "globals_exported": 0,
+      "memories_exported": 3
+    },
+    {
+      "case": "wasm_inline_optional_references-O0",
+      "globals_exported": 0,
+      "memories_exported": 2
+    },
+    {
+      "case": "wasm_inline_optional_references-O2",
+      "globals_exported": 0,
+      "memories_exported": 2
+    },
+    {
+      "case": "wasm_inline_reference_path-O0",
+      "globals_exported": 0,
+      "memories_exported": 1
+    },
+    {
+      "case": "wasm_inline_reference_path-O2",
+      "globals_exported": 0,
+      "memories_exported": 1
+    },
+    {
+      "case": "wasm_inline_nested_path-O0",
+      "globals_exported": 0,
+      "memories_exported": 1
+    },
+    {
+      "case": "wasm_inline_nested_path-O2",
+      "globals_exported": 0,
+      "memories_exported": 1
+    },
+    {
+      "case": "wasm_inline_effect_path-O0",
+      "globals_exported": 0,
+      "memories_exported": 1
+    },
+    {
+      "case": "wasm_inline_effect_path-O2",
+      "globals_exported": 0,
+      "memories_exported": 1
+    },
+    {
+      "case": "wasm_inline_limited_path-O0",
+      "globals_exported": 0,
+      "memories_exported": 1
+    },
+    {
+      "case": "wasm_inline_limited_path-O2",
+      "globals_exported": 0,
+      "memories_exported": 1
+    },
+    {
+      "case": "wasm_byte_print-O0",
+      "globals_exported": 0,
+      "memories_exported": 5
+    },
+    {
+      "case": "wasm_byte_print-O2",
+      "globals_exported": 0,
+      "memories_exported": 5
+    },
+    {
+      "case": "wasm_struct_refs-O0",
+      "globals_exported": 0,
+      "memories_exported": 8
+    },
+    {
+      "case": "wasm_struct_refs-O2",
+      "globals_exported": 0,
+      "memories_exported": 8
+    },
+    {
+      "case": "wasm_aggregate_array_walk_thin-O0",
+      "globals_exported": 0,
+      "memories_exported": 1
+    },
+    {
+      "case": "wasm_aggregate_array_walk_thin-O2",
+      "globals_exported": 0,
+      "memories_exported": 1
+    },
+    {
+      "case": "wasm_aggregate_array_walk_packed-O0",
+      "globals_exported": 0,
+      "memories_exported": 3
+    },
+    {
+      "case": "wasm_aggregate_array_walk_packed-O2",
+      "globals_exported": 0,
+      "memories_exported": 3
+    },
+    {
+      "case": "wasm_aggregate_iteration_walk_packed-O0",
+      "globals_exported": 0,
+      "memories_exported": 3
+    },
+    {
+      "case": "wasm_aggregate_iteration_walk_packed-O2",
+      "globals_exported": 0,
+      "memories_exported": 3
+    },
+    {
+      "case": "wasm_aggregate_iteration_callbacks-O0",
+      "globals_exported": 0,
+      "memories_exported": 1
+    },
+    {
+      "case": "wasm_aggregate_iteration_callbacks-O2",
+      "globals_exported": 0,
+      "memories_exported": 1
+    },
+    {
+      "case": "wasm_aggregate_iteration_paths-O0",
+      "globals_exported": 0,
+      "memories_exported": 1
+    },
+    {
+      "case": "wasm_aggregate_iteration_paths-O2",
+      "globals_exported": 0,
+      "memories_exported": 1
+    },
+    {
+      "case": "wasm_aggregate_iteration_refs_packed-O0",
+      "globals_exported": 0,
+      "memories_exported": 4
+    },
+    {
+      "case": "wasm_aggregate_iteration_refs_packed-O2",
+      "globals_exported": 0,
+      "memories_exported": 4
+    }
+  ],
+  "local_delta_range": [
+    -1,
+    6
+  ],
+  "helper_kinds_added": [
+    "goose.copy_to_frame",
+    "goose.memory_op.41",
+    "goose.memory_op.49",
+    "goose.memory_op.55",
+    "goose.memory_op.60",
+    "goose.memory_op.61"
+  ],
+  "code_section_total_delta": 405,
+  "limitations": [
+    "No instructions executed.",
+    "Only section structure, signatures, names, local declarations and lengths decoded.",
+    "No compiler/native executable disassembly."
+  ]
+}

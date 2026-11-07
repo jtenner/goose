@@ -29,7 +29,7 @@ inline WasmCodeGen::ArrayPlace WasmCodeGen::ArrayFromPlace(FixedPlace image, Lin
     auto layout = ArrayLayout(image.type, line);
     if (!image.packed && image.memory < 0) Fail(line, "array place is missing its memory proof");
     if (layout.image != ArrayImage::PrefixedData && image.memory > 0)
-        Fail(line, "this array image needs the pending reference ABI");
+        Fail(line, "this array image needs the pending data destination lowering");
     if (layout.image == ArrayImage::GrowableHeader && (image.memory != 0 || image.packed))
         Fail(line, "growable array headers require a Memory 0 place");
     return {image, layout, layout.image == ArrayImage::GrowableHeader ? -1 : image.memory,
@@ -63,8 +63,8 @@ inline int WasmCodeGen::ArrayAllocationMemory(VarDef *owner, const Slot *slot,
 inline WasmCodeGen::ArrayPlace WasmCodeGen::CaptureArrayBorrow(
         TypeExpr *array, uint32_t value, uint8_t representation, ArrayOrigin origin, Line line) {
     // This bridge is the current scalar emitter's borrowed-array transport,
-    // not an array-value ABI. Inline borrows have a Memory 0 ABI proof.
-    if (representation != LegacyArrayBorrowType(array))
+    // not an array-value ABI. Only the thin transport proves Memory 0.
+    if (representation != BorrowedArrayAddressType(array))
         Fail(line, "incompatible borrowed array representation");
     auto packed = representation == WasmModule::I64;
     auto place = ArrayFromPlace({array, value, 0, packed ? -1 : 0, packed, false}, line);
@@ -79,7 +79,7 @@ inline WasmCodeGen::ArrayPlace WasmCodeGen::RefineArrayOwner(ArrayPlace place, N
         (InlineArray(id->vdef->type) || storage.owners.count(id->vdef))) {
         place.owner = id->vdef; place.origin = ArrayOrigin::PlannedOwner;
         place.elementMemory = storage.owners.count(id->vdef) ? storage.Memory(id->vdef, current) : 0;
-        if (place.layout.image == ArrayImage::PrefixedData) place.image.memory = place.elementMemory;
+        if (place.layout.image != ArrayImage::GrowableHeader) place.image.memory = place.elementMemory;
     }
     return place;
 }
@@ -89,14 +89,18 @@ inline WasmCodeGen::ArrayPlace WasmCodeGen::ResolveArray(Node *n) {
     if (auto field = Is<Dot>(n); field && field->IsField()) {
         auto place = ResolvePlace(n);
         if (!TEq(place.type, array)) Fail(n->line, "array adaptation needs the pending destination lowering");
-        // Retain the checked Memory 0 field ingress until the reference ABI widens.
-        PlaceAddress(place, LegacyArrayBorrowType(array), n->line);
-        auto address = Local(LegacyArrayBorrowType(array)); code.Set(address);
-        return CaptureArrayBorrow(array, address, LegacyArrayBorrowType(array), ArrayOrigin::ParentPlace, n->line);
+        PlaceAddress(place, BorrowedArrayAddressType(array), n->line);
+        auto address = Local(BorrowedArrayAddressType(array)); code.Set(address);
+        auto captured = CaptureArrayBorrow(array, address, BorrowedArrayAddressType(array),
+                                           ArrayOrigin::ParentPlace, n->line);
+        if (captured.layout.image != ArrayImage::GrowableHeader) {
+            captured.image.memory = place.memory; captured.elementMemory = place.memory;
+        }
+        return captured;
     }
     Gen(n); Convert(n->exprtype, array);
-    auto address = Local(LegacyArrayBorrowType(array)); code.Set(address);
-    return RefineArrayOwner(CaptureArrayBorrow(array, address, LegacyArrayBorrowType(array),
+    auto address = Local(BorrowedArrayAddressType(array)); code.Set(address);
+    return RefineArrayOwner(CaptureArrayBorrow(array, address, BorrowedArrayAddressType(array),
                                               ArrayOrigin::ReferenceABI, n->line), n);
 }
 
@@ -269,7 +273,7 @@ inline void WasmCodeGen::InitArrayCopy(VarDef *owner, const Slot &slot, Node *so
     int count = -1;
     if (InlineArray(array)) {
         code.I32((int32_t)Size(array)); code.Set(bytes);
-        code.Get(header); code.Byte(0xad); code.Set(sourceBase);
+        EmitPackedAddress(fromplace.image, source->line); code.Set(sourceBase);
     } else {
         auto prefix = DataArray(array) && !VarintPrefix(array) ? DataPrefix(array) : 0u;
         auto stride = Size(array->arr->sub);
@@ -856,7 +860,7 @@ inline void WasmCodeGen::ArrayFor(ForLoop *loop) {
     optional<ArrayWalk> walk;
     if (Is<Index>(loop->iter)) { walk.emplace(); CaptureArrayWalk(loop->iter, *walk); }
     auto place = reload || walk
-        ? CaptureArrayBorrow(array, Local(LegacyArrayBorrowType(array)), LegacyArrayBorrowType(array),
+        ? CaptureArrayBorrow(array, Local(BorrowedArrayAddressType(array)), BorrowedArrayAddressType(array),
                              ArrayOrigin::ReferenceABI, loop->line)
         : ResolveArray(loop->iter);
     auto header = place.image.address;
@@ -865,7 +869,7 @@ inline void WasmCodeGen::ArrayFor(ForLoop *loop) {
     if (copyAggregate) {
         auto plan = storage.fixedvalues.find(loop->vdef);
         if (loop->iterkind != IK_ARRAY || loop->byref || !loop->vdef->copybind ||
-            !InlineArray(array) || !Nominal(element) || memory != 0 ||
+            !InlineArray(array) || !Nominal(element) ||
             !TEq(element, loop->vdef->type) || plan == storage.fixedvalues.end() ||
             plan->second.origin != WasmStoragePlan::FixedOrigin::IterationCopy ||
             plan->second.initialization != loop || !RequireFixed(element, loop->line))

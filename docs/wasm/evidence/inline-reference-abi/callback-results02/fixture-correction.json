@@ -1,0 +1,6 @@
+{
+  "before": "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results01",
+  "rule": "Spec7.6 and CheckFnValueCall use CheckValue without destination type; fixed block tails copy, nullable references remain values.",
+  "change": "Named function values for non-null returns; nullable checked block returns for true fvbody result coverage.",
+  "production_CPP_changed": false
+}

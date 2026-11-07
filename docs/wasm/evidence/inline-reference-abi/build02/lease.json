@@ -1,0 +1,32 @@
+{
+  "owner": "Goose inline-reference ABI functional unit",
+  "pid": 987934,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "source-identity",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/build02/verify-source.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "parent-checks",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/build02/checks.py",
+        "parent"
+      ],
+      "exit": 1
+    }
+  ],
+  "exit": 1,
+  "released_at": "2026-11-07T16:44:09.833282+00:00"
+}

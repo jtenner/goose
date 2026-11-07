@@ -1,0 +1,86 @@
+{
+  "owner": "Goose inline-reference ABI functional unit",
+  "pid": 1100787,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "source-identity",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/build04/verify-source.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "parent-checks",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/build04/checks.py",
+        "parent"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "release-build",
+      "command": [
+        "cmake",
+        "--build",
+        "build",
+        "--parallel",
+        "2"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "freeze",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/build04/freeze.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "candidate-checks",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/build04/checks.py",
+        "candidate"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "abi-shapes",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/build04/shapes.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "source-identity-after",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/build04/verify-source.py",
+        "--built"
+      ],
+      "exit": 0
+    }
+  ],
+  "exit": 0,
+  "released_at": "2026-11-07T16:50:25.125656+00:00"
+}

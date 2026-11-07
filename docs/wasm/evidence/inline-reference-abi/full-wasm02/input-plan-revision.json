@@ -1,0 +1,9 @@
+{
+  "previous_manifest": "validation-input-hashes-v2.json",
+  "manifest": "validation-input-hashes-v3.json",
+  "changed_files": [
+    "test/wasm/wasm_inline_ref_callback_packed.goose",
+    "test/wasm/wasm_inline_ref_callback_thin.goose"
+  ],
+  "reason": "Valid callback fixtures now use named non-null result functions and nullable checked blocks. Full suite has never started."
+}

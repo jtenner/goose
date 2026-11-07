@@ -1,0 +1,5 @@
+/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_callback_thin.goose:1: error: expected a value of type i64[2]&, got i64[2]
+recursive fn relayFixed<F>(a: i64[2]&) -> i64[2]& { return F(a); }
+                                                           ^~~~
+  in fn relayFixed<F = {block at /home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_callback_thin.goose:6:47}>(i64[2]&) instantiated from /home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_callback_thin.goose:6
+  in fn main() instantiated from /home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_callback_thin.goose:3

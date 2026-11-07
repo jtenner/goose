@@ -1,0 +1,2867 @@
+[
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi.md",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi.md",
+    "lines": 106,
+    "sha256": "193d0504599a388863260b40646ae4debdc6fb035a0f688327abcec1f03c36c3",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        106
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/abi-cost-audit.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/abi-cost-audit.json",
+    "lines": 52,
+    "sha256": "f26895bb0902dd482119aad0d707e3abd82d587cb7ac0b625d6081b1b891cd63",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        52
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/archive-index-checks.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/archive-index-checks.json",
+    "lines": 607,
+    "sha256": "af24e70907f3885cbdbcaa536311bd2d318aa818a5d2c84aa9899ea82cf60b1d",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        607
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/archive-manifest.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/archive-manifest.json",
+    "lines": 607,
+    "sha256": "fbfa40cae262837b004b967e78b772132965fa7f7eaf691eab5fa2ae634700fa",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        607
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build01/commands.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build01/commands.json",
+    "lines": 71,
+    "sha256": "7e903ad783bab4807b57b6364430ba991d37260aebabb1a8603329d16770a4d3",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        71
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build01/failing-fixtures/wasm_inline_ref_abi_packed.goose",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build01/failing-fixtures/wasm_inline_ref_abi_packed.goose",
+    "lines": 54,
+    "sha256": "2376630dbbfccaa434d9e52b9d0f582e8ad2aaa1c7023ec425c14e42a33c11e2",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        54
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build01/failing-fixtures/wasm_inline_ref_abi_packed.out",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build01/failing-fixtures/wasm_inline_ref_abi_packed.out",
+    "lines": 4,
+    "sha256": "56f4c931e134c788b6e1854b308fdfdd8e218a2879e19734df909ec7ad52c8fe",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        4
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build01/failing-fixtures/wasm_inline_ref_abi_thin.goose",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build01/failing-fixtures/wasm_inline_ref_abi_thin.goose",
+    "lines": 42,
+    "sha256": "9492b030227ab67ef09e925a1054287671043847d2124259d6ed3b765b45ba3b",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        42
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build01/failing-fixtures/wasm_inline_ref_abi_thin.out",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build01/failing-fixtures/wasm_inline_ref_abi_thin.out",
+    "lines": 4,
+    "sha256": "56f4c931e134c788b6e1854b308fdfdd8e218a2879e19734df909ec7ad52c8fe",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        4
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build01/harness-hashes.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build01/harness-hashes.json",
+    "lines": 12,
+    "sha256": "8954842a63c041c8f0e83dd4a024aae8d7244cfd5705c5bfdb8e499f0aeec831",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        12
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build01/input-hashes.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build01/input-hashes.json",
+    "lines": 39,
+    "sha256": "ebc6af9e50e2f02868db4adf8356009aaaec6958e413bc6243a725f4535cfc5f",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        39
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build01/lease.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build01/lease.json",
+    "lines": 32,
+    "sha256": "0f33e268f53645309280dd0beb6fb6df54f4ffcc78ad4e79804ec31cee0ab07f",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        32
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build01/parent-checks.exit",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build01/parent-checks.exit",
+    "lines": 1,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build01/parent-checks.stderr",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build01/parent-checks.stderr",
+    "lines": 8,
+    "sha256": "06f37c96824e0eb5c14388826198a0cfc141ab59acdb0677553b9a74c0826e96",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        8
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build01/parent-checks.stdout",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build01/parent-checks.stdout",
+    "lines": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "inspection": "Full text review",
+    "read_ranges": [],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build01/release-verification.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build01/release-verification.json",
+    "lines": 11,
+    "sha256": "3df4f1aecead12b205454a30ed4c080f19cb1d02ea1683d2ad39d3ceebc79281",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        11
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build01/scope.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build01/scope.json",
+    "lines": 41,
+    "sha256": "e9806e292ca6afe642b03b7be8f3b7ec75c39aaab4535f3b14e06f21d1f1382b",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        41
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build01/source-hashes.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build01/source-hashes.json",
+    "lines": 88,
+    "sha256": "ad5f6f9bf9c3257d670f022f6d37151c15c53ad8f384d71d8c108321c0e8aaab",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        88
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build02/commands.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build02/commands.json",
+    "lines": 71,
+    "sha256": "b32d56b9163208d78aeea51f68c3818369aff65f04cc886fac91ef7dbe34d913",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        71
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build02/failing-fixtures/wasm_inline_ref_abi_packed.goose",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build02/failing-fixtures/wasm_inline_ref_abi_packed.goose",
+    "lines": 54,
+    "sha256": "7da81d819fde4e5b0f61ac20c2781821f55a208ed854d82611745e0268c4ff53",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        54
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build02/failing-fixtures/wasm_inline_ref_abi_packed.out",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build02/failing-fixtures/wasm_inline_ref_abi_packed.out",
+    "lines": 4,
+    "sha256": "56f4c931e134c788b6e1854b308fdfdd8e218a2879e19734df909ec7ad52c8fe",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        4
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build02/failing-fixtures/wasm_inline_ref_abi_thin.goose",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build02/failing-fixtures/wasm_inline_ref_abi_thin.goose",
+    "lines": 42,
+    "sha256": "824407c5561534414d00819bfbc29521077256dc17b95a57f9454315cadc054d",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        42
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build02/failing-fixtures/wasm_inline_ref_abi_thin.out",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build02/failing-fixtures/wasm_inline_ref_abi_thin.out",
+    "lines": 4,
+    "sha256": "56f4c931e134c788b6e1854b308fdfdd8e218a2879e19734df909ec7ad52c8fe",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        4
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build02/harness-hashes.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build02/harness-hashes.json",
+    "lines": 13,
+    "sha256": "927b34bbcc76b174e21ab9efc5dcba41579be3aa81af5f9bf19587ddfeb736a3",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        13
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build02/input-hashes.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build02/input-hashes.json",
+    "lines": 39,
+    "sha256": "bda2fdb0ec891cf76b9bb3377dba6216264e625d9d3a0354708aa87b551510bf",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        39
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build02/lease.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build02/lease.json",
+    "lines": 32,
+    "sha256": "ba10e4ef4454d6bd449c2c2b3db25818f0885a46a3e966d9ad9fc04e3df0d420",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        32
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build02/parent-checks.exit",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build02/parent-checks.exit",
+    "lines": 1,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build02/parent-checks.stderr",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build02/parent-checks.stderr",
+    "lines": 8,
+    "sha256": "fd2990af5597ca2b393e01a21d0c524e85f4bd84e044e630693fd5954befaf28",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        8
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build02/parent-checks.stdout",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build02/parent-checks.stdout",
+    "lines": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "inspection": "Full text review",
+    "read_ranges": [],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build02/release-verification.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build02/release-verification.json",
+    "lines": 11,
+    "sha256": "ce6f4734f5d3cb4383f6b6e0ff453b198d9beac8d4b8deacaa826a51dd191287",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        11
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build02/scope.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build02/scope.json",
+    "lines": 41,
+    "sha256": "e9806e292ca6afe642b03b7be8f3b7ec75c39aaab4535f3b14e06f21d1f1382b",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        41
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build02/source-hashes.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build02/source-hashes.json",
+    "lines": 88,
+    "sha256": "ad5f6f9bf9c3257d670f022f6d37151c15c53ad8f384d71d8c108321c0e8aaab",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        88
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build03/commands.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build03/commands.json",
+    "lines": 71,
+    "sha256": "9b8b642652f039ebc20edee4e57babf7aef0ff6f37031dec4b7d4e2bbfe4121c",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        71
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build03/failing-fixtures/wasm_inline_ref_abi_packed.goose",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build03/failing-fixtures/wasm_inline_ref_abi_packed.goose",
+    "lines": 54,
+    "sha256": "2e3def8be9e982efaaa610badf191749647f65f4a3ca3928ee16c1d69ad35be9",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        54
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build03/failing-fixtures/wasm_inline_ref_abi_packed.out",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build03/failing-fixtures/wasm_inline_ref_abi_packed.out",
+    "lines": 4,
+    "sha256": "56f4c931e134c788b6e1854b308fdfdd8e218a2879e19734df909ec7ad52c8fe",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        4
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build03/failing-fixtures/wasm_inline_ref_abi_thin.goose",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build03/failing-fixtures/wasm_inline_ref_abi_thin.goose",
+    "lines": 42,
+    "sha256": "5047f6f196e427874ffd032eace17febb0823f55d780f5914adecc9c835a7975",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        42
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build03/failing-fixtures/wasm_inline_ref_abi_thin.out",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build03/failing-fixtures/wasm_inline_ref_abi_thin.out",
+    "lines": 4,
+    "sha256": "56f4c931e134c788b6e1854b308fdfdd8e218a2879e19734df909ec7ad52c8fe",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        4
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build03/harness-hashes.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build03/harness-hashes.json",
+    "lines": 13,
+    "sha256": "b8305b56df7bd9e145fd8ca509ad75c83bd0523ed78abd67d41ea213413d7b18",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        13
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build03/input-hashes.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build03/input-hashes.json",
+    "lines": 39,
+    "sha256": "129fe9bd34092bb0ec15f05ca92f0660ec660f5c965f560c6fe318297a6f6592",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        39
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build03/lease.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build03/lease.json",
+    "lines": 32,
+    "sha256": "00e56ad683f3ac1429d3b4a462e3b3f94b54ddb4ee20475d8beb83f3ad81f407",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        32
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build03/parent-checks.exit",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build03/parent-checks.exit",
+    "lines": 1,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build03/parent-checks.stderr",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build03/parent-checks.stderr",
+    "lines": 8,
+    "sha256": "3bba48060614bb14c33ef3e8b719fbf1d89b6f755d3d7097daec67c1dd84eaa7",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        8
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build03/parent-checks.stdout",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build03/parent-checks.stdout",
+    "lines": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "inspection": "Full text review",
+    "read_ranges": [],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build03/release-verification.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build03/release-verification.json",
+    "lines": 11,
+    "sha256": "eb5dca8c4a98cc0a6527ea3193e593d126c5a1e7f9064a3f8b1b1737f916c06a",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        11
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build03/scope.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build03/scope.json",
+    "lines": 41,
+    "sha256": "e9806e292ca6afe642b03b7be8f3b7ec75c39aaab4535f3b14e06f21d1f1382b",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        41
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build03/source-hashes.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build03/source-hashes.json",
+    "lines": 88,
+    "sha256": "ad5f6f9bf9c3257d670f022f6d37151c15c53ad8f384d71d8c108321c0e8aaab",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        88
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/abi-shapes.exit",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/abi-shapes.exit",
+    "lines": 1,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/abi-shapes.stderr",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/abi-shapes.stderr",
+    "lines": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "inspection": "Full text review",
+    "read_ranges": [],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/abi-shapes.stdout",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/abi-shapes.stdout",
+    "lines": 1,
+    "sha256": "2202127b1e6ea59c819efc0758fa441fce9e965a7bf5002e066fb34a8ef3e1bb",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/build-identity.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/build-identity.json",
+    "lines": 4,
+    "sha256": "1620b57bb4acc41a52101834b4ca6e3b16a0ef0dd342b7cdd9d20bc37d3077e4",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        4
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/candidate-checks.exit",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/candidate-checks.exit",
+    "lines": 1,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/candidate-checks.stderr",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/candidate-checks.stderr",
+    "lines": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "inspection": "Full text review",
+    "read_ranges": [],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/candidate-checks.stdout",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/candidate-checks.stdout",
+    "lines": 1,
+    "sha256": "a03e3e3e2951dd24e81d9ac3d9c29a2d3a0065f6f9cce540c62af5b564b31fb7",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/candidate/case-results.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/candidate/case-results.json",
+    "lines": 754,
+    "sha256": "69d53af600aabf0ce0f43e914ee3a135fadc00adbb284dd95472f1db6804459b",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        754
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/candidate/commands-results.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/candidate/commands-results.json",
+    "lines": 1327,
+    "sha256": "d0b519bccd06bbd6e728fcdab140896675222990e7997c5693828560628ecd5b",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        1327
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/candidate/owner-field-admission.exit",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/candidate/owner-field-admission.exit",
+    "lines": 1,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/candidate/owner-field-admission.stderr",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/candidate/owner-field-admission.stderr",
+    "lines": 1,
+    "sha256": "4954a3fedb9a7ce728d0972fa3816bae67e85771c1c9d9b01bc0ba3b86e16cb2",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/candidate/owner-field-admission.stdout",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/candidate/owner-field-admission.stdout",
+    "lines": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "inspection": "Full text review",
+    "read_ranges": [],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/checks.py",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/checks.py",
+    "lines": 74,
+    "sha256": "a4d7a0a70a5d8b7ff56cb8cc0a4a937009b740a28044d9bf2d8476af70059bf5",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        74
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/commands.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/commands.json",
+    "lines": 71,
+    "sha256": "ef3ee7962865a5574b3802066b02cf906178ced94fed851354f22e2c91b2475f",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        71
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/fixture-names.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/fixture-names.json",
+    "lines": 18,
+    "sha256": "3fd6ecfae7b50cdf1ce598a74fd507185becf9957db9804e333f4e0e717ef04f",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        18
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/freeze.py",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/freeze.py",
+    "lines": 6,
+    "sha256": "4bc5a50d83164e49c09ad9d5961c578204a268602940f2ee02f55be22d798978",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        6
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/harness-hashes.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/harness-hashes.json",
+    "lines": 14,
+    "sha256": "b17c0093eb9ba8c36a59a1601f2aca39e7a6f61c503fe0460fa617ac650b6ec6",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        14
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/input-hashes.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/input-hashes.json",
+    "lines": 39,
+    "sha256": "6be212d5feffda8442fb5517bd1964c7867e2c0c8391b8e3519aa8e25d573331",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        39
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/lease.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/lease.json",
+    "lines": 86,
+    "sha256": "de65d9683ffe8e4574c0892915c46b29c3910e4b7cb1b6caba174dd985a47e8a",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        86
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/parent-checks.exit",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/parent-checks.exit",
+    "lines": 1,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/parent-checks.stderr",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/parent-checks.stderr",
+    "lines": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "inspection": "Full text review",
+    "read_ranges": [],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/parent-checks.stdout",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/parent-checks.stdout",
+    "lines": 1,
+    "sha256": "6b3217334df9974f6a2de8e1e899c703feeaf001a0f22a7e86759f24f997892c",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/parent/case-results.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/parent/case-results.json",
+    "lines": 696,
+    "sha256": "1848218ced488d8eb6245338d87642baf7472fd267cc63a3fc14dad3cc971119",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        696
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/parent/commands-results.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/parent/commands-results.json",
+    "lines": 1329,
+    "sha256": "7716bb0db1dd4f714da6b1724c8a654e6e6b21c079d4667fd620a713d4b398b4",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        1329
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/parent/owner-field-admission.exit",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/parent/owner-field-admission.exit",
+    "lines": 1,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/parent/owner-field-admission.stderr",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/parent/owner-field-admission.stderr",
+    "lines": 1,
+    "sha256": "4954a3fedb9a7ce728d0972fa3816bae67e85771c1c9d9b01bc0ba3b86e16cb2",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/parent/owner-field-admission.stdout",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/parent/owner-field-admission.stdout",
+    "lines": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "inspection": "Full text review",
+    "read_ranges": [],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/parent/reused-parent-results.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/parent/reused-parent-results.json",
+    "lines": 95,
+    "sha256": "64e1b9ec19c3e7c7fff8491359109f1711164f4c49c4d64a8192cb903b80199e",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        95
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/rejected-owner-field.goose",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/rejected-owner-field.goose",
+    "lines": 54,
+    "sha256": "2e3def8be9e982efaaa610badf191749647f65f4a3ca3928ee16c1d69ad35be9",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        54
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/release-build.exit",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/release-build.exit",
+    "lines": 1,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/release-build.stderr",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/release-build.stderr",
+    "lines": 35,
+    "sha256": "3d6f6f399cde0a9de42be8dbab5d12642a112e0670a41f027a02b5d164d87c81",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        35
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/release-build.stdout",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/release-build.stdout",
+    "lines": 12,
+    "sha256": "2195a01b2a2d3bbb3f460cb9571c1c72132fa565e0aaaefdd88c32b262005fd7",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        12
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/release-verification.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/release-verification.json",
+    "lines": 11,
+    "sha256": "880adbd1da4f9b684051b092c2cd997f61de3525b32e1633d9a71f39f07d33c6",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        11
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/scope.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/scope.json",
+    "lines": 46,
+    "sha256": "7e1a7664793c6deb5b0cbcffaeed33ef939bf74661144087f130aba2ca87d50e",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        46
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/setup-correction.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/setup-correction.json",
+    "lines": 8,
+    "sha256": "d71b33956d59193a6b61fbe4e548db9fbc93f32023f131a5de2376dd52c5dabc",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        8
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/shape-commands.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/shape-commands.json",
+    "lines": 66,
+    "sha256": "ece6ac4d0f13fa6cbe6e442998e95627d79013a69ace760dae58dfab9aa9defc",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        66
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/shapes.py",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/shapes.py",
+    "lines": 13,
+    "sha256": "0d7ebeda08a8cfd3c81d77ebb0049cbbf21c0a357c382db0bcbc42241f3761cd",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        13
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/source-hashes.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/source-hashes.json",
+    "lines": 88,
+    "sha256": "ad5f6f9bf9c3257d670f022f6d37151c15c53ad8f384d71d8c108321c0e8aaab",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        88
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/build04/verify-source.py",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/build04/verify-source.py",
+    "lines": 21,
+    "sha256": "483fe7a6ec8212588206638f8fce512790eecfe69db9a3fb3bd007118e1388ff",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        21
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/compatibility01/commands.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/compatibility01/commands.json",
+    "lines": 36,
+    "sha256": "0f441348d110a163e97e9988a845dff17302b42d525a4ea44ec703d026433d10",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        36
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/compatibility01/compatibility01.exit",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/compatibility01/compatibility01.exit",
+    "lines": 1,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/compatibility01/compatibility01.stderr",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/compatibility01/compatibility01.stderr",
+    "lines": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "inspection": "Full text review",
+    "read_ranges": [],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/compatibility01/compatibility01.stdout",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/compatibility01/compatibility01.stdout",
+    "lines": 1,
+    "sha256": "20f36dd9c46cb8f0beff01a79bd88b8d681ca89abc0dbed7f4858e6fcc21bfc8",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/compatibility01/exact/summary.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/compatibility01/exact/summary.json",
+    "lines": 370,
+    "sha256": "4681ffbfaba4039a20d1ea08df6309697602101f8d082dd79e664d4830103046",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        370
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/compatibility01/lease.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/compatibility01/lease.json",
+    "lines": 48,
+    "sha256": "88adc3f5bef0f6c1665ee791f9f97353e4dbfb6ac1718aaca65456e680ca1317",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        48
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/compatibility01/module-deltas.exit",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/compatibility01/module-deltas.exit",
+    "lines": 1,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/compatibility01/module-deltas.py",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/compatibility01/module-deltas.py",
+    "lines": 10,
+    "sha256": "a44c3fac284d9ce594b783f0c816031265d1e183d6ced4a663ce3e6c196ca04b",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        10
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/compatibility01/module-deltas.stderr",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/compatibility01/module-deltas.stderr",
+    "lines": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "inspection": "Full text review",
+    "read_ranges": [],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/compatibility01/module-deltas.stdout",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/compatibility01/module-deltas.stdout",
+    "lines": 1,
+    "sha256": "dec8b3d09501ed198b6bf6840821d6b30f977006b519c52fd750e377afc560cb",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/compatibility01/prior-module-deltas.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/compatibility01/prior-module-deltas.json",
+    "lines": 2262,
+    "sha256": "d23a06cf3618859d060ddd8d805755c54463d2a7ca6c77feceffa989abc2d90f",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        2262
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/compatibility01/release-verification.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/compatibility01/release-verification.json",
+    "lines": 11,
+    "sha256": "20d9ef42a7ed3549b51ff4e51cbb0be86304c29ed3d9f42b71b66a689cf0bfc9",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        11
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/compatibility01/source-identity-after.exit",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/compatibility01/source-identity-after.exit",
+    "lines": 1,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/compatibility01/source-identity-after.stdout",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/compatibility01/source-identity-after.stdout",
+    "lines": 1,
+    "sha256": "0d09ca3ce02c99a273ecb12ee8a51e4f0bf3cc6505860ad3cabf34d4020ef03a",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/compatibility01/source-identity.exit",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/compatibility01/source-identity.exit",
+    "lines": 1,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/compatibility01/source-identity.stdout",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/compatibility01/source-identity.stdout",
+    "lines": 1,
+    "sha256": "0d09ca3ce02c99a273ecb12ee8a51e4f0bf3cc6505860ad3cabf34d4020ef03a",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/full-wasm01/commands.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/full-wasm01/commands.json",
+    "lines": 36,
+    "sha256": "5a8bac6b04090a9141ede7fbacda656f5c2b69e4d0c050dbfde92f0a54cd5a47",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        36
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/full-wasm01/full-wasm01.exit",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/full-wasm01/full-wasm01.exit",
+    "lines": 1,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/full-wasm01/full-wasm01.stderr",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/full-wasm01/full-wasm01.stderr",
+    "lines": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "inspection": "Full text review",
+    "read_ranges": [],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/full-wasm01/full-wasm01.stdout",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/full-wasm01/full-wasm01.stdout",
+    "lines": 1,
+    "sha256": "155b7e8fa0c3e310fe32d76b85e6cf69ab82557e69e109c6bbb7285bf9ff6c7e",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/full-wasm01/lease.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/full-wasm01/lease.json",
+    "lines": 47,
+    "sha256": "105d7466fb2d32f57c71b60a01c8c1b0c001351370efdc487f56a1bef29c6420",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        47
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/full-wasm01/release-verification.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/full-wasm01/release-verification.json",
+    "lines": 11,
+    "sha256": "4f0bf5a3387c52c4f6b35af272d98e6460d76545edff207309684f0f5a765f5a",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        11
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/full-wasm01/source-identity-after.exit",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/full-wasm01/source-identity-after.exit",
+    "lines": 1,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/full-wasm01/source-identity-after.stdout",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/full-wasm01/source-identity-after.stdout",
+    "lines": 1,
+    "sha256": "0d09ca3ce02c99a273ecb12ee8a51e4f0bf3cc6505860ad3cabf34d4020ef03a",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/full-wasm01/source-identity.exit",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/full-wasm01/source-identity.exit",
+    "lines": 1,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/full-wasm01/source-identity.stdout",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/full-wasm01/source-identity.stdout",
+    "lines": 1,
+    "sha256": "0d09ca3ce02c99a273ecb12ee8a51e4f0bf3cc6505860ad3cabf34d4020ef03a",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/module-structure-deltas.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/module-structure-deltas.json",
+    "lines": 3698,
+    "sha256": "290922681861a992f0bca31d2aeb959bf8a6c40999d8a440d4b4656638ffa50f",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        3698
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/native-baseline01/commands.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/native-baseline01/commands.json",
+    "lines": 38,
+    "sha256": "d78540e456417f9b20ac33f196d99825c7c375caaeeac2ccf5609cc1adf6b773",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        38
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/native-baseline01/lease.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/native-baseline01/lease.json",
+    "lines": 49,
+    "sha256": "f4b8c4fb4067439da4285fd4639c713395251bdf409775ef7738f0dfec59650f",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        49
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/native-baseline01/native-baseline01.exit",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/native-baseline01/native-baseline01.exit",
+    "lines": 1,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/native-baseline01/native-baseline01.stderr",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/native-baseline01/native-baseline01.stderr",
+    "lines": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "inspection": "Full text review",
+    "read_ranges": [],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/native-baseline01/native-baseline01.stdout",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/native-baseline01/native-baseline01.stdout",
+    "lines": 31,
+    "sha256": "116ce7df1649073c987be835306fe124ac1e961e5d6029b448aeacd560b7c7ed",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        31
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/native-baseline01/release-verification.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/native-baseline01/release-verification.json",
+    "lines": 11,
+    "sha256": "3bf721dd2552defa283ca27902c8a130a84f46527fd9bd67312d4323c4a2dc9e",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        11
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/native-baseline01/source-identity-after.exit",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/native-baseline01/source-identity-after.exit",
+    "lines": 1,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/native-baseline01/source-identity-after.stdout",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/native-baseline01/source-identity-after.stdout",
+    "lines": 1,
+    "sha256": "0d09ca3ce02c99a273ecb12ee8a51e4f0bf3cc6505860ad3cabf34d4020ef03a",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/native-baseline01/source-identity.exit",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/native-baseline01/source-identity.exit",
+    "lines": 1,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/native-baseline01/source-identity.stdout",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/native-baseline01/source-identity.stdout",
+    "lines": 1,
+    "sha256": "0d09ca3ce02c99a273ecb12ee8a51e4f0bf3cc6505860ad3cabf34d4020ef03a",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/static-module-facts.py",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/static-module-facts.py",
+    "lines": 56,
+    "sha256": "91c2a0613449684c9dc9e1e87cfa0182d6870d7a94d44a07fbf5106237faa7be",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        56
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/evidence/inline-reference-abi/validation-input-hashes.json",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/evidence/inline-reference-abi/validation-input-hashes.json",
+    "lines": 4198,
+    "sha256": "0f0ca0866b71b6a407d6a32f29c2f1ecd087d2bacbf76dce2cdbef5627496589",
+    "inspection": "All JSON records parsed; hashes, command records, numeric results or artifact metadata cross-checked",
+    "read_ranges": [
+      [
+        1,
+        4198
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/measurements.md",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/measurements.md",
+    "lines": 177,
+    "sha256": "0a40166705017a24b82878f34b700cddbdd91a9411f06b8c13e23b6630911d5b",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        177
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/docs/wasm/status.md",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/docs/wasm/status.md",
+    "lines": 290,
+    "sha256": "13e4b6ba469d9e8b040b2686e5d4afa41652044bd65a45d3768589aa7d44d42b",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        290
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/wasm_arrays.h",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/src/wasm_arrays.h",
+    "lines": 911,
+    "sha256": "7d4e9aa37df7e938fdeabdc5025d5ac056fcd329d97151e8d7b60b36ca542366",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        911
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/src/wasm_codegen.h",
+    "lines": 1262,
+    "sha256": "f8a6a271adfc4c1443a680915cb9988c489faa111fa2691f4c34c5cbe5bd374e",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1262
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/expected/wasm_inline_ref_abi_packed.out",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/test/expected/wasm_inline_ref_abi_packed.out",
+    "lines": 4,
+    "sha256": "56f4c931e134c788b6e1854b308fdfdd8e218a2879e19734df909ec7ad52c8fe",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        4
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/expected/wasm_inline_ref_abi_thin.out",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/test/expected/wasm_inline_ref_abi_thin.out",
+    "lines": 4,
+    "sha256": "56f4c931e134c788b6e1854b308fdfdd8e218a2879e19734df909ec7ad52c8fe",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        4
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_abi_packed.goose",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/test/wasm/wasm_inline_ref_abi_packed.goose",
+    "lines": 53,
+    "sha256": "74781c7370f60fd9b072d87dbdad9e87483959f51d07b85509edbc8b605c2344",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        53
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_abi_thin.goose",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/test/wasm/wasm_inline_ref_abi_thin.goose",
+    "lines": 42,
+    "sha256": "5047f6f196e427874ffd032eace17febb0823f55d780f5914adecc9c835a7975",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        42
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_checks.py",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/test/wasm_aggregate_checks.py",
+    "lines": 133,
+    "sha256": "52c8f7dc99a9e71d325f686f44d02c1bf68fce1c19a08ee38794da4a5e135bed",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        133
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm_backend.py",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/test/wasm_backend.py",
+    "lines": 617,
+    "sha256": "3fc32315450d6c2a5fc185e2106447f74bc457d713838eec79b427131b9b01e0",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        617
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/snapshot/test/wasm_reference_abi.mjs",
+    "lines": 27,
+    "sha256": "bfa2761ee9d2e89e77e37fd59e529685dc3d708b19d4f4a32018c528188173f9",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        27
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/CMakeLists.txt",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/CMakeLists.txt",
+    "lines": 236,
+    "sha256": "657486b885c241458ecac72fabee02a0443e6428b345f701afa983085b765413",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        236
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/scripts/run_wasm.mjs",
+    "lines": 149,
+    "sha256": "ba7f98c7def9c2fabfef35fe631aab3e5239218c87b47aa1550a589b7dbcf3ff",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        149
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/ast.h",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/src/ast.h",
+    "lines": 2967,
+    "sha256": "c6ba4a65898724f407ab3b43a2c391e483fe86345d8c95bc2d567bf58703f73e",
+    "inspection": "Hash verification only; isolated search hits are not counted as source review",
+    "read_ranges": [],
+    "unread_ranges": [
+      [
+        1,
+        2967
+      ]
+    ]
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/clone.h",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/src/clone.h",
+    "lines": 740,
+    "sha256": "340cb18ef42febacbdc76a516ace72e91b5b82944e9b20002c1ade5473099e54",
+    "inspection": "Selected source ranges reviewed",
+    "read_ranges": [
+      [
+        580,
+        617
+      ]
+    ],
+    "unread_ranges": [
+      [
+        1,
+        579
+      ],
+      [
+        618,
+        740
+      ]
+    ]
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/codegen_nodes.h",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/src/codegen_nodes.h",
+    "lines": 1297,
+    "sha256": "45cf9a85e1e9a8d09d3dda0c7fbf799d693272fa2d76a40adb9c11dd31a97362",
+    "inspection": "Hash verification only; isolated search hits are not counted as source review",
+    "read_ranges": [],
+    "unread_ranges": [
+      [
+        1,
+        1297
+      ]
+    ]
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/codegen_values.h",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/src/codegen_values.h",
+    "lines": 2060,
+    "sha256": "8d4daa25932f3fb610f50f70cf39b56d260878c35d5191bfca0368c568bd5b97",
+    "inspection": "Hash verification only; isolated search hits are not counted as source review",
+    "read_ranges": [],
+    "unread_ranges": [
+      [
+        1,
+        2060
+      ]
+    ]
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/data_stacks.h",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/src/data_stacks.h",
+    "lines": 79,
+    "sha256": "e68d48103069c906451b5557a10398377d191469a131f7ce5d2886161fe6f264",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        79
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/main.cpp",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/src/main.cpp",
+    "lines": 2092,
+    "sha256": "9f2e05a0f7dd8cd7e565f71bac7d429592d505fe2722d94010db6cb06186119a",
+    "inspection": "Hash verification only; isolated search hits are not counted as source review",
+    "read_ranges": [],
+    "unread_ranges": [
+      [
+        1,
+        2092
+      ]
+    ]
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/typecheck_calls.h",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/src/typecheck_calls.h",
+    "lines": 4101,
+    "sha256": "b8e021e1d01c8e0f98c8334976b9a0496147bad0e8b3c112f9de5f11fe171a94",
+    "inspection": "Selected source ranges reviewed",
+    "read_ranges": [
+      [
+        3815,
+        3990
+      ]
+    ],
+    "unread_ranges": [
+      [
+        1,
+        3814
+      ],
+      [
+        3991,
+        4101
+      ]
+    ]
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/typecheck_exprs.h",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/src/typecheck_exprs.h",
+    "lines": 3427,
+    "sha256": "941f3c714673d0efafd350b6716f7b09b4d5277a6e5bfde42c816940e8ef8e19",
+    "inspection": "Hash verification only; isolated search hits are not counted as source review",
+    "read_ranges": [],
+    "unread_ranges": [
+      [
+        1,
+        3427
+      ]
+    ]
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/typecheck_flow.h",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/src/typecheck_flow.h",
+    "lines": 3242,
+    "sha256": "4f13bcfe0ac408cdca700bbf24719cec4595d3ad41fc0aa7deb3ecb83553410e",
+    "inspection": "Selected source ranges reviewed",
+    "read_ranges": [
+      [
+        2030,
+        2170
+      ]
+    ],
+    "unread_ranges": [
+      [
+        1,
+        2029
+      ],
+      [
+        2171,
+        3242
+      ]
+    ]
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/value_layout.h",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/src/value_layout.h",
+    "lines": 399,
+    "sha256": "fb6b93137076b2987e7519180df1372e2cb81715aa7f901162650bec7bffdd90",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        399
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/wasm_binary.h",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/src/wasm_binary.h",
+    "lines": 191,
+    "sha256": "3fd48372e3f82cb9777640d22818a4abdbd7e95d7bbf62b2ac76c8d235fe2766",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        191
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/wasm_fixed.h",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/src/wasm_fixed.h",
+    "lines": 467,
+    "sha256": "2c5a3b2a84770546a0305af7b9cbe6ce9a0a767af1bdd81882b59b5ce47417af",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        467
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/wasm_memory.h",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/src/wasm_memory.h",
+    "lines": 228,
+    "sha256": "4b73f90c1c911fcf9e51060cdff1ffef8d71200660aa6c7bcb4d7b2bfc60eb74",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        228
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/wasm_storage.h",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/src/wasm_storage.h",
+    "lines": 225,
+    "sha256": "335885e5dbe9e17dac08b248815de2268671289c6f1b917fa0c68b9c35fc8ed0",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        225
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/src/wasm_support.h",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/src/wasm_support.h",
+    "lines": 97,
+    "sha256": "2ba243e4858747e05d6f516e5b7c5e3e88f80109f91752534ce2c789b5ef38fd",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        97
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/backend_shared.py",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/backend_shared.py",
+    "lines": 71,
+    "sha256": "a192f7204cb34a8eb582ced05459f17c7c0fc64022c99f6b6e92ba556557c94e",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        71
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/expected/wasm_aggregate_array_walk_packed.out",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/expected/wasm_aggregate_array_walk_packed.out",
+    "lines": 1,
+    "sha256": "d3cc23ec09363374d7928813bc83a24bff3b86f2c8c9856c12e465c542b5771a",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/expected/wasm_aggregate_array_walk_thin.out",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/expected/wasm_aggregate_array_walk_thin.out",
+    "lines": 1,
+    "sha256": "d3cc23ec09363374d7928813bc83a24bff3b86f2c8c9856c12e465c542b5771a",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/expected/wasm_aggregate_iteration_callbacks.out",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/expected/wasm_aggregate_iteration_callbacks.out",
+    "lines": 1,
+    "sha256": "afbf658baa6e4950feb11b9f496b8e921061d213d10b5e5ae03fcef2730824f9",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/expected/wasm_aggregate_iteration_paths.out",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/expected/wasm_aggregate_iteration_paths.out",
+    "lines": 1,
+    "sha256": "fae81844dbc13e8a2cbc4c5872127bd73a71758cb0a542676befd75d1c6ba589",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/expected/wasm_aggregate_iteration_refs_packed.out",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/expected/wasm_aggregate_iteration_refs_packed.out",
+    "lines": 1,
+    "sha256": "310fb892f303b8279f799fe4fee44ae047dfc31b1498ba15b44601a186692e11",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/expected/wasm_aggregate_iteration_walk_packed.out",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/expected/wasm_aggregate_iteration_walk_packed.out",
+    "lines": 1,
+    "sha256": "10d32167a39d6bdd8289ce6952d5119df1c2a3f6a699332ce21c1b1203108543",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/expected/wasm_byte_print.out",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/expected/wasm_byte_print.out",
+    "lines": 22,
+    "sha256": "28f56ff4de9a808d73aa6203f86bcc322b9144a01d68b4dd21fb268ceff390f5",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        22
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/expected/wasm_inline_effect_path.out",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/expected/wasm_inline_effect_path.out",
+    "lines": 7,
+    "sha256": "50241908c7fb187657abef4a4e33fc6b3cef50efde546a599c8914e746c2347e",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        7
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/expected/wasm_inline_limited_path.out",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/expected/wasm_inline_limited_path.out",
+    "lines": 3,
+    "sha256": "3941ca98b2e9f0243486ca8afa2ec4651e17e9de977cbf4749334991878bea79",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        3
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/expected/wasm_inline_mixed_references.out",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/expected/wasm_inline_mixed_references.out",
+    "lines": 6,
+    "sha256": "b0d3baf9def8f7963c9e009f707ba6b57c66a7b5d0d9bf7f8ee791ccb77af152",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        6
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/expected/wasm_inline_nested_path.out",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/expected/wasm_inline_nested_path.out",
+    "lines": 12,
+    "sha256": "b9f7100cc6b857218d52fd5d3e8b60bb83a1a1772c82e95ac19d98f993cd1c6b",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        12
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/expected/wasm_inline_optional_references.out",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/expected/wasm_inline_optional_references.out",
+    "lines": 4,
+    "sha256": "6e5418dd6eb25e2c7c575e98b40f26c93f4c16f641cdb64aa1146ee709e4cea5",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        4
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/expected/wasm_inline_reference_path.out",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/expected/wasm_inline_reference_path.out",
+    "lines": 3,
+    "sha256": "3941ca98b2e9f0243486ca8afa2ec4651e17e9de977cbf4749334991878bea79",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        3
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/expected/wasm_struct_refs.out",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/expected/wasm_struct_refs.out",
+    "lines": 4,
+    "sha256": "1670502826a753b9ab41d03fdfcb7b9f8e7a88272d8ce68d14538666f9e4b4a1",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        4
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/run_tests.py",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/run_tests.py",
+    "lines": 2882,
+    "sha256": "07d47102b36a3536999f787f3407cc94e376a0d6cf4112eb85750b412cc6b762",
+    "inspection": "Hash verification only; isolated search hits are not counted as source review",
+    "read_ranges": [],
+    "unread_ranges": [
+      [
+        1,
+        2882
+      ]
+    ]
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_array_walk_packed.goose",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasm/wasm_aggregate_array_walk_packed.goose",
+    "lines": 17,
+    "sha256": "df2318c46259296ee5c568a292b9520b8987124186072a8798c16d28a7e1fb45",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        17
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_array_walk_thin.goose",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasm/wasm_aggregate_array_walk_thin.goose",
+    "lines": 17,
+    "sha256": "840d17ccfbfac7bfddf464b6569c95b605fe390eb7efc686f4b22ef9213554fd",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        17
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_iteration_callbacks.goose",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasm/wasm_aggregate_iteration_callbacks.goose",
+    "lines": 7,
+    "sha256": "361bb25a44f93a63c6b2440e5bcecd9f8a8542becd9988fa239092904c992c96",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        7
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_iteration_paths.goose",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasm/wasm_aggregate_iteration_paths.goose",
+    "lines": 15,
+    "sha256": "2d85e3be72837a1563706a15170ca5bc980ce1534a4211deaddb749f77bd4c96",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        15
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_iteration_refs_packed.goose",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasm/wasm_aggregate_iteration_refs_packed.goose",
+    "lines": 8,
+    "sha256": "e7218acbd6c7a89cb3275327178b38dd849ec019b920a5710965e9a65872e545",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        8
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_iteration_walk_packed.goose",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasm/wasm_aggregate_iteration_walk_packed.goose",
+    "lines": 10,
+    "sha256": "003094aaa728e0824a10e49ccdcfb14c2c8ffcfd35528344207c4474b7922471",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        10
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_byte_print.goose",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasm/wasm_byte_print.goose",
+    "lines": 39,
+    "sha256": "6bf63f35b1f696fd19dd9b89e94d3ff64f2336a3333ec5e156ff5b5af98acb75",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        39
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_effect_path.goose",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasm/wasm_inline_effect_path.goose",
+    "lines": 11,
+    "sha256": "6d4e681e900b42bb107b181c249156d17126dc0000de5ee34e105d65b81da5db",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        11
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_limited_path.goose",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasm/wasm_inline_limited_path.goose",
+    "lines": 5,
+    "sha256": "f76920517d4236017b3f6f240dc8333969fb5ee3c44445632e6f2a0fb329e1da",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        5
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_mixed_references.goose",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasm/wasm_inline_mixed_references.goose",
+    "lines": 28,
+    "sha256": "b4d16db1d336481a0091867540b8721b3bb435b1fca16332942df3db48f82406",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        28
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_nested_path.goose",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasm/wasm_inline_nested_path.goose",
+    "lines": 22,
+    "sha256": "bc46304dd3dfb63f945379d78fde091076f1724947c42b1ded141858aa902f59",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        22
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_optional_references.goose",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasm/wasm_inline_optional_references.goose",
+    "lines": 15,
+    "sha256": "7d275dfd77f08451c32c79b8b61887908e79773ba7011f314b240e9f304a881b",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        15
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_reference_path.goose",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasm/wasm_inline_reference_path.goose",
+    "lines": 9,
+    "sha256": "adb21284ba8b3c57ef559732a18b90916d1cdb1ec61b100cb8b8237523f05f1b",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        9
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_struct_refs.goose",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasm/wasm_struct_refs.goose",
+    "lines": 23,
+    "sha256": "1fcd225b714e664c140f287102d657557b5e6b5c9cbabd4155131a98b0b462fe",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        23
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_admission.py",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasm_aggregate_admission.py",
+    "lines": 118,
+    "sha256": "5b09dfdf07b5556a4695137f32cad592d0728795d634cfdf256059340649e432",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        118
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm_array_places.cpp",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasm_array_places.cpp",
+    "lines": 137,
+    "sha256": "1da4fad03091f60dfa5945824ca051b56766802ababe8bae0ed4a8c6a6b1d7a9",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        137
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm_array_places.mjs",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasm_array_places.mjs",
+    "lines": 56,
+    "sha256": "6f0803f1b9c4dc28f0cf27d6637717414e085a5762fc335d7dcab575c8600456",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        56
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm_array_places.py",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasm_array_places.py",
+    "lines": 79,
+    "sha256": "99cf599533511dfa1877ca905843e60dfe7e4afbb7c5fcc280b42c3a4ab6d3f0",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        79
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm_enum_admission.py",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasm_enum_admission.py",
+    "lines": 78,
+    "sha256": "b80bf66fcdb1433a46117c9e3ec3e9bb3bacc801f61ee2a5ee43f6b69a3e430d",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        78
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm_enum_checks.py",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasm_enum_checks.py",
+    "lines": 84,
+    "sha256": "5e36ea1847b9830b70ed9cf3b3dcd9868c43b41b4eb832c0953bf0ab7007646c",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        84
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm_iteration_checks.py",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasm_iteration_checks.py",
+    "lines": 143,
+    "sha256": "7f5edfcd155a0323dbb2672e655f6a30f8fdc40973c360c2b5441c68f5f29ed9",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        143
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm_struct_admission.py",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasm_struct_admission.py",
+    "lines": 110,
+    "sha256": "e8a19d8afe0534d2bbe9e2c93b96f071b6cdfcad88dfce8e9be9f15983324806",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        110
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm_struct_checks.py",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasm_struct_checks.py",
+    "lines": 63,
+    "sha256": "1713bc31570b903fea8a755a7d97b3924be1d153ed9c6cdc31cc0f2c3d206efd",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        63
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+    "packet_path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/context/test/wasmtime_host.py",
+    "lines": 169,
+    "sha256": "a556120addd1f1abb98c84a18d6c1deed9a9a19303295afafb7adfcf6d3da19e",
+    "inspection": "Full text review",
+    "read_ranges": [
+      [
+        1,
+        169
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/before/docs/wasm/measurements.md",
+    "inspection": "Baseline hash checked against Git; all changed hunks read; unchanged text reviewed in candidate where listed",
+    "lines": 156
+  },
+  {
+    "path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/before/docs/wasm/status.md",
+    "inspection": "Baseline hash checked against Git; all changed hunks read; unchanged text reviewed in candidate where listed",
+    "lines": 279
+  },
+  {
+    "path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/before/src/wasm_arrays.h",
+    "inspection": "Baseline hash checked against Git; all changed hunks read; unchanged text reviewed in candidate where listed",
+    "lines": 907
+  },
+  {
+    "path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/before/src/wasm_codegen.h",
+    "inspection": "Baseline hash checked against Git; all changed hunks read; unchanged text reviewed in candidate where listed",
+    "lines": 1250
+  },
+  {
+    "path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/before/test/wasm_aggregate_checks.py",
+    "inspection": "Baseline hash checked against Git; all changed hunks read; unchanged text reviewed in candidate where listed",
+    "lines": 119
+  },
+  {
+    "path": "/tmp/goose-wasm-inline-ref-abi-review-20261107/before/test/wasm_backend.py",
+    "inspection": "Baseline hash checked against Git; all changed hunks read; unchanged text reviewed in candidate where listed",
+    "lines": 613
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_array_callbacks.goose",
+    "inspection": "Full text review",
+    "sha256": "8bd55d52a61848b4e4bfa5939b80890e93df3efb5aa3b3b74909720647f23f0f",
+    "read_ranges": [
+      [
+        1,
+        23
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_iteration_checkpoint.goose",
+    "inspection": "Full text review",
+    "sha256": "a5c867a3a3a3abd5b9ede56cbc28956d48ae797d600881dc31a7e8a75e490157",
+    "read_ranges": [
+      [
+        1,
+        11
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_iteration_cleanup.goose",
+    "inspection": "Full text review",
+    "sha256": "8458ebce6bb44d2ccc4a89edd62608755071e0fe3373e8cba8705a0e56b71b6e",
+    "read_ranges": [
+      [
+        1,
+        17
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_iteration_control.goose",
+    "inspection": "Full text review",
+    "sha256": "8af6ed45f5cd1e8528395eda523c0b75d7b78c2ff0591159088d1267627a3e44",
+    "read_ranges": [
+      [
+        1,
+        11
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_iteration_defaults.goose",
+    "inspection": "Full text review",
+    "sha256": "f2dbf6c91e5570b74d1dd2fb2d08f5be2aaeeccdcbbd916862776015aac386f4",
+    "read_ranges": [
+      [
+        1,
+        6
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_iteration_enums.goose",
+    "inspection": "Full text review",
+    "sha256": "0315c1d0171bf64807a05c02ea10c8e65e2ff6358c2761d93622047d4bef3843",
+    "read_ranges": [
+      [
+        1,
+        12
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_iteration_fields.goose",
+    "inspection": "Full text review",
+    "sha256": "abce83a83c4a025e0469550f83da1957104e690fc69fabfe5a259d097bf45321",
+    "read_ranges": [
+      [
+        1,
+        15
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_iteration_identity.goose",
+    "inspection": "Full text review",
+    "sha256": "e8e2007dff6323a81dd363b09fed3bcefdeaa6f9a6b7cfb6faa552514a5b29c2",
+    "read_ranges": [
+      [
+        1,
+        9
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_iteration_limited_empty.goose",
+    "inspection": "Full text review",
+    "sha256": "6273d8b2e466d8762cae3a876677ae2cd0aed65680d995df50b8b262d4ebf9d1",
+    "read_ranges": [
+      [
+        1,
+        14
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_iteration_refs_thin.goose",
+    "inspection": "Full text review",
+    "sha256": "0cc43fdcf7e21229d5fbbdb306e6835011a146510ea03bbf9d01285972ea3670",
+    "read_ranges": [
+      [
+        1,
+        8
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_iteration_values.goose",
+    "inspection": "Full text review",
+    "sha256": "c4d02f3e980176a9a9f46adb9a9f00960c9f2e1a285b4abeff8795e2162359b5",
+    "read_ranges": [
+      [
+        1,
+        13
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_iteration_zero_control.goose",
+    "inspection": "Full text review",
+    "sha256": "e57f03b293ef7c858c2f632730f95e064643a20f1afa96ff4350d0aa2062bad0",
+    "read_ranges": [
+      [
+        1,
+        6
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm_bytes.mjs",
+    "inspection": "Full text review",
+    "sha256": "732fea74c2f0d61c3ee1f9d47d243389162a1ed6adf6a62409d13e31e7482ab7",
+    "read_ranges": [
+      [
+        1,
+        36
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm_iteration_owner.mjs",
+    "inspection": "Full text review",
+    "sha256": "a45a989b926e25794e6ece6c10063b6f725c72813380eb60114dd76358b5cc81",
+    "read_ranges": [
+      [
+        1,
+        50
+      ]
+    ],
+    "unread_ranges": []
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+    "inspection": "Full text review",
+    "sha256": "163288c1f382492f33246c4da239d989954097ffda5af217c46399f33e982d03",
+    "read_ranges": [
+      [
+        1,
+        85
+      ]
+    ],
+    "unread_ranges": []
+  }
+]

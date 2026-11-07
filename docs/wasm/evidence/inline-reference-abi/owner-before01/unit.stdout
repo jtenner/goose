@@ -1,0 +1,11 @@
+Start source-identity
+source-identity exit 0
+Start damaged-modules
+damaged-modules exit 0
+Start validate-print
+validate-print exit 0
+Start validate-snapshot
+validate-snapshot exit 0
+Start original-owner-check
+original-owner-check exit 1
+All children reaped; lease released.

@@ -1,0 +1,66 @@
+{
+  "owner": "Goose inline-reference ABI functional unit",
+  "pid": 1447588,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "source-identity",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/owner-before01/verify-source.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "damaged-modules",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/owner-before01/make-controls.py",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/build04/candidate/wasm_inline_ref_abi_packed-O0.wasm",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/owner-before01/controls"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "validate-print",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "--",
+        "wasm-tools",
+        "validate",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/owner-before01/controls/print-owner.wasm"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "validate-snapshot",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "--",
+        "wasm-tools",
+        "validate",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/owner-before01/controls/snapshot-owner.wasm"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "original-owner-check",
+      "command": [
+        "mise",
+        "exec",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/owner-before01/before-check.py"
+      ],
+      "exit": 1
+    }
+  ],
+  "exit": 1,
+  "released_at": "2026-11-07T17:38:05.193370+00:00"
+}

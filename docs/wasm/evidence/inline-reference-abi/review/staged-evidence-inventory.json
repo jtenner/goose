@@ -1,0 +1,1295 @@
+[
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/abi-cost-audit.json",
+    "bytes": 3202,
+    "lines": 52,
+    "type": "dict",
+    "entries": 8,
+    "keys": [
+      "status",
+      "canonical_rule",
+      "internal_transport",
+      "stored_layout",
+      "shared_paths",
+      "source_costs",
+      "evidence_limits",
+      "queued_measurement"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/archive-index-checks.json",
+    "bytes": 24651,
+    "lines": 607,
+    "type": "list",
+    "entries": 121,
+    "keys": [
+      "path",
+      "sha256",
+      "index_match"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/archive-manifest.json",
+    "bytes": 28245,
+    "lines": 607,
+    "type": "list",
+    "entries": 121,
+    "keys": [
+      "source",
+      "archived",
+      "sha256"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build01/commands.json",
+    "bytes": 1189,
+    "lines": 71,
+    "type": "list",
+    "entries": 7,
+    "keys": []
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build01/failing-fixtures/wasm_inline_ref_abi_packed.goose",
+    "bytes": 3162,
+    "lines": 54
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build01/failing-fixtures/wasm_inline_ref_abi_packed.out",
+    "bytes": 47,
+    "lines": 4
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build01/failing-fixtures/wasm_inline_ref_abi_thin.goose",
+    "bytes": 2405,
+    "lines": 42
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build01/failing-fixtures/wasm_inline_ref_abi_thin.out",
+    "bytes": 47,
+    "lines": 4
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build01/harness-hashes.json",
+    "bytes": 950,
+    "lines": 12,
+    "type": "dict",
+    "entries": 10,
+    "keys": [
+      "resource-unit.py",
+      "build01/checks.py",
+      "build01/commands.json",
+      "build01/fixture-names.json",
+      "build01/freeze.py",
+      "build01/input-hashes.json",
+      "build01/scope.json",
+      "build01/shapes.py",
+      "build01/source-hashes.json",
+      "build01/verify-source.py"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build01/input-hashes.json",
+    "bytes": 4270,
+    "lines": 39,
+    "type": "dict",
+    "entries": 37,
+    "keys": [
+      "test/wasm/wasm_inline_ref_abi_thin.goose",
+      "test/wasm/wasm_inline_ref_abi_packed.goose",
+      "test/wasm/wasm_inline_mixed_references.goose",
+      "test/wasm/wasm_inline_optional_references.goose",
+      "test/wasm/wasm_inline_reference_path.goose",
+      "test/wasm/wasm_inline_nested_path.goose",
+      "test/wasm/wasm_inline_effect_path.goose",
+      "test/wasm/wasm_inline_limited_path.goose",
+      "test/wasm/wasm_byte_print.goose",
+      "test/wasm/wasm_struct_refs.goose",
+      "test/wasm/wasm_aggregate_array_walk_thin.goose",
+      "test/wasm/wasm_aggregate_array_walk_packed.goose",
+      "test/wasm/wasm_aggregate_iteration_walk_packed.goose",
+      "test/wasm/wasm_aggregate_iteration_callbacks.goose",
+      "test/wasm/wasm_aggregate_iteration_paths.goose",
+      "test/wasm/wasm_aggregate_iteration_refs_packed.goose",
+      "test/expected/wasm_inline_ref_abi_thin.out",
+      "test/expected/wasm_inline_ref_abi_packed.out",
+      "test/expected/wasm_inline_mixed_references.out",
+      "test/expected/wasm_inline_optional_references.out"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build01/lease.json",
+    "bytes": 686,
+    "lines": 32,
+    "type": "dict",
+    "entries": 7,
+    "keys": [
+      "owner",
+      "pid",
+      "active",
+      "children_reaped",
+      "commands",
+      "exit",
+      "released_at"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build01/parent-checks.exit",
+    "bytes": 2,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build01/parent-checks.stderr",
+    "bytes": 898,
+    "lines": 8
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build01/parent-checks.stdout",
+    "bytes": 0,
+    "lines": 0
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build01/release-verification.json",
+    "bytes": 265,
+    "lines": 11,
+    "type": "dict",
+    "entries": 9,
+    "keys": [
+      "owner_pid",
+      "owner_exited",
+      "children_reaped",
+      "lease_active",
+      "exact_owned_processes",
+      "nonblocking_exclusive_probe",
+      "probe_released",
+      "checked_at",
+      "exit"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build01/scope.json",
+    "bytes": 1316,
+    "lines": 41,
+    "type": "dict",
+    "entries": 16,
+    "keys": [
+      "status",
+      "parent",
+      "fixtures",
+      "optimizations",
+      "engines",
+      "native_reference",
+      "candidate_builds",
+      "whole_memory_and_global_comparison",
+      "thin_new_fixture_modules_must_be_identical",
+      "ABI_shape_checks",
+      "no_precision_timing",
+      "parent_cases",
+      "candidate_cases",
+      "native_reference_runs",
+      "whole_memory_engine",
+      "wasmtime_scope"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build01/source-hashes.json",
+    "bytes": 7802,
+    "lines": 88,
+    "type": "dict",
+    "entries": 86,
+    "keys": [
+      "src/gfx.h",
+      "src/typecheck_exprs.h",
+      "src/utils.h",
+      "src/typecheck_types.h",
+      "src/optimize.h",
+      "src/optimize_reassoc.h",
+      "src/packages.h",
+      "src/jit_runtime.h",
+      "src/lsp_workspace.h",
+      "src/codegen_types.h",
+      "src/toolchain.h",
+      "src/typecheck.h",
+      "src/flat_map.h",
+      "src/progress.cpp",
+      "src/json.h",
+      "src/expansion_bind.h",
+      "src/wasm_memory.h",
+      "src/process.cpp",
+      "src/shaderc.c",
+      "src/lsp_rpc.h"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build02/commands.json",
+    "bytes": 1189,
+    "lines": 71,
+    "type": "list",
+    "entries": 7,
+    "keys": []
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build02/failing-fixtures/wasm_inline_ref_abi_packed.goose",
+    "bytes": 3182,
+    "lines": 54
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build02/failing-fixtures/wasm_inline_ref_abi_packed.out",
+    "bytes": 47,
+    "lines": 4
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build02/failing-fixtures/wasm_inline_ref_abi_thin.goose",
+    "bytes": 2425,
+    "lines": 42
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build02/failing-fixtures/wasm_inline_ref_abi_thin.out",
+    "bytes": 47,
+    "lines": 4
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build02/harness-hashes.json",
+    "bytes": 1053,
+    "lines": 13,
+    "type": "dict",
+    "entries": 11,
+    "keys": [
+      "resource-unit.py",
+      "build02/checks.py",
+      "build02/commands.json",
+      "build02/fixture-names.json",
+      "build02/freeze.py",
+      "build02/input-hashes.json",
+      "build02/scope.json",
+      "build02/setup-correction.json",
+      "build02/shapes.py",
+      "build02/source-hashes.json",
+      "build02/verify-source.py"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build02/input-hashes.json",
+    "bytes": 4270,
+    "lines": 39,
+    "type": "dict",
+    "entries": 37,
+    "keys": [
+      "test/wasm/wasm_inline_ref_abi_thin.goose",
+      "test/wasm/wasm_inline_ref_abi_packed.goose",
+      "test/wasm/wasm_inline_mixed_references.goose",
+      "test/wasm/wasm_inline_optional_references.goose",
+      "test/wasm/wasm_inline_reference_path.goose",
+      "test/wasm/wasm_inline_nested_path.goose",
+      "test/wasm/wasm_inline_effect_path.goose",
+      "test/wasm/wasm_inline_limited_path.goose",
+      "test/wasm/wasm_byte_print.goose",
+      "test/wasm/wasm_struct_refs.goose",
+      "test/wasm/wasm_aggregate_array_walk_thin.goose",
+      "test/wasm/wasm_aggregate_array_walk_packed.goose",
+      "test/wasm/wasm_aggregate_iteration_walk_packed.goose",
+      "test/wasm/wasm_aggregate_iteration_callbacks.goose",
+      "test/wasm/wasm_aggregate_iteration_paths.goose",
+      "test/wasm/wasm_aggregate_iteration_refs_packed.goose",
+      "test/expected/wasm_inline_ref_abi_thin.out",
+      "test/expected/wasm_inline_ref_abi_packed.out",
+      "test/expected/wasm_inline_mixed_references.out",
+      "test/expected/wasm_inline_optional_references.out"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build02/lease.json",
+    "bytes": 686,
+    "lines": 32,
+    "type": "dict",
+    "entries": 7,
+    "keys": [
+      "owner",
+      "pid",
+      "active",
+      "children_reaped",
+      "commands",
+      "exit",
+      "released_at"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build02/parent-checks.exit",
+    "bytes": 2,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build02/parent-checks.stderr",
+    "bytes": 686,
+    "lines": 8
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build02/parent-checks.stdout",
+    "bytes": 0,
+    "lines": 0
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build02/release-verification.json",
+    "bytes": 265,
+    "lines": 11,
+    "type": "dict",
+    "entries": 9,
+    "keys": [
+      "owner_pid",
+      "owner_exited",
+      "children_reaped",
+      "lease_active",
+      "exact_owned_processes",
+      "nonblocking_exclusive_probe",
+      "probe_released",
+      "checked_at",
+      "exit"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build02/scope.json",
+    "bytes": 1316,
+    "lines": 41,
+    "type": "dict",
+    "entries": 16,
+    "keys": [
+      "status",
+      "parent",
+      "fixtures",
+      "optimizations",
+      "engines",
+      "native_reference",
+      "candidate_builds",
+      "whole_memory_and_global_comparison",
+      "thin_new_fixture_modules_must_be_identical",
+      "ABI_shape_checks",
+      "no_precision_timing",
+      "parent_cases",
+      "candidate_cases",
+      "native_reference_runs",
+      "whole_memory_engine",
+      "wasmtime_scope"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build02/source-hashes.json",
+    "bytes": 7802,
+    "lines": 88,
+    "type": "dict",
+    "entries": 86,
+    "keys": [
+      "src/gfx.h",
+      "src/typecheck_exprs.h",
+      "src/utils.h",
+      "src/typecheck_types.h",
+      "src/optimize.h",
+      "src/optimize_reassoc.h",
+      "src/packages.h",
+      "src/jit_runtime.h",
+      "src/lsp_workspace.h",
+      "src/codegen_types.h",
+      "src/toolchain.h",
+      "src/typecheck.h",
+      "src/flat_map.h",
+      "src/progress.cpp",
+      "src/json.h",
+      "src/expansion_bind.h",
+      "src/wasm_memory.h",
+      "src/process.cpp",
+      "src/shaderc.c",
+      "src/lsp_rpc.h"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build03/commands.json",
+    "bytes": 1189,
+    "lines": 71,
+    "type": "list",
+    "entries": 7,
+    "keys": []
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build03/failing-fixtures/wasm_inline_ref_abi_packed.goose",
+    "bytes": 3201,
+    "lines": 54
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build03/failing-fixtures/wasm_inline_ref_abi_packed.out",
+    "bytes": 47,
+    "lines": 4
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build03/failing-fixtures/wasm_inline_ref_abi_thin.goose",
+    "bytes": 2444,
+    "lines": 42
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build03/failing-fixtures/wasm_inline_ref_abi_thin.out",
+    "bytes": 47,
+    "lines": 4
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build03/harness-hashes.json",
+    "bytes": 1053,
+    "lines": 13,
+    "type": "dict",
+    "entries": 11,
+    "keys": [
+      "resource-unit.py",
+      "build03/checks.py",
+      "build03/commands.json",
+      "build03/fixture-names.json",
+      "build03/freeze.py",
+      "build03/input-hashes.json",
+      "build03/scope.json",
+      "build03/setup-correction.json",
+      "build03/shapes.py",
+      "build03/source-hashes.json",
+      "build03/verify-source.py"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build03/input-hashes.json",
+    "bytes": 4270,
+    "lines": 39,
+    "type": "dict",
+    "entries": 37,
+    "keys": [
+      "test/wasm/wasm_inline_ref_abi_thin.goose",
+      "test/wasm/wasm_inline_ref_abi_packed.goose",
+      "test/wasm/wasm_inline_mixed_references.goose",
+      "test/wasm/wasm_inline_optional_references.goose",
+      "test/wasm/wasm_inline_reference_path.goose",
+      "test/wasm/wasm_inline_nested_path.goose",
+      "test/wasm/wasm_inline_effect_path.goose",
+      "test/wasm/wasm_inline_limited_path.goose",
+      "test/wasm/wasm_byte_print.goose",
+      "test/wasm/wasm_struct_refs.goose",
+      "test/wasm/wasm_aggregate_array_walk_thin.goose",
+      "test/wasm/wasm_aggregate_array_walk_packed.goose",
+      "test/wasm/wasm_aggregate_iteration_walk_packed.goose",
+      "test/wasm/wasm_aggregate_iteration_callbacks.goose",
+      "test/wasm/wasm_aggregate_iteration_paths.goose",
+      "test/wasm/wasm_aggregate_iteration_refs_packed.goose",
+      "test/expected/wasm_inline_ref_abi_thin.out",
+      "test/expected/wasm_inline_ref_abi_packed.out",
+      "test/expected/wasm_inline_mixed_references.out",
+      "test/expected/wasm_inline_optional_references.out"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build03/lease.json",
+    "bytes": 687,
+    "lines": 32,
+    "type": "dict",
+    "entries": 7,
+    "keys": [
+      "owner",
+      "pid",
+      "active",
+      "children_reaped",
+      "commands",
+      "exit",
+      "released_at"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build03/parent-checks.exit",
+    "bytes": 2,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build03/parent-checks.stderr",
+    "bytes": 712,
+    "lines": 8
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build03/parent-checks.stdout",
+    "bytes": 0,
+    "lines": 0
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build03/release-verification.json",
+    "bytes": 266,
+    "lines": 11,
+    "type": "dict",
+    "entries": 9,
+    "keys": [
+      "owner_pid",
+      "owner_exited",
+      "children_reaped",
+      "lease_active",
+      "exact_owned_processes",
+      "nonblocking_exclusive_probe",
+      "probe_released",
+      "checked_at",
+      "exit"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build03/scope.json",
+    "bytes": 1316,
+    "lines": 41,
+    "type": "dict",
+    "entries": 16,
+    "keys": [
+      "status",
+      "parent",
+      "fixtures",
+      "optimizations",
+      "engines",
+      "native_reference",
+      "candidate_builds",
+      "whole_memory_and_global_comparison",
+      "thin_new_fixture_modules_must_be_identical",
+      "ABI_shape_checks",
+      "no_precision_timing",
+      "parent_cases",
+      "candidate_cases",
+      "native_reference_runs",
+      "whole_memory_engine",
+      "wasmtime_scope"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build03/source-hashes.json",
+    "bytes": 7802,
+    "lines": 88,
+    "type": "dict",
+    "entries": 86,
+    "keys": [
+      "src/gfx.h",
+      "src/typecheck_exprs.h",
+      "src/utils.h",
+      "src/typecheck_types.h",
+      "src/optimize.h",
+      "src/optimize_reassoc.h",
+      "src/packages.h",
+      "src/jit_runtime.h",
+      "src/lsp_workspace.h",
+      "src/codegen_types.h",
+      "src/toolchain.h",
+      "src/typecheck.h",
+      "src/flat_map.h",
+      "src/progress.cpp",
+      "src/json.h",
+      "src/expansion_bind.h",
+      "src/wasm_memory.h",
+      "src/process.cpp",
+      "src/shaderc.c",
+      "src/lsp_rpc.h"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/abi-shapes.exit",
+    "bytes": 2,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/abi-shapes.stderr",
+    "bytes": 0,
+    "lines": 0
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/abi-shapes.stdout",
+    "bytes": 82,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/build-identity.json",
+    "bytes": 119,
+    "lines": 4,
+    "type": "dict",
+    "entries": 2,
+    "keys": [
+      "compiler_sha256",
+      "source_verified"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/candidate-checks.exit",
+    "bytes": 2,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/candidate-checks.stderr",
+    "bytes": 0,
+    "lines": 0
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/candidate-checks.stdout",
+    "bytes": 82,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/candidate/case-results.json",
+    "bytes": 22867,
+    "lines": 754,
+    "type": "list",
+    "entries": 32,
+    "keys": [
+      "source",
+      "opt",
+      "module_bytes",
+      "module_sha256",
+      "memories",
+      "globals",
+      "parent_memory_and_globals_exact",
+      "parent_module_identical"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/candidate/commands-results.json",
+    "bytes": 44488,
+    "lines": 1327,
+    "type": "list",
+    "entries": 129,
+    "keys": [
+      "name",
+      "command",
+      "exit"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/candidate/owner-field-admission.exit",
+    "bytes": 2,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/candidate/owner-field-admission.stderr",
+    "bytes": 169,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/candidate/owner-field-admission.stdout",
+    "bytes": 0,
+    "lines": 0
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/checks.py",
+    "bytes": 5638,
+    "lines": 74
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/commands.json",
+    "bytes": 1189,
+    "lines": 71,
+    "type": "list",
+    "entries": 7,
+    "keys": []
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/fixture-names.json",
+    "bytes": 533,
+    "lines": 18,
+    "type": "list",
+    "entries": 16,
+    "keys": []
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/freeze.py",
+    "bytes": 482,
+    "lines": 6
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/harness-hashes.json",
+    "bytes": 1161,
+    "lines": 14,
+    "type": "dict",
+    "entries": 12,
+    "keys": [
+      "resource-unit.py",
+      "build04/checks.py",
+      "build04/commands.json",
+      "build04/fixture-names.json",
+      "build04/freeze.py",
+      "build04/input-hashes.json",
+      "build04/rejected-owner-field.goose",
+      "build04/scope.json",
+      "build04/setup-correction.json",
+      "build04/shapes.py",
+      "build04/source-hashes.json",
+      "build04/verify-source.py"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/input-hashes.json",
+    "bytes": 4270,
+    "lines": 39,
+    "type": "dict",
+    "entries": 37,
+    "keys": [
+      "test/wasm/wasm_inline_ref_abi_thin.goose",
+      "test/wasm/wasm_inline_ref_abi_packed.goose",
+      "test/wasm/wasm_inline_mixed_references.goose",
+      "test/wasm/wasm_inline_optional_references.goose",
+      "test/wasm/wasm_inline_reference_path.goose",
+      "test/wasm/wasm_inline_nested_path.goose",
+      "test/wasm/wasm_inline_effect_path.goose",
+      "test/wasm/wasm_inline_limited_path.goose",
+      "test/wasm/wasm_byte_print.goose",
+      "test/wasm/wasm_struct_refs.goose",
+      "test/wasm/wasm_aggregate_array_walk_thin.goose",
+      "test/wasm/wasm_aggregate_array_walk_packed.goose",
+      "test/wasm/wasm_aggregate_iteration_walk_packed.goose",
+      "test/wasm/wasm_aggregate_iteration_callbacks.goose",
+      "test/wasm/wasm_aggregate_iteration_paths.goose",
+      "test/wasm/wasm_aggregate_iteration_refs_packed.goose",
+      "test/expected/wasm_inline_ref_abi_thin.out",
+      "test/expected/wasm_inline_ref_abi_packed.out",
+      "test/expected/wasm_inline_mixed_references.out",
+      "test/expected/wasm_inline_optional_references.out"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/lease.json",
+    "bytes": 1786,
+    "lines": 86,
+    "type": "dict",
+    "entries": 7,
+    "keys": [
+      "owner",
+      "pid",
+      "active",
+      "children_reaped",
+      "commands",
+      "exit",
+      "released_at"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/parent-checks.exit",
+    "bytes": 2,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/parent-checks.stderr",
+    "bytes": 0,
+    "lines": 0
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/parent-checks.stdout",
+    "bytes": 79,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/parent/case-results.json",
+    "bytes": 20581,
+    "lines": 696,
+    "type": "list",
+    "entries": 32,
+    "keys": [
+      "source",
+      "opt",
+      "module_bytes",
+      "module_sha256",
+      "memories",
+      "globals",
+      "parent_ordinary_array_reference_abi",
+      "reused_from"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/parent/commands-results.json",
+    "bytes": 43717,
+    "lines": 1329,
+    "type": "list",
+    "entries": 129,
+    "keys": [
+      "name",
+      "command",
+      "exit"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/parent/owner-field-admission.exit",
+    "bytes": 2,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/parent/owner-field-admission.stderr",
+    "bytes": 169,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/parent/owner-field-admission.stdout",
+    "bytes": 0,
+    "lines": 0
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/parent/reused-parent-results.json",
+    "bytes": 6975,
+    "lines": 95,
+    "type": "dict",
+    "entries": 3,
+    "keys": [
+      "cases",
+      "original_artifacts",
+      "executed_again"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/rejected-owner-field.goose",
+    "bytes": 3201,
+    "lines": 54
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/release-build.exit",
+    "bytes": 2,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/release-build.stderr",
+    "bytes": 4178,
+    "lines": 35
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/release-build.stdout",
+    "bytes": 445,
+    "lines": 12
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/release-verification.json",
+    "bytes": 266,
+    "lines": 11,
+    "type": "dict",
+    "entries": 9,
+    "keys": [
+      "owner_pid",
+      "owner_exited",
+      "children_reaped",
+      "lease_active",
+      "exact_owned_processes",
+      "nonblocking_exclusive_probe",
+      "probe_released",
+      "checked_at",
+      "exit"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/scope.json",
+    "bytes": 1464,
+    "lines": 46,
+    "type": "dict",
+    "entries": 21,
+    "keys": [
+      "status",
+      "parent",
+      "fixtures",
+      "optimizations",
+      "engines",
+      "native_reference",
+      "candidate_builds",
+      "whole_memory_and_global_comparison",
+      "thin_new_fixture_modules_must_be_identical",
+      "ABI_shape_checks",
+      "no_precision_timing",
+      "parent_cases",
+      "candidate_cases",
+      "native_reference_runs",
+      "whole_memory_engine",
+      "wasmtime_scope",
+      "parent_reused_cases",
+      "parent_fresh_cases",
+      "native_fresh_runs",
+      "native_reused_runs"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/setup-correction.json",
+    "bytes": 485,
+    "lines": 8,
+    "type": "dict",
+    "entries": 6,
+    "keys": [
+      "parent_attempt",
+      "cause",
+      "change",
+      "production_source_changed",
+      "candidate_build_started",
+      "reused_passed_cases"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/shape-commands.json",
+    "bytes": 1483,
+    "lines": 66,
+    "type": "list",
+    "entries": 8,
+    "keys": [
+      "command",
+      "exit"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/shapes.py",
+    "bytes": 856,
+    "lines": 13
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/source-hashes.json",
+    "bytes": 7802,
+    "lines": 88,
+    "type": "dict",
+    "entries": 86,
+    "keys": [
+      "src/gfx.h",
+      "src/typecheck_exprs.h",
+      "src/utils.h",
+      "src/typecheck_types.h",
+      "src/optimize.h",
+      "src/optimize_reassoc.h",
+      "src/packages.h",
+      "src/jit_runtime.h",
+      "src/lsp_workspace.h",
+      "src/codegen_types.h",
+      "src/toolchain.h",
+      "src/typecheck.h",
+      "src/flat_map.h",
+      "src/progress.cpp",
+      "src/json.h",
+      "src/expansion_bind.h",
+      "src/wasm_memory.h",
+      "src/process.cpp",
+      "src/shaderc.c",
+      "src/lsp_rpc.h"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/build04/verify-source.py",
+    "bytes": 1666,
+    "lines": 21
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/compatibility01/commands.json",
+    "bytes": 756,
+    "lines": 36,
+    "type": "list",
+    "entries": 4,
+    "keys": []
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/compatibility01/compatibility01.exit",
+    "bytes": 2,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/compatibility01/compatibility01.stderr",
+    "bytes": 0,
+    "lines": 0
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/compatibility01/compatibility01.stdout",
+    "bytes": 75,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/compatibility01/exact/summary.json",
+    "bytes": 15822,
+    "lines": 370,
+    "type": "dict",
+    "entries": 3,
+    "keys": [
+      "reference_sha256",
+      "candidate_sha256",
+      "comparisons"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/compatibility01/lease.json",
+    "bytes": 1175,
+    "lines": 48,
+    "type": "dict",
+    "entries": 7,
+    "keys": [
+      "owner",
+      "pid",
+      "active",
+      "children_reaped",
+      "commands",
+      "exit",
+      "released_at"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/compatibility01/module-deltas.exit",
+    "bytes": 2,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/compatibility01/module-deltas.py",
+    "bytes": 1108,
+    "lines": 10
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/compatibility01/module-deltas.stderr",
+    "bytes": 0,
+    "lines": 0
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/compatibility01/module-deltas.stdout",
+    "bytes": 205,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/compatibility01/prior-module-deltas.json",
+    "bytes": 81766,
+    "lines": 2262,
+    "type": "list",
+    "entries": 226,
+    "keys": [
+      "source",
+      "opt",
+      "parent_bytes",
+      "candidate_bytes",
+      "delta_bytes",
+      "identical",
+      "parent_sha256",
+      "candidate_sha256"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/compatibility01/release-verification.json",
+    "bytes": 266,
+    "lines": 11,
+    "type": "dict",
+    "entries": 9,
+    "keys": [
+      "owner_pid",
+      "owner_exited",
+      "children_reaped",
+      "lease_active",
+      "exact_owned_processes",
+      "nonblocking_exclusive_probe",
+      "probe_released",
+      "checked_at",
+      "exit"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/compatibility01/source-identity-after.exit",
+    "bytes": 2,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/compatibility01/source-identity-after.stdout",
+    "bytes": 57,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/compatibility01/source-identity.exit",
+    "bytes": 2,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/compatibility01/source-identity.stdout",
+    "bytes": 57,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/full-wasm01/commands.json",
+    "bytes": 805,
+    "lines": 36,
+    "type": "list",
+    "entries": 3,
+    "keys": []
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/full-wasm01/full-wasm01.exit",
+    "bytes": 2,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/full-wasm01/full-wasm01.stderr",
+    "bytes": 0,
+    "lines": 0
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/full-wasm01/full-wasm01.stdout",
+    "bytes": 33,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/full-wasm01/lease.json",
+    "bytes": 1188,
+    "lines": 47,
+    "type": "dict",
+    "entries": 7,
+    "keys": [
+      "owner",
+      "pid",
+      "active",
+      "children_reaped",
+      "commands",
+      "exit",
+      "released_at"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/full-wasm01/release-verification.json",
+    "bytes": 266,
+    "lines": 11,
+    "type": "dict",
+    "entries": 9,
+    "keys": [
+      "owner_pid",
+      "owner_exited",
+      "children_reaped",
+      "lease_active",
+      "exact_owned_processes",
+      "nonblocking_exclusive_probe",
+      "probe_released",
+      "checked_at",
+      "exit"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/full-wasm01/source-identity-after.exit",
+    "bytes": 2,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/full-wasm01/source-identity-after.stdout",
+    "bytes": 57,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/full-wasm01/source-identity.exit",
+    "bytes": 2,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/full-wasm01/source-identity.stdout",
+    "bytes": 57,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/module-structure-deltas.json",
+    "bytes": 81223,
+    "lines": 3698,
+    "type": "list",
+    "entries": 54,
+    "keys": [
+      "source",
+      "opt",
+      "module_bytes_delta",
+      "code_section_bytes_delta",
+      "type_count_delta",
+      "function_count_delta",
+      "local_slots_delta",
+      "helpers_added",
+      "helpers_removed",
+      "changed_function_metadata"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/native-baseline01/commands.json",
+    "bytes": 734,
+    "lines": 38,
+    "type": "list",
+    "entries": 3,
+    "keys": []
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/native-baseline01/lease.json",
+    "bytes": 1121,
+    "lines": 49,
+    "type": "dict",
+    "entries": 7,
+    "keys": [
+      "owner",
+      "pid",
+      "active",
+      "children_reaped",
+      "commands",
+      "exit",
+      "released_at"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/native-baseline01/native-baseline01.exit",
+    "bytes": 2,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/native-baseline01/native-baseline01.stderr",
+    "bytes": 0,
+    "lines": 0
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/native-baseline01/native-baseline01.stdout",
+    "bytes": 2914,
+    "lines": 31
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/native-baseline01/release-verification.json",
+    "bytes": 266,
+    "lines": 11,
+    "type": "dict",
+    "entries": 9,
+    "keys": [
+      "owner_pid",
+      "owner_exited",
+      "children_reaped",
+      "lease_active",
+      "exact_owned_processes",
+      "nonblocking_exclusive_probe",
+      "probe_released",
+      "checked_at",
+      "exit"
+    ]
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/native-baseline01/source-identity-after.exit",
+    "bytes": 2,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/native-baseline01/source-identity-after.stdout",
+    "bytes": 57,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/native-baseline01/source-identity.exit",
+    "bytes": 2,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/native-baseline01/source-identity.stdout",
+    "bytes": 57,
+    "lines": 1
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/static-module-facts.py",
+    "bytes": 3438,
+    "lines": 56
+  },
+  {
+    "path": "docs/wasm/evidence/inline-reference-abi/validation-input-hashes.json",
+    "bytes": 484360,
+    "lines": 4198,
+    "type": "dict",
+    "entries": 4196,
+    "keys": [
+      "scripts/check_doc_examples.py",
+      "scripts/package_release.py",
+      "scripts/pow10_table.py",
+      "scripts/run_wasm.mjs",
+      "scripts/toolchain.py",
+      "test/audio/audio_err_thread.goose",
+      "test/audio/audio_errors.goose",
+      "test/audio/audio_mixer.goose",
+      "test/backend_shared.py",
+      "test/cli_paths.py",
+      "test/codegen/adt_adaptation.goose",
+      "test/codegen/adt_field_tags.goose",
+      "test/codegen/append_constructed_results.goose",
+      "test/codegen/append_destination_storage.goose",
+      "test/codegen/append_limited_call.goose",
+      "test/codegen/append_limited_queue.goose",
+      "test/codegen/append_references.goose",
+      "test/codegen/argument_captures.goose",
+      "test/codegen/array_length_boundaries.goose",
+      "test/codegen/array_length_overflow_runtime.goose"
+    ]
+  }
+]

@@ -1,0 +1,19 @@
+{
+  "healthy_sha256": "a3bce45a894be96f29ca12f71b061fbc7fdd7e8bfda0ef041ffa769c8cb379f3",
+  "controls": [
+    {
+      "name": "print-owner",
+      "sha256": "e069434f961c2a8887e10ea416a657fcd531d143119f1779a88e7a073411b30d",
+      "inserted_bytes": "10001a",
+      "target": "_start before its final end",
+      "intended_owner_count": 1
+    },
+    {
+      "name": "snapshot-owner",
+      "sha256": "1cd497b893e0f70898b9ee7498d37bf82a75ed2507651179cc6fe91e019d0c7f",
+      "inserted_bytes": "410041004100100a1a",
+      "target": "_start before its final end",
+      "intended_owner_count": 1
+    }
+  ]
+}

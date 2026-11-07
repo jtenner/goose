@@ -1,0 +1,152 @@
+{
+  "source": "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02",
+  "reason": "Passed guest outcomes preceded failed single-specialization assertion. Row reconstructed from actual streams, statuses, image hashes and saved WAT; no original case summary existed.",
+  "commands": [
+    {
+      "name": "parent-wasm_inline_ref_callback_thin-O0-native-emit",
+      "command": [
+        "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+        "-O0",
+        "--standalone",
+        "-o",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/parent-wasm_inline_ref_callback_thin-O0.c",
+        "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_callback_thin.goose"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "parent-wasm_inline_ref_callback_thin-O0-native-build",
+      "command": [
+        "cc",
+        "-O0",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/parent-wasm_inline_ref_callback_thin-O0.c",
+        "-pthread",
+        "-lm",
+        "-ldl",
+        "-o",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/parent-wasm_inline_ref_callback_thin-O0.native"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "parent-wasm_inline_ref_callback_thin-O0-native-run",
+      "command": [
+        "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/parent-wasm_inline_ref_callback_thin-O0.native"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "parent-wasm_inline_ref_callback_thin-O0-emit",
+      "command": [
+        "/tmp/goose-wasm-array-places-20261107/build02/goose-tested",
+        "-O0",
+        "--target",
+        "wasm",
+        "-o",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/parent-wasm_inline_ref_callback_thin-O0.wasm",
+        "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_inline_ref_callback_thin.goose"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "parent-wasm_inline_ref_callback_thin-O0-validate",
+      "command": [
+        "wasm-tools",
+        "validate",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/parent-wasm_inline_ref_callback_thin-O0.wasm"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "parent-wasm_inline_ref_callback_thin-O0-node",
+      "command": [
+        "node",
+        "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/parent-wasm_inline_ref_callback_thin-O0.wasm",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/parent-wasm_inline_ref_callback_thin-O0-instance"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "parent-wasm_inline_ref_callback_thin-O0-wasmtime",
+      "command": [
+        "/tmp/goose-wasm-runtime-env/bin/python",
+        "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/parent-wasm_inline_ref_callback_thin-O0.wasm"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "parent-wasm_inline_ref_callback_thin-O0-wat",
+      "command": [
+        "wasm-tools",
+        "print",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02/parent-wasm_inline_ref_callback_thin-O0.wasm"
+      ],
+      "exit": 0
+    }
+  ],
+  "files": {
+    "parent-wasm_inline_ref_callback_thin-O0-validate.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "parent-wasm_inline_ref_callback_thin-O0-native-emit.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "parent-wasm_inline_ref_callback_thin-O0-native-run.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "parent-wasm_inline_ref_callback_thin-O0-wat.stdout": "1d3e07ecf00b3698c009f58f2cfb795aea71ff4b88f7bf20c47975f0ebc19721",
+    "parent-wasm_inline_ref_callback_thin-O0-wasmtime.stdout": "f4c7f44754be74da587a642e225316ae6df5061974a621db4af308976a73d1e2",
+    "parent-wasm_inline_ref_callback_thin-O0-wat.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "parent-wasm_inline_ref_callback_thin-O0-emit.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "parent-wasm_inline_ref_callback_thin-O0-wat.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "parent-wasm_inline_ref_callback_thin-O0.native": "f9616233073803c35ffa33065d4baca977fb81c8e1f8ba6d7e0ebad6bae6534a",
+    "parent-wasm_inline_ref_callback_thin-O0-emit.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "parent-wasm_inline_ref_callback_thin-O0-native-run.stdout": "f4c7f44754be74da587a642e225316ae6df5061974a621db4af308976a73d1e2",
+    "parent-wasm_inline_ref_callback_thin-O0-wasmtime.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "parent-wasm_inline_ref_callback_thin-O0.c": "7d0b515c35eabbe54037b1a518ca003599501f9e657a002db91d8daf988ad3c3",
+    "parent-wasm_inline_ref_callback_thin-O0-validate.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "parent-wasm_inline_ref_callback_thin-O0-node.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "parent-wasm_inline_ref_callback_thin-O0.wasm": "43d18191413b9e487e4a41c13931940a39c3e93370cad5ff4fdfa15fae9224a8",
+    "parent-wasm_inline_ref_callback_thin-O0-instance/instance.json": "fa0cbba5bcc7f0e64767bd864b58be8437b0443a703bc22459a90f05432a9f7e",
+    "parent-wasm_inline_ref_callback_thin-O0-instance/memory.bin": "fe6f4153d4c4f3eb53b1b55b2e879b70e179a95b65d3ab95bf790178d09abcf3",
+    "parent-wasm_inline_ref_callback_thin-O0-native-build.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "parent-wasm_inline_ref_callback_thin-O0-native-emit.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "parent-wasm_inline_ref_callback_thin-O0-emit.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "parent-wasm_inline_ref_callback_thin-O0-native-build.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "parent-wasm_inline_ref_callback_thin-O0-native-build.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "parent-wasm_inline_ref_callback_thin-O0-node.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "parent-wasm_inline_ref_callback_thin-O0-native-emit.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "parent-wasm_inline_ref_callback_thin-O0-wasmtime.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "parent-wasm_inline_ref_callback_thin-O0-native-run.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "parent-wasm_inline_ref_callback_thin-O0-validate.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "parent-wasm_inline_ref_callback_thin-O0-node.stdout": "f4c7f44754be74da587a642e225316ae6df5061974a621db4af308976a73d1e2"
+  },
+  "case": {
+    "phase": "parent",
+    "mode": "thin",
+    "opt": 0,
+    "module_sha256": "43d18191413b9e487e4a41c13931940a39c3e93370cad5ff4fdfa15fae9224a8",
+    "state": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "fe6f4153d4c4f3eb53b1b55b2e879b70e179a95b65d3ab95bf790178d09abcf3"
+        }
+      ],
+      "globals": []
+    },
+    "reference_signature": "i32",
+    "signature_specializations": {
+      "relayFixed": [
+        "  (func $relayFixed.1 (;12;) (type 9) (param i32) (result i32)"
+      ],
+      "relayMaybeFixed": [
+        "  (func $relayMaybeFixed.5 (;16;) (type 9) (param i32) (result i32)",
+        "  (func $relayMaybeFixed.6 (;17;) (type 9) (param i32) (result i32)"
+      ]
+    },
+    "reused_from": "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02"
+  },
+  "reused_guest_outcomes": 3
+}

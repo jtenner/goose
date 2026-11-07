@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-inline-ref-abi-20261107/owner-before01/before-check.py", line 16, in <module>
+    assert not accepted,'Original owner assertion accepted damaged controls: '+','.join(accepted)
+           ^^^^^^^^^^^^
+AssertionError: Original owner assertion accepted damaged controls: print-owner,snapshot-owner

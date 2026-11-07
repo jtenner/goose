@@ -154,3 +154,27 @@ The handoff needs fresh coordinated scope, exact source/tool/build identities,
 normal host and affinity controls, declared warmups/repetitions and qualified
 uncertainty. Park a clear measured shared-path loss. No scalar grant is reused
 and no speed or physical-memory gain is claimed by this queued work.
+
+
+## Pending canonical reference-ABI measurements
+
+Compare accepted array-place compiler `5b68b041` with canonical reference
+compiler `bcc336c9` on frozen matched source. Include thin controls and packed
+fixed/static-limited references through direct calls, opaque params, globals,
+optionals, stored fields, 1/2/8-step mutable paths, copies, equality, by-value
+binders and byte snapshots. Vary owner counts and payload sizes. Record paired
+compiler CPU/wall time, allocation counts/bytes, RSS, module/type/local/helper
+sizes, engine initialization, guest execution and separate physical-memory
+observations. Keep native/reference and engine identities exact.
+
+The 32 focused Node image pairs are identical; 54 of 226 saved module pairs
+change; total module size falls by 313 bytes while code sections grow by 405.
+Use the corrected completion observer on both compilers. It reads print and
+snapshot owners before terminal cleanup; ordinary adapter runs add one optional
+terminal-hook check and allocate no callback for it. Neither size result proves a runtime or
+memory improvement. Wider params/locals and checked identity dispatch can cost
+work even without a new heap wrapper. Use fresh coordinated scope, actual
+family/count contracts, exclusive lease and declared host/affinity controls,
+repetitions/warmups and qualified decision limits. A clear measured shared-path
+loss must be resolved or parked. No scalar grant is reused; performance
+acceptance remains open.

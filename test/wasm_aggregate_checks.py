@@ -63,8 +63,22 @@ def check_reference_abi(run, validator, out):
         for opt in (0, 2):
             module = out / f'wasm_aggregate_array_walk_{mode}-O{opt}.wasm'
             text = run([validator, 'print', module]).stdout.decode()
-            for name, signature in (('arrayref', '(param i32) (result i32)'),
-                                    ('elementref', f'(param i32) (result {result})')):
+            for name, signature in (('arrayref', f'(param {result}) (result {result})'),
+                                    ('elementref', f'(param {result}) (result {result})')):
+                found = [line for line in text.splitlines() if re.search(r'\(func \$' + name + r'\.', line)]
+                assert len(found) == 1 and signature in found[0], (mode, opt, name, found)
+                count += 1
+            module = out / f'wasm_inline_ref_abi_{mode}-O{opt}.wasm'
+            text = run([validator, 'print', module]).stdout.decode()
+            signatures = [
+                ('fixedref', f'(param {result}) (result {result})'),
+                ('limitedref', f'(param {result}) (result {result})'),
+                ('optionalref', f'(param {result} i32) (result {result})'),
+                ('choose', f'(param {result} {result} i32) (result {result})'),
+            ]
+            if mode == 'packed':
+                signatures.append(('headerref', '(param i32) (result i32)'))
+            for name, signature in signatures:
                 found = [line for line in text.splitlines() if re.search(r'\(func \$' + name + r'\.', line)]
                 assert len(found) == 1 and signature in found[0], (mode, opt, name, found)
                 count += 1

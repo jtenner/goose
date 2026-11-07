@@ -1,0 +1,263 @@
+[
+  {
+    "phase": "parent",
+    "mode": "thin",
+    "opt": 0,
+    "module_sha256": "43d18191413b9e487e4a41c13931940a39c3e93370cad5ff4fdfa15fae9224a8",
+    "state": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "fe6f4153d4c4f3eb53b1b55b2e879b70e179a95b65d3ab95bf790178d09abcf3"
+        }
+      ],
+      "globals": []
+    },
+    "reference_signature": "i32",
+    "signature_specializations": {
+      "relayFixed": [
+        "  (func $relayFixed.1 (;12;) (type 9) (param i32) (result i32)"
+      ],
+      "relayMaybeFixed": [
+        "  (func $relayMaybeFixed.5 (;16;) (type 9) (param i32) (result i32)",
+        "  (func $relayMaybeFixed.6 (;17;) (type 9) (param i32) (result i32)"
+      ]
+    },
+    "reused_from": "/tmp/goose-wasm-inline-ref-abi-20261107/callback-results02"
+  },
+  {
+    "phase": "parent",
+    "mode": "thin",
+    "opt": 2,
+    "module_sha256": "01e678c17ee24b37029eb0d89ec8c980fc3f4729f0abdf0f32f7007e270e0fbf",
+    "state": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "fe6f4153d4c4f3eb53b1b55b2e879b70e179a95b65d3ab95bf790178d09abcf3"
+        }
+      ],
+      "globals": []
+    },
+    "reference_signature": "i32",
+    "signature_specializations": {
+      "relayFixed": [
+        "  (func $relayFixed.1 (;12;) (type 9) (param i32) (result i32)"
+      ],
+      "relayMaybeFixed": [
+        "  (func $relayMaybeFixed.5 (;14;) (type 9) (param i32) (result i32)",
+        "  (func $relayMaybeFixed.6 (;15;) (type 9) (param i32) (result i32)"
+      ]
+    }
+  },
+  {
+    "phase": "parent",
+    "mode": "packed",
+    "opt": 0,
+    "module_sha256": "06585b9554e997b8413f7b8a8faada2bc4f4ccfbadbbfd6d93de3a803baa5af5",
+    "state": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "7c431fdc8b22ea8a09126ad7ed6766c2604a19dfc81c655bed76b688e27cac63"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "30f44290b7bb159578b5381acaf9154f51c781e3b2637007833bc77ae3038ad8"
+        }
+      ],
+      "globals": []
+    },
+    "reference_signature": "i32",
+    "signature_specializations": {
+      "relayFixed": [
+        "  (func $relayFixed.1 (;12;) (type 9) (param i32) (result i32)"
+      ],
+      "relayMaybeFixed": [
+        "  (func $relayMaybeFixed.5 (;16;) (type 9) (param i32) (result i32)",
+        "  (func $relayMaybeFixed.6 (;17;) (type 9) (param i32) (result i32)"
+      ]
+    }
+  },
+  {
+    "phase": "parent",
+    "mode": "packed",
+    "opt": 2,
+    "module_sha256": "097b79c6af067c556f84f7fd937d0e25afeb39372d1a956a6225fd7e57b811ad",
+    "state": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "7c431fdc8b22ea8a09126ad7ed6766c2604a19dfc81c655bed76b688e27cac63"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "30f44290b7bb159578b5381acaf9154f51c781e3b2637007833bc77ae3038ad8"
+        }
+      ],
+      "globals": []
+    },
+    "reference_signature": "i32",
+    "signature_specializations": {
+      "relayFixed": [
+        "  (func $relayFixed.1 (;12;) (type 9) (param i32) (result i32)"
+      ],
+      "relayMaybeFixed": [
+        "  (func $relayMaybeFixed.5 (;14;) (type 9) (param i32) (result i32)",
+        "  (func $relayMaybeFixed.6 (;15;) (type 9) (param i32) (result i32)"
+      ]
+    }
+  },
+  {
+    "phase": "candidate",
+    "mode": "thin",
+    "opt": 0,
+    "module_sha256": "43d18191413b9e487e4a41c13931940a39c3e93370cad5ff4fdfa15fae9224a8",
+    "state": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "fe6f4153d4c4f3eb53b1b55b2e879b70e179a95b65d3ab95bf790178d09abcf3"
+        }
+      ],
+      "globals": []
+    },
+    "reference_signature": "i32",
+    "signature_specializations": {
+      "relayFixed": [
+        "  (func $relayFixed.1 (;12;) (type 9) (param i32) (result i32)"
+      ],
+      "relayMaybeFixed": [
+        "  (func $relayMaybeFixed.5 (;16;) (type 9) (param i32) (result i32)",
+        "  (func $relayMaybeFixed.6 (;17;) (type 9) (param i32) (result i32)"
+      ]
+    }
+  },
+  {
+    "phase": "candidate",
+    "mode": "thin",
+    "opt": 2,
+    "module_sha256": "01e678c17ee24b37029eb0d89ec8c980fc3f4729f0abdf0f32f7007e270e0fbf",
+    "state": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "fe6f4153d4c4f3eb53b1b55b2e879b70e179a95b65d3ab95bf790178d09abcf3"
+        }
+      ],
+      "globals": []
+    },
+    "reference_signature": "i32",
+    "signature_specializations": {
+      "relayFixed": [
+        "  (func $relayFixed.1 (;12;) (type 9) (param i32) (result i32)"
+      ],
+      "relayMaybeFixed": [
+        "  (func $relayMaybeFixed.5 (;14;) (type 9) (param i32) (result i32)",
+        "  (func $relayMaybeFixed.6 (;15;) (type 9) (param i32) (result i32)"
+      ]
+    }
+  },
+  {
+    "phase": "candidate",
+    "mode": "packed",
+    "opt": 0,
+    "module_sha256": "dfb24ad9e63e2e26344354f396709fb6d27dfc1f95a382d60f79ebb0caf82eec",
+    "state": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "7c431fdc8b22ea8a09126ad7ed6766c2604a19dfc81c655bed76b688e27cac63"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "30f44290b7bb159578b5381acaf9154f51c781e3b2637007833bc77ae3038ad8"
+        }
+      ],
+      "globals": []
+    },
+    "reference_signature": "i64",
+    "signature_specializations": {
+      "relayFixed": [
+        "  (func $relayFixed.1 (;12;) (type 11) (param i64) (result i64)"
+      ],
+      "relayMaybeFixed": [
+        "  (func $relayMaybeFixed.5 (;16;) (type 11) (param i64) (result i64)",
+        "  (func $relayMaybeFixed.6 (;17;) (type 11) (param i64) (result i64)"
+      ]
+    }
+  },
+  {
+    "phase": "candidate",
+    "mode": "packed",
+    "opt": 2,
+    "module_sha256": "39d8b48859ad55c295cde516e5870c11aee7abdb6dd26a826a8c4630010229c5",
+    "state": {
+      "completed": true,
+      "completionCalls": 1,
+      "pendingPrints": 0,
+      "pendingSnapshots": 0,
+      "memories": [
+        {
+          "name": "memory",
+          "bytes": 65536,
+          "sha256": "7c431fdc8b22ea8a09126ad7ed6766c2604a19dfc81c655bed76b688e27cac63"
+        },
+        {
+          "name": "data_memory_1",
+          "bytes": 65536,
+          "sha256": "30f44290b7bb159578b5381acaf9154f51c781e3b2637007833bc77ae3038ad8"
+        }
+      ],
+      "globals": []
+    },
+    "reference_signature": "i64",
+    "signature_specializations": {
+      "relayFixed": [
+        "  (func $relayFixed.1 (;12;) (type 11) (param i64) (result i64)"
+      ],
+      "relayMaybeFixed": [
+        "  (func $relayMaybeFixed.5 (;14;) (type 11) (param i64) (result i64)",
+        "  (func $relayMaybeFixed.6 (;15;) (type 11) (param i64) (result i64)"
+      ]
+    }
+  }
+]

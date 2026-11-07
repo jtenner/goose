@@ -1,0 +1,47 @@
+{
+  "owner": "Goose inline-reference ABI functional unit",
+  "pid": 1152835,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "source-identity",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/full-wasm01/verify-source.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "full-wasm01",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "test/wasm_backend.py",
+        "--exe",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/build04/goose-tested",
+        "--out",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/full-wasm01/artifacts",
+        "--wasmtime-python",
+        "/tmp/goose-wasm-runtime-env/bin/python",
+        "--shader-library",
+        "/home/dev/Projects/goose-wasm-backend/build/libgoose_shaderc.a"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "source-identity-after",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-inline-ref-abi-20261107/full-wasm01/verify-source.py"
+      ],
+      "exit": 0
+    }
+  ],
+  "exit": 0,
+  "released_at": "2026-11-07T16:58:41.334658+00:00"
+}
