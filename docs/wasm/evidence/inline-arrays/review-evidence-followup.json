@@ -1,0 +1,35 @@
+{
+  "CMakeLists.txt": {
+    "sha256": "1f1923eed1d18c2a6d3d2a6048decc8b7bd7abfc51e9ebdaceefe0cf917c4997",
+    "matches_validation_manifest": true
+  },
+  "cmake/libtcc.cmake": {
+    "sha256": "4e11f9ec5089ae6b547028e73c2c994f88c8e1c369d96412e3e34fb9d696b1e4",
+    "matches_validation_manifest": true
+  },
+  "cmake/linkclosure.cmake": {
+    "sha256": "1b4944d4acbb670a8dda2ee1b18aa31c44960dc2dfec76298a4f15d1d1c079db",
+    "matches_validation_manifest": true
+  },
+  "cmake/package.cmake": {
+    "sha256": "6bb91dcbf8db04236ad6bb1bbe50177bb79b30d5792dba83d49b6a6182d823df",
+    "matches_validation_manifest": true
+  },
+  "cmake/version.cmake": {
+    "sha256": "d66a6bc78dafd94c639d9d0a14cd4f82cbb9e94f7209d5eee7615065e348bd51",
+    "matches_validation_manifest": true
+  },
+  "wasm_array_equality-O0.wasm": {
+    "bytes": 11688,
+    "sha256": "f82ec452329bed57bc69a981028f865919099b6782ed31bad216d82712cf8a42"
+  },
+  "wasm_array_equality-O2.wasm": {
+    "bytes": 12247,
+    "sha256": "51762fb6a94a6047b23f93a93f07cd3728b97f90a4eaada286cb1ea5df3e3b99"
+  },
+  "encoder.wasm": {
+    "bytes": 529,
+    "sha256": "732a5b301e0300bffc244316e7f7b19fccee7c0a3c68cbe37d31f5fa490cf867"
+  },
+  "note": "Parent follow-up file verification only. The independent review report keeps its original evidence limits. No build, validation, or execution was run."
+}

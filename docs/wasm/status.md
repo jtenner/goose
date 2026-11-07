@@ -38,13 +38,24 @@ remain target diagnostics.
 
 The emitted modules use Memory32, i32/i64/f32/f64 scalar instructions,
 ordinary calls, block/loop/if branches, unaligned loads/stores, global/data
-sections, and checked `memory.grow`. Memory 0 frame addresses remain thin. When an array interface is live, ordinary
+sections, and checked `memory.grow`. Memory 0 frame addresses remain thin. When a growable-array interface is live, ordinary
 references use packed i64 addresses; owner-header addresses remain i32 because
 all admitted headers reside in Memory 0. Stored owner references retain the
 16-byte layout. Known array memories use direct fixed-index loads/stores;
 dynamic references use shared checked `br_table` helpers. The backend has an
 explicit limit of 64 data memories and rejects a larger valid program before
 writing a module. General memory-identity specialization remains pending.
+
+The initial inline layout path now also admits explicit scalar/reference
+literals for fixed arrays and static-capacity limited arrays, with packed
+prefixes, bounded push/pop/clear, zero-length references and Memory 0 storage.
+Large global capacities use zero-filled static reservations. Indexed reference
+paths follow native iteration semantics with captured indices and reloaded
+reference slots. Value equality now checks lengths and elements; pending operand temporaries
+receive destination diagnostics. This extension passed 247 Wasm checks, native
+validation, 52 exact comparisons and 56 byte-identical prior Wasm modules. A
+nested-type compile-limit regression also passes. An independent
+Astra source review found no confirmed defect. See [inline-array evidence](evidence/inline-arrays.md).
 
 ## Host contract
 
@@ -113,7 +124,9 @@ BigInt operation for other values.
   memories, checked growth/restores, and dynamic dispatch. Extend the plan to
   protected destinations, temporary owners, and all compound lifetime events.
   General thin-reference propagation remains pending.
-- D: use the shared numeric layout authority to implement arrays of all classes, packed/variable aggregates, ADTs, root and
+- D: fixed and static-capacity limited scalar arrays now use the shared numeric
+  layout authority. Complete variable arrays, all constructors, packed/variable
+  aggregates, ADTs, root and
   pool descriptors, relative references, slices, byte views, and serialization.
 - E: implement direct nonfixed construction, named-result landing/relocation,
   destination protection, ordered data-stack/defer cleanup, and `try_table` /

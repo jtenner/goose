@@ -86,16 +86,35 @@ struct WasmModule {
         return (uint32_t)(imports.size() + functions.size() - 1);
     }
     uint32_t Data(string_view bytes) {
-        if (bytes.size() > UINT32_MAX || data.size() > UINT32_MAX - bytes.size())
+        auto end = fragments.empty() ? data.size() : dataend;
+        if (bytes.size() > UINT32_MAX || end > UINT32_MAX - bytes.size())
             throw CompileError {"wasm: static data exceeds memory32"};
-        auto offset = (uint32_t)data.size();
-        data.append(bytes);
+        auto offset = (uint32_t)end;
+        if (fragments.empty()) data.append(bytes);
+        else {
+            auto &last = fragments.back();
+            if (last.first + last.second.size() == offset) last.second.append(bytes);
+            else fragments.emplace_back(offset, string(bytes));
+            dataend += (uint32_t)bytes.size();
+        }
         return offset;
     }
+    // Guest memory starts zeroed. Reserve large inline globals without
+    // allocating or serializing their unused capacity in the compiler.
+    vector<pair<uint32_t, string>> fragments;
+    uint32_t dataend = 0;
+    uint32_t ZeroData(uint32_t bytes) {
+        auto end = fragments.empty() ? data.size() : dataend;
+        if (end > UINT32_MAX - bytes) throw CompileError {"wasm: static data exceeds memory32"};
+        if (fragments.empty()) fragments.emplace_back(0, std::move(data));
+        dataend = (uint32_t)end + bytes;
+        return (uint32_t)end;
+    }
     string Finish() {
-        if (data.size() > UINT32_MAX - 15)
+        auto end = fragments.empty() ? data.size() : dataend;
+        if (end > UINT32_MAX - 15)
             throw CompileError {"wasm: static data exceeds memory32"};
-        auto top = ((uint32_t)data.size() + 15) & ~15u;
+        auto top = ((uint32_t)end + 15) & ~15u;
         WasmBytes out;
         out.bytes = string("\0asm\x01\0\0\0", 8);
         WasmBytes t;
@@ -149,7 +168,12 @@ struct WasmModule {
             cs.U(body.bytes.size()); cs.Append(body);
         }
         out.Section(10, cs);
-        WasmBytes ds; ds.U(1); ds.U(0); ds.I32(0); ds.Byte(0x0b); ds.Name(data);
+        WasmBytes ds; ds.U(fragments.empty() ? 1 : fragments.size());
+        auto segment = [&](uint32_t offset, const string &bytes) {
+            ds.U(0); ds.I32((int32_t)offset); ds.Byte(0x0b); ds.Name(bytes);
+        };
+        if (fragments.empty()) segment(0, data);
+        else for (auto &[offset, bytes] : fragments) segment(offset, bytes);
         out.Section(11, ds);
         WasmBytes names, fnnames;
         fnnames.U(functions.size());

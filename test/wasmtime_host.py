@@ -99,7 +99,7 @@ def execute(path):
             reason = {1: 'assert failed', 2: 'division by zero', 3: 'integer division overflow',
                       4: 'null reference', 5: 'out of memory growing frame storage',
                       6: 'out of memory growing data storage', 7: 'invalid memory identity or watermark',
-                      8: 'array index out of bounds', 9: 'pop from empty array',
+                      8: 'array index out of bounds', 9: 'pop from empty array', 10: 'array capacity exceeded',
                       11: 'memory32 address overflow'}[code]
             source = read(caller, offset, length).decode()
             raise RuntimeError(f'goose runtime error: {reason}' + (f' at {source}:{line}' if source else ''))

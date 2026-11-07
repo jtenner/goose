@@ -49,6 +49,15 @@ int main(int argc, char **argv) {
     }
     WasmModule m;
     m.memories = 2;
+    if (m.Data("A") != 8 || m.ZeroData(131072) != 9 || m.Data("Z") != 131081 ||
+        m.ZeroData(7) != 131082 || m.Data("Q") != 131089) return 1;
+    {
+        WasmModule invalid;
+        bool rejected = false;
+        try { invalid.ZeroData(UINT32_MAX); }
+        catch (const CompileError &e) { rejected = e.msg.find("static data exceeds memory32") != string::npos; }
+        if (!rejected) return 1;
+    }
     vector<int64_t> values {0, 63, 64, 127, 128, -64, -65, -128, -129, INT64_MIN, INT64_MAX};
     for (size_t i = 0; i < values.size(); i++) {
         auto fn = m.AddFn(cat("constant", i), {}, {WasmModule::I64});
@@ -62,7 +71,9 @@ int main(int argc, char **argv) {
     m.exports.push_back({"unaligned", 0, fn});
     m.exports.push_back({"memory", 2, 0});
     m.exports.push_back({"other", 2, 1});
+    m.exports.push_back({"test_top", 3, 0});
     auto data = m.Finish();
+    if (data.size() >= 4096) return 1; // Unused zero capacity is not a data segment.
     auto f = fopen(argv[1], "wb");
     if (!f) return 1;
     auto wrote = fwrite(data.data(), 1, data.size(), f);

@@ -83,7 +83,7 @@ export function instantiate(bytes, write = b => fs.writeSync(1, b)) {
             const messages = { 1: 'assert failed', 2: 'division by zero',
                 3: 'integer division overflow', 4: 'null reference', 5: 'out of memory growing frame storage',
                 6: 'out of memory growing data storage', 7: 'invalid memory identity or watermark',
-                8: 'array index out of bounds', 9: 'pop from empty array', 11: 'memory32 address overflow' };
+                8: 'array index out of bounds', 9: 'pop from empty array', 10: 'array capacity exceeded', 11: 'memory32 address overflow' };
             const source = read(offset, length).toString('utf8');
             throw new GooseFailure(`goose runtime error: ${messages[code] ?? 'unknown failure'}${source ? ` at ${source}:${line}` : ''}`);
         },

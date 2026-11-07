@@ -12,8 +12,12 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def run(command, *, ok=True):
-    result = subprocess.run([str(c) for c in command], cwd=ROOT, capture_output=True, timeout=90)
+def run(command, *, ok=True, timeout=90):
+    try:
+        result = subprocess.run([str(c) for c in command], cwd=ROOT, capture_output=True, timeout=timeout)
+    except subprocess.TimeoutExpired as error:
+        raise AssertionError(f"command exceeded {timeout}s test limit: {' '.join(map(str, command))}\n"
+                             f"stderr:\n{(error.stderr or b'').decode(errors='replace')}") from error
     if ok and result.returncode:
         raise AssertionError(f"command failed ({result.returncode}): {' '.join(map(str, command))}\n"
                              f"stdout:\n{result.stdout.decode(errors='replace')}\n"
@@ -83,10 +87,19 @@ def main():
                 count += 1
             if source.stem in ('wasm_multimemory', 'wasm_scoped_data_reuse', 'wasm_array_widths',
                                'wasm_array_shrink', 'wasm_no_data_owner', 'wasm_entry_stack_base',
-                               'wasm_ordered_array_cleanup'):
+                               'wasm_ordered_array_cleanup', 'wasm_inline_arrays',
+                               'wasm_inline_mixed_references', 'wasm_inline_reference_path',
+                               'wasm_inline_limited_path', 'wasm_inline_effect_path',
+                               'wasm_inline_nested_path', 'wasm_inline_boundaries',
+                               'wasm_inline_optional_references', 'wasm_array_equality'):
+                if source.stem == 'wasm_inline_arrays':
+                    assert wasm.stat().st_size < 32768, 'unused global capacity was serialized'
                 persistent = '1' if source.stem == 'wasm_multimemory' else '0'
                 mode = {'wasm_multimemory': 'growth', 'wasm_scoped_data_reuse': 'reuse',
-                        'wasm_array_widths': 'typed-reuse', 'wasm_no_data_owner': 'no-data'}.get(source.stem, '')
+                        'wasm_array_widths': 'typed-reuse', 'wasm_no_data_owner': 'no-data',
+                        'wasm_inline_arrays': 'no-data', 'wasm_inline_reference_path': 'no-data',
+                        'wasm_inline_limited_path': 'no-data', 'wasm_inline_effect_path': 'no-data',
+                        'wasm_inline_nested_path': 'no-data', 'wasm_inline_boundaries': 'no-data'}.get(source.stem, '')
                 resource = run([args.node, ROOT / 'test' / 'wasm_multimemory.mjs', wasm, persistent, mode])
                 assert resource.stdout == reference.stdout, 'completed owner-state check changed output'
                 count += 1
@@ -177,6 +190,26 @@ def main():
         if args.wasmtime_python:
             assert run([args.wasmtime_python, ROOT / 'test' / 'wasmtime_host.py', wasm]).stdout == reference.stdout, ('numeric Wasmtime', opt)
             count += 1
+    # A chain of array-reference element types must not validate each
+    # element twice recursively. The old lowering exceeds this compile limit.
+    deep = out / 'nested-inline-types.goose'
+    typ = 'i64[1]' + '&[1]' * 39
+    deep.write_text('fn inspect(a: ' + typ + '?) { print(a == null); }\n'
+                    'var unused: ' + typ + '? = null;\n'
+                    'fn main() { inspect(unused); }\n')
+    for opt in (0, 2):
+        prefix = out / f'nested-inline-types-O{opt}'
+        c, native, wasm = prefix.with_suffix('.c'), prefix.with_suffix('.native'), prefix.with_suffix('.wasm')
+        run([exe, f'-O{opt}', '--standalone', '-o', c, deep])
+        run([args.cc, '-O2', c, '-pthread', '-lm', '-ldl', '-o', native])
+        assert run([native]).stdout == b'true\n'
+        run([exe, f'-O{opt}', '--target', 'wasm', '-o', wasm, deep], timeout=5)
+        run([args.validator, 'validate', wasm])
+        assert run([args.node, ROOT / 'scripts' / 'run_wasm.mjs', wasm]).stdout == b'true\n'
+        count += 1
+        if args.wasmtime_python:
+            assert run([args.wasmtime_python, ROOT / 'test' / 'wasmtime_host.py', wasm]).stdout == b'true\n'
+            count += 1
     # Exercise the binary encoder itself with true multi-memory memargs and
     # signed LEB boundary values, independent of Goose storage lowering.
     binary_test, binary_module = out / 'wasm-binary-test', out / 'encoder.wasm'
@@ -193,8 +226,12 @@ def main():
 const x=new WebAssembly.Instance(new WebAssembly.Module(fs.readFileSync(process.argv[1]))).exports;
 const values=[0n,63n,64n,127n,128n,-64n,-65n,-128n,-129n,-9223372036854775808n,9223372036854775807n];
 values.forEach((v,i)=>a.equal(x['constant'+i](),v)); a.equal(x.unaligned(),values[9]);
+const bytes=new Uint8Array(x.memory.buffer);
+a.equal(bytes[8],65); a.equal(bytes[131081],90); a.equal(bytes[131089],81);
+a.ok(bytes.subarray(9,131081).every(v=>v===0));
+a.ok(bytes.subarray(131082,131089).every(v=>v===0)); a.equal(x.test_top.value,131104);
 a.equal(new DataView(x.other.buffer).getBigInt64(1,true),values[9]);
-a.equal(new DataView(x.memory.buffer).getBigInt64(1,true),0n);"""
+a.equal(new DataView(x.memory.buffer).getBigInt64(1,true),65n<<56n);"""
     run([args.node, '-e', js, binary_module])
     count += 1
     bounded = out / 'bounded-conversion.goose'
@@ -239,10 +276,14 @@ a.equal(new DataView(x.memory.buffer).getBigInt64(1,true),0n);"""
         ('divoverflow', 'var n = -9223372036854775808; var m = -1; print(n / m);', b'overflow'),
         ('array-index', 'var a: i64[>..] = [1]; print("bad=", a[failure_index]);', b'out of bounds'),
         ('empty-pop', 'var a: i64[>..<] = []; print("bad=", a.pop());', b'empty'),
+        ('inline-index', 'var a: i64[2] = [1, 2]; print("bad=", a[failure_index]);', b'out of bounds'),
+        ('limited-capacity', 'var a: u8[..1] = [1]; print("bad=", a.push(2));', b'capacity'),
+        ('zero-capacity', 'var a: u8[..0] = []; print("bad=", a.push(1));', b'capacity'),
+        ('limited-empty', 'var a: u8[..3] = []; print("bad=", a.pop());', b'empty'),
     ]
     for name, body, reason in failures:
         source = out / f'failure-{name}.goose'
-        globals = 'var failure_index: i64 = 2;\n' if name == 'array-index' else ''
+        globals = 'var failure_index: i64 = 2;\n' if name in ('array-index', 'inline-index') else ''
         source.write_text(globals + 'fn main() { ' + body + ' }\n')
         for opt in (0, 2):
             wasm = out / f'failure-{name}-O{opt}.wasm'
@@ -285,6 +326,25 @@ a.equal(new DataView(x.memory.buffer).getBigInt64(1,true),0n);"""
             result = run([exe, f'-O{opt}', '--target', 'wasm', '-o', wasm, source], ok=False)
             assert result.returncode and b'wasm target:' in result.stderr and b'destination' in result.stderr
             assert not wasm.exists(), 'unsupported array result left a partial module'
+            count += 1
+    # Effects that require a fixed-array operand snapshot and unary array
+    # temporaries remain explicit destination errors, not pointer operations.
+    pending_ops = [
+        ('effectful-equality', 'fn change(a: i64[2]&, b: i64[2]&) -> i64[2]& { a[0] = 9; return b; }\n'
+         'fn main() { var a: i64[2] = [1, 2]; var b: i64[2] = [1, 2]; print(a == change(a, b)); print(a[0]); }\n', b'true\n9\n'),
+        ('unary-array', 'fn main() { var a: i64[2] = [1, 2]; var b: i64[2] = [-1, -2]; print(-a == b); }\n', b'true\n'),
+    ]
+    for name, text, expected in pending_ops:
+        source = out / (name + '.goose'); source.write_text(text)
+        for opt in (0, 2):
+            prefix = out / f'{name}-O{opt}'
+            c, native, wasm = prefix.with_suffix('.c'), prefix.with_suffix('.native'), prefix.with_suffix('.wasm')
+            run([exe, f'-O{opt}', '--standalone', '-o', c, source])
+            run([args.cc, '-O2', c, '-pthread', '-lm', '-ldl', '-o', native])
+            assert run([native]).stdout == expected
+            wasm.unlink(missing_ok=True)
+            failure = run([exe, f'-O{opt}', '--target', 'wasm', '-o', wasm, source], ok=False)
+            assert failure.returncode and b'destination' in failure.stderr and not wasm.exists()
             count += 1
     # The explicit backend limit must reject a valid program before writing
     # any output. Keep every owner live to avoid testing dead-code removal.

@@ -1,0 +1,32 @@
+{
+  "data_stacks": {
+    "path": "/home/dev/Projects/goose-wasm-backend/build/goose-data-stacks",
+    "bytes": 6970328,
+    "sha256": "8ee9634cd097905e2e73aa56a57148b3e38cfe57e62f6fc199fc84104479d247"
+  },
+  "native_reference": {
+    "path": "/home/dev/Projects/goose-wasm-backend/build/goose-shared-services",
+    "bytes": 6918208,
+    "sha256": "c30a6d3ebd9890579c7ec854db3d018a12eca35666511e75cfa5f263b133f67f"
+  },
+  "initial_inline": {
+    "path": "/tmp/goose-wasm-inline-arrays-20261107/build-check/goose-before-followup",
+    "bytes": 6978640,
+    "sha256": "1b8baa6698b5d7f33611137a41f1037129d1a061092c35e338092e8381d0adc5"
+  },
+  "path_repair": {
+    "path": "/tmp/goose-wasm-inline-arrays-20261107/repair/goose-after-review",
+    "bytes": 6983336,
+    "sha256": "6c3b0cc81da94c36e4672ae6d79c3365cb45c382e41b5c5a3d18c3cafbce76fd"
+  },
+  "query_repair": {
+    "path": "/tmp/goose-wasm-inline-arrays-20261107/equality-before/goose-before-equality",
+    "bytes": 6983440,
+    "sha256": "d3969a0a8241d8a316fed09577c93bf75db1a9280f723356712574e3dfc4fc25"
+  },
+  "current": {
+    "path": "/tmp/goose-wasm-inline-arrays-20261107/equality-repair/goose-after-review",
+    "bytes": 6987808,
+    "sha256": "63ce6ebec6c5857c61d85270f2393c324d60b40abd4ae67b31eb19d1c656781a"
+  }
+}
