@@ -1,0 +1,107 @@
+{
+  "parent": "4dc9af871426b6f440f5bdbe7f009531f4d72600",
+  "first_data_compiler": "e1eacdffc85c2f042b72127579ea332a5426384e373478b571c859f98c87ea42",
+  "current_compiler": "12dc79f34587854a08bb8c7df44b2866fbc8989962873afb17f8aece2c90dde4",
+  "static_repairs": {
+    "limited_locals_before": [
+      318,
+      2334
+    ],
+    "limited_locals_after": [
+      35,
+      35
+    ],
+    "unknown_function_counts_before": [
+      79,
+      527
+    ],
+    "unknown_function_counts_after": [
+      15,
+      15
+    ],
+    "unknown_max_locals_after": [
+      68,
+      68
+    ],
+    "row_counts": [
+      32,
+      256
+    ],
+    "all_semantics_and_images": "PASS"
+  },
+  "full_wasm04": {
+    "check_groups": 1171,
+    "source_inputs": 80,
+    "validation_inputs": 4222,
+    "before_after_identity": "PASS"
+  },
+  "shared_paths": [
+    "prefix stores on all packed known-memory array images",
+    "fresh fixed/limited field literals,strings,defaults and fills",
+    "opaque fresh child prefix dispatch",
+    "fresh fixed owner/copy extent checks"
+  ],
+  "allocation_analysis": "Emission-local value tokens and fixed per-function/type scratch caches; no runtime heap wrapper or extra child stack owner. Existing helper maps/vectors may allocate compiler objects. Exact compiler allocation/RSS costs remain unmeasured.",
+  "complexity": "Literal emission and runtime stores grow with required initializers. Child image copies grow with bytes. Shared opaque helper code grows with the existing bounded memory count; fresh literal ordinals no longer specialize helpers.",
+  "not_measured": [
+    "compiler CPU/wall acceptance",
+    "compiler allocation count/bytes",
+    "RSS",
+    "engine compilation/initialization",
+    "guest runtime",
+    "physical memory"
+  ],
+  "native_baseline": {
+    "generated_C": 852,
+    "TinyCC": 1024,
+    "other_groups": "PASS",
+    "initial_exit": 1,
+    "remaining": "None: four O0/O2 stats/roundtrip/check cases and warning-marker matching PASS in compatibility02. Full execution groups retained from native-baseline01."
+  },
+  "compatibility": {
+    "exact_comparisons": 52,
+    "module_pairs": 234,
+    "identical": 162,
+    "changed": 72,
+    "module_bytes_delta": -1031,
+    "code_bytes_delta": -1031,
+    "locals_delta": -421,
+    "functions_delta": 0
+  },
+  "independent_review": {
+    "result": "P2 named-copy local growth, no confirmed correctness defect",
+    "resolution": "review-resolution.json",
+    "reviewed_patch": "4d02d6a06e43dab6a3e92cadf3b9b17b046403502abf04b6453990b312246deb",
+    "post_repair_review": "not claimed"
+  },
+  "measurement_handoff": "docs/wasm/measurements.md#pending-fresh-aggregate-data-measurements",
+  "reviewed_compiler": "e1bbd1b28d51382014fe34c1cf93dfff039164286fdb6718f1e27b521b65905c",
+  "full_wasm05": {
+    "check_groups": 1251,
+    "source_inputs": 80,
+    "validation_inputs": 4223,
+    "before_after_identity": "PASS"
+  },
+  "native_baseline_final": {
+    "unit": "native-baseline03",
+    "exit": 0,
+    "front_end": 1752,
+    "generated_C": 852,
+    "TinyCC": 1024,
+    "other_groups": "PASS",
+    "explicit_TCC_path": true
+  },
+  "compatibility_final": {
+    "unit": "compatibility03",
+    "exit": 0,
+    "exact_comparisons": 52,
+    "module_pairs": 234,
+    "identical": 162,
+    "changed": 72,
+    "module_bytes_delta": -1031,
+    "code_bytes_delta": -1031,
+    "locals_delta": -421,
+    "functions_delta": 0
+  },
+  "helper_directory_fix": "helper-directory-provenance.json: tested before/fixed in-memory,exact source bytes matched,no compiler/guest change."
+}

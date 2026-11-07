@@ -65,9 +65,9 @@ int main(int argc, char **argv) {
     fixed.arr = &fixedDetail; fixedDetail.sub = byte; fixedDetail.size = 16;
     auto add = [&](const string &name, vector<uint8_t> params, vector<uint8_t> results, auto emit) {
         auto fn = gen.module.AddFn(name, std::move(params), std::move(results));
-        gen.fn = fn; gen.code.bytes.clear(); gen.fixedoffsetscratch = UINT32_MAX;
+        gen.StartFunction(fn, nullptr);
         emit(); // WasmModule::Finish appends the function end.
-        gen.module.functions[fn - gen.module.imports.size()].code = gen.code;
+        gen.EndFunction();
         gen.module.exports.push_back({name, 0, fn});
     };
     add("pack0", {WasmModule::I32}, {WasmModule::I64}, [&] {
@@ -119,13 +119,22 @@ int main(int argc, char **argv) {
     add("copyconstant", {WasmModule::I64}, {}, [&] {
         gen.CopyBytes({byte, 0, 0, -1, true, true}, {byte, gen.NoLocal, 32, 2, false, true}, 4, {}, true);
     });
+    auto inlineData = gen.ArrayFromPlace({&fixed, 0, 0, 2, false, true}, {});
+    assert(inlineData.layout.image == WasmCodeGen::ArrayImage::Inline);
+    assert(inlineData.image.memory == 2 && inlineData.elementMemory == 2);
+    TypeExpr growable(TY_ARRAY, {}); TypeArray growableDetail;
+    growable.arr = &growableDetail; growableDetail.sub = byte; growableDetail.akind = A_GROW;
     bool refused = false;
-    try { gen.ArrayFromPlace({&fixed, 0, 0, 2, false, true}, {}); }
-    catch (const CompileError &) { refused = true; }
-    assert(refused); // D-place must keep nonzero inline images guarded.
+    try { gen.ArrayFromPlace({&growable, 0, 0, 2, false, true}, {}); }
+    catch (const CompileError &error) {
+        refused = error.msg.find("growable array headers require a Memory 0 place") != string::npos;
+    }
+    assert(refused);
     refused = false;
     try { gen.EmitKnownOffset({byte, 0, 0, 2, true, true}, 1, {}); }
-    catch (const CompileError &) { refused = true; }
+    catch (const CompileError &error) {
+        refused = error.msg.find("array address is missing its concrete memory proof") != string::npos;
+    }
     assert(refused);
     for (uint32_t i = 0; i < 3; i++) gen.module.exports.push_back({cat("memory", i), 2, i});
     auto bytes = gen.module.Finish();

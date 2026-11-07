@@ -1,0 +1,20 @@
+{
+  "mode": "growth-bad-zero",
+  "observedReady": true,
+  "expectedFailure": true,
+  "tops": [
+    [
+      "test_stack_top_0",
+      1024
+    ],
+    [
+      "test_stack_top_1",
+      80007
+    ],
+    [
+      "test_stack_top_2",
+      1
+    ]
+  ],
+  "allChecks": "PASS"
+}

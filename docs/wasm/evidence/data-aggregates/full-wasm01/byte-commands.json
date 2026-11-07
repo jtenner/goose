@@ -1,0 +1,68 @@
+[
+  {
+    "name": "byte-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-aggregates-20261107/full-wasm01/byte-O0.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_bytes.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "byte-O0-build",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-aggregates-20261107/full-wasm01/byte-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-aggregates-20261107/full-wasm01/byte-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "byte-O0-run",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/full-wasm01/byte-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "byte-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-aggregates-20261107/full-wasm01/byte-O2.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_bytes.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "byte-O2-build",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-aggregates-20261107/full-wasm01/byte-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-aggregates-20261107/full-wasm01/byte-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "byte-O2-run",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/full-wasm01/byte-O2.native"
+    ],
+    "exit": 0
+  }
+]

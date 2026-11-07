@@ -1,0 +1,32 @@
+{
+  "source": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm01",
+  "files": {
+    "byte-O0-run.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "byte-O0-build.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "byte-O0-emit.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "byte-O0.c": "8116541e89a26d1363b18405ab75ce4aaadbce9fdca6ba3d010e386008487fe3",
+    "byte-O0-emit.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "byte-O0-run.stdout": "807d4a460c4ac7b983bef10f25f56c9c1dcf35bdf1749b4c2b980b8b2714a34d",
+    "byte-O0.native": "af29d5853e60ed754d4399235b610067eab5c6f0ddb940bee0c8ac074ee44ac6",
+    "byte-O0-build.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "byte-O0-build.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "byte-O0-run.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "byte-O0-emit.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "byte-O2-emit.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "byte-O2-build.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "byte-O2.c": "8116541e89a26d1363b18405ab75ce4aaadbce9fdca6ba3d010e386008487fe3",
+    "byte-O2-build.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "byte-O2-run.stdout": "807d4a460c4ac7b983bef10f25f56c9c1dcf35bdf1749b4c2b980b8b2714a34d",
+    "byte-O2-emit.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "byte-O2.native": "48f864f8edba2dbd2d5075195ee9ae62cdbc51a1eb5de28a9e91874d5feacf21",
+    "byte-O2-run.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "byte-O2-run.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "byte-O2-emit.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "byte-O2-build.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  "native_outcomes": 2,
+  "source_and_expected_sha256": {
+    "test/wasm/wasm_data_aggregate_bytes.goose": "450aaee60a4593b0ade51dbd40cbcc232ed02ee1c9db29178c10fd93f792ae31",
+    "test/expected/wasm_data_aggregate_bytes.out": "807d4a460c4ac7b983bef10f25f56c9c1dcf35bdf1749b4c2b980b8b2714a34d"
+  }
+}

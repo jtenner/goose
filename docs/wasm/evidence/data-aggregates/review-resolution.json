@@ -1,0 +1,39 @@
+{
+  "review_report": "/tmp/goose-wasm-data-aggregates-review-20261107/review/report.md",
+  "review_patch": "4d02d6a06e43dab6a3e92cadf3b9b17b046403502abf04b6453990b312246deb",
+  "finding": "F1 P2: one named fixed-source copy in each fresh data row adds four scratch locals.",
+  "independent_verification": {
+    "unit": "named-copy-before01",
+    "behavior": "32 native,32 Node,32 Wasmtime and complete independent data models PASS",
+    "assertion": "FAIL in16family pairs,exactly896 additional locals for224 additional rows",
+    "release": "named-copy-before01/release-verification.json"
+  },
+  "repair": {
+    "source": "src/wasm_fixed.h",
+    "sha256": "3fcc2df51bbaa0d8cbc29184c0a978c8836e63fd9a367dad8a4fa4ac8f749994",
+    "scope": "Direct same-layout nominal Ident only inside ReservedDataElement; existing frame/global CopyBytes, constant span; empty handling retained; shared CopyFixed and arbitrary reference paths unchanged.",
+    "allocations": "No new compiler cache or guest allocations; removes per-row address/length locals."
+  },
+  "after_validation": {
+    "build06_compiler": "12dc79f34587854a08bb8c7df44b2866fbc8989962873afb17f8aece2c90dde4",
+    "behavior": "32native/32Node/32Wasmtime PASS",
+    "flat_local_families": 16,
+    "maximum_locals": 36,
+    "complete_memory0_models": 64,
+    "exact_data_image_pairs": 48,
+    "model_record": "named-copy-image-model.json",
+    "full_suite": "PASS1251 full-wasm05",
+    "native_baseline": "PASS native-baseline03",
+    "final_compatibility": "PASS52exact/234module pairs compatibility03"
+  },
+  "coverage_gap": "Closed:65-memory fill executed for all selectors, bounds and invalid selectors in both engines.",
+  "measurement_acceptance": "Open; named-copy families added to queued handoff. No CPU/RSS/runtime claim.",
+  "harness_comparison_correction": {
+    "build06": "Original paths differ; source filenames embedded in static data.",
+    "named-copy-after02": "One matched-source guest PASS; exact Memory0 comparison still invalid because fewer address checks remove repeated diagnostics and relocate frame start.",
+    "resolution": "Complete per-module Memory0 model plus independent data models, exact data-image pairs and typed behavior. No further guest run.",
+    "file_parser": "First model assumed one segment; global-source module reserves4global bytes between active segments. First script retained; all64models pass after handling declared gap."
+  },
+  "helper_directory_fix": "One output-directory option; four filesystem-only failing-first/fixed controls; native-baseline03/harness-reuse-results.json and helper-directory-provenance.json.",
+  "F1_status": "RESOLVED with failing-first compiler output, narrow direct-copy repair,32case/16family flat-local checks,64complete Memory0 models/48exactdata image pairs,1251full Wasm groups,fullnative and52exact comparisons. Performance acceptance remains open."
+}

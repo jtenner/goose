@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_backend.py", line 633, in <module>
+    main()
+    ~~~~^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_backend.py", line 115, in main
+    run([fixed_layout])
+    ~~~^^^^^^^^^^^^^^^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_backend.py", line 22, in run
+    raise AssertionError(f"command failed ({result.returncode}): {' '.join(map(str, command))}\n"
+                         f"stdout:\n{result.stdout.decode(errors='replace')}\n"
+                         f"stderr:\n{result.stderr.decode(errors='replace')}")
+AssertionError: command failed (-6): /tmp/goose-wasm-data-aggregates-20261107/full-wasm02/artifacts/fixed-layout
+stdout:
+
+stderr:
+fixed-layout: /home/dev/Projects/goose-wasm-backend/test/wasm_fixed_layout.cpp:123: int main(): Assertion `inlineAggregates.Check(&aggregateData)' failed.
+

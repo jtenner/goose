@@ -1,0 +1,3 @@
+struct Item { a: u16, b: u16 }
+fn main() { var template: Item = Item { a: 7, b: 9 };
+var rows: Item[] = [template, template, template, template, template, template, template, template, template, template, template, template, template, template, template, template, template, template, template, template, template, template, template, template, template, template, template, template, template, template, template, template]; assert(rows.len == 32); for &row in rows { assert(row.a == 7); assert(row.b == 9); } rows[0].a = 17; assert(template.a == 7); assert(rows[rows.len - 1].a == 7); print("named-copy=ok"); }

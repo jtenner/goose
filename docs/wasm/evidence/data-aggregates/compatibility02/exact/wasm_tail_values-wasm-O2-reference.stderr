@@ -1,0 +1,3 @@
+/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_tail_values.goose:18: warning: redundant &: n binds by reference here without it (§4.1)
+    let p: i64? = &n;
+                  ^~

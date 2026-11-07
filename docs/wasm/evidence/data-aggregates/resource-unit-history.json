@@ -1,0 +1,7 @@
+{
+  "original_wrapper_sha256": "84c6427ec1ef19b678ae17e7c80b1ed24b16439fe292fd4110a327a9fcf4b987",
+  "original_snapshot": "/tmp/goose-wasm-data-aggregates-20261107/resource-unit-v1.py",
+  "note": "Retrospective copy of the unchanged wrapper used by completed units. All resource children start only after successful LOCK_EX|LOCK_NB. Past lease records are unchanged. New records add acquired=true and a contemporaneous wrapper snapshot/hash.",
+  "updated_wrapper_sha256": "5d842920156374f1b90c07f1c99f9238e68e566e402c37db37c299739790a9b0",
+  "changed_at": "2026-11-07T19:17:18.229934+00:00"
+}

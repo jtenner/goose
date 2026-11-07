@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-data-aggregates-20261107/build02/checks.py", line 17, in <module>
+    run(name+'-native-emit',[exe,'-O'+str(opt),'--standalone','-o',c,source]);run(name+'-native-build',['cc','-O'+str(opt),c,'-pthread','-lm','-ldl','-o',native]);a=run(name+'-native-run',[native]);assert a.stdout==expected and not a.stderr
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/goose-wasm-data-aggregates-20261107/build02/checks.py", line 9, in run
+    if ok:assert a.returncode==0,(name,a.returncode,a.stderr.decode(errors='replace'))
+                 ^^^^^^^^^^^^^^^
+AssertionError: ('parent-effects-O0-native-emit', 1, '/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_effects.goose:3: error: field empty of struct Row cannot be a zero-length array: i64[0] (§3.4)\nstruct Row { before: u8, values: u16[..3], text: u8[3], zero: u32[2] = default<u32[2]>(), empty: i64[0], after: u16 }\n^\n')

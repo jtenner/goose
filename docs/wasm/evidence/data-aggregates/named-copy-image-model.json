@@ -1,0 +1,649 @@
+{
+  "status": "PASS",
+  "complete_memory0_models": 64,
+  "exact_complete_data_image_pairs": 48,
+  "guest_or_compiler_runs": 0,
+  "scope": "Saved byte parsing only. Memory0 static bytes must be zero prefix + exact source filename repetitions + exact output literal; only template bytes at declared global/frame start may differ from initial data. Data memories byte-identical and independently modeled by retained runs.",
+  "cases": [
+    {
+      "phase": "before",
+      "name": "direct-local-known-32-O0",
+      "memory0_sha256": "fef4833a2926fac1e91db9d44441647f3cf77c03f5d99d32e8ade7737651b7e2",
+      "static_bytes": 3981,
+      "filename_copies": 45,
+      "frame_start": 3984,
+      "template_address": 3984,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "direct-local-known-32-O2",
+      "memory0_sha256": "fef4833a2926fac1e91db9d44441647f3cf77c03f5d99d32e8ade7737651b7e2",
+      "static_bytes": 3981,
+      "filename_copies": 45,
+      "frame_start": 3984,
+      "template_address": 3984,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "direct-local-known-256-O0",
+      "memory0_sha256": "e8fcc8c438fec3f35c6a5279a74fcf6b6a927e5e55359901723fd3ed914ffea2",
+      "static_bytes": 23962,
+      "filename_copies": 269,
+      "frame_start": 23968,
+      "template_address": 23968,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "direct-local-known-256-O2",
+      "memory0_sha256": "e8fcc8c438fec3f35c6a5279a74fcf6b6a927e5e55359901723fd3ed914ffea2",
+      "static_bytes": 23962,
+      "filename_copies": 269,
+      "frame_start": 23968,
+      "template_address": 23968,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "direct-local-unknown-32-O0",
+      "memory0_sha256": "ec6dc357282be6564c6114022dc0364991730b99c7004033bb30e4812256bc9d",
+      "static_bytes": 4521,
+      "filename_copies": 50,
+      "frame_start": 4528,
+      "template_address": 4528,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "direct-local-unknown-32-O2",
+      "memory0_sha256": "ec6dc357282be6564c6114022dc0364991730b99c7004033bb30e4812256bc9d",
+      "static_bytes": 4521,
+      "filename_copies": 50,
+      "frame_start": 4528,
+      "template_address": 4528,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "direct-local-unknown-256-O0",
+      "memory0_sha256": "56f225e198896bb723aeedb181bef6f71397ff190a8fdbd30c20fbeb914a0989",
+      "static_bytes": 24955,
+      "filename_copies": 274,
+      "frame_start": 24960,
+      "template_address": 24960,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "direct-local-unknown-256-O2",
+      "memory0_sha256": "56f225e198896bb723aeedb181bef6f71397ff190a8fdbd30c20fbeb914a0989",
+      "static_bytes": 24955,
+      "filename_copies": 274,
+      "frame_start": 24960,
+      "template_address": 24960,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "direct-global-known-32-O0",
+      "memory0_sha256": "75e6f0e06ad45f4be4ab719e9fae5a1972f8fcbbe71a82deb31ec681c7eb4b34",
+      "static_bytes": 4030,
+      "filename_copies": 45,
+      "frame_start": 4032,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "direct-global-known-32-O2",
+      "memory0_sha256": "75e6f0e06ad45f4be4ab719e9fae5a1972f8fcbbe71a82deb31ec681c7eb4b34",
+      "static_bytes": 4030,
+      "filename_copies": 45,
+      "frame_start": 4032,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "direct-global-known-256-O0",
+      "memory0_sha256": "725d41ef98696411ff640f1cacb07076b882b0072608bf86bf6ba6242abf96cb",
+      "static_bytes": 24235,
+      "filename_copies": 269,
+      "frame_start": 24240,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "direct-global-known-256-O2",
+      "memory0_sha256": "725d41ef98696411ff640f1cacb07076b882b0072608bf86bf6ba6242abf96cb",
+      "static_bytes": 24235,
+      "filename_copies": 269,
+      "frame_start": 24240,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "direct-global-unknown-32-O0",
+      "memory0_sha256": "51559702e2f3f76ab010ee4027bb79c5d58806d9e139e19642000b77d7abde64",
+      "static_bytes": 4575,
+      "filename_copies": 50,
+      "frame_start": 4576,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "direct-global-unknown-32-O2",
+      "memory0_sha256": "51559702e2f3f76ab010ee4027bb79c5d58806d9e139e19642000b77d7abde64",
+      "static_bytes": 4575,
+      "filename_copies": 50,
+      "frame_start": 4576,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "direct-global-unknown-256-O0",
+      "memory0_sha256": "6d2606841a8fb1f0506a6ccda686577cc8b4c74aadf5dcffa6634a54f5a22b71",
+      "static_bytes": 25233,
+      "filename_copies": 274,
+      "frame_start": 25248,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "direct-global-unknown-256-O2",
+      "memory0_sha256": "6d2606841a8fb1f0506a6ccda686577cc8b4c74aadf5dcffa6634a54f5a22b71",
+      "static_bytes": 25233,
+      "filename_copies": 274,
+      "frame_start": 25248,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "nested-local-known-32-O0",
+      "memory0_sha256": "cfeafb495fb2cd5ec0bd612af755aceb9b57dee31fdc3a10fec6734d81dc57c6",
+      "static_bytes": 4069,
+      "filename_copies": 46,
+      "frame_start": 4080,
+      "template_address": 4080,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "nested-local-known-32-O2",
+      "memory0_sha256": "cfeafb495fb2cd5ec0bd612af755aceb9b57dee31fdc3a10fec6734d81dc57c6",
+      "static_bytes": 4069,
+      "filename_copies": 46,
+      "frame_start": 4080,
+      "template_address": 4080,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "nested-local-known-256-O0",
+      "memory0_sha256": "72960b35d65b1491bd74b214f78f6750d1417fa1f20ffcdaa20f6a4df2d677b4",
+      "static_bytes": 24051,
+      "filename_copies": 270,
+      "frame_start": 24064,
+      "template_address": 24064,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "nested-local-known-256-O2",
+      "memory0_sha256": "72960b35d65b1491bd74b214f78f6750d1417fa1f20ffcdaa20f6a4df2d677b4",
+      "static_bytes": 24051,
+      "filename_copies": 270,
+      "frame_start": 24064,
+      "template_address": 24064,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "nested-local-unknown-32-O0",
+      "memory0_sha256": "6b53ec41c55db45d5c5c19b780e424da1a3a0a073b5557c44ea44b1f1d9b2b4a",
+      "static_bytes": 10641,
+      "filename_copies": 118,
+      "frame_start": 10656,
+      "template_address": 10656,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "nested-local-unknown-32-O2",
+      "memory0_sha256": "6b53ec41c55db45d5c5c19b780e424da1a3a0a073b5557c44ea44b1f1d9b2b4a",
+      "static_bytes": 10641,
+      "filename_copies": 118,
+      "frame_start": 10656,
+      "template_address": 10656,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "nested-local-unknown-256-O0",
+      "memory0_sha256": "917e2958be2545a38023fd040db1e7cd20590845781c8c419a9bbdc809fe4312",
+      "static_bytes": 71911,
+      "filename_copies": 790,
+      "frame_start": 71920,
+      "template_address": 71920,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "nested-local-unknown-256-O2",
+      "memory0_sha256": "917e2958be2545a38023fd040db1e7cd20590845781c8c419a9bbdc809fe4312",
+      "static_bytes": 71911,
+      "filename_copies": 790,
+      "frame_start": 71920,
+      "template_address": 71920,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "nested-global-known-32-O0",
+      "memory0_sha256": "ec20fb2577333cf9fb142910a9f09a6535012a1961973cdc23949b08624ee568",
+      "static_bytes": 4119,
+      "filename_copies": 46,
+      "frame_start": 4128,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "nested-global-known-32-O2",
+      "memory0_sha256": "ec20fb2577333cf9fb142910a9f09a6535012a1961973cdc23949b08624ee568",
+      "static_bytes": 4119,
+      "filename_copies": 46,
+      "frame_start": 4128,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "nested-global-known-256-O0",
+      "memory0_sha256": "378e639c182c1abd9c583118478dcf8b9e4ddcb96988aed7b7939705e7fbc5eb",
+      "static_bytes": 24325,
+      "filename_copies": 270,
+      "frame_start": 24336,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "nested-global-known-256-O2",
+      "memory0_sha256": "378e639c182c1abd9c583118478dcf8b9e4ddcb96988aed7b7939705e7fbc5eb",
+      "static_bytes": 24325,
+      "filename_copies": 270,
+      "frame_start": 24336,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "nested-global-unknown-32-O0",
+      "memory0_sha256": "08d628f278073aeaf5650532eb6841da5b09b717c02eaf891e8f333e9d380c1d",
+      "static_bytes": 10763,
+      "filename_copies": 118,
+      "frame_start": 10768,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "nested-global-unknown-32-O2",
+      "memory0_sha256": "08d628f278073aeaf5650532eb6841da5b09b717c02eaf891e8f333e9d380c1d",
+      "static_bytes": 10763,
+      "filename_copies": 118,
+      "frame_start": 10768,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "nested-global-unknown-256-O0",
+      "memory0_sha256": "a3503d3a6fb29ff89886b65b10d7c9b166ffb0fea66113010ac7ef40624af969",
+      "static_bytes": 72705,
+      "filename_copies": 790,
+      "frame_start": 72720,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "before",
+      "name": "nested-global-unknown-256-O2",
+      "memory0_sha256": "a3503d3a6fb29ff89886b65b10d7c9b166ffb0fea66113010ac7ef40624af969",
+      "static_bytes": 72705,
+      "filename_copies": 790,
+      "frame_start": 72720,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "direct-local-known-32-O0",
+      "memory0_sha256": "917595a39b7f800a0ba286c95d6aeab29c8b256a31f62f67f85ea3aa28fa1ebe",
+      "static_bytes": 1217,
+      "filename_copies": 13,
+      "frame_start": 1232,
+      "template_address": 1232,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "direct-local-known-32-O2",
+      "memory0_sha256": "917595a39b7f800a0ba286c95d6aeab29c8b256a31f62f67f85ea3aa28fa1ebe",
+      "static_bytes": 1217,
+      "filename_copies": 13,
+      "frame_start": 1232,
+      "template_address": 1232,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "direct-local-known-256-O0",
+      "memory0_sha256": "1bf5ff86f85c6cdd3ee524400c185170a713343eb0e5af14ebecb2a9689b75e5",
+      "static_bytes": 1230,
+      "filename_copies": 13,
+      "frame_start": 1232,
+      "template_address": 1232,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "direct-local-known-256-O2",
+      "memory0_sha256": "1bf5ff86f85c6cdd3ee524400c185170a713343eb0e5af14ebecb2a9689b75e5",
+      "static_bytes": 1230,
+      "filename_copies": 13,
+      "frame_start": 1232,
+      "template_address": 1232,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "direct-local-unknown-32-O0",
+      "memory0_sha256": "47f52d7a566be5c5589e24b9402c09edbf0dfbdcf3746a9099b15a7ea8230bc0",
+      "static_bytes": 4721,
+      "filename_copies": 50,
+      "frame_start": 4736,
+      "template_address": 4736,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "direct-local-unknown-32-O2",
+      "memory0_sha256": "47f52d7a566be5c5589e24b9402c09edbf0dfbdcf3746a9099b15a7ea8230bc0",
+      "static_bytes": 4721,
+      "filename_copies": 50,
+      "frame_start": 4736,
+      "template_address": 4736,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "direct-local-unknown-256-O0",
+      "memory0_sha256": "c1fc5e5b3de4ac6fb186f3ab60aeca77d191ec7ebb4b8e496ac9a93c70409702",
+      "static_bytes": 26051,
+      "filename_copies": 274,
+      "frame_start": 26064,
+      "template_address": 26064,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "direct-local-unknown-256-O2",
+      "memory0_sha256": "c1fc5e5b3de4ac6fb186f3ab60aeca77d191ec7ebb4b8e496ac9a93c70409702",
+      "static_bytes": 26051,
+      "filename_copies": 274,
+      "frame_start": 26064,
+      "template_address": 26064,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "direct-global-known-32-O0",
+      "memory0_sha256": "6b522d1cb8dcec3b6e7d6ab6d20db59f087182648f6ecc00b21ca409f80a4ecb",
+      "static_bytes": 1234,
+      "filename_copies": 13,
+      "frame_start": 1248,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "direct-global-known-32-O2",
+      "memory0_sha256": "6b522d1cb8dcec3b6e7d6ab6d20db59f087182648f6ecc00b21ca409f80a4ecb",
+      "static_bytes": 1234,
+      "filename_copies": 13,
+      "frame_start": 1248,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "direct-global-known-256-O0",
+      "memory0_sha256": "341ca8ee5970e0131bd18379d61337ca9a62f12604f4eeda1b50eb24445a6371",
+      "static_bytes": 1247,
+      "filename_copies": 13,
+      "frame_start": 1248,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "direct-global-known-256-O2",
+      "memory0_sha256": "341ca8ee5970e0131bd18379d61337ca9a62f12604f4eeda1b50eb24445a6371",
+      "static_bytes": 1247,
+      "filename_copies": 13,
+      "frame_start": 1248,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "direct-global-unknown-32-O0",
+      "memory0_sha256": "b4b313889758671eb4704b65404a5d9a17f1a4d0c20541fc32b37abd6f58fd3d",
+      "static_bytes": 4775,
+      "filename_copies": 50,
+      "frame_start": 4784,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "direct-global-unknown-32-O2",
+      "memory0_sha256": "b4b313889758671eb4704b65404a5d9a17f1a4d0c20541fc32b37abd6f58fd3d",
+      "static_bytes": 4775,
+      "filename_copies": 50,
+      "frame_start": 4784,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "direct-global-unknown-256-O0",
+      "memory0_sha256": "1bb51358f5cd1b92e4de6be27fc3b804dd0513c41cf8697a534f38c8e30ed77b",
+      "static_bytes": 26329,
+      "filename_copies": 274,
+      "frame_start": 26336,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "direct-global-unknown-256-O2",
+      "memory0_sha256": "1bb51358f5cd1b92e4de6be27fc3b804dd0513c41cf8697a534f38c8e30ed77b",
+      "static_bytes": 26329,
+      "filename_copies": 274,
+      "frame_start": 26336,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "nested-local-known-32-O0",
+      "memory0_sha256": "79a150182c2a27e6945dd63bde2571b159ebc3730ce29bd1d3bcb23c1853ef56",
+      "static_bytes": 1309,
+      "filename_copies": 14,
+      "frame_start": 1312,
+      "template_address": 1312,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "nested-local-known-32-O2",
+      "memory0_sha256": "79a150182c2a27e6945dd63bde2571b159ebc3730ce29bd1d3bcb23c1853ef56",
+      "static_bytes": 1309,
+      "filename_copies": 14,
+      "frame_start": 1312,
+      "template_address": 1312,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "nested-local-known-256-O0",
+      "memory0_sha256": "250e79671317d4b7a8270515828d609f1211af8c1158c196834b9bb53568b1e4",
+      "static_bytes": 1323,
+      "filename_copies": 14,
+      "frame_start": 1328,
+      "template_address": 1328,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "nested-local-known-256-O2",
+      "memory0_sha256": "250e79671317d4b7a8270515828d609f1211af8c1158c196834b9bb53568b1e4",
+      "static_bytes": 1323,
+      "filename_copies": 14,
+      "frame_start": 1328,
+      "template_address": 1328,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "nested-local-unknown-32-O0",
+      "memory0_sha256": "05d37e073d3194e58c26bd6295b0ddd0a2b2c15799690d5a43335401b21e543d",
+      "static_bytes": 11113,
+      "filename_copies": 118,
+      "frame_start": 11120,
+      "template_address": 11120,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "nested-local-unknown-32-O2",
+      "memory0_sha256": "05d37e073d3194e58c26bd6295b0ddd0a2b2c15799690d5a43335401b21e543d",
+      "static_bytes": 11113,
+      "filename_copies": 118,
+      "frame_start": 11120,
+      "template_address": 11120,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "nested-local-unknown-256-O0",
+      "memory0_sha256": "97f3b031d900e1a9d185861dd6ce43f81ae8d7b2677230c34554b7552403ae56",
+      "static_bytes": 75071,
+      "filename_copies": 790,
+      "frame_start": 75072,
+      "template_address": 75072,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "nested-local-unknown-256-O2",
+      "memory0_sha256": "97f3b031d900e1a9d185861dd6ce43f81ae8d7b2677230c34554b7552403ae56",
+      "static_bytes": 75071,
+      "filename_copies": 790,
+      "frame_start": 75072,
+      "template_address": 75072,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "nested-global-known-32-O0",
+      "memory0_sha256": "af29bb09c8fcc0a2197c1bd8a2b8f5530c609f7929b0bc824dbf73cefd7c659e",
+      "static_bytes": 1327,
+      "filename_copies": 14,
+      "frame_start": 1328,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "nested-global-known-32-O2",
+      "memory0_sha256": "af29bb09c8fcc0a2197c1bd8a2b8f5530c609f7929b0bc824dbf73cefd7c659e",
+      "static_bytes": 1327,
+      "filename_copies": 14,
+      "frame_start": 1328,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "nested-global-known-256-O0",
+      "memory0_sha256": "3e3194e064226400773454f4383112a3e87353cebd8e05775bea326324b1d240",
+      "static_bytes": 1341,
+      "filename_copies": 14,
+      "frame_start": 1344,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "nested-global-known-256-O2",
+      "memory0_sha256": "3e3194e064226400773454f4383112a3e87353cebd8e05775bea326324b1d240",
+      "static_bytes": 1341,
+      "filename_copies": 14,
+      "frame_start": 1344,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "nested-global-unknown-32-O0",
+      "memory0_sha256": "ef4babf38aa07c0fd223c9d62873eb7caacd72a13285cc165ea4a8dbc47bc976",
+      "static_bytes": 11235,
+      "filename_copies": 118,
+      "frame_start": 11248,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "nested-global-unknown-32-O2",
+      "memory0_sha256": "ef4babf38aa07c0fd223c9d62873eb7caacd72a13285cc165ea4a8dbc47bc976",
+      "static_bytes": 11235,
+      "filename_copies": 118,
+      "frame_start": 11248,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "nested-global-unknown-256-O0",
+      "memory0_sha256": "c7691ae0e6a910356923e0923783eea9002d9a2f7de9b24447845543c6707de0",
+      "static_bytes": 75865,
+      "filename_copies": 790,
+      "frame_start": 75872,
+      "template_address": 8,
+      "full_model": "PASS"
+    },
+    {
+      "phase": "after",
+      "name": "nested-global-unknown-256-O2",
+      "memory0_sha256": "c7691ae0e6a910356923e0923783eea9002d9a2f7de9b24447845543c6707de0",
+      "static_bytes": 75865,
+      "filename_copies": 790,
+      "frame_start": 75872,
+      "template_address": 8,
+      "full_model": "PASS"
+    }
+  ]
+}

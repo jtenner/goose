@@ -1,0 +1,86 @@
+{
+  "owner": "Goose aggregate data-array functional unit",
+  "pid": 1731396,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "source-identity",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-data-aggregates-20261107/build05/verify-source.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "release-build",
+      "command": [
+        "cmake",
+        "--build",
+        "build",
+        "--parallel",
+        "2"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "freeze",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-data-aggregates-20261107/build05/freeze.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "candidate-checks",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-data-aggregates-20261107/build05/checks.py",
+        "candidate"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "scaling-after01",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-data-aggregates-20261107/scaling-after01/checks.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "unknown-scaling-after01",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-after01/checks.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "source-identity-after",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-data-aggregates-20261107/build05/verify-source.py",
+        "--built"
+      ],
+      "exit": 0
+    }
+  ],
+  "exit": 0,
+  "released_at": "2026-11-07T18:46:39.395524+00:00"
+}

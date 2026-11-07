@@ -1,0 +1,150 @@
+[
+  {
+    "kind": "limited-literal",
+    "amount": 32,
+    "opt": 0,
+    "local_counts": [
+      3,
+      35,
+      1,
+      0,
+      3,
+      0,
+      0
+    ],
+    "module_bytes": 30945,
+    "module_sha256": "b6d2d52f6ec622aa1022070718017acca96f996a97249a5f7643f20573eba3a3",
+    "native_and_both_engine_checks": "PASS",
+    "full_data_memory_model": "PASS"
+  },
+  {
+    "kind": "limited-literal",
+    "amount": 32,
+    "opt": 2,
+    "local_counts": [
+      3,
+      35,
+      1,
+      0,
+      3,
+      0,
+      0
+    ],
+    "module_bytes": 30945,
+    "module_sha256": "b6d2d52f6ec622aa1022070718017acca96f996a97249a5f7643f20573eba3a3",
+    "native_and_both_engine_checks": "PASS",
+    "full_data_memory_model": "PASS"
+  },
+  {
+    "kind": "limited-literal",
+    "amount": 256,
+    "opt": 0,
+    "local_counts": [
+      3,
+      35,
+      1,
+      0,
+      3,
+      0,
+      0
+    ],
+    "module_bytes": 227834,
+    "module_sha256": "7e7734f7cffb179af37ed6ad566434a6b992d8fda9520ff62e05c53855be0a1d",
+    "native_and_both_engine_checks": "PASS",
+    "full_data_memory_model": "PASS"
+  },
+  {
+    "kind": "limited-literal",
+    "amount": 256,
+    "opt": 2,
+    "local_counts": [
+      3,
+      35,
+      1,
+      0,
+      3,
+      0,
+      0
+    ],
+    "module_bytes": 227834,
+    "module_sha256": "7e7734f7cffb179af37ed6ad566434a6b992d8fda9520ff62e05c53855be0a1d",
+    "native_and_both_engine_checks": "PASS",
+    "full_data_memory_model": "PASS"
+  },
+  {
+    "kind": "fill-and-text",
+    "amount": 32,
+    "opt": 0,
+    "local_counts": [
+      3,
+      55,
+      1,
+      0,
+      3,
+      0,
+      0,
+      0
+    ],
+    "module_bytes": 12198,
+    "module_sha256": "aabc80dfe1620a2f0188ebdd8b61dc9339e711ec71ed2860d6dae17c3ffd6366",
+    "native_and_both_engine_checks": "PASS",
+    "full_data_memory_model": "PASS"
+  },
+  {
+    "kind": "fill-and-text",
+    "amount": 32,
+    "opt": 2,
+    "local_counts": [
+      3,
+      55,
+      1,
+      0,
+      3,
+      0,
+      0,
+      0
+    ],
+    "module_bytes": 12198,
+    "module_sha256": "aabc80dfe1620a2f0188ebdd8b61dc9339e711ec71ed2860d6dae17c3ffd6366",
+    "native_and_both_engine_checks": "PASS",
+    "full_data_memory_model": "PASS"
+  },
+  {
+    "kind": "fill-and-text",
+    "amount": 256,
+    "opt": 0,
+    "local_counts": [
+      3,
+      55,
+      1,
+      0,
+      3,
+      0,
+      0,
+      0
+    ],
+    "module_bytes": 64591,
+    "module_sha256": "316ac8b48d96d9ae8b3d07d68fb20562c2bdf7c2c191144d8ebeb1f95e3c1793",
+    "native_and_both_engine_checks": "PASS",
+    "full_data_memory_model": "PASS"
+  },
+  {
+    "kind": "fill-and-text",
+    "amount": 256,
+    "opt": 2,
+    "local_counts": [
+      3,
+      55,
+      1,
+      0,
+      3,
+      0,
+      0,
+      0
+    ],
+    "module_bytes": 64591,
+    "module_sha256": "316ac8b48d96d9ae8b3d07d68fb20562c2bdf7c2c191144d8ebeb1f95e3c1793",
+    "native_and_both_engine_checks": "PASS",
+    "full_data_memory_model": "PASS"
+  }
+]

@@ -22,8 +22,8 @@ CASES = {'argument': ('enum E { A { x: i64 }, B }\n'
  'value-equality': ('enum E { A { x: i64 }, B }\n'
                     'fn main() { var a: E = E.A { x: 1 }; var b: E = E.B; print(a == b); }\n',
                     'aggregate value operators'),
- 'elements': ('enum E { A { x: i64 }, B }\n'
-              'fn main() { var a: E[] = [E.A { x: 1 }]; match a[0] { A p => print(p.x), B => print(0) } '
+ 'wide-count-elements': ('enum E { A { x: i64 }, B }\n'
+              'fn main() { var a: E[u64] = [E.A { x: 1 }]; match a[0] { A p => print(p.x), B => print(0) } '
               '}\n',
               'compound array elements'),
  'adaptation': ('enum E { A { x: i64 }, B }\n'

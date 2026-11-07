@@ -8,8 +8,19 @@ const pointer = (memory, offset) => (BigInt(memory) << 32n) | BigInt(offset);
 for (let i = 0; i < count; i++) {
     new Uint8Array(x[`memory${i}`].buffer).set([128, 1], 500);
     assert.deepEqual(x.read_prefix(pointer(i, 500)), [128n, 2]);
+    const bytes = new Uint8Array(x[`memory${i}`].buffer);
+    bytes.fill(90, 699, 705);
+    x.fill(pointer(i, 700), 0x1ab, 4);
+    assert.deepEqual([...bytes.slice(699, 705)], [90, 171, 171, 171, 171, 90]);
 }
 assert.throws(() => x.read_prefix(pointer(count, 500)), /memory failure 7/);
+const last = new Uint8Array(x.memory64.buffer);
+const beforeFillFailure = Buffer.from(last);
+x.fill(pointer(64, 65536), 7, 0);
+assert.throws(() => x.fill(pointer(64, 65535), 7, 2), WebAssembly.RuntimeError);
+for (const invalid of [count, 0xffffffff])
+    assert.throws(() => x.fill(pointer(invalid, 700), 7, 0), /memory failure 7/);
+assert.deepEqual(Buffer.from(last), beforeFillFailure);
 for (let i = 0; i < count; i++) new Uint8Array(x[`memory${i}`].buffer).set([i, 0, 127, 255], 100);
 for (let source = 0; source < count; source++) for (let destination = 0; destination < count; destination++) {
     x.copy(pointer(destination, 200), pointer(source, 100), 4);

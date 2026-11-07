@@ -1,0 +1,168 @@
+[
+  {
+    "name": "unknown-32-native-emit",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-32.c",
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-32.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "unknown-32-native-build",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-32.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-32.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "unknown-32-native-run",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-32.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "unknown-32-emit",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-32.wasm",
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-32.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "unknown-32-validate",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-32.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "unknown-32-node",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-32.wasm",
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-32-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "unknown-32-wasmtime",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-32.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "unknown-32-wat",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-32.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "unknown-256-native-emit",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-256.c",
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-256.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "unknown-256-native-build",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-256.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-256.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "unknown-256-native-run",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-256.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "unknown-256-emit",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-256.wasm",
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-256.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "unknown-256-validate",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-256.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "unknown-256-node",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-256.wasm",
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-256-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "unknown-256-wasmtime",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-256.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "unknown-256-wat",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-256.wasm"
+    ],
+    "exit": 0
+  }
+]

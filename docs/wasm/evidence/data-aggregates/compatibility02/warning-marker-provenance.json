@@ -1,0 +1,21 @@
+[
+  {
+    "source": "test/wasm/wasm_data_aggregate_cleanup.goose",
+    "before": "3c4ad5a38c71c8068bf07b9b44981039080635ff12d75a08d538f73894970f4a",
+    "after": "edf3040b20e2b3a1216e151833d894e95da01d2d70a11b337e531ff563a06e6a",
+    "added_comment_lines": [
+      "redundant `as u16`: 7 fits u16 here"
+    ],
+    "proof": "Removing exactly the added leading comment bytes reproduces the saved failed source byte for byte."
+  },
+  {
+    "source": "test/wasm/wasm_data_aggregate_mixed.goose",
+    "before": "fddb8224b310b7a672fe84aa248fd337e88ecc1a318e04d5c4831e6ff63bc104",
+    "after": "31bcad2c22fdc2422ca2e23a270b1c11382aa3f056744db343a837cfbd6c1a4e",
+    "added_comment_lines": [
+      "redundant `as f32`: 16777217.0 is an f32 here",
+      "redundant `as f32`: 1.25 is an f32 here"
+    ],
+    "proof": "Removing exactly the added leading comment bytes reproduces the saved failed source byte for byte."
+  }
+]

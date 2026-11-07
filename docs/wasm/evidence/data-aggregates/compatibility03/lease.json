@@ -1,0 +1,58 @@
+{
+  "owner": "Goose aggregate data-array functional unit",
+  "pid": 1976357,
+  "active": false,
+  "acquired": true,
+  "wrapper_sha256": "5d842920156374f1b90c07f1c99f9238e68e566e402c37db37c299739790a9b0",
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "identity",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-data-aggregates-20261107/compatibility03/verify.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "exact-comparisons",
+      "command": [
+        "python3",
+        "test/backend_shared.py",
+        "--reference",
+        "build/goose-inline-checkpoint",
+        "--exe",
+        "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+        "--out",
+        "/tmp/goose-wasm-data-aggregates-20261107/compatibility03/exact"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "module-deltas",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-data-aggregates-20261107/compatibility03/module-deltas.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "module-metadata",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-data-aggregates-20261107/compatibility03/module-metadata.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "identity-after",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-data-aggregates-20261107/compatibility03/verify.py"
+      ],
+      "exit": 0
+    }
+  ],
+  "exit": 0,
+  "released_at": "2026-11-07T20:21:50.314959+00:00"
+}

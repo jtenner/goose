@@ -1,0 +1,49 @@
+{
+  "constant_constructor_scratch": false,
+  "failures": [
+    {
+      "kind": "limited-literal",
+      "opt": 0,
+      "counts32": [
+        3,
+        318,
+        1,
+        0,
+        3,
+        0,
+        0
+      ],
+      "counts256": [
+        3,
+        2334,
+        1,
+        0,
+        3,
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "limited-literal",
+      "opt": 2,
+      "counts32": [
+        3,
+        318,
+        1,
+        0,
+        3,
+        0,
+        0
+      ],
+      "counts256": [
+        3,
+        2334,
+        1,
+        0,
+        3,
+        0,
+        0
+      ]
+    }
+  ]
+}

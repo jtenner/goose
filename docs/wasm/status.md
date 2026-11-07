@@ -193,8 +193,25 @@ grow by 405 bytes. Independent review found no production ABI defect and one
 owner-observer test defect. Its failing-first controls, repair, callback-result
 coverage and final suite pass. Performance acceptance
 remains open. See
-[reference-ABI evidence](evidence/inline-reference-abi.md). Fresh aggregate data
-destinations, remaining layouts, results and adapters are still open.
+[reference-ABI evidence](evidence/inline-reference-abi.md).
+
+Fresh u32-count data arrays now admit positive fixed struct, enum and variant
+strides, explicit literals and exact-layout copies. One checked reservation
+covers the complete owner before any child initialization. Nested inline fields
+retain the actual memory identity, and constructor scratch is shared per
+function and value type. The repaired integrated Wasm suite passes 1,251 check groups.
+Before/after scaling checks prove flat local/helper counts for the tested
+32/256-row families; these are static footprint results, not CPU or memory
+measurements. Native execution groups and the warning-only correction pass, as do 52 exact
+comparisons. Of 234 parent module pairs, 162 are identical and 72 change; total
+module/code-section size falls by 1,031 bytes on the reviewed compiler. Independent
+review found one named-copy local-growth cost, reproduced and repaired with
+32-case/16-family scaling and complete image-model checks. The repaired compiler
+passes the full native baseline and all 52 final exact comparisons.
+See [data-aggregate evidence](evidence/data-aggregates.md).
+Wide/varint aggregate counts, fills/capacity, data by-value iteration, general
+adaptations and protected/by-value destinations remain guarded. This does not
+complete Stage D or performance acceptance. Results and adapters remain open.
 
 ## Host contract
 

@@ -1,0 +1,31 @@
+{
+  "owner": "Goose aggregate data-array functional unit",
+  "pid": 1726502,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "identity",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/verify.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "unknown-scaling",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/checks.py"
+      ],
+      "exit": 1
+    }
+  ],
+  "exit": 1,
+  "released_at": "2026-11-07T18:40:47.193461+00:00"
+}

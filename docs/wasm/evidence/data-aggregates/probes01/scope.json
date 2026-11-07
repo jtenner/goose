@@ -1,0 +1,14 @@
+{
+  "compiler_builds": 0,
+  "healthy_native_cases": 6,
+  "healthy_engine_cases": 12,
+  "reservation_failure_controls": 8,
+  "wrong_zero_controls": 2,
+  "wrong_order_controls": 6,
+  "opts": [
+    0,
+    2
+  ],
+  "no_timing": true,
+  "purpose": "Reservation before first store/callee; source evaluation order, nested scratch, partial construction, live outer owner and cleanup exits."
+}

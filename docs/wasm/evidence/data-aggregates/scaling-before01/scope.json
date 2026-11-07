@@ -1,0 +1,22 @@
+{
+  "preserved_compiler": "e1eacdff",
+  "compiler_builds": 0,
+  "kinds": [
+    "limited-literal",
+    "fill-and-text"
+  ],
+  "row_counts": [
+    32,
+    256
+  ],
+  "opts": [
+    0,
+    2
+  ],
+  "native_cases": 8,
+  "Node_cases": 8,
+  "Wasmtime_cases": 8,
+  "full_independent_data_memory_model": true,
+  "no_timing": true,
+  "stop_condition": "After all semantic results are saved, fail if constructor locals scale with row count."
+}

@@ -1,0 +1,186 @@
+[
+  {
+    "name": "parent-effects-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/parent-effects-O0.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_effects.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "parent-effects-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/parent-effects-O2.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_effects.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "parent-enums-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/parent-enums-O0.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_enums.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "parent-enums-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/parent-enums-O2.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_enums.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "parent-effects-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/parent-effects-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/parent-effects-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "parent-effects-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/parent-effects-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "parent-effects-O0-admission",
+    "command": [
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/parent-effects-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_effects.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "parent-effects-O2-native-build",
+    "command": [
+      "cc",
+      "-O2",
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/parent-effects-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/parent-effects-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "parent-effects-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/parent-effects-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "parent-effects-O2-admission",
+    "command": [
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/parent-effects-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_effects.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "parent-enums-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/parent-enums-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/parent-enums-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "parent-enums-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/parent-enums-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "parent-enums-O0-admission",
+    "command": [
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/parent-enums-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_enums.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "parent-enums-O2-native-build",
+    "command": [
+      "cc",
+      "-O2",
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/parent-enums-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/parent-enums-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "parent-enums-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/parent-enums-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "parent-enums-O2-admission",
+    "command": [
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-aggregates-20261107/build04/parent-enums-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_enums.goose"
+    ],
+    "exit": 1
+  }
+]

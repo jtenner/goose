@@ -1,0 +1,17 @@
+{
+  "compiler_builds": 0,
+  "preserved_compiler": "e1eacdff",
+  "cases": 2,
+  "row_counts": [
+    32,
+    256
+  ],
+  "opt": 0,
+  "native_guests": 2,
+  "Node_guests": 2,
+  "Wasmtime_guests": 2,
+  "two_live_call_bases": true,
+  "independent_full_memory_models": true,
+  "no_timing": true,
+  "footprint_assertion_after_semantic_checks": true
+}

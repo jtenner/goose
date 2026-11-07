@@ -1,0 +1,5 @@
+/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_rows.goose:6: error: references may only be passed down, not stored, inside a recursive cycle (§7.8)
+    var rows: Row[] = [Row { mark: 1, target: target, cells: [11, 22], tail: 60000 }];
+                                              ^
+  in fn dynamic(i64) instantiated from /home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_rows.goose:14
+  in fn main() instantiated from /home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_rows.goose:13

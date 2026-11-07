@@ -20,6 +20,10 @@ struct WasmValueSupport {
         return t->kind == TY_BOOL || t->kind == TY_INT || t->kind == TY_FLT ||
                (t->kind == TY_REF && !layout.IsResz(t->ref->sub));
     }
+    bool DataNominalArray(TypeExpr *t) {
+        return t->kind == TY_ARRAY && t->arr->akind == A_VAR &&
+               layout.LenStore(t->arr) == IS_U32 && Nominal(t->arr->sub);
+    }
     const char *Check(TypeExpr *root) {
         if (validated.count(root)) return nullptr;
         vector<TypeExpr *> work {root};
@@ -49,7 +53,8 @@ struct WasmValueSupport {
                     work.push_back(t->ref->sub);
                     break;
                 case TY_ARRAY:
-                    if (!ScalarElement(t->arr->sub) && !(InlineArray(t) && Nominal(t->arr->sub)))
+                    if (!ScalarElement(t->arr->sub) &&
+                        !(InlineArray(t) && Nominal(t->arr->sub)) && !DataNominalArray(t))
                         return "compound array elements need the pending layout lowering";
                     work.push_back(t->arr->sub);
                     break;
@@ -88,6 +93,12 @@ struct WasmValueSupport {
                 return "fixed aggregate layout exceeds memory32";
             if (InlineArray(t) && Nominal(t->arr->sub) && !sizes.at(t->arr->sub))
                 return "zero-stride aggregate elements need the pending layout lowering";
+        }
+        for (auto t : seen) if (DataNominalArray(t)) {
+            uint64_t bytes;
+            if (!layout.TryFixedSize(t->arr->sub, UINT32_MAX, bytes, sizes))
+                return "fixed aggregate layout exceeds memory32";
+            if (!bytes) return "zero-stride aggregate elements need the pending layout lowering";
         }
         validated.insert(seen.begin(), seen.end());
         return nullptr;

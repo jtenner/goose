@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-data-aggregates-20261107/build01/checks.py", line 17, in <module>
+    run(name+'-native-emit',[exe,'-O'+str(opt),'--standalone','-o',c,source]);run(name+'-native-build',['cc','-O'+str(opt),c,'-pthread','-lm','-ldl','-o',native]);a=run(name+'-native-run',[native]);assert a.stdout==expected and not a.stderr
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/goose-wasm-data-aggregates-20261107/build01/checks.py", line 9, in run
+    if ok:assert a.returncode==0,(name,a.returncode,a.stderr.decode(errors='replace'))
+                 ^^^^^^^^^^^^^^^
+AssertionError: ('parent-rows-O0-native-emit', 1, '/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_rows.goose:6: error: references may only be passed down, not stored, inside a recursive cycle (§7.8)\n    var rows: Row[] = [Row { mark: 1, target: target, cells: [11, 22], tail: 60000 }];\n                                              ^\n  in fn dynamic(i64) instantiated from /home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_rows.goose:14\n  in fn main() instantiated from /home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_rows.goose:13\n')

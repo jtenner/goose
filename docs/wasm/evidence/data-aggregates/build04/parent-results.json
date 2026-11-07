@@ -1,0 +1,44 @@
+[
+  {
+    "family": "rows",
+    "opt": 0,
+    "phase": "parent",
+    "expected_output_sha256": "8583e8c1ca3b53e87e1c2b714abf15afb8df5359147c18012610d3d59efbec6b",
+    "module_sha256": null
+  },
+  {
+    "family": "rows",
+    "opt": 2,
+    "phase": "parent",
+    "expected_output_sha256": "8583e8c1ca3b53e87e1c2b714abf15afb8df5359147c18012610d3d59efbec6b",
+    "module_sha256": null
+  },
+  {
+    "family": "effects",
+    "opt": 0,
+    "phase": "parent",
+    "expected_output_sha256": "3c21d357391523129e98eddbd70f4e77038bf2643ea6ea294637dc75108a5da9",
+    "module_sha256": null
+  },
+  {
+    "family": "effects",
+    "opt": 2,
+    "phase": "parent",
+    "expected_output_sha256": "3c21d357391523129e98eddbd70f4e77038bf2643ea6ea294637dc75108a5da9",
+    "module_sha256": null
+  },
+  {
+    "family": "enums",
+    "opt": 0,
+    "phase": "parent",
+    "expected_output_sha256": "35025415c1ac77c158ad3cb328c53356fa3e8afc6aafffdfe5a3cefb22682600",
+    "module_sha256": null
+  },
+  {
+    "family": "enums",
+    "opt": 2,
+    "phase": "parent",
+    "expected_output_sha256": "35025415c1ac77c158ad3cb328c53356fa3e8afc6aafffdfe5a3cefb22682600",
+    "module_sha256": null
+  }
+]

@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_backend.py", line 633, in <module>
+    main()
+    ~~~~^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_backend.py", line 106, in main
+    run([places_exe, places_wasm])
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_backend.py", line 22, in run
+    raise AssertionError(f"command failed ({result.returncode}): {' '.join(map(str, command))}\n"
+                         f"stdout:\n{result.stdout.decode(errors='replace')}\n"
+                         f"stderr:\n{result.stderr.decode(errors='replace')}")
+AssertionError: command failed (-6): /tmp/goose-wasm-data-aggregates-20261107/full-wasm01/artifacts/array-places /tmp/goose-wasm-data-aggregates-20261107/full-wasm01/artifacts/array-places.wasm
+stdout:
+
+stderr:
+array-places: /home/dev/Projects/goose-wasm-backend/test/wasm_array_places.cpp:125: int main(int, char**): Assertion `refused' failed.
+

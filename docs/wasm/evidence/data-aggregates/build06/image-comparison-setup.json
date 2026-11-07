@@ -1,0 +1,10 @@
+{
+  "unit": "build06",
+  "compiler_build": "PASS",
+  "behavior_models_and_flat_local_checks": "PASS 32native/32Node/32Wasmtime; maxlocals36",
+  "last_assertion": "FAIL Memory0 byte comparison",
+  "cause": "Source path differed between before and after emit; source-path strings are embedded fromoffset8 and alter static data layout. No source text or runtime value difference.",
+  "before_source_root": "/tmp/goose-wasm-data-aggregates-20261107/named-copy-before01",
+  "after_source_root": "/tmp/goose-wasm-data-aggregates-20261107/build06/data-named-copy",
+  "remaining": "named-copy-after02 compiles exact original source paths to close whole-image proof; no rebuild or native/Wasmtime rerun."
+}

@@ -1,0 +1,11 @@
+{
+  "file_only_parser_failures": {
+    "first_exit": 1,
+    "first_assumption": "One active segment; global owners reserve a hole between two segments.",
+    "original_source": "named-copy-image-model-first.py",
+    "corrected_source": "named-copy-image-model.py",
+    "recording": "Retrospective note of observed tool errors, not a contemporaneous stderr capture."
+  },
+  "final_result": "named-copy-image-model.json PASS:64 complete Memory0 models and48 exact data-image pairs",
+  "resource_jobs": 0
+}

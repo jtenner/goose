@@ -12,6 +12,7 @@ struct WasmMemoryRuntime {
     uint32_t dynamicreserve = UINT32_MAX, gettop = UINT32_MAX, settop = UINT32_MAX;
     uint32_t copyfromframe = UINT32_MAX, copytoframe = UINT32_MAX;
     uint32_t copy = UINT32_MAX;
+    uint32_t fill = UINT32_MAX;
     uint32_t readprefix = UINT32_MAX;
 
     WasmMemoryRuntime(WasmModule &m, uint32_t fail) : module(m), failure(fail) {}
@@ -200,6 +201,20 @@ struct WasmMemoryRuntime {
         Save(readprefix, std::move(c), {WasmModule::I64, WasmModule::I32,
                                        WasmModule::I64, WasmModule::I64});
         return readprefix;
+    }
+
+    uint32_t Fill() {
+        if (fill != UINT32_MAX) return fill;
+        fill = module.AddFn("goose.fill_memory",
+                            {WasmModule::I64, WasmModule::I32, WasmModule::I32}, {});
+        WasmBytes c;
+        Dispatch(c, 0, 0x40,
+                 [&] { c.Get(0); c.I64(32); c.Byte(0x88); c.Byte(0xa7); },
+                 [&](uint32_t memory) {
+            c.Get(0); c.Byte(0xa7); c.Get(1); c.Get(2); c.Fill(memory);
+        });
+        Save(fill, std::move(c));
+        return fill;
     }
 
     uint32_t Copy() {

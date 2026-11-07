@@ -1,0 +1,787 @@
+{
+  "exact": {
+    "comparisons": [
+      {
+        "source": "test/codegen/cycle_static_stacks.goose",
+        "target": "native",
+        "opt": 0
+      },
+      {
+        "source": "test/codegen/cycle_static_stacks.goose",
+        "target": "native",
+        "opt": 2
+      },
+      {
+        "source": "test/codegen/cycle_scratch_locals.goose",
+        "target": "native",
+        "opt": 0
+      },
+      {
+        "source": "test/codegen/cycle_scratch_locals.goose",
+        "target": "native",
+        "opt": 2
+      },
+      {
+        "source": "test/codegen/temporary_stack_base.goose",
+        "target": "native",
+        "opt": 0
+      },
+      {
+        "source": "test/codegen/temporary_stack_base.goose",
+        "target": "native",
+        "opt": 2
+      },
+      {
+        "source": "test/codegen/defer_exits.goose",
+        "target": "native",
+        "opt": 0
+      },
+      {
+        "source": "test/codegen/defer_exits.goose",
+        "target": "native",
+        "opt": 2
+      },
+      {
+        "source": "test/codegen/defer_return_from.goose",
+        "target": "native",
+        "opt": 0
+      },
+      {
+        "source": "test/codegen/defer_return_from.goose",
+        "target": "native",
+        "opt": 2
+      },
+      {
+        "source": "test/codegen/pad_only_layouts.goose",
+        "target": "native",
+        "opt": 0
+      },
+      {
+        "source": "test/codegen/pad_only_layouts.goose",
+        "target": "native",
+        "opt": 2
+      },
+      {
+        "source": "test/codegen/copy_slot_layouts.goose",
+        "target": "native",
+        "opt": 0
+      },
+      {
+        "source": "test/codegen/copy_slot_layouts.goose",
+        "target": "native",
+        "opt": 2
+      },
+      {
+        "source": "test/codegen/limited_array_adaptation.goose",
+        "target": "native",
+        "opt": 0
+      },
+      {
+        "source": "test/codegen/limited_array_adaptation.goose",
+        "target": "native",
+        "opt": 2
+      },
+      {
+        "source": "test/codegen/adt_field_tags.goose",
+        "target": "native",
+        "opt": 0
+      },
+      {
+        "source": "test/codegen/adt_field_tags.goose",
+        "target": "native",
+        "opt": 2
+      },
+      {
+        "source": "test/codegen/varint_elements.goose",
+        "target": "native",
+        "opt": 0
+      },
+      {
+        "source": "test/codegen/varint_elements.goose",
+        "target": "native",
+        "opt": 2
+      },
+      {
+        "source": "test/storage/serialize.goose",
+        "target": "native",
+        "opt": 0
+      },
+      {
+        "source": "test/storage/serialize.goose",
+        "target": "native",
+        "opt": 2
+      },
+      {
+        "source": "test/storage/serialize_adt_tail.goose",
+        "target": "native",
+        "opt": 0
+      },
+      {
+        "source": "test/storage/serialize_adt_tail.goose",
+        "target": "native",
+        "opt": 2
+      },
+      {
+        "source": "test/storage/self_relative_adt_payloads.goose",
+        "target": "native",
+        "opt": 0
+      },
+      {
+        "source": "test/storage/self_relative_adt_payloads.goose",
+        "target": "native",
+        "opt": 2
+      },
+      {
+        "source": "test/storage/relative_named_results.goose",
+        "target": "native",
+        "opt": 0
+      },
+      {
+        "source": "test/storage/relative_named_results.goose",
+        "target": "native",
+        "opt": 2
+      },
+      {
+        "source": "test/storage/resizable_adt_payload_links.goose",
+        "target": "native",
+        "opt": 0
+      },
+      {
+        "source": "test/storage/resizable_adt_payload_links.goose",
+        "target": "native",
+        "opt": 2
+      },
+      {
+        "source": "test/threads/thread_spawn_stack.goose",
+        "target": "native",
+        "opt": 0
+      },
+      {
+        "source": "test/threads/thread_spawn_stack.goose",
+        "target": "native",
+        "opt": 2
+      },
+      {
+        "source": "test/runtime/stack_stats.goose",
+        "target": "native",
+        "opt": 0
+      },
+      {
+        "source": "test/runtime/stack_stats.goose",
+        "target": "native",
+        "opt": 2
+      },
+      {
+        "source": "test/wasm/wasm_control.goose",
+        "target": "wasm",
+        "opt": 0
+      },
+      {
+        "source": "test/wasm/wasm_control.goose",
+        "target": "wasm",
+        "opt": 2
+      },
+      {
+        "source": "test/wasm/wasm_conversion_boundaries.goose",
+        "target": "wasm",
+        "opt": 0
+      },
+      {
+        "source": "test/wasm/wasm_conversion_boundaries.goose",
+        "target": "wasm",
+        "opt": 2
+      },
+      {
+        "source": "test/wasm/wasm_conversion_global.goose",
+        "target": "wasm",
+        "opt": 0
+      },
+      {
+        "source": "test/wasm/wasm_conversion_global.goose",
+        "target": "wasm",
+        "opt": 2
+      },
+      {
+        "source": "test/wasm/wasm_frames.goose",
+        "target": "wasm",
+        "opt": 0
+      },
+      {
+        "source": "test/wasm/wasm_frames.goose",
+        "target": "wasm",
+        "opt": 2
+      },
+      {
+        "source": "test/wasm/wasm_reference_identity.goose",
+        "target": "wasm",
+        "opt": 0
+      },
+      {
+        "source": "test/wasm/wasm_reference_identity.goose",
+        "target": "wasm",
+        "opt": 2
+      },
+      {
+        "source": "test/wasm/wasm_reference_rebind.goose",
+        "target": "wasm",
+        "opt": 0
+      },
+      {
+        "source": "test/wasm/wasm_reference_rebind.goose",
+        "target": "wasm",
+        "opt": 2
+      },
+      {
+        "source": "test/wasm/wasm_reference_returns.goose",
+        "target": "wasm",
+        "opt": 0
+      },
+      {
+        "source": "test/wasm/wasm_reference_returns.goose",
+        "target": "wasm",
+        "opt": 2
+      },
+      {
+        "source": "test/wasm/wasm_scalars.goose",
+        "target": "wasm",
+        "opt": 0
+      },
+      {
+        "source": "test/wasm/wasm_scalars.goose",
+        "target": "wasm",
+        "opt": 2
+      },
+      {
+        "source": "test/wasm/wasm_tail_values.goose",
+        "target": "wasm",
+        "opt": 0
+      },
+      {
+        "source": "test/wasm/wasm_tail_values.goose",
+        "target": "wasm",
+        "opt": 2
+      }
+    ],
+    "reference_sha256": "63ce6ebec6c5857c61d85270f2393c324d60b40abd4ae67b31eb19d1c656781a",
+    "candidate_sha256": "e1bbd1b28d51382014fe34c1cf93dfff039164286fdb6718f1e27b521b65905c"
+  },
+  "leases": [
+    {
+      "unit": "build01",
+      "exit": 1,
+      "commands": 2,
+      "explicit_acquired": null,
+      "wrapper_hash_recorded": null,
+      "release_records_acquired": null,
+      "release_records_wrapper_match": null
+    },
+    {
+      "unit": "build02",
+      "exit": 1,
+      "commands": 2,
+      "explicit_acquired": null,
+      "wrapper_hash_recorded": null,
+      "release_records_acquired": null,
+      "release_records_wrapper_match": null
+    },
+    {
+      "unit": "build03",
+      "exit": 1,
+      "commands": 2,
+      "explicit_acquired": null,
+      "wrapper_hash_recorded": null,
+      "release_records_acquired": null,
+      "release_records_wrapper_match": null
+    },
+    {
+      "unit": "build04",
+      "exit": 0,
+      "commands": 6,
+      "explicit_acquired": null,
+      "wrapper_hash_recorded": null,
+      "release_records_acquired": null,
+      "release_records_wrapper_match": null
+    },
+    {
+      "unit": "build05",
+      "exit": 0,
+      "commands": 7,
+      "explicit_acquired": null,
+      "wrapper_hash_recorded": null,
+      "release_records_acquired": null,
+      "release_records_wrapper_match": null
+    },
+    {
+      "unit": "compatibility01",
+      "exit": 1,
+      "commands": 2,
+      "explicit_acquired": true,
+      "wrapper_hash_recorded": "5d842920156374f1b90c07f1c99f9238e68e566e402c37db37c299739790a9b0",
+      "release_records_acquired": true,
+      "release_records_wrapper_match": true
+    },
+    {
+      "unit": "compatibility02",
+      "exit": 0,
+      "commands": 6,
+      "explicit_acquired": true,
+      "wrapper_hash_recorded": "5d842920156374f1b90c07f1c99f9238e68e566e402c37db37c299739790a9b0",
+      "release_records_acquired": true,
+      "release_records_wrapper_match": true
+    },
+    {
+      "unit": "full-wasm01",
+      "exit": 1,
+      "commands": 3,
+      "explicit_acquired": null,
+      "wrapper_hash_recorded": null,
+      "release_records_acquired": null,
+      "release_records_wrapper_match": null
+    },
+    {
+      "unit": "full-wasm02",
+      "exit": 1,
+      "commands": 3,
+      "explicit_acquired": true,
+      "wrapper_hash_recorded": "5d842920156374f1b90c07f1c99f9238e68e566e402c37db37c299739790a9b0",
+      "release_records_acquired": null,
+      "release_records_wrapper_match": null
+    },
+    {
+      "unit": "full-wasm03",
+      "exit": 1,
+      "commands": 3,
+      "explicit_acquired": true,
+      "wrapper_hash_recorded": "5d842920156374f1b90c07f1c99f9238e68e566e402c37db37c299739790a9b0",
+      "release_records_acquired": true,
+      "release_records_wrapper_match": true
+    },
+    {
+      "unit": "full-wasm04",
+      "exit": 0,
+      "commands": 5,
+      "explicit_acquired": true,
+      "wrapper_hash_recorded": "5d842920156374f1b90c07f1c99f9238e68e566e402c37db37c299739790a9b0",
+      "release_records_acquired": true,
+      "release_records_wrapper_match": true
+    },
+    {
+      "unit": "native-baseline01",
+      "exit": 1,
+      "commands": 2,
+      "explicit_acquired": true,
+      "wrapper_hash_recorded": "5d842920156374f1b90c07f1c99f9238e68e566e402c37db37c299739790a9b0",
+      "release_records_acquired": true,
+      "release_records_wrapper_match": true
+    },
+    {
+      "unit": "probes01",
+      "exit": 0,
+      "commands": 3,
+      "explicit_acquired": null,
+      "wrapper_hash_recorded": null,
+      "release_records_acquired": null,
+      "release_records_wrapper_match": null
+    },
+    {
+      "unit": "scaling-before01",
+      "exit": 1,
+      "commands": 2,
+      "explicit_acquired": null,
+      "wrapper_hash_recorded": null,
+      "release_records_acquired": null,
+      "release_records_wrapper_match": null
+    },
+    {
+      "unit": "unknown-scaling-before01",
+      "exit": 1,
+      "commands": 2,
+      "explicit_acquired": null,
+      "wrapper_hash_recorded": null,
+      "release_records_acquired": null,
+      "release_records_wrapper_match": null
+    }
+  ],
+  "probes": {
+    "commands": 75,
+    "wrong_order_failures": [
+      {
+        "case": "wrong-order-O0-native",
+        "stderr": "goose runtime error: assert failed (/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order.goose:42)\n"
+      },
+      {
+        "case": "wrong-order-O0-node",
+        "stderr": "goose runtime error: assert failed at /tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order.goose:42\n"
+      },
+      {
+        "case": "wrong-order-O0-wasmtime",
+        "stderr": "goose runtime error: assert failed at /tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order.goose:42\n"
+      },
+      {
+        "case": "wrong-order-O2-native",
+        "stderr": "goose runtime error: assert failed (/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order.goose:42)\n"
+      },
+      {
+        "case": "wrong-order-O2-node",
+        "stderr": "goose runtime error: assert failed at /tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order.goose:42\n"
+      },
+      {
+        "case": "wrong-order-O2-wasmtime",
+        "stderr": "goose runtime error: assert failed at /tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order.goose:42\n"
+      }
+    ],
+    "controls": [
+      {
+        "file": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-dirty-node.json",
+        "record": {
+          "mode": "growth-healthy",
+          "observedReady": true,
+          "expectedFailure": false,
+          "tops": [
+            [
+              "test_stack_top_0",
+              1024
+            ],
+            [
+              "test_stack_top_1",
+              1
+            ],
+            [
+              "test_stack_top_2",
+              1
+            ]
+          ],
+          "allChecks": "PASS"
+        }
+      },
+      {
+        "file": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-dirty-wasmtime.json",
+        "record": {
+          "mode": "growth-healthy",
+          "observedReady": true,
+          "expectedFailure": false,
+          "tops": [
+            [
+              "test_stack_top_0",
+              1024
+            ],
+            [
+              "test_stack_top_1",
+              1
+            ],
+            [
+              "test_stack_top_2",
+              1
+            ]
+          ],
+          "allChecks": "PASS"
+        }
+      },
+      {
+        "file": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-failure-node.json",
+        "record": {
+          "mode": "growth-failure",
+          "observedReady": true,
+          "expectedFailure": true,
+          "tops": [
+            [
+              "test_stack_top_0",
+              1024
+            ],
+            [
+              "test_stack_top_1",
+              1
+            ],
+            [
+              "test_stack_top_2",
+              1
+            ]
+          ],
+          "allChecks": "PASS"
+        }
+      },
+      {
+        "file": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-failure-wasmtime.json",
+        "record": {
+          "mode": "growth-failure",
+          "observedReady": true,
+          "expectedFailure": true,
+          "tops": [
+            [
+              "test_stack_top_0",
+              1024
+            ],
+            [
+              "test_stack_top_1",
+              1
+            ],
+            [
+              "test_stack_top_2",
+              1
+            ]
+          ],
+          "allChecks": "PASS"
+        }
+      },
+      {
+        "file": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-dirty-node.json",
+        "record": {
+          "mode": "growth-healthy",
+          "observedReady": true,
+          "expectedFailure": false,
+          "tops": [
+            [
+              "test_stack_top_0",
+              1024
+            ],
+            [
+              "test_stack_top_1",
+              1
+            ],
+            [
+              "test_stack_top_2",
+              1
+            ]
+          ],
+          "allChecks": "PASS"
+        }
+      },
+      {
+        "file": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-dirty-wasmtime.json",
+        "record": {
+          "mode": "growth-healthy",
+          "observedReady": true,
+          "expectedFailure": false,
+          "tops": [
+            [
+              "test_stack_top_0",
+              1024
+            ],
+            [
+              "test_stack_top_1",
+              1
+            ],
+            [
+              "test_stack_top_2",
+              1
+            ]
+          ],
+          "allChecks": "PASS"
+        }
+      },
+      {
+        "file": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-failure-node.json",
+        "record": {
+          "mode": "growth-failure",
+          "observedReady": true,
+          "expectedFailure": true,
+          "tops": [
+            [
+              "test_stack_top_0",
+              1024
+            ],
+            [
+              "test_stack_top_1",
+              1
+            ],
+            [
+              "test_stack_top_2",
+              1
+            ]
+          ],
+          "allChecks": "PASS"
+        }
+      },
+      {
+        "file": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-failure-wasmtime.json",
+        "record": {
+          "mode": "growth-failure",
+          "observedReady": true,
+          "expectedFailure": true,
+          "tops": [
+            [
+              "test_stack_top_0",
+              1024
+            ],
+            [
+              "test_stack_top_1",
+              1
+            ],
+            [
+              "test_stack_top_2",
+              1
+            ]
+          ],
+          "allChecks": "PASS"
+        }
+      },
+      {
+        "file": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O0-failure-node.json",
+        "record": {
+          "mode": "overflow",
+          "observedReady": true,
+          "expectedFailure": true,
+          "tops": [
+            [
+              "test_stack_top_0",
+              416
+            ],
+            [
+              "test_stack_top_1",
+              1
+            ],
+            [
+              "test_stack_top_2",
+              9
+            ]
+          ],
+          "allChecks": "PASS"
+        }
+      },
+      {
+        "file": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O0-failure-wasmtime.json",
+        "record": {
+          "mode": "overflow",
+          "observedReady": true,
+          "expectedFailure": true,
+          "tops": [
+            [
+              "test_stack_top_0",
+              416
+            ],
+            [
+              "test_stack_top_1",
+              1
+            ],
+            [
+              "test_stack_top_2",
+              9
+            ]
+          ],
+          "allChecks": "PASS"
+        }
+      },
+      {
+        "file": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O2-failure-node.json",
+        "record": {
+          "mode": "overflow",
+          "observedReady": true,
+          "expectedFailure": true,
+          "tops": [
+            [
+              "test_stack_top_0",
+              416
+            ],
+            [
+              "test_stack_top_1",
+              1
+            ],
+            [
+              "test_stack_top_2",
+              9
+            ]
+          ],
+          "allChecks": "PASS"
+        }
+      },
+      {
+        "file": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O2-failure-wasmtime.json",
+        "record": {
+          "mode": "overflow",
+          "observedReady": true,
+          "expectedFailure": true,
+          "tops": [
+            [
+              "test_stack_top_0",
+              416
+            ],
+            [
+              "test_stack_top_1",
+              1
+            ],
+            [
+              "test_stack_top_2",
+              9
+            ]
+          ],
+          "allChecks": "PASS"
+        }
+      },
+      {
+        "file": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-zero-node.json",
+        "record": {
+          "mode": "growth-bad-zero",
+          "observedReady": true,
+          "expectedFailure": true,
+          "tops": [
+            [
+              "test_stack_top_0",
+              1024
+            ],
+            [
+              "test_stack_top_1",
+              80007
+            ],
+            [
+              "test_stack_top_2",
+              1
+            ]
+          ],
+          "allChecks": "PASS"
+        }
+      },
+      {
+        "file": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-zero-wasmtime.json",
+        "record": {
+          "mode": "growth-bad-zero",
+          "observedReady": true,
+          "expectedFailure": true,
+          "tops": [
+            [
+              "test_stack_top_0",
+              1024
+            ],
+            [
+              "test_stack_top_1",
+              80007
+            ],
+            [
+              "test_stack_top_2",
+              1
+            ]
+          ],
+          "allChecks": "PASS"
+        }
+      }
+    ],
+    "wrong_zero_wat_exact_single_mutation": true
+  },
+  "warnings": [
+    {
+      "case": "wasm_data_aggregate_cleanup-O0",
+      "messages": [
+        "redundant `as u16`: 7 fits u16 here"
+      ]
+    },
+    {
+      "case": "wasm_data_aggregate_cleanup-O2",
+      "messages": [
+        "redundant `as u16`: 7 fits u16 here"
+      ]
+    },
+    {
+      "case": "wasm_data_aggregate_mixed-O0",
+      "messages": [
+        "redundant `as f32`: 16777217.0 is an f32 here",
+        "redundant `as f32`: 1.25 is an f32 here"
+      ]
+    },
+    {
+      "case": "wasm_data_aggregate_mixed-O2",
+      "messages": [
+        "redundant `as f32`: 16777217.0 is an f32 here",
+        "redundant `as f32`: 1.25 is an f32 here"
+      ]
+    }
+  ]
+}

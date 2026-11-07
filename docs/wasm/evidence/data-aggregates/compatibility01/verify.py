@@ -1,0 +1,8 @@
+from pathlib import Path
+import hashlib,json
+p=Path(__file__).parent;r=Path('/home/dev/Projects/goose-wasm-backend');b=p.parent/'build05'
+for manifest in [b/'source-hashes.json',p/'validation-input-hashes.json']:
+ for n,h in json.loads(manifest.read_text()).items():assert hashlib.sha256((r/n).read_bytes()).hexdigest()==h,n
+assert hashlib.sha256((b/'goose-tested').read_bytes()).hexdigest()=='e1bbd1b28d51382014fe34c1cf93dfff039164286fdb6718f1e27b521b65905c'
+for n,h in json.loads((p/'harness-hashes.json').read_text()).items():assert hashlib.sha256((p/n).read_bytes()).hexdigest()==h,n
+print('Frozen data-array compiler/source and validation inputs match.')

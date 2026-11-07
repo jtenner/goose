@@ -1,0 +1,15 @@
+Start source-identity
+source-identity exit 0
+Start release-build
+release-build exit 0
+Start freeze
+freeze exit 0
+Start candidate-checks
+candidate-checks exit 0
+Start scaling-after01
+scaling-after01 exit 0
+Start unknown-scaling-after01
+unknown-scaling-after01 exit 0
+Start source-identity-after
+source-identity-after exit 0
+All children reaped; lease released.

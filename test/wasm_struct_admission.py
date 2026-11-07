@@ -39,7 +39,7 @@ CASES = {'argument': ('struct S { x: i64 }\n'
                'fn main() { var a: Outer = Outer { items: [1, 2] }; for v in a.items { print(v); } '
                '}\n',
                'field-path iteration'),
- 'elements': ('struct S { x: i64 }\nfn main() { var a: S[] = [S { x: 1 }]; print(a[0].x); }\n',
+ 'wide-count-elements': ('struct S { x: i64 }\nfn main() { var a: S[u64] = [S { x: 1 }]; print(a[0].x); }\n',
               'compound array elements'),
  'variable-field': ('struct S { x: i64 }\n'
                     'struct V { data: i64[] }\n'

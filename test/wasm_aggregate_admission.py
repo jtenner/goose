@@ -33,9 +33,9 @@ CASES = {'default': ['struct S { x: i64 = 7 }\nfn main() { var a: S[2] = default
  'adaptation': ['struct S { x: i64 = 7 }\n'
                 'fn main() { var a: S[1] = [S { x: 1 }]; var b: S[..2] = a; print(b[0].x); }\n',
                 ['array adaptation']],
- 'data': ['struct Row { cells: u16[2] }\n'
+ 'data-varint': ['struct Row { cells: u16[2] }\n'
           'recursive fn read(a: u16[2]&) -> i64 { a[1] }\n'
-          'fn main() { var rows: Row[] = [Row { cells: [11, 22] }]; print(read(rows[0].cells)); }\n',
+          'fn main() { var rows: Row[varint] = [Row { cells: [11, 22] }]; print(read(rows[0].cells)); }\n',
           ['compound array elements']],
  'nested': ['struct S { x: i64 = 7 }\n'
             'fn main() { var a: S[1][1] = [[S { x: 1 }]]; print(a[0][0].x); }\n',

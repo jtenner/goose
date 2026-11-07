@@ -1,0 +1,24 @@
+{
+  "source": "/tmp/goose-wasm-data-aggregates-20261107/build04",
+  "files": {
+    "memory-build.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "memory-build.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "memory-build.stderr": "315b46adbd5f985baf542cd01c0cfe7bddc236064107f5951b259227e3932865",
+    "memory-emit.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "memory-emit.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "memory-emit.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "memory-validate.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "memory-validate.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "memory-validate.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "memory-node.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "memory-node.stdout": "05a79401786613c428742bb89b0c5929a29784044893139696bd5f41bed53c39",
+    "memory-node.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "memory-wasmtime.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "memory-wasmtime.stdout": "91b7a4f93ef3db363f66045ba0e19016827ac2c5b2f41a48b6a59738eef034e0",
+    "memory-wasmtime.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "memory-runtime": "932abc0f27cd284bb1ddbf3ec17cefc432d9d7b01a0e59ca580438cc0ee1d754",
+    "memory-runtime.wasm": "6facf5c642e7c0d96bc1d8b6535b8554bc38afb37087ba59a0c8342afbe8de70",
+    "memory-runtime-limited.wasm": "ffc8f90e1365ce45fa5c8b72304d793c2894b9b5e899804b2e41fa097988c74c"
+  },
+  "reason": "Private runtime and helper/test source hashes unchanged; successful cached-fill controls reused."
+}

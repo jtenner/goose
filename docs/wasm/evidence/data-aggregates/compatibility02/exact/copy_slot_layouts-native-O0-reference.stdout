@@ -1,0 +1,13 @@
+data stacks: 2 GB reserved per stack, 1 MB guard gap, 32 TB budget: 16376 regions, GS_MAX_STACKS 1024
+main program: 20 data stacks + 7 global stacks = 27 regions
+thread cap: none, no workers
+fn main: 20 own, 20 with callees
+fn line: 2 own, 2 with callees
+fn line: 2 own, 2 with callees
+fn ends: 1 own, 1 with callees
+fn ends: 1 own, 1 with callees
+fn ends: 1 own, 1 with callees
+fn ends: 1 own, 1 with callees
+fn ends: 1 own, 1 with callees
+fn ends: 1 own, 1 with callees
+global initializers: 1 own, 1 with callees

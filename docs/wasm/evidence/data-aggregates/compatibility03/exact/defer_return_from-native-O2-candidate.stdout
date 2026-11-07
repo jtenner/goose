@@ -1,0 +1,13 @@
+data stacks: 2 GB reserved per stack, 1 MB guard gap, 32 TB budget: 16376 regions, GS_MAX_STACKS 1024
+main program: 5 data stacks + 0 global stacks = 5 regions
+thread cap: none, no workers
+fn exception::try: 2 own, 5 with callees
+fn exception::try: 2 own, 5 with callees
+fn main: 3 own, 5 with callees
+fn exception::handler: 2 own, 4 with callees
+fn exception::handler: 2 own, 4 with callees
+fn outer: 4 own, 4 with callees
+fn step2: 3 own, 3 with callees
+fn step2: 3 own, 3 with callees
+fn top_text: 2 own, 2 with callees
+fn deep_text: 1 own, 1 with callees

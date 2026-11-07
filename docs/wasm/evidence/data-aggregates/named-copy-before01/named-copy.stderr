@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-data-aggregates-20261107/named-copy-footprint.py", line 43, in <module>
+    result={'constant_copy_scratch':not failures,'cases':len(rows),'native_cases':len(rows),'Node_cases':len(rows),'Wasmtime_cases':len(rows),'failures':failures};(p/'footprint-assertion.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result));assert not failures,'Named-copy scratch grows with literal length.'
+                                                                                                                                                                                                                                                                                ^^^^^^^^^^^^
+AssertionError: Named-copy scratch grows with literal length.

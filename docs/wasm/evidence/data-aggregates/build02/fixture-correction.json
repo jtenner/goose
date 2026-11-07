@@ -1,0 +1,6 @@
+{
+  "failed_unit": "/tmp/goose-wasm-data-aggregates-20261107/build01",
+  "reason": "Native \u00a77.8 forbids storing reference field inside recursive cycle. PlainRow without references now supplies out-of-line constructor coverage; main retains reference fields.",
+  "production_source_changed": false,
+  "passed_guest_reuses": 0
+}

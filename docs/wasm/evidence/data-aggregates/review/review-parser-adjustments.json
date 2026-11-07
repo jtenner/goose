@@ -1,0 +1,21 @@
+{
+  "input_evidence_unchanged": true,
+  "attempts": [
+    {
+      "exit": 1,
+      "exception": "AssertionError",
+      "location": "check_remaining.py:24",
+      "reason": "The review parser incorrectly required release-verification exit to be zero. This field preserves the workload exit; it must equal lease exit."
+    },
+    {
+      "exit": 1,
+      "exception": "KeyError: 'lease_acquired'",
+      "location": "check_remaining.py:27",
+      "reason": "The review parser incorrectly required later release fields on full-wasm02. Absence is now recorded explicitly as a provenance limit."
+    },
+    {
+      "exit": 0,
+      "result": "File-only evidence comparisons completed; remaining-checks.json and remaining-read-log.json saved."
+    }
+  ]
+}

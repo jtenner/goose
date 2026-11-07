@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-data-aggregates-20261107/scaling-before01/checks.py", line 32, in <module>
+    assert not failures,failures
+           ^^^^^^^^^^^^
+AssertionError: [{'kind': 'limited-literal', 'opt': 0, 'counts32': [3, 318, 1, 0, 3, 0, 0], 'counts256': [3, 2334, 1, 0, 3, 0, 0]}, {'kind': 'limited-literal', 'opt': 2, 'counts32': [3, 318, 1, 0, 3, 0, 0], 'counts256': [3, 2334, 1, 0, 3, 0, 0]}]

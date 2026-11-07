@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-data-aggregates-20261107/build03/checks.py", line 22, in <module>
+    run(name+'-native-emit',[exe,'-O'+str(opt),'--standalone','-o',c,source]);run(name+'-native-build',['cc','-O'+str(opt),c,'-pthread','-lm','-ldl','-o',native]);a=run(name+'-native-run',[native]);assert a.stdout==expected and not a.stderr
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/goose-wasm-data-aggregates-20261107/build03/checks.py", line 9, in run
+    if ok:assert a.returncode==0,(name,a.returncode,a.stderr.decode(errors='replace'))
+                 ^^^^^^^^^^^^^^^
+AssertionError: ('parent-effects-O0-native-emit', 1, '/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_effects.goose:5: error: expected a value of type u16, got i64 (narrowing and sign changes require an explicit `as`)\n    var rows: Row[] = [Row { before: 1, values: [tick(7); 2], text: "abc", empty: [tick(11); 0], after: 60000 },\n                                                 ^~~~~~~\n  in fn exercise() instantiated from /home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_effects.goose:20\n  in fn main() instantiated from /home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_effects.goose:19\n')

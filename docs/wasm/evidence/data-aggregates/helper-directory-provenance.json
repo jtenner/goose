@@ -1,0 +1,8 @@
+{
+  "source": "test/wasm_data_aggregate_named.py",
+  "before_sha256": "b4bfd364b02394705e7be622914012dfa024d384842644d97826c97ef56735be",
+  "after_sha256": "b4dbe6a5ac7dfc8a6d16b5e337a8c8f63e1be97c5e4212b621bcc8f8a11c9da2",
+  "exact_change": "p.mkdir() -> p.mkdir(exist_ok=True)",
+  "failing_first_and_fixed_controls": "native-baseline03/harness-reuse-results.json",
+  "scope": "Filesystem setup only; fresh-directory guest source generation and all assertions unchanged.1251suite preceded this option change; no additional guest rerun/rebuild is claimed. Final compatibility identity uses explicit updated input manifest."
+}

@@ -1,0 +1,3 @@
+/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order.goose:37: warning: redundant `as u16`: 7 fits u16 here
+    var rows: Partial[] = [Partial { cells: [if early { return 5; } else { 7 as u16 }, 8] }];
+                                                                           ^~~~~~~~

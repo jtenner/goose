@@ -1,0 +1,14 @@
+[
+  {
+    "name": "parent-rows-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-inline-ref-abi-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-aggregates-20261107/build01/parent-rows-O0.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_rows.goose"
+    ],
+    "exit": 1
+  }
+]

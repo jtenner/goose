@@ -1,0 +1,7 @@
+parsed ok: 9 top-level declarations, 1 file(s)
+roundtrip ok: 2463 bytes of dump
+/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_cleanup.goose:38: warning: redundant `as u16`: 7 fits u16 here
+    var rows: Partial[] = [Partial { cells: [if early { return 5; } else { 7 as u16 }, 8] }];
+                                                                           ^~~~~~~~
+typechecked ok: 5 specialization(s), 3 struct/0 enum instance(s); optimized -O2: 0 inlined, 0 base case(s), 1 folded, 0 propagated, 0 tail loop(s), 0 reassociated
+bce: elided 14/24 index and 0/0 slice checks

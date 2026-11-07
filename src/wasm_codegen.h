@@ -21,6 +21,9 @@ struct WasmCodeGen : ValueLayout {
     uint32_t failfn, exitfn, fmodfn, f2islowfn;
     uint32_t f2ifn = UINT32_MAX;
     uint32_t fixedoffsetscratch = UINT32_MAX;
+    array<uint32_t, 4> fixedfillitems;
+    uint32_t fixedfillposition = UINT32_MAX, fixedfillbase = UINT32_MAX;
+    uint32_t arraystorevalue = UINT32_MAX;
     struct Slot { TypeExpr *type; uint32_t local = 0, offset = 0; bool memory = false, global = false; };
     struct FixedPlace {
         TypeExpr *type;
@@ -30,7 +33,7 @@ struct WasmCodeGen : ValueLayout {
     };
     static constexpr uint32_t NoLocal = UINT32_MAX;
     enum class ArrayImage { Inline, PrefixedData, GrowableHeader };
-    enum class ArrayOrigin { PlannedOwner, ParentPlace, ReferenceABI };
+    enum class ArrayOrigin { PlannedOwner, ParentPlace, ReferenceABI, FreshDataElement };
     struct ArrayLayoutFacts {
         TypeExpr *type, *element;
         ArrayImage image;
@@ -53,10 +56,22 @@ struct WasmCodeGen : ValueLayout {
     };
     // The selected packed i64 address remains on the operand stack.
     struct ElementPlace { TypeExpr *type; int memory; bool bounded = true; };
+    enum class FreshFixedOrigin { PlannedFrame, ReservedDataElement };
     struct FreshFixedDestination {
         FixedPlace place;
         VarDef *root;
         uint32_t rootOffset = 0, image = 0;
+        FreshFixedOrigin origin = FreshFixedOrigin::PlannedFrame;
+        Node *initialization = nullptr;
+        uint32_t ownerBytes = 0;
+    };
+    struct FreshDataArrayDestination {
+        ArrayPlace image;
+        VarDef *root;
+        VarDecl *initialization;
+        uint32_t logicalStack, identityLocal, baseLocal, bytesLocal, countLocal;
+        uint32_t prefixBytes, stride;
+        uint32_t literalCount = NoLocal, ownerBytes = 0;
     };
     struct FixedFields {
         const vector<Field> &fields;
@@ -64,6 +79,7 @@ struct WasmCodeGen : ValueLayout {
         const Layout &layout;
     };
     struct PushScratch { uint32_t item, length, old, address, base, offset; };
+    array<optional<PushScratch>, 4> fixedpushscratch;
     unordered_map<VarDef *, Slot> globals, slots;
     unordered_map<FnSpec *, uint32_t> functions;
     set<VarDef *> addressed;
@@ -174,8 +190,12 @@ struct WasmCodeGen : ValueLayout {
                 if (!IsResz(t) && !InlineArray(t) && !DataArray(t))
                     Fail(t->line, "this array layout needs the pending compound lowering");
                 auto element = t->arr->sub;
-                if (Nominal(element) && InlineArray(t)) {
-                    RequireFixed(t, t->line);
+                if (Nominal(element) && (InlineArray(t) || support.DataNominalArray(t))) {
+                    if (InlineArray(t)) RequireFixed(t, t->line);
+                    else {
+                        if (auto reason = support.Check(t)) Fail(t->line, reason);
+                        RequireFixed(element, t->line);
+                    }
                     return BorrowedArrayAddressType(t);
                 }
                 if (!support.ScalarElement(element))
@@ -1040,6 +1060,8 @@ struct WasmCodeGen : ValueLayout {
         fn = index; current = sp; code.bytes.clear(); slots.clear(); addressed.clear();
         targets.clear(); scopes.clear(); labels.clear(); framesize = 0;
         fixedoffsetscratch = UINT32_MAX;
+        fixedfillitems.fill(UINT32_MAX); fixedfillposition = fixedfillbase = UINT32_MAX;
+        arraystorevalue = UINT32_MAX; fixedpushscratch.fill(nullopt);
     }
     void EndFunction() {
         assert(labels.empty() && scopes.empty() && targets.empty());
@@ -1177,6 +1199,12 @@ struct WasmCodeGen : ValueLayout {
     TypeExpr *ActualType(Node *n);
     FixedPlace OwnerPlace(VarDef *owner);
     FreshFixedDestination FreshOwner(VarDef *owner, Node *initialization);
+    FreshDataArrayDestination ReserveFreshDataArray(VarDef *owner, const Slot &slot,
+                                                  VarDecl *initialization, uint32_t count,
+                                                  uint32_t literalCount = NoLocal);
+    FreshFixedDestination FreshDataElement(const FreshDataArrayDestination &destination,
+                                          uint32_t ordinal, Line line);
+    ArrayPlace FreshArrayPlace(const FreshFixedDestination &destination, Line line);
     FreshFixedDestination FixedChild(FreshFixedDestination parent, TypeExpr *type, uint32_t offset, Line line);
     FixedFields FieldsOf(TypeExpr *type, Line line);
     FixedFields VariantFields(EnumInst *instance, int variant, Line line);
@@ -1232,10 +1260,15 @@ struct WasmCodeGen : ValueLayout {
     void InitArrayCopy(VarDef *owner, const Slot &slot, Node *source);
     void CopyBytes(const FixedPlace &destination, const FixedPlace &source, uint32_t bytes,
                    Line line, bool immediate = false);
-    void InitFilledArray(VarDef *owner, const Slot *slot, ArrayLit *literal, const FixedPlace *destination = nullptr);
-    void InitByteString(VarDef *owner, const Slot *slot, StrLit *literal, const FixedPlace *destination = nullptr);
+    void ZeroFixed(const FixedPlace &destination, uint32_t bytes, Line line);
+    void InitFilledArray(VarDef *owner, const Slot *slot, ArrayLit *literal,
+                         const FreshFixedDestination *fresh = nullptr);
+    void InitByteString(VarDef *owner, const Slot *slot, StrLit *literal,
+                        const FreshFixedDestination *fresh = nullptr);
     void InlineArrayLiteral(const ArrayPlace &place, ArrayLit *literal, bool reuse = false);
     void InitDataArray(VarDef *owner, const Slot &slot, ArrayLit *literal);
+    void InitAggregateDataArray(VarDef *owner, const Slot &slot, VarDecl *declaration,
+                                Node *source);
     void InitLimitedCapacity(VarDef *owner, const Slot &slot, ArrayLit *literal);
     void PushArray(const ArrayPlace &place, Node *value, TypeExpr *result, Line line,
                    PushScratch *scratch = nullptr);

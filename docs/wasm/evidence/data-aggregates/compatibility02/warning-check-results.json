@@ -1,0 +1,34 @@
+[
+  {
+    "source": "test/wasm/wasm_data_aggregate_cleanup.goose",
+    "opt": 0,
+    "exit": 0,
+    "warnings": 1,
+    "markers_match": true,
+    "parse_roundtrip_typecheck": true
+  },
+  {
+    "source": "test/wasm/wasm_data_aggregate_cleanup.goose",
+    "opt": 2,
+    "exit": 0,
+    "warnings": 1,
+    "markers_match": true,
+    "parse_roundtrip_typecheck": true
+  },
+  {
+    "source": "test/wasm/wasm_data_aggregate_mixed.goose",
+    "opt": 0,
+    "exit": 0,
+    "warnings": 2,
+    "markers_match": true,
+    "parse_roundtrip_typecheck": true
+  },
+  {
+    "source": "test/wasm/wasm_data_aggregate_mixed.goose",
+    "opt": 2,
+    "exit": 0,
+    "warnings": 2,
+    "markers_match": true,
+    "parse_roundtrip_typecheck": true
+  }
+]

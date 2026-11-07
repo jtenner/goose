@@ -1,0 +1,38 @@
+[
+  {
+    "kind": "cleanup",
+    "opt": 0,
+    "status": "PASS",
+    "module_sha256": "2010aa6b807c9976e34ec4457326bb377e8ee3bfa1a896a0c75bc90d63f4c08a"
+  },
+  {
+    "kind": "cleanup",
+    "opt": 2,
+    "status": "PASS",
+    "module_sha256": "2010aa6b807c9976e34ec4457326bb377e8ee3bfa1a896a0c75bc90d63f4c08a"
+  },
+  {
+    "kind": "growth",
+    "opt": 0,
+    "status": "PASS",
+    "module_sha256": "e6fa8c8293cb76e191834479ad6c4f86539953feeef8caa1d81370c3d378d33a"
+  },
+  {
+    "kind": "growth",
+    "opt": 2,
+    "status": "PASS",
+    "module_sha256": "e6fa8c8293cb76e191834479ad6c4f86539953feeef8caa1d81370c3d378d33a"
+  },
+  {
+    "kind": "overflow",
+    "opt": 0,
+    "status": "PASS",
+    "module_sha256": "6ac18c5be5e895413abee36bb8e8226ccd11173cf89ce04d7131e68765d75625"
+  },
+  {
+    "kind": "overflow",
+    "opt": 2,
+    "status": "PASS",
+    "module_sha256": "6ac18c5be5e895413abee36bb8e8226ccd11173cf89ce04d7131e68765d75625"
+  }
+]

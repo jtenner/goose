@@ -8,7 +8,16 @@ pointer = lambda memory, offset: (memory << 32) | offset
 for i in range(count):
     x[f'memory{i}'].write(store, bytes([128, 1]), 500)
     assert x['read_prefix'](store, pointer(i, 500)) == [128, 2]
+    x[f'memory{i}'].write(store, bytes([90] * 6), 699)
+    x['fill'](store, pointer(i, 700), 0x1ab, 4)
+    assert bytes(x[f'memory{i}'].read(store, 699, 705)) == bytes([90, 171, 171, 171, 171, 90])
 throws(lambda: x['read_prefix'](store, pointer(count, 500)), 'memory failure 7')
+before_fill_failure = bytes(x['memory64'].read(store))
+x['fill'](store, pointer(64, 65536), 7, 0)
+throws(lambda: x['fill'](store, pointer(64, 65535), 7, 2), 'out of bounds')
+for invalid in (count, 0xffffffff):
+    throws(lambda: x['fill'](store, pointer(invalid, 700), 7, 0), 'memory failure 7')
+assert bytes(x['memory64'].read(store)) == before_fill_failure
 for i in range(count):
     x[f'memory{i}'].write(store, bytes([i, 0, 127, 255]), 100)
 for source in range(count):

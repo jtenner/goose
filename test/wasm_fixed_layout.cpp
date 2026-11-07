@@ -120,11 +120,28 @@ int main() {
     TypeExpr aggregateData(TY_ARRAY, {}); TypeArray dataElements;
     aggregateData.arr = &dataElements; dataElements.sub = &padded.type;
     dataElements.akind = A_VAR;
-    assert(inlineAggregates.Check(&aggregateData));
+    assert(inlineAggregates.DataNominalArray(&aggregateData));
+    assert(!inlineAggregates.Check(&aggregateData));
+    for (auto width : {IS_U64, IS_VARINT}) {
+        TypeExpr unsupported(TY_ARRAY, {}); TypeArray data;
+        unsupported.arr = &data; data.sub = &padded.type; data.akind = A_VAR; data.lenstorage = width;
+        auto reason = inlineAggregates.Check(&unsupported);
+        assert(reason && string(reason) == "compound array elements need the pending layout lowering");
+    }
+    TypeExpr aggregateGrow(TY_ARRAY, {}); TypeArray growData;
+    aggregateGrow.arr = &growData; growData.sub = &padded.type; growData.akind = A_GROW;
+    auto growReason = inlineAggregates.Check(&aggregateGrow);
+    assert(growReason && string(growReason) == "compound array elements need the pending layout lowering");
     TypeExpr zeroElements(TY_ARRAY, {}); TypeArray zeroImage;
     zeroElements.arr = &zeroImage; zeroImage.sub = &tagOnly.variant; zeroImage.size = 2;
     WasmValueSupport zeroStride(layout);
     assert(zeroStride.Check(&zeroElements) && zeroStride.validated.empty());
+    TypeExpr zeroData(TY_ARRAY, {}); TypeArray zeroDataImage;
+    zeroData.arr = &zeroDataImage; zeroDataImage.sub = &tagOnly.variant; zeroDataImage.akind = A_VAR;
+    WasmValueSupport zeroDataStride(layout);
+    auto zeroReason = zeroDataStride.Check(&zeroData);
+    assert(zeroReason && string(zeroReason) == "zero-stride aggregate elements need the pending layout lowering");
+    assert(zeroDataStride.validated.empty());
     TypeExpr nestedElements(TY_ARRAY, {}); TypeArray nestedImage;
     nestedElements.arr = &nestedImage; nestedImage.sub = &aggregateArray; nestedImage.size = 1;
     assert(inlineAggregates.Check(&nestedElements));

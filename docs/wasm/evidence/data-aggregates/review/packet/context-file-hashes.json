@@ -1,0 +1,19 @@
+{
+  "src/wasm_storage.h": "335885e5dbe9e17dac08b248815de2268671289c6f1b917fa0c68b9c35fc8ed0",
+  "src/wasm_binary.h": "3fd48372e3f82cb9777640d22818a4abdbd7e95d7bbf62b2ac76c8d235fe2766",
+  "src/value_layout.h": "fb6b93137076b2987e7519180df1372e2cb81715aa7f901162650bec7bffdd90",
+  "src/data_stacks.h": "e68d48103069c906451b5557a10398377d191469a131f7ce5d2886161fe6f264",
+  "src/codegen_values.h": "8d4daa25932f3fb610f50f70cf39b56d260878c35d5191bfca0368c568bd5b97",
+  "src/codegen_nodes.h": "45cf9a85e1e9a8d09d3dda0c7fbf799d693272fa2d76a40adb9c11dd31a97362",
+  "src/ast.h": "c6ba4a65898724f407ab3b43a2c391e483fe86345d8c95bc2d567bf58703f73e",
+  "src/clone.h": "340cb18ef42febacbdc76a516ace72e91b5b82944e9b20002c1ade5473099e54",
+  "src/main.cpp": "9f2e05a0f7dd8cd7e565f71bac7d429592d505fe2722d94010db6cb06186119a",
+  "src/typecheck_calls.h": "b8e021e1d01c8e0f98c8334976b9a0496147bad0e8b3c112f9de5f11fe171a94",
+  "src/typecheck_exprs.h": "941f3c714673d0efafd350b6716f7b09b4d5277a6e5bfde42c816940e8ef8e19",
+  "src/typecheck_flow.h": "4f13bcfe0ac408cdca700bbf24719cec4595d3ad41fc0aa7deb3ecb83553410e",
+  "scripts/run_wasm.mjs": "2fa4ffaef07215558cae6578dc5782c705fb9d5369e533eec53fc929763ed953",
+  "test/wasmtime_host.py": "a556120addd1f1abb98c84a18d6c1deed9a9a19303295afafb7adfcf6d3da19e",
+  "test/backend_shared.py": "a192f7204cb34a8eb582ced05459f17c7c0fc64022c99f6b6e92ba556557c94e",
+  "test/run_tests.py": "07d47102b36a3536999f787f3407cc94e376a0d6cf4112eb85750b412cc6b762",
+  "CMakeLists.txt": "657486b885c241458ecac72fabee02a0443e6428b345f701afa983085b765413"
+}

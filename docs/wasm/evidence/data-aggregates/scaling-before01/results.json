@@ -1,0 +1,150 @@
+[
+  {
+    "kind": "limited-literal",
+    "amount": 32,
+    "opt": 0,
+    "local_counts": [
+      3,
+      318,
+      1,
+      0,
+      3,
+      0,
+      0
+    ],
+    "module_bytes": 31723,
+    "module_sha256": "f898ab3e65f999583c555426af3eed9481c8012f819d17cbaf75cb527480c049",
+    "native_and_both_engine_checks": "PASS",
+    "full_data_memory_model": "PASS"
+  },
+  {
+    "kind": "limited-literal",
+    "amount": 32,
+    "opt": 2,
+    "local_counts": [
+      3,
+      318,
+      1,
+      0,
+      3,
+      0,
+      0
+    ],
+    "module_bytes": 31723,
+    "module_sha256": "f898ab3e65f999583c555426af3eed9481c8012f819d17cbaf75cb527480c049",
+    "native_and_both_engine_checks": "PASS",
+    "full_data_memory_model": "PASS"
+  },
+  {
+    "kind": "limited-literal",
+    "amount": 256,
+    "opt": 0,
+    "local_counts": [
+      3,
+      2334,
+      1,
+      0,
+      3,
+      0,
+      0
+    ],
+    "module_bytes": 236677,
+    "module_sha256": "db0dffd52cf2da5c8910a5871d686302b3957c47544273fb1062d142a30715e9",
+    "native_and_both_engine_checks": "PASS",
+    "full_data_memory_model": "PASS"
+  },
+  {
+    "kind": "limited-literal",
+    "amount": 256,
+    "opt": 2,
+    "local_counts": [
+      3,
+      2334,
+      1,
+      0,
+      3,
+      0,
+      0
+    ],
+    "module_bytes": 236677,
+    "module_sha256": "db0dffd52cf2da5c8910a5871d686302b3957c47544273fb1062d142a30715e9",
+    "native_and_both_engine_checks": "PASS",
+    "full_data_memory_model": "PASS"
+  },
+  {
+    "kind": "fill-and-text",
+    "amount": 32,
+    "opt": 0,
+    "local_counts": [
+      3,
+      55,
+      1,
+      0,
+      3,
+      0,
+      0,
+      0
+    ],
+    "module_bytes": 12198,
+    "module_sha256": "aabc80dfe1620a2f0188ebdd8b61dc9339e711ec71ed2860d6dae17c3ffd6366",
+    "native_and_both_engine_checks": "PASS",
+    "full_data_memory_model": "PASS"
+  },
+  {
+    "kind": "fill-and-text",
+    "amount": 32,
+    "opt": 2,
+    "local_counts": [
+      3,
+      55,
+      1,
+      0,
+      3,
+      0,
+      0,
+      0
+    ],
+    "module_bytes": 12198,
+    "module_sha256": "aabc80dfe1620a2f0188ebdd8b61dc9339e711ec71ed2860d6dae17c3ffd6366",
+    "native_and_both_engine_checks": "PASS",
+    "full_data_memory_model": "PASS"
+  },
+  {
+    "kind": "fill-and-text",
+    "amount": 256,
+    "opt": 0,
+    "local_counts": [
+      3,
+      55,
+      1,
+      0,
+      3,
+      0,
+      0,
+      0
+    ],
+    "module_bytes": 64591,
+    "module_sha256": "316ac8b48d96d9ae8b3d07d68fb20562c2bdf7c2c191144d8ebeb1f95e3c1793",
+    "native_and_both_engine_checks": "PASS",
+    "full_data_memory_model": "PASS"
+  },
+  {
+    "kind": "fill-and-text",
+    "amount": 256,
+    "opt": 2,
+    "local_counts": [
+      3,
+      55,
+      1,
+      0,
+      3,
+      0,
+      0,
+      0
+    ],
+    "module_bytes": 64591,
+    "module_sha256": "316ac8b48d96d9ae8b3d07d68fb20562c2bdf7c2c191144d8ebeb1f95e3c1793",
+    "native_and_both_engine_checks": "PASS",
+    "full_data_memory_model": "PASS"
+  }
+]

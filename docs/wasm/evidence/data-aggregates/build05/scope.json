@@ -1,0 +1,15 @@
+{
+  "parent": "4dc9af87",
+  "compiler_builds": 1,
+  "fresh_basic_Node_cases": 6,
+  "fresh_basic_Wasmtime_cases": 6,
+  "fresh_scaling_Node_cases": 10,
+  "fresh_scaling_Wasmtime_cases": 10,
+  "native_reference_reuses": 16,
+  "private_runtime_reused": true,
+  "failing_first_footprint_units": [
+    "scaling-before01",
+    "unknown-scaling-before01"
+  ],
+  "no_timing": true
+}

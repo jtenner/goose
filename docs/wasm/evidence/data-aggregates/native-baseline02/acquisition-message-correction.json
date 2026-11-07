@@ -1,0 +1,12 @@
+{
+  "premature_message": "Said acquired before inspecting wrapper result",
+  "actual_result": {
+    "exit": 75,
+    "acquired": false,
+    "children": 0,
+    "lease_file": false
+  },
+  "correction_sent": true,
+  "read_only_kernel_observation": "acquisition-deferral.json",
+  "action": "Do not interrupt E37 screen1936688. Await actual owner completion/release; no further probes or resource jobs while active."
+}

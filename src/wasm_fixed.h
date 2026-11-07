@@ -48,7 +48,23 @@ inline WasmCodeGen::FreshFixedDestination WasmCodeGen::FreshOwner(VarDef *owner,
             find(declaration->defs.begin(), declaration->defs.end(), owner) == declaration->defs.end())
             Fail(owner->line, "fixed construction needs its planned fresh owner");
     }
-    return {OwnerPlace(owner), owner, 0, image};
+    return {OwnerPlace(owner), owner, 0, image, FreshFixedOrigin::PlannedFrame,
+            initialization, std::max(1u, image)};
+}
+
+inline WasmCodeGen::FreshFixedDestination WasmCodeGen::FreshDataElement(
+        const FreshDataArrayDestination &destination, uint32_t ordinal, Line line) {
+    if (destination.literalCount == NoLocal || ordinal >= destination.literalCount ||
+        !destination.initialization || !destination.ownerBytes)
+        Fail(line, "data element needs its complete fresh literal reservation");
+    auto offset = (uint64_t)destination.prefixBytes + (uint64_t)ordinal * destination.stride;
+    if (offset > destination.ownerBytes || destination.stride > destination.ownerBytes - offset)
+        Fail(line, "data element exceeds its fresh owner reservation");
+    auto place = destination.image.image;
+    place.type = destination.image.layout.element;
+    place.offset = (uint32_t)offset;
+    return {place, destination.root, (uint32_t)offset, destination.stride,
+            FreshFixedOrigin::ReservedDataElement, destination.initialization, destination.ownerBytes};
 }
 
 inline WasmCodeGen::FreshFixedDestination WasmCodeGen::FixedChild(
@@ -60,6 +76,20 @@ inline WasmCodeGen::FreshFixedDestination WasmCodeGen::FixedChild(
     parent.place.offset += offset; parent.place.type = type;
     parent.rootOffset += offset; parent.image = image;
     return parent;
+}
+
+inline WasmCodeGen::ArrayPlace WasmCodeGen::FreshArrayPlace(
+        const FreshFixedDestination &destination, Line line) {
+    auto place = ArrayFromPlace(destination.place, line);
+    if (destination.origin == FreshFixedOrigin::ReservedDataElement) {
+        if (!destination.root || !destination.initialization || !destination.place.bounded || !destination.place.packed ||
+            !support.DataNominalArray(destination.root->type) ||
+            destination.rootOffset > destination.ownerBytes ||
+            destination.image > destination.ownerBytes - destination.rootOffset)
+            Fail(line, "array construction needs its complete fresh data span");
+        place.origin = ArrayOrigin::FreshDataElement;
+    }
+    return place;
 }
 
 inline WasmCodeGen::FixedFields WasmCodeGen::VariantFields(EnumInst *instance, int variant, Line line) {
@@ -228,20 +258,32 @@ inline void WasmCodeGen::InlineArrayLiteral(const ArrayPlace &place, ArrayLit *l
             Fail(literal->line, "this fixed array constructor needs the pending destination lowering");
         auto element = array->arr->sub;
         for (size_t i = 0; i < literal->elems.size(); i++) {
-            EmitKnownOffset(place.image, (uint32_t)place.image.memory, literal->line);
-            code.I32((int32_t)(i * place.layout.stride)); code.Byte(0x6a);
+            if (place.image.memory >= 0) {
+                EmitKnownOffset(place.image, (uint32_t)place.image.memory, literal->line);
+                code.I32((int32_t)(i * place.layout.stride)); code.Byte(0x6a);
+            } else {
+                EmitPackedAddress(place.image, literal->line);
+                code.I64((int64_t)(i * place.layout.stride)); code.Byte(0x7c);
+            }
             auto value = literal->elems[i]; Gen(value); Convert(value->exprtype, element);
-            StoreFixed(element, (uint32_t)place.elementMemory);
+            if (place.elementMemory >= 0) StoreFixed(element, (uint32_t)place.elementMemory);
+            else Store(element);
         }
     } else {
         PrepareArrayLengthStore(place); code.I64(0); StoreArrayLength(place);
-        optional<PushScratch> scratch;
-        if (reuse && !literal->elems.empty())
-            scratch = PushScratch {Temp(array->arr->sub), Local(WasmModule::I64),
-                                   Local(WasmModule::I32), Local(WasmModule::I64),
-                                   Local(WasmModule::I64), Local(WasmModule::I64)};
+        PushScratch *scratch = nullptr;
+        if (reuse && !literal->elems.empty()) {
+            if (place.layout.image != ArrayImage::Inline)
+                Fail(literal->line, "fixed constructor scratch requires an inline image");
+            auto &cached = fixedpushscratch[WasmModule::I32 - Type(array->arr->sub)];
+            if (!cached)
+                cached = PushScratch {Temp(array->arr->sub), Local(WasmModule::I64), NoLocal,
+                                      Local(WasmModule::I64), Local(WasmModule::I64),
+                                      Local(WasmModule::I64)};
+            scratch = &*cached;
+        }
         for (auto value : literal->elems)
-            PushArray(place, value, nullptr, value->line, scratch ? &*scratch : nullptr);
+            PushArray(place, value, nullptr, value->line, scratch);
     }
 }
 
@@ -289,7 +331,7 @@ inline void WasmCodeGen::ConstructAggregateArray(FreshFixedDestination destinati
         Fail(literal->line, "aggregate literal exceeds its checked array extent");
     auto prefix = array->arr->akind == A_LIMITED ? (uint32_t)IntSize(LenStore(array->arr)) : 0u;
     if (prefix) {
-        auto place = ArrayFromPlace(destination.place, literal->line);
+        auto place = FreshArrayPlace(destination, literal->line);
         PrepareArrayLengthStore(place); code.I64((int64_t)literal->elems.size()); StoreArrayLength(place);
     }
     for (size_t i = 0; i < literal->elems.size(); i++) {
@@ -304,9 +346,9 @@ inline void WasmCodeGen::ConstructAggregateArray(FreshFixedDestination destinati
         if (auto id = Is<Ident>(init); id && id->vdef && TEq(element, id->vdef->type)) {
             auto &source = Find(id->vdef);
             if (!source.memory) Fail(init->line, "fixed source owner is missing planned storage");
-            EmitKnownOffset(child.place, (uint32_t)child.place.memory, init->line);
-            Address(source); // A named fixed owner has a planned Memory 0 slot.
-            code.I32((int32_t)stride); code.Copy((uint32_t)child.place.memory, 0);
+            CopyBytes(child.place, {element, source.global ? NoLocal : framebase,
+                                   source.offset, 0, false, true},
+                      stride, init->line, true);
         } else ConstructFixed(child, init);
     }
 }
@@ -317,7 +359,13 @@ inline void WasmCodeGen::CopyFixed(FreshFixedDestination destination, FixedPlace
     if (!destination.image) {
         // An empty standalone owner has an identity byte, but no payload image.
         if (!destination.rootOffset && TEq(destination.root->type, destination.place.type)) {
-            StoreAddress(destination.place); code.I32(0); code.Mem(0x3a, 0, destination.place.offset);
+            if (destination.place.memory >= 0) {
+                StoreAddress(destination.place); code.I32(0);
+                code.Mem(0x3a, (uint32_t)destination.place.memory, destination.place.offset);
+            } else {
+                EmitPackedAddress(destination.place, line); code.I32(0);
+                code.Call(memories->Access(0x3a));
+            }
         }
         return;
     }
@@ -331,7 +379,11 @@ inline void WasmCodeGen::CopyFixed(FreshFixedDestination destination, FixedPlace
 
 inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *source) {
     auto destination = fresh.place;
-    if (destination.memory != 0 || !destination.bounded)
+    if (!fresh.root || !destination.bounded || !fresh.initialization || fresh.rootOffset > fresh.ownerBytes ||
+        fresh.image > fresh.ownerBytes - fresh.rootOffset ||
+        (fresh.origin == FreshFixedOrigin::PlannedFrame && destination.memory != 0) ||
+        (fresh.origin == FreshFixedOrigin::ReservedDataElement &&
+         (!support.DataNominalArray(fresh.root->type) || !destination.packed)))
         Fail(source->line, "fixed construction needs a fresh planned destination");
     auto type = destination.type;
     if (type->kind == TY_ARRAY && !InlineArray(type))
@@ -340,8 +392,7 @@ inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *sourc
     if (bytes != fresh.image) Fail(source->line, "fixed construction has an inconsistent image");
     auto zero = [&](uint32_t count) {
         if (!count) return;
-        PlaceAddress(destination, WasmModule::I32, source->line);
-        code.I32(0); code.I32((int32_t)count); code.Fill(0);
+        ZeroFixed(destination, count, source->line);
     };
     while (auto call = Is<Call>(source)) {
         if (call->builtin == B_COPY) { source = call->ValueArgNodes().at(0); continue; }
@@ -352,7 +403,7 @@ inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *sourc
                 Fail(source->line, "aggregate array defaults need the pending destination lowering");
             if (type->arr->akind == A_FIXED) zero(bytes);
             else {
-                auto place = ArrayFromPlace(destination, source->line);
+                auto place = FreshArrayPlace(fresh, source->line);
                 PrepareArrayLengthStore(place); code.I64(0); StoreArrayLength(place);
             }
             return;
@@ -396,19 +447,27 @@ inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *sourc
         tag(ei, vi); return;
     }
     if (InlineArray(type)) {
-        if (auto text = Is<StrLit>(source)) { InitByteString(nullptr, nullptr, text, &destination); return; }
+        if (auto text = Is<StrLit>(source)) { InitByteString(nullptr, nullptr, text, &fresh); return; }
         if (auto literal = Is<ArrayLit>(source)) {
             if (Nominal(type->arr->sub)) { ConstructAggregateArray(fresh, literal); return; }
             if (literal->capexpr) Fail(source->line, "this capacity constructor needs the pending destination lowering");
-            if (literal->fillval) { InitFilledArray(nullptr, nullptr, literal, &destination); return; }
-            auto header = Local(WasmModule::I32);
-            PlaceAddress(destination, WasmModule::I32, source->line); code.Set(header);
-            InlineArrayLiteral(ArrayFromPlace({type, header, 0, 0, false, true}, source->line), literal, true); return;
+            if (literal->fillval) { InitFilledArray(nullptr, nullptr, literal, &fresh); return; }
+            InlineArrayLiteral(FreshArrayPlace(fresh, source->line), literal, true); return;
         }
     }
     auto from = ActualType(source);
     while (from && from->kind == TY_REF) from = from->ref->sub;
     if (!from || !TEq(type, from)) Fail(source->line, "aggregate adaptation needs the pending destination lowering");
+    if (fresh.origin == FreshFixedOrigin::ReservedDataElement && Nominal(type)) {
+        if (auto id = Is<Ident>(source); id && id->vdef && TEq(type, id->vdef->type)) {
+            auto &slot = Find(id->vdef);
+            if (!slot.memory) Fail(source->line, "fixed source owner is missing planned storage");
+            FixedPlace named {type, slot.global ? NoLocal : framebase, slot.offset, 0, false, true};
+            if (bytes) CopyBytes(destination, named, bytes, source->line, true);
+            else CopyFixed(fresh, named, source->line);
+            return;
+        }
+    }
     CopyFixed(fresh, ResolvePlace(source), source->line);
 }
 

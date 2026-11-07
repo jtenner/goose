@@ -1,0 +1,2958 @@
+[
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/summary.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/build/goose-inline-checkpoint",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build05/goose-tested",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/codegen/cycle_static_stacks.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_static_stacks-native-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_static_stacks-native-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_static_stacks-native-O0-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_static_stacks-native-O0-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_static_stacks-native-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_static_stacks-native-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_static_stacks-native-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_static_stacks-native-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/codegen/cycle_static_stacks.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_static_stacks-native-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_static_stacks-native-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_static_stacks-native-O2-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_static_stacks-native-O2-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_static_stacks-native-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_static_stacks-native-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_static_stacks-native-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_static_stacks-native-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/codegen/cycle_scratch_locals.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_scratch_locals-native-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_scratch_locals-native-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_scratch_locals-native-O0-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_scratch_locals-native-O0-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_scratch_locals-native-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_scratch_locals-native-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_scratch_locals-native-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_scratch_locals-native-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/codegen/cycle_scratch_locals.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_scratch_locals-native-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_scratch_locals-native-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_scratch_locals-native-O2-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_scratch_locals-native-O2-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_scratch_locals-native-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_scratch_locals-native-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_scratch_locals-native-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/cycle_scratch_locals-native-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/codegen/temporary_stack_base.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/temporary_stack_base-native-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/temporary_stack_base-native-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/temporary_stack_base-native-O0-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/temporary_stack_base-native-O0-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/temporary_stack_base-native-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/temporary_stack_base-native-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/temporary_stack_base-native-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/temporary_stack_base-native-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/codegen/temporary_stack_base.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/temporary_stack_base-native-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/temporary_stack_base-native-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/temporary_stack_base-native-O2-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/temporary_stack_base-native-O2-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/temporary_stack_base-native-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/temporary_stack_base-native-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/temporary_stack_base-native-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/temporary_stack_base-native-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/codegen/defer_exits.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_exits-native-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_exits-native-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_exits-native-O0-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_exits-native-O0-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_exits-native-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_exits-native-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_exits-native-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_exits-native-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/codegen/defer_exits.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_exits-native-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_exits-native-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_exits-native-O2-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_exits-native-O2-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_exits-native-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_exits-native-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_exits-native-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_exits-native-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/codegen/defer_return_from.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_return_from-native-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_return_from-native-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_return_from-native-O0-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_return_from-native-O0-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_return_from-native-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_return_from-native-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_return_from-native-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_return_from-native-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/codegen/defer_return_from.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_return_from-native-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_return_from-native-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_return_from-native-O2-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_return_from-native-O2-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_return_from-native-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_return_from-native-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_return_from-native-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/defer_return_from-native-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/codegen/pad_only_layouts.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/pad_only_layouts-native-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/pad_only_layouts-native-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/pad_only_layouts-native-O0-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/pad_only_layouts-native-O0-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/pad_only_layouts-native-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/pad_only_layouts-native-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/pad_only_layouts-native-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/pad_only_layouts-native-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/codegen/pad_only_layouts.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/pad_only_layouts-native-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/pad_only_layouts-native-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/pad_only_layouts-native-O2-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/pad_only_layouts-native-O2-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/pad_only_layouts-native-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/pad_only_layouts-native-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/pad_only_layouts-native-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/pad_only_layouts-native-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/codegen/copy_slot_layouts.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/copy_slot_layouts-native-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/copy_slot_layouts-native-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/copy_slot_layouts-native-O0-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/copy_slot_layouts-native-O0-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/copy_slot_layouts-native-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/copy_slot_layouts-native-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/copy_slot_layouts-native-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/copy_slot_layouts-native-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/codegen/copy_slot_layouts.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/copy_slot_layouts-native-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/copy_slot_layouts-native-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/copy_slot_layouts-native-O2-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/copy_slot_layouts-native-O2-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/copy_slot_layouts-native-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/copy_slot_layouts-native-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/copy_slot_layouts-native-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/copy_slot_layouts-native-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/codegen/limited_array_adaptation.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/limited_array_adaptation-native-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/limited_array_adaptation-native-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/limited_array_adaptation-native-O0-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/limited_array_adaptation-native-O0-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/limited_array_adaptation-native-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/limited_array_adaptation-native-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/limited_array_adaptation-native-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/limited_array_adaptation-native-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/codegen/limited_array_adaptation.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/limited_array_adaptation-native-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/limited_array_adaptation-native-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/limited_array_adaptation-native-O2-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/limited_array_adaptation-native-O2-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/limited_array_adaptation-native-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/limited_array_adaptation-native-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/limited_array_adaptation-native-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/limited_array_adaptation-native-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/codegen/adt_field_tags.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/adt_field_tags-native-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/adt_field_tags-native-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/adt_field_tags-native-O0-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/adt_field_tags-native-O0-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/adt_field_tags-native-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/adt_field_tags-native-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/adt_field_tags-native-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/adt_field_tags-native-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/codegen/adt_field_tags.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/adt_field_tags-native-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/adt_field_tags-native-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/adt_field_tags-native-O2-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/adt_field_tags-native-O2-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/adt_field_tags-native-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/adt_field_tags-native-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/adt_field_tags-native-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/adt_field_tags-native-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/codegen/varint_elements.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/varint_elements-native-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/varint_elements-native-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/varint_elements-native-O0-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/varint_elements-native-O0-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/varint_elements-native-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/varint_elements-native-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/varint_elements-native-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/varint_elements-native-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/codegen/varint_elements.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/varint_elements-native-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/varint_elements-native-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/varint_elements-native-O2-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/varint_elements-native-O2-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/varint_elements-native-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/varint_elements-native-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/varint_elements-native-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/varint_elements-native-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/storage/serialize.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize-native-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize-native-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize-native-O0-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize-native-O0-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize-native-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize-native-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize-native-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize-native-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/storage/serialize.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize-native-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize-native-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize-native-O2-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize-native-O2-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize-native-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize-native-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize-native-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize-native-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/storage/serialize_adt_tail.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize_adt_tail-native-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize_adt_tail-native-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize_adt_tail-native-O0-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize_adt_tail-native-O0-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize_adt_tail-native-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize_adt_tail-native-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize_adt_tail-native-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize_adt_tail-native-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/storage/serialize_adt_tail.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize_adt_tail-native-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize_adt_tail-native-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize_adt_tail-native-O2-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize_adt_tail-native-O2-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize_adt_tail-native-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize_adt_tail-native-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize_adt_tail-native-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/serialize_adt_tail-native-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/storage/self_relative_adt_payloads.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/self_relative_adt_payloads-native-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/self_relative_adt_payloads-native-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/self_relative_adt_payloads-native-O0-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/self_relative_adt_payloads-native-O0-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/self_relative_adt_payloads-native-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/self_relative_adt_payloads-native-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/self_relative_adt_payloads-native-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/self_relative_adt_payloads-native-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/storage/self_relative_adt_payloads.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/self_relative_adt_payloads-native-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/self_relative_adt_payloads-native-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/self_relative_adt_payloads-native-O2-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/self_relative_adt_payloads-native-O2-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/self_relative_adt_payloads-native-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/self_relative_adt_payloads-native-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/self_relative_adt_payloads-native-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/self_relative_adt_payloads-native-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/storage/relative_named_results.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/relative_named_results-native-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/relative_named_results-native-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/relative_named_results-native-O0-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/relative_named_results-native-O0-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/relative_named_results-native-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/relative_named_results-native-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/relative_named_results-native-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/relative_named_results-native-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/storage/relative_named_results.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/relative_named_results-native-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/relative_named_results-native-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/relative_named_results-native-O2-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/relative_named_results-native-O2-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/relative_named_results-native-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/relative_named_results-native-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/relative_named_results-native-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/relative_named_results-native-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/storage/resizable_adt_payload_links.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/resizable_adt_payload_links-native-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/resizable_adt_payload_links-native-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/resizable_adt_payload_links-native-O0-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/resizable_adt_payload_links-native-O0-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/resizable_adt_payload_links-native-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/resizable_adt_payload_links-native-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/resizable_adt_payload_links-native-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/resizable_adt_payload_links-native-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/storage/resizable_adt_payload_links.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/resizable_adt_payload_links-native-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/resizable_adt_payload_links-native-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/resizable_adt_payload_links-native-O2-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/resizable_adt_payload_links-native-O2-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/resizable_adt_payload_links-native-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/resizable_adt_payload_links-native-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/resizable_adt_payload_links-native-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/resizable_adt_payload_links-native-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/threads/thread_spawn_stack.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/thread_spawn_stack-native-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/thread_spawn_stack-native-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/thread_spawn_stack-native-O0-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/thread_spawn_stack-native-O0-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/thread_spawn_stack-native-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/thread_spawn_stack-native-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/thread_spawn_stack-native-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/thread_spawn_stack-native-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/threads/thread_spawn_stack.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/thread_spawn_stack-native-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/thread_spawn_stack-native-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/thread_spawn_stack-native-O2-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/thread_spawn_stack-native-O2-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/thread_spawn_stack-native-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/thread_spawn_stack-native-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/thread_spawn_stack-native-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/thread_spawn_stack-native-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/runtime/stack_stats.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/stack_stats-native-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/stack_stats-native-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/stack_stats-native-O0-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/stack_stats-native-O0-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/stack_stats-native-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/stack_stats-native-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/stack_stats-native-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/stack_stats-native-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/runtime/stack_stats.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/stack_stats-native-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/stack_stats-native-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/stack_stats-native-O2-reference.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/stack_stats-native-O2-candidate.c",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/stack_stats-native-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/stack_stats-native-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/stack_stats-native-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/stack_stats-native-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_control.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_control-wasm-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_control-wasm-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_control-wasm-O0-reference.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_control-wasm-O0-candidate.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_control-wasm-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_control-wasm-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_control-wasm-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_control-wasm-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_control.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_control-wasm-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_control-wasm-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_control-wasm-O2-reference.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_control-wasm-O2-candidate.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_control-wasm-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_control-wasm-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_control-wasm-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_control-wasm-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_conversion_boundaries.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_boundaries-wasm-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_boundaries-wasm-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_boundaries-wasm-O0-reference.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_boundaries-wasm-O0-candidate.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_boundaries-wasm-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_boundaries-wasm-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_boundaries-wasm-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_boundaries-wasm-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_conversion_boundaries.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_boundaries-wasm-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_boundaries-wasm-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_boundaries-wasm-O2-reference.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_boundaries-wasm-O2-candidate.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_boundaries-wasm-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_boundaries-wasm-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_boundaries-wasm-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_boundaries-wasm-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_conversion_global.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_global-wasm-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_global-wasm-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_global-wasm-O0-reference.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_global-wasm-O0-candidate.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_global-wasm-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_global-wasm-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_global-wasm-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_global-wasm-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_conversion_global.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_global-wasm-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_global-wasm-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_global-wasm-O2-reference.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_global-wasm-O2-candidate.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_global-wasm-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_global-wasm-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_global-wasm-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_conversion_global-wasm-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_frames.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_frames-wasm-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_frames-wasm-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_frames-wasm-O0-reference.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_frames-wasm-O0-candidate.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_frames-wasm-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_frames-wasm-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_frames-wasm-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_frames-wasm-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_frames.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_frames-wasm-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_frames-wasm-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_frames-wasm-O2-reference.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_frames-wasm-O2-candidate.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_frames-wasm-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_frames-wasm-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_frames-wasm-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_frames-wasm-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_reference_identity.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_identity-wasm-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_identity-wasm-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_identity-wasm-O0-reference.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_identity-wasm-O0-candidate.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_identity-wasm-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_identity-wasm-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_identity-wasm-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_identity-wasm-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_reference_identity.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_identity-wasm-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_identity-wasm-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_identity-wasm-O2-reference.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_identity-wasm-O2-candidate.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_identity-wasm-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_identity-wasm-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_identity-wasm-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_identity-wasm-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_reference_rebind.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_rebind-wasm-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_rebind-wasm-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_rebind-wasm-O0-reference.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_rebind-wasm-O0-candidate.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_rebind-wasm-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_rebind-wasm-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_rebind-wasm-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_rebind-wasm-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_reference_rebind.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_rebind-wasm-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_rebind-wasm-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_rebind-wasm-O2-reference.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_rebind-wasm-O2-candidate.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_rebind-wasm-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_rebind-wasm-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_rebind-wasm-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_rebind-wasm-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_reference_returns.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_returns-wasm-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_returns-wasm-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_returns-wasm-O0-reference.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_returns-wasm-O0-candidate.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_returns-wasm-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_returns-wasm-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_returns-wasm-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_returns-wasm-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_reference_returns.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_returns-wasm-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_returns-wasm-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_returns-wasm-O2-reference.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_returns-wasm-O2-candidate.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_returns-wasm-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_returns-wasm-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_returns-wasm-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_reference_returns-wasm-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_scalars.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_scalars-wasm-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_scalars-wasm-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_scalars-wasm-O0-reference.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_scalars-wasm-O0-candidate.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_scalars-wasm-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_scalars-wasm-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_scalars-wasm-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_scalars-wasm-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_scalars.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_scalars-wasm-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_scalars-wasm-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_scalars-wasm-O2-reference.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_scalars-wasm-O2-candidate.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_scalars-wasm-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_scalars-wasm-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_scalars-wasm-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_scalars-wasm-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_tail_values.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_tail_values-wasm-O0-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_tail_values-wasm-O0-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_tail_values-wasm-O0-reference.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_tail_values-wasm-O0-candidate.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_tail_values-wasm-O0-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_tail_values-wasm-O0-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_tail_values-wasm-O0-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_tail_values-wasm-O0-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_tail_values.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_tail_values-wasm-O2-reference.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_tail_values-wasm-O2-candidate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_tail_values-wasm-O2-reference.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_tail_values-wasm-O2-candidate.wasm",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_tail_values-wasm-O2-reference.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_tail_values-wasm-O2-candidate.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_tail_values-wasm-O2-reference.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact/wasm_tail_values-wasm-O2-candidate.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build01/lease.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build01/release-verification.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build01/source-identity.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build01/parent-checks.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build01/unit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build02/lease.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build02/release-verification.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build02/source-identity.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build02/parent-checks.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build02/unit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build03/lease.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build03/release-verification.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build03/source-identity.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build03/parent-checks.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build03/unit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build04/lease.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build04/release-verification.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build04/source-identity.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build04/parent-checks.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build04/release-build.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build04/freeze.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build04/candidate-checks.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build04/source-identity-after.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build04/unit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build05/lease.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build05/release-verification.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build05/source-identity.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build05/release-build.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build05/freeze.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-checks.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build05/scaling-after01.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build05/unknown-scaling-after01.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build05/source-identity-after.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/build05/unit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility01/lease.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility01/release-verification.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility01/identity.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility01/warning-checks.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility01/unit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/resource-unit.py",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/lease.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/release-verification.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/identity.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/warning-checks.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/exact-comparisons.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/module-deltas.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/module-metadata.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/identity-after.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/unit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/resource-unit.py",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm01/lease.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm01/release-verification.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm01/identity.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm01/byte-preflight.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm01/full-wasm.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm01/unit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm02/lease.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm02/release-verification.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm02/identity.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm02/byte-reuse.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm02/full-wasm.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm02/unit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/resource-unit.py",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm03/lease.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm03/release-verification.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm03/identity.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm03/byte-reuse.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm03/full-wasm.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm03/unit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/resource-unit.py",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm04/lease.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm04/release-verification.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm04/identity.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm04/byte-reuse.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm04/mixed-preflight.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm04/full-wasm.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm04/identity-after.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/full-wasm04/unit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/resource-unit.py",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/native-baseline01/lease.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/native-baseline01/release-verification.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/native-baseline01/identity.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/native-baseline01/native-baseline.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/native-baseline01/unit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/resource-unit.py",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/lease.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/release-verification.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/identity.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/probes.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/identity-after.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/unit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/scaling-before01/lease.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/scaling-before01/release-verification.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/scaling-before01/identity.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/scaling-before01/scaling.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/scaling-before01/unit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/lease.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/release-verification.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/identity.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-scaling.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/commands-results.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/cleanup-O0-native-emit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/cleanup-O2-native-emit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-native-emit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-native-emit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O0-native-emit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O2-native-emit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/cleanup-O0-native-build.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/cleanup-O0-native-run.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/cleanup-O0-emit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/cleanup-O0-validate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/cleanup-O0-node.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/cleanup-O0-wasmtime.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/cleanup-O2-native-build.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/cleanup-O2-native-run.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/cleanup-O2-emit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/cleanup-O2-validate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/cleanup-O2-node.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/cleanup-O2-wasmtime.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-native-build.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-native-run.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-emit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-validate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-tops-validate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-dirty-node.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-dirty-wasmtime.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-limit-validate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-failure-node.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-failure-wasmtime.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-wat.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-zero-parse.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-zero-validate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-zero-node.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-zero-wasmtime.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-native-build.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-native-run.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-emit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-validate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-tops-validate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-dirty-node.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-dirty-wasmtime.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-limit-validate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-failure-node.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-failure-wasmtime.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O0-native-build.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O0-native-run.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O0-emit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O0-validate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O0-node.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O0-wasmtime.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O0-tops-validate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O0-failure-node.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O0-failure-wasmtime.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O2-native-build.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O2-native-run.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O2-emit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O2-validate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O2-node.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O2-wasmtime.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O2-tops-validate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O2-failure-node.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O2-failure-wasmtime.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O0-native-emit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O0-native-build.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O0-emit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O0-validate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O0-native.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O0-node.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O0-wasmtime.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O2-native-emit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O2-native-build.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O2-emit.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O2-validate.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O2-native.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O2-node.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O2-wasmtime.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order.goose",
+    "mode": "source mutation inspection"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/native-baseline01/failed-warning-fixtures/wasm_data_aggregate_cleanup.goose",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O0-native.stderr",
+    "mode": "exact failure reason inspection"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O0-native.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O0-native.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O0-node.stderr",
+    "mode": "exact failure reason inspection"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O0-node.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O0-node.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O0-wasmtime.stderr",
+    "mode": "exact failure reason inspection"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O0-wasmtime.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O0-wasmtime.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O2-native.stderr",
+    "mode": "exact failure reason inspection"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O2-native.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O2-native.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O2-node.stderr",
+    "mode": "exact failure reason inspection"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O2-node.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O2-node.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O2-wasmtime.stderr",
+    "mode": "exact failure reason inspection"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O2-wasmtime.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-order-O2-wasmtime.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-wat.stdout",
+    "mode": "targeted WAT mutation comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-zero.wat",
+    "mode": "targeted WAT mutation comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-dirty-node.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-dirty-node.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-dirty-node.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-dirty-node.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-dirty-wasmtime.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-dirty-wasmtime.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-dirty-wasmtime.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-dirty-wasmtime.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-failure-node.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-failure-node.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-failure-node.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-failure-node.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-failure-wasmtime.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-failure-wasmtime.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-failure-wasmtime.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O0-failure-wasmtime.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-dirty-node.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-dirty-node.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-dirty-node.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-dirty-node.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-dirty-wasmtime.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-dirty-wasmtime.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-dirty-wasmtime.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-dirty-wasmtime.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-failure-node.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-failure-node.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-failure-node.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-failure-node.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-failure-wasmtime.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-failure-wasmtime.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-failure-wasmtime.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/growth-O2-failure-wasmtime.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O0-failure-node.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O0-failure-node.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O0-failure-node.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O0-failure-node.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O0-failure-wasmtime.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O0-failure-wasmtime.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O0-failure-wasmtime.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O0-failure-wasmtime.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O2-failure-node.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O2-failure-node.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O2-failure-node.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O2-failure-node.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O2-failure-wasmtime.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O2-failure-wasmtime.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O2-failure-wasmtime.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/overflow-O2-failure-wasmtime.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-zero-node.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-zero-node.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-zero-node.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-zero-node.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-zero-wasmtime.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-zero-wasmtime.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-zero-wasmtime.stderr",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/probes01/wrong-zero-wasmtime.stdout",
+    "mode": "byte/hash comparison"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/warning-marker-provenance.json",
+    "mode": "parsed JSON content"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/wasm_data_aggregate_cleanup-O0.stdout",
+    "mode": "warning and phase inspection"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/wasm_data_aggregate_cleanup-O0.stderr",
+    "mode": "warning and phase inspection"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/wasm_data_aggregate_cleanup-O0.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/wasm_data_aggregate_cleanup-O2.stdout",
+    "mode": "warning and phase inspection"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/wasm_data_aggregate_cleanup-O2.stderr",
+    "mode": "warning and phase inspection"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/wasm_data_aggregate_cleanup-O2.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/wasm_data_aggregate_mixed-O0.stdout",
+    "mode": "warning and phase inspection"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/wasm_data_aggregate_mixed-O0.stderr",
+    "mode": "warning and phase inspection"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/wasm_data_aggregate_mixed-O0.exit",
+    "mode": "parsed exact exit status"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/wasm_data_aggregate_mixed-O2.stdout",
+    "mode": "warning and phase inspection"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/wasm_data_aggregate_mixed-O2.stderr",
+    "mode": "warning and phase inspection"
+  },
+  {
+    "path": "/tmp/goose-wasm-data-aggregates-20261107/compatibility02/wasm_data_aggregate_mixed-O2.exit",
+    "mode": "parsed exact exit status"
+  }
+]

@@ -178,3 +178,37 @@ family/count contracts, exclusive lease and declared host/affinity controls,
 repetitions/warmups and qualified decision limits. A clear measured shared-path
 loss must be resolved or parked. No scalar grant is reused; performance
 acceptance remains open.
+
+## Pending fresh aggregate-data measurements
+
+Use parent `4dc9af87` / compiler `bcc336c9` and final data compiler `12dc79f3`
+on matched old supported controls: `wasm_aggregate_array_packed.goose`,
+`wasm_struct_refs.goose`, and `wasm_byte_print.goose`. Include known and opaque
+prefix paths, scalar/header callers, frame copies and byte snapshots. These
+controls compare the shared scratch path with the accepted feature parent.
+
+The parent rejects the new owning aggregate-data form. For that form, compare
+the preserved first data compiler `e1eacdff` with `12dc79f3` on the same checked
+32/256-row limited-literal, fill/string/default, and unknown-base programs.
+Label this as a comparison of two data implementations, not a master speedup.
+Include direct and nested named copies, local/global sources and known/opaque
+bases at both row counts. Use reviewed compiler `e1bbd1b2` for the named-copy before comparison. It adds four locals
+per named source; use its separate failing-first record as the comparison
+source, and verify the repaired full images before measuring.
+Source, compiler, generated module and adapter identities must be frozen. All
+before/after memory models and logical-top checks must pass outside timed spans.
+
+Record paired compiler CPU and wall time, compiler allocation count/bytes and
+RSS, module/local/helper sizes, separate engine compilation and initialization,
+and guest execution. The ordinary adapter permits one start per instance;
+declare any fresh-instance or instrumented-entry protocol before acquisition.
+Measure physical commitment separately from addressable pages or restored tops.
+Literal work grows with required child initializers and fixed image bytes;
+opaque fills/loads/stores may use a bounded memory selector dispatcher.
+
+The static failing-first checks now show 35 known-constructor locals and 15
+unknown-base functions at both 32 and 256 rows. They do not qualify CPU, runtime,
+RSS or physical-memory costs. Use a new fixed sample/count contract, exclusive
+coordinated lease, normal host/affinity checks, declared warmups/repetitions and
+qualified uncertainty. Resolve or park a clear measured shared-path loss. No
+previous scalar grant or sample budget applies; performance acceptance is open.

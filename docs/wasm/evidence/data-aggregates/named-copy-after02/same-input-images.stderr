@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-data-aggregates-20261107/named-copy-after02/checks.py", line 15, in <module>
+    actual=capture/image.name;assert image.read_bytes()==actual.read_bytes(),(name,image.name)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('direct-local-known-32-O0', 'memory.bin')

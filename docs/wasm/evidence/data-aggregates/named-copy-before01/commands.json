@@ -1,0 +1,23 @@
+[
+  [
+    "identity",
+    [
+      "python3",
+      "/tmp/goose-wasm-data-aggregates-20261107/named-copy-before01/verify.py"
+    ]
+  ],
+  [
+    "named-copy",
+    [
+      "mise",
+      "exec",
+      "wasm-tools@1.262.0",
+      "node@24.22.2",
+      "--",
+      "python3",
+      "/tmp/goose-wasm-data-aggregates-20261107/named-copy-footprint.py",
+      "/tmp/goose-wasm-data-aggregates-20261107/named-copy-before01",
+      "/tmp/goose-wasm-data-aggregates-20261107/build05/goose-tested"
+    ]
+  ]
+]

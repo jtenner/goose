@@ -85,6 +85,18 @@ def main():
     for memory in range(3):
         assert call('load64', pointer(memory, 3)) == -(1 << 63) + memory
     pattern = bytes([0, 127, 128, 255])
+    for memory in range(3):
+        target = exports[f'memory{memory}']
+        target.write(store, bytes([90] * 6), 6000)
+        call('fill', pointer(memory, 6001), 0x1ab, 4)
+        assert bytes(target.read(store, 6000, 6006)) == bytes([90, 171, 171, 171, 171, 90])
+        call('fill', pointer(memory, 65536), 13, 0)
+        before = bytes(target.read(store))
+        throws(lambda: call('fill', pointer(memory, 65535), 7, 2), 'out of bounds')
+        throws(lambda: call('fill', pointer(memory, 0), 7, -1), 'out of bounds')
+        assert bytes(target.read(store)) == before, 'failed fill changed memory'
+    for memory in (3, 0xffffffff):
+        throws(lambda: call('fill', pointer(memory, 0), 7, 0), 'memory failure 7')
     exports['memory0'].write(store, pattern, 100)
     for memory in range(3):
         call('copy_from_frame', pointer(memory, 1000), 100, len(pattern))

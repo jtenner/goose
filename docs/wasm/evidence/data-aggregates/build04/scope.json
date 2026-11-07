@@ -1,0 +1,15 @@
+{
+  "parent": "4dc9af871426b6f440f5bdbe7f009531f4d72600",
+  "parent_compiler_sha256": "bcc336c9f3f06f604b6ecdb002f4f355dae24bca9691e5d1b16ca30dfef7148c",
+  "parent_native_cases": 6,
+  "parent_exact_admission_rejections": 6,
+  "candidate_Node_cases": 6,
+  "candidate_Wasmtime_cases": 6,
+  "helper_checks": "cached fill,all3memories,bounds/selector/atomic-failure in both engines",
+  "compiler_builds": 1,
+  "optimizations": [
+    0,
+    2
+  ],
+  "no_timing": true
+}

@@ -1,0 +1,5 @@
+/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_effects.goose:5: error: expected a value of type u16, got i64 (narrowing and sign changes require an explicit `as`)
+    var rows: Row[] = [Row { before: 1, values: [tick(7); 2], text: "abc", empty: [tick(11); 0], after: 60000 },
+                                                 ^~~~~~~
+  in fn exercise() instantiated from /home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_effects.goose:20
+  in fn main() instantiated from /home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_effects.goose:19

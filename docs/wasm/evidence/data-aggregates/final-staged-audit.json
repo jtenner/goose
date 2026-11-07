@@ -1,0 +1,13 @@
+{
+  "source_inputs": 80,
+  "validation_inputs": 4223,
+  "current_source_hashes": "PASS",
+  "staged_worktree_match": "PASS",
+  "raw_whitespace_diagnostic_counts": {
+    "docs/wasm/evidence/data-aggregates/full-wasm01/full-wasm.stderr": 1,
+    "docs/wasm/evidence/data-aggregates/full-wasm02/full-wasm.stderr": 1,
+    "docs/wasm/evidence/data-aggregates/review/unread-evidence.tsv": 2861
+  },
+  "raw_whitespace_output_sha256": "43c726ba209958d8d47020ef147c267a62bea6b59b548ebf55a718a0a5bb0a25",
+  "limit": "Only preserved stderr blank lines and original reviewer TSV empty final columns; source/test/document prose clean. First classifier did not account for + context lines; no product failure."
+}

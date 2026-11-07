@@ -1,0 +1,3094 @@
+{
+  "scaling": [
+    {
+      "unit": "scaling-before01",
+      "stem": "limited-literal-32-O0",
+      "module_bytes": 31723,
+      "code_section_bytes": 13821,
+      "functions": 7,
+      "local_count": 325,
+      "max_function_locals": 318
+    },
+    {
+      "unit": "scaling-before01",
+      "stem": "limited-literal-32-O2",
+      "module_bytes": 31723,
+      "code_section_bytes": 13821,
+      "functions": 7,
+      "local_count": 325,
+      "max_function_locals": 318
+    },
+    {
+      "unit": "scaling-before01",
+      "stem": "limited-literal-256-O0",
+      "module_bytes": 236677,
+      "code_section_bytes": 107010,
+      "functions": 7,
+      "local_count": 2341,
+      "max_function_locals": 2334
+    },
+    {
+      "unit": "scaling-before01",
+      "stem": "limited-literal-256-O2",
+      "module_bytes": 236677,
+      "code_section_bytes": 107010,
+      "functions": 7,
+      "local_count": 2341,
+      "max_function_locals": 2334
+    },
+    {
+      "unit": "scaling-before01",
+      "stem": "fill-and-text-32-O0",
+      "module_bytes": 12198,
+      "code_section_bytes": 6364,
+      "functions": 8,
+      "local_count": 62,
+      "max_function_locals": 55
+    },
+    {
+      "unit": "scaling-before01",
+      "stem": "fill-and-text-32-O2",
+      "module_bytes": 12198,
+      "code_section_bytes": 6364,
+      "functions": 8,
+      "local_count": 62,
+      "max_function_locals": 55
+    },
+    {
+      "unit": "scaling-before01",
+      "stem": "fill-and-text-256-O0",
+      "module_bytes": 64591,
+      "code_section_bytes": 39872,
+      "functions": 8,
+      "local_count": 62,
+      "max_function_locals": 55
+    },
+    {
+      "unit": "scaling-before01",
+      "stem": "fill-and-text-256-O2",
+      "module_bytes": 64591,
+      "code_section_bytes": 39872,
+      "functions": 8,
+      "local_count": 62,
+      "max_function_locals": 55
+    },
+    {
+      "unit": "scaling-after01",
+      "stem": "limited-literal-32-O0",
+      "module_bytes": 30945,
+      "code_section_bytes": 13043,
+      "functions": 7,
+      "local_count": 42,
+      "max_function_locals": 35
+    },
+    {
+      "unit": "scaling-after01",
+      "stem": "limited-literal-32-O2",
+      "module_bytes": 30945,
+      "code_section_bytes": 13043,
+      "functions": 7,
+      "local_count": 42,
+      "max_function_locals": 35
+    },
+    {
+      "unit": "scaling-after01",
+      "stem": "limited-literal-256-O0",
+      "module_bytes": 227834,
+      "code_section_bytes": 98167,
+      "functions": 7,
+      "local_count": 42,
+      "max_function_locals": 35
+    },
+    {
+      "unit": "scaling-after01",
+      "stem": "limited-literal-256-O2",
+      "module_bytes": 227834,
+      "code_section_bytes": 98167,
+      "functions": 7,
+      "local_count": 42,
+      "max_function_locals": 35
+    },
+    {
+      "unit": "scaling-after01",
+      "stem": "fill-and-text-32-O0",
+      "module_bytes": 12198,
+      "code_section_bytes": 6364,
+      "functions": 8,
+      "local_count": 62,
+      "max_function_locals": 55
+    },
+    {
+      "unit": "scaling-after01",
+      "stem": "fill-and-text-32-O2",
+      "module_bytes": 12198,
+      "code_section_bytes": 6364,
+      "functions": 8,
+      "local_count": 62,
+      "max_function_locals": 55
+    },
+    {
+      "unit": "scaling-after01",
+      "stem": "fill-and-text-256-O0",
+      "module_bytes": 64591,
+      "code_section_bytes": 39872,
+      "functions": 8,
+      "local_count": 62,
+      "max_function_locals": 55
+    },
+    {
+      "unit": "scaling-after01",
+      "stem": "fill-and-text-256-O2",
+      "module_bytes": 64591,
+      "code_section_bytes": 39872,
+      "functions": 8,
+      "local_count": 62,
+      "max_function_locals": 55
+    },
+    {
+      "unit": "unknown-scaling-before01",
+      "stem": "unknown-32",
+      "module_bytes": 47214,
+      "code_section_bytes": 21097,
+      "functions": 79,
+      "local_count": 278,
+      "max_function_locals": 255
+    },
+    {
+      "unit": "unknown-scaling-before01",
+      "stem": "unknown-256",
+      "module_bytes": 347161,
+      "code_section_bytes": 156983,
+      "functions": 527,
+      "local_count": 1622,
+      "max_function_locals": 1599
+    },
+    {
+      "unit": "unknown-scaling-after01",
+      "stem": "unknown-32",
+      "module_bytes": 40657,
+      "code_section_bytes": 16564,
+      "functions": 15,
+      "local_count": 91,
+      "max_function_locals": 68
+    },
+    {
+      "unit": "unknown-scaling-after01",
+      "stem": "unknown-256",
+      "module_bytes": 290034,
+      "code_section_bytes": 116920,
+      "functions": 15,
+      "local_count": 91,
+      "max_function_locals": 68
+    }
+  ],
+  "images": [
+    "/tmp/goose-wasm-data-aggregates-20261107/scaling-before01/limited-literal-32-O0-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/scaling-before01/limited-literal-32-O2-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/scaling-before01/limited-literal-256-O0-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/scaling-before01/limited-literal-256-O2-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/scaling-before01/fill-and-text-32-O0-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/scaling-before01/fill-and-text-32-O2-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/scaling-before01/fill-and-text-256-O0-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/scaling-before01/fill-and-text-256-O2-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/scaling-after01/limited-literal-32-O0-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/scaling-after01/limited-literal-32-O2-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/scaling-after01/limited-literal-256-O0-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/scaling-after01/limited-literal-256-O2-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/scaling-after01/fill-and-text-32-O0-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/scaling-after01/fill-and-text-32-O2-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/scaling-after01/fill-and-text-256-O0-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/scaling-after01/fill-and-text-256-O2-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-32-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-32-instance/data_memory_2.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-256-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01/unknown-256-instance/data_memory_2.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-after01/unknown-32-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-after01/unknown-32-instance/data_memory_2.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-after01/unknown-256-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-after01/unknown-256-instance/data_memory_2.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-rows-O0-instance/memory.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-rows-O0-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-rows-O0-instance/data_memory_2.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-rows-O0-instance/data_memory_3.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-rows-O0-instance/data_memory_4.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-rows-O0-instance/data_memory_5.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-rows-O0-instance/data_memory_6.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-rows-O2-instance/memory.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-rows-O2-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-rows-O2-instance/data_memory_2.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-rows-O2-instance/data_memory_3.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-rows-O2-instance/data_memory_4.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-rows-O2-instance/data_memory_5.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-rows-O2-instance/data_memory_6.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-effects-O0-instance/memory.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-effects-O0-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-effects-O0-instance/data_memory_2.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-effects-O0-instance/data_memory_3.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-effects-O2-instance/memory.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-effects-O2-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-effects-O2-instance/data_memory_2.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-effects-O2-instance/data_memory_3.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-enums-O0-instance/memory.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-enums-O0-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-enums-O0-instance/data_memory_2.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-enums-O0-instance/data_memory_3.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-enums-O0-instance/data_memory_4.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-enums-O2-instance/memory.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-enums-O2-instance/data_memory_1.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-enums-O2-instance/data_memory_2.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-enums-O2-instance/data_memory_3.bin",
+    "/tmp/goose-wasm-data-aggregates-20261107/build05/candidate-enums-O2-instance/data_memory_4.bin"
+  ],
+  "reuse": [
+    {
+      "unit": "scaling-after01",
+      "files": 92,
+      "source": "/tmp/goose-wasm-data-aggregates-20261107/scaling-before01"
+    },
+    {
+      "unit": "unknown-scaling-after01",
+      "files": 24,
+      "source": "/tmp/goose-wasm-data-aggregates-20261107/unknown-scaling-before01"
+    },
+    {
+      "unit": "build03",
+      "files": 28,
+      "source": "/tmp/goose-wasm-data-aggregates-20261107/build02"
+    },
+    {
+      "unit": "build04",
+      "files": 28,
+      "source": "/tmp/goose-wasm-data-aggregates-20261107/build02"
+    },
+    {
+      "unit": "build05",
+      "files": 18,
+      "source": "/tmp/goose-wasm-data-aggregates-20261107/build04"
+    }
+  ],
+  "compatibility": [
+    {
+      "source": "test/wasm/wasm_aggregate_array_callbacks.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_callbacks.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": -2,
+        "max_function_locals": -2
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_cleanup.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -16,
+        "code_section_bytes": -16,
+        "functions": 0,
+        "local_count": -6,
+        "max_function_locals": -1
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_cleanup.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -16,
+        "code_section_bytes": -16,
+        "functions": 0,
+        "local_count": -6,
+        "max_function_locals": -1
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_control.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_control.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_effects.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_effects.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_enums.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -3,
+        "code_section_bytes": -3,
+        "functions": 0,
+        "local_count": -3,
+        "max_function_locals": -3
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_enums.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -3,
+        "code_section_bytes": -3,
+        "functions": 0,
+        "local_count": -3,
+        "max_function_locals": -3
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_fields.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -3,
+        "code_section_bytes": -3,
+        "functions": 0,
+        "local_count": -3,
+        "max_function_locals": -3
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_fields.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -3,
+        "code_section_bytes": -3,
+        "functions": 0,
+        "local_count": -3,
+        "max_function_locals": -3
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_global_effects.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_global_effects.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_hidden.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_hidden.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_limited.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_limited.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_nested_fields.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -15,
+        "code_section_bytes": -15,
+        "functions": 0,
+        "local_count": -3,
+        "max_function_locals": -3
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_nested_fields.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -15,
+        "code_section_bytes": -15,
+        "functions": 0,
+        "local_count": -3,
+        "max_function_locals": -3
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_packed.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -20,
+        "code_section_bytes": -20,
+        "functions": 0,
+        "local_count": -4,
+        "max_function_locals": -4
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_packed.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -20,
+        "code_section_bytes": -20,
+        "functions": 0,
+        "local_count": -4,
+        "max_function_locals": -4
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_values.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -6,
+        "code_section_bytes": -6,
+        "functions": 0,
+        "local_count": -2,
+        "max_function_locals": -2
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_values.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -6,
+        "code_section_bytes": -6,
+        "functions": 0,
+        "local_count": -2,
+        "max_function_locals": -2
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_walk_packed.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_walk_packed.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_walk_thin.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_array_walk_thin.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_callbacks.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_callbacks.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_checkpoint.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": -2,
+        "max_function_locals": -2
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_checkpoint.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": -2,
+        "max_function_locals": -2
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_cleanup.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -16,
+        "code_section_bytes": -16,
+        "functions": 0,
+        "local_count": -6,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_cleanup.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -16,
+        "code_section_bytes": -16,
+        "functions": 0,
+        "local_count": -6,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_control.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_control.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_defaults.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_defaults.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_enums.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": 2,
+        "code_section_bytes": 2,
+        "functions": 0,
+        "local_count": -1,
+        "max_function_locals": -1
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_enums.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": 2,
+        "code_section_bytes": 2,
+        "functions": 0,
+        "local_count": -1,
+        "max_function_locals": -1
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_fields.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -8,
+        "code_section_bytes": -8,
+        "functions": 0,
+        "local_count": -9,
+        "max_function_locals": -9
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_fields.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -12,
+        "code_section_bytes": -12,
+        "functions": 0,
+        "local_count": -9,
+        "max_function_locals": -9
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_identity.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_identity.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_limited_empty.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_limited_empty.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_paths.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_paths.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_refs_packed.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": -2,
+        "max_function_locals": -2
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_refs_packed.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": -2,
+        "max_function_locals": -2
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_refs_thin.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_refs_thin.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_values.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_values.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_walk_packed.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_walk_packed.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_zero_control.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_aggregate_iteration_zero_control.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_array_copy.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -19,
+        "code_section_bytes": -19,
+        "functions": 0,
+        "local_count": -8,
+        "max_function_locals": -8
+      }
+    },
+    {
+      "source": "test/wasm/wasm_array_copy.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -19,
+        "code_section_bytes": -19,
+        "functions": 0,
+        "local_count": -8,
+        "max_function_locals": -8
+      }
+    },
+    {
+      "source": "test/wasm/wasm_array_copy_cleanup.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": -1,
+        "max_function_locals": -1
+      }
+    },
+    {
+      "source": "test/wasm/wasm_array_copy_cleanup.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": -1,
+        "max_function_locals": -1
+      }
+    },
+    {
+      "source": "test/wasm/wasm_array_copy_inline.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_array_copy_inline.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_array_copy_sources.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_array_copy_sources.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -2,
+        "code_section_bytes": -2,
+        "functions": 0,
+        "local_count": -1,
+        "max_function_locals": -1
+      }
+    },
+    {
+      "source": "test/wasm/wasm_array_equality.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_array_equality.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_array_fills.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -21,
+        "code_section_bytes": -21,
+        "functions": 0,
+        "local_count": -8,
+        "max_function_locals": -8
+      }
+    },
+    {
+      "source": "test/wasm/wasm_array_fills.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -55,
+        "code_section_bytes": -55,
+        "functions": 0,
+        "local_count": -21,
+        "max_function_locals": -21
+      }
+    },
+    {
+      "source": "test/wasm/wasm_array_iteration.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_array_iteration.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_array_shrink.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_array_shrink.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_array_widths.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_array_widths.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_byte_print.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -4,
+        "code_section_bytes": -4,
+        "functions": 0,
+        "local_count": -2,
+        "max_function_locals": -2
+      }
+    },
+    {
+      "source": "test/wasm/wasm_byte_print.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -8,
+        "code_section_bytes": -8,
+        "functions": 0,
+        "local_count": -4,
+        "max_function_locals": -4
+      }
+    },
+    {
+      "source": "test/wasm/wasm_byte_strings.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -6,
+        "code_section_bytes": -6,
+        "functions": 0,
+        "local_count": -3,
+        "max_function_locals": -3
+      }
+    },
+    {
+      "source": "test/wasm/wasm_byte_strings.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -6,
+        "code_section_bytes": -6,
+        "functions": 0,
+        "local_count": -3,
+        "max_function_locals": -3
+      }
+    },
+    {
+      "source": "test/wasm/wasm_callback_address.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_callback_address.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_callback_default.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_callback_default.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_callback_inline_reference.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_callback_inline_reference.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_callback_local.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_callback_local.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_control.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_control.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_conversion_boundaries.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_conversion_boundaries.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_conversion_global.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_conversion_global.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_entry_stack_base.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_entry_stack_base.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_callback_match.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_callback_match.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_cleanup.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -8,
+        "code_section_bytes": -8,
+        "functions": 0,
+        "local_count": -2,
+        "max_function_locals": -1
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_cleanup.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -8,
+        "code_section_bytes": -8,
+        "functions": 0,
+        "local_count": -2,
+        "max_function_locals": -1
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_containers.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -11,
+        "code_section_bytes": -11,
+        "functions": 0,
+        "local_count": -6,
+        "max_function_locals": -6
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_containers.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -11,
+        "code_section_bytes": -11,
+        "functions": 0,
+        "local_count": -6,
+        "max_function_locals": -6
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_control.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_control.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_effects.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_effects.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_empty.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_empty.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_hidden.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_hidden.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_layout.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -17,
+        "code_section_bytes": -17,
+        "functions": 0,
+        "local_count": -9,
+        "max_function_locals": -9
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_layout.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -17,
+        "code_section_bytes": -17,
+        "functions": 0,
+        "local_count": -9,
+        "max_function_locals": -9
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_references.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_references.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_tags.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_tags.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_variant.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -38,
+        "code_section_bytes": -38,
+        "functions": 0,
+        "local_count": -5,
+        "max_function_locals": -5
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_variant.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -38,
+        "code_section_bytes": -38,
+        "functions": 0,
+        "local_count": -5,
+        "max_function_locals": -5
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_wildcard.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_enum_wildcard.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_frames.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_frames.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_arrays.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_arrays.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_boundaries.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_boundaries.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_deferred_rebind.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_deferred_rebind.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_effect_path.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_effect_path.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_equality_modes.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_equality_modes.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_limited_path.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_limited_path.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_mixed_references.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": -2,
+        "max_function_locals": -2
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_mixed_references.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": -2,
+        "max_function_locals": -2
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_nested_path.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_nested_path.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_optional_references.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_optional_references.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_ref_abi_packed.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": -1,
+        "max_function_locals": -1
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_ref_abi_packed.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": -1,
+        "max_function_locals": -1
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_ref_abi_thin.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_ref_abi_thin.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_ref_callback_packed.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_ref_callback_packed.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_ref_callback_thin.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_ref_callback_thin.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_reference_path.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_inline_reference_path.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_multimemory.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_multimemory.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_no_data_owner.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_no_data_owner.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_optional_reference_iteration.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_optional_reference_iteration.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_ordered_array_cleanup.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_ordered_array_cleanup.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_reference_identity.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_reference_identity.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_reference_iteration.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_reference_iteration.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_reference_rebind.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_reference_rebind.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_reference_returns.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_reference_returns.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_repoint_iteration.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_repoint_iteration.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_runtime_limited.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -60,
+        "code_section_bytes": -60,
+        "functions": 0,
+        "local_count": -26,
+        "max_function_locals": -25
+      }
+    },
+    {
+      "source": "test/wasm/wasm_runtime_limited.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -55,
+        "code_section_bytes": -55,
+        "functions": 0,
+        "local_count": -27,
+        "max_function_locals": -26
+      }
+    },
+    {
+      "source": "test/wasm/wasm_runtime_limited_bytes.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -36,
+        "code_section_bytes": -36,
+        "functions": 0,
+        "local_count": -19,
+        "max_function_locals": -18
+      }
+    },
+    {
+      "source": "test/wasm/wasm_runtime_limited_bytes.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -43,
+        "code_section_bytes": -43,
+        "functions": 0,
+        "local_count": -19,
+        "max_function_locals": -18
+      }
+    },
+    {
+      "source": "test/wasm/wasm_runtime_limited_cleanup.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": -9,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_runtime_limited_cleanup.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -43,
+        "code_section_bytes": -43,
+        "functions": 0,
+        "local_count": -15,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_runtime_limited_no_owner.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_runtime_limited_no_owner.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_scalars.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_scalars.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_scoped_data_reuse.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_scoped_data_reuse.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_arrays.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -52,
+        "code_section_bytes": -52,
+        "functions": 0,
+        "local_count": -6,
+        "max_function_locals": -5
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_arrays.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -50,
+        "code_section_bytes": -50,
+        "functions": 0,
+        "local_count": -6,
+        "max_function_locals": -5
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_calls.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_calls.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_cleanup.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -8,
+        "code_section_bytes": -8,
+        "functions": 0,
+        "local_count": -3,
+        "max_function_locals": -2
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_cleanup.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -18,
+        "code_section_bytes": -18,
+        "functions": 0,
+        "local_count": -5,
+        "max_function_locals": -5
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_effects.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -14,
+        "code_section_bytes": -14,
+        "functions": 0,
+        "local_count": -2,
+        "max_function_locals": -2
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_effects.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -14,
+        "code_section_bytes": -14,
+        "functions": 0,
+        "local_count": -2,
+        "max_function_locals": -2
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_hidden.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_hidden.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_refs.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -27,
+        "code_section_bytes": -27,
+        "functions": 0,
+        "local_count": -12,
+        "max_function_locals": -12
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_refs.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -27,
+        "code_section_bytes": -27,
+        "functions": 0,
+        "local_count": -12,
+        "max_function_locals": -12
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_review_callback_only.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_review_callback_only.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_review_calls_packed.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_review_calls_packed.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_review_calls_thin.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_review_calls_thin.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_review_fields_packed.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -1,
+        "code_section_bytes": -1,
+        "functions": 0,
+        "local_count": -1,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_review_fields_packed.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -1,
+        "code_section_bytes": -1,
+        "functions": 0,
+        "local_count": -1,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_review_fields_thin.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -1,
+        "code_section_bytes": -1,
+        "functions": 0,
+        "local_count": -1,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_review_fields_thin.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -1,
+        "code_section_bytes": -1,
+        "functions": 0,
+        "local_count": -1,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_review_inline_only.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_review_inline_only.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_review_reference_fields.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -18,
+        "code_section_bytes": -18,
+        "functions": 0,
+        "local_count": -9,
+        "max_function_locals": -5
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_review_reference_fields.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -18,
+        "code_section_bytes": -18,
+        "functions": 0,
+        "local_count": -9,
+        "max_function_locals": -5
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_values.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_struct_values.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_tail_values.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_tail_values.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_variable_arrays.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": -25,
+        "code_section_bytes": -25,
+        "functions": 0,
+        "local_count": -9,
+        "max_function_locals": -9
+      }
+    },
+    {
+      "source": "test/wasm/wasm_variable_arrays.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -23,
+        "code_section_bytes": -23,
+        "functions": 0,
+        "local_count": -11,
+        "max_function_locals": -11
+      }
+    },
+    {
+      "source": "test/wasm/wasm_variable_cleanup.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": -4,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_variable_cleanup.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -17,
+        "code_section_bytes": -17,
+        "functions": 0,
+        "local_count": -7,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_variable_no_owner.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_variable_no_owner.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_variable_paths.goose",
+      "opt": 0,
+      "identical": false,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": -4,
+        "max_function_locals": -4
+      }
+    },
+    {
+      "source": "test/wasm/wasm_variable_paths.goose",
+      "opt": 2,
+      "identical": false,
+      "delta": {
+        "module_bytes": -17,
+        "code_section_bytes": -17,
+        "functions": 0,
+        "local_count": -7,
+        "max_function_locals": -7
+      }
+    },
+    {
+      "source": "test/wasm/wasm_varint_bytes.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_varint_bytes.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_varint_cleanup.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_varint_cleanup.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_varint_paths.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_varint_paths.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_varint_prefix.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/wasm/wasm_varint_prefix.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/typing/global_optional_flow.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/typing/global_optional_flow.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/typing/optional_loop_callee_assignments.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/typing/optional_loop_callee_assignments.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/typing/optional_while_condition_calls.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/typing/optional_while_condition_calls.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/typing/u64_cmp_readonly_refs.goose",
+      "opt": 0,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    },
+    {
+      "source": "test/typing/u64_cmp_readonly_refs.goose",
+      "opt": 2,
+      "identical": true,
+      "delta": {
+        "module_bytes": 0,
+        "code_section_bytes": 0,
+        "functions": 0,
+        "local_count": 0,
+        "max_function_locals": 0
+      }
+    }
+  ],
+  "warning_comments": [
+    "test/wasm/wasm_data_aggregate_cleanup.goose",
+    "test/wasm/wasm_data_aggregate_mixed.goose"
+  ],
+  "compatibility_summary": {
+    "pairs": 234,
+    "identical": 162,
+    "total_deltas": {
+      "module_bytes": -1031,
+      "code_section_bytes": -1031,
+      "functions": 0,
+      "local_count": -421,
+      "max_function_locals": -343
+    }
+  }
+}

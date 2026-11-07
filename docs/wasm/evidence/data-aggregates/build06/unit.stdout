@@ -1,0 +1,9 @@
+Start identity
+identity exit 0
+Start release-build
+release-build exit 0
+Start freeze
+freeze exit 0
+Start named-copy-checks
+named-copy-checks exit 1
+All children reaped; lease released.

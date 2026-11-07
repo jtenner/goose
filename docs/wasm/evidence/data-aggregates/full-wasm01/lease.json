@@ -1,0 +1,47 @@
+{
+  "owner": "Goose aggregate data-array functional unit",
+  "pid": 1757140,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "identity",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-data-aggregates-20261107/full-wasm01/verify.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "byte-preflight",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-data-aggregates-20261107/full-wasm01/byte-preflight.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "full-wasm",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "test/wasm_backend.py",
+        "--exe",
+        "/tmp/goose-wasm-data-aggregates-20261107/build05/goose-tested",
+        "--out",
+        "/tmp/goose-wasm-data-aggregates-20261107/full-wasm01/artifacts",
+        "--wasmtime-python",
+        "/tmp/goose-wasm-runtime-env/bin/python",
+        "--shader-library",
+        "/home/dev/Projects/goose-wasm-backend/build/libgoose_shaderc.a"
+      ],
+      "exit": 1
+    }
+  ],
+  "exit": 1,
+  "released_at": "2026-11-07T19:12:47.094755+00:00"
+}

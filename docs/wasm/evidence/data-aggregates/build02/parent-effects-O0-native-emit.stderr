@@ -1,0 +1,3 @@
+/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_effects.goose:3: error: field empty of struct Row cannot be a zero-length array: i64[0] (§3.4)
+struct Row { before: u8, values: u16[..3], text: u8[3], zero: u32[2] = default<u32[2]>(), empty: i64[0], after: u16 }
+^

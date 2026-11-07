@@ -1,0 +1,11 @@
+{
+  "compiler_sha256": "e1bbd1b28d51382014fe34c1cf93dfff039164286fdb6718f1e27b521b65905c",
+  "compiler_rebuild": false,
+  "production_source_changed": false,
+  "native_byte_reference_reuses": 2,
+  "corrections": [
+    "private place policy accepts admitted nonzero inline images",
+    "private layout policy accepts only u32 positive-stride aggregate data and tests exact deferred reasons"
+  ],
+  "no_timing": true
+}

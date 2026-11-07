@@ -1,0 +1,32 @@
+{
+  "owner": "Goose aggregate data-array functional unit",
+  "pid": 1715670,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "source-identity",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-data-aggregates-20261107/build03/verify-source.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "parent-checks",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-data-aggregates-20261107/build03/checks.py",
+        "parent"
+      ],
+      "exit": 1
+    }
+  ],
+  "exit": 1,
+  "released_at": "2026-11-07T18:27:54.179158+00:00"
+}

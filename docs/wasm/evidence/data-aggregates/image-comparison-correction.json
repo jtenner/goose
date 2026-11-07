@@ -1,0 +1,11 @@
+{
+  "supersedes_explanation_only": "/tmp/goose-wasm-data-aggregates-20261107/build06/image-comparison-setup.json",
+  "original_sha256": "fd6f00e75528ec09c77854f8b8079eb55451c1731663a0154a565c4a3c6ef3cf",
+  "correction": {
+    "build06": "Original paths differ; source filenames embedded in static data.",
+    "named-copy-after02": "One matched-source guest PASS; exact Memory0 comparison still invalid because fewer address checks remove repeated diagnostics and relocate frame start.",
+    "resolution": "Complete per-module Memory0 model plus independent data models, exact data-image pairs and typed behavior. No further guest run.",
+    "file_parser": "First model assumed one segment; global-source module reserves4global bytes between active segments. First script retained; all64models pass after handling declared gap."
+  },
+  "original_evidence_retained": true
+}

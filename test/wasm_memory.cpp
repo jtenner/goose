@@ -27,6 +27,9 @@ int main(int argc, char **argv) {
     auto paircopy = runtime.Copy();
     if (runtime.Copy() != paircopy) return 1;
     add("copy", paircopy);
+    auto fill = runtime.Fill();
+    if (runtime.Fill() != fill) return 1;
+    add("fill", fill);
     auto prefix = runtime.ReadPrefix();
     if (runtime.ReadPrefix() != prefix) return 1;
     add("read_prefix", prefix);

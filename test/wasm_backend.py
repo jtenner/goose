@@ -133,7 +133,7 @@ def main():
             run([exe, f'-O{opt}', '--target', 'wasm', '-o', wasm, source])
             assert wasm.read_bytes()[:8] == b'\0asm\x01\0\0\0', 'invalid binary magic/version'
             run([args.validator, 'validate', wasm])
-            if source.stem.startswith('wasm_inline_ref_abi_'):
+            if source.stem.startswith(('wasm_inline_ref_abi_', 'wasm_data_aggregate_')):
                 actual = run([args.node, ROOT / 'test' / 'wasm_reference_abi.mjs', wasm,
                               out / f'{source.stem}-O{opt}-instance'])
             else:
@@ -211,6 +211,11 @@ def main():
                 resource = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
                 assert resource.stdout == reference.stdout, 'completed enum/callback owner-state check changed output'
                 count += 1
+            if source.stem.startswith('wasm_data_aggregate_'):
+                persistent = '1' if source.stem in ('wasm_data_aggregate_enums', 'wasm_data_aggregate_overflow') else '0'
+                checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, persistent])
+                assert checked.stdout == reference.stdout and not checked.stderr
+                count += 1
             if source.stem == 'wasm_byte_print':
                 checked = run([args.node, ROOT / 'test' / 'wasm_bytes.mjs', wasm])
                 assert checked.stdout == reference.stdout
@@ -250,6 +255,11 @@ def main():
     run([args.node, ROOT / 'test/wasm_reference_abi_controls.mjs', owner_module, owner_controls,
          ROOT / 'test/expected/wasm_inline_ref_abi_packed.out', out / 'reference-owner-results.json'])
     count += 3
+    from wasm_data_aggregate_checks import check_footprint as check_data_footprint, check_controls as check_data_controls
+    count += check_data_footprint(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out, function_local_counts)
+    count += check_data_controls(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out)
+    from wasm_data_aggregate_named import check_named_footprint
+    count += check_named_footprint(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out, function_local_counts)
     growth_source = out / 'frame-growth.goose'
     lines = ['recursive fn grow(n: i64) -> i64 {']
     for i in range(96):

@@ -1,0 +1,14 @@
+{
+  "exit": 75,
+  "acquired": false,
+  "children_started": 0,
+  "lease_file_created": false,
+  "lock_records": [
+    {
+      "record": "202: FLOCK  ADVISORY  WRITE 1936688 103:02:23986265 0 EOF",
+      "pid": 1936688,
+      "cmdline": "python3 /home/dev/Projects/wasm-fyi/.wasmbench/current/losses-master-e37-numeric-frame-v1-20261107/measure-with-current-v8-reference.py /home/dev/Projects/wasm-fyi/.wasmbench/current/losses-master-e37-numeric-frame-v1-20261107/e37-v1-master-screen-wago7e6a-01 "
+    }
+  ],
+  "checked_at": "2026-11-07T20:16:03.856706+00:00"
+}

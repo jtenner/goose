@@ -1,0 +1,18 @@
+data stacks: 2 GB reserved per stack, 1 MB guard gap, 32 TB budget: 16376 regions, GS_MAX_STACKS 1024
+main program: 14 data stacks + 0 global stacks = 14 regions
+thread cap: none, no workers
+fn fixed_elements: 14 own, 14 with callees
+fn main: 0 own, 14 with callees
+fn framing: 12 own, 12 with callees
+fn mutations: 9 own, 9 with callees
+fn nested: 8 own, 8 with callees
+fn variable_elements: 8 own, 8 with callees
+fn destinations: 6 own, 7 with callees
+fn receivers: 7 own, 7 with callees
+fn self_links: 6 own, 6 with callees
+fn adt_elements: 5 own, 5 with callees
+fn limited_fields: 5 own, 5 with callees
+fn variant_pointees: 5 own, 5 with callees
+fn variant_elements: 4 own, 4 with callees
+fn nodes_in: 1 own, 1 with callees
+fn nodes_in: 1 own, 1 with callees
