@@ -55,6 +55,15 @@ assert.deepEqual(new Uint8Array(x.memory2.buffer, 1000, 4), pattern);
 x.store8(pointer(2, 65535), 90n);
 assert.throws(() => x.copy_from_frame(pointer(2, 65535), 100, 2), WebAssembly.RuntimeError);
 assert.equal(x.load8u(pointer(2, 65535)), 90n);
+for (let memory = 0; memory < 3; memory++) {
+    x.store32(pointer(memory, 2000), 17n);
+    x.store32off(pointer(memory, 2000), 0xffffffffn);
+    assert.equal(x.load32u(pointer(memory, 2000)), 17n);
+    assert.equal(x.load32off(pointer(memory, 2000)), 0xffffffffn);
+}
+assert.throws(() => x.load32huge(pointer(0, 0)), WebAssembly.RuntimeError);
+assert.throws(() => x.load32off(pointer(3, 2000)), /memory failure 7/);
+assert.throws(() => x.load32off(pointer(2, 65532)), WebAssembly.RuntimeError);
 
 assert.equal(x.reserve1(65536 - 65), 65);
 assert.equal(x.top(1), 65536);

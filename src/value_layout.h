@@ -28,6 +28,18 @@ struct ValueLayout {
     bool IsRoot(TypeExpr *t) { return Cls(t) == SC_ROOT; }
     bool IsBytesT(TypeExpr *t) { auto c = Cls(t); return c == SC_VARIABLE || c == SC_RESIZABLE; }
     IntStorage LenStore(TypeArray *a);
+    // Packed byte prefixes, excluding compiler-private growable owner headers.
+    // A varint prefix has no fixed element offset.
+    struct ArrayPrefixLayout { IntStorage storage; int64_t length, elements; };
+    ArrayPrefixLayout ArrayPrefix(TypeArray *a) {
+        if (a->akind == A_FIXED) return {IS_U32, -1, 0};
+        if (a->akind == A_LIMITED && ArrSize(a) < 0) {
+            auto width = IntSize(IS_U32);
+            return {IS_U32, width, 2 * width};
+        }
+        auto storage = LenStore(a);
+        return {storage, 0, storage == IS_VARINT ? -1 : IntSize(storage)};
+    }
 
     static int64_t IntSize(IntStorage s) { return IntBits(s) / 8; }
 

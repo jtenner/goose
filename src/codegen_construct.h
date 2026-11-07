@@ -83,8 +83,9 @@ inline void CodeGen::EmitArrayCount(const string &stk, TypeExpr *at, const strin
             if (check) EmitLenCheck(IS_U32, n);
             auto x = check ? cat("(uint32_t)", n) : n;
             L("*(gs_u32 *)", Top(stk), " = ", x, ";");
-            L("*(gs_u32 *)(", Top(stk), " + 4) = ", x, ";");
-            Bump(stk, "8");
+            auto prefix = ArrayPrefix(at->arr);
+            L("*(gs_u32 *)(", Top(stk), " + ", prefix.length, ") = ", x, ";");
+            Bump(stk, cat(prefix.elements));
             break;
         }
         default:
@@ -1236,8 +1237,9 @@ inline void CodeGen::GenArrayLit(ArrayLit *al, const string &stk, const string &
         L("if (", t, " < 0 || ", t, " > (int64_t)UINT32_MAX) "
           "gs_abort(GS_E_CAPRANGE, ", LocArgs(al->line), ");");
         L("*(gs_u32 *)", Top(stk), " = (uint32_t)", t, ";");
-        L("*(gs_u32 *)(", Top(stk), " + 4) = 0;");
-        Bump(stk, cat("8 + ", t, " * ", FixedSize(elem)));
+        auto prefix = ArrayPrefix(et->arr);
+        L("*(gs_u32 *)(", Top(stk), " + ", prefix.length, ") = 0;");
+        Bump(stk, cat(prefix.elements, " + ", t, " * ", FixedSize(elem)));
         return;
     }
     auto count = LitCount(al);

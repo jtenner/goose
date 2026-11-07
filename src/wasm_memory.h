@@ -7,7 +7,8 @@ namespace goose {
 struct WasmMemoryRuntime {
     WasmModule &module;
     uint32_t failure;
-    unordered_map<uint32_t, uint32_t> reserves, accesses;
+    unordered_map<uint32_t, uint32_t> reserves;
+    unordered_map<uint64_t, uint32_t> accesses;
     uint32_t dynamicreserve = UINT32_MAX, gettop = UINT32_MAX, settop = UINT32_MAX;
     uint32_t copyfromframe = UINT32_MAX;
 
@@ -97,8 +98,9 @@ struct WasmMemoryRuntime {
         return fn;
     }
 
-    uint32_t Access(uint8_t opcode) {
-        if (auto it = accesses.find(opcode); it != accesses.end()) return it->second;
+    uint32_t Access(uint8_t opcode, uint32_t offset = 0) {
+        auto key = ((uint64_t)offset << 8) | opcode;
+        if (auto it = accesses.find(key); it != accesses.end()) return it->second;
         uint8_t type;
         switch (opcode) {
             case 0x28: case 0x2c: case 0x2d: case 0x2e: case 0x2f:
@@ -112,14 +114,16 @@ struct WasmMemoryRuntime {
         auto write = opcode >= 0x36;
         vector<uint8_t> params {WasmModule::I64}, results;
         if (write) params.push_back(type); else results.push_back(type);
-        auto fn = module.AddFn(cat("goose.memory_op.", (int)opcode), params, results);
-        accesses[opcode] = fn;
+        auto name = cat("goose.memory_op.", (int)opcode);
+        if (offset) name += cat(".offset.", offset);
+        auto fn = module.AddFn(name, params, results);
+        accesses[key] = fn;
         WasmBytes c;
         Dispatch(c, 0, write ? 0x40 : type,
                  [&] { c.Get(0); c.I64(32); c.Byte(0x88); c.Byte(0xa7); }, [&](uint32_t memory) {
             c.Get(0); c.Byte(0xa7);
             if (write) c.Get(1);
-            c.Mem(opcode, memory);
+            c.Mem(opcode, memory, offset);
         });
         Save(fn, std::move(c));
         return fn;

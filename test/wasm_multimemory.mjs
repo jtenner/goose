@@ -2,7 +2,7 @@
 // Production modules expose memories, not mutable stack tops.
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { instantiate } from '../scripts/run_wasm.mjs';
+import { instantiate, GooseFailure } from '../scripts/run_wasm.mjs';
 
 const bytes = fs.readFileSync(process.argv[2]);
 let cursor = 8;
@@ -44,7 +44,10 @@ for (const { id, start, end } of sections) {
 }
 const runtime = instantiate(new Uint8Array(output), buffer => fs.writeSync(1, buffer));
 const initialFrameTop = runtime.instance.exports.test_stack_top_0.value;
-runtime.run();
+if (process.argv[4] === 'allocation-failure') {
+    assert.throws(() => runtime.run(), error => error instanceof GooseFailure &&
+                  error.message.includes('out of memory growing data storage'));
+} else runtime.run();
 const exports = runtime.instance.exports;
 assert.equal(runtime.pendingPrints, 0);
 assert.equal(exports.test_stack_top_0.value, initialFrameTop, 'activation frame top was not restored');
@@ -69,3 +72,7 @@ if (process.argv[4] === 'variable-reuse')
 
 if (process.argv[4] === 'variable-growth')
     assert(memoriesAfter.slice(1).some(memory => memory.buffer.byteLength >= 131072), 'variable payload did not grow its data memory');
+
+if (process.argv[4] === 'allocation-failure')
+    for (const memory of memoriesAfter.slice(1))
+        assert.equal(memory.buffer.byteLength, 65536, 'overflow attempted a data memory growth');

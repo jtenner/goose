@@ -1,0 +1,370 @@
+[
+  {
+    "name": "values-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-byte-strings-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/values-O0.c",
+      "/tmp/goose-wasm-runtime-limited-20261107/values.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "values-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-runtime-limited-20261107/values-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/values-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "values-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/values-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "values-O0-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-byte-strings-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/values-O0-before.wasm",
+      "/tmp/goose-wasm-runtime-limited-20261107/values.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "values-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-byte-strings-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/values-O2.c",
+      "/tmp/goose-wasm-runtime-limited-20261107/values.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "values-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-runtime-limited-20261107/values-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/values-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "values-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/values-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "values-O2-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-byte-strings-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/values-O2-before.wasm",
+      "/tmp/goose-wasm-runtime-limited-20261107/values.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "bytes-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-byte-strings-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/bytes-O0.c",
+      "/tmp/goose-wasm-runtime-limited-20261107/bytes.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "bytes-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-runtime-limited-20261107/bytes-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/bytes-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "bytes-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/bytes-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "bytes-O0-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-byte-strings-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/bytes-O0-before.wasm",
+      "/tmp/goose-wasm-runtime-limited-20261107/bytes.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "bytes-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-byte-strings-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/bytes-O2.c",
+      "/tmp/goose-wasm-runtime-limited-20261107/bytes.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "bytes-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-runtime-limited-20261107/bytes-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/bytes-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "bytes-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/bytes-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "bytes-O2-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-byte-strings-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/bytes-O2-before.wasm",
+      "/tmp/goose-wasm-runtime-limited-20261107/bytes.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "cleanup-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-byte-strings-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/cleanup-O0.c",
+      "/tmp/goose-wasm-runtime-limited-20261107/cleanup.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-runtime-limited-20261107/cleanup-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/cleanup-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/cleanup-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O0-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-byte-strings-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/cleanup-O0-before.wasm",
+      "/tmp/goose-wasm-runtime-limited-20261107/cleanup.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "cleanup-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-byte-strings-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/cleanup-O2.c",
+      "/tmp/goose-wasm-runtime-limited-20261107/cleanup.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-runtime-limited-20261107/cleanup-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/cleanup-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/cleanup-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O2-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-byte-strings-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/cleanup-O2-before.wasm",
+      "/tmp/goose-wasm-runtime-limited-20261107/cleanup.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "no_owner-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-byte-strings-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/no_owner-O0.c",
+      "/tmp/goose-wasm-runtime-limited-20261107/no_owner.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "no_owner-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-runtime-limited-20261107/no_owner-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/no_owner-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "no_owner-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/no_owner-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "no_owner-O0-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-byte-strings-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/no_owner-O0-before.wasm",
+      "/tmp/goose-wasm-runtime-limited-20261107/no_owner.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "no_owner-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-byte-strings-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/no_owner-O2.c",
+      "/tmp/goose-wasm-runtime-limited-20261107/no_owner.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "no_owner-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-runtime-limited-20261107/no_owner-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/no_owner-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "no_owner-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/no_owner-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "no_owner-O2-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-byte-strings-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/no_owner-O2-before.wasm",
+      "/tmp/goose-wasm-runtime-limited-20261107/no_owner.goose"
+    ],
+    "exit": 1
+  }
+]

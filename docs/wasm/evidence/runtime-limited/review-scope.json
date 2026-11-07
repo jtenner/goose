@@ -1,0 +1,40 @@
+{
+  "baseline": "cf982723f61f3200e6ba70733e34649fcc4c81a1",
+  "changed_files": [
+    "scripts/run_wasm.mjs",
+    "src/codegen_construct.h",
+    "src/codegen_values.h",
+    "src/value_layout.h",
+    "src/wasm_arrays.h",
+    "src/wasm_codegen.h",
+    "src/wasm_memory.h",
+    "src/wasm_storage.h",
+    "test/wasm_backend.py",
+    "test/wasm_memory.cpp",
+    "test/wasm_memory.mjs",
+    "test/wasm_memory.py",
+    "test/wasm_multimemory.mjs",
+    "test/wasmtime_host.py",
+    "test/expected/wasm_runtime_limited.out",
+    "test/expected/wasm_runtime_limited_bytes.out",
+    "test/expected/wasm_runtime_limited_cleanup.out",
+    "test/expected/wasm_runtime_limited_no_owner.out",
+    "test/wasm/wasm_runtime_limited.goose",
+    "test/wasm/wasm_runtime_limited_bytes.goose",
+    "test/wasm/wasm_runtime_limited_cleanup.goose",
+    "test/wasm/wasm_runtime_limited_no_owner.goose"
+  ],
+  "context_files": [
+    "src/ast.h",
+    "src/codegen.h",
+    "src/codegen_builtins.h",
+    "src/codegen_calls.h",
+    "src/codegen_frames.h",
+    "src/data_stacks.h",
+    "src/typecheck_nodes.h",
+    "src/wasm_binary.h",
+    "test/backend_shared.py",
+    "test/wasm_bytes.mjs"
+  ],
+  "compiler_sha256": "fbbf0e36f41b37614c9b1f48e7f61502c0ae215b44ea6710eaa212d9b5bd9389"
+}

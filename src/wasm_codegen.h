@@ -46,8 +46,13 @@ struct WasmCodeGen : ValueLayout {
     bool FatPointers() const { return storage.dataaddresses; }
     bool HeaderRef(TypeExpr *t) { return t->kind == TY_REF && IsResz(t->ref->sub); }
     bool VariableArray(TypeExpr *t) { return t->kind == TY_ARRAY && t->arr->akind == A_VAR; }
+    bool RuntimeLimited(TypeExpr *t) {
+        return t->kind == TY_ARRAY && t->arr->akind == A_LIMITED && ArrSize(t->arr) < 0;
+    }
+    bool DataArray(TypeExpr *t) { return VariableArray(t) || RuntimeLimited(t); }
+    uint32_t DataPrefix(TypeExpr *t) { return (uint32_t)ArrayPrefix(t->arr).elements; }
     bool FrameRef(TypeExpr *t) {
-        return t->kind == TY_REF && t->ref->sub->kind == TY_ARRAY && !VariableArray(t->ref->sub);
+        return t->kind == TY_REF && t->ref->sub->kind == TY_ARRAY && !DataArray(t->ref->sub);
     }
     bool InlineArray(TypeExpr *t) {
         return t->kind == TY_ARRAY && (t->arr->akind == A_FIXED ||
@@ -89,7 +94,7 @@ struct WasmCodeGen : ValueLayout {
                 // also lie in any assigned data memory.
                 return FatPointers() && !FrameRef(t) ? WasmModule::I64 : WasmModule::I32;
             case TY_ARRAY: {
-                if (!IsResz(t) && !InlineArray(t) && !VariableArray(t))
+                if (!IsResz(t) && !InlineArray(t) && !DataArray(t))
                     Fail(t->line, "this array layout needs the pending compound lowering");
                 if (VariableArray(t) && LenStore(t->arr) == IS_VARINT)
                     Fail(t->line, "varint array prefixes need the pending encoding lowering");
@@ -102,14 +107,14 @@ struct WasmCodeGen : ValueLayout {
                     if ((uint64_t)ArrSize(t->arr) > (UINT32_MAX - prefix) / FixedSize(element))
                         Fail(t->line, "array layout exceeds memory32");
                 }
-                return VariableArray(t) ? WasmModule::I64 : WasmModule::I32;
+                return DataArray(t) ? WasmModule::I64 : WasmModule::I32;
             }
             default: Fail(t->line, "this value layout is not implemented (scalar backend)");
         }
     }
     uint32_t Size(TypeExpr *t) {
         Type(t);
-        if (VariableArray(t)) Fail(t->line, "variable array size needs the pending destination lowering");
+        if (DataArray(t)) Fail(t->line, "variable array size needs the pending destination lowering");
         auto size = IsResz(t) ? 16 : FixedSize(t);
         if (size < 0 || size > UINT32_MAX) Fail(t->line, "value exceeds memory32");
         return (uint32_t)size;
@@ -251,19 +256,19 @@ struct WasmCodeGen : ValueLayout {
     void Read(const Slot &s) {
         if (s.memory) {
             Address(s);
-            if (VariableArray(s.type)) code.Mem(0x29);
+            if (DataArray(s.type)) code.Mem(0x29);
             else if (s.type->kind != TY_ARRAY) LoadFixed(s.type);
         }
         else code.Get(s.local);
     }
     void ReferenceAddress(const Slot &s) {
-        if (VariableArray(s.type)) Read(s);
+        if (DataArray(s.type)) Read(s);
         else { Address(s); if (FatPointers() && s.type->kind != TY_ARRAY) code.Byte(0xad); }
     }
     void Write(const Slot &s) {
         if (s.memory) {
             auto temp = Temp(s.type); code.Set(temp); Address(s); code.Get(temp);
-            if (VariableArray(s.type)) code.Mem(0x37);
+            if (DataArray(s.type)) code.Mem(0x37);
             else StoreFixed(s.type);
         } else code.Set(s.local);
     }
@@ -271,7 +276,7 @@ struct WasmCodeGen : ValueLayout {
         if (v->isglobal || slots.count(v)) return;
         auto t = Type(v->type);
         Slot s {v->type};
-        if (!VariableArray(v->type) && (addressed.count(v) || v->type->kind == TY_ARRAY)) {
+        if (!DataArray(v->type) && (addressed.count(v) || v->type->kind == TY_ARRAY)) {
             s.memory = true;
             s.offset = framesize;
             auto bytes = std::max(1u, Size(v->type));
@@ -680,7 +685,7 @@ struct WasmCodeGen : ValueLayout {
             auto header = ArrayHeader(v->obj); auto array = ArrayType(v->obj);
             if (v->member == B_LEN) ArrayLength(header, array, ArrayMemory(v->obj));
             else if (VariableArray(array)) Fail(v->line, "variable arrays have no static capacity");
-            else code.I64(ArrSize(array->arr));
+            else ArrayCapacity(header, array, ArrayMemory(v->obj));
             return;
         }
         if (auto v = Is<AsCast>(n)) {
@@ -937,7 +942,7 @@ struct WasmCodeGen : ValueLayout {
         startfn = module.AddFn("goose.start", {}, {});
         for (auto g : ast.globals) for (auto v : g->defs) {
             Type(v->type);
-            auto bytes = VariableArray(v->type) ? 8u : std::max(1u, Size(v->type));
+            auto bytes = DataArray(v->type) ? 8u : std::max(1u, Size(v->type));
             auto offset = InlineArray(v->type) ? module.ZeroData(bytes) : module.Data(string(bytes, '\0'));
             globals[v] = {v->type, 0, offset, true, true};
         }
@@ -974,11 +979,16 @@ struct WasmCodeGen : ValueLayout {
     TypeExpr *ArrayType(Node *n);
     TypeExpr *ArrayElement(Node *n);
     void ArrayLength(uint32_t header, TypeExpr *array, int memory = -1);
+    void ArrayCapacity(uint32_t header, TypeExpr *array, int memory = -1);
+    void LoadArrayField(uint32_t header, TypeExpr *array, int memory, uint32_t offset);
+    void StoreArrayField(TypeExpr *array, int memory, uint32_t offset);
     void StoreArrayLength(TypeExpr *array, int memory = -1);
+    void InitArrayCount(uint32_t header, TypeExpr *array, uint64_t count, int memory);
     void InitArray(VarDef *owner, const Slot &slot, Node *init);
     void InitFilledArray(VarDef *owner, const Slot &slot, ArrayLit *literal);
     void InitByteString(VarDef *owner, const Slot &slot, StrLit *literal);
-    void InitVariableArray(VarDef *owner, const Slot &slot, ArrayLit *literal);
+    void InitDataArray(VarDef *owner, const Slot &slot, ArrayLit *literal);
+    void InitLimitedCapacity(VarDef *owner, const Slot &slot, ArrayLit *literal);
     void PushArray(uint32_t header, TypeExpr *array, Node *value, TypeExpr *result, Line line, int memory);
     void ArrayBuiltin(Call *call, const vector<Node *> &arguments);
     void ArrayEquality(Binary *node);

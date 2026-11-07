@@ -1,7 +1,8 @@
 # Direct Wasm backend progress
 
 The complete native multi-memory Goose backend is **not finished**. This
-checkpoint implements a working direct scalar path and an initial growable scalar-array path. It does not use generated
+checkpoint implements a working direct scalar path and scalar/reference arrays
+with fixed, limited, variable and growable layouts. It does not use generated
 C as the Wasm compiler's intermediate representation.
 
 Branch: `feat/wasm-multimemory-backend`.
@@ -88,6 +89,15 @@ modules. An independent Astra review found no confirmed defect. See
 [byte-string evidence](evidence/byte-strings.md) for the preserved adapter-update
 overlap, exact provenance, missing measurements and coverage limits.
 
+Runtime-capacity limited arrays `T[..]` now support capacity constructors,
+literals, fills, strings, reference calls, indexing, iteration, equality and
+bounded push/pop/clear within the scalar/reference subset. Packed capacity and
+length offsets are shared with C; data references use packed addresses. The
+stage passed 375 Wasm checks, a fresh native baseline, 52 exact comparisons and
+76 unchanged prior modules. Independent Astra review found no confirmed defect;
+two test expectations were tightened and checked with a valid wrong-field
+control. See [runtime-limited evidence](evidence/runtime-limited.md).
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping
@@ -155,12 +165,12 @@ BigInt operation for other values.
   memories, checked growth/restores, and dynamic dispatch. Extend the plan to
   protected destinations, temporary owners, and all compound lifetime events.
   General thin-reference propagation remains pending.
-- D: fixed and static-capacity limited scalar arrays now use the shared numeric
-  layout authority. Complete variable arrays, all constructors, packed/variable
-  aggregates, ADTs, root and
-  pool descriptors, relative references, slices, byte views, and serialization.
+- D: scalar/reference arrays now cover fixed, limited, variable and growable
+  layouts. Complete varint prefixes/elements, general constructors and value
+  copies, packed/variable aggregates, ADTs, root/pool descriptors, relative
+  references, slices, byte views, and serialization.
 - E: implement direct nonfixed construction, named-result landing/relocation,
-  destination protection, ordered data-stack/defer cleanup, and `try_table` /
+  destination protection, cleanup for all remaining value lifetimes, and `try_table` /
   `throw` fallback across remaining nonlocal call boundaries. Engine capability
   probes passed; the backend does not yet emit this fallback.
 - F: implement supported native/WASI adapters, OS/program arguments, isolated

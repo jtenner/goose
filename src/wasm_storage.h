@@ -26,7 +26,7 @@ struct WasmStoragePlan {
         while (type) {
             if (type->kind == TY_REF) { type = type->ref->sub; continue; }
             if (type->kind != TY_ARRAY) return;
-            if (layout.IsResz(type) || type->arr->akind == A_VAR) { dataaddresses = true; return; }
+            if (Owns(type)) { dataaddresses = true; return; }
             type = type->arr->sub;
         }
     }
@@ -34,7 +34,8 @@ struct WasmStoragePlan {
     // Owners admitted by the current array lowering. Other compound classes
     // are rejected before emission until their destination plan is complete.
     bool Owns(TypeExpr *t) {
-        return t && t->kind == TY_ARRAY && (layout.IsResz(t) || t->arr->akind == A_VAR);
+        return t && t->kind == TY_ARRAY && (layout.IsResz(t) || t->arr->akind == A_VAR ||
+               (t->arr->akind == A_LIMITED && layout.ArrSize(t->arr) < 0));
     }
 
     void Walk(Node *n, FnSpec *function, int &next) {

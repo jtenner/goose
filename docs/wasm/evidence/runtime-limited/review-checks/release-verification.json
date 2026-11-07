@@ -1,0 +1,26 @@
+{
+  "owner_pid": 3723274,
+  "owner_exited": true,
+  "children_reaped": true,
+  "lease_active": false,
+  "exact_owned_processes": [],
+  "nonblocking_exclusive_probe": "PASS",
+  "production_source_unchanged": true,
+  "post_review_harness_sha256": "c78ff79992e2b21546e064e12ebc7d8f98b78dff36b00990fda9e74762420884",
+  "compiler_sha256": "fbbf0e36f41b37614c9b1f48e7f61502c0ae215b44ea6710eaa212d9b5bd9389",
+  "commands": [
+    {
+      "name": "checks",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-runtime-limited-20261107/review-checks/check.py"
+      ],
+      "exit": 0
+    }
+  ]
+}

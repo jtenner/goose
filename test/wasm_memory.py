@@ -76,6 +76,14 @@ def main():
     call('store8', pointer(2, 65535), 90)
     throws(lambda: call('copy_from_frame', pointer(2, 65535), 100, 2), 'out of bounds')
     assert call('load8u', pointer(2, 65535)) == 90
+    for memory in range(3):
+        call('store32', pointer(memory, 2000), 17)
+        call('store32off', pointer(memory, 2000), 0xffffffff)
+        assert call('load32u', pointer(memory, 2000)) == 17
+        assert call('load32off', pointer(memory, 2000)) == 0xffffffff
+    throws(lambda: call('load32huge', pointer(0, 0)), 'out of bounds')
+    throws(lambda: call('load32off', pointer(3, 2000)), 'memory failure 7')
+    throws(lambda: call('load32off', pointer(2, 65532)), 'out of bounds')
     assert call('reserve1', 65536 - 65) == 65
     assert call('reserve1', 1) == 65536
     assert size(1) == 131072 and size(2) == 65536

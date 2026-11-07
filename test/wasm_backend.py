@@ -122,10 +122,12 @@ def main():
                                'wasm_inline_equality_modes', 'wasm_inline_deferred_rebind',
                                'wasm_variable_arrays', 'wasm_variable_paths', 'wasm_variable_no_owner',
                                'wasm_array_fills', 'wasm_variable_cleanup',
-                               'wasm_byte_strings', 'wasm_byte_print'):
+                               'wasm_byte_strings', 'wasm_byte_print', 'wasm_runtime_limited',
+                               'wasm_runtime_limited_bytes', 'wasm_runtime_limited_cleanup',
+                               'wasm_runtime_limited_no_owner'):
                 if source.stem == 'wasm_inline_arrays':
                     assert wasm.stat().st_size < 32768, 'unused global capacity was serialized'
-                persistent = '1' if source.stem in ('wasm_multimemory', 'wasm_variable_arrays', 'wasm_array_fills', 'wasm_byte_strings') else '0'
+                persistent = '1' if source.stem in ('wasm_multimemory', 'wasm_variable_arrays', 'wasm_array_fills', 'wasm_byte_strings', 'wasm_runtime_limited', 'wasm_runtime_limited_bytes') else '0'
                 mode = {'wasm_multimemory': 'growth', 'wasm_scoped_data_reuse': 'reuse',
                         'wasm_array_widths': 'typed-reuse', 'wasm_no_data_owner': 'no-data',
                         'wasm_inline_arrays': 'no-data', 'wasm_inline_reference_path': 'no-data',
@@ -135,7 +137,10 @@ def main():
                         'wasm_variable_paths': 'variable-reuse',
                         'wasm_array_fills': 'variable-growth',
                         'wasm_byte_strings': 'variable-growth',
-                        'wasm_byte_print': 'variable-growth'}.get(source.stem, '')
+                        'wasm_byte_print': 'variable-growth',
+                        'wasm_runtime_limited': 'variable-reuse',
+                        'wasm_runtime_limited_bytes': 'variable-growth',
+                        'wasm_runtime_limited_no_owner': 'no-data'}.get(source.stem, '')
                 resource = run([args.node, ROOT / 'test' / 'wasm_multimemory.mjs', wasm, persistent, mode])
                 assert resource.stdout == reference.stdout, 'completed owner-state check changed output'
                 count += 1
@@ -221,6 +226,21 @@ def main():
             if args.wasmtime_python:
                 assert run([args.wasmtime_python, ROOT / 'test' / 'wasmtime_host.py', wasm]).stdout == expected
                 count += 1
+    # A native-valid runtime capacity can exceed the entire Memory32 byte
+    # range. Reject it before reservation; this test never requests gigabytes.
+    overflow = out / 'runtime-capacity-overflow.goose'
+    overflow.write_text('fn main() { var n: i64 = 4294967295; var a: u8[..] = [..n]; print(a.cap); }\n')
+    run([exe, 'check', overflow])
+    for opt in (0, 2):
+        wasm = out / f'runtime-capacity-overflow-O{opt}.wasm'
+        run([exe, f'-O{opt}', '--target', 'wasm', '-o', wasm, overflow])
+        run([args.validator, 'validate', wasm])
+        run([args.node, ROOT / 'test' / 'wasm_multimemory.mjs', wasm, '0', 'allocation-failure'])
+        count += 1
+        if args.wasmtime_python:
+            failure = run([args.wasmtime_python, ROOT / 'test' / 'wasmtime_host.py', wasm], ok=False)
+            assert failure.returncode and b'out of memory growing data storage' in failure.stderr and not failure.stdout
+            count += 1
     # Deterministic values exercise arithmetic at each declared storage width,
     # independent of constant folding and of the receiving slot's width.
     randomizer = random.Random(20261106)
@@ -349,13 +369,20 @@ a.equal(new DataView(x.memory.buffer).getBigInt64(1,true),65n<<56n);"""
         ('empty-pop', 'var a: i64[>..<] = []; print("bad=", a.pop());', b'empty'),
         ('inline-index', 'var a: i64[2] = [1, 2]; print("bad=", a[failure_index]);', b'out of bounds'),
         ('variable-index', 'var a: i64[] = [1]; print("bad=", a[failure_index]);', b'out of bounds'),
+        ('runtime-index', 'var a: i64[..] = [..2]; a.push(1); print("bad=", a[failure_index]);', b'out of bounds'),
+        ('runtime-capacity', 'var a: u8[..] = [..1]; a.push(1); print("bad=", a.push(2));', b'capacity'),
+        ('runtime-zero', 'var a: u8[..] = [..0]; print("bad=", a.push(1));', b'capacity'),
+        ('runtime-empty', 'var a: u8[..] = [..3]; print("bad=", a.pop());', b'empty'),
+        ('runtime-negative', 'var n: i64 = -1; var a: i64[..] = [..n]; print("bad=", a.cap);', b'array capacity out of range'),
+        ('runtime-large', 'var n: i64 = 4294967296; var a: i64[..] = [..n]; print("bad=", a.cap);', b'array capacity out of range'),
         ('limited-capacity', 'var a: u8[..1] = [1]; print("bad=", a.push(2));', b'capacity'),
         ('zero-capacity', 'var a: u8[..0] = []; print("bad=", a.push(1));', b'capacity'),
         ('limited-empty', 'var a: u8[..3] = []; print("bad=", a.pop());', b'empty'),
     ]
     for name, body, reason in failures:
         source = out / f'failure-{name}.goose'
-        globals = 'var failure_index: i64 = 2;\n' if name in ('array-index', 'inline-index', 'variable-index') else ''
+        globals = ('var failure_index: i64 = 1;\n' if name == 'runtime-index' else
+                   'var failure_index: i64 = 2;\n' if name in ('array-index', 'inline-index', 'variable-index') else '')
         source.write_text(globals + 'fn main() { ' + body + ' }\n')
         for opt in (0, 2):
             wasm = out / f'failure-{name}-O{opt}.wasm'
@@ -368,7 +395,8 @@ a.equal(new DataView(x.memory.buffer).getBigInt64(1,true),65n<<56n);"""
             run([args.validator, 'validate', wasm])
             actual = run([args.node, ROOT / 'scripts' / 'run_wasm.mjs', wasm], ok=False)
             assert ref.returncode and actual.returncode, (name, opt, 'missing failure')
-            assert reason in ref.stderr and reason in actual.stderr, (name, ref.stderr, actual.stderr)
+            native_reason = b'invalid capacity' if name in ('runtime-negative', 'runtime-large') else reason
+            assert native_reason in ref.stderr and reason in actual.stderr, (name, ref.stderr, actual.stderr)
             assert ref.stdout == actual.stdout == b'', (name, 'partial print leaked')
             if args.wasmtime_python:
                 second = run([args.wasmtime_python, ROOT / 'test' / 'wasmtime_host.py', wasm], ok=False)

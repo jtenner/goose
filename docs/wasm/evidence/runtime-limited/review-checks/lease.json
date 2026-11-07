@@ -1,0 +1,22 @@
+{
+  "owner": "Goose runtime-limited Release validation",
+  "pid": 3723274,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "checks",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-runtime-limited-20261107/review-checks/check.py"
+      ],
+      "exit": 0
+    }
+  ],
+  "exit": 0
+}

@@ -20,6 +20,12 @@ int main(int argc, char **argv) {
     auto copy = runtime.CopyFromFrame();
     if (runtime.CopyFromFrame() != copy) return 1;
     add("copy_from_frame", copy);
+    auto offsetload = runtime.Access(0x35, 4), hugeload = runtime.Access(0x35, 0x1000000);
+    if (offsetload == runtime.Access(0x35) || hugeload == runtime.Access(0x35) ||
+        offsetload != runtime.Access(0x35, 4)) return 1;
+    add("load32off", offsetload);
+    add("load32huge", hugeload);
+    add("store32off", runtime.Access(0x3e, 4));
     for (auto [name, op] : vector<pair<string, uint8_t>> {
              {"load64", 0x29}, {"store64", 0x37}, {"load8s", 0x30}, {"load8u", 0x31},
              {"load16s", 0x32}, {"load16u", 0x33}, {"load32s", 0x34}, {"load32u", 0x35},

@@ -1,0 +1,467 @@
+[
+  {
+    "name": "runtime-index-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-index-O0.c",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-index.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-index-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-index-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-index-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-index-O0-native",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-index-O0.native"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "runtime-index-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-index-O0.wasm",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-index.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-index-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-index-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-index-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-index-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "runtime-index-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-index-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "runtime-index-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-index-O2.c",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-index.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-index-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-index-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-index-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-index-O2-native",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-index-O2.native"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "runtime-index-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-index-O2.wasm",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-index.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-index-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-index-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-index-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-index-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "runtime-index-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-index-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "runtime-negative-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-negative-O0.c",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-negative.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-negative-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-negative-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-negative-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-negative-O0-native",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-negative-O0.native"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "runtime-negative-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-negative-O0.wasm",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-negative.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-negative-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-negative-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-negative-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-negative-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "runtime-negative-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-negative-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "runtime-negative-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-negative-O2.c",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-negative.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-negative-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-negative-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-negative-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-negative-O2-native",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-negative-O2.native"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "runtime-negative-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-negative-O2.wasm",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-negative.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-negative-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-negative-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-negative-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-negative-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "runtime-negative-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-negative-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "runtime-large-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-large-O0.c",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-large.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-large-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-large-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-large-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-large-O0-native",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-large-O0.native"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "runtime-large-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-large-O0.wasm",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-large.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-large-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-large-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-large-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-large-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "runtime-large-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-large-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "runtime-large-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-large-O2.c",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-large.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-large-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-large-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-large-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-large-O2-native",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-large-O2.native"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "runtime-large-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-large-O2.wasm",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-large.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-large-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-large-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "runtime-large-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-large-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "runtime-large-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/runtime-large-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "wrong-capacity-bound-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/wrong-capacity-bound.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wrong-capacity-bound-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/wrong-capacity-bound.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wrong-capacity-bound-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-runtime-limited-20261107/review-checks/wrong-capacity-bound.wasm"
+    ],
+    "exit": 0
+  }
+]
