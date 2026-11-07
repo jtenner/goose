@@ -1,0 +1,16 @@
+[
+  {
+    "case": "zero",
+    "opt": 0,
+    "source_sha256": "5c3c235245b5ee59171641e1f6e4ffeb261a6931c6e35db56f6d59b8e2838e3d",
+    "native": "PASS",
+    "wasm_before": "exact field-path rejection"
+  },
+  {
+    "case": "zero",
+    "opt": 2,
+    "source_sha256": "5c3c235245b5ee59171641e1f6e4ffeb261a6931c6e35db56f6d59b8e2838e3d",
+    "native": "PASS",
+    "wasm_before": "exact field-path rejection"
+  }
+]

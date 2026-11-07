@@ -1,0 +1,30 @@
+[
+  {
+    "case": "effects",
+    "opt": 0,
+    "source_sha256": "fd5580daa773b77bf7ee4f57639b02d047c68fe0f7c1dbfbd03e09121c9955a3",
+    "native": "PASS",
+    "wasm_before": "exact field-path rejection"
+  },
+  {
+    "case": "effects",
+    "opt": 2,
+    "source_sha256": "fd5580daa773b77bf7ee4f57639b02d047c68fe0f7c1dbfbd03e09121c9955a3",
+    "native": "PASS",
+    "wasm_before": "exact field-path rejection"
+  },
+  {
+    "case": "refs",
+    "opt": 0,
+    "source_sha256": "4738ad594203e599ebe4e3dae452d0cc254ccc40d6b8ccb476bc2d99e8ac7244",
+    "native": "PASS",
+    "wasm_before": "exact field-path rejection"
+  },
+  {
+    "case": "refs",
+    "opt": 2,
+    "source_sha256": "4738ad594203e599ebe4e3dae452d0cc254ccc40d6b8ccb476bc2d99e8ac7244",
+    "native": "PASS",
+    "wasm_before": "exact field-path rejection"
+  }
+]

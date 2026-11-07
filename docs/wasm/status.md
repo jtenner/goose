@@ -228,7 +228,18 @@ source/count reloads. Focused complete-image, cleanup, path, admission and
 count/stride checks pass, as does the integrated 1,476-group Wasm suite. Field-path
 loops and the other array/call/result limits remain guarded. See the
 [data iteration evidence](evidence/data-aggregate-iteration.md). This is a
-Stage D increment, with runtime and physical-memory acceptance still open.
+Stage D increment. No performance work is in the current owner scope.
+
+Array iteration can now follow fixed aggregate fields, including fields in
+data-array rows, mutable reference paths, effectful captured indices and enum
+payloads. Current reference slots and outer bounds reload on each pass; index
+expressions and function roots execute once. The correctness-only integrated
+suite passes 1,409 groups, including complete Memory 0/data images and real
+recursive binder activations. Native regressions and 52 exact comparisons
+pass; 272 unchanged-source parent modules are byte-identical. See
+[field iteration evidence](evidence/field-iteration.md). The earlier field-path
+guard statements describe their historical checkpoints. Whole aggregate
+assignment and general by-value/result support are still compilation gaps.
 
 ## Host contract
 

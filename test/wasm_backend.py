@@ -65,6 +65,8 @@ def main():
                    help='normal compiler shader library needed by the array-place test helper')
     p.add_argument('--out', type=Path, default=ROOT / 'build' / 'gen' / 'wasm')
     p.add_argument('--wasmtime-python', type=Path, help='Python with optional wasmtime==49.0.0')
+    p.add_argument('--correctness-only', action='store_true',
+                   help='run behavior, safety and memory-image checks without cost-only scaling reports')
     args = p.parse_args()
     exe = args.exe.resolve()
     for command in (args.node, args.validator, args.cc, args.cxx):
@@ -216,6 +218,13 @@ def main():
                 checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, persistent])
                 assert checked.stdout == reference.stdout and not checked.stderr
                 count += 1
+            if source.stem.startswith('wasm_field_iteration_'):
+                mode = ('no-data' if source.stem in ('wasm_field_iteration_fixed', 'wasm_field_iteration_root',
+                                                    'wasm_field_iteration_refs', 'wasm_field_iteration_zero',
+                                                    'wasm_field_iteration_call', 'wasm_field_iteration_variant') else '')
+                checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
+                assert checked.stdout == reference.stdout and not checked.stderr
+                count += 1
             if source.stem == 'wasm_byte_print':
                 checked = run([args.node, ROOT / 'test' / 'wasm_bytes.mjs', wasm])
                 assert checked.stdout == reference.stdout
@@ -230,23 +239,27 @@ def main():
     count += check_struct_modules(run, args.node, args.validator, args.wasmtime_python, out)
     from wasm_struct_admission import check_admission as check_struct_admission
     count += check_struct_admission(run, exe, args.node, args.validator, args.wasmtime_python, out)
-    count += check_constructor_locals(run, exe, args.node, args.validator, args.wasmtime_python, out, function_local_counts)
+    if not args.correctness_only:
+        count += check_constructor_locals(run, exe, args.node, args.validator, args.wasmtime_python, out, function_local_counts)
     from wasm_enum_checks import check_modules as check_enum_modules, check_footprint as check_enum_footprint
     from wasm_enum_admission import check_admission as check_enum_admission
     count += check_enum_modules(run, args.node, args.validator, args.wasmtime_python, out)
     count += check_enum_admission(run, exe, args.cc, out)
-    count += check_enum_footprint(run, exe, args.node, args.validator, args.wasmtime_python, out, function_local_counts)
+    if not args.correctness_only:
+        count += check_enum_footprint(run, exe, args.node, args.validator, args.wasmtime_python, out, function_local_counts)
     from wasm_aggregate_checks import check_controls as check_aggregate_controls, check_reference_abi, check_footprint as check_aggregate_footprint
     from wasm_aggregate_admission import check_admission as check_aggregate_admission, check_limits as check_aggregate_limits
     count += check_aggregate_controls(run, args.node, args.validator, args.wasmtime_python, out)
     count += check_reference_abi(run, args.validator, out)
-    count += check_aggregate_admission(run, exe, args.cc, out)
+    count += check_aggregate_admission(run, exe, args.cc, out, args.node, args.validator, args.wasmtime_python)
     count += check_aggregate_limits(run, exe, out)
-    count += check_aggregate_footprint(run, exe, args.node, args.validator, args.wasmtime_python, out, function_local_counts)
+    if not args.correctness_only:
+        count += check_aggregate_footprint(run, exe, args.node, args.validator, args.wasmtime_python, out, function_local_counts)
     from wasm_iteration_checks import check_modules as check_iteration_modules, check_limits as check_iteration_limits, check_footprint as check_iteration_footprint
     count += check_iteration_modules(run, args.node, args.validator, args.wasmtime_python, out)
     count += check_iteration_limits(run, exe, out)
-    count += check_iteration_footprint(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out)
+    if not args.correctness_only:
+        count += check_iteration_footprint(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out)
     owner_module = out / 'wasm_inline_ref_abi_packed-O0.wasm'
     owner_controls = out / 'reference-owner-controls'
     run([sys.executable, ROOT / 'test/wasm_reference_abi_controls.py', owner_module, owner_controls])
@@ -256,18 +269,24 @@ def main():
          ROOT / 'test/expected/wasm_inline_ref_abi_packed.out', out / 'reference-owner-results.json'])
     count += 3
     from wasm_data_aggregate_checks import check_footprint as check_data_footprint, check_controls as check_data_controls
-    count += check_data_footprint(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out, function_local_counts)
+    if not args.correctness_only:
+        count += check_data_footprint(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out, function_local_counts)
     count += check_data_controls(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out)
     from wasm_data_aggregate_named import check_named_footprint
-    count += check_named_footprint(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out, function_local_counts)
+    if not args.correctness_only:
+        count += check_named_footprint(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out, function_local_counts)
     run([args.node, ROOT / 'test/wasm_memory_snapshot_checks.mjs'])
     count += 2
-    from wasm_data_iteration_checks import check_modules as check_data_iteration_modules
+    from wasm_data_iteration_checks import check_modules as check_data_iteration_modules, check_recursion as check_data_iteration_recursion
     from wasm_data_iteration_admission import check_admission as check_data_iteration_admission
     from wasm_data_iteration_footprint import check_footprint as check_data_iteration_footprint
     count += check_data_iteration_modules(run, args.node, args.validator, args.wasmtime_python, out)
-    count += check_data_iteration_admission(run, exe, out)
-    count += check_data_iteration_footprint(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out)
+    count += check_data_iteration_recursion(run, args.node, args.validator, args.wasmtime_python, out)
+    count += check_data_iteration_admission(run, exe, out, args.node, args.validator, args.wasmtime_python)
+    from wasm_field_iteration_checks import check_paths as check_field_iteration_paths
+    count += check_field_iteration_paths(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out)
+    count += check_data_iteration_footprint(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out,
+                                          correctness_only=args.correctness_only)
     growth_source = out / 'frame-growth.goose'
     lines = ['recursive fn grow(n: i64) -> i64 {']
     for i in range(96):

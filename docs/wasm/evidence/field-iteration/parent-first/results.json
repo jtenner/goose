@@ -1,0 +1,58 @@
+[
+  {
+    "case": "fixed",
+    "opt": 0,
+    "source_sha256": "a58cf0e3a81efcf902b7bd0e51e226b4042056cb278624628949a8e97f55e7d8",
+    "native": "PASS",
+    "wasm_before": "exact field-path rejection"
+  },
+  {
+    "case": "fixed",
+    "opt": 2,
+    "source_sha256": "a58cf0e3a81efcf902b7bd0e51e226b4042056cb278624628949a8e97f55e7d8",
+    "native": "PASS",
+    "wasm_before": "exact field-path rejection"
+  },
+  {
+    "case": "rebind",
+    "opt": 0,
+    "source_sha256": "332c1d482f1ddc6f0db9aa73e341553f3beb1f6c8e3b00ec5cc2997747ce1b82",
+    "native": "PASS",
+    "wasm_before": "exact field-path rejection"
+  },
+  {
+    "case": "rebind",
+    "opt": 2,
+    "source_sha256": "332c1d482f1ddc6f0db9aa73e341553f3beb1f6c8e3b00ec5cc2997747ce1b82",
+    "native": "PASS",
+    "wasm_before": "exact field-path rejection"
+  },
+  {
+    "case": "index",
+    "opt": 0,
+    "source_sha256": "d43eef9e9e30e1a135b045ebc6ecc10796728de648184f00b3d80236c5ab44c0",
+    "native": "PASS",
+    "wasm_before": "exact field-path rejection"
+  },
+  {
+    "case": "index",
+    "opt": 2,
+    "source_sha256": "d43eef9e9e30e1a135b045ebc6ecc10796728de648184f00b3d80236c5ab44c0",
+    "native": "PASS",
+    "wasm_before": "exact field-path rejection"
+  },
+  {
+    "case": "root",
+    "opt": 0,
+    "source_sha256": "be2453b76fae536221047bd192f51eac44a43784febdc977141c543a04321ae5",
+    "native": "PASS",
+    "wasm_before": "exact field-path rejection"
+  },
+  {
+    "case": "root",
+    "opt": 2,
+    "source_sha256": "be2453b76fae536221047bd192f51eac44a43784febdc977141c543a04321ae5",
+    "native": "PASS",
+    "wasm_before": "exact field-path rejection"
+  }
+]

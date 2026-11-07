@@ -1,0 +1,106 @@
+[
+  {
+    "name": "growable-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra02/growable-O0.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_growable.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "growable-O0-cc",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra02/growable-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra02/growable-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "growable-O0-native",
+    "command": [
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra02/growable-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "growable-O0-wasm-before",
+    "command": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra02/growable-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_growable.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "growable-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra02/growable-O2.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_growable.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "growable-O2-cc",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra02/growable-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra02/growable-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "growable-O2-native",
+    "command": [
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra02/growable-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "growable-O2-wasm-before",
+    "command": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra02/growable-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_growable.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "zero-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra02/zero-O0.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_zero.goose"
+    ],
+    "exit": 1
+  }
+]

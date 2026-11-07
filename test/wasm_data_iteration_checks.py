@@ -72,3 +72,42 @@ def check_modules(run,node,validator,wasmtime_python,out):
         facts.append({'opt':opt,'unique_loop_copy':True,'length_site':7,'source_memory':1,'mutations_validated':7,'healthy_owner_modes':len(MODES)})
     (out/'data-iteration-control-facts.json').write_text(json.dumps(facts,indent=2)+'\n')
     return count
+
+
+def check_recursion(run,node,validator,wasmtime_python,out):
+    source=ROOT/'test/wasm/wasm_data_aggregate_iteration_recursion.goose'
+    line=next(i for i,s in enumerate(source.read_text().splitlines(),1) if 'assert(&s .!= parent)' in s)
+    expected=(ROOT/'test/expected/wasm_data_aggregate_iteration_recursion.out').read_bytes()
+    count=0
+    for opt in (0,2):
+        text=run([validator,'print',out/f'wasm_data_aggregate_iteration_recursion-O{opt}.wasm']).stdout.decode()
+        frames={}
+        for name in ('main','walk'):
+            a,z=function_span(text,name)
+            reserve=re.findall(r'i32.const (\d+)\s+call \$goose.reserve_frame\s+local.set \d+',text[a:z])
+            assert len(reserve)==1,(name,reserve)
+            frames[name]=int(reserve[0])
+        initial=re.findall(r'\(global \(;0;\) \(mut i32\) i32.const (\d+)\)',text)
+        assert len(initial)==1
+        derived=text[:text.rfind(')')]+'  (export "test_stack_top_0" (global 0))\n)\n'
+        wat=out/f'data-recursion-owner-O{opt}.wat';wat.write_text(derived);module=wat.with_suffix('.wasm')
+        run([validator,'parse',wat,'-o',module]);run([validator,'validate',module])
+        result=run([node,ROOT/'test/wasm_data_iteration_recursion.mjs',module,str(frames['main']),str(frames['walk'])])
+        assert result.stdout==expected and not result.stderr
+        count+=1
+        a,z=function_span(text,'walk');body=text[a:z]
+        # Reserve distinct live regions, but deliberately make every activation use the first frame.
+        shared=int(initial[0])+frames['main']
+        body,n=re.subn(r'(call \$goose.reserve_frame\s+)(local.set \d+)',
+                       lambda m:m[1]+f'drop\n    i32.const {shared}\n    '+m[2],body,count=1)
+        assert n==1
+        wat=out/f'data-recursion-shared-frame-O{opt}.wat';wat.write_text(text[:a]+body+text[z:]);module=wat.with_suffix('.wasm')
+        run([validator,'parse',wat,'-o',module]);run([validator,'validate',module])
+        engines=[[node,ROOT/'scripts/run_wasm.mjs',module]]
+        if wasmtime_python:engines.append([wasmtime_python,ROOT/'test/wasmtime_host.py',module])
+        for args in engines:
+            result=run(args,ok=False)
+            assert result.returncode==1 and b'assert failed' in result.stderr and f'{source}:{line}'.encode() in result.stderr,result.stderr
+            assert result.stdout==b'enter=3\n',result.stdout
+            count+=1
+    return count

@@ -5,7 +5,7 @@ from wasm_data_iteration_checks import function_span
 ROOT=Path(__file__).resolve().parents[1]
 
 
-def check_footprint(run,exe,cc,node,validator,wasmtime_python,out,parent=None):
+def check_footprint(run,exe,cc,node,validator,wasmtime_python,out,parent=None,correctness_only=False):
     p=out/'data-iteration-footprint';p.mkdir(exist_ok=True);rows=[];groups=0
     for stride in (1,7,16,256,40008):
         if stride==1:fields='';value='S {}';checks='';term='1'
@@ -31,14 +31,20 @@ def check_footprint(run,exe,cc,node,validator,wasmtime_python,out,parent=None):
                 assert 'call $goose.reserve_frame' not in function[loop.start():]
                 assert function.count('call $goose.copy_to_frame')==1
                 assert 'call $goose.reserve_memory' not in function
-                locals_=sum(len(re.findall(r'\b(?:i32|i64|f32|f64)\b',x)) for x in re.findall(r'\(local ([^)]+)\)',function))
                 memories=len(re.findall(r'(?m)^\s*\(memory\s',text));assert memories==2
                 exports=''.join(f'  (export "test_stack_top_{i}" (global {i}))\n' for i in range(memories));wat=prefix.with_suffix('.owner.wat');wat.write_text(text[:text.rfind(')')]+exports+')\n');owner=prefix.with_suffix('.owner.wasm');run([validator,'parse',wat,'-o',owner]);run([validator,'validate',owner])
                 actual=run([node,ROOT/'test/wasm_data_iteration_global.mjs',owner,str(stride),str(amount),prefix.with_suffix('.owner.json')]);assert actual.stdout==b'footprint\n' and not actual.stderr;groups+=1
                 if wasmtime_python:
                     actual=run([wasmtime_python,ROOT/'test/wasmtime_host.py',module]);assert actual.stdout==b'footprint\n' and not actual.stderr;groups+=1
-                rows.append({'stride':stride,'amount':amount,'opt':opt,'binder_bytes':stride,'loop_locals':locals_,'loop_copy_sites':1,'functions':len(re.findall(r'(?m)^  \(func ',text)),'module_bytes':module.stat().st_size,'complete_images':'PASS'})
+                row={'stride':stride,'amount':amount,'opt':opt,'complete_images':'PASS'}
+                if not correctness_only:
+                    locals_=sum(len(re.findall(r'\b(?:i32|i64|f32|f64)\b',x)) for x in re.findall(r'\(local ([^)]+)\)',function))
+                    row.update(binder_bytes=stride,loop_locals=locals_,loop_copy_sites=1,
+                               functions=len(re.findall(r'(?m)^  \(func ',text)),module_bytes=module.stat().st_size)
+                rows.append(row)
                 (p/'results.json').write_text(json.dumps(rows,indent=2)+'\n')
+    if correctness_only:
+        return groups
     for stride in (1,7,16,256,40008):
         for opt in (0,2):
             cases=[x for x in rows if x['stride']==stride and x['opt']==opt]

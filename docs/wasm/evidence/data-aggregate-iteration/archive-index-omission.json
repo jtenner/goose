@@ -1,0 +1,8 @@
+{
+  "commit": "3661b863",
+  "missing_from_index": [
+    "docs/wasm/evidence/data-aggregate-iteration/build01/build-identity.json"
+  ],
+  "cause": "archive verification failed before commit; shell did not stop",
+  "repair": "explicitly add listed retained records,then verify before follow-up commit"
+}

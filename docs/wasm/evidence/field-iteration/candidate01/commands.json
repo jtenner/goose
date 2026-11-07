@@ -1,0 +1,482 @@
+[
+  {
+    "name": "fixed-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-field-iteration-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/fixed-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_fixed.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fixed-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/fixed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fixed-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/fixed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fixed-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/fixed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fixed-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-field-iteration-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/fixed-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_fixed.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fixed-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/fixed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fixed-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/fixed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fixed-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/fixed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "rebind-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-field-iteration-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/rebind-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_rebind.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "rebind-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/rebind-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "rebind-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/rebind-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "rebind-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/rebind-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "rebind-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-field-iteration-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/rebind-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_rebind.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "rebind-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/rebind-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "rebind-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/rebind-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "rebind-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/rebind-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "index-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-field-iteration-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/index-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_index.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "index-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/index-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "index-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/index-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "index-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/index-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "index-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-field-iteration-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/index-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_index.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "index-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/index-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "index-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/index-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "index-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/index-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "root-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-field-iteration-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/root-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_root.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "root-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/root-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "root-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/root-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "root-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/root-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "root-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-field-iteration-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/root-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_root.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "root-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/root-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "root-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/root-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "root-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/root-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-field-iteration-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/effects-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_effects.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/effects-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/effects-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/effects-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-field-iteration-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/effects-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_effects.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/effects-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/effects-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/effects-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-field-iteration-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/refs-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_refs.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/refs-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/refs-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/refs-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-field-iteration-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/refs-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_refs.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/refs-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/refs-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-field-iteration-20261107/candidate01/refs-O2.wasm"
+    ],
+    "exit": 0
+  }
+]

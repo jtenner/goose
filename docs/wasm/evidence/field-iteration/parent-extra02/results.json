@@ -1,0 +1,16 @@
+[
+  {
+    "case": "growable",
+    "opt": 0,
+    "source_sha256": "1dfb89ca3121558faa844babefe8dd759554f4763824b2f7b7de24afd625ea3d",
+    "native": "PASS",
+    "wasm_before": "exact field-path rejection"
+  },
+  {
+    "case": "growable",
+    "opt": 2,
+    "source_sha256": "1dfb89ca3121558faa844babefe8dd759554f4763824b2f7b7de24afd625ea3d",
+    "native": "PASS",
+    "wasm_before": "exact field-path rejection"
+  }
+]

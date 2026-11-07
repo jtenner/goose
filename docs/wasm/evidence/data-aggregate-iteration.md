@@ -6,7 +6,8 @@ Focused native, Node and Wasmtime checks pass. The integrated Wasm suite passes
 1,476 check groups with 80 C++ and 4,262 validation input hashes checked before
 and after. The native baseline and all 52 exact comparisons pass; all 242
 unchanged parent fixture modules are byte-identical. Independent correctness
-review is running against a frozen snapshot. This increment does not complete
+review found no production defect and one recursion-coverage gap, corrected
+with the actual-call checks described below. This increment does not complete
 Stage D or the backend.
 
 ## Scope and bounds proof
@@ -49,7 +50,7 @@ independent binders, local/global/data reference targets, nullable references,
 mixed inline fields, enums and variants, inactive payload bytes, callbacks,
 inlined helpers, globals/defaults, mutable root replacement, an effectful index
 that grows the outer reference array, zero trips, defers, early returns,
-continue, break, recursion and live outer owners. Each positive family has a
+continue, break and live outer owners. Each positive family has a
 native behavior reference and the parent's exact copied-binder target
 rejection before candidate execution. O0 and O2 are included.
 
@@ -124,5 +125,18 @@ setup. Its record is retained; the corrected comparison completes normally.
 
 Selected command/status/hash and failure records are preserved in
 [data-aggregate-iteration](data-aggregate-iteration/archive-manifest.json).
-The independent correctness review uses its own frozen patch and input
-manifest; its result will be recorded separately when it completes.
+The [independent correctness review](data-aggregate-iteration/review/report.md)
+inspected all 42 primary files in its frozen snapshot and found no confirmed
+production defect. Its P2 finding is correct: declaring a function recursive
+did not exercise a recursive call. The added regression now keeps copied
+binders live across four recursive activations, uses distinct row values and
+checks caller data after child return. Native, Node and Wasmtime pass at O0/O2.
+A live observer checks the actual Memory 0 top on every enter/exit checkpoint
+and after completion. A validated shared-frame mutation fails at the exact
+distinct-binder-address assertion in both engines. The initial fixture used
+the reserved keyword `guard` as a name; its parse failure is retained and the
+valid fixture uses `saved`. No production change was made for R1.
+
+The frozen review predates the later native/comparison results and the owner's
+correctness-only directive; its pending statements describe that packet
+boundary. The review does not cover the subsequent field-path implementation.

@@ -1,0 +1,186 @@
+[
+  {
+    "name": "effects-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra/effects-O0.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_effects.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O0-cc",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra/effects-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra/effects-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O0-native",
+    "command": [
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra/effects-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O0-wasm-before",
+    "command": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra/effects-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_effects.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "effects-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra/effects-O2.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_effects.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O2-cc",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra/effects-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra/effects-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O2-native",
+    "command": [
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra/effects-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O2-wasm-before",
+    "command": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra/effects-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_effects.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "refs-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra/refs-O0.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_refs.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs-O0-cc",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra/refs-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra/refs-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs-O0-native",
+    "command": [
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra/refs-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs-O0-wasm-before",
+    "command": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra/refs-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_refs.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "refs-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra/refs-O2.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_refs.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs-O2-cc",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra/refs-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra/refs-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs-O2-native",
+    "command": [
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra/refs-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs-O2-wasm-before",
+    "command": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-field-iteration-20261107/parent-extra/refs-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_field_iteration_refs.goose"
+    ],
+    "exit": 1
+  }
+]

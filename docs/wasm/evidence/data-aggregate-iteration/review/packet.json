@@ -1,0 +1,14 @@
+{
+  "baseline": "20484f75bf27af082b769da38fff3fea8bdd629c",
+  "candidate": "staged patch on baseline, source b60cd4ba tested compiler",
+  "primary_files": 42,
+  "patch_sha256": "53258f546df6aa48900b7195585ca1e40bc0e2881226d8a6bb83c1db381739f7",
+  "context_files": 13,
+  "missing_suggested_context_names": [
+    "src/wasm_layout.h",
+    "src/wasm_views.h"
+  ],
+  "raw": "/tmp/goose-wasm-data-iteration-20261107",
+  "status": "frozen independent review input:full1476Wasm passed; native baseline and compatibility pending",
+  "supplemental_raw_files": 6636
+}

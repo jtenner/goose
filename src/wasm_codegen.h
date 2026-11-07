@@ -1289,6 +1289,14 @@ struct WasmCodeGen : ValueLayout {
     bool ArrayPathHasStatements(Node *n);
     void CaptureArrayWalk(Node *n, ArrayWalk &walk);
     ArrayPlace LoadArrayWalk(const ArrayWalk &walk);
+    struct PlaceWalkStep { Node *node; uint32_t position = NoLocal, length = NoLocal; };
+    struct PlaceWalk {
+        Node *root = nullptr;
+        optional<FixedPlace> captured;
+        vector<PlaceWalkStep> steps;
+    };
+    void CapturePlaceWalk(Node *n, PlaceWalk &walk);
+    FixedPlace LoadPlaceWalk(const PlaceWalk &walk);
     void ArrayFor(ForLoop *loop);
 };
 

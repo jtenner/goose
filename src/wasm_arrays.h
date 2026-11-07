@@ -983,14 +983,71 @@ inline WasmCodeGen::ArrayPlace WasmCodeGen::LoadArrayWalk(const ArrayWalk &walk)
     return place;
 }
 
+inline void WasmCodeGen::CapturePlaceWalk(Node *n, PlaceWalk &walk) {
+    if (auto field = Is<Dot>(n); field && field->IsField()) {
+        CapturePlaceWalk(field->obj, walk);
+        walk.steps.push_back({field});
+        return;
+    }
+    if (auto index = Is<Index>(n)) {
+        CapturePlaceWalk(index->obj, walk);
+        PlaceWalkStep step {index, Local(WasmModule::I64)};
+        if (ArrayPathHasStatements(index->idx)) {
+            // Index effects see the captured parent; subsequent path slots still reload.
+            auto parent = LoadPlaceWalk(walk);
+            step.length = Local(WasmModule::I64);
+            CaptureArrayView(ArrayFromPlace(parent, index->line), step.length);
+            walk.root = nullptr; walk.captured = parent; walk.steps.clear();
+        }
+        Gen(index->idx); code.Set(step.position);
+        walk.steps.push_back(step);
+        return;
+    }
+    if (auto address = Is<Unary>(n); address && address->op == T_BITAND &&
+        address->child->exprtype->kind != TY_REF &&
+        (Is<Ident>(address->child) || Is<Dot>(address->child) || Is<Index>(address->child))) {
+        CapturePlaceWalk(address->child, walk); return;
+    }
+    auto id = Is<Ident>(n);
+    if (id && id->vdef && id->vdef->isvar && id->vdef->type->kind == TY_REF) walk.root = n;
+    else walk.captured = ResolvePlace(n);
+}
+
+inline WasmCodeGen::FixedPlace WasmCodeGen::LoadPlaceWalk(const PlaceWalk &walk) {
+    assert(walk.root || walk.captured);
+    auto place = walk.root ? ResolvePlace(walk.root) : *walk.captured;
+    for (auto &step : walk.steps) {
+        if (auto field = Is<Dot>(step.node)) {
+            auto [type, offset] = StoredField(place.type, field->fieldidx, field->line);
+            if (field->accessorowner && !TEq(field->accessorowner, place.type))
+                Fail(field->line, "field adaptation needs the pending layout lowering");
+            if ((uint64_t)offset > UINT32_MAX - place.offset)
+                Fail(field->line, "field offset exceeds memory32");
+            place.offset += (uint32_t)offset; place.type = type;
+        } else {
+            auto index = Is<Index>(step.node); assert(index);
+            auto array = ArrayFromPlace(place, index->line);
+            if (!index->nobc) {
+                code.Get(step.position); ViewLength({array, step.length});
+                code.Byte(0x5a); Open(0x04); Trap(8, index->line); Close();
+            }
+            ElementOffset({array}, step.position, index->line);
+            place = CaptureElementPlace({array.layout.element, array.elementMemory, true});
+        }
+        while (place.type->kind == TY_REF) place = DereferencePlace(place, step.node->line);
+    }
+    return place;
+}
+
 inline void WasmCodeGen::ArrayFor(ForLoop *loop) {
-    if (FieldPath(loop->iter)) Fail(loop->line, "field-path iteration needs the pending path lowering");
     auto array = ArrayType(loop->iter), element = array->arr->sub;
     auto id = Is<Ident>(loop->iter);
     auto reload = id && id->vdef && id->vdef->isvar && id->vdef->type->kind == TY_REF;
     optional<ArrayWalk> walk;
-    if (Is<Index>(loop->iter)) { walk.emplace(); CaptureArrayWalk(loop->iter, *walk); }
-    auto place = reload || walk
+    optional<PlaceWalk> fields;
+    if (FieldPath(loop->iter)) { fields.emplace(); CapturePlaceWalk(loop->iter, *fields); }
+    else if (Is<Index>(loop->iter)) { walk.emplace(); CaptureArrayWalk(loop->iter, *walk); }
+    auto place = reload || walk || fields
         ? CaptureArrayBorrow(array, Local(BorrowedArrayAddressType(array)), BorrowedArrayAddressType(array),
                              ArrayOrigin::ReferenceABI, loop->line)
         : ResolveArray(loop->iter);
@@ -1010,7 +1067,10 @@ inline void WasmCodeGen::ArrayFor(ForLoop *loop) {
     auto prefix = VarintPrefix(array) ? (int)Local(WasmModule::I32) : -1;
     auto position = Local(WasmModule::I64); code.I64(0); code.Set(position);
     auto end = Open(), head = Open(0x03);
-    if (walk) {
+    if (fields) {
+        auto selected = LoadPlaceWalk(*fields);
+        PlaceAddress(selected, BorrowedArrayAddressType(array), loop->line); code.Set(header);
+    } else if (walk) {
         auto selected = LoadArrayWalk(*walk); code.Get(selected.image.address); code.Set(header);
     } else if (reload) {
         auto selected = ResolveArray(loop->iter); code.Get(selected.image.address); code.Set(header);

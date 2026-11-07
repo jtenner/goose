@@ -565,7 +565,97 @@
       "raw_path": "/tmp/goose-wasm-data-iteration-20261107/compatibility01/exact/summary.json",
       "sha256": "abbe4f77f2cb5c3da1d4c3d954c2b82b1802501353ee5aee0cc1eaa042c16eb1",
       "bytes": 15822
+    },
+    {
+      "path": "recursion-correctness/commands.json",
+      "raw_path": "/tmp/goose-wasm-data-iteration-20261107/post-review-records/recursion-correctness/commands.json",
+      "sha256": "4c3f6b8e8421e7d966ab65b51717937e26ae514414c8dfd1232bd3b574bf7d46",
+      "bytes": 375
+    },
+    {
+      "path": "recursion-correctness/failed-source.goose",
+      "raw_path": "/tmp/goose-wasm-data-iteration-20261107/post-review-records/recursion-correctness/failed-source.goose",
+      "sha256": "eb34d1437c91a64ebae1f77fa8236b329f1fa4cc154b559af43526910b8ef956",
+      "bytes": 767
+    },
+    {
+      "path": "recursion-correctness02/commands.json",
+      "raw_path": "/tmp/goose-wasm-data-iteration-20261107/post-review-records/recursion-correctness02/commands.json",
+      "sha256": "008e92dc32dc281544d5c7a25573362a3c81e62f9d56c74d0a22a8cbeebe7ceb",
+      "bytes": 4225
+    },
+    {
+      "path": "recursion-correctness03/commands.json",
+      "raw_path": "/tmp/goose-wasm-data-iteration-20261107/post-review-records/recursion-correctness03/commands.json",
+      "sha256": "aaf9e70bf48a25600ed9e36dc4bcc1f987f2c9413ac01c42023938469025f685",
+      "bytes": 4225
+    },
+    {
+      "path": "recursion-owner/commands.json",
+      "raw_path": "/tmp/goose-wasm-data-iteration-20261107/post-review-records/recursion-owner/commands.json",
+      "sha256": "95b2d9aaca8411f187c591e123b548831c635406c9b83ed434f3e33bdca469bc",
+      "bytes": 18477
+    },
+    {
+      "path": "recursion-owner/results.json",
+      "raw_path": "/tmp/goose-wasm-data-iteration-20261107/post-review-records/recursion-owner/results.json",
+      "sha256": "e9b1bfabc4035fd074a86b56f1fce320559dd2541c6040a89fa56216c9bb7cdf",
+      "bytes": 111
+    },
+    {
+      "path": "review/coverage.md",
+      "raw_path": "/tmp/goose-wasm-data-iteration-20261107/post-review-records/review/coverage.md",
+      "sha256": "c4039cbf483a827f28376c20fa119a9eca5269062da5fa52c9513d25ffd0857a",
+      "bytes": 4929
+    },
+    {
+      "path": "review/hash-verification.json",
+      "raw_path": "/tmp/goose-wasm-data-iteration-20261107/post-review-records/review/hash-verification.json",
+      "sha256": "43278f83f75005e82dedf7a642872e7425ee7d048ed3227548fed67a8814c2c9",
+      "bytes": 512
+    },
+    {
+      "path": "review/report.md",
+      "raw_path": "/tmp/goose-wasm-data-iteration-20261107/post-review-records/review/report.md",
+      "sha256": "89753c58d875da94cff890f2415b1c409ba706f3cd0be24aefc35979f02a12dd",
+      "bytes": 12456
+    },
+    {
+      "path": "review-resolution.json",
+      "raw_path": "/tmp/goose-wasm-data-iteration-20261107/post-review-records/review-resolution.json",
+      "sha256": "beb4f8b384f51a867680e7227d7e551c1a0b40388533b65427d1010a8576c07b",
+      "bytes": 2297
+    },
+    {
+      "path": "archive-index-omission.json",
+      "raw_path": "/tmp/goose-wasm-data-iteration-20261107/post-review-records/archive-index-omission.json",
+      "sha256": "d6f9574690cb56e5c80d908a19372fc12d4d2e0f73da151218cebcf953bc4777",
+      "bytes": 302
+    },
+    {
+      "path": "review/context-files.json",
+      "raw_path": "/tmp/goose-wasm-data-iteration-20261107/post-review-records/review/context-files.json",
+      "sha256": "be91005da14146edaf8cfeaea7f41488d13a6dff128366caaa63fe22c46228ff",
+      "bytes": 1245
+    },
+    {
+      "path": "review/packet.json",
+      "raw_path": "/tmp/goose-wasm-data-iteration-20261107/post-review-records/review/packet.json",
+      "sha256": "ae0749bd8551cdd5add845499c341f10d11e999a73e08eca3649486b716d76ed",
+      "bytes": 557
+    },
+    {
+      "path": "review/primary-files.json",
+      "raw_path": "/tmp/goose-wasm-data-iteration-20261107/post-review-records/review/primary-files.json",
+      "sha256": "531fc0e6276c36d7175935cbdc1df0d5a2c57636db8a6066db821982937b1225",
+      "bytes": 5158
+    },
+    {
+      "path": "review/reviewed.patch.gz",
+      "raw_path": "/tmp/goose-wasm-data-iteration-20261107/post-review-records/review/reviewed.patch.gz",
+      "sha256": "48dcdbed7b7102da6008b5285251255076f629b7957e422d9e392a33a15337cc",
+      "bytes": 14745
     }
   ],
-  "omitted": "Large binaries, complete images and further per-command records remain at raw paths. Independent review is pending."
+  "omitted": "Large binaries,complete images and further per-command records remain at raw paths. The frozen review and targeted recursion resolution are included."
 }

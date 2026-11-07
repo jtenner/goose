@@ -1,0 +1,14 @@
+[
+  {
+    "name": "O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/recursion-correctness/O0.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_recursion.goose"
+    ],
+    "exit": 1
+  }
+]

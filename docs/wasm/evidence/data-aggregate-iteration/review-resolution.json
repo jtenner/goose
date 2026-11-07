@@ -1,0 +1,43 @@
+{
+  "reviewed_baseline": "20484f75",
+  "reviewed_candidate_compiler": "b60cd4ba",
+  "review_scope": "42 frozen primary files before subsequent field-path changes",
+  "production_findings": 0,
+  "finding_R1": "claimed recursion was only an out-of-line declaration,not a recursive call",
+  "resolution": "actual four-depth recursive calls with different row values,distinct live binder addresses,parent reads after child return,live frame-top observer and validated shared-frame control",
+  "targeted_results": "native/Node/WasmtimeO0/O2 PASS; 6 live-owner/control groups PASS; shared frame rejected at exact distinct-address assertion",
+  "native_and_compatibility_after_review_snapshot": "full baseline,52exact and242unchanged module identities passed",
+  "measurements": "out of scope by owner directive",
+  "records": [
+    {
+      "path": "recursion-correctness/commands.json",
+      "raw_path": "/tmp/goose-wasm-data-iteration-20261107/recursion-correctness/commands.json",
+      "sha256": "4c3f6b8e8421e7d966ab65b51717937e26ae514414c8dfd1232bd3b574bf7d46"
+    },
+    {
+      "path": "recursion-correctness/failed-source.goose",
+      "raw_path": "/tmp/goose-wasm-data-iteration-20261107/recursion-correctness/failed-source.goose",
+      "sha256": "eb34d1437c91a64ebae1f77fa8236b329f1fa4cc154b559af43526910b8ef956"
+    },
+    {
+      "path": "recursion-correctness02/commands.json",
+      "raw_path": "/tmp/goose-wasm-data-iteration-20261107/recursion-correctness02/commands.json",
+      "sha256": "008e92dc32dc281544d5c7a25573362a3c81e62f9d56c74d0a22a8cbeebe7ceb"
+    },
+    {
+      "path": "recursion-correctness03/commands.json",
+      "raw_path": "/tmp/goose-wasm-data-iteration-20261107/recursion-correctness03/commands.json",
+      "sha256": "aaf9e70bf48a25600ed9e36dc4bcc1f987f2c9413ac01c42023938469025f685"
+    },
+    {
+      "path": "recursion-owner/commands.json",
+      "raw_path": "/tmp/goose-wasm-data-iteration-20261107/recursion-owner/commands.json",
+      "sha256": "95b2d9aaca8411f187c591e123b548831c635406c9b83ed434f3e33bdca469bc"
+    },
+    {
+      "path": "recursion-owner/results.json",
+      "raw_path": "/tmp/goose-wasm-data-iteration-20261107/recursion-owner/results.json",
+      "sha256": "e9b1bfabc4035fd074a86b56f1fce320559dd2541c6040a89fa56216c9bb7cdf"
+    }
+  ]
+}

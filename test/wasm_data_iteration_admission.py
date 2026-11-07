@@ -2,8 +2,7 @@
 import re
 
 
-def check_admission(run, exe, out):
-    reason = 'field-path iteration needs the pending path lowering'
+def check_admission(run, exe, out, node='node', validator='wasm-tools', wasmtime_python=None):
     cases = []
     for binder in ('s', '&s'):
         suffix = 'ref' if binder.startswith('&') else 'copy'
@@ -23,11 +22,17 @@ def check_admission(run, exe, out):
             prefix = out / f'data-iteration-{name}-O{opt}'
             run([exe, f'-O{opt}', '--standalone', '-o', prefix.with_suffix('.c'), source])
             wasm = prefix.with_suffix('.wasm')
-            rejected = run([exe, f'-O{opt}', '--target', 'wasm', '-o', wasm, source], ok=False)
-            assert rejected.returncode == 1, (name, rejected.stderr)
-            assert re.findall(rb'wasm target: ([^\n]+)', rejected.stderr) == [reason.encode()], (name, rejected.stderr)
-            assert not wasm.exists(), name
-            count += 1
+            run([exe, f'-O{opt}', '--target', 'wasm', '-o', wasm, source])
+            run([validator, 'validate', wasm])
+            from pathlib import Path
+            root = Path(__file__).resolve().parents[1]
+            engines = [[node, root / 'scripts/run_wasm.mjs', wasm]]
+            if wasmtime_python:
+                engines.append([wasmtime_python, root / 'test/wasmtime_host.py', wasm])
+            for args in engines:
+                result = run(args)
+                assert not result.stdout and not result.stderr, (name, result.stdout, result.stderr)
+                count += 1
     source = out / 'data-iteration-readonly.goose'
     source.write_text('struct S { n: i64 }\nfn main() { var rows: S[] = [S { n: 7 }]; '
                       'for s in rows { s.n += 1; } }\n')
