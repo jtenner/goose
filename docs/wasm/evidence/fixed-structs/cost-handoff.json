@@ -1,0 +1,26 @@
+{
+  "status": "queued; no samples taken; requires a new coordinated lease",
+  "frozen_candidates": {
+    "prior_correct-native-and-earlier-Wasm": "/tmp/goose-wasm-fixed-struct-20261107/build03/goose-tested",
+    "repaired": "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested"
+  },
+  "scope_to_prepare": [
+    "same native scalar/array/layout compiler fixtures at both compiler identities to check shared-caller CPU/RSS/allocations",
+    "nested field depth scaling with fixed expressions and matched source",
+    "new field read/write, reference, exact-copy and literal guest workloads against native reference with checked outcomes",
+    "dynamic struct-reference copy module size at2/4/8/16/32/64data memories"
+  ],
+  "controls": [
+    "frozen source/driver/adapter/input identities",
+    "nonblocking shared lease and owner handoff",
+    "fixed affinity, host qualification, warmups, samples and confidence rules before acquisition",
+    "preserve every failed/noisy setup and original sample",
+    "verify checksums, reap children and record actual release probe"
+  ],
+  "limits": [
+    "No speed or minimum-memory conclusion from local-count/module-size evidence.",
+    "Native-generated output pairs are byte-identical, not compiler-time measurements.",
+    "Deep FieldPlace/ActualType paths may perform quadratic compiler work.",
+    "Dynamic Copy dispatch can add quadratic helper code within the65memory bound."
+  ]
+}

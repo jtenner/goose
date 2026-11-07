@@ -64,6 +64,8 @@ if (process.argv[4] === 'varint-prefix') {
 }
 for (let i = 1; i < memories - persistent; i++)
     assert.equal(exports[`test_stack_top_${i}`].value, 1, `data stack ${i} was not restored`);
+if (process.argv[4] === 'frame-growth')
+    assert(exports.memory.buffer.byteLength >= 131072, 'fixed frame storage did not grow');
 if (process.argv[4] === 'growth')
     assert(memoriesAfter.slice(1).filter(memory => memory.buffer.byteLength >= 131072).length >= 2);
 if (process.argv[4] === 'reuse')

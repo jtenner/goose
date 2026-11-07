@@ -12,6 +12,9 @@ struct WasmStoragePlan {
     unordered_map<VarDef *, uint32_t> owners;
     unordered_map<Call *, int> calltops;
     vector<VarDef *> globals;
+    struct FixedOwner { uint32_t bytes = 0; bool argument = false, initialized = false; };
+    unordered_map<VarDef *, FixedOwner> fixedvalues;
+    unordered_set<TypeExpr *> notedtypes;
     // -1 is dynamic, a missing entry is not yet reached. A concrete base is
     // valid only when every incoming call agrees on it.
     unordered_map<FnSpec *, int> bases;
@@ -22,12 +25,18 @@ struct WasmStoragePlan {
     explicit WasmStoragePlan(Ast &a, ValueLayout &l) : ast(a), layout(l) {}
 
     void NoteType(TypeExpr *type) {
-        if (dataaddresses) return;
-        while (type) {
-            if (type->kind == TY_REF) { type = type->ref->sub; continue; }
-            if (type->kind != TY_ARRAY) return;
-            if (Owns(type)) { dataaddresses = true; return; }
-            type = type->arr->sub;
+        if (!type || dataaddresses || notedtypes.count(type)) return;
+        vector<TypeExpr *> work {type};
+        while (!work.empty()) {
+            auto t = work.back(); work.pop_back();
+            if (!notedtypes.insert(t).second) continue;
+            if (t->kind == TY_REF) work.push_back(t->ref->sub);
+            else if (t->kind == TY_ARRAY) {
+                if (Owns(t)) { dataaddresses = true; return; }
+                work.push_back(t->arr->sub);
+            } else if (t->kind == TY_STRUCT) {
+                for (auto ft : layout.SI(t)->ftypes) if (ft) work.push_back(ft);
+            }
         }
     }
 
@@ -59,8 +68,11 @@ struct WasmStoragePlan {
         }
         if (auto d = Is<Defer>(n)) { Walk(d->body, function, next); return; }
         if (auto v = Is<VarDecl>(n)) {
-            for (auto d : v->defs) {
+            for (size_t i = 0; i < v->defs.size(); i++) {
+                auto d = v->defs[i];
                 NoteType(d->type);
+                if (d->type->kind == TY_STRUCT)
+                    fixedvalues[d] = {0, v->inline_arg, i < v->inits.size()};
                 if (!Owns(d->type)) continue;
                 if (d->isglobal) {
                     if (owners.emplace(d, 0).second) globals.push_back(d);
@@ -93,7 +105,7 @@ struct WasmStoragePlan {
         n->Children([&](Node *child) { Walk(child, function, next); });
     }
 
-    template<class Fail> void Build(Fail fail) {
+    template<class Fail, class FixedSize> void Build(Fail fail, FixedSize fixedsize) {
         vector<FnSpec *> functions;
         for (auto sp : ast.fnspecs) if (sp->live) {
             functions.push_back(sp);
@@ -105,6 +117,12 @@ struct WasmStoragePlan {
         for (auto declaration : ast.globals) {
             int next = 0;
             Walk(declaration, nullptr, next);
+        }
+        for (auto &[owner, plan] : fixedvalues) {
+            if (plan.argument) fail(owner->line, "by-value aggregates need the pending destination lowering");
+            if (!plan.initialized) fail(owner->line, "uninitialized aggregate declarations need the pending destination lowering");
+            if (owner->reusable) fail(owner->line, "pool owners need the pending descriptor lowering");
+            plan.bytes = fixedsize(owner->type, owner->line);
         }
         counts.Bound(functions, [&](FnSpec *caller, const auto &edge) {
             fail(edge.line, cat("live data stack across recursive call from ", caller->sf->name,

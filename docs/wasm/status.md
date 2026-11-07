@@ -117,6 +117,18 @@ pairs. Independent Astra review found no confirmed defect. See
 correction, exact provenance, costs, gaps and missing measurements. Signed
 varint elements and general mixed-layout/slice operations remain pending.
 
+Fresh fixed packed struct owners now use shared bounded layouts and Memory 0
+places, with nested admitted fields, exact fresh copies, checked defaults,
+scalar field updates, ordinary references and inline scalar/reference array
+fields. The repaired final suite passed 590 Wasm checks, the full native baseline,
+52 saved exact comparisons, 100 unchanged prior-module pairs and 14 unchanged
+earlier struct-module pairs. The new field
+literal scratch stays at 22 locals for both 32 and 256 elements. Independent
+Astra review found two defects; both were reproduced and repaired with expanded
+coverage. See [fixed-struct evidence](evidence/fixed-structs.md) for
+exact build identities, preserved failures, evidence-record corrections,
+remaining scope and unmeasured costs. This does not complete Stage D.
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping
@@ -185,9 +197,10 @@ BigInt operation for other values.
   protected destinations, temporary owners, and all compound lifetime events.
   General thin-reference propagation remains pending.
 - D: scalar/reference arrays now cover fixed, limited, variable and growable
-  layouts, including same-layout copies and unsigned LEB count prefixes. Complete
-  signed varint elements, layout adaptations, general constructors, packed and
-  variable aggregates, ADTs, root/pool descriptors, relative references, slices,
+  layouts, including same-layout copies and unsigned LEB count prefixes, plus
+  fresh ordinary fixed structs in the admitted field subset. Complete signed
+  varint elements, layout adaptations, general aggregate constructors, remaining
+  fixed and variable aggregates, ADTs, root/pool descriptors, relative references, slices,
   byte views, and serialization.
 - E: implement direct nonfixed construction, named-result landing/relocation,
   destination protection, cleanup for all remaining value lifetimes, and `try_table` /

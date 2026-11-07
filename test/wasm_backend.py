@@ -92,6 +92,10 @@ def main():
     if args.wasmtime_python:
         run([args.wasmtime_python, ROOT / 'test' / 'wasm_copy_matrix.py', copy_matrix])
         count += 1
+    fixed_layout = out / 'fixed-layout'
+    run([args.cxx, '-std=c++20', '-O2', ROOT / 'test' / 'wasm_fixed_layout.cpp', '-o', fixed_layout])
+    run([fixed_layout])
+    count += 1
     sources = sorted((ROOT / 'test' / 'wasm').glob('*.goose'))
     sources.extend(ROOT / 'test' / 'typing' / f'{name}.goose' for name in (
         'global_optional_flow', 'optional_loop_callee_assignments',
@@ -137,10 +141,16 @@ def main():
                                'wasm_runtime_limited_no_owner', 'wasm_array_copy',
                                'wasm_array_copy_inline', 'wasm_array_copy_cleanup',
                                'wasm_array_copy_sources', 'wasm_varint_prefix',
-                               'wasm_varint_paths', 'wasm_varint_bytes', 'wasm_varint_cleanup'):
+                               'wasm_varint_paths', 'wasm_varint_bytes', 'wasm_varint_cleanup',
+                               'wasm_struct_values', 'wasm_struct_arrays', 'wasm_struct_calls',
+                               'wasm_struct_effects', 'wasm_struct_refs', 'wasm_struct_cleanup',
+                               'wasm_struct_hidden', 'wasm_struct_review_fields_thin',
+                               'wasm_struct_review_fields_packed', 'wasm_struct_review_calls_thin',
+                               'wasm_struct_review_calls_packed', 'wasm_struct_review_reference_fields',
+                               'wasm_struct_review_inline_only', 'wasm_struct_review_callback_only'):
                 if source.stem == 'wasm_inline_arrays':
                     assert wasm.stat().st_size < 32768, 'unused global capacity was serialized'
-                persistent = ('2' if source.stem == 'wasm_array_copy_sources' else
+                persistent = ('2' if source.stem in ('wasm_array_copy_sources', 'wasm_struct_review_reference_fields') else
                               '1' if source.stem in ('wasm_multimemory', 'wasm_variable_arrays', 'wasm_array_fills', 'wasm_byte_strings', 'wasm_runtime_limited', 'wasm_runtime_limited_bytes', 'wasm_array_copy', 'wasm_varint_prefix') else '0')
                 mode = {'wasm_multimemory': 'growth', 'wasm_scoped_data_reuse': 'reuse',
                         'wasm_array_widths': 'typed-reuse', 'wasm_no_data_owner': 'no-data',
@@ -158,7 +168,14 @@ def main():
                         'wasm_array_copy': 'growth',
                         'wasm_array_copy_inline': 'no-data',
                         'wasm_varint_prefix': 'varint-prefix',
-                        'wasm_varint_bytes': 'growth'}.get(source.stem, '')
+                        'wasm_varint_bytes': 'growth',
+                        'wasm_struct_values': 'no-data', 'wasm_struct_arrays': 'no-data',
+                        'wasm_struct_calls': 'no-data', 'wasm_struct_effects': 'no-data',
+                        'wasm_struct_hidden': 'no-data', 'wasm_struct_cleanup': 'frame-growth',
+                        'wasm_struct_review_fields_thin': 'no-data',
+                        'wasm_struct_review_calls_thin': 'no-data',
+                        'wasm_struct_review_inline_only': 'no-data',
+                        'wasm_struct_review_callback_only': 'no-data'}.get(source.stem, '')
                 resource = run([args.node, ROOT / 'test' / 'wasm_multimemory.mjs', wasm, persistent, mode])
                 assert resource.stdout == reference.stdout, 'completed owner-state check changed output'
                 count += 1
@@ -172,6 +189,11 @@ def main():
                     count += 1
                 count += 1
             count += 1
+    from wasm_struct_checks import check_modules as check_struct_modules, check_constructor_locals
+    count += check_struct_modules(run, args.node, args.validator, args.wasmtime_python, out)
+    from wasm_struct_admission import check_admission as check_struct_admission
+    count += check_struct_admission(run, exe, args.node, args.validator, args.wasmtime_python, out)
+    count += check_constructor_locals(run, exe, args.node, args.validator, args.wasmtime_python, out, function_local_counts)
     growth_source = out / 'frame-growth.goose'
     lines = ['recursive fn grow(n: i64) -> i64 {']
     for i in range(96):

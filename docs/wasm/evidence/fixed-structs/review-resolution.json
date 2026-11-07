@@ -1,0 +1,39 @@
+{
+  "review_scope": "30 frozen pre-fix files; see scope.json and astra-review.md",
+  "findings": [
+    {
+      "severity": "P1",
+      "trigger": "explicit &scalar-field in a value destination",
+      "before": [
+        "wrong i64 and bool results in both engines",
+        "invalid f32 Wasm module"
+      ],
+      "after": "Read scalar fields using the stored type; preserve reference and aggregate address handling."
+    },
+    {
+      "severity": "P2",
+      "trigger": "discarded ordinary struct-reference result",
+      "before": "target rejects direct, retained inline and callback cases",
+      "after": "Emit the actual single reference result for a discarded call or InlineBlock; retain by-value guards."
+    }
+  ],
+  "proof_directory": "/tmp/goose-wasm-fixed-struct-20261107/review-repro01",
+  "inline_callback_before": "/tmp/goose-wasm-fixed-struct-20261107/review-coverage01",
+  "fixed_directory": "/tmp/goose-wasm-fixed-struct-20261107/review-fixed01",
+  "fixed_compiler_sha256": "7fdb4c2236fcfddb599c0426e23ba5547779ec0ef0f27790545a886b4edd1d54",
+  "coverage": [
+    "all integer widths, false bool, f32/f64",
+    "direct owner and nested fields through a struct reference",
+    "thin and packed references",
+    "stored reference-field decay and explicit reference identity/mutation",
+    "direct and retained inline calls, defer effects, named callbacks and block callbacks",
+    "used reference results and exact fresh copies",
+    "nested/global fixed and limited reference-array fields with two distinct data-memory targets, copies, rebinding, used/discarded push/pop and neighboring fields"
+  ],
+  "unverified_cost_followups": [
+    "deep field-path compiler scaling",
+    "high-memory-count dynamic-copy helper size",
+    "compiler CPU/RSS/allocation and guest throughput measurements"
+  ],
+  "second_independent_review": "not requested; fixes verified against source and discriminating executions"
+}

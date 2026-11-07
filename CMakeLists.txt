@@ -59,9 +59,11 @@ add_executable(goose
     src/bce.h
     src/wasm_binary.h
     src/wasm_memory.h
+    src/wasm_support.h
     src/wasm_storage.h
     src/wasm_codegen.h
     src/wasm_arrays.h
+    src/wasm_fixed.h
     src/data_stacks.h
     src/value_layout.h
     src/codegen.h

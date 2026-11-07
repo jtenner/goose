@@ -7,6 +7,7 @@ namespace goose {
 struct WasmCodeGen : ValueLayout {
     Ast &ast;
     WasmModule module;
+    WasmValueSupport support;
     WasmStoragePlan storage;
     optional<WasmMemoryRuntime> memories;
     WasmBytes code;
@@ -19,7 +20,15 @@ struct WasmCodeGen : ValueLayout {
     uint32_t nextprint = 0;
     uint32_t failfn, exitfn, fmodfn, f2islowfn;
     uint32_t f2ifn = UINT32_MAX;
+    uint32_t fixedoffsetscratch = UINT32_MAX;
     struct Slot { TypeExpr *type; uint32_t local = 0, offset = 0; bool memory = false, global = false; };
+    struct FixedPlace {
+        TypeExpr *type;
+        uint32_t address, offset = 0;
+        int memory = 0;
+        bool packed = false, bounded = false;
+    };
+    struct PushScratch { uint32_t item, length, old, address, base, offset; };
     unordered_map<VarDef *, Slot> globals, slots;
     unordered_map<FnSpec *, uint32_t> functions;
     set<VarDef *> addressed;
@@ -42,7 +51,24 @@ struct WasmCodeGen : ValueLayout {
     vector<int> labels;
     int nextlabel = 0;
 
-    explicit WasmCodeGen(Ast &a) : ast(a), storage(a, *this) {}
+    explicit WasmCodeGen(Ast &a) : ast(a), support(*this), storage(a, *this) {}
+    static bool Aggregate(TypeExpr *t) {
+        return t && (t->kind == TY_ARRAY || t->kind == TY_STRUCT || t->kind == TY_ENUM ||
+                     t->kind == TY_VARIANT || t->kind == TY_SLICE);
+    }
+    uint32_t RequireFixed(TypeExpr *t, Line line) {
+        if (auto reason = support.Check(t)) Fail(line, reason);
+        uint64_t bytes;
+        if (!TryFixedSize(t, UINT32_MAX, bytes, support.sizes))
+            Fail(line, "fixed aggregate layout exceeds memory32");
+        return (uint32_t)bytes;
+    }
+    void RequireCallValue(TypeExpr *t, bool result, Line line) {
+        if (t->kind == TY_ARRAY)
+            Fail(line, result ? "array results need the pending destination lowering"
+                              : "by-value arrays need the pending destination lowering");
+        if (Aggregate(t)) Fail(line, "by-value aggregates need the pending destination lowering");
+    }
     bool FatPointers() const { return storage.dataaddresses; }
     bool HeaderRef(TypeExpr *t) { return t->kind == TY_REF && IsResz(t->ref->sub); }
     bool VariableArray(TypeExpr *t) { return t->kind == TY_ARRAY && t->arr->akind == A_VAR; }
@@ -100,7 +126,8 @@ struct WasmCodeGen : ValueLayout {
             case TY_FLT: return t->fltstorage == FS_F32 ? WasmModule::F32 : WasmModule::F64;
             case TY_REF:
                 if (t->ref->lenstorage >= 0) Fail(t->line, "relative references are not implemented");
-                Type(t->ref->sub);
+                if (t->ref->sub->kind == TY_STRUCT) RequireFixed(t->ref->sub, t->line);
+                else Type(t->ref->sub);
                 // A resizable header is in Memory 0. Ordinary pointees may
                 // also lie in any assigned data memory.
                 return FatPointers() && !FrameRef(t) ? WasmModule::I64 : WasmModule::I32;
@@ -108,7 +135,7 @@ struct WasmCodeGen : ValueLayout {
                 if (!IsResz(t) && !InlineArray(t) && !DataArray(t))
                     Fail(t->line, "this array layout needs the pending compound lowering");
                 auto element = t->arr->sub;
-                if (element->kind == TY_ARRAY || HeaderRef(element))
+                if (!support.ScalarElement(element))
                     Fail(t->line, "compound array elements need the pending layout lowering");
                 Type(element);
                 if (InlineArray(t)) {
@@ -122,6 +149,7 @@ struct WasmCodeGen : ValueLayout {
         }
     }
     uint32_t Size(TypeExpr *t) {
+        if (t->kind == TY_STRUCT) return RequireFixed(t, t->line);
         Type(t);
         if (DataArray(t)) Fail(t->line, "variable array size needs the pending destination lowering");
         auto size = IsResz(t) ? 16 : FixedSize(t);
@@ -169,6 +197,8 @@ struct WasmCodeGen : ValueLayout {
         } else code.Byte(bits == 8 ? 0xc2 : bits == 16 ? 0xc3 : 0xc4);
     }
     void Convert(TypeExpr *from, TypeExpr *to) {
+        if ((from && from->kind == TY_STRUCT) || (to && to->kind == TY_STRUCT))
+            Fail(to ? to->line : from->line, "aggregate values need the pending destination lowering");
         if (!to || from == to) return;
         // A bare null has the checker's optional-void placeholder. It has no
         // pointee layout to lower; only its zero address needs conversion.
@@ -209,8 +239,8 @@ struct WasmCodeGen : ValueLayout {
             default: Fail(t->line, "this load layout is not implemented");
         }
     }
-    void LoadFixed(TypeExpr *t, uint32_t memory = 0) {
-        code.Mem(LoadOpcode(t), memory);
+    void LoadFixed(TypeExpr *t, uint32_t memory = 0, uint32_t offset = 0) {
+        code.Mem(LoadOpcode(t), memory, offset);
         if (t->kind == TY_REF && Type(t) == WasmModule::I32) code.Byte(0xa7);
     }
     void Load(TypeExpr *t) {
@@ -231,18 +261,19 @@ struct WasmCodeGen : ValueLayout {
             default: Fail(t->line, "this store layout is not implemented");
         }
     }
-    void StoreFixed(TypeExpr *t, uint32_t memory = 0) {
+    void StoreFixed(TypeExpr *t, uint32_t memory = 0, uint32_t offset = 0) {
         if (HeaderRef(t)) {
+            if (offset > UINT32_MAX - 8) Fail(t->line, "reference layout exceeds memory32");
             auto value = Local(WasmModule::I32), at = Local(WasmModule::I32);
             code.Set(value); code.Set(at);
-            code.Get(at); code.Get(value); code.Byte(0xad); code.Mem(0x37, memory);
+            code.Get(at); code.Get(value); code.Byte(0xad); code.Mem(0x37, memory, offset);
             code.Get(at); code.Get(value); Open(0x04, WasmModule::I64);
             code.Get(value); code.Mem(0x29); code.I64(32); code.Byte(0x88);
-            code.Byte(0x05); code.I64(0); Close(); code.Mem(0x37, memory, 8);
+            code.Byte(0x05); code.I64(0); Close(); code.Mem(0x37, memory, offset + 8);
             return;
         }
         if (t->kind == TY_REF && Type(t) == WasmModule::I32) code.Byte(0xad);
-        code.Mem(StoreOpcode(t), memory);
+        code.Mem(StoreOpcode(t), memory, offset);
     }
     void Store(TypeExpr *t) {
         if (!FatPointers()) { StoreFixed(t); return; }
@@ -283,6 +314,13 @@ struct WasmCodeGen : ValueLayout {
     }
     void Bind(VarDef *v, optional<uint32_t> param = {}) {
         if (v->isglobal || slots.count(v)) return;
+        if (auto it = storage.fixedvalues.find(v); it != storage.fixedvalues.end()) {
+            auto bytes = it->second.bytes;
+            if (framesize > UINT32_MAX - bytes) Fail(v->line, "frame exceeds memory32");
+            slots[v] = {v->type, 0, framesize, true, false};
+            framesize += bytes;
+            return;
+        }
         auto t = Type(v->type);
         Slot s {v->type};
         if (!DataArray(v->type) && (addressed.count(v) || v->type->kind == TY_ARRAY)) {
@@ -309,8 +347,10 @@ struct WasmCodeGen : ValueLayout {
         if (!n || Is<FnDecl>(n)) return;
         if (auto v = Is<VarDecl>(n)) for (auto d : v->defs) Bind(d);
         if (auto f = Is<ForLoop>(n)) { Bind(f->vdef); if (f->idxdef) Bind(f->idxdef); }
-        if (auto c = Is<Call>(n); c && c->fvbody)
-            for (auto v : c->fvparams) Bind(v);
+        if (auto c = Is<Call>(n); c && c->fvbody) {
+            for (auto v : c->fvparams) { RequireCallValue(v->type, false, c->line); Bind(v); }
+            for (auto t : c->rettypes) RequireCallValue(t, true, c->line);
+        }
         n->Children([&](Node *ch) { BindTree(ch); });
     }
     void Cleanup(size_t bottom) {
@@ -410,8 +450,7 @@ struct WasmCodeGen : ValueLayout {
     uint8_t ReferenceType(Node *n) {
         if (Is<NullLit>(n) && n->exprtype->kind == TY_REF && n->exprtype->ref->sub->kind == TY_VOID)
             return FatPointers() ? WasmModule::I64 : WasmModule::I32;
-        if (auto id = Is<Ident>(n); id && id->vdef && id->vdef->type->kind == TY_REF)
-            return Type(id->vdef->type);
+        if (auto actual = ActualType(n); actual && actual->kind == TY_REF) return Type(actual);
         return Type(n->exprtype);
     }
     void ReferenceValue(Node *n, uint8_t wanted = 0) {
@@ -423,6 +462,12 @@ struct WasmCodeGen : ValueLayout {
         // Identity and null tests still read the stored reference itself.
         if (auto id = Is<Ident>(n); id && id->vdef && id->vdef->type->kind == TY_REF) {
             Read(Find(id->vdef));
+        } else if (auto field = Is<Dot>(n); field && field->IsField() && ActualType(n)->kind == TY_REF) {
+            ReadPlace(FieldPlace(field));
+        } else if (auto index = Is<Index>(n); index && ActualType(n)->kind == TY_REF) {
+            auto element = ElementAddress(index); LoadElement(element.first, element.second);
+        } else if ((Is<Call>(n) || Is<InlineBlock>(n)) && ActualType(n)->kind == TY_REF) {
+            Gen(n, ActualType(n));
         } else {
             if (!n->exprtype || n->exprtype->kind != TY_REF)
                 Fail(n->line, "reference identity requires an address value");
@@ -452,6 +497,9 @@ struct WasmCodeGen : ValueLayout {
             Close(); return;
         }
         auto t = Operand(n->left->exprtype);
+        if (t->kind == TY_STRUCT && !(n->left->exprtype->kind == TY_REF &&
+                                      n->left->exprtype->ref->optional))
+            Fail(n->line, "aggregate value operators need the pending destination lowering");
         if (t->kind == TY_ARRAY && !(n->left->exprtype->kind == TY_REF &&
                                     n->left->exprtype->ref->optional)) {
             if (op == T_EQ || op == T_NEQ) { ArrayEquality(n); return; }
@@ -538,6 +586,10 @@ struct WasmCodeGen : ValueLayout {
                 continue;
             }
             auto t = arg->exprtype;
+            auto printed = t;
+            while (printed->kind == TY_REF) printed = printed->ref->sub;
+            if (printed->kind == TY_STRUCT)
+                Fail(arg->line, "aggregate printing needs the pending rendering lowering");
             Gen(arg); auto value = Temp(t); code.Set(value);
             int null = -1;
             while (t->kind == TY_REF) {
@@ -576,7 +628,7 @@ struct WasmCodeGen : ValueLayout {
             }), actions.end());
         }
     }
-    void CallValue(Call *c) {
+    void CallValue(Call *c, TypeExpr *resulttype = nullptr) {
         if (c->defaultinit) { Gen(c->defaultinit); return; }
         if (c->builtin >= 0) {
             auto an = c->ValueArgNodes();
@@ -587,17 +639,30 @@ struct WasmCodeGen : ValueLayout {
                 case B_EXIT:
                     Gen(an[0]); code.Byte(0xa7); code.Call(exitfn); code.Byte(0x00); return;
                 case B_LEN: case B_CAP: case B_PUSH: case B_POP: case B_CLEAR:
-                    ArrayBuiltin(c, an); return;
+                    ArrayBuiltin(c, an, resulttype); return;
+                case B_DEFAULT: {
+                    auto t = resulttype ? resulttype : c->exprtype;
+                    if (Aggregate(t)) Fail(c->line, "aggregate defaults need a fresh destination");
+                    auto type = Type(t);
+                    if (type == WasmModule::F32) code.F32(0);
+                    else if (type == WasmModule::F64) code.F64(0);
+                    else if (type == WasmModule::I64) code.I64(0);
+                    else code.I32(0);
+                    return;
+                }
                 default: Fail(c->line, cat("builtin ", builtindefs[c->builtin].name, " is not implemented"));
             }
         }
         if (c->fvbody) {
+            for (auto p : c->fvparams) RequireCallValue(p->type, false, c->line);
+            for (auto t : c->rettypes) RequireCallValue(t, true, c->line);
             auto args = c->ValueArgNodes();
             if (args.size() != c->fvparams.size()) Fail(c->line, "function-value parameter mismatch");
             for (size_t i = 0; i < args.size(); i++) {
                 Gen(args[i]); Convert(args[i]->exprtype, c->fvparams[i]->type); Write(Find(c->fvparams[i]));
             }
-            BlockValue(c->fvbody, !Void(c->exprtype), c->exprtype); return;
+            auto wanted = resulttype ? resulttype : c->exprtype;
+            BlockValue(c->fvbody, !Void(wanted), wanted); return;
         }
         if (!c->dispatch.empty()) Fail(c->line, "ADT dispatch is not implemented");
         auto it = functions.find(c->spec);
@@ -609,9 +674,11 @@ struct WasmCodeGen : ValueLayout {
         }
         if (NeedsBase(c->spec)) StackIndex((uint32_t)storage.calltops.at(c));
         code.Call(it->second);
-        if (!c->spec->rets.empty()) Convert(c->spec->rets[0], c->exprtype);
+        if (!c->spec->rets.empty()) Convert(c->spec->rets[0], resulttype ? resulttype : c->exprtype);
     }
-    void Gen(Node *n) {
+    void Gen(Node *n, TypeExpr *resulttype = nullptr) {
+        if (!resulttype && n->exprtype && n->exprtype->kind == TY_STRUCT)
+            Fail(n->line, "aggregate values need the pending destination lowering");
         auto unary = Is<Unary>(n);
         auto arrayaddress = Is<Ident>(n) || (unary && unary->op == T_BITAND);
         if (n->exprtype && n->exprtype->kind == TY_ARRAY && !arrayaddress) {
@@ -620,6 +687,11 @@ struct WasmCodeGen : ValueLayout {
                        TEq(type->ref->sub, n->exprtype);
             };
             if (auto index = Is<Index>(n)) arrayaddress = borrowed(ArrayElement(index->obj));
+            else if (auto field = Is<Dot>(n); field && field->IsField()) {
+                auto actual = ActualType(field);
+                while (actual->kind == TY_REF) actual = actual->ref->sub;
+                arrayaddress = TEq(actual, n->exprtype);
+            }
             else if (auto call = Is<Call>(n)) {
                 auto &rets = call->spec ? call->spec->rets : call->rettypes;
                 arrayaddress = rets.size() == 1 && borrowed(rets[0]);
@@ -641,7 +713,11 @@ struct WasmCodeGen : ValueLayout {
         }
         if (auto v = Is<Ident>(n)) {
             if (!v->vdef) Fail(n->line, "function value is not a runtime scalar");
-            auto &s = Find(v->vdef); Read(s); auto actual = s.type;
+            auto &s = Find(v->vdef);
+            if (s.type->kind == TY_STRUCT && n->exprtype->kind == TY_REF && TEq(s.type, n->exprtype->ref->sub)) {
+                ReferenceAddress(s); return;
+            }
+            Read(s); auto actual = s.type;
             while (actual->kind == TY_REF && n->exprtype->kind != TY_REF) {
                 CheckNull(n->line, Type(actual)); actual = actual->ref->sub; Load(actual);
             }
@@ -649,6 +725,15 @@ struct WasmCodeGen : ValueLayout {
         }
         if (auto v = Is<Unary>(n)) {
             if (v->op == T_BITAND) {
+                if (auto field = Is<Dot>(v->child); field && field->IsField()) {
+                    auto place = FieldPlace(field);
+                    if (place.type->kind == TY_REF) { ReadPlace(place); Convert(place.type, n->exprtype); }
+                    else if (n->exprtype->kind != TY_REF && !Aggregate(place.type)) {
+                        ReadPlace(place); Convert(place.type, n->exprtype);
+                    }
+                    else PlaceAddress(place, Type(n->exprtype), n->line);
+                    return;
+                }
                 if (auto index = Is<Index>(v->child)) {
                     auto element = ElementAddress(index);
                     if (element.first->kind == TY_REF) {
@@ -660,6 +745,12 @@ struct WasmCodeGen : ValueLayout {
                     return;
                 }
                 auto id = Is<Ident>(v->child);
+                if (!id && (Is<Call>(v->child) || Is<InlineBlock>(v->child)) &&
+                    ActualType(v->child)->kind == TY_REF) {
+                    ReferenceValue(v->child, Type(n->exprtype)); return;
+                }
+                if (!id && Aggregate(Operand(v->child->exprtype)))
+                    Fail(n->line, "aggregate temporaries need the pending destination lowering");
                 if (!id || !id->vdef) Fail(n->line, "only scalar local/global addresses are implemented");
                 auto &s = Find(id->vdef);
                 if (s.type->kind == TY_REF) Read(s);
@@ -691,6 +782,14 @@ struct WasmCodeGen : ValueLayout {
             } else if (Type(n->exprtype) == WasmModule::I32) code.Byte(0xa7);
             return;
         }
+        if (auto v = Is<Dot>(n); v && v->IsField()) {
+            if (n->exprtype->kind == TY_ARRAY) { code.Get(ArrayHeader(n)); return; }
+            auto place = FieldPlace(v);
+            if (n->exprtype->kind == TY_REF && TEq(n->exprtype->ref->sub, place.type))
+                PlaceAddress(place, Type(n->exprtype), n->line);
+            else { ReadPlace(place); Convert(place.type, n->exprtype); }
+            return;
+        }
         if (auto v = Is<Dot>(n); v && (v->member == B_LEN || v->member == B_CAP)) {
             auto header = ArrayHeader(v->obj); auto array = ArrayType(v->obj);
             if (v->member == B_LEN) ArrayLength(header, array, ArrayMemory(v->obj));
@@ -701,7 +800,7 @@ struct WasmCodeGen : ValueLayout {
         if (auto v = Is<AsCast>(n)) {
             Gen(v->child); Convert(Operand(v->child->exprtype), v->totype); Convert(v->totype, n->exprtype); return;
         }
-        if (auto v = Is<Call>(n)) { CallValue(v); return; }
+        if (auto v = Is<Call>(n)) { CallValue(v, resulttype); return; }
         if (auto v = Is<Block>(n)) { BlockValue(v, !Void(n->exprtype), n->exprtype); return; }
         if (auto v = Is<IfExpr>(n)) {
             Condition(v->cond); Open(0x04, Void(n->exprtype) ? 0x40 : Type(n->exprtype));
@@ -710,6 +809,8 @@ struct WasmCodeGen : ValueLayout {
             Close(); return;
         }
         if (auto v = Is<InlineBlock>(n)) {
+            for (auto p : v->spec->params) RequireCallValue(p->type, false, n->line);
+            for (auto r : v->spec->rets) RequireCallValue(r, true, n->line);
             auto ret = v->spec->rets.empty() ? nullptr : v->spec->rets[0];
             auto result = ret ? (int)Temp(ret) : -1;
             auto label = Open();
@@ -717,7 +818,7 @@ struct WasmCodeGen : ValueLayout {
             BlockValue(v->body, ret != nullptr, ret);
             if (ret && v->body->tail && !Void(v->body->tail->exprtype)) code.Set(result);
             targets.pop_back(); Close();
-            if (ret) { code.Get(result); Convert(ret, n->exprtype); }
+            if (ret) { code.Get(result); Convert(ret, resulttype ? resulttype : n->exprtype); }
             return;
         }
         if (auto v = Is<LoopExpr>(n)) { Loop(v->body, nullptr, n->exprtype); return; }
@@ -782,6 +883,9 @@ struct WasmCodeGen : ValueLayout {
         }
     }
     void Assign(Node *lv, Node *rhs, TType op, bool pointee, Line line) {
+        if (auto field = Is<Dot>(lv); field && field->IsField()) {
+            AssignField(field, rhs, op, pointee, line); return;
+        }
         if (auto index = Is<Index>(lv)) { AssignElement(index, rhs, op, pointee, line); return; }
         auto id = Is<Ident>(lv);
         if (!id || !id->vdef) Fail(line, "only scalar variable assignment is implemented");
@@ -796,11 +900,13 @@ struct WasmCodeGen : ValueLayout {
             return;
         }
         if (t->kind == TY_ARRAY) Fail(line, "whole-array assignment needs the pending destination lowering");
+        if (t->kind == TY_STRUCT) Fail(line, "whole-aggregate assignment needs the pending destination lowering");
         int address = -1;
         if (pointee) {
             Read(s); CheckNull(line, Type(t)); address = (int)Local(Type(t)); code.Set(address);
             t = t->ref->sub;
             if (t->kind == TY_ARRAY) Fail(line, "whole-array assignment needs the pending destination lowering");
+            if (t->kind == TY_STRUCT) Fail(line, "whole-aggregate assignment needs the pending destination lowering");
         }
         if (op != T_ASSIGN) {
             if (address >= 0) { code.Get(address); Load(t); } else Read(s);
@@ -830,6 +936,10 @@ struct WasmCodeGen : ValueLayout {
                         Fail(n->line, "by-value arrays need the pending destination lowering");
                     InitArray(v->defs[i], s, v->inits[i]); continue;
                 }
+                if (s.type->kind == TY_STRUCT) {
+                    if (v->inline_arg) Fail(n->line, "by-value aggregates need the pending destination lowering");
+                    ConstructFixed(OwnerPlace(v->defs[i]), v->inits[i]); continue;
+                }
                 Gen(v->inits[i]); Convert(v->inits[i]->exprtype, s.type); Write(s);
             }
             return;
@@ -851,11 +961,19 @@ struct WasmCodeGen : ValueLayout {
         if (auto v = Is<While>(n)) { Loop(v->body, v->cond, nullptr); return; }
         if (auto v = Is<ForLoop>(n)) { For(v); return; }
         if (Is<FnDecl>(n)) return;
+        // Discard the declared reference result without reading its struct.
+        if (n->exprtype && n->exprtype->kind == TY_STRUCT && (Is<Call>(n) || Is<InlineBlock>(n))) {
+            auto actual = ActualType(n);
+            if (actual && actual->kind == TY_REF) {
+                Gen(n, actual); code.Byte(0x1a); return;
+            }
+        }
         Gen(n); if (!Void(n->exprtype)) code.Byte(0x1a);
     }
     void StartFunction(uint32_t index, FnSpec *sp) {
         fn = index; current = sp; code.bytes.clear(); slots.clear(); addressed.clear();
         targets.clear(); scopes.clear(); labels.clear(); framesize = 0;
+        fixedoffsetscratch = UINT32_MAX;
     }
     void EndFunction() {
         assert(labels.empty() && scopes.empty() && targets.empty());
@@ -913,7 +1031,8 @@ struct WasmCodeGen : ValueLayout {
         EndFunction();
     }
     string Run() {
-        storage.Build([&](Line l, const string &message) { Fail(l, message); });
+        storage.Build([&](Line l, const string &message) { Fail(l, message); },
+                      [&](TypeExpr *t, Line line) { return RequireFixed(t, line); });
         module.memories = storage.Memories();
         // Imports are versioned as a group. The adapter rejects reentry and runs
         // one program per instance. There is no implicit native extern bridge.
@@ -942,11 +1061,11 @@ struct WasmCodeGen : ValueLayout {
             if (sp->rets.size() > 1) Fail(sp->sf->line, "multiple results are not implemented");
             vector<uint8_t> args, rets;
             for (auto p : sp->params) {
-                if (p->type->kind == TY_ARRAY) Fail(p->line, "by-value arrays need the pending destination lowering");
+                RequireCallValue(p->type, false, p->line);
                 args.push_back(Type(p->type));
             }
             for (auto r : sp->rets) {
-                if (r->kind == TY_ARRAY) Fail(r->line, "array results need the pending destination lowering");
+                RequireCallValue(r, true, r->line);
                 rets.push_back(Type(r));
             }
             if (NeedsBase(sp)) args.push_back(WasmModule::I32);
@@ -955,9 +1074,10 @@ struct WasmCodeGen : ValueLayout {
         initfn = module.AddFn("goose.init", {}, {});
         startfn = module.AddFn("goose.start", {}, {});
         for (auto g : ast.globals) for (auto v : g->defs) {
-            Type(v->type);
+            if (v->type->kind != TY_STRUCT) Type(v->type);
             auto bytes = DataArray(v->type) ? 8u : std::max(1u, Size(v->type));
-            auto offset = InlineArray(v->type) ? module.ZeroData(bytes) : module.Data(string(bytes, '\0'));
+            auto offset = InlineArray(v->type) || v->type->kind == TY_STRUCT
+                            ? module.ZeroData(bytes) : module.Data(string(bytes, '\0'));
             globals[v] = {v->type, 0, offset, true, true};
         }
         EmitReserve();
@@ -988,6 +1108,19 @@ struct WasmCodeGen : ValueLayout {
         return module.Finish();
     }
 
+    TypeExpr *ActualType(Node *n);
+    FixedPlace OwnerPlace(VarDef *owner);
+    FixedPlace ResolvePlace(Node *n);
+    FixedPlace FieldPlace(Dot *field);
+    FixedPlace PointeePlace(TypeExpr *reference, Line line);
+    FixedPlace DereferencePlace(FixedPlace place, Line line);
+    void PlaceAddress(const FixedPlace &place, uint8_t representation, Line line);
+    void ReadPlace(const FixedPlace &place);
+    void StorePlace(const FixedPlace &place);
+    void StoreAddress(const FixedPlace &place);
+    void ConstructFixed(FixedPlace destination, Node *source);
+    void AssignField(Dot *field, Node *rhs, TType op, bool pointee, Line line);
+    bool FieldPath(Node *n);
     uint32_t ArrayHeader(Node *n);
     int ArrayMemory(Node *n);
     TypeExpr *ArrayType(Node *n);
@@ -1002,15 +1135,18 @@ struct WasmCodeGen : ValueLayout {
     void InitArrayCopy(VarDef *owner, const Slot &slot, Node *source);
     void CopyBytes(uint32_t destination, int destinationMemory, uint32_t source, int sourceMemory,
                    uint32_t bytes);
-    void InitFilledArray(VarDef *owner, const Slot &slot, ArrayLit *literal);
-    void InitByteString(VarDef *owner, const Slot &slot, StrLit *literal);
+    void InitFilledArray(VarDef *owner, const Slot *slot, ArrayLit *literal, const FixedPlace *destination = nullptr);
+    void InitByteString(VarDef *owner, const Slot *slot, StrLit *literal, const FixedPlace *destination = nullptr);
+    void InlineArrayLiteral(TypeExpr *array, uint32_t header, ArrayLit *literal, bool reuse = false);
     void InitDataArray(VarDef *owner, const Slot &slot, ArrayLit *literal);
     void InitLimitedCapacity(VarDef *owner, const Slot &slot, ArrayLit *literal);
-    void PushArray(uint32_t header, TypeExpr *array, Node *value, TypeExpr *result, Line line, int memory);
-    void ArrayBuiltin(Call *call, const vector<Node *> &arguments);
+    void PushArray(uint32_t header, TypeExpr *array, Node *value, TypeExpr *result, Line line, int memory,
+                   PushScratch *scratch = nullptr);
+    void ArrayBuiltin(Call *call, const vector<Node *> &arguments, TypeExpr *resulttype = nullptr);
     void ArrayEquality(Binary *node);
     pair<TypeExpr *, int> ElementAddress(Index *index);
-    void ElementOffset(uint32_t header, uint32_t index, TypeExpr *array, Line line, int prefix = -1);
+    void ElementOffset(uint32_t header, uint32_t index, TypeExpr *array, Line line, int prefix = -1,
+                       PushScratch *scratch = nullptr);
     void LoadElement(TypeExpr *element, int memory);
     void StoreElement(TypeExpr *element, int memory);
     void AssignElement(Index *index, Node *rhs, TType op, bool pointee, Line line);

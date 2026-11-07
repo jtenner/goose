@@ -43,6 +43,7 @@ struct WasmBytes {
     void Tee(uint32_t v) { Byte(0x22); U(v); }
     void Call(uint32_t f) { Byte(0x10); U(f); }
     void Copy(uint32_t destination, uint32_t source) { Byte(0xfc); U(10); U(destination); U(source); }
+    void Fill(uint32_t memory) { Byte(0xfc); U(11); U(memory); }
     // All packed accesses use an alignment hint of one byte. A nonzero memory
     // index is explicit in the multi-memory memarg, before its offset.
     void Mem(uint8_t op, uint32_t memory = 0, uint32_t offset = 0) {

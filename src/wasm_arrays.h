@@ -78,6 +78,12 @@ inline uint32_t WasmCodeGen::ArrayHeader(Node *n) {
     ArrayElement(n);
     auto t = n->exprtype;
     while (t->kind == TY_REF) t = t->ref->sub;
+    if (auto field = Is<Dot>(n); field && field->IsField()) {
+        auto place = ResolvePlace(n);
+        if (!TEq(place.type, t)) Fail(n->line, "array adaptation needs the pending destination lowering");
+        PlaceAddress(place, Type(t), n->line);
+        auto header = Local(Type(t)); code.Set(header); return header;
+    }
     Gen(n); Convert(n->exprtype, t);
     auto header = Local(Type(t)); code.Set(header);
     return header;
@@ -108,20 +114,7 @@ inline void WasmCodeGen::InitArrayCopy(VarDef *owner, const Slot &slot, Node *so
     auto array = owner->type;
     // Check the storage type, not exprtype: the checker can adapt exprtype
     // to the destination while the source still has its original layout.
-    auto storageSource = source;
-    while (auto address = Is<Unary>(storageSource)) {
-        if (address->op != T_BITAND) break;
-        storageSource = address->child;
-    }
-    TypeExpr *from = nullptr;
-    if (auto id = Is<Ident>(storageSource)) from = id->vdef ? id->vdef->type : nullptr;
-    else if (auto index = Is<Index>(storageSource)) from = ArrayElement(index->obj);
-    else if (auto call = Is<Call>(storageSource)) {
-        auto &rets = call->spec ? call->spec->rets : call->rettypes;
-        if (rets.size() == 1) from = rets[0];
-    } else if (auto inlined = Is<InlineBlock>(storageSource)) {
-        if (inlined->spec->rets.size() == 1) from = inlined->spec->rets[0];
-    }
+    auto from = ActualType(source);
     while (from && from->kind == TY_REF) from = from->ref->sub;
     if (!from || !TEq(array, from))
         Fail(source->line, "array adaptation needs the pending destination lowering");
@@ -214,18 +207,23 @@ inline void WasmCodeGen::InitLimitedCapacity(VarDef *owner, const Slot &slot, Ar
     code.Get(header); code.I64(0); StoreArrayLength(array, memory);
 }
 
-inline void WasmCodeGen::InitByteString(VarDef *owner, const Slot &slot, StrLit *literal) {
-    auto array = owner->type;
+inline void WasmCodeGen::InitByteString(VarDef *owner, const Slot *slot, StrLit *literal,
+                                       const FixedPlace *destination) {
+    auto array = destination ? destination->type : owner->type;
+    auto line = owner ? owner->line : literal->line;
     if (!ByteArray(array)) Fail(literal->line, "string literals require byte elements");
     auto count = literal->val.size();
     auto prefix = DataArray(array) ? DataPrefix(array, count) : 0u;
-    if (count > UINT32_MAX - prefix) Fail(owner->line, "array allocation exceeds memory32");
+    if (count > UINT32_MAX - prefix) Fail(line, "array allocation exceeds memory32");
     if (prefix && prefix < 8 && count > ((1ull << (prefix * 8)) - 1))
-        Fail(owner->line, "array length exceeds its stored prefix");
+        Fail(line, "array length exceeds its stored prefix");
     auto memory = InlineArray(array) ? 0 : storage.Memory(owner, current);
     auto base = Local(WasmModule::I64);
     if (InlineArray(array)) {
-        auto header = Local(WasmModule::I32); Address(slot); code.Set(header);
+        auto header = Local(WasmModule::I32);
+        if (destination) PlaceAddress(*destination, WasmModule::I32, literal->line);
+        else Address(*slot);
+        code.Set(header);
         if (array->arr->akind == A_LIMITED) {
             code.Get(header); code.I64((int64_t)count); StoreArrayLength(array);
         }
@@ -250,11 +248,11 @@ inline void WasmCodeGen::InitByteString(VarDef *owner, const Slot &slot, StrLit 
         code.Get(identity); code.Byte(0xad); code.I64(32); code.Byte(0x86);
         code.Get(saved); code.Byte(0xad); code.Byte(0x84); code.Set(base);
         if (DataArray(array)) {
-            code.Get(base); Write(slot);
+            code.Get(base); Write(*slot);
             InitArrayCount(base, array, count, memory);
         } else {
-            Address(slot); code.Get(base); code.Mem(0x37);
-            Address(slot); code.I64((int64_t)count); code.Mem(0x37, 0, 8);
+            Address(*slot); code.Get(base); code.Mem(0x37);
+            Address(*slot); code.I64((int64_t)count); code.Mem(0x37, 0, 8);
         }
         if (prefix) { code.Get(base); code.I64(prefix); code.Byte(0x7c); code.Set(base); }
     }
@@ -267,8 +265,11 @@ inline void WasmCodeGen::InitByteString(VarDef *owner, const Slot &slot, StrLit 
     else code.Call(memories->CopyFromFrame());
 }
 
-inline void WasmCodeGen::InitFilledArray(VarDef *owner, const Slot &slot, ArrayLit *literal) {
-    auto array = owner->type, element = array->arr->sub;
+inline void WasmCodeGen::InitFilledArray(VarDef *owner, const Slot *slot, ArrayLit *literal,
+                                        const FixedPlace *destination) {
+    auto array = destination ? destination->type : owner->type;
+    auto element = array->arr->sub;
+    auto line = owner ? owner->line : literal->line;
     auto countnode = Is<IntLit>(literal->fillcount);
     if (!countnode || countnode->val < 0)
         Fail(literal->line, "array fill needs a nonnegative constant count");
@@ -276,16 +277,19 @@ inline void WasmCodeGen::InitFilledArray(VarDef *owner, const Slot &slot, ArrayL
     auto stride = Size(element);
     auto prefix = DataArray(array) ? DataPrefix(array, count) : 0u;
     if (count > (UINT32_MAX - prefix) / stride)
-        Fail(owner->line, "array allocation exceeds memory32");
+        Fail(line, "array allocation exceeds memory32");
     if (prefix && prefix < 8 && count > ((1ull << (prefix * 8)) - 1))
-        Fail(owner->line, "array length exceeds its stored prefix");
+        Fail(line, "array length exceeds its stored prefix");
     auto memory = InlineArray(array) ? 0 : storage.Memory(owner, current);
     auto base = Local(WasmModule::I64);
     if (InlineArray(array)) {
         auto capacity = (uint64_t)ArrSize(array->arr);
         if (count > capacity || (array->arr->akind == A_FIXED && count != capacity))
-            Fail(owner->line, "array fill does not fit its static layout");
-        auto header = Local(WasmModule::I32); Address(slot); code.Set(header);
+            Fail(line, "array fill does not fit its static layout");
+        auto header = Local(WasmModule::I32);
+        if (destination) PlaceAddress(*destination, WasmModule::I32, literal->line);
+        else Address(*slot);
+        code.Set(header);
         if (array->arr->akind == A_LIMITED) {
             code.Get(header); code.I64((int64_t)count); StoreArrayLength(array);
         }
@@ -310,11 +314,11 @@ inline void WasmCodeGen::InitFilledArray(VarDef *owner, const Slot &slot, ArrayL
         code.Get(identity); code.Byte(0xad); code.I64(32); code.Byte(0x86);
         code.Get(saved); code.Byte(0xad); code.Byte(0x84); code.Set(base);
         if (DataArray(array)) {
-            code.Get(base); Write(slot);
+            code.Get(base); Write(*slot);
             InitArrayCount(base, array, count, memory);
         } else {
-            Address(slot); code.Get(base); code.Mem(0x37);
-            Address(slot); code.I64((int64_t)count); code.Mem(0x37, 0, 8);
+            Address(*slot); code.Get(base); code.Mem(0x37);
+            Address(*slot); code.I64((int64_t)count); code.Mem(0x37, 0, 8);
         }
     }
     // The language evaluates even a zero-count fill once. Capturing before
@@ -390,35 +394,25 @@ inline void WasmCodeGen::InitDataArray(VarDef *owner, const Slot &slot, ArrayLit
 
 inline void WasmCodeGen::InitArray(VarDef *owner, const Slot &slot, Node *init) {
     if (owner->reusable) Fail(owner->line, "pool owners need the pending descriptor lowering");
+    if (auto call = Is<Call>(init); call && call->builtin == B_DEFAULT && InlineArray(owner->type)) {
+        ConstructFixed(OwnerPlace(owner), init); return;
+    }
     while (auto call = Is<Call>(init)) {
         if (call->defaultinit) init = call->defaultinit;
         else if (call->builtin == B_COPY) init = call->ValueArgNodes().at(0);
         else break;
     }
-    if (auto literal = Is<StrLit>(init)) { InitByteString(owner, slot, literal); return; }
+    if (auto literal = Is<StrLit>(init)) { InitByteString(owner, &slot, literal); return; }
     auto literal = Is<ArrayLit>(init);
     if (!literal) { InitArrayCopy(owner, slot, init); return; }
     auto array = owner->type;
     if (literal->capexpr) { InitLimitedCapacity(owner, slot, literal); return; }
-    if (literal->fillval) { InitFilledArray(owner, slot, literal); return; }
+    if (literal->fillval) { InitFilledArray(owner, &slot, literal); return; }
     if (DataArray(array)) { InitDataArray(owner, slot, literal); return; }
     if (!IsResz(array)) {
         auto header = Local(WasmModule::I32);
         Address(slot); code.Set(header);
-        if (array->arr->akind == A_FIXED) {
-            if ((uint64_t)ArrSize(array->arr) != literal->elems.size())
-                Fail(init->line, "this fixed array constructor needs the pending destination lowering");
-            auto element = array->arr->sub;
-            for (size_t i = 0; i < literal->elems.size(); i++) {
-                code.Get(header); code.I32((int32_t)(i * Size(element))); code.Byte(0x6a);
-                auto value = literal->elems[i]; Gen(value); Convert(value->exprtype, element);
-                StoreFixed(element);
-            }
-        } else {
-            code.Get(header); code.I64(0); StoreArrayLength(array);
-            for (auto value : literal->elems)
-                PushArray(header, array, value, nullptr, value->line, 0);
-        }
+        InlineArrayLiteral(array, header, literal);
         return;
     }
     auto memory = storage.Memory(owner, current);
@@ -455,13 +449,14 @@ inline void WasmCodeGen::StoreElement(TypeExpr *element, int memory) {
 }
 
 inline void WasmCodeGen::PushArray(uint32_t header, TypeExpr *array, Node *value,
-                                  TypeExpr *result, Line line, int memory) {
+                                  TypeExpr *result, Line line, int memory, PushScratch *scratch) {
     auto element = array->arr->sub;
     Gen(value); Convert(value->exprtype, element);
-    auto item = Temp(element); code.Set(item);
+    auto item = scratch ? scratch->item : Temp(element); code.Set(item);
     // Read the current header after argument effects. A call used for the
     // value can itself append through another reference to this owner.
-    auto length = Local(WasmModule::I64), old = Local(WasmModule::I32);
+    auto length = scratch ? scratch->length : Local(WasmModule::I64);
+    auto old = scratch ? scratch->old : Local(WasmModule::I32);
     ArrayLength(header, array, memory); code.Set(length);
     if (IsResz(array)) {
         if (memory >= 0) { code.I32((int32_t)Size(element)); code.Call(memories->Reserve(memory)); }
@@ -475,9 +470,13 @@ inline void WasmCodeGen::PushArray(uint32_t header, TypeExpr *array, Node *value
     } else {
         code.Get(length); ArrayCapacity(header, array, memory); code.Byte(0x5a);
         Open(0x04); Trap(10, line); Close();
-        ElementOffset(header, length, array, line);
+        ElementOffset(header, length, array, line, -1, scratch);
     }
-    auto address = Local(WasmModule::I64); code.Tee(address); code.Get(item); StoreElement(element, memory);
+    auto address = scratch ? scratch->address : Local(WasmModule::I64);
+    if (scratch && memory >= 0) {
+        code.Set(address); code.Get(address); code.Byte(0xa7); code.Get(item);
+        StoreFixed(element, (uint32_t)memory);
+    } else { code.Tee(address); code.Get(item); StoreElement(element, memory); }
     code.Get(header); code.Get(length); code.I64(1); code.Byte(0x7c); StoreArrayLength(array, memory);
     if (!Void(result)) {
         code.Get(address);
@@ -488,9 +487,11 @@ inline void WasmCodeGen::PushArray(uint32_t header, TypeExpr *array, Node *value
     (void)line;
 }
 
-inline void WasmCodeGen::ElementOffset(uint32_t header, uint32_t index, TypeExpr *array, Line line, int prefix) {
+inline void WasmCodeGen::ElementOffset(uint32_t header, uint32_t index, TypeExpr *array, Line line, int prefix,
+                                     PushScratch *scratch) {
     auto element = array->arr->sub;
-    auto base = Local(WasmModule::I64), offset = Local(WasmModule::I64);
+    auto base = scratch ? scratch->base : Local(WasmModule::I64);
+    auto offset = scratch ? scratch->offset : Local(WasmModule::I64);
     code.Get(header);
     if (IsResz(array)) code.Mem(0x29);
     else if (!DataArray(array)) {
@@ -537,6 +538,7 @@ inline void WasmCodeGen::AssignElement(Index *index, Node *rhs, TType op, bool p
     if (pointee && type->kind == TY_REF && op != T_DOTASSIGN) {
         code.Get(address); LoadElement(type, memory); CheckNull(line, Type(type));
         if (type->ref->sub->kind == TY_ARRAY) Fail(line, "whole-array assignment needs the pending destination lowering");
+        if (type->ref->sub->kind == TY_STRUCT) Fail(line, "whole-aggregate assignment needs the pending destination lowering");
         if (Type(type) == WasmModule::I32) address = Local(WasmModule::I32);
         code.Set(address); type = type->ref->sub; memory = -1;
     }
@@ -556,7 +558,7 @@ inline void WasmCodeGen::AssignElement(Index *index, Node *rhs, TType op, bool p
     auto value = Temp(type); code.Set(value); code.Get(address); code.Get(value); StoreElement(type, memory);
 }
 
-inline void WasmCodeGen::ArrayBuiltin(Call *call, const vector<Node *> &arguments) {
+inline void WasmCodeGen::ArrayBuiltin(Call *call, const vector<Node *> &arguments, TypeExpr *resulttype) {
     auto array = ArrayType(arguments[0]), element = array->arr->sub;
     auto header = ArrayHeader(arguments[0]);
     auto memory = ArrayMemory(arguments[0]);
@@ -564,7 +566,8 @@ inline void WasmCodeGen::ArrayBuiltin(Call *call, const vector<Node *> &argument
     if (VariableArray(array)) Fail(call->line, "variable-array mutation needs the pending destination lowering");
     if (call->builtin == B_CAP) { ArrayCapacity(header, array, memory); return; }
     if (call->builtin == B_PUSH) {
-        PushArray(header, array, arguments[1], call->exprtype, call->line, memory); return;
+        PushArray(header, array, arguments[1], resulttype ? resulttype : call->exprtype,
+                  call->line, memory); return;
     }
     auto length = Local(WasmModule::I64);
     ArrayLength(header, array, memory); code.Set(length);
@@ -584,7 +587,7 @@ inline void WasmCodeGen::ArrayBuiltin(Call *call, const vector<Node *> &argument
         code.Get(address); code.Byte(0xa7); code.Call(memories->Top(true));
     }
     code.Get(header); code.Get(length); StoreArrayLength(array, memory);
-    if (result >= 0) { code.Get(result); Convert(element, call->exprtype); }
+    if (result >= 0) { code.Get(result); Convert(element, resulttype ? resulttype : call->exprtype); }
 }
 
 inline void WasmCodeGen::ArrayEquality(Binary *node) {
@@ -673,6 +676,7 @@ inline uint32_t WasmCodeGen::LoadArrayWalk(const ArrayWalk &walk) {
 }
 
 inline void WasmCodeGen::ArrayFor(ForLoop *loop) {
+    if (FieldPath(loop->iter)) Fail(loop->line, "field-path iteration needs the pending path lowering");
     auto array = ArrayType(loop->iter), element = array->arr->sub;
     auto id = Is<Ident>(loop->iter);
     auto reload = id && id->vdef && id->vdef->isvar && id->vdef->type->kind == TY_REF;

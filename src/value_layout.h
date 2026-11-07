@@ -56,10 +56,15 @@ struct ValueLayout {
     map<pair<const void *, int>, Layout> layouts;   // StructInst / (EnumInst, variant).
 
     int64_t PadAlign(TypeExpr *t);
-    Layout LayoutFields(const vector<Field> &fields, const vector<TypeExpr *> &ftypes);
+    Layout LayoutFields(const vector<Field> &fields, const vector<TypeExpr *> &ftypes,
+                        uint64_t limit = INT64_MAX, bool *fits = nullptr);
     const Layout &StructLayout(StructInst *si);
     const Layout &VariantLayout(EnumInst *ei, int vi);
     int64_t FixedSize(TypeExpr *t);
+    // Proves supported fixed layouts fit before using unchecked arithmetic.
+    // Reference pointees do not contribute to the stored reference size.
+    using FixedSizes = unordered_map<TypeExpr *, uint64_t>;
+    bool TryFixedSize(TypeExpr *t, uint64_t limit, uint64_t &bytes, FixedSizes &checked);
 
     TypeExpr *FoTailArr(TypeExpr *t);
     // Prefix before the innermost resizable tail in its byte image.
@@ -217,30 +222,87 @@ inline int64_t ValueLayout::PadAlign(TypeExpr *t) {
 }
 
 inline ValueLayout::Layout ValueLayout::LayoutFields(const vector<Field> &fields,
-                                             const vector<TypeExpr *> &ftypes) {
+                                             const vector<TypeExpr *> &ftypes,
+                                             uint64_t limit, bool *fits) {
     Layout lo;
     int64_t off = 0;
+    auto advance = [&](int64_t bytes) {
+        if (fits && (bytes < 0 || (uint64_t)bytes > limit - (uint64_t)off)) {
+            *fits = false;
+            return false;
+        }
+        off += bytes;
+        return true;
+    };
     for (size_t i = 0; i < fields.size(); i++) {
         auto &f = fields[i];
         if (f.ispad) {
             lo.offs.push_back(off);
             if (f.padsize >= 0) {
-                off += f.padsize;
+                if (!advance(f.padsize)) return lo;
             } else {
                 // Bare pad: align the next real field to its own size.
                 TypeExpr *nt = nullptr;
                 for (auto j = i + 1; j < fields.size(); j++)
                     if (!fields[j].ispad) { nt = ftypes[j]; break; }
                 auto a = nt ? PadAlign(nt) : 1;
-                off = (off + a - 1) / a * a;
+                if (fits) {
+                    if (!advance((a - off % a) % a)) return lo;
+                } else off = (off + a - 1) / a * a;
             }
             continue;
         }
         lo.offs.push_back(off);
-        off += FixedSize(ftypes[i]);
+        if (!advance(FixedSize(ftypes[i]))) return lo;
     }
     lo.size = off;
     return lo;
+}
+
+inline bool ValueLayout::TryFixedSize(TypeExpr *t, uint64_t limit, uint64_t &bytes, FixedSizes &checked) {
+    limit = std::min(limit, (uint64_t)INT64_MAX);
+    if (auto it = checked.find(t); it != checked.end()) {
+        bytes = it->second;
+        return bytes <= limit;
+    }
+    if (!IsFix(t)) return false;
+    uint64_t size = 0;
+    switch (t->kind) {
+        case TY_INT: size = IntSize(t->intstorage); break;
+        case TY_FLT: size = t->fltstorage == FS_F32 ? 4 : 8; break;
+        case TY_BOOL: size = 1; break;
+        case TY_REF:
+            size = t->ref->lenstorage >= 0 ? IntSize((IntStorage)t->ref->lenstorage)
+                                         : IsResz(t->ref->sub) ? 16 : 8;
+            break;
+        case TY_ARRAY: {
+            auto count = ArrSize(t->arr);
+            auto prefix = t->arr->akind == A_FIXED ? 0u : (uint32_t)IntSize(LenStore(t->arr));
+            uint64_t stride;
+            if (count < 0 || prefix > limit || !TryFixedSize(t->arr->sub, limit, stride, checked) ||
+                (stride && (uint64_t)count > (limit - prefix) / stride)) return false;
+            size = prefix + (uint64_t)count * stride;
+            break;
+        }
+        case TY_STRUCT: {
+            auto si = SI(t);
+            for (auto ft : si->ftypes) {
+                uint64_t child;
+                if (ft && !TryFixedSize(ft, limit, child, checked)) return false;
+            }
+            bool fits = true;
+            auto lo = LayoutFields(si->st->fields, si->ftypes, limit, &fits);
+            if (!fits) return false;
+            size = std::max((uint64_t)1, (uint64_t)lo.size);
+            if (size > limit) return false;
+            layouts[pair<const void *, int>(si, -1)] = std::move(lo);
+            break;
+        }
+        default: return false;
+    }
+    if (size > limit) return false;
+    checked[t] = bytes = size;
+    return true;
 }
 
 inline const ValueLayout::Layout &ValueLayout::StructLayout(StructInst *si) {
