@@ -2033,7 +2033,7 @@ def main():
                     r.fail(f"compiler {name}", out + err)
                 else:
                     r.ok(f"compiler {name}")
-        for name in ("compiler_roots", "compiler_containers"):
+        for name in ("compiler_roots", "compiler_containers", "data_stacks"):
             r.show_task(compiler_unit, name)
         r.show_task(compiler_unit, "compiler_process",
                     [HERE.parent / "src" / name for name in ("process.cpp", "progress.cpp")],

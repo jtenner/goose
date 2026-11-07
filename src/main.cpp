@@ -26,6 +26,8 @@
 #include "optimize_loops.h"
 #include "optimize_reassoc.h"
 #include "bce.h"
+#include "data_stacks.h"
+#include "value_layout.h"
 #include "codegen.h"
 #include "codegen_types.h"
 #include "codegen_frames.h"

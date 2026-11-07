@@ -1,0 +1,36 @@
+{
+  "baseline": "113dc3ae7b75d4258764135b3c94413c0465641c",
+  "files": {
+    "CMakeLists.txt": "943617f116a75d7f8c685373573fd903d30f5b418f862f1e470d52a082ce1497",
+    "src/main.cpp": "f5acdb5881c145d018e88f39dbe742e1ad1e9b0a704b01fe8d46c56d4af47f4b",
+    "src/codegen.h": "c925e88bafaf152ea916ef2718a28f3943c6de73d87642b2b4fd9833e35da623",
+    "src/codegen_types.h": "6bf9618c824a5e1337e18fc3e419ca1130098979446ef3b798e6b577450a5699",
+    "src/codegen_stacks.h": "59791cf57c6ddf747955474205c3cbd7f055ec883976b7c28727f02e82875d75",
+    "src/codegen_emit.h": "71ec00b65a9916f3de6b0248b1a0a0a6ec1ab3041870c54827f2ef40d625ebc7",
+    "src/wasm_codegen.h": "d537747511bed8bda3f44f325f9863b564ffb7b10f367338049556b6cc3ec8c1",
+    "src/data_stacks.h": "e68d48103069c906451b5557a10398377d191469a131f7ce5d2886161fe6f264",
+    "src/value_layout.h": "d73b163354d5fe3b76494d97942c879cf39b70c8c371a7621454e2c06c838dc6",
+    "test/data_stacks.cpp": "0f2cb53f9aaf8188272eed8908f8307917a1d8e18c8df190ce8692917377e885",
+    "test/backend_shared.py": "c3f3cfac45e8f5b016532f472412d9ab03a5f2ba14ade9cadc373ed34c7417a4"
+  },
+  "patch_sha256": "a7f3190a766a64c9e47b0f5452bc947abf0d242eb0d880c8925cf5ae8b9b19da",
+  "candidate_compiler_sha256": "c30a6d3ebd9890579c7ec854db3d018a12eca35666511e75cfa5f263b133f67f",
+  "reference_compiler_sha256": "858f4092702b85300103afb4427b4d0f2a8be3701c7d0e83a8d91f1b2a3a0de6",
+  "validation": {
+    "build": 0,
+    "stack-unit-build": 0,
+    "stack-unit": 0,
+    "equivalence": 0,
+    "native": 0,
+    "wasm": 0
+  },
+  "lease_released": true,
+  "registration_sha256": "07d47102b36a3536999f787f3407cc94e376a0d6cf4112eb85750b412cc6b762",
+  "registration_exit": 0,
+  "raw_evidence_directory": "/tmp/goose-wasm-shared-services-20261107",
+  "limits": [
+    "Linux x86-64 native execution only.",
+    "No compiler timing or allocation measurements.",
+    "Scalar Wasm modules remain unchanged; no multi-memory Goose lowering is established by this extraction."
+  ]
+}

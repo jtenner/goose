@@ -4,7 +4,7 @@
 
 namespace goose {
 
-struct WasmCodeGen {
+struct WasmCodeGen : ValueLayout {
     Ast &ast;
     WasmModule module;
     WasmBytes code;
@@ -59,13 +59,10 @@ struct WasmCodeGen {
         }
     }
     uint32_t Size(TypeExpr *t) {
-        switch (t->kind) {
-            case TY_BOOL: return 1;
-            case TY_INT: return (uint32_t)IntBits(t->intstorage) / 8;
-            case TY_FLT: return t->fltstorage == FS_F32 ? 4 : 8;
-            case TY_REF: return 8; // Packed storage width stays independent of SSA pointer width.
-            default: Type(t); return 0;
-        }
+        Type(t);
+        auto size = FixedSize(t);
+        if (size < 0 || size > UINT32_MAX) Fail(t->line, "value exceeds memory32");
+        return (uint32_t)size;
     }
     uint32_t Local(uint8_t t) {
         auto &f = module.functions[fn - module.imports.size()];

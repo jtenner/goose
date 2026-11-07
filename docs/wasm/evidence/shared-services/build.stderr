@@ -1,0 +1,48 @@
+CMake Warning (author) at /home/dev/.local/lib/python3.13/site-packages/cmake/data/share/cmake-4.4/Modules/FetchContent.cmake:1968 (message):
+  Calling FetchContent_Populate(goose_pkg_physics) is deprecated, call
+  FetchContent_MakeAvailable(goose_pkg_physics) instead.  Policy CMP0169 can
+  be set to OLD to allow FetchContent_Populate(goose_pkg_physics) to be
+  called directly for now, but the ability to call it with declared details
+  will be removed completely in a future version.
+Call Stack (most recent call first):
+  cmake/package.cmake:127 (FetchContent_Populate)
+  cmake/package.cmake:222 (goose_builtin_package)
+  CMakeLists.txt:196 (goose_builtin_packages)
+This warning is for project developers.  Use -Wno-author to suppress it.
+
+CMake Warning (author) at /home/dev/.local/lib/python3.13/site-packages/cmake/data/share/cmake-4.4/Modules/FetchContent.cmake:1968 (message):
+  Calling FetchContent_Populate(goose_pkg_gfx) is deprecated, call
+  FetchContent_MakeAvailable(goose_pkg_gfx) instead.  Policy CMP0169 can be
+  set to OLD to allow FetchContent_Populate(goose_pkg_gfx) to be called
+  directly for now, but the ability to call it with declared details will be
+  removed completely in a future version.
+Call Stack (most recent call first):
+  cmake/package.cmake:127 (FetchContent_Populate)
+  cmake/package.cmake:222 (goose_builtin_package)
+  CMakeLists.txt:196 (goose_builtin_packages)
+This warning is for project developers.  Use -Wno-author to suppress it.
+
+In file included from /home/dev/Projects/goose-wasm-backend/src/main.cpp:31:
+/home/dev/Projects/goose-wasm-backend/src/codegen.h: In constructor ‘goose::CodeGen::CodeGen(goose::Ast&, std::string_view, const std::vector<std::__cxx11::basic_string<char> >&, bool, bool, int64_t)’:
+/home/dev/Projects/goose-wasm-backend/src/codegen.h:1524:20: warning: unused variable ‘n’ [-Wunused-variable]
+ 1524 |             size_t n = 0;
+      |                    ^
+In file included from /home/dev/Projects/goose-wasm-backend/src/main.cpp:32:
+/home/dev/Projects/goose-wasm-backend/src/codegen_types.h: In member function ‘void goose::CodeGen::EmitDefaultInto(const std::string&, goose::TypeExpr*)’:
+/home/dev/Projects/goose-wasm-backend/src/codegen_types.h:1016:66: warning: unused parameter ‘t’ [-Wunused-parameter]
+ 1016 | inline void CodeGen::EmitDefaultInto(const string &lv, TypeExpr *t) {
+      |                                                        ~~~~~~~~~~^
+In file included from /home/dev/Projects/goose-wasm-backend/src/main.cpp:5:
+In member function ‘void goose::small_vector<T, N>::CopyInPlace(const goose::small_vector<T, N>&) [with T = goose::RootAlt; int N = 1]’,
+    inlined from ‘goose::small_vector<T, N>::small_vector(goose::small_vector<T, N>&&) [with T = goose::RootAlt; int N = 1]’ at /home/dev/Projects/goose-wasm-backend/src/small_vector.h:86:24,
+    inlined from ‘goose::Roots::Roots(goose::Roots&&)’ at /home/dev/Projects/goose-wasm-backend/src/ast.h:526:8,
+    inlined from ‘constexpr std::pair<_T1, _T2>::pair(_U1&&, _U2&&) [with _U1 = const goose::StoreEvent*; _U2 = goose::Roots; _T1 = const goose::StoreEvent*; _T2 = goose::Roots]’ at /usr/include/c++/14/bits/stl_pair.h:444:35,
+    inlined from ‘void goose::TypeCheck::ApplyCalleeStores(goose::FnSpec*, std::vector<goose::Val>&, goose::Node*, std::vector<int>*)’ at /home/dev/Projects/goose-wasm-backend/src/typecheck_builtins.h:2158:27:
+/home/dev/Projects/goose-wasm-backend/src/small_vector.h:48:15: warning: ‘*(unsigned char (*)[32])((char*)&<unnamed> + offsetof(goose::Roots, goose::Roots::alts.goose::small_vector<goose::RootAlt, 1>::<unnamed>))’ may be used uninitialized [-Wmaybe-uninitialized]
+   48 |         memcpy(inl, (const void *)o.data(), sizeof(inl));
+      |         ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/dev/Projects/goose-wasm-backend/src/main.cpp:21:
+/home/dev/Projects/goose-wasm-backend/src/typecheck_builtins.h: In member function ‘void goose::TypeCheck::ApplyCalleeStores(goose::FnSpec*, std::vector<goose::Val>&, goose::Node*, std::vector<int>*)’:
+/home/dev/Projects/goose-wasm-backend/src/typecheck_builtins.h:2158:41: note: ‘<anonymous>’ declared here
+ 2158 |             held.push_back({ &e, Roots {} });
+      |                                         ^

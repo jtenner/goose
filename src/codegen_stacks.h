@@ -19,63 +19,18 @@ namespace goose {
 // Tarjan's components, callees' before callers', so a component's count can
 // take its external callees' as final.
 inline void CodeGen::BoundStacks() {
-    unordered_map<FnSpec *, int> index, low;
-    vector<FnSpec *> stack;
-    unordered_set<FnSpec *> onstack;
-    int next = 0;
-    function<void(FnSpec *)> visit = [&](FnSpec *v) {
-        index[v] = low[v] = next++;
-        stack.push_back(v);
-        onstack.insert(v);
-        if (auto it = stackcalls.find(v); it != stackcalls.end()) {
-            for (auto &c : it->second) {
-                auto w = c.callee;
-                if (!index.count(w)) {
-                    visit(w);
-                    low[v] = std::min(low[v], low[w]);
-                } else if (onstack.count(w)) {
-                    low[v] = std::min(low[v], index[w]);
-                }
-            }
-        }
-        if (low[v] != index[v]) return;
-        vector<FnSpec *> scc;
-        for (;;) {
-            auto w = stack.back();
-            stack.pop_back();
-            onstack.erase(w);
-            scc.push_back(w);
-            if (w == v) break;
-        }
-        unordered_set<FnSpec *> members(scc.begin(), scc.end());
-        int64_t need = 0;
-        for (auto m : scc) {
-            need = std::max(need, (int64_t)stackown[m]);
-            auto it = stackcalls.find(m);
-            if (it == stackcalls.end()) continue;
-            for (auto &c : it->second) {
-                if (members.count(c.callee)) {
-                    if (c.offset)
-                        Fail(c.line, cat("internal: ", m->sf->name, " holds ", c.offset,
-                                         " data stack(s) across its call into the recursive "
-                                         "cycle through ", c.callee->sf->name, " (§7.8)"));
-                    continue;
-                }
-                need = std::max(need, c.offset + stackneed[c.callee]);
-            }
-        }
-        for (auto m : scc) stackneed[m] = need;
-    };
-    for (auto sp : livespecs)
-        if (!index.count(sp)) visit(sp);
-    if (!index.count(nullptr)) visit(nullptr);
+    stackcounts.Bound(livespecs, [&](FnSpec *caller, const auto &c) {
+        Fail(c.line, cat("internal: ", caller->sf->name, " holds ", c.offset,
+                         " data stack(s) across its call into the recursive "
+                         "cycle through ", c.callee->sf->name, " (§7.8)"));
+    });
 }
 
 // A program's count: over its entry points, and what runs with gs_sp at 0
 // (the nullptr function: the global initializers and render functions).
 inline int64_t CodeGen::ProgramStacks(const vector<FnSpec *> &roots) {
-    auto n = stackneed[nullptr];
-    for (auto r : roots) n = std::max(n, stackneed[r]);
+    auto n = stackcounts.need[nullptr];
+    for (auto r : roots) n = std::max(n, stackcounts.need[r]);
     return n;
 }
 
@@ -157,18 +112,18 @@ inline void CodeGen::StackReport(FILE *out, const StackConfig &cfg) {
     // Every function with stacks, the heaviest first.
     vector<pair<string, FnSpec *>> fns;
     for (auto sp : livespecs)
-        if (stackneed[sp]) fns.push_back({ string(sp->sf->qname), sp });
+        if (stackcounts.need[sp]) fns.push_back({ string(sp->sf->qname), sp });
     sort(fns.begin(), fns.end(), [&](auto &a, auto &b) {
-        auto na = stackneed[a.second], nb = stackneed[b.second];
+        auto na = stackcounts.need[a.second], nb = stackcounts.need[b.second];
         if (na != nb) return na > nb;
         return a.first < b.first;
     });
     for (auto &[name, sp] : fns)
-        fprintf(out, "fn %s: %d own, %lld with callees\n", name.c_str(), stackown[sp],
-                (long long)stackneed[sp]);
-    if (stackneed[nullptr])
-        fprintf(out, "global initializers: %d own, %lld with callees\n", stackown[nullptr],
-                (long long)stackneed[nullptr]);
+        fprintf(out, "fn %s: %d own, %lld with callees\n", name.c_str(), stackcounts.own[sp],
+                (long long)stackcounts.need[sp]);
+    if (stackcounts.need[nullptr])
+        fprintf(out, "global initializers: %d own, %lld with callees\n", stackcounts.own[nullptr],
+                (long long)stackcounts.need[nullptr]);
 }
 
 }  // namespace goose

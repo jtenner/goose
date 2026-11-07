@@ -59,6 +59,8 @@ add_executable(goose
     src/bce.h
     src/wasm_binary.h
     src/wasm_codegen.h
+    src/data_stacks.h
+    src/value_layout.h
     src/codegen.h
     src/codegen_types.h
     src/codegen_frames.h

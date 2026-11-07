@@ -688,7 +688,7 @@ inline void CodeGen::EmitSpec(FnSpec *sp, bool er) {
     if (stkmax > 0 && !curinfo->needssp)
         Fail(sp->sf->line, cat("internal: ", curinfo->cname, " uses data stacks without gs_sp"));
     // The element-run twin is the same body: the larger count of the two.
-    stackown[sp] = std::max(stackown[sp], stkmax);
+    stackcounts.own[sp] = std::max(stackcounts.own[sp], stkmax);
     // The regions and the markers resolve now that every stack this body
     // grows, and where it grows it, is known.
     auto plan = PlanTopCaches();
@@ -935,7 +935,7 @@ inline void CodeGen::EmitGlobalInit() {
     }
     EmitExitRestores(0);
     cscopes.clear();
-    stackown[nullptr] = std::max(stackown[nullptr], stkmax);
+    stackcounts.own[nullptr] = std::max(stackcounts.own[nullptr], stkmax);
     auto decls = HoistAggregateDecls(body);
     Append(code, "static void gs_init_globals(void) {\n");
     code += decls;

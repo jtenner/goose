@@ -1,0 +1,27 @@
+-- libtcc: TinyCC 0.9.28rc backend for x86_64
+-- package physics: fetching https://github.com/aardappel/goose_physics at v1
+-- CMake C compiler: GNU
+-- CMake C++ compiler: GNU
+-- CMake system name: Linux
+-- CMake host system processor: x86_64
+-- Box3D using Unix
+-- physics: Box3D 0.1.0, static
+-- package physics: built in from /home/dev/Projects/goose-wasm-backend/build/pkg/src/physics/v1
+-- package gfx: fetching https://github.com/aardappel/goose_gfx at v1
+-- gfx: neither the X11 nor the Wayland development files were found, so SDL could not open a window; building nothing. Install the packages in SDL's docs/README-linux.md (at least libx11-dev libxext-dev, or libwayland-dev libxkbcommon-dev wayland-protocols) and reconfigure.
+-- package gfx: its CMakeLists built nothing, so it is not compiled in (a submodule it needs may not be checked out)
+-- Configuring done (0.3s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/dev/Projects/goose-wasm-backend/build
+[  2%] Built target libtcc
+[ 65%] Built target box3d
+[ 65%] Built target goose_version
+[ 67%] Built target goose_shaderc
+[ 70%] Built target tcc_driver
+[ 79%] Built target goose_physics
+[ 91%] Built target tcc_runtime
+[ 92%] Building CXX object CMakeFiles/goose.dir/src/main.cpp.o
+[ 93%] Building CXX object CMakeFiles/goose.dir/src/version.cpp.o
+[ 95%] Linking CXX executable goose
+link closure of the package physics
+[100%] Built target goose

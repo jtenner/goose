@@ -22,8 +22,10 @@ master were preserved. Implementation commits: `a0dc5c8d` (ABI/baseline), `f3d13
   authoritative address-taken storage, scalar references and optionals,
   reference identity/rebinding/return decay, reached scalar defers, and direct
   branches for fully inlined returns, including `return ... from`.
-- `CMakeLists.txt`: lists the new compiler headers. Existing C lowering and
-  native runtime sources are unchanged.
+- `src/value_layout.h` and `src/data_stacks.h`: shared concrete layout queries
+  and symbolic call bounds. The C backend now uses these extracted services.
+- `CMakeLists.txt`: lists the compiler headers. Native runtime sources are
+  unchanged. Exact output checks preserve native lowering behavior.
 
 The emitted modules use Memory32, i32/i64/f32/f64 scalar instructions,
 ordinary calls, block/loop/if branches, unaligned loads/stores, global/data
@@ -60,7 +62,9 @@ Exact commands, source hashes, compiler identity, and exits are in
 [evidence/release-validation.json](evidence/release-validation.json).
 Independent reviews and failing-first regression records are retained under
 [evidence](evidence/review-regressions.md). Review findings were checked and
-corrected before the final suites. The existing C backend source is unchanged.
+corrected before the final suites. The later shared-service extraction also
+passed 52 exact C/stack-report/diagnostic/Wasm comparisons, the native baseline,
+and 94 Wasm checks. See [shared-service evidence](evidence/shared-services.md).
 
 ## Measurements
 
@@ -80,11 +84,10 @@ BigInt operation for other values.
 
 ## Remaining stages and trade-offs
 
-- C: extract a symbolic storage/lifetime plan, bind logical stacks to separate
+- C: complete a symbolic storage/lifetime plan, bind logical stacks to separate
   physical memories, implement data-stack bump/growth/restores, memory identity
   propagation, packed fat pointers, and fixed-index dynamic dispatch.
-- D: extract shared numeric layout authority without changing C behavior, then
-  implement arrays of all classes, packed/variable aggregates, ADTs, root and
+- D: use the shared numeric layout authority to implement arrays of all classes, packed/variable aggregates, ADTs, root and
   pool descriptors, relative references, slices, byte views, and serialization.
 - E: implement direct nonfixed construction, named-result landing/relocation,
   destination protection, ordered data-stack/defer cleanup, and `try_table` /
@@ -104,7 +107,7 @@ Memory 0's exclusive top is limited to UINT32_MAX. Debug overflow checking is
 not implemented, and `--debug` is rejected. Wasm recursion uses the engine's
 ordinary execution stack. These are explicit limits of this checkpoint.
 
-The next stage needs extraction of the C emitter's coupled stack-count and
-layout services. Duplicating those rules or guessing memory identity from a
-surface type would risk layout, ownership, and restoration errors. The current
-checkpoint leaves those operations as clear diagnostics.
+The shared numeric layout and call-bound services are now extracted. The C
+backend still collects lifetime events during emission. The Wasm backend must
+collect its own complete storage plan before it can bind logical stacks to
+memories. It must use the shared layout authority for compound values.

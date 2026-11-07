@@ -87,7 +87,7 @@ struct RelFacts {
     bool apart = false;
 };
 
-struct CodeGen {
+struct CodeGen : ValueLayout {
     Ast &ast;
 
     // Output sections, concatenated by Run() in this order (after the
@@ -261,37 +261,8 @@ struct CodeGen {
     }
 
     // ------------------------------------------------------------------
-    // Type utilities on concrete (post-typecheck) types. Sizes of fixed and
-    // limited arrays were evaluated during checking; assert rather than
-    // re-evaluate.
-    //
-    // These read what the checker left behind and create nothing: TypeCheck's
-    // ClassOf and GetStructInst instantiate a type and validate it, which is
-    // the checking half of the same questions and must not happen here.
-    // TEq is not TypeEq either: it is equality of C representation, so it
-    // ignores `const`, which no C type carries (§9.5).
+    // Concrete type and numeric layout queries come from ValueLayout.
 
-    int64_t ArrSize(TypeArray *a) {
-        assert(a->size >= 0 || !a->sizeexpr);
-        return a->size;
-    }
-
-    bool TEq(TypeExpr *a, TypeExpr *b);
-    StructInst *SI(TypeExpr *t);
-    EnumInst *EIOf(TypeExpr *t);
-    EnumInst *EIVar(TypeExpr *t);
-    // The field runs of a nominal type (ast.h FieldRun); empty for every
-    // other kind.
-    span<const FieldRun> FieldRuns(TypeExpr *t);
-    // As the checker's, over the runs this pass reads rather than builds.
-    template<typename F> bool AnyField(TypeExpr *t, F f) { return AnyFieldOf(FieldRuns(t), f); }
-    template<typename F> void EachField(TypeExpr *t, F f) { EachFieldOf(FieldRuns(t), f); }
-    SizeClass Cls(TypeExpr *t);
-
-    bool IsFix(TypeExpr *t)  { return Cls(t) == SC_FIXED; }
-    bool IsResz(TypeExpr *t) { return Cls(t) == SC_RESIZABLE; }
-    bool IsRoot(TypeExpr *t) { return Cls(t) == SC_ROOT; }
-    bool IsBytesT(TypeExpr *t) { auto c = Cls(t); return c == SC_VARIABLE || c == SC_RESIZABLE; }
     // This is a C backend storage/ABI choice, not a language size class:
     // packed layout, copying, indexing and lifetime rules stay unchanged.
     static constexpr int64_t NATIVE_VALUE_LIMIT = 4096;
@@ -309,52 +280,20 @@ struct CodeGen {
     bool IsStaticLimited(TypeExpr *t) {
         return t->kind == TY_ARRAY && t->arr->akind == A_LIMITED && IsFix(t);
     }
-    // A resizable-tailed struct with an all-fixed prefix is a frame object
-    // (C.2): a C struct of its fixed fields plus its tail's own gs_rhdr (or
-    // nested frame object), held in the owning frame like a fixed value;
-    // only the innermost tail's elements occupy a data stack. A gs_rref to
-    // one carries the object's address in `hdr`.
-    bool IsFrameObj(TypeExpr *t) { return t->kind == TY_STRUCT && SI(t)->frameobj; }
     // The C type of a resizable value's header: a frame object's own struct,
     // a gs_rhdr for anything else.
     string RzCT(TypeExpr *t) { return IsFrameObj(t) ? CT(t) : "gs_rhdr"; }
     string FoTailHdr(TypeExpr *t, const string &obj);
-    TypeExpr *FoTailArr(TypeExpr *t);
     string FoPrefixSize(TypeExpr *t);
-    // The same type as the tail of a value that is not a frame object keeps
-    // its fixed fields as bytes in that value, like the enclosing fields.
-    int64_t FoBytesPrefix(TypeExpr *t);
     bool IsFatRef(TypeExpr *t);
     bool HoldsFatRef(TypeExpr *t);
     bool HoldsFatRefIn(TypeExpr *t, set<const void *> &open);
     bool IsVoidT(TypeExpr *t) { return !t || t->kind == TY_VOID; }
 
-    IntStorage LenStore(TypeArray *a);
-
-    static int64_t IntSize(IntStorage s) { return IntBits(s) / 8; }
-
     static const char *IntCT(IntStorage s, bool unaligned = true);
     static const char *IntSfx(IntStorage s);
     static const char *RelCT(IntStorage s, bool uns = false);
     static const char *RelCT(TypeExpr *rt);
-
-    IntStorage TagStore(SEnum *en) { return en->variants.size() <= 256 ? IS_U8 : IS_U16; }
-    int64_t TagSize(SEnum *en) { return IntSize(TagStore(en)); }
-
-    // Packed layout of a run of fields: byte offsets aligned with the fields
-    // vector (pads get their own offset), plus the total size. Fixed types
-    // only; the same code computes the static prefix of variable structs.
-    struct Layout {
-        vector<int64_t> offs;
-        int64_t size = 0;
-    };
-    map<pair<const void *, int>, Layout> layouts;   // StructInst / (EnumInst, variant).
-
-    int64_t PadAlign(TypeExpr *t);
-    Layout LayoutFields(const vector<Field> &fields, const vector<TypeExpr *> &ftypes);
-    const Layout &StructLayout(StructInst *si);
-    const Layout &VariantLayout(EnumInst *ei, int vi);
-    int64_t FixedSize(TypeExpr *t);
 
     // ------------------------------------------------------------------
     // Naming: one global identifier space for types, functions, globals, and
@@ -491,17 +430,7 @@ struct CodeGen {
     // to its own (SpTop), and the most stacks its own body opens. The
     // nullptr function is what runs with gs_sp fixed at 0: gs_init_globals
     // and the render functions.
-    struct StackCall {
-        FnSpec *callee;
-        int offset;
-        Line line;
-    };
-    unordered_map<FnSpec *, vector<StackCall>> stackcalls;
-    unordered_map<FnSpec *, int> stackown;
-    // The most stacks a function can have in use at once, its callees
-    // included (BoundStacks): a constant, since no call into a recursive
-    // cycle is made with a stack in use (§7.8).
-    unordered_map<FnSpec *, int64_t> stackneed;
+    DataStackCounts<FnSpec, Line> stackcounts;
     // Regions outside the indexed block: the globals' dedicated stacks
     // gs_init_globals reserves for the main program, and what each worker's
     // thunk reserves for its arguments and its copy of the globals.
@@ -511,7 +440,7 @@ struct CodeGen {
     // stacks one thread program may use at once, zero for no limit.
     int64_t maxstacks = 0;
     void NoteStackCall(FnSpec *callee, Line ln) {
-        stackcalls[curspec].push_back({ callee, stknext, ln });
+        stackcounts.calls[curspec].push_back({ callee, stknext, ln });
     }
     void BoundStacks();
     int64_t ProgramStacks(const vector<FnSpec *> &roots);

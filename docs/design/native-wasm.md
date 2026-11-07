@@ -19,12 +19,13 @@ Variable and return-target identities are AST object identities, not names.
 
 The current C backend collects stack counts while it emits C. `AllocStk`,
 `SaveBase`, `NoteStackCall`, and scope exit are not independent AST passes.
-`BoundStacks` can solve a symbolic call graph, but does not collect that graph.
-Likewise `FixedSize`, `LayoutFields`, and frame-object prefix calculations live
-inside `CodeGen`. A backend must not construct `CodeGen` and discard its C to
-obtain these results. The layout and stack services need a separate extraction
-before general compound-value lowering. Lifetime classes constrain storage;
-they are not physical stack identities.
+The shared `DataStackCounts` service now solves the symbolic call bound, but
+it does not collect that graph. `ValueLayout` supplies concrete type queries,
+`FixedSize`, `LayoutFields`, and numeric frame-object byte prefixes to both
+backends. C names and emitted frame-header expressions remain in `CodeGen`.
+A backend must not construct `CodeGen` and discard its C to obtain analysis.
+The Wasm storage plan must collect its own lifetime events before emission.
+Lifetime classes constrain storage; they are not physical stack identities.
 
 The storage plan must record slots, ordered scope saves/deferred bodies, call
 watermarks, temporary owners, protected result destinations, and logical stack
