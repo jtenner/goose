@@ -1,0 +1,14 @@
+[
+  [
+    "callback-and-gates",
+    [
+      "mise",
+      "exec",
+      "wasm-tools@1.262.0",
+      "node@24.22.2",
+      "--",
+      "python3",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths02/checks.py"
+    ]
+  ]
+]

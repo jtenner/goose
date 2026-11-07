@@ -1,0 +1,4 @@
+/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build01/pop.goose:2: error: copy of a temporary: the value is fresh already
+fn main() { var a: S[..3] = [S { x: 1 }]; var s: S = copy(a.pop()); print(s.x); }
+                                                     ^~~~~~~~~~~~~
+  in fn main() instantiated from /tmp/goose-wasm-fixed-aggregate-arrays-20261107/build01/pop.goose:2

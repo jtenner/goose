@@ -1,0 +1,18 @@
+{
+  "owner": "Goose fixed aggregate-array functional unit",
+  "pid": 325349,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "extra-native",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build01/extra-native.py"
+      ],
+      "exit": 1
+    }
+  ],
+  "exit": 1,
+  "released_at": "2026-11-07T12:53:32.241707+00:00"
+}

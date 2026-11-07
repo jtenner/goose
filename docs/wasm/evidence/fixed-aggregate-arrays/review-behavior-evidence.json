@@ -1,0 +1,1430 @@
+{
+  "fixture_oracles": [
+    {
+      "fixture": "wasm_aggregate_array_values",
+      "source_matches": true,
+      "native_stdout_matches": true,
+      "runs": [
+        {
+          "name": "wasm_aggregate_array_values-O0-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_values-O0-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_values-O0-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_values-O2-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_values-O2-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_values-O2-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        }
+      ]
+    },
+    {
+      "fixture": "wasm_aggregate_array_enums",
+      "source_matches": true,
+      "native_stdout_matches": true,
+      "runs": [
+        {
+          "name": "wasm_aggregate_array_enums-O0-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_enums-O0-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_enums-O0-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_enums-O2-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_enums-O2-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_enums-O2-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        }
+      ]
+    },
+    {
+      "fixture": "wasm_aggregate_array_limited",
+      "source_matches": true,
+      "native_stdout_matches": true,
+      "runs": [
+        {
+          "name": "wasm_aggregate_array_limited-O0-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_limited-O0-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_limited-O0-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_limited-O2-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_limited-O2-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_limited-O2-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        }
+      ]
+    },
+    {
+      "fixture": "wasm_aggregate_array_packed",
+      "source_matches": true,
+      "native_stdout_matches": true,
+      "runs": [
+        {
+          "name": "wasm_aggregate_array_packed-O0-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_packed-O0-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_packed-O0-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_packed-O2-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_packed-O2-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_packed-O2-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        }
+      ]
+    },
+    {
+      "fixture": "wasm_aggregate_array_fields",
+      "source_matches": true,
+      "native_stdout_matches": true,
+      "runs": [
+        {
+          "name": "wasm_aggregate_array_fields-O0-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_fields-O0-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_fields-O0-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_fields-O2-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_fields-O2-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_fields-O2-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        }
+      ]
+    },
+    {
+      "fixture": "wasm_aggregate_array_effects",
+      "source_matches": true,
+      "native_stdout_matches": true,
+      "runs": [
+        {
+          "name": "wasm_aggregate_array_effects-O0-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_effects-O0-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_effects-O0-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_effects-O2-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_effects-O2-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_effects-O2-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        }
+      ]
+    },
+    {
+      "fixture": "wasm_aggregate_array_cleanup",
+      "source_matches": true,
+      "native_stdout_matches": true,
+      "runs": [
+        {
+          "name": "wasm_aggregate_array_cleanup-O0-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_cleanup-O0-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_cleanup-O0-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_cleanup-O2-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_cleanup-O2-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_cleanup-O2-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        }
+      ]
+    },
+    {
+      "fixture": "wasm_aggregate_array_hidden",
+      "source_matches": true,
+      "native_stdout_matches": true,
+      "runs": [
+        {
+          "name": "wasm_aggregate_array_hidden-O0-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_hidden-O0-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_hidden-O0-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_hidden-O2-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_hidden-O2-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "wasm_aggregate_array_hidden-O2-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        }
+      ]
+    },
+    {
+      "fixture": "wasm_aggregate_array_walk_thin",
+      "source_matches": true,
+      "native_stdout_matches": true,
+      "runs": [
+        {
+          "name": "walk-thin-O0-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "walk-thin-O0-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "walk-thin-O0-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "walk-thin-O2-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "walk-thin-O2-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "walk-thin-O2-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        }
+      ]
+    },
+    {
+      "fixture": "wasm_aggregate_array_walk_packed",
+      "source_matches": true,
+      "native_stdout_matches": true,
+      "runs": [
+        {
+          "name": "walk-packed-O0-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "walk-packed-O0-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "walk-packed-O0-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "walk-packed-O2-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "walk-packed-O2-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "walk-packed-O2-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        }
+      ]
+    },
+    {
+      "fixture": "wasm_aggregate_array_nested_fields",
+      "source_matches": true,
+      "native_stdout_matches": true,
+      "runs": [
+        {
+          "name": "nested-fields-O0-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "nested-fields-O0-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "nested-fields-O0-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "nested-fields-O2-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "nested-fields-O2-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "nested-fields-O2-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        }
+      ]
+    },
+    {
+      "fixture": "wasm_aggregate_array_control",
+      "source_matches": true,
+      "native_stdout_matches": true,
+      "runs": [
+        {
+          "name": "control-O0-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "control-O0-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "control-O0-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "control-O2-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "control-O2-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "control-O2-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        }
+      ]
+    },
+    {
+      "fixture": "wasm_aggregate_array_callbacks",
+      "source_matches": true,
+      "native_stdout_matches": true,
+      "runs": [
+        {
+          "name": "callbacks-O0-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "callbacks-O0-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "callbacks-O0-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "callbacks-O2-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "callbacks-O2-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "callbacks-O2-owner",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        }
+      ]
+    },
+    {
+      "fixture": "wasm_aggregate_array_global_effects",
+      "source_matches": true,
+      "native_stdout_matches": true,
+      "runs": [
+        {
+          "name": "global-effects-O0-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "global-effects-O0-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "global-effects-O2-node",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        },
+        {
+          "name": "global-effects-O2-wasmtime",
+          "exit": 0,
+          "stdout_matches": true,
+          "stderr_bytes": 0
+        }
+      ]
+    }
+  ],
+  "gates": [
+    {
+      "case": "default",
+      "opt": 0,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/default.goose:2: error: wasm target: aggregate array defaults need the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "default",
+      "opt": 2,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/default.goose:2: error: wasm target: aggregate array defaults need the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "limited-default",
+      "opt": 0,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/limited-default.goose:2: error: wasm target: aggregate array defaults need the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "limited-default",
+      "opt": 2,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/limited-default.goose:2: error: wasm target: aggregate array defaults need the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "fill",
+      "opt": 0,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/fill.goose:2: error: wasm target: aggregate array fills need the pending snapshot lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "fill",
+      "opt": 2,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/fill.goose:2: error: wasm target: aggregate array fills need the pending snapshot lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "zero-fill",
+      "opt": 0,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/zero-fill.goose:3: error: wasm target: aggregate array fills need the pending snapshot lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "zero-fill",
+      "opt": 2,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/zero-fill.goose:3: error: wasm target: aggregate array fills need the pending snapshot lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "push",
+      "opt": 0,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/push.goose:2: error: wasm target: aggregate push/pop needs the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "push",
+      "opt": 2,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/push.goose:2: error: wasm target: aggregate push/pop needs the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "pop",
+      "opt": 0,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/pop.goose:2: error: wasm target: aggregate results need the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "pop",
+      "opt": 2,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/pop.goose:2: error: wasm target: aggregate results need the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "discard-pop",
+      "opt": 0,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/discard-pop.goose:2: error: wasm target: aggregate values need the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "discard-pop",
+      "opt": 2,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/discard-pop.goose:2: error: wasm target: aggregate values need the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "iteration",
+      "opt": 0,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/iteration.goose:2: error: wasm target: by-value aggregate iteration needs the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "iteration",
+      "opt": 2,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/iteration.goose:2: error: wasm target: by-value aggregate iteration needs the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "equality",
+      "opt": 0,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/equality.goose:2: error: wasm target: aggregate array equality needs the pending value lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "equality",
+      "opt": 2,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/equality.goose:2: error: wasm target: aggregate array equality needs the pending value lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "assign",
+      "opt": 0,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/assign.goose:2: error: wasm target: whole-aggregate assignment needs the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "assign",
+      "opt": 2,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/assign.goose:2: error: wasm target: whole-aggregate assignment needs the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "adaptation",
+      "opt": 0,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/adaptation.goose:2: error: wasm target: array adaptation needs the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "adaptation",
+      "opt": 2,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/adaptation.goose:2: error: wasm target: array adaptation needs the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "data",
+      "opt": 0,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/data.goose:3: error: wasm target: compound array elements need the pending layout lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "data",
+      "opt": 2,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/data.goose:3: error: wasm target: compound array elements need the pending layout lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "nested",
+      "opt": 0,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/nested.goose:2: error: wasm target: compound array elements need the pending layout lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "nested",
+      "opt": 2,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/nested.goose:2: error: wasm target: compound array elements need the pending layout lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "field-iteration",
+      "opt": 0,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/field-iteration.goose:3: error: wasm target: field-path iteration needs the pending path lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "field-iteration",
+      "opt": 2,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/field-iteration.goose:3: error: wasm target: field-path iteration needs the pending path lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "argument",
+      "opt": 0,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths02/argument.goose:2: error: wasm target: by-value arrays need the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "argument",
+      "opt": 2,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths02/argument.goose:2: error: wasm target: by-value arrays need the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "inline-argument",
+      "opt": 0,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths02/inline-argument.goose:2: error: wasm target: by-value arrays need the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "inline-argument",
+      "opt": 2,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths02/inline-argument.goose:3: error: wasm target: by-value arrays need the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "result",
+      "opt": 0,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths02/result.goose:2: error: wasm target: array results need the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "result",
+      "opt": 2,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths02/result.goose:2: error: wasm target: array results need the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "callback-argument",
+      "opt": 0,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths02/callback-argument.goose:2: error: wasm target: by-value arrays need the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "callback-argument",
+      "opt": 2,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths02/callback-argument.goose:2: error: wasm target: by-value arrays need the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "array-assign",
+      "opt": 0,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths02/array-assign.goose:2: error: wasm target: whole-array assignment needs the pending destination lowering",
+      "reason_matches": true
+    },
+    {
+      "case": "array-assign",
+      "opt": 2,
+      "native_steps": {
+        "emit": 0,
+        "build": 0,
+        "run": 0
+      },
+      "target_exit": 1,
+      "target_stderr": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths02/array-assign.goose:2: error: wasm target: whole-array assignment needs the pending destination lowering",
+      "reason_matches": true
+    }
+  ],
+  "controls": [
+    {
+      "name": "control-000",
+      "command": [
+        "wasm-tools",
+        "print",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/control-O0.wasm"
+      ],
+      "exit": 0,
+      "stdout_bytes": 11664,
+      "stderr": ""
+    },
+    {
+      "name": "control-001",
+      "command": [
+        "wasm-tools",
+        "parse",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-short-copy-O0.wat",
+        "-o",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-short-copy-O0.wasm"
+      ],
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "name": "control-002",
+      "command": [
+        "wasm-tools",
+        "validate",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-short-copy-O0.wasm"
+      ],
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "name": "control-003",
+      "command": [
+        "node",
+        "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-short-copy-O0.wasm"
+      ],
+      "exit": 1,
+      "stdout_bytes": 0,
+      "stderr": "goose runtime error: assert failed at /tmp/goose-wasm-fixed-aggregate-arrays-20261107/control.goose:7\n"
+    },
+    {
+      "name": "control-004",
+      "command": [
+        "/tmp/goose-wasm-runtime-env/bin/python",
+        "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-short-copy-O0.wasm"
+      ],
+      "exit": 1,
+      "stdout_bytes": 0,
+      "stderr": "goose runtime error: assert failed at /tmp/goose-wasm-fixed-aggregate-arrays-20261107/control.goose:7\n"
+    },
+    {
+      "name": "control-005",
+      "command": [
+        "wasm-tools",
+        "parse",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-wrong-stride-O0.wat",
+        "-o",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-wrong-stride-O0.wasm"
+      ],
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "name": "control-006",
+      "command": [
+        "wasm-tools",
+        "validate",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-wrong-stride-O0.wasm"
+      ],
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "name": "control-007",
+      "command": [
+        "node",
+        "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-wrong-stride-O0.wasm"
+      ],
+      "exit": 1,
+      "stdout_bytes": 0,
+      "stderr": "goose runtime error: assert failed at /tmp/goose-wasm-fixed-aggregate-arrays-20261107/control.goose:8\n"
+    },
+    {
+      "name": "control-008",
+      "command": [
+        "/tmp/goose-wasm-runtime-env/bin/python",
+        "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-wrong-stride-O0.wasm"
+      ],
+      "exit": 1,
+      "stdout_bytes": 0,
+      "stderr": "goose runtime error: assert failed at /tmp/goose-wasm-fixed-aggregate-arrays-20261107/control.goose:8\n"
+    },
+    {
+      "name": "control-009",
+      "command": [
+        "wasm-tools",
+        "parse",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-owner-guard-O0.wat",
+        "-o",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-owner-guard-O0.wasm"
+      ],
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "name": "control-010",
+      "command": [
+        "wasm-tools",
+        "validate",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-owner-guard-O0.wasm"
+      ],
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "name": "control-011",
+      "command": [
+        "node",
+        "/home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_guard.mjs",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-owner-guard-O0.wasm",
+        "14"
+      ],
+      "exit": 0,
+      "stdout_bytes": 8,
+      "stderr": ""
+    },
+    {
+      "name": "control-012",
+      "command": [
+        "wasm-tools",
+        "parse",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-long-copy-O0.wat",
+        "-o",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-long-copy-O0.wasm"
+      ],
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "name": "control-013",
+      "command": [
+        "wasm-tools",
+        "validate",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-long-copy-O0.wasm"
+      ],
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "name": "control-014",
+      "command": [
+        "node",
+        "/home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_guard.mjs",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-long-copy-O0.wasm",
+        "14"
+      ],
+      "exit": 1,
+      "stdout_bytes": 0,
+      "stderr": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: aggregate constructor crossed its planned owner image\n+ actual - expected\n\n  [\n+   47,\n    165,\n    165,\n    165,\n    165,\n    165,\n    165,\n    165,\n-   165\n  ]\n\n    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_guard.mjs:11:12\n    at print_end_v1 (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:105:13)\n    at main.0 (wasm://wasm/7d17d29a:wasm-function[11]:0x51a)\n    at goose.start (wasm://wasm/7d17d29a:wasm-function[13]:0x54a)\n    at Object.run (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:132:36)\n    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_guard.mjs:19:9\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: [\n     47, 165, 165,\n    165, 165, 165,\n    165, 165\n  ],\n  expected: [\n    165, 165, 165,\n    165, 165, 165,\n    165, 165\n  ],\n  operator: 'deepStrictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.22.2\n"
+    },
+    {
+      "name": "control-015",
+      "command": [
+        "wasm-tools",
+        "print",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/control-O2.wasm"
+      ],
+      "exit": 0,
+      "stdout_bytes": 11664,
+      "stderr": ""
+    },
+    {
+      "name": "control-016",
+      "command": [
+        "wasm-tools",
+        "parse",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-short-copy-O2.wat",
+        "-o",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-short-copy-O2.wasm"
+      ],
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "name": "control-017",
+      "command": [
+        "wasm-tools",
+        "validate",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-short-copy-O2.wasm"
+      ],
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "name": "control-018",
+      "command": [
+        "node",
+        "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-short-copy-O2.wasm"
+      ],
+      "exit": 1,
+      "stdout_bytes": 0,
+      "stderr": "goose runtime error: assert failed at /tmp/goose-wasm-fixed-aggregate-arrays-20261107/control.goose:7\n"
+    },
+    {
+      "name": "control-019",
+      "command": [
+        "/tmp/goose-wasm-runtime-env/bin/python",
+        "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-short-copy-O2.wasm"
+      ],
+      "exit": 1,
+      "stdout_bytes": 0,
+      "stderr": "goose runtime error: assert failed at /tmp/goose-wasm-fixed-aggregate-arrays-20261107/control.goose:7\n"
+    },
+    {
+      "name": "control-020",
+      "command": [
+        "wasm-tools",
+        "parse",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-wrong-stride-O2.wat",
+        "-o",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-wrong-stride-O2.wasm"
+      ],
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "name": "control-021",
+      "command": [
+        "wasm-tools",
+        "validate",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-wrong-stride-O2.wasm"
+      ],
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "name": "control-022",
+      "command": [
+        "node",
+        "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-wrong-stride-O2.wasm"
+      ],
+      "exit": 1,
+      "stdout_bytes": 0,
+      "stderr": "goose runtime error: assert failed at /tmp/goose-wasm-fixed-aggregate-arrays-20261107/control.goose:8\n"
+    },
+    {
+      "name": "control-023",
+      "command": [
+        "/tmp/goose-wasm-runtime-env/bin/python",
+        "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-wrong-stride-O2.wasm"
+      ],
+      "exit": 1,
+      "stdout_bytes": 0,
+      "stderr": "goose runtime error: assert failed at /tmp/goose-wasm-fixed-aggregate-arrays-20261107/control.goose:8\n"
+    },
+    {
+      "name": "control-024",
+      "command": [
+        "wasm-tools",
+        "parse",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-owner-guard-O2.wat",
+        "-o",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-owner-guard-O2.wasm"
+      ],
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "name": "control-025",
+      "command": [
+        "wasm-tools",
+        "validate",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-owner-guard-O2.wasm"
+      ],
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "name": "control-026",
+      "command": [
+        "node",
+        "/home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_guard.mjs",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-owner-guard-O2.wasm",
+        "14"
+      ],
+      "exit": 0,
+      "stdout_bytes": 8,
+      "stderr": ""
+    },
+    {
+      "name": "control-027",
+      "command": [
+        "wasm-tools",
+        "parse",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-long-copy-O2.wat",
+        "-o",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-long-copy-O2.wasm"
+      ],
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "name": "control-028",
+      "command": [
+        "wasm-tools",
+        "validate",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-long-copy-O2.wasm"
+      ],
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "name": "control-029",
+      "command": [
+        "node",
+        "/home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_guard.mjs",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/aggregate-long-copy-O2.wasm",
+        "14"
+      ],
+      "exit": 1,
+      "stdout_bytes": 0,
+      "stderr": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: aggregate constructor crossed its planned owner image\n+ actual - expected\n\n  [\n+   47,\n    165,\n    165,\n    165,\n    165,\n    165,\n    165,\n    165,\n-   165\n  ]\n\n    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_guard.mjs:11:12\n    at print_end_v1 (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:105:13)\n    at main.0 (wasm://wasm/7d17d29a:wasm-function[11]:0x51a)\n    at goose.start (wasm://wasm/7d17d29a:wasm-function[13]:0x54a)\n    at Object.run (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:132:36)\n    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_guard.mjs:19:9\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: [\n     47, 165, 165,\n    165, 165, 165,\n    165, 165\n  ],\n  expected: [\n    165, 165, 165,\n    165, 165, 165,\n    165, 165\n  ],\n  operator: 'deepStrictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.22.2\n"
+    }
+  ],
+  "control_mutations": [
+    {
+      "name": "short-copy",
+      "opt": 0,
+      "matches": true,
+      "sites": 2
+    },
+    {
+      "name": "wrong-stride",
+      "opt": 0,
+      "matches": true,
+      "sites": 8
+    },
+    {
+      "name": "short-copy",
+      "opt": 2,
+      "matches": true,
+      "sites": 2
+    },
+    {
+      "name": "wrong-stride",
+      "opt": 2,
+      "matches": true,
+      "sites": 8
+    }
+  ]
+}

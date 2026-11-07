@@ -49,7 +49,8 @@ struct WasmValueSupport {
                     work.push_back(t->ref->sub);
                     break;
                 case TY_ARRAY:
-                    if (!ScalarElement(t->arr->sub)) return "compound array elements need the pending layout lowering";
+                    if (!ScalarElement(t->arr->sub) && !(InlineArray(t) && Nominal(t->arr->sub)))
+                        return "compound array elements need the pending layout lowering";
                     work.push_back(t->arr->sub);
                     break;
                 case TY_STRUCT: {
@@ -85,6 +86,8 @@ struct WasmValueSupport {
             uint64_t bytes;
             if (!layout.TryFixedSize(t, UINT32_MAX, bytes, sizes))
                 return "fixed aggregate layout exceeds memory32";
+            if (InlineArray(t) && Nominal(t->arr->sub) && !sizes.at(t->arr->sub))
+                return "zero-stride aggregate elements need the pending layout lowering";
         }
         validated.insert(seen.begin(), seen.end());
         return nullptr;

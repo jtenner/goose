@@ -1,0 +1,13 @@
+Start remaining-native
+remaining-native exit 0
+Start layout-build
+layout-build exit 0
+Start layout-check
+layout-check exit 0
+Start release-build
+release-build exit 0
+Start freeze
+freeze exit 0
+Start aggregate-checks
+aggregate-checks exit 0
+All children reaped; lease released.

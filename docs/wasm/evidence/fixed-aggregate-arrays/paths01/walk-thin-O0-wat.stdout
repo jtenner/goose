@@ -1,0 +1,1713 @@
+(module
+  (type (;0;) (func (result i32)))
+  (type (;1;) (func (param i32 i64 i32)))
+  (type (;2;) (func (param i32 f64 i32)))
+  (type (;3;) (func (param i32 i32)))
+  (type (;4;) (func (param i32 i32 i32)))
+  (type (;5;) (func (param i32)))
+  (type (;6;) (func (param i32 i32 i32 i32)))
+  (type (;7;) (func (param f64 f64) (result f64)))
+  (type (;8;) (func (param f64) (result i64)))
+  (type (;9;) (func (param i32) (result i32)))
+  (type (;10;) (func))
+  (type (;11;) (func (result i64)))
+  (import "goose" "print_begin_v1" (func (;0;) (type 0) (result i32)))
+  (import "goose" "print_int_v1" (func (;1;) (type 1) (param i32 i64 i32)))
+  (import "goose" "print_float_v1" (func (;2;) (type 2) (param i32 f64 i32)))
+  (import "goose" "print_bool_v1" (func (;3;) (type 3) (param i32 i32)))
+  (import "goose" "print_bytes_v1" (func (;4;) (type 4) (param i32 i32 i32)))
+  (import "goose" "print_end_v1" (func (;5;) (type 5) (param i32)))
+  (import "goose" "fail_v1" (func (;6;) (type 6) (param i32 i32 i32 i32)))
+  (import "goose" "exit_v1" (func (;7;) (type 5) (param i32)))
+  (import "goose" "fmod_v1" (func (;8;) (type 7) (param f64 f64) (result f64)))
+  (import "goose" "float_to_int_v1" (func (;9;) (type 8) (param f64) (result i64)))
+  (memory (;0;) 1 65536)
+  (global (;0;) (mut i32) i32.const 3456)
+  (export "memory" (memory 0))
+  (export "_start" (func $goose.start))
+  (func $goose.reserve_frame (;10;) (type 9) (param i32) (result i32)
+    (local i32 i64 i32)
+    global.get 0
+    local.tee 1
+    i64.extend_i32_u
+    local.get 0
+    i64.extend_i32_u
+    i64.add
+    local.tee 2
+    i64.const 4294967295
+    i64.gt_u
+    if ;; label = @1
+      i32.const 5
+      i32.const 32
+      i32.const 63
+      i32.const 0
+      call 6
+      unreachable
+    end
+    local.get 2
+    i64.const 65535
+    i64.add
+    i64.const 16
+    i64.shr_u
+    i32.wrap_i64
+    local.tee 3
+    memory.size
+    i32.gt_u
+    if ;; label = @1
+      local.get 3
+      memory.size
+      i32.sub
+      memory.grow
+      i32.const -1
+      i32.eq
+      if ;; label = @2
+        i32.const 5
+        i32.const 95
+        i32.const 63
+        i32.const 0
+        call 6
+        unreachable
+      end
+    end
+    local.get 2
+    i32.wrap_i64
+    global.set 0
+    local.get 1
+  )
+  (func $main.0 (;11;) (type 10)
+    (local i32 i32 i64 i32 i32 i64 i32 i32 i32 i32 i32 i64 i64 i32 i64 i64 i64 i32 i32 i64 i64 i32 i64 i64 i64 i64 i64 i32 i32 i32 i32 i64 i64 i64 i64 i64 i32 i64 i64 i64 i64 i64 i32 i64 i64 i64 i64 i64 i32 i64 i64 i64 i64 i64 i32 i64 i32 i32 i64 i64 i32 i32 i64 i64 i64 i64 i64 i32 i64 i64 i64 i64 i64 i32 i64 i64 i64 i64 i64 i32 i64 i64 i64 i64 i64 i32 i32 i32 i64 i64 i32 i64 i64 i64 i64 i64 i32 i64 i64 i64 i64 i64 i32 i64 i64 i64 i64 i64 i32 i32 i64 i64 i32 i32 i32 i32 i64 i64 i64 i64 i64 i32 i64 i64 i64 i64 i32 i32 i32 i64 i64 i32 i64 i64 i64 i64 i64 i32 i64 i64 i64 i64 i64 i32 i64 i64 i64 i64 i64 i32 i64 i64 i64 i64 i64 i64 i32 i64 i64 i64 i64 i64 i64 i32 i64 i64 i64 i64 i64 i64 i32 i64 i64 i64 i64 i64 i64 i32 i64 i64 i64 i64 i64 i64 i64 i64 i64 i32)
+    i32.const 104
+    call $goose.reserve_frame
+    local.set 0
+    block ;; label = @1
+      local.get 0
+      i32.const 0
+      i32.add
+      local.set 6
+      local.get 6
+      i64.const 1
+      i64.store align=1
+      local.get 6
+      i64.const 2
+      i64.store offset=8 align=1
+      local.get 0
+      i32.const 16
+      i32.add
+      local.set 7
+      local.get 7
+      i64.const 10
+      i64.store align=1
+      local.get 7
+      i64.const 20
+      i64.store offset=8 align=1
+      local.get 0
+      i32.const 32
+      i32.add
+      local.set 8
+      local.get 8
+      i64.const 30
+      i64.store align=1
+      local.get 8
+      i64.const 40
+      i64.store offset=8 align=1
+      local.get 0
+      i32.const 48
+      i32.add
+      local.set 9
+      local.get 9
+      i32.const 0
+      i32.add
+      local.get 0
+      i32.const 0
+      i32.add
+      i64.extend_i32_u
+      i64.store align=1
+      local.get 9
+      i32.const 8
+      i32.add
+      local.get 0
+      i32.const 16
+      i32.add
+      i64.extend_i32_u
+      i64.store align=1
+      local.get 0
+      i32.const 48
+      i32.add
+      local.set 10
+      i64.const 2
+      local.set 12
+      call $choose.1
+      local.set 11
+      i64.const 0
+      local.set 14
+      block ;; label = @2
+        loop ;; label = @3
+          local.get 11
+          local.get 12
+          i64.ge_u
+          if ;; label = @4
+            i32.const 8
+            i32.const 158
+            i32.const 63
+            i32.const 9
+            call 6
+            unreachable
+          end
+          local.get 10
+          i64.extend_i32_u
+          local.set 15
+          local.get 15
+          i64.const 4294967295
+          i64.and
+          local.get 11
+          i64.const 8
+          i64.mul
+          i64.add
+          local.tee 16
+          i64.const 4294967295
+          i64.gt_u
+          if ;; label = @4
+            i32.const 11
+            i32.const 221
+            i32.const 63
+            i32.const 9
+            call 6
+            unreachable
+          end
+          local.get 15
+          i64.const -4294967296
+          i64.and
+          local.get 16
+          i64.or
+          i32.wrap_i64
+          i64.load align=1
+          i32.wrap_i64
+          local.tee 17
+          i32.eqz
+          if ;; label = @4
+            i32.const 4
+            i32.const 284
+            i32.const 63
+            i32.const 9
+            call 6
+            unreachable
+          end
+          local.get 17
+          local.set 18
+          local.get 18
+          local.set 13
+          local.get 14
+          i64.const 2
+          i64.ge_u
+          br_if 1 (;@2;)
+          local.get 13
+          i64.extend_i32_u
+          local.set 19
+          local.get 19
+          i64.const 4294967295
+          i64.and
+          local.get 14
+          i64.const 8
+          i64.mul
+          i64.add
+          local.tee 20
+          i64.const 4294967295
+          i64.gt_u
+          if ;; label = @4
+            i32.const 11
+            i32.const 347
+            i32.const 63
+            i32.const 9
+            call 6
+            unreachable
+          end
+          local.get 19
+          i64.const -4294967296
+          i64.and
+          local.get 20
+          i64.or
+          i32.wrap_i64
+          local.set 1
+          local.get 14
+          local.set 2
+          block ;; label = @4
+            local.get 2
+            i64.const 0
+            i64.eq
+            if ;; label = @5
+              local.get 0
+              i32.const 48
+              i32.add
+              local.set 21
+              i64.const 2
+              local.set 22
+              i64.const 0
+              local.set 23
+              local.get 21
+              i64.extend_i32_u
+              local.set 24
+              local.get 24
+              i64.const 4294967295
+              i64.and
+              local.get 23
+              i64.const 8
+              i64.mul
+              i64.add
+              local.tee 25
+              i64.const 4294967295
+              i64.gt_u
+              if ;; label = @6
+                i32.const 11
+                i32.const 410
+                i32.const 63
+                i32.const 9
+                call 6
+                unreachable
+              end
+              local.get 24
+              i64.const -4294967296
+              i64.and
+              local.get 25
+              i64.or
+              local.set 26
+              local.get 0
+              i32.const 16
+              i32.add
+              local.set 27
+              local.get 26
+              local.get 27
+              local.set 28
+              i32.wrap_i64
+              local.get 28
+              i64.extend_i32_u
+              i64.store align=1
+            end
+            local.get 1
+            local.tee 29
+            i32.eqz
+            if ;; label = @5
+              i32.const 4
+              i32.const 473
+              i32.const 63
+              i32.const 9
+              call 6
+              unreachable
+            end
+            local.get 29
+            local.get 29
+            i64.load align=1
+            i64.const 1
+            i64.add
+            i64.store align=1
+          end
+          local.get 14
+          i64.const 1
+          i64.add
+          local.set 14
+          br 0 (;@3;)
+        end
+      end
+      i32.const 8
+      i64.load align=1
+      i64.const 1
+      i64.eq
+      i32.eqz
+      if ;; label = @2
+        i32.const 1
+        i32.const 536
+        i32.const 63
+        i32.const 10
+        call 6
+        unreachable
+      end
+      local.get 0
+      i32.const 0
+      i32.add
+      local.set 30
+      i64.const 2
+      local.set 31
+      i64.const 0
+      local.set 32
+      local.get 30
+      i64.extend_i32_u
+      local.set 33
+      local.get 33
+      i64.const 4294967295
+      i64.and
+      local.get 32
+      i64.const 8
+      i64.mul
+      i64.add
+      local.tee 34
+      i64.const 4294967295
+      i64.gt_u
+      if ;; label = @2
+        i32.const 11
+        i32.const 599
+        i32.const 63
+        i32.const 10
+        call 6
+        unreachable
+      end
+      local.get 33
+      i64.const -4294967296
+      i64.and
+      local.get 34
+      i64.or
+      local.set 35
+      local.get 35
+      i32.wrap_i64
+      i64.load align=1
+      i64.const 2
+      i64.eq
+      i32.eqz
+      if ;; label = @2
+        i32.const 1
+        i32.const 662
+        i32.const 63
+        i32.const 10
+        call 6
+        unreachable
+      end
+      local.get 0
+      i32.const 0
+      i32.add
+      local.set 36
+      i64.const 2
+      local.set 37
+      i64.const 1
+      local.set 38
+      local.get 36
+      i64.extend_i32_u
+      local.set 39
+      local.get 39
+      i64.const 4294967295
+      i64.and
+      local.get 38
+      i64.const 8
+      i64.mul
+      i64.add
+      local.tee 40
+      i64.const 4294967295
+      i64.gt_u
+      if ;; label = @2
+        i32.const 11
+        i32.const 725
+        i32.const 63
+        i32.const 10
+        call 6
+        unreachable
+      end
+      local.get 39
+      i64.const -4294967296
+      i64.and
+      local.get 40
+      i64.or
+      local.set 41
+      local.get 41
+      i32.wrap_i64
+      i64.load align=1
+      i64.const 2
+      i64.eq
+      i32.eqz
+      if ;; label = @2
+        i32.const 1
+        i32.const 788
+        i32.const 63
+        i32.const 10
+        call 6
+        unreachable
+      end
+      local.get 0
+      i32.const 16
+      i32.add
+      local.set 42
+      i64.const 2
+      local.set 43
+      i64.const 0
+      local.set 44
+      local.get 42
+      i64.extend_i32_u
+      local.set 45
+      local.get 45
+      i64.const 4294967295
+      i64.and
+      local.get 44
+      i64.const 8
+      i64.mul
+      i64.add
+      local.tee 46
+      i64.const 4294967295
+      i64.gt_u
+      if ;; label = @2
+        i32.const 11
+        i32.const 851
+        i32.const 63
+        i32.const 10
+        call 6
+        unreachable
+      end
+      local.get 45
+      i64.const -4294967296
+      i64.and
+      local.get 46
+      i64.or
+      local.set 47
+      local.get 47
+      i32.wrap_i64
+      i64.load align=1
+      i64.const 10
+      i64.eq
+      i32.eqz
+      if ;; label = @2
+        i32.const 1
+        i32.const 914
+        i32.const 63
+        i32.const 10
+        call 6
+        unreachable
+      end
+      local.get 0
+      i32.const 16
+      i32.add
+      local.set 48
+      i64.const 2
+      local.set 49
+      i64.const 1
+      local.set 50
+      local.get 48
+      i64.extend_i32_u
+      local.set 51
+      local.get 51
+      i64.const 4294967295
+      i64.and
+      local.get 50
+      i64.const 8
+      i64.mul
+      i64.add
+      local.tee 52
+      i64.const 4294967295
+      i64.gt_u
+      if ;; label = @2
+        i32.const 11
+        i32.const 977
+        i32.const 63
+        i32.const 10
+        call 6
+        unreachable
+      end
+      local.get 51
+      i64.const -4294967296
+      i64.and
+      local.get 52
+      i64.or
+      local.set 53
+      local.get 53
+      i32.wrap_i64
+      i64.load align=1
+      i64.const 21
+      i64.eq
+      i32.eqz
+      if ;; label = @2
+        i32.const 1
+        i32.const 1040
+        i32.const 63
+        i32.const 10
+        call 6
+        unreachable
+      end
+      local.get 0
+      i32.const 0
+      i32.add
+      local.set 3
+      i64.const 0
+      local.set 55
+      block ;; label = @2
+        loop ;; label = @3
+          local.get 3
+          local.tee 56
+          i32.eqz
+          if ;; label = @4
+            i32.const 4
+            i32.const 1103
+            i32.const 63
+            i32.const 11
+            call 6
+            unreachable
+          end
+          local.get 56
+          local.set 57
+          local.get 57
+          local.set 54
+          local.get 55
+          i64.const 2
+          i64.ge_u
+          br_if 1 (;@2;)
+          local.get 54
+          i64.extend_i32_u
+          local.set 58
+          local.get 58
+          i64.const 4294967295
+          i64.and
+          local.get 55
+          i64.const 8
+          i64.mul
+          i64.add
+          local.tee 59
+          i64.const 4294967295
+          i64.gt_u
+          if ;; label = @4
+            i32.const 11
+            i32.const 1166
+            i32.const 63
+            i32.const 11
+            call 6
+            unreachable
+          end
+          local.get 58
+          i64.const -4294967296
+          i64.and
+          local.get 59
+          i64.or
+          i32.wrap_i64
+          local.set 4
+          local.get 55
+          local.set 5
+          block ;; label = @4
+            local.get 5
+            i64.const 0
+            i64.eq
+            if ;; label = @5
+              local.get 0
+              i32.const 32
+              i32.add
+              local.set 3
+            end
+            local.get 4
+            local.tee 60
+            i32.eqz
+            if ;; label = @5
+              i32.const 4
+              i32.const 1229
+              i32.const 63
+              i32.const 11
+              call 6
+              unreachable
+            end
+            local.get 60
+            local.get 60
+            i64.load align=1
+            i64.const 2
+            i64.add
+            i64.store align=1
+          end
+          local.get 55
+          i64.const 1
+          i64.add
+          local.set 55
+          br 0 (;@3;)
+        end
+      end
+      local.get 0
+      i32.const 0
+      i32.add
+      local.set 61
+      i64.const 2
+      local.set 62
+      i64.const 0
+      local.set 63
+      local.get 61
+      i64.extend_i32_u
+      local.set 64
+      local.get 64
+      i64.const 4294967295
+      i64.and
+      local.get 63
+      i64.const 8
+      i64.mul
+      i64.add
+      local.tee 65
+      i64.const 4294967295
+      i64.gt_u
+      if ;; label = @2
+        i32.const 11
+        i32.const 1292
+        i32.const 63
+        i32.const 12
+        call 6
+        unreachable
+      end
+      local.get 64
+      i64.const -4294967296
+      i64.and
+      local.get 65
+      i64.or
+      local.set 66
+      local.get 66
+      i32.wrap_i64
+      i64.load align=1
+      i64.const 4
+      i64.eq
+      i32.eqz
+      if ;; label = @2
+        i32.const 1
+        i32.const 1355
+        i32.const 63
+        i32.const 12
+        call 6
+        unreachable
+      end
+      local.get 0
+      i32.const 0
+      i32.add
+      local.set 67
+      i64.const 2
+      local.set 68
+      i64.const 1
+      local.set 69
+      local.get 67
+      i64.extend_i32_u
+      local.set 70
+      local.get 70
+      i64.const 4294967295
+      i64.and
+      local.get 69
+      i64.const 8
+      i64.mul
+      i64.add
+      local.tee 71
+      i64.const 4294967295
+      i64.gt_u
+      if ;; label = @2
+        i32.const 11
+        i32.const 1418
+        i32.const 63
+        i32.const 12
+        call 6
+        unreachable
+      end
+      local.get 70
+      i64.const -4294967296
+      i64.and
+      local.get 71
+      i64.or
+      local.set 72
+      local.get 72
+      i32.wrap_i64
+      i64.load align=1
+      i64.const 2
+      i64.eq
+      i32.eqz
+      if ;; label = @2
+        i32.const 1
+        i32.const 1481
+        i32.const 63
+        i32.const 12
+        call 6
+        unreachable
+      end
+      local.get 0
+      i32.const 32
+      i32.add
+      local.set 73
+      i64.const 2
+      local.set 74
+      i64.const 0
+      local.set 75
+      local.get 73
+      i64.extend_i32_u
+      local.set 76
+      local.get 76
+      i64.const 4294967295
+      i64.and
+      local.get 75
+      i64.const 8
+      i64.mul
+      i64.add
+      local.tee 77
+      i64.const 4294967295
+      i64.gt_u
+      if ;; label = @2
+        i32.const 11
+        i32.const 1544
+        i32.const 63
+        i32.const 12
+        call 6
+        unreachable
+      end
+      local.get 76
+      i64.const -4294967296
+      i64.and
+      local.get 77
+      i64.or
+      local.set 78
+      local.get 78
+      i32.wrap_i64
+      i64.load align=1
+      i64.const 30
+      i64.eq
+      i32.eqz
+      if ;; label = @2
+        i32.const 1
+        i32.const 1607
+        i32.const 63
+        i32.const 12
+        call 6
+        unreachable
+      end
+      local.get 0
+      i32.const 32
+      i32.add
+      local.set 79
+      i64.const 2
+      local.set 80
+      i64.const 1
+      local.set 81
+      local.get 79
+      i64.extend_i32_u
+      local.set 82
+      local.get 82
+      i64.const 4294967295
+      i64.and
+      local.get 81
+      i64.const 8
+      i64.mul
+      i64.add
+      local.tee 83
+      i64.const 4294967295
+      i64.gt_u
+      if ;; label = @2
+        i32.const 11
+        i32.const 1670
+        i32.const 63
+        i32.const 12
+        call 6
+        unreachable
+      end
+      local.get 82
+      i64.const -4294967296
+      i64.and
+      local.get 83
+      i64.or
+      local.set 84
+      local.get 84
+      i32.wrap_i64
+      i64.load align=1
+      i64.const 42
+      i64.eq
+      i32.eqz
+      if ;; label = @2
+        i32.const 1
+        i32.const 1733
+        i32.const 63
+        i32.const 12
+        call 6
+        unreachable
+      end
+      local.get 0
+      i32.const 0
+      i32.add
+      call $arrayref.2
+      local.tee 85
+      i32.eqz
+      if ;; label = @2
+        i32.const 4
+        i32.const 1796
+        i32.const 63
+        i32.const 4
+        call 6
+        unreachable
+      end
+      local.get 85
+      local.set 86
+      i32.const 16
+      local.set 87
+      local.get 86
+      i64.extend_i32_u
+      local.set 88
+      local.get 0
+      i32.const 64
+      i32.add
+      i64.extend_i32_u
+      local.set 89
+      local.get 89
+      i32.wrap_i64
+      local.get 88
+      i32.wrap_i64
+      local.get 87
+      memory.copy
+      local.get 0
+      i32.const 64
+      i32.add
+      local.set 90
+      i64.const 2
+      local.set 91
+      i64.const 0
+      local.set 92
+      local.get 90
+      i64.extend_i32_u
+      local.set 93
+      local.get 93
+      i64.const 4294967295
+      i64.and
+      local.get 92
+      i64.const 8
+      i64.mul
+      i64.add
+      local.tee 94
+      i64.const 4294967295
+      i64.gt_u
+      if ;; label = @2
+        i32.const 11
+        i32.const 1859
+        i32.const 63
+        i32.const 13
+        call 6
+        unreachable
+      end
+      local.get 93
+      i64.const -4294967296
+      i64.and
+      local.get 94
+      i64.or
+      local.set 95
+      local.get 95
+      i32.wrap_i64
+      local.get 95
+      i32.wrap_i64
+      i64.load align=1
+      i64.const 100
+      i64.add
+      i64.store align=1
+      local.get 0
+      i32.const 0
+      i32.add
+      local.set 96
+      i64.const 2
+      local.set 97
+      i64.const 0
+      local.set 98
+      local.get 96
+      i64.extend_i32_u
+      local.set 99
+      local.get 99
+      i64.const 4294967295
+      i64.and
+      local.get 98
+      i64.const 8
+      i64.mul
+      i64.add
+      local.tee 100
+      i64.const 4294967295
+      i64.gt_u
+      if ;; label = @2
+        i32.const 11
+        i32.const 1922
+        i32.const 63
+        i32.const 13
+        call 6
+        unreachable
+      end
+      local.get 99
+      i64.const -4294967296
+      i64.and
+      local.get 100
+      i64.or
+      local.set 101
+      local.get 101
+      i32.wrap_i64
+      i64.load align=1
+      i64.const 4
+      i64.eq
+      i32.eqz
+      if ;; label = @2
+        i32.const 1
+        i32.const 1985
+        i32.const 63
+        i32.const 13
+        call 6
+        unreachable
+      end
+      local.get 0
+      i32.const 64
+      i32.add
+      local.set 102
+      i64.const 2
+      local.set 103
+      i64.const 0
+      local.set 104
+      local.get 102
+      i64.extend_i32_u
+      local.set 105
+      local.get 105
+      i64.const 4294967295
+      i64.and
+      local.get 104
+      i64.const 8
+      i64.mul
+      i64.add
+      local.tee 106
+      i64.const 4294967295
+      i64.gt_u
+      if ;; label = @2
+        i32.const 11
+        i32.const 2048
+        i32.const 63
+        i32.const 13
+        call 6
+        unreachable
+      end
+      local.get 105
+      i64.const -4294967296
+      i64.and
+      local.get 106
+      i64.or
+      local.set 107
+      local.get 107
+      i32.wrap_i64
+      i64.load align=1
+      i64.const 104
+      i64.eq
+      i32.eqz
+      if ;; label = @2
+        i32.const 1
+        i32.const 2111
+        i32.const 63
+        i32.const 13
+        call 6
+        unreachable
+      end
+      i32.const 16
+      i64.load align=1
+      i64.const 1
+      i64.eq
+      i32.eqz
+      if ;; label = @2
+        i32.const 1
+        i32.const 2174
+        i32.const 63
+        i32.const 13
+        call 6
+        unreachable
+      end
+      local.get 0
+      i32.const 80
+      i32.add
+      local.set 108
+      local.get 0
+      i32.const 64
+      i32.add
+      call $elementref.3
+      local.tee 109
+      i32.eqz
+      if ;; label = @2
+        i32.const 4
+        i32.const 2237
+        i32.const 63
+        i32.const 14
+        call 6
+        unreachable
+      end
+      local.get 108
+      i64.extend_i32_u
+      local.set 110
+      local.get 109
+      i64.extend_i32_u
+      local.set 111
+      i32.const 8
+      local.set 112
+      local.get 110
+      i32.wrap_i64
+      local.get 111
+      i32.wrap_i64
+      local.get 112
+      memory.copy
+      local.get 0
+      i32.const 80
+      i32.add
+      local.set 113
+      local.get 113
+      local.get 113
+      i64.load align=1
+      i64.const 1000
+      i64.add
+      i64.store align=1
+      local.get 0
+      i32.const 80
+      i32.add
+      local.set 114
+      local.get 114
+      i64.load align=1
+      i64.const 1002
+      i64.eq
+      i32.eqz
+      if ;; label = @2
+        i32.const 1
+        i32.const 2300
+        i32.const 63
+        i32.const 14
+        call 6
+        unreachable
+      end
+      local.get 0
+      i32.const 64
+      i32.add
+      local.set 115
+      i64.const 2
+      local.set 116
+      i64.const 1
+      local.set 117
+      local.get 115
+      i64.extend_i32_u
+      local.set 118
+      local.get 118
+      i64.const 4294967295
+      i64.and
+      local.get 117
+      i64.const 8
+      i64.mul
+      i64.add
+      local.tee 119
+      i64.const 4294967295
+      i64.gt_u
+      if ;; label = @2
+        i32.const 11
+        i32.const 2363
+        i32.const 63
+        i32.const 14
+        call 6
+        unreachable
+      end
+      local.get 118
+      i64.const -4294967296
+      i64.and
+      local.get 119
+      i64.or
+      local.set 120
+      local.get 120
+      i32.wrap_i64
+      i64.load align=1
+      i64.const 2
+      i64.eq
+      i32.eqz
+      if ;; label = @2
+        i32.const 1
+        i32.const 2426
+        i32.const 63
+        i32.const 14
+        call 6
+        unreachable
+      end
+      i32.const 24
+      i64.load align=1
+      i64.const 1
+      i64.eq
+      i32.eqz
+      if ;; label = @2
+        i32.const 1
+        i32.const 2489
+        i32.const 63
+        i32.const 14
+        call 6
+        unreachable
+      end
+      local.get 0
+      i32.const 48
+      i32.add
+      local.set 121
+      i64.const 2
+      local.set 122
+      i64.const 0
+      local.set 123
+      local.get 121
+      i64.extend_i32_u
+      local.set 124
+      local.get 124
+      i64.const 4294967295
+      i64.and
+      local.get 123
+      i64.const 8
+      i64.mul
+      i64.add
+      local.tee 125
+      i64.const 4294967295
+      i64.gt_u
+      if ;; label = @2
+        i32.const 11
+        i32.const 2552
+        i32.const 63
+        i32.const 15
+        call 6
+        unreachable
+      end
+      local.get 124
+      i64.const -4294967296
+      i64.and
+      local.get 125
+      i64.or
+      i32.wrap_i64
+      i64.load align=1
+      i32.wrap_i64
+      local.tee 126
+      i32.eqz
+      if ;; label = @2
+        i32.const 4
+        i32.const 2615
+        i32.const 63
+        i32.const 8
+        call 6
+        unreachable
+      end
+      local.get 126
+      local.set 127
+      i32.const 16
+      local.set 128
+      local.get 127
+      i64.extend_i32_u
+      local.set 129
+      local.get 0
+      i32.const 88
+      i32.add
+      i64.extend_i32_u
+      local.set 130
+      local.get 130
+      i32.wrap_i64
+      local.get 129
+      i32.wrap_i64
+      local.get 128
+      memory.copy
+      local.get 0
+      i32.const 88
+      i32.add
+      local.set 131
+      i64.const 2
+      local.set 132
+      i64.const 0
+      local.set 133
+      local.get 131
+      i64.extend_i32_u
+      local.set 134
+      local.get 134
+      i64.const 4294967295
+      i64.and
+      local.get 133
+      i64.const 8
+      i64.mul
+      i64.add
+      local.tee 135
+      i64.const 4294967295
+      i64.gt_u
+      if ;; label = @2
+        i32.const 11
+        i32.const 2678
+        i32.const 63
+        i32.const 15
+        call 6
+        unreachable
+      end
+      local.get 134
+      i64.const -4294967296
+      i64.and
+      local.get 135
+      i64.or
+      local.set 136
+      local.get 136
+      i32.wrap_i64
+      local.get 136
+      i32.wrap_i64
+      i64.load align=1
+      i64.const 100
+      i64.add
+      i64.store align=1
+      local.get 0
+      i32.const 16
+      i32.add
+      local.set 137
+      i64.const 2
+      local.set 138
+      i64.const 0
+      local.set 139
+      local.get 137
+      i64.extend_i32_u
+      local.set 140
+      local.get 140
+      i64.const 4294967295
+      i64.and
+      local.get 139
+      i64.const 8
+      i64.mul
+      i64.add
+      local.tee 141
+      i64.const 4294967295
+      i64.gt_u
+      if ;; label = @2
+        i32.const 11
+        i32.const 2741
+        i32.const 63
+        i32.const 15
+        call 6
+        unreachable
+      end
+      local.get 140
+      i64.const -4294967296
+      i64.and
+      local.get 141
+      i64.or
+      local.set 142
+      local.get 142
+      i32.wrap_i64
+      i64.load align=1
+      i64.const 10
+      i64.eq
+      i32.eqz
+      if ;; label = @2
+        i32.const 1
+        i32.const 2804
+        i32.const 63
+        i32.const 15
+        call 6
+        unreachable
+      end
+      local.get 0
+      i32.const 88
+      i32.add
+      local.set 143
+      i64.const 2
+      local.set 144
+      i64.const 1
+      local.set 145
+      local.get 143
+      i64.extend_i32_u
+      local.set 146
+      local.get 146
+      i64.const 4294967295
+      i64.and
+      local.get 145
+      i64.const 8
+      i64.mul
+      i64.add
+      local.tee 147
+      i64.const 4294967295
+      i64.gt_u
+      if ;; label = @2
+        i32.const 11
+        i32.const 2867
+        i32.const 63
+        i32.const 15
+        call 6
+        unreachable
+      end
+      local.get 146
+      i64.const -4294967296
+      i64.and
+      local.get 147
+      i64.or
+      local.set 148
+      local.get 148
+      i32.wrap_i64
+      i64.load align=1
+      i64.const 21
+      i64.eq
+      i32.eqz
+      if ;; label = @2
+        i32.const 1
+        i32.const 2930
+        i32.const 63
+        i32.const 15
+        call 6
+        unreachable
+      end
+      local.get 0
+      i32.const 0
+      i32.add
+      local.set 149
+      i64.const 2
+      local.set 150
+      i64.const 0
+      local.set 151
+      local.get 149
+      i64.extend_i32_u
+      local.set 152
+      local.get 152
+      i64.const 4294967295
+      i64.and
+      local.get 151
+      i64.const 8
+      i64.mul
+      i64.add
+      local.tee 153
+      i64.const 4294967295
+      i64.gt_u
+      if ;; label = @2
+        i32.const 11
+        i32.const 2993
+        i32.const 63
+        i32.const 16
+        call 6
+        unreachable
+      end
+      local.get 152
+      i64.const -4294967296
+      i64.and
+      local.get 153
+      i64.or
+      local.set 154
+      local.get 154
+      i32.wrap_i64
+      i64.load align=1
+      local.set 155
+      local.get 0
+      i32.const 16
+      i32.add
+      local.set 156
+      i64.const 2
+      local.set 157
+      i64.const 1
+      local.set 158
+      local.get 156
+      i64.extend_i32_u
+      local.set 159
+      local.get 159
+      i64.const 4294967295
+      i64.and
+      local.get 158
+      i64.const 8
+      i64.mul
+      i64.add
+      local.tee 160
+      i64.const 4294967295
+      i64.gt_u
+      if ;; label = @2
+        i32.const 11
+        i32.const 3056
+        i32.const 63
+        i32.const 16
+        call 6
+        unreachable
+      end
+      local.get 159
+      i64.const -4294967296
+      i64.and
+      local.get 160
+      i64.or
+      local.set 161
+      local.get 161
+      i32.wrap_i64
+      i64.load align=1
+      local.set 162
+      local.get 0
+      i32.const 32
+      i32.add
+      local.set 163
+      i64.const 2
+      local.set 164
+      i64.const 1
+      local.set 165
+      local.get 163
+      i64.extend_i32_u
+      local.set 166
+      local.get 166
+      i64.const 4294967295
+      i64.and
+      local.get 165
+      i64.const 8
+      i64.mul
+      i64.add
+      local.tee 167
+      i64.const 4294967295
+      i64.gt_u
+      if ;; label = @2
+        i32.const 11
+        i32.const 3119
+        i32.const 63
+        i32.const 16
+        call 6
+        unreachable
+      end
+      local.get 166
+      i64.const -4294967296
+      i64.and
+      local.get 167
+      i64.or
+      local.set 168
+      local.get 168
+      i32.wrap_i64
+      i64.load align=1
+      local.set 169
+      local.get 0
+      i32.const 64
+      i32.add
+      local.set 170
+      i64.const 2
+      local.set 171
+      i64.const 0
+      local.set 172
+      local.get 170
+      i64.extend_i32_u
+      local.set 173
+      local.get 173
+      i64.const 4294967295
+      i64.and
+      local.get 172
+      i64.const 8
+      i64.mul
+      i64.add
+      local.tee 174
+      i64.const 4294967295
+      i64.gt_u
+      if ;; label = @2
+        i32.const 11
+        i32.const 3182
+        i32.const 63
+        i32.const 16
+        call 6
+        unreachable
+      end
+      local.get 173
+      i64.const -4294967296
+      i64.and
+      local.get 174
+      i64.or
+      local.set 175
+      local.get 175
+      i32.wrap_i64
+      i64.load align=1
+      local.set 176
+      local.get 0
+      i32.const 88
+      i32.add
+      local.set 177
+      i64.const 2
+      local.set 178
+      i64.const 1
+      local.set 179
+      local.get 177
+      i64.extend_i32_u
+      local.set 180
+      local.get 180
+      i64.const 4294967295
+      i64.and
+      local.get 179
+      i64.const 8
+      i64.mul
+      i64.add
+      local.tee 181
+      i64.const 4294967295
+      i64.gt_u
+      if ;; label = @2
+        i32.const 11
+        i32.const 3245
+        i32.const 63
+        i32.const 16
+        call 6
+        unreachable
+      end
+      local.get 180
+      i64.const -4294967296
+      i64.and
+      local.get 181
+      i64.or
+      local.set 182
+      local.get 182
+      i32.wrap_i64
+      i64.load align=1
+      local.set 183
+      i32.const 8
+      i64.load align=1
+      local.set 184
+      i32.const 16
+      i64.load align=1
+      local.set 185
+      i32.const 24
+      i64.load align=1
+      local.set 186
+      call 0
+      local.set 187
+      local.get 187
+      i32.const 3308
+      i32.const 5
+      call 4
+      local.get 187
+      local.get 155
+      i32.const 0
+      call 1
+      local.get 187
+      i32.const 3313
+      i32.const 1
+      call 4
+      local.get 187
+      local.get 162
+      i32.const 0
+      call 1
+      local.get 187
+      i32.const 3314
+      i32.const 1
+      call 4
+      local.get 187
+      local.get 169
+      i32.const 0
+      call 1
+      local.get 187
+      i32.const 3315
+      i32.const 1
+      call 4
+      local.get 187
+      local.get 176
+      i32.const 0
+      call 1
+      local.get 187
+      i32.const 3316
+      i32.const 1
+      call 4
+      local.get 187
+      local.get 183
+      i32.const 0
+      call 1
+      local.get 187
+      i32.const 3317
+      i32.const 1
+      call 4
+      local.get 187
+      local.get 184
+      i32.const 0
+      call 1
+      local.get 187
+      i32.const 3318
+      i32.const 1
+      call 4
+      local.get 187
+      local.get 185
+      i32.const 0
+      call 1
+      local.get 187
+      i32.const 3319
+      i32.const 1
+      call 4
+      local.get 187
+      local.get 186
+      i32.const 0
+      call 1
+      local.get 187
+      call 5
+    end
+    local.get 0
+    global.set 0
+  )
+  (func $choose.1 (;12;) (type 11) (result i64)
+    (local i32 i64 i64)
+    block ;; label = @1
+      i32.const 8
+      i64.load align=1
+      i64.const 1
+      i64.add
+      local.set 2
+      i32.const 8
+      local.get 2
+      i64.store align=1
+      i64.const 0
+      local.set 1
+      br 0 (;@1;)
+    end
+    local.get 1
+  )
+  (func $arrayref.2 (;13;) (type 9) (param i32) (result i32)
+    (local i32 i32 i64)
+    block ;; label = @1
+      i32.const 16
+      i64.load align=1
+      i64.const 1
+      i64.add
+      local.set 3
+      i32.const 16
+      local.get 3
+      i64.store align=1
+      local.get 0
+      local.set 2
+      br 0 (;@1;)
+    end
+    local.get 2
+  )
+  (func $elementref.3 (;14;) (type 9) (param i32) (result i32)
+    (local i32 i32 i64 i32 i32 i64 i64 i64 i64)
+    block ;; label = @1
+      i32.const 24
+      i64.load align=1
+      i64.const 1
+      i64.add
+      local.set 3
+      i32.const 24
+      local.get 3
+      i64.store align=1
+      local.get 0
+      local.tee 4
+      i32.eqz
+      if ;; label = @2
+        i32.const 4
+        i32.const 3320
+        i32.const 63
+        i32.const 5
+        call 6
+        unreachable
+      end
+      local.get 4
+      local.set 5
+      i64.const 2
+      local.set 6
+      i64.const 1
+      local.set 7
+      local.get 5
+      i64.extend_i32_u
+      local.set 8
+      local.get 8
+      i64.const 4294967295
+      i64.and
+      local.get 7
+      i64.const 8
+      i64.mul
+      i64.add
+      local.tee 9
+      i64.const 4294967295
+      i64.gt_u
+      if ;; label = @2
+        i32.const 11
+        i32.const 3383
+        i32.const 63
+        i32.const 5
+        call 6
+        unreachable
+      end
+      local.get 8
+      i64.const -4294967296
+      i64.and
+      local.get 9
+      i64.or
+      i32.wrap_i64
+      local.set 2
+      br 0 (;@1;)
+    end
+    local.get 2
+  )
+  (func $goose.init (;15;) (type 10)
+    (local i32 i64 i64 i64)
+    i64.const 0
+    local.set 1
+    i32.const 8
+    local.get 1
+    i64.store align=1
+    i64.const 0
+    local.set 2
+    i32.const 16
+    local.get 2
+    i64.store align=1
+    i64.const 0
+    local.set 3
+    i32.const 24
+    local.get 3
+    i64.store align=1
+  )
+  (func $goose.start (;16;) (type 10)
+    call $goose.init
+    call $main.0
+  )
+  (data (;0;) (i32.const 0) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goosewalk=,,,,,,,/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose")
+)

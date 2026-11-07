@@ -1,0 +1,422 @@
+{
+  "exact": {
+    "pairs": 52,
+    "errors": [],
+    "reference_actual": "63ce6ebec6c5857c61d85270f2393c324d60b40abd4ae67b31eb19d1c656781a",
+    "reference_expected": "63ce6ebec6c5857c61d85270f2393c324d60b40abd4ae67b31eb19d1c656781a"
+  },
+  "prior_modules": {
+    "pairs": 168,
+    "errors": []
+  },
+  "footprints": [
+    {
+      "path": "build02/named-32-O0.wasm",
+      "bytes": 1426,
+      "locals": [
+        3,
+        12,
+        1,
+        0
+      ],
+      "body_bytes": [
+        93,
+        699,
+        4,
+        6
+      ],
+      "memories": [
+        {
+          "minimum": 1,
+          "maximum": 65536
+        }
+      ],
+      "section_bytes": {
+        "1": 58,
+        "2": 206,
+        "3": 5,
+        "5": 6,
+        "6": 7,
+        "7": 19,
+        "10": 808,
+        "11": 226,
+        "0": 62
+      },
+      "matches_saved": true
+    },
+    {
+      "path": "build02/named-32-O2.wasm",
+      "bytes": 1426,
+      "locals": [
+        3,
+        12,
+        1,
+        0
+      ],
+      "body_bytes": [
+        93,
+        699,
+        4,
+        6
+      ],
+      "memories": [
+        {
+          "minimum": 1,
+          "maximum": 65536
+        }
+      ],
+      "section_bytes": {
+        "1": 58,
+        "2": 206,
+        "3": 5,
+        "5": 6,
+        "6": 7,
+        "7": 19,
+        "10": 808,
+        "11": 226,
+        "0": 62
+      },
+      "matches_saved": true
+    },
+    {
+      "path": "build02/named-256-O0.wasm",
+      "bytes": 5240,
+      "locals": [
+        3,
+        12,
+        1,
+        0
+      ],
+      "body_bytes": [
+        93,
+        4510,
+        4,
+        6
+      ],
+      "memories": [
+        {
+          "minimum": 1,
+          "maximum": 65536
+        }
+      ],
+      "section_bytes": {
+        "1": 58,
+        "2": 206,
+        "3": 5,
+        "5": 6,
+        "6": 7,
+        "7": 19,
+        "10": 4619,
+        "11": 229,
+        "0": 62
+      },
+      "matches_saved": true
+    },
+    {
+      "path": "build02/named-256-O2.wasm",
+      "bytes": 5240,
+      "locals": [
+        3,
+        12,
+        1,
+        0
+      ],
+      "body_bytes": [
+        93,
+        4510,
+        4,
+        6
+      ],
+      "memories": [
+        {
+          "minimum": 1,
+          "maximum": 65536
+        }
+      ],
+      "section_bytes": {
+        "1": 58,
+        "2": 206,
+        "3": 5,
+        "5": 6,
+        "6": 7,
+        "7": 19,
+        "10": 4619,
+        "11": 229,
+        "0": 62
+      },
+      "matches_saved": true
+    },
+    {
+      "path": "build02/literal-32-O0.wasm",
+      "bytes": 1125,
+      "locals": [
+        3,
+        11,
+        1,
+        0
+      ],
+      "body_bytes": [
+        93,
+        392,
+        4,
+        6
+      ],
+      "memories": [
+        {
+          "minimum": 1,
+          "maximum": 65536
+        }
+      ],
+      "section_bytes": {
+        "1": 58,
+        "2": 206,
+        "3": 5,
+        "5": 6,
+        "6": 7,
+        "7": 19,
+        "10": 501,
+        "11": 232,
+        "0": 62
+      },
+      "matches_saved": true
+    },
+    {
+      "path": "build02/literal-32-O2.wasm",
+      "bytes": 1125,
+      "locals": [
+        3,
+        11,
+        1,
+        0
+      ],
+      "body_bytes": [
+        93,
+        392,
+        4,
+        6
+      ],
+      "memories": [
+        {
+          "minimum": 1,
+          "maximum": 65536
+        }
+      ],
+      "section_bytes": {
+        "1": 58,
+        "2": 206,
+        "3": 5,
+        "5": 6,
+        "6": 7,
+        "7": 19,
+        "10": 501,
+        "11": 232,
+        "0": 62
+      },
+      "matches_saved": true
+    },
+    {
+      "path": "build02/literal-256-O0.wasm",
+      "bytes": 3110,
+      "locals": [
+        3,
+        11,
+        1,
+        0
+      ],
+      "body_bytes": [
+        93,
+        2374,
+        4,
+        6
+      ],
+      "memories": [
+        {
+          "minimum": 1,
+          "maximum": 65536
+        }
+      ],
+      "section_bytes": {
+        "1": 58,
+        "2": 206,
+        "3": 5,
+        "5": 6,
+        "6": 7,
+        "7": 19,
+        "10": 2483,
+        "11": 235,
+        "0": 62
+      },
+      "matches_saved": true
+    },
+    {
+      "path": "build02/literal-256-O2.wasm",
+      "bytes": 3110,
+      "locals": [
+        3,
+        11,
+        1,
+        0
+      ],
+      "body_bytes": [
+        93,
+        2374,
+        4,
+        6
+      ],
+      "memories": [
+        {
+          "minimum": 1,
+          "maximum": 65536
+        }
+      ],
+      "section_bytes": {
+        "1": 58,
+        "2": 206,
+        "3": 5,
+        "5": 6,
+        "6": 7,
+        "7": 19,
+        "10": 2483,
+        "11": 235,
+        "0": 62
+      },
+      "matches_saved": true
+    },
+    {
+      "path": "full-wasm01/artifacts/aggregate-sparse-32-O0.wasm",
+      "bytes": 1182,
+      "locals": [
+        3,
+        9,
+        2,
+        0
+      ],
+      "body_bytes": [
+        94,
+        160,
+        22,
+        6
+      ],
+      "memories": [
+        {
+          "minimum": 1,
+          "maximum": 65536
+        }
+      ],
+      "section_bytes": {
+        "1": 58,
+        "2": 206,
+        "3": 5,
+        "5": 6,
+        "6": 7,
+        "7": 19,
+        "10": 288,
+        "11": 502,
+        "0": 62
+      }
+    },
+    {
+      "path": "full-wasm01/artifacts/aggregate-sparse-32-O2.wasm",
+      "bytes": 1182,
+      "locals": [
+        3,
+        9,
+        2,
+        0
+      ],
+      "body_bytes": [
+        94,
+        160,
+        22,
+        6
+      ],
+      "memories": [
+        {
+          "minimum": 1,
+          "maximum": 65536
+        }
+      ],
+      "section_bytes": {
+        "1": 58,
+        "2": 206,
+        "3": 5,
+        "5": 6,
+        "6": 7,
+        "7": 19,
+        "10": 288,
+        "11": 502,
+        "0": 62
+      }
+    },
+    {
+      "path": "full-wasm01/artifacts/aggregate-sparse-65536-O0.wasm",
+      "bytes": 1205,
+      "locals": [
+        3,
+        9,
+        2,
+        0
+      ],
+      "body_bytes": [
+        96,
+        164,
+        22,
+        6
+      ],
+      "memories": [
+        {
+          "minimum": 9,
+          "maximum": 65536
+        }
+      ],
+      "section_bytes": {
+        "1": 58,
+        "2": 206,
+        "3": 5,
+        "5": 6,
+        "6": 8,
+        "7": 19,
+        "10": 294,
+        "11": 518,
+        "0": 62
+      }
+    },
+    {
+      "path": "full-wasm01/artifacts/aggregate-sparse-65536-O2.wasm",
+      "bytes": 1205,
+      "locals": [
+        3,
+        9,
+        2,
+        0
+      ],
+      "body_bytes": [
+        96,
+        164,
+        22,
+        6
+      ],
+      "memories": [
+        {
+          "minimum": 9,
+          "maximum": 65536
+        }
+      ],
+      "section_bytes": {
+        "1": 58,
+        "2": 206,
+        "3": 5,
+        "5": 6,
+        "6": 8,
+        "7": 19,
+        "10": 294,
+        "11": 518,
+        "0": 62
+      }
+    }
+  ],
+  "targeted_records": {
+    "records": 466,
+    "errors": []
+  }
+}

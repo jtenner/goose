@@ -408,6 +408,9 @@ inline void WasmCodeGen::InitArray(VarDef *owner, const Slot &slot, Node *init, 
     auto literal = Is<ArrayLit>(init);
     if (!literal) { InitArrayCopy(owner, slot, init); return; }
     auto array = owner->type;
+    if (InlineArray(array) && Nominal(array->arr->sub)) {
+        ConstructAggregateArray(FreshOwner(owner, declaration), literal); return;
+    }
     if (literal->capexpr) { InitLimitedCapacity(owner, slot, literal); return; }
     if (literal->fillval) { InitFilledArray(owner, &slot, literal); return; }
     if (DataArray(array)) { InitDataArray(owner, slot, literal); return; }
@@ -439,11 +442,13 @@ inline void WasmCodeGen::InitArray(VarDef *owner, const Slot &slot, Node *init, 
 }
 
 inline void WasmCodeGen::LoadElement(TypeExpr *element, int memory) {
+    if (Aggregate(element)) Fail(element->line, "aggregate element reads need a stored-value consumer");
     if (memory >= 0) { code.Byte(0xa7); LoadFixed(element, (uint32_t)memory); }
     else Load(element);
 }
 
 inline void WasmCodeGen::StoreElement(TypeExpr *element, int memory) {
+    if (Aggregate(element)) Fail(element->line, "whole-aggregate assignment needs the pending destination lowering");
     if (memory >= 0) {
         auto value = Temp(element); code.Set(value); code.Byte(0xa7); code.Get(value);
         StoreFixed(element, (uint32_t)memory);
@@ -536,6 +541,7 @@ inline pair<TypeExpr *, int> WasmCodeGen::ElementAddress(Index *index) {
 
 inline void WasmCodeGen::AssignElement(Index *index, Node *rhs, TType op, bool pointee, Line line) {
     auto [type, memory] = ElementAddress(index);
+    if (Nominal(type)) Fail(line, "whole-aggregate assignment needs the pending destination lowering");
     auto address = Local(WasmModule::I64); code.Set(address);
     if (pointee && type->kind == TY_REF && op != T_DOTASSIGN) {
         code.Get(address); LoadElement(type, memory); CheckNull(line, Type(type));
@@ -567,6 +573,8 @@ inline void WasmCodeGen::ArrayBuiltin(Call *call, const vector<Node *> &argument
     if (call->builtin == B_LEN) { ArrayLength(header, array, memory); return; }
     if (VariableArray(array)) Fail(call->line, "variable-array mutation needs the pending destination lowering");
     if (call->builtin == B_CAP) { ArrayCapacity(header, array, memory); return; }
+    if (Nominal(element) && (call->builtin == B_PUSH || call->builtin == B_POP))
+        Fail(call->line, "aggregate push/pop needs the pending destination lowering");
     if (call->builtin == B_PUSH) {
         PushArray(header, array, arguments[1], resulttype ? resulttype : call->exprtype,
                   call->line, memory); return;
@@ -596,6 +604,8 @@ inline void WasmCodeGen::ArrayEquality(Binary *node) {
     if (ArrayPathHasStatements(node->right))
         Fail(node->line, "effectful array comparison needs the pending destination lowering");
     auto lefttype = ArrayType(node->left), righttype = ArrayType(node->right);
+    if (Nominal(lefttype->arr->sub) || Nominal(righttype->arr->sub))
+        Fail(node->line, "aggregate array equality needs the pending value lowering");
     auto element = lefttype->arr->sub;
     auto left = ArrayHeader(node->left), length = Local(WasmModule::I64);
     auto leftprefix = VarintPrefix(lefttype) ? (int)Local(WasmModule::I32) : -1;

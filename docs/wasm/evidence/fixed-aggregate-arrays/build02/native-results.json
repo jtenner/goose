@@ -1,0 +1,134 @@
+[
+  {
+    "name": "native-pop-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/native-pop-O0.c",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/pop.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "native-pop-O0-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/native-pop-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/native-pop-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "native-pop-O0-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/native-pop-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "native-pop-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/native-pop-O2.c",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/pop.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "native-pop-O2-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/native-pop-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/native-pop-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "native-pop-O2-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/native-pop-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "native-global-effects-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/native-global-effects-O0.c",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/global-effects.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "native-global-effects-O0-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/native-global-effects-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/native-global-effects-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "native-global-effects-O0-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/native-global-effects-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "native-global-effects-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/native-global-effects-O2.c",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/global-effects.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "native-global-effects-O2-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/native-global-effects-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/native-global-effects-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "native-global-effects-O2-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/native-global-effects-O2.native"
+    ],
+    "exit": 0
+  }
+]

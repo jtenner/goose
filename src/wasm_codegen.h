@@ -146,6 +146,10 @@ struct WasmCodeGen : ValueLayout {
                 if (!IsResz(t) && !InlineArray(t) && !DataArray(t))
                     Fail(t->line, "this array layout needs the pending compound lowering");
                 auto element = t->arr->sub;
+                if (Nominal(element) && InlineArray(t)) {
+                    RequireFixed(t, t->line);
+                    return WasmModule::I32;
+                }
                 if (!support.ScalarElement(element))
                     Fail(t->line, "compound array elements need the pending layout lowering");
                 Type(element);
@@ -357,7 +361,11 @@ struct WasmCodeGen : ValueLayout {
     void BindTree(Node *n) {
         if (!n || Is<FnDecl>(n)) return;
         if (auto v = Is<VarDecl>(n)) for (auto d : v->defs) Bind(d);
-        if (auto f = Is<ForLoop>(n)) { Bind(f->vdef); if (f->idxdef) Bind(f->idxdef); }
+        if (auto f = Is<ForLoop>(n)) {
+            if (Nominal(f->vdef->type))
+                Fail(f->line, "by-value aggregate iteration needs the pending destination lowering");
+            Bind(f->vdef); if (f->idxdef) Bind(f->idxdef);
+        }
         if (auto match = Is<MatchExpr>(n))
             for (auto &arm : match->arms) if (arm.binder) Bind(arm.binder);
         if (auto c = Is<Call>(n); c && c->fvbody) {
@@ -1132,6 +1140,7 @@ struct WasmCodeGen : ValueLayout {
     pair<TypeExpr *, uint32_t> StoredField(TypeExpr *type, int field, Line line);
     void ConstructFields(FreshFixedDestination destination, StructLit *literal, const FixedFields &fields,
                          uint32_t prefix, Line line);
+    void ConstructAggregateArray(FreshFixedDestination destination, ArrayLit *literal);
     void CopyFixed(FreshFixedDestination destination, FixedPlace source, Line line);
     void EnumMatchStatement(MatchExpr *match);
     FixedPlace ResolvePlace(Node *n);

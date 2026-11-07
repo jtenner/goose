@@ -1,0 +1,69 @@
+{
+  "owner": "Goose fixed aggregate-array functional unit",
+  "pid": 327743,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "remaining-native",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/extra-native.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "layout-build",
+      "command": [
+        "c++",
+        "-std=c++20",
+        "-O2",
+        "test/wasm_fixed_layout.cpp",
+        "-o",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/layout"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "layout-check",
+      "command": [
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/layout"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "release-build",
+      "command": [
+        "cmake",
+        "--build",
+        "build",
+        "--parallel",
+        "2"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "freeze",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/freeze.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "aggregate-checks",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/checks.py"
+      ],
+      "exit": 0
+    }
+  ],
+  "exit": 0,
+  "released_at": "2026-11-07T12:57:00.583042+00:00"
+}

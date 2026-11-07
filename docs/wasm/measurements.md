@@ -90,3 +90,19 @@ guest throughput or retained physical memory. The evidence report gives a
 concrete matched-compiler handoff for those costs, including shared struct
 callers and checked callback scans. It needs a fresh coordinated lease and
 host controls; the scalar timing grants remain closed.
+
+## Pending fixed aggregate-array measurements
+
+The [Memory 0 aggregate-array increment](evidence/fixed-aggregate-arrays.md)
+has functional and static-footprint evidence. Compare accepted enum compiler
+`25090248` with array compiler `bd3856b6` for shared scalar/reference controls.
+For newly admitted programs, compare native C from the same frozen source and
+report compiler, engine initialization and guest execution phases separately.
+Include named and nested literals at 32/256 elements, explicit COPY wrappers,
+sparse limited capacities, exact copies of large unused capacity, enum payload
+matches, nested paths, thin/packed references, checked callbacks, repeated
+activations and cleanup/frame growth. Record raw samples, source/build/tool
+identities, allocation counts, peak RSS, retained pages, Wasm/native-code size
+and confidence/qualification limits. The 12/11 constant constructor-local counts
+do not establish these costs. This work needs a fresh coordinated scope and
+exclusive lease with normal host controls. It is queued, not measured.

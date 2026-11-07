@@ -1,0 +1,32 @@
+{
+  "argument": [
+    "struct S { x: i64 }\nrecursive fn read(a: S[1]) -> i64 { a[0].x }\nfn main() { var a: S[1] = [S { x: 1 }]; print(read(a)); }\n",
+    [
+      "by-value arrays"
+    ]
+  ],
+  "inline-argument": [
+    "struct S { x: i64 }\ninline fn read(a: S[1]) -> i64 { a[0].x }\nfn main() { var a: S[1] = [S { x: 1 }]; print(read(a)); }\n",
+    [
+      "by-value arrays"
+    ]
+  ],
+  "result": [
+    "struct S { x: i64 }\nrecursive fn make(n: i64) -> S[1] { [S { x: n }] }\nfn main() { var a: S[1] = make(1); print(a[0].x); }\n",
+    [
+      "array results"
+    ]
+  ],
+  "callback-argument": [
+    "struct S { x: i64 }\nfn invoke<F>(a: S[1]&) { F(copy(a)); }\nfn main() { var a: S[1] = [S { x: 1 }]; invoke(a) { p: S[1] => print(p[0].x); }; }\n",
+    [
+      "by-value arrays"
+    ]
+  ],
+  "array-assign": [
+    "struct S { x: i64 }\nfn main() { var a: S[1] = [S { x: 1 }]; var b: S[1] = [S { x: 2 }]; a = b; print(a[0].x); }\n",
+    [
+      "whole-array assignment"
+    ]
+  ]
+}

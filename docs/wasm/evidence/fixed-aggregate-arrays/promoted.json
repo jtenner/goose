@@ -1,0 +1,34 @@
+{
+  "wasm_aggregate_array_values": {
+    "source": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/values.goose",
+    "expected": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/native01/values-O0-native-run.stdout"
+  },
+  "wasm_aggregate_array_enums": {
+    "source": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/enums.goose",
+    "expected": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/native01/enums-O0-native-run.stdout"
+  },
+  "wasm_aggregate_array_limited": {
+    "source": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/limited.goose",
+    "expected": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/native01/limited-O0-native-run.stdout"
+  },
+  "wasm_aggregate_array_packed": {
+    "source": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/packed.goose",
+    "expected": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/native01/packed-O0-native-run.stdout"
+  },
+  "wasm_aggregate_array_fields": {
+    "source": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/fields.goose",
+    "expected": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/native01/fields-O0-native-run.stdout"
+  },
+  "wasm_aggregate_array_effects": {
+    "source": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/effects.goose",
+    "expected": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/native01/effects-O0-native-run.stdout"
+  },
+  "wasm_aggregate_array_cleanup": {
+    "source": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/cleanup.goose",
+    "expected": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/native01/cleanup-O0-native-run.stdout"
+  },
+  "wasm_aggregate_array_hidden": {
+    "source": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/hidden.goose",
+    "expected": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/native01/hidden-O0-native-run.stdout"
+  }
+}

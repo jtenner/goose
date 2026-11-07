@@ -1,0 +1,24 @@
+{
+  "reused_cases": [
+    "default",
+    "limited-default",
+    "fill",
+    "zero-fill",
+    "push",
+    "discard-pop",
+    "iteration",
+    "equality",
+    "assign",
+    "adaptation",
+    "data",
+    "nested",
+    "field-iteration"
+  ],
+  "prior_results": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build01/native-results.json",
+  "no_native_rerun_for_passed_cases": true,
+  "excluded_frontend_inputs": {
+    "pop-copy": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build01/native-pop-O0-emit.stderr",
+    "zero-stride": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build01/native-zero-stride-O0-emit.stderr",
+    "global-self-read": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build01/native-global-effects-O0-emit.stderr"
+  }
+}

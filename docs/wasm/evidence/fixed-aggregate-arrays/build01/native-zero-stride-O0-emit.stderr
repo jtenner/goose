@@ -1,0 +1,4 @@
+/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build01/zero-stride.goose:2: error: an element cannot be a variant type with no fields: E.Empty (§3.4)
+fn main() { var a: E.Empty[2] = [E.Empty {}, E.Empty {}]; print(a.len); }
+            ^
+  in fn main() instantiated from /tmp/goose-wasm-fixed-aggregate-arrays-20261107/build01/zero-stride.goose:2

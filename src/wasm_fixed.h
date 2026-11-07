@@ -272,6 +272,44 @@ inline void WasmCodeGen::ConstructFields(FreshFixedDestination destination, Stru
     }
 }
 
+inline void WasmCodeGen::ConstructAggregateArray(FreshFixedDestination destination, ArrayLit *literal) {
+    auto array = destination.place.type;
+    if (!InlineArray(array) || !Nominal(array->arr->sub))
+        Fail(literal->line, "aggregate array construction needs a fixed Memory 0 destination");
+    if (literal->fillval)
+        Fail(literal->line, "aggregate array fills need the pending snapshot lowering");
+    if (literal->capexpr)
+        Fail(literal->line, "aggregate capacity constructors need the pending destination lowering");
+    auto element = array->arr->sub;
+    auto stride = RequireFixed(element, literal->line);
+    if (!stride) Fail(literal->line, "zero-stride aggregate elements need the pending layout lowering");
+    auto capacity = (uint64_t)ArrSize(array->arr);
+    if (literal->elems.size() > capacity ||
+        (array->arr->akind == A_FIXED && literal->elems.size() != capacity))
+        Fail(literal->line, "aggregate literal exceeds its checked array extent");
+    auto prefix = array->arr->akind == A_LIMITED ? (uint32_t)IntSize(LenStore(array->arr)) : 0u;
+    if (prefix) {
+        StoreAddress(destination.place); code.I64((int64_t)literal->elems.size());
+        StoreArrayField(array, 0, destination.place.offset);
+    }
+    for (size_t i = 0; i < literal->elems.size(); i++) {
+        auto offset = (uint64_t)prefix + i * (uint64_t)stride;
+        if (offset > UINT32_MAX) Fail(literal->line, "aggregate element offset exceeds memory32");
+        auto child = FixedChild(destination, element, (uint32_t)offset, literal->line);
+        auto init = literal->elems[i];
+        while (auto copy = Is<Call>(init)) {
+            if (copy->builtin != B_COPY) break;
+            init = copy->ValueArgNodes().at(0);
+        }
+        if (auto id = Is<Ident>(init); id && id->vdef && TEq(element, id->vdef->type)) {
+            auto &source = Find(id->vdef);
+            if (!source.memory) Fail(init->line, "fixed source owner is missing planned storage");
+            PlaceAddress(child.place, WasmModule::I32, init->line); Address(source);
+            code.I32((int32_t)stride); code.Copy(0, 0);
+        } else ConstructFixed(child, init);
+    }
+}
+
 inline void WasmCodeGen::CopyFixed(FreshFixedDestination destination, FixedPlace source, Line line) {
     if (!TEq(destination.place.type, source.type))
         Fail(line, "aggregate adaptation needs the pending destination lowering");
@@ -308,6 +346,8 @@ inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *sourc
         if (call->builtin != B_DEFAULT) break;
         if (Nominal(type) && call->defaultinit) { source = call->defaultinit; continue; }
         if (InlineArray(type)) {
+            if (Nominal(type->arr->sub))
+                Fail(source->line, "aggregate array defaults need the pending destination lowering");
             if (type->arr->akind == A_FIXED) zero(bytes);
             else {
                 StoreAddress(destination); code.I64(0);
@@ -356,6 +396,7 @@ inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *sourc
     if (InlineArray(type)) {
         if (auto text = Is<StrLit>(source)) { InitByteString(nullptr, nullptr, text, &destination); return; }
         if (auto literal = Is<ArrayLit>(source)) {
+            if (Nominal(type->arr->sub)) { ConstructAggregateArray(fresh, literal); return; }
             if (literal->capexpr) Fail(source->line, "this capacity constructor needs the pending destination lowering");
             if (literal->fillval) { InitFilledArray(nullptr, nullptr, literal, &destination); return; }
             auto header = Local(WasmModule::I32);

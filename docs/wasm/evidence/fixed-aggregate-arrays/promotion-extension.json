@@ -1,0 +1,26 @@
+{
+  "wasm_aggregate_array_walk_thin": {
+    "source": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose",
+    "expected": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-thin-O0-native-run.stdout"
+  },
+  "wasm_aggregate_array_walk_packed": {
+    "source": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-packed.goose",
+    "expected": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-packed-O0-native-run.stdout"
+  },
+  "wasm_aggregate_array_nested_fields": {
+    "source": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/nested-fields.goose",
+    "expected": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/nested-fields-O0-native-run.stdout"
+  },
+  "wasm_aggregate_array_control": {
+    "source": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/control.goose",
+    "expected": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/control-O0-native-run.stdout"
+  },
+  "wasm_aggregate_array_callbacks": {
+    "source": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/callbacks.goose",
+    "expected": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths02/callbacks-O0-native-run.stdout"
+  },
+  "wasm_aggregate_array_global_effects": {
+    "source": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/global-effects.goose",
+    "expected": "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/native-global-effects-O0-run.stdout"
+  }
+}

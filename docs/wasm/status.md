@@ -142,6 +142,19 @@ the one-source-memory copy helper. Constructor scratch stays at 28 locals for
 corrections, exact identities and unmeasured costs. This still does not complete
 Stage D or add the general by-value/result ABI.
 
+Fixed and static-capacity limited arrays now admit positive-stride fixed
+aggregate elements in Memory 0. Explicit literals, exact fresh copies,
+indexed places/references, nested fields and existing by-reference iteration
+paths pass the full 904-check Wasm suite. Constructor scratch stays at 12
+locals for named elements and 11 for literal elements at 32/256 elements.
+The native baseline, 52 exact comparisons and 168 unchanged prior-module pairs
+also pass. Independent Astra review found no confirmed production defect.
+Data-memory aggregate values, aggregate defaults/fills/mutation, whole-value
+operations and the general by-value ABI remain guarded. See
+[aggregate-array evidence](evidence/fixed-aggregate-arrays.md) for scope,
+controls, exact identity and the queued cost measurements. This is a Stage D
+increment, not full backend completion.
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping
@@ -213,7 +226,7 @@ BigInt operation for other values.
   layouts, including same-layout copies and unsigned LEB count prefixes, plus
   fresh ordinary fixed structs in the admitted field subset. Complete signed
   varint elements, layout adaptations, general aggregate constructors, remaining
-  aggregate arrays and fixed destinations, nonfixed ADTs, root/pool descriptors, relative references, slices,
+  data-memory aggregate arrays and fixed destinations, nonfixed ADTs, root/pool descriptors, relative references, slices,
   byte views, and serialization.
 - E: implement direct nonfixed construction, named-result landing/relocation,
   destination protection, cleanup for all remaining value lifetimes, and `try_table` /

@@ -110,5 +110,23 @@ int main() {
     Enum bad(1, {&relative});
     WasmValueSupport badPayload(layout);
     assert(badPayload.Check(&bad.type) && badPayload.validated.empty());
+    TypeExpr aggregateArray(TY_ARRAY, {}); TypeArray aggregateElements;
+    aggregateArray.arr = &aggregateElements; aggregateElements.sub = &padded.type;
+    aggregateElements.size = 2;
+    assert(!layout.TryFixedSize(&aggregateArray, 25, bytes, sizes));
+    assert(layout.TryFixedSize(&aggregateArray, 26, bytes, sizes) && bytes == 26);
+    WasmValueSupport inlineAggregates(layout);
+    assert(!inlineAggregates.Check(&aggregateArray));
+    TypeExpr aggregateData(TY_ARRAY, {}); TypeArray dataElements;
+    aggregateData.arr = &dataElements; dataElements.sub = &padded.type;
+    dataElements.akind = A_VAR;
+    assert(inlineAggregates.Check(&aggregateData));
+    TypeExpr zeroElements(TY_ARRAY, {}); TypeArray zeroImage;
+    zeroElements.arr = &zeroImage; zeroImage.sub = &tagOnly.variant; zeroImage.size = 2;
+    WasmValueSupport zeroStride(layout);
+    assert(zeroStride.Check(&zeroElements) && zeroStride.validated.empty());
+    TypeExpr nestedElements(TY_ARRAY, {}); TypeArray nestedImage;
+    nestedElements.arr = &nestedImage; nestedImage.sub = &aggregateArray; nestedImage.size = 1;
+    assert(inlineAggregates.Check(&nestedElements));
     puts("checked fixed layouts: PASS");
 }

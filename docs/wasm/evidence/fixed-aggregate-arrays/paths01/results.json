@@ -1,0 +1,746 @@
+[
+  {
+    "name": "walk-thin-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-thin-O0.c",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-thin-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-thin-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-thin-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-thin-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-thin-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-thin-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-thin-O0.wasm",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-thin-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-thin-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-thin-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-thin-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-thin-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-thin-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-thin-O0-owner",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-thin-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-thin-O0-wat",
+    "command": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-thin-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-thin-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-thin-O2.c",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-thin-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-thin-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-thin-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-thin-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-thin-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-thin-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-thin-O2.wasm",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-thin.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-thin-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-thin-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-thin-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-thin-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-thin-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-thin-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-thin-O2-owner",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-thin-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-thin-O2-wat",
+    "command": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-thin-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-packed-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-packed-O0.c",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-packed.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-packed-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-packed-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-packed-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-packed-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-packed-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-packed-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-packed-O0.wasm",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-packed.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-packed-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-packed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-packed-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-packed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-packed-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-packed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-packed-O0-owner",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-packed-O0.wasm",
+      "0",
+      ""
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-packed-O0-wat",
+    "command": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-packed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-packed-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-packed-O2.c",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-packed.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-packed-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-packed-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-packed-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-packed-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-packed-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-packed-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-packed-O2.wasm",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/walk-packed.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-packed-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-packed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-packed-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-packed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-packed-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-packed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-packed-O2-owner",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-packed-O2.wasm",
+      "0",
+      ""
+    ],
+    "exit": 0
+  },
+  {
+    "name": "walk-packed-O2-wat",
+    "command": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/walk-packed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-fields-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/nested-fields-O0.c",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/nested-fields.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-fields-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/nested-fields-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/nested-fields-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-fields-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/nested-fields-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-fields-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/nested-fields-O0.wasm",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/nested-fields.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-fields-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/nested-fields-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-fields-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/nested-fields-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-fields-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/nested-fields-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-fields-O0-owner",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/nested-fields-O0.wasm",
+      "0",
+      ""
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-fields-O0-wat",
+    "command": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/nested-fields-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-fields-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/nested-fields-O2.c",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/nested-fields.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-fields-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/nested-fields-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/nested-fields-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-fields-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/nested-fields-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-fields-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/nested-fields-O2.wasm",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/nested-fields.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-fields-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/nested-fields-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-fields-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/nested-fields-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-fields-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/nested-fields-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-fields-O2-owner",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/nested-fields-O2.wasm",
+      "0",
+      ""
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-fields-O2-wat",
+    "command": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/nested-fields-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "control-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/control-O0.c",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/control.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "control-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/control-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/control-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "control-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/control-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "control-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/control-O0.wasm",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/control.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "control-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/control-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "control-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/control-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "control-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/control-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "control-O0-owner",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/control-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "control-O0-wat",
+    "command": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/control-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "control-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/control-O2.c",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/control.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "control-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/control-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/control-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "control-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/control-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "control-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/control-O2.wasm",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/control.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "control-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/control-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "control-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/control-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "control-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/control-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "control-O2-owner",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/control-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "control-O2-wat",
+    "command": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-fixed-aggregate-arrays-20261107/paths01/control-O2.wasm"
+    ],
+    "exit": 0
+  }
+]

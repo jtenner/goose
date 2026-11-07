@@ -1,0 +1,4 @@
+/tmp/goose-wasm-fixed-aggregate-arrays-20261107/build01/global-effects.goose:3: error: variable rows may be used before it is assigned: globals initialize in declaration order, imported files first (§11.1), so rows has no value until its initializer at /tmp/goose-wasm-fixed-aggregate-arrays-20261107/build01/global-effects.goose:4 has run
+fn inspect() -> i64 { observed = observed * 10 + rows.len; return rows.len; }
+                                                 ^~~~
+  in fn inspect() instantiated from /tmp/goose-wasm-fixed-aggregate-arrays-20261107/build01/global-effects.goose:4
