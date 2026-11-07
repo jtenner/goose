@@ -1,0 +1,39 @@
+{
+  "reconstructed_from": "Unchanged per-command exit/stdout/stderr files; original generic manifest was overwritten by the subsequent target harness.",
+  "rows": [
+    {
+      "name": "enums-O0-native-emit",
+      "exit": 0
+    },
+    {
+      "name": "enums-O0-native-build",
+      "exit": 0
+    },
+    {
+      "name": "enums-O0-native-run",
+      "exit": 0
+    },
+    {
+      "name": "enums-O0-prior-wasm",
+      "exit": 1
+    },
+    {
+      "name": "enums-O2-native-emit",
+      "exit": 0
+    },
+    {
+      "name": "enums-O2-native-build",
+      "exit": 0
+    },
+    {
+      "name": "enums-O2-native-run",
+      "exit": 0
+    },
+    {
+      "name": "enums-O2-prior-wasm",
+      "exit": 1
+    }
+  ],
+  "native_stdout_equal": true,
+  "harness_note": "A later log-name proposal was made after completion, then saved separately as not-run and the executed checks.py restored."
+}

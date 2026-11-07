@@ -1,0 +1,15 @@
+/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_struct_review_fields_packed.goose:18: warning: redundant &: o.leaf.g binds by reference here without it (§4.1)
+    var address: i64& = &o.leaf.g; assert(address .== &o.leaf.g); address += 1; assert(o.leaf.g == -7);
+                        ^~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_struct_review_fields_packed.goose:19: warning: redundant &: o.leaf.a binds by reference here without it (§4.1)
+    var small: i8& = &o.leaf.a; small += 1; assert(o.leaf.a == -8);
+                     ^~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_struct_review_fields_packed.goose:20: warning: redundant &: o.leaf.bit binds by reference here without it (§4.1)
+    var flag: bool& = &o.leaf.bit; flag = true; assert(o.leaf.bit);
+                      ^~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_struct_review_fields_packed.goose:21: warning: redundant &: o.leaf.x binds by reference here without it (§4.1)
+    var number: f32& = &o.leaf.x; number += 0.5; assert(o.leaf.x == 2.0);
+                       ^~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_struct_review_fields_packed.goose:22: warning: redundant &: o.leaf.arr binds by reference here without it (§4.1)
+    var array: i64[2]& = &o.leaf.arr; var copied: i64[2] = copy(&o.leaf.arr);
+                         ^~~~~~~~~~~

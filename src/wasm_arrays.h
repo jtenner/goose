@@ -696,6 +696,17 @@ inline void WasmCodeGen::ArrayFor(ForLoop *loop) {
     if (Is<Index>(loop->iter)) { walk.emplace(); CaptureArrayWalk(loop->iter, *walk); }
     auto header = reload || walk ? Local(Type(array)) : ArrayHeader(loop->iter);
     auto memory = ArrayMemory(loop->iter);
+    auto copyAggregate = Nominal(loop->vdef->type);
+    if (copyAggregate) {
+        auto plan = storage.fixedvalues.find(loop->vdef);
+        if (loop->iterkind != IK_ARRAY || loop->byref || !loop->vdef->copybind ||
+            !InlineArray(array) || !Nominal(element) || memory != 0 ||
+            !TEq(element, loop->vdef->type) || plan == storage.fixedvalues.end() ||
+            plan->second.origin != WasmStoragePlan::FixedOrigin::IterationCopy ||
+            plan->second.initialization != loop || !RequireFixed(element, loop->line))
+            Fail(loop->line, "by-value aggregate iteration needs a fixed Memory 0 copy owner");
+        RequireFixed(array, loop->line);
+    }
     auto prefix = VarintPrefix(array) ? (int)Local(WasmModule::I32) : -1;
     auto position = Local(WasmModule::I64); code.I64(0); code.Set(position);
     auto end = Open(), head = Open(0x03);
@@ -708,10 +719,17 @@ inline void WasmCodeGen::ArrayFor(ForLoop *loop) {
     // test rather than assuming the entry view has a fixed length.
     code.Get(position); ArrayLength(header, array, memory, prefix); code.Byte(0x5a); Branch(end, true);
     ElementOffset(header, position, array, loop->line, prefix);
-    if (!loop->byref || element->kind == TY_REF) {
-        LoadElement(element, memory); Convert(element, loop->vdef->type);
-    } else if (Type(loop->vdef->type) == WasmModule::I32) code.Byte(0xa7);
-    Write(Find(loop->vdef));
+    if (copyAggregate) {
+        auto source = Local(WasmModule::I64); code.Set(source);
+        // The length test and fixed array image bound the whole selected element.
+        FixedPlace selected {element, source, 0, 0, true, true};
+        CopyFixed(FreshOwner(loop->vdef, loop), selected, loop->line);
+    } else {
+        if (!loop->byref || element->kind == TY_REF) {
+            LoadElement(element, memory); Convert(element, loop->vdef->type);
+        } else if (Type(loop->vdef->type) == WasmModule::I32) code.Byte(0xa7);
+        Write(Find(loop->vdef));
+    }
     if (loop->idxdef) {
         code.Get(position); Normalize(loop->idxdef->type); Write(Find(loop->idxdef));
     }

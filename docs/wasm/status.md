@@ -155,6 +155,21 @@ operations and the general by-value ABI remain guarded. See
 controls, exact identity and the queued cost measurements. This is a Stage D
 increment, not full backend completion.
 
+By-value iteration over these admitted aggregate arrays now uses a planned,
+read-only binder owner. Each selected element is copied before the body while
+current source paths/counts and cleanup ordering retain their existing rules.
+The increment passed 1,034 Wasm checks, the full native baseline, 52 exact
+comparisons and 196 unchanged prior-module pairs. Loop-copy,
+alias, stride, zero-trip and live inner-cleanup controls are included. Tested
+loop scratch stays at 13 locals with an eight-byte binder slot for the i64
+element cases across 0/1/32/256 lengths and 32/65536 capacities. See
+[iteration evidence](evidence/fixed-aggregate-iteration.md) for scope, preserved
+setup errors, identities and pending performance costs. This does not add
+general by-value calls/results, data-memory aggregate values or the other
+guarded array operations.
+Independent Astra review found no confirmed correctness or design defect;
+performance acceptance and the remaining backend stages are still open.
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping

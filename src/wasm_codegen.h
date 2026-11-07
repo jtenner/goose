@@ -362,8 +362,13 @@ struct WasmCodeGen : ValueLayout {
         if (!n || Is<FnDecl>(n)) return;
         if (auto v = Is<VarDecl>(n)) for (auto d : v->defs) Bind(d);
         if (auto f = Is<ForLoop>(n)) {
-            if (Nominal(f->vdef->type))
-                Fail(f->line, "by-value aggregate iteration needs the pending destination lowering");
+            if (Nominal(f->vdef->type)) {
+                auto plan = storage.fixedvalues.find(f->vdef);
+                if (plan == storage.fixedvalues.end() ||
+                    plan->second.origin != WasmStoragePlan::FixedOrigin::IterationCopy ||
+                    plan->second.initialization != f || plan->second.argument || !plan->second.initialized)
+                    Fail(f->line, "by-value aggregate iteration needs its planned copy owner");
+            }
             Bind(f->vdef); if (f->idxdef) Bind(f->idxdef);
         }
         if (auto match = Is<MatchExpr>(n))

@@ -1,0 +1,23 @@
+{
+  "owner": "Goose aggregate-iteration functional unit",
+  "pid": 468398,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "missing-controls",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/checks.py"
+      ],
+      "exit": 0
+    }
+  ],
+  "exit": 0,
+  "released_at": "2026-11-07T14:14:48.176032+00:00"
+}

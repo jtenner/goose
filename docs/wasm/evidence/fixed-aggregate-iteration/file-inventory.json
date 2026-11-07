@@ -1,0 +1,969 @@
+[
+  {
+    "file": "docs/wasm/evidence/fixed-aggregate-iteration.md",
+    "group": "review",
+    "lines": 118,
+    "inspected": [
+      [
+        1,
+        118
+      ]
+    ],
+    "unread": [],
+    "note": "Scope, results, corrections, cost claims and record limits."
+  },
+  {
+    "file": "docs/wasm/measurements.md",
+    "group": "review",
+    "lines": 132,
+    "inspected": [
+      [
+        1,
+        132
+      ]
+    ],
+    "unread": [],
+    "note": "Prior results kept separate; iteration measurement handoff at 110-132."
+  },
+  {
+    "file": "docs/wasm/status.md",
+    "group": "review",
+    "lines": 265,
+    "inspected": [
+      [
+        1,
+        265
+      ]
+    ],
+    "unread": [],
+    "note": "Increment status and retained target limits."
+  },
+  {
+    "file": "src/wasm_arrays.h",
+    "group": "review",
+    "lines": 743,
+    "inspected": [
+      [
+        1,
+        743
+      ]
+    ],
+    "unread": [],
+    "note": "All array helpers; copy guard, path capture, current length, element address and cleanup order."
+  },
+  {
+    "file": "src/wasm_codegen.h",
+    "group": "review",
+    "lines": 1203,
+    "inspected": [
+      [
+        1,
+        1203
+      ]
+    ],
+    "unread": [],
+    "note": "All code; type guards, binding, callbacks, defaults, exits, activation and global initialization."
+  },
+  {
+    "file": "src/wasm_storage.h",
+    "group": "review",
+    "lines": 225,
+    "inspected": [
+      [
+        1,
+        225
+      ]
+    ],
+    "unread": [],
+    "note": "All code; nominal copy plan, runtime-child discovery, frame sizes and data-stack accounting."
+  },
+  {
+    "file": "test/expected/wasm_aggregate_iteration_callbacks.out",
+    "group": "review",
+    "lines": 1,
+    "inspected": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread": [],
+    "note": "Exact expected output checked with its fixture and saved streams."
+  },
+  {
+    "file": "test/expected/wasm_aggregate_iteration_checkpoint.out",
+    "group": "review",
+    "lines": 6,
+    "inspected": [
+      [
+        1,
+        6
+      ]
+    ],
+    "unread": [],
+    "note": "Exact expected output checked with its fixture and saved streams."
+  },
+  {
+    "file": "test/expected/wasm_aggregate_iteration_cleanup.out",
+    "group": "review",
+    "lines": 6,
+    "inspected": [
+      [
+        1,
+        6
+      ]
+    ],
+    "unread": [],
+    "note": "Exact expected output checked with its fixture and saved streams."
+  },
+  {
+    "file": "test/expected/wasm_aggregate_iteration_control.out",
+    "group": "review",
+    "lines": 2,
+    "inspected": [
+      [
+        1,
+        2
+      ]
+    ],
+    "unread": [],
+    "note": "Exact expected output checked with its fixture and saved streams."
+  },
+  {
+    "file": "test/expected/wasm_aggregate_iteration_defaults.out",
+    "group": "review",
+    "lines": 1,
+    "inspected": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread": [],
+    "note": "Exact expected output checked with its fixture and saved streams."
+  },
+  {
+    "file": "test/expected/wasm_aggregate_iteration_enums.out",
+    "group": "review",
+    "lines": 1,
+    "inspected": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread": [],
+    "note": "Exact expected output checked with its fixture and saved streams."
+  },
+  {
+    "file": "test/expected/wasm_aggregate_iteration_fields.out",
+    "group": "review",
+    "lines": 1,
+    "inspected": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread": [],
+    "note": "Exact expected output checked with its fixture and saved streams."
+  },
+  {
+    "file": "test/expected/wasm_aggregate_iteration_identity.out",
+    "group": "review",
+    "lines": 1,
+    "inspected": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread": [],
+    "note": "Exact expected output checked with its fixture and saved streams."
+  },
+  {
+    "file": "test/expected/wasm_aggregate_iteration_limited_empty.out",
+    "group": "review",
+    "lines": 1,
+    "inspected": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread": [],
+    "note": "Exact expected output checked with its fixture and saved streams."
+  },
+  {
+    "file": "test/expected/wasm_aggregate_iteration_paths.out",
+    "group": "review",
+    "lines": 1,
+    "inspected": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread": [],
+    "note": "Exact expected output checked with its fixture and saved streams."
+  },
+  {
+    "file": "test/expected/wasm_aggregate_iteration_refs_packed.out",
+    "group": "review",
+    "lines": 1,
+    "inspected": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread": [],
+    "note": "Exact expected output checked with its fixture and saved streams."
+  },
+  {
+    "file": "test/expected/wasm_aggregate_iteration_refs_thin.out",
+    "group": "review",
+    "lines": 1,
+    "inspected": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread": [],
+    "note": "Exact expected output checked with its fixture and saved streams."
+  },
+  {
+    "file": "test/expected/wasm_aggregate_iteration_values.out",
+    "group": "review",
+    "lines": 1,
+    "inspected": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread": [],
+    "note": "Exact expected output checked with its fixture and saved streams."
+  },
+  {
+    "file": "test/expected/wasm_aggregate_iteration_walk_packed.out",
+    "group": "review",
+    "lines": 1,
+    "inspected": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread": [],
+    "note": "Exact expected output checked with its fixture and saved streams."
+  },
+  {
+    "file": "test/expected/wasm_aggregate_iteration_zero_control.out",
+    "group": "review",
+    "lines": 1,
+    "inspected": [
+      [
+        1,
+        1
+      ]
+    ],
+    "unread": [],
+    "note": "Exact expected output checked with its fixture and saved streams."
+  },
+  {
+    "file": "test/wasm/wasm_aggregate_iteration_callbacks.goose",
+    "group": "review",
+    "lines": 7,
+    "inspected": [
+      [
+        1,
+        7
+      ]
+    ],
+    "unread": [],
+    "note": "Fixture behavior and expected output checked together."
+  },
+  {
+    "file": "test/wasm/wasm_aggregate_iteration_checkpoint.goose",
+    "group": "review",
+    "lines": 11,
+    "inspected": [
+      [
+        1,
+        11
+      ]
+    ],
+    "unread": [],
+    "note": "Fixture behavior and expected output checked together."
+  },
+  {
+    "file": "test/wasm/wasm_aggregate_iteration_cleanup.goose",
+    "group": "review",
+    "lines": 17,
+    "inspected": [
+      [
+        1,
+        17
+      ]
+    ],
+    "unread": [],
+    "note": "Fixture behavior and expected output checked together."
+  },
+  {
+    "file": "test/wasm/wasm_aggregate_iteration_control.goose",
+    "group": "review",
+    "lines": 11,
+    "inspected": [
+      [
+        1,
+        11
+      ]
+    ],
+    "unread": [],
+    "note": "Fixture behavior and expected output checked together."
+  },
+  {
+    "file": "test/wasm/wasm_aggregate_iteration_defaults.goose",
+    "group": "review",
+    "lines": 6,
+    "inspected": [
+      [
+        1,
+        6
+      ]
+    ],
+    "unread": [],
+    "note": "Fixture behavior and expected output checked together."
+  },
+  {
+    "file": "test/wasm/wasm_aggregate_iteration_enums.goose",
+    "group": "review",
+    "lines": 12,
+    "inspected": [
+      [
+        1,
+        12
+      ]
+    ],
+    "unread": [],
+    "note": "Fixture behavior and expected output checked together."
+  },
+  {
+    "file": "test/wasm/wasm_aggregate_iteration_fields.goose",
+    "group": "review",
+    "lines": 15,
+    "inspected": [
+      [
+        1,
+        15
+      ]
+    ],
+    "unread": [],
+    "note": "Fixture behavior and expected output checked together."
+  },
+  {
+    "file": "test/wasm/wasm_aggregate_iteration_identity.goose",
+    "group": "review",
+    "lines": 9,
+    "inspected": [
+      [
+        1,
+        9
+      ]
+    ],
+    "unread": [],
+    "note": "Fixture behavior and expected output checked together."
+  },
+  {
+    "file": "test/wasm/wasm_aggregate_iteration_limited_empty.goose",
+    "group": "review",
+    "lines": 14,
+    "inspected": [
+      [
+        1,
+        14
+      ]
+    ],
+    "unread": [],
+    "note": "Fixture behavior and expected output checked together."
+  },
+  {
+    "file": "test/wasm/wasm_aggregate_iteration_paths.goose",
+    "group": "review",
+    "lines": 15,
+    "inspected": [
+      [
+        1,
+        15
+      ]
+    ],
+    "unread": [],
+    "note": "Fixture behavior and expected output checked together."
+  },
+  {
+    "file": "test/wasm/wasm_aggregate_iteration_refs_packed.goose",
+    "group": "review",
+    "lines": 8,
+    "inspected": [
+      [
+        1,
+        8
+      ]
+    ],
+    "unread": [],
+    "note": "Fixture behavior and expected output checked together."
+  },
+  {
+    "file": "test/wasm/wasm_aggregate_iteration_refs_thin.goose",
+    "group": "review",
+    "lines": 8,
+    "inspected": [
+      [
+        1,
+        8
+      ]
+    ],
+    "unread": [],
+    "note": "Fixture behavior and expected output checked together."
+  },
+  {
+    "file": "test/wasm/wasm_aggregate_iteration_values.goose",
+    "group": "review",
+    "lines": 13,
+    "inspected": [
+      [
+        1,
+        13
+      ]
+    ],
+    "unread": [],
+    "note": "Fixture behavior and expected output checked together."
+  },
+  {
+    "file": "test/wasm/wasm_aggregate_iteration_walk_packed.goose",
+    "group": "review",
+    "lines": 10,
+    "inspected": [
+      [
+        1,
+        10
+      ]
+    ],
+    "unread": [],
+    "note": "Fixture behavior and expected output checked together."
+  },
+  {
+    "file": "test/wasm/wasm_aggregate_iteration_zero_control.goose",
+    "group": "review",
+    "lines": 6,
+    "inspected": [
+      [
+        1,
+        6
+      ]
+    ],
+    "unread": [],
+    "note": "Fixture behavior and expected output checked together."
+  },
+  {
+    "file": "test/wasm_aggregate_admission.py",
+    "group": "review",
+    "lines": 118,
+    "inspected": [
+      [
+        1,
+        118
+      ]
+    ],
+    "unread": [],
+    "note": "Native-first exclusions and compile-only range limits; removed iteration rejection."
+  },
+  {
+    "file": "test/wasm_backend.py",
+    "group": "review",
+    "lines": 596,
+    "inspected": [
+      [
+        1,
+        596
+      ]
+    ],
+    "unread": [],
+    "note": "Full runner; fixture inclusion, owner checks, new controls, limits and footprint calls."
+  },
+  {
+    "file": "test/wasm_iteration_checks.py",
+    "group": "review",
+    "lines": 143,
+    "inspected": [
+      [
+        1,
+        143
+      ]
+    ],
+    "unread": [],
+    "note": "Specific damaged-module failures, validation, binder limit and static footprint."
+  },
+  {
+    "file": "test/wasm_iteration_owner.mjs",
+    "group": "review",
+    "lines": 50,
+    "inspected": [
+      [
+        1,
+        50
+      ]
+    ],
+    "unread": [],
+    "note": "Live completion, neighbor sentinel, zero-trip binder, outer owner and inner top."
+  },
+  {
+    "file": "src/wasm_fixed.h",
+    "group": "context",
+    "lines": 465,
+    "inspected": [
+      [
+        1,
+        465
+      ]
+    ],
+    "unread": [],
+    "note": "Search hits outside these ranges were used for navigation only."
+  },
+  {
+    "file": "src/wasm_support.h",
+    "group": "context",
+    "lines": 97,
+    "inspected": [
+      [
+        1,
+        97
+      ]
+    ],
+    "unread": [],
+    "note": "Search hits outside these ranges were used for navigation only."
+  },
+  {
+    "file": "test/wasm_aggregate_checks.py",
+    "group": "context",
+    "lines": 119,
+    "inspected": [
+      [
+        1,
+        119
+      ]
+    ],
+    "unread": [],
+    "note": "Search hits outside these ranges were used for navigation only."
+  },
+  {
+    "file": "src/clone.h",
+    "group": "context",
+    "lines": 740,
+    "inspected": [
+      [
+        245,
+        270
+      ],
+      [
+        550,
+        610
+      ]
+    ],
+    "unread": [
+      [
+        1,
+        244
+      ],
+      [
+        271,
+        549
+      ],
+      [
+        611,
+        740
+      ]
+    ],
+    "note": "Search hits outside these ranges were used for navigation only."
+  },
+  {
+    "file": "src/optimize.h",
+    "group": "context",
+    "lines": 1531,
+    "inspected": [
+      [
+        660,
+        716
+      ],
+      [
+        1040,
+        1080
+      ],
+      [
+        1480,
+        1505
+      ]
+    ],
+    "unread": [
+      [
+        1,
+        659
+      ],
+      [
+        717,
+        1039
+      ],
+      [
+        1081,
+        1479
+      ],
+      [
+        1506,
+        1531
+      ]
+    ],
+    "note": "Search hits outside these ranges were used for navigation only."
+  },
+  {
+    "file": "src/typecheck_exprs.h",
+    "group": "context",
+    "lines": 3427,
+    "inspected": [
+      [
+        1,
+        110
+      ],
+      [
+        490,
+        555
+      ]
+    ],
+    "unread": [
+      [
+        111,
+        489
+      ],
+      [
+        556,
+        3427
+      ]
+    ],
+    "note": "Search hits outside these ranges were used for navigation only."
+  },
+  {
+    "file": "src/typecheck_types.h",
+    "group": "context",
+    "lines": 1751,
+    "inspected": [
+      [
+        730,
+        785
+      ]
+    ],
+    "unread": [
+      [
+        1,
+        729
+      ],
+      [
+        786,
+        1751
+      ]
+    ],
+    "note": "Search hits outside these ranges were used for navigation only."
+  },
+  {
+    "file": "src/codegen_construct.h",
+    "group": "context",
+    "lines": 1407,
+    "inspected": [
+      [
+        1,
+        70
+      ],
+      [
+        900,
+        970
+      ]
+    ],
+    "unread": [
+      [
+        71,
+        899
+      ],
+      [
+        971,
+        1407
+      ]
+    ],
+    "note": "Search hits outside these ranges were used for navigation only."
+  },
+  {
+    "file": "src/value_layout.h",
+    "group": "context",
+    "lines": 399,
+    "inspected": [
+      [
+        1,
+        399
+      ]
+    ],
+    "unread": [],
+    "note": "Search hits outside these ranges were used for navigation only."
+  },
+  {
+    "file": "src/wasm_memory.h",
+    "group": "context",
+    "lines": 228,
+    "inspected": [
+      [
+        1,
+        228
+      ]
+    ],
+    "unread": [],
+    "note": "Search hits outside these ranges were used for navigation only."
+  },
+  {
+    "file": "src/wasm_binary.h",
+    "group": "context",
+    "lines": 191,
+    "inspected": [
+      [
+        1,
+        191
+      ]
+    ],
+    "unread": [],
+    "note": "Search hits outside these ranges were used for navigation only."
+  },
+  {
+    "file": "src/data_stacks.h",
+    "group": "context",
+    "lines": 79,
+    "inspected": [
+      [
+        1,
+        79
+      ]
+    ],
+    "unread": [],
+    "note": "Search hits outside these ranges were used for navigation only."
+  },
+  {
+    "file": "src/ast.h",
+    "group": "context",
+    "lines": 2967,
+    "inspected": [
+      [
+        1310,
+        1370
+      ],
+      [
+        1680,
+        1730
+      ]
+    ],
+    "unread": [
+      [
+        1,
+        1309
+      ],
+      [
+        1371,
+        1679
+      ],
+      [
+        1731,
+        2967
+      ]
+    ],
+    "note": "Search hits outside these ranges were used for navigation only."
+  },
+  {
+    "file": "src/codegen_nodes.h",
+    "group": "context",
+    "lines": 1297,
+    "inspected": [
+      [
+        975,
+        1235
+      ]
+    ],
+    "unread": [
+      [
+        1,
+        974
+      ],
+      [
+        1236,
+        1297
+      ]
+    ],
+    "note": "Search hits outside these ranges were used for navigation only."
+  },
+  {
+    "file": "src/codegen_values.h",
+    "group": "context",
+    "lines": 2060,
+    "inspected": [
+      [
+        475,
+        530
+      ]
+    ],
+    "unread": [
+      [
+        1,
+        474
+      ],
+      [
+        531,
+        2060
+      ]
+    ],
+    "note": "Search hits outside these ranges were used for navigation only."
+  },
+  {
+    "file": "src/codegen_stmts.h",
+    "group": "context",
+    "lines": 1215,
+    "inspected": [
+      [
+        650,
+        735
+      ]
+    ],
+    "unread": [
+      [
+        1,
+        649
+      ],
+      [
+        736,
+        1215
+      ]
+    ],
+    "note": "Search hits outside these ranges were used for navigation only."
+  },
+  {
+    "file": "src/typecheck_flow.h",
+    "group": "context",
+    "lines": 3242,
+    "inspected": [
+      [
+        1944,
+        2145
+      ]
+    ],
+    "unread": [
+      [
+        1,
+        1943
+      ],
+      [
+        2146,
+        3242
+      ]
+    ],
+    "note": "Search hits outside these ranges were used for navigation only."
+  },
+  {
+    "file": "scripts/run_wasm.mjs",
+    "group": "context",
+    "lines": 149,
+    "inspected": [
+      [
+        1,
+        149
+      ]
+    ],
+    "unread": [],
+    "note": "Search hits outside these ranges were used for navigation only."
+  },
+  {
+    "file": "test/wasmtime_host.py",
+    "group": "context",
+    "lines": 169,
+    "inspected": [
+      [
+        1,
+        169
+      ]
+    ],
+    "unread": [],
+    "note": "Search hits outside these ranges were used for navigation only."
+  },
+  {
+    "file": "test/wasm_multimemory.mjs",
+    "group": "context",
+    "lines": 85,
+    "inspected": [
+      [
+        1,
+        85
+      ]
+    ],
+    "unread": [],
+    "note": "Search hits outside these ranges were used for navigation only."
+  },
+  {
+    "file": "test/backend_shared.py",
+    "group": "context",
+    "lines": 71,
+    "inspected": [
+      [
+        1,
+        71
+      ]
+    ],
+    "unread": [],
+    "note": "Search hits outside these ranges were used for navigation only."
+  },
+  {
+    "file": "test/run_tests.py",
+    "group": "context",
+    "lines": 2882,
+    "inspected": [
+      [
+        1,
+        55
+      ],
+      [
+        1365,
+        1490
+      ]
+    ],
+    "unread": [
+      [
+        56,
+        1364
+      ],
+      [
+        1491,
+        2882
+      ]
+    ],
+    "note": "Search hits outside these ranges were used for navigation only."
+  },
+  {
+    "file": "CMakeLists.txt",
+    "group": "context",
+    "lines": 236,
+    "inspected": [
+      [
+        1,
+        150
+      ]
+    ],
+    "unread": [
+      [
+        151,
+        236
+      ]
+    ],
+    "note": "Search hits outside these ranges were used for navigation only."
+  }
+]

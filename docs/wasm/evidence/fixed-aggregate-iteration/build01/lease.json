@@ -1,0 +1,50 @@
+{
+  "owner": "Goose aggregate-iteration functional unit",
+  "pid": 451572,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "remaining-native",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-aggregate-iteration-20261107/build01/remaining-native.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "release-build",
+      "command": [
+        "cmake",
+        "--build",
+        "build",
+        "--parallel",
+        "2"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "freeze",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-aggregate-iteration-20261107/build01/freeze.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "iteration-checks",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-aggregate-iteration-20261107/build01/checks.py"
+      ],
+      "exit": 0
+    }
+  ],
+  "exit": 0,
+  "released_at": "2026-11-07T14:06:54.134801+00:00"
+}

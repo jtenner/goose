@@ -180,11 +180,13 @@ def main():
                 resource = run([args.node, ROOT / 'test' / 'wasm_multimemory.mjs', wasm, persistent, mode])
                 assert resource.stdout == reference.stdout, 'completed owner-state check changed output'
                 count += 1
-            if source.stem.startswith(('wasm_enum_', 'wasm_callback_', 'wasm_aggregate_array_')):
-                mode = ('frame-growth' if source.stem in ('wasm_enum_cleanup', 'wasm_aggregate_array_cleanup') else
+            if source.stem.startswith(('wasm_enum_', 'wasm_callback_', 'wasm_aggregate_array_', 'wasm_aggregate_iteration_')):
+                mode = ('frame-growth' if source.stem in ('wasm_enum_cleanup', 'wasm_aggregate_array_cleanup',
+                                                         'wasm_aggregate_iteration_cleanup') else
                         '' if source.stem in ('wasm_enum_containers', 'wasm_aggregate_array_packed',
                                              'wasm_aggregate_array_walk_packed', 'wasm_aggregate_array_nested_fields',
-                                             'wasm_aggregate_array_callbacks') else 'no-data')
+                                             'wasm_aggregate_array_callbacks', 'wasm_aggregate_iteration_refs_packed',
+                                             'wasm_aggregate_iteration_walk_packed', 'wasm_aggregate_iteration_checkpoint') else 'no-data')
                 resource = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
                 assert resource.stdout == reference.stdout, 'completed enum/callback owner-state check changed output'
                 count += 1
@@ -215,6 +217,10 @@ def main():
     count += check_aggregate_admission(run, exe, args.cc, out)
     count += check_aggregate_limits(run, exe, out)
     count += check_aggregate_footprint(run, exe, args.node, args.validator, args.wasmtime_python, out, function_local_counts)
+    from wasm_iteration_checks import check_modules as check_iteration_modules, check_limits as check_iteration_limits, check_footprint as check_iteration_footprint
+    count += check_iteration_modules(run, args.node, args.validator, args.wasmtime_python, out)
+    count += check_iteration_limits(run, exe, out)
+    count += check_iteration_footprint(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out)
     growth_source = out / 'frame-growth.goose'
     lines = ['recursive fn grow(n: i64) -> i64 {']
     for i in range(96):

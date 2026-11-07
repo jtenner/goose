@@ -1,0 +1,17 @@
+{
+  "values": "test/wasm/wasm_aggregate_iteration_values.goose",
+  "fields": "test/wasm/wasm_aggregate_iteration_fields.goose",
+  "identity": "test/wasm/wasm_aggregate_iteration_identity.goose",
+  "refs_thin": "test/wasm/wasm_aggregate_iteration_refs_thin.goose",
+  "refs_packed": "test/wasm/wasm_aggregate_iteration_refs_packed.goose",
+  "paths": "test/wasm/wasm_aggregate_iteration_paths.goose",
+  "walk_packed": "test/wasm/wasm_aggregate_iteration_walk_packed.goose",
+  "limited_empty": "test/wasm/wasm_aggregate_iteration_limited_empty.goose",
+  "callbacks": "test/wasm/wasm_aggregate_iteration_callbacks.goose",
+  "defaults": "test/wasm/wasm_aggregate_iteration_defaults.goose",
+  "cleanup": "test/wasm/wasm_aggregate_iteration_cleanup.goose",
+  "enums": "test/wasm/wasm_aggregate_iteration_enums.goose",
+  "control": "test/wasm/wasm_aggregate_iteration_control.goose",
+  "checkpoint": "test/wasm/wasm_aggregate_iteration_checkpoint.goose",
+  "zero_control": "test/wasm/wasm_aggregate_iteration_zero_control.goose"
+}

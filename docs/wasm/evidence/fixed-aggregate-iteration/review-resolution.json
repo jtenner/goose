@@ -1,0 +1,17 @@
+{
+  "review": "astra-review.md",
+  "confirmed_production_findings": 0,
+  "review_files_read": 40,
+  "context_files_consulted": 23,
+  "source_or_test_changes_after_review": false,
+  "compiler_sha256": "c9519e59d47ea996b84d249fee688704bfab0ed49cf5c1ef844e7daf3bdd60d2",
+  "reviewed_patch_sha256": "f9129398a1249f51b40722af40f45156cd16bf221465dc2a15c608168af1cf50",
+  "limits": [
+    "Compiler/runtime CPU, RSS, allocations, engine native-code size and physical-retention unmeasured.",
+    "Linux-only native evidence, existing platform and JIT skips, no new sanitizer run.",
+    "Dedicated integer-index-width and const/optional/reference-type combination matrix is incomplete.",
+    "Original generic corrected-native manifest was overwritten; per-command streams, original summary stdout and labelled reconstruction retained.",
+    "Full suite has aggregate logs/artifacts; targeted units have per-command streams."
+  ],
+  "after_review_changes": "Archive independent report and audits, and update documentation only."
+}

@@ -1,0 +1,524 @@
+[
+  {
+    "name": "O0-cleanup-live-owner",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_iteration_owner.mjs",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls01/checkpoint-O0-owner.wasm",
+      "cleanup"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "short-O0-parse",
+    "command": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/short-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/short-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "short-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/short-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "short-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/short-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "short-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/short-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "stride-O0-parse",
+    "command": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/stride-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/stride-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "stride-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/stride-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "stride-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/stride-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "stride-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/stride-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "alias-O0-parse",
+    "command": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/alias-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/alias-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "alias-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/alias-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "alias-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/alias-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "alias-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/alias-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "long-O0-parse",
+    "command": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/long-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/long-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "long-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/long-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "long-O0-owner",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_iteration_owner.mjs",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/long-O0.wasm",
+      "copy"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "eager-O0-parse",
+    "command": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/eager-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/eager-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "eager-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/eager-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "eager-O0-owner",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_iteration_owner.mjs",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/eager-O0.wasm",
+      "zero"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "cleanup-O0-parse",
+    "command": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/cleanup-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/cleanup-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/cleanup-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O0-owner",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_iteration_owner.mjs",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/cleanup-O0.wasm",
+      "cleanup"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "packed-O0-dump",
+    "command": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/build01/refs_packed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "memory-O0-parse",
+    "command": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/memory-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/memory-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "memory-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/memory-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "memory-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/memory-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "memory-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/memory-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "O2-cleanup-live-owner",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_iteration_owner.mjs",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls01/checkpoint-O2-owner.wasm",
+      "cleanup"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "short-O2-parse",
+    "command": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/short-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/short-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "short-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/short-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "short-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/short-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "short-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/short-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "stride-O2-parse",
+    "command": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/stride-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/stride-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "stride-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/stride-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "stride-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/stride-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "stride-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/stride-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "alias-O2-parse",
+    "command": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/alias-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/alias-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "alias-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/alias-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "alias-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/alias-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "alias-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/alias-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "long-O2-parse",
+    "command": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/long-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/long-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "long-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/long-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "long-O2-owner",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_iteration_owner.mjs",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/long-O2.wasm",
+      "copy"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "eager-O2-parse",
+    "command": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/eager-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/eager-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "eager-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/eager-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "eager-O2-owner",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_iteration_owner.mjs",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/eager-O2.wasm",
+      "zero"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "cleanup-O2-parse",
+    "command": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/cleanup-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/cleanup-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/cleanup-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O2-owner",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_iteration_owner.mjs",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/cleanup-O2.wasm",
+      "cleanup"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "packed-O2-dump",
+    "command": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/build01/refs_packed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "memory-O2-parse",
+    "command": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/memory-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/memory-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "memory-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/memory-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "memory-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/memory-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "memory-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-iteration-20261107/controls02/memory-O2.wasm"
+    ],
+    "exit": 1
+  }
+]

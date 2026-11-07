@@ -1,0 +1,3 @@
+/tmp/goose-wasm-aggregate-iteration-20261107/native01/enums.goose:7: error: expected '}' in match expression, found '+='
+  match e { Data p => { var own: E.Data = copy(p); own.n += 10; assert(p.n == 7); total += p.n; }, Other p => { assert(p.b[2] == 3); total += p.b[2]; }, Empty => total += 1 }
+                                                                                                                                                                        ^~

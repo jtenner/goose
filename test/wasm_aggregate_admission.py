@@ -23,9 +23,6 @@ CASES = {'default': ['struct S { x: i64 = 7 }\nfn main() { var a: S[2] = default
  'discard-pop': ['struct S { x: i64 = 7 }\n'
                  'fn main() { var a: S[..3] = [S { x: 1 }]; a.pop(); print(a.len); }\n',
                  ['aggregate push/pop', 'aggregate values need']],
- 'iteration': ['struct S { x: i64 = 7 }\n'
-               'fn main() { var a: S[1] = [S { x: 1 }]; for s in a { print(s.x); } }\n',
-               ['by-value aggregate iteration', 'aggregate element reads']],
  'equality': ['struct S { x: i64 = 7 }\n'
               'fn main() { var a: S[1] = [S { x: 1 }]; var b: S[1] = [S { x: 1 }]; print(a == b); }\n',
               ['aggregate array equality']],

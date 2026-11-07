@@ -1,0 +1,40 @@
+{
+  "owner": "Goose aggregate-iteration functional unit",
+  "pid": 534251,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "source-identity",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-aggregate-iteration-20261107/full-wasm01/verify-source.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "exact-comparisons",
+      "command": [
+        "python3",
+        "test/backend_shared.py",
+        "--reference",
+        "build/goose-inline-checkpoint",
+        "--exe",
+        "/tmp/goose-wasm-aggregate-iteration-20261107/build01/goose-tested",
+        "--out",
+        "/tmp/goose-wasm-aggregate-iteration-20261107/compatibility01/exact"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "prior-modules",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-aggregate-iteration-20261107/compatibility01/compare.py"
+      ],
+      "exit": 0
+    }
+  ],
+  "exit": 0,
+  "released_at": "2026-11-07T14:24:31.772182+00:00"
+}

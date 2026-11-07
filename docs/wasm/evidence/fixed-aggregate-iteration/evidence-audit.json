@@ -1,0 +1,205 @@
+{
+  "build01/source-hashes.json": {
+    "count": 86,
+    "mismatches": []
+  },
+  "full-wasm01/test-hashes.json": {
+    "count": 3880,
+    "mismatches": []
+  },
+  "parent_compiler_sha256": "bd3856b6c2eedd69bd4eaf343aa9f505794f1a17ab3383194b218fbe33fa368d",
+  "targeted_records": {
+    "native01": {
+      "commands": 90,
+      "status_mismatches": [],
+      "nonzero": [
+        "values-O0-prior-wasm",
+        "values-O2-prior-wasm",
+        "enums-O0-native-emit",
+        "enums-O2-native-emit",
+        "fields-O0-prior-wasm",
+        "fields-O2-prior-wasm",
+        "identity-O0-prior-wasm",
+        "identity-O2-prior-wasm",
+        "refs_thin-O0-prior-wasm",
+        "refs_thin-O2-prior-wasm",
+        "refs_packed-O0-prior-wasm",
+        "refs_packed-O2-prior-wasm",
+        "paths-O0-prior-wasm",
+        "paths-O2-prior-wasm",
+        "walk_packed-O0-prior-wasm",
+        "walk_packed-O2-prior-wasm",
+        "limited_empty-O0-prior-wasm",
+        "limited_empty-O2-prior-wasm",
+        "callbacks-O0-prior-wasm",
+        "callbacks-O2-prior-wasm",
+        "defaults-O0-prior-wasm",
+        "defaults-O2-prior-wasm",
+        "cleanup-O0-prior-wasm",
+        "cleanup-O2-prior-wasm"
+      ]
+    },
+    "build01": {
+      "commands": 120,
+      "status_mismatches": [],
+      "nonzero": []
+    },
+    "controls01": {
+      "commands": 70,
+      "status_mismatches": [],
+      "nonzero": [
+        "checkpoint-O0-live-owner",
+        "checkpoint-O2-live-owner",
+        "frame_limit-O0-emit",
+        "frame_limit-O2-emit"
+      ]
+    },
+    "controls02": {
+      "commands": 54,
+      "status_mismatches": [],
+      "nonzero": [
+        "short-O0-node",
+        "short-O0-wasmtime",
+        "stride-O0-node",
+        "stride-O0-wasmtime",
+        "alias-O0-node",
+        "alias-O0-wasmtime",
+        "long-O0-owner",
+        "eager-O0-owner",
+        "cleanup-O0-owner",
+        "memory-O0-node",
+        "memory-O0-wasmtime",
+        "short-O2-node",
+        "short-O2-wasmtime",
+        "stride-O2-node",
+        "stride-O2-wasmtime",
+        "alias-O2-node",
+        "alias-O2-wasmtime",
+        "long-O2-owner",
+        "eager-O2-owner",
+        "cleanup-O2-owner",
+        "memory-O2-node",
+        "memory-O2-wasmtime"
+      ]
+    }
+  },
+  "native_target_comparisons": [
+    "values-O0",
+    "values-O2",
+    "enums-O0",
+    "enums-O2",
+    "fields-O0",
+    "fields-O2",
+    "identity-O0",
+    "identity-O2",
+    "refs_thin-O0",
+    "refs_thin-O2",
+    "refs_packed-O0",
+    "refs_packed-O2",
+    "paths-O0",
+    "paths-O2",
+    "walk_packed-O0",
+    "walk_packed-O2",
+    "limited_empty-O0",
+    "limited_empty-O2",
+    "callbacks-O0",
+    "callbacks-O2",
+    "defaults-O0",
+    "defaults-O2",
+    "cleanup-O0",
+    "cleanup-O2"
+  ],
+  "control_failures": [
+    {
+      "name": "short-O0-node",
+      "reason": "goose runtime error: assert failed at /tmp/goose-wasm-aggregate-iteration-20261107/controls01/control.goose:6"
+    },
+    {
+      "name": "short-O0-wasmtime",
+      "reason": "goose runtime error: assert failed at /tmp/goose-wasm-aggregate-iteration-20261107/controls01/control.goose:6"
+    },
+    {
+      "name": "stride-O0-node",
+      "reason": "goose runtime error: assert failed at /tmp/goose-wasm-aggregate-iteration-20261107/controls01/control.goose:5"
+    },
+    {
+      "name": "stride-O0-wasmtime",
+      "reason": "goose runtime error: assert failed at /tmp/goose-wasm-aggregate-iteration-20261107/controls01/control.goose:5"
+    },
+    {
+      "name": "alias-O0-node",
+      "reason": "goose runtime error: assert failed at /tmp/goose-wasm-aggregate-iteration-20261107/controls01/control.goose:8"
+    },
+    {
+      "name": "alias-O0-wasmtime",
+      "reason": "goose runtime error: assert failed at /tmp/goose-wasm-aggregate-iteration-20261107/controls01/control.goose:8"
+    },
+    {
+      "name": "memory-O0-node",
+      "reason": "goose runtime error: assert failed at /tmp/goose-wasm-aggregate-iteration-20261107/native01/refs_packed.goose:5"
+    },
+    {
+      "name": "memory-O0-wasmtime",
+      "reason": "goose runtime error: assert failed at /tmp/goose-wasm-aggregate-iteration-20261107/native01/refs_packed.goose:5"
+    },
+    {
+      "name": "long-O0-owner",
+      "reason": "iteration copy crossed its planned owner image"
+    },
+    {
+      "name": "eager-O0-owner",
+      "reason": "zero-trip iteration copied an element"
+    },
+    {
+      "name": "cleanup-O0-owner",
+      "reason": "iteration body data top was not restored at its completion"
+    },
+    {
+      "name": "short-O2-node",
+      "reason": "goose runtime error: assert failed at /tmp/goose-wasm-aggregate-iteration-20261107/controls01/control.goose:6"
+    },
+    {
+      "name": "short-O2-wasmtime",
+      "reason": "goose runtime error: assert failed at /tmp/goose-wasm-aggregate-iteration-20261107/controls01/control.goose:6"
+    },
+    {
+      "name": "stride-O2-node",
+      "reason": "goose runtime error: assert failed at /tmp/goose-wasm-aggregate-iteration-20261107/controls01/control.goose:5"
+    },
+    {
+      "name": "stride-O2-wasmtime",
+      "reason": "goose runtime error: assert failed at /tmp/goose-wasm-aggregate-iteration-20261107/controls01/control.goose:5"
+    },
+    {
+      "name": "alias-O2-node",
+      "reason": "goose runtime error: assert failed at /tmp/goose-wasm-aggregate-iteration-20261107/controls01/control.goose:8"
+    },
+    {
+      "name": "alias-O2-wasmtime",
+      "reason": "goose runtime error: assert failed at /tmp/goose-wasm-aggregate-iteration-20261107/controls01/control.goose:8"
+    },
+    {
+      "name": "memory-O2-node",
+      "reason": "goose runtime error: assert failed at /tmp/goose-wasm-aggregate-iteration-20261107/native01/refs_packed.goose:5"
+    },
+    {
+      "name": "memory-O2-wasmtime",
+      "reason": "goose runtime error: assert failed at /tmp/goose-wasm-aggregate-iteration-20261107/native01/refs_packed.goose:5"
+    },
+    {
+      "name": "long-O2-owner",
+      "reason": "iteration copy crossed its planned owner image"
+    },
+    {
+      "name": "eager-O2-owner",
+      "reason": "zero-trip iteration copied an element"
+    },
+    {
+      "name": "cleanup-O2-owner",
+      "reason": "iteration body data top was not restored at its completion"
+    }
+  ],
+  "prior_module_pairs": 196,
+  "exact_comparisons": 52,
+  "issues": []
+}

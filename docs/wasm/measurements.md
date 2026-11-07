@@ -106,3 +106,27 @@ identities, allocation counts, peak RSS, retained pages, Wasm/native-code size
 and confidence/qualification limits. The 12/11 constant constructor-local counts
 do not establish these costs. This work needs a fresh coordinated scope and
 exclusive lease with normal host controls. It is queued, not measured.
+
+## Pending copied aggregate-iteration measurements
+
+The iteration increment reuses one planned frame slot for each fixed aggregate
+copy binder. Compare accepted array compiler `bd3856b6` with iteration compiler
+`c9519e59` on unchanged scalar/reference loops, constructors, matches, checked
+callbacks and defaults. For the new syntax, compare against the parent-accepted
+`for &e` plus an explicit fresh `copy(e)` with the same checked output. Record
+source/frame differences; the parent cannot compile the new syntax itself.
+
+Separate compiler CPU/wall time, RSS and allocation profiles from instantiation,
+initialization and guest execution. Include 0/1/32/256 passes, nested binders,
+path depths 1/2/8, thin/packed reference targets, 1/7/16/256/40008-byte elements,
+large inactive enum payloads and unused nested limited capacity. Test cold and
+warm calls, repeated early exits, defers, live outer owners and growth thresholds.
+Record exact source/tool/engine identities, raw samples and qualified uncertainty,
+code size, logical tops, addressable pages and separately observed RSS or physical
+retention. Copy work grows with selected image bytes; a restored top does not
+shrink memory. Constant loop scratch does not prove a speed or memory gain.
+
+Use a fresh coordinated measurement scope with explicit host controls,
+affinity, repetitions, warmups and decision limits. If a shared-path change
+causes a clear measured loss, park it. No scalar timing grant is reused and no
+performance acceptance is claimed by this queued handoff.

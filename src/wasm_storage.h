@@ -12,7 +12,7 @@ struct WasmStoragePlan {
     unordered_map<VarDef *, uint32_t> owners;
     unordered_map<Call *, int> calltops;
     vector<VarDef *> globals;
-    enum class FixedOrigin { Declaration, MatchCopy };
+    enum class FixedOrigin { Declaration, MatchCopy, IterationCopy };
     struct FixedOwner {
         uint32_t bytes = 0, image = 0;
         Node *initialization = nullptr;
@@ -99,6 +99,19 @@ struct WasmStoragePlan {
                 }
             }
             for (auto init : v->inits) Walk(init, function, next);
+            return;
+        }
+        if (auto loop = Is<ForLoop>(n); loop && WasmValueSupport::Nominal(loop->vdef->type)) {
+            if (loop->iterkind == IK_ARRAY && !loop->byref && loop->vdef->copybind) {
+                NoteType(loop->vdef->type);
+                FixedOwner fixed;
+                fixed.initialization = loop;
+                fixed.origin = FixedOrigin::IterationCopy;
+                fixed.initialized = true;
+                fixedvalues[loop->vdef] = fixed;
+            }
+            Walk(loop->iter, function, next);
+            Walk(loop->body, function, next);
             return;
         }
         if (auto match = Is<MatchExpr>(n)) {

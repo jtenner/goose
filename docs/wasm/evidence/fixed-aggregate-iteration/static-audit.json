@@ -1,0 +1,170 @@
+[
+  {
+    "file": "iteration-length-0-O0.wasm",
+    "module_bytes": 1111,
+    "main_body_bytes": 213,
+    "main_instruction_bytes": 198,
+    "main_locals": 13,
+    "binder_frame_bytes": 8,
+    "loop_copy_sites": 1,
+    "reserve_before_loop": true,
+    "copy_memories": [
+      0,
+      0
+    ]
+  },
+  {
+    "file": "iteration-length-0-O2.wasm",
+    "module_bytes": 1111,
+    "main_body_bytes": 213,
+    "main_instruction_bytes": 198,
+    "main_locals": 13,
+    "binder_frame_bytes": 8,
+    "loop_copy_sites": 1,
+    "reserve_before_loop": true,
+    "copy_memories": [
+      0,
+      0
+    ]
+  },
+  {
+    "file": "iteration-length-1-O0.wasm",
+    "module_bytes": 1118,
+    "main_body_bytes": 213,
+    "main_instruction_bytes": 198,
+    "main_locals": 13,
+    "binder_frame_bytes": 8,
+    "loop_copy_sites": 1,
+    "reserve_before_loop": true,
+    "copy_memories": [
+      0,
+      0
+    ]
+  },
+  {
+    "file": "iteration-length-1-O2.wasm",
+    "module_bytes": 1118,
+    "main_body_bytes": 213,
+    "main_instruction_bytes": 198,
+    "main_locals": 13,
+    "binder_frame_bytes": 8,
+    "loop_copy_sites": 1,
+    "reserve_before_loop": true,
+    "copy_memories": [
+      0,
+      0
+    ]
+  },
+  {
+    "file": "iteration-length-32-O0.wasm",
+    "module_bytes": 1358,
+    "main_body_bytes": 213,
+    "main_instruction_bytes": 198,
+    "main_locals": 13,
+    "binder_frame_bytes": 8,
+    "loop_copy_sites": 1,
+    "reserve_before_loop": true,
+    "copy_memories": [
+      0,
+      0
+    ]
+  },
+  {
+    "file": "iteration-length-32-O2.wasm",
+    "module_bytes": 1358,
+    "main_body_bytes": 213,
+    "main_instruction_bytes": 198,
+    "main_locals": 13,
+    "binder_frame_bytes": 8,
+    "loop_copy_sites": 1,
+    "reserve_before_loop": true,
+    "copy_memories": [
+      0,
+      0
+    ]
+  },
+  {
+    "file": "iteration-length-256-O0.wasm",
+    "module_bytes": 3156,
+    "main_body_bytes": 215,
+    "main_instruction_bytes": 200,
+    "main_locals": 13,
+    "binder_frame_bytes": 8,
+    "loop_copy_sites": 1,
+    "reserve_before_loop": true,
+    "copy_memories": [
+      0,
+      0
+    ]
+  },
+  {
+    "file": "iteration-length-256-O2.wasm",
+    "module_bytes": 3156,
+    "main_body_bytes": 215,
+    "main_instruction_bytes": 200,
+    "main_locals": 13,
+    "binder_frame_bytes": 8,
+    "loop_copy_sites": 1,
+    "reserve_before_loop": true,
+    "copy_memories": [
+      0,
+      0
+    ]
+  },
+  {
+    "file": "iteration-capacity-32-O0.wasm",
+    "module_bytes": 1145,
+    "main_body_bytes": 219,
+    "main_instruction_bytes": 204,
+    "main_locals": 13,
+    "binder_frame_bytes": 8,
+    "loop_copy_sites": 1,
+    "reserve_before_loop": true,
+    "copy_memories": [
+      0,
+      0
+    ]
+  },
+  {
+    "file": "iteration-capacity-32-O2.wasm",
+    "module_bytes": 1145,
+    "main_body_bytes": 219,
+    "main_instruction_bytes": 204,
+    "main_locals": 13,
+    "binder_frame_bytes": 8,
+    "loop_copy_sites": 1,
+    "reserve_before_loop": true,
+    "copy_memories": [
+      0,
+      0
+    ]
+  },
+  {
+    "file": "iteration-capacity-65536-O0.wasm",
+    "module_bytes": 1164,
+    "main_body_bytes": 222,
+    "main_instruction_bytes": 207,
+    "main_locals": 13,
+    "binder_frame_bytes": 8,
+    "loop_copy_sites": 1,
+    "reserve_before_loop": true,
+    "copy_memories": [
+      0,
+      0
+    ]
+  },
+  {
+    "file": "iteration-capacity-65536-O2.wasm",
+    "module_bytes": 1164,
+    "main_body_bytes": 222,
+    "main_instruction_bytes": 207,
+    "main_locals": 13,
+    "binder_frame_bytes": 8,
+    "loop_copy_sites": 1,
+    "reserve_before_loop": true,
+    "copy_memories": [
+      0,
+      0
+    ]
+  }
+]

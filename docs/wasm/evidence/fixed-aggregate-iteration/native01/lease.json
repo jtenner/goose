@@ -1,0 +1,18 @@
+{
+  "owner": "Goose aggregate-iteration functional unit",
+  "pid": 438916,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "native-oracles",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-aggregate-iteration-20261107/native01/checks.py"
+      ],
+      "exit": 1
+    }
+  ],
+  "exit": 1,
+  "released_at": "2026-11-07T14:01:57.118892+00:00"
+}
