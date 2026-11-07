@@ -1,0 +1,16 @@
+[
+  {
+    "case": "aggregate_exit",
+    "opt": 0,
+    "source_sha256": "d0ed6befd52ef6671c23ee72f64a99a280e3d38988c139a5a8df748a9b29f3d7",
+    "native": "PASS",
+    "wasm_before": "constructor temporary diagnostic"
+  },
+  {
+    "case": "aggregate_exit",
+    "opt": 2,
+    "source_sha256": "d0ed6befd52ef6671c23ee72f64a99a280e3d38988c139a5a8df748a9b29f3d7",
+    "native": "PASS",
+    "wasm_before": "constructor temporary diagnostic"
+  }
+]

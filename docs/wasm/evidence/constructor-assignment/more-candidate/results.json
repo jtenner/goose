@@ -1,0 +1,128 @@
+[
+  {
+    "case": "array_scalar_exit",
+    "opt": 0,
+    "source_sha256": "e66e587fe10261fdd65f595357f7131c9d313ed855a7772746bec5e4a0f21e6d",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_scalar_exit.goose:0: error: wasm target: this value layout is not implemented (scalar backend)\n",
+    "candidate_node": "PASS",
+    "candidate_wasmtime": "PASS"
+  },
+  {
+    "case": "array_scalar_exit",
+    "opt": 2,
+    "source_sha256": "e66e587fe10261fdd65f595357f7131c9d313ed855a7772746bec5e4a0f21e6d",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_scalar_exit.goose:0: error: wasm target: this value layout is not implemented (scalar backend)\n",
+    "candidate_node": "PASS",
+    "candidate_wasmtime": "PASS"
+  },
+  {
+    "case": "array_scalar_limited_exit",
+    "opt": 0,
+    "source_sha256": "dab0143aedaede97b346084452942cc52b92cd3b699a2c9c479aabd70f902f3d",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_scalar_limited_exit.goose:0: error: wasm target: this value layout is not implemented (scalar backend)\n",
+    "candidate_node": "PASS",
+    "candidate_wasmtime": "PASS"
+  },
+  {
+    "case": "array_scalar_limited_exit",
+    "opt": 2,
+    "source_sha256": "dab0143aedaede97b346084452942cc52b92cd3b699a2c9c479aabd70f902f3d",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_scalar_limited_exit.goose:0: error: wasm target: this value layout is not implemented (scalar backend)\n",
+    "candidate_node": "PASS",
+    "candidate_wasmtime": "PASS"
+  },
+  {
+    "case": "array_aggregate_exit",
+    "opt": 0,
+    "source_sha256": "13e3c3390dd241857d923f219de6aa74b68250a943f0e8246dd2bc41b8b15704",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_aggregate_exit.goose:4: error: wasm target: aggregate adaptation needs the pending destination lowering\n",
+    "candidate_node": "PASS",
+    "candidate_wasmtime": "PASS"
+  },
+  {
+    "case": "array_aggregate_exit",
+    "opt": 2,
+    "source_sha256": "13e3c3390dd241857d923f219de6aa74b68250a943f0e8246dd2bc41b8b15704",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_aggregate_exit.goose:4: error: wasm target: aggregate adaptation needs the pending destination lowering\n",
+    "candidate_node": "PASS",
+    "candidate_wasmtime": "PASS"
+  },
+  {
+    "case": "array_aggregate_limited_exit",
+    "opt": 0,
+    "source_sha256": "635c776e39e704b90cef7d8c02f6e3e3742e709dc6c2634a0b0365ccf63719ca",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_aggregate_limited_exit.goose:4: error: wasm target: aggregate adaptation needs the pending destination lowering\n",
+    "candidate_node": "PASS",
+    "candidate_wasmtime": "PASS"
+  },
+  {
+    "case": "array_aggregate_limited_exit",
+    "opt": 2,
+    "source_sha256": "635c776e39e704b90cef7d8c02f6e3e3742e709dc6c2634a0b0365ccf63719ca",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_aggregate_limited_exit.goose:4: error: wasm target: aggregate adaptation needs the pending destination lowering\n",
+    "candidate_node": "PASS",
+    "candidate_wasmtime": "PASS"
+  },
+  {
+    "case": "data_exit",
+    "opt": 0,
+    "source_sha256": "ab541aaad2b5760da4bfeac416a5c70bf68b2adad76df1a507b37484e9562757",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/data_exit.goose:2: error: wasm target: aggregate adaptation needs the pending destination lowering\n",
+    "candidate_node": "PASS",
+    "candidate_wasmtime": "PASS"
+  },
+  {
+    "case": "data_exit",
+    "opt": 2,
+    "source_sha256": "ab541aaad2b5760da4bfeac416a5c70bf68b2adad76df1a507b37484e9562757",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/data_exit.goose:2: error: wasm target: aggregate adaptation needs the pending destination lowering\n",
+    "candidate_node": "PASS",
+    "candidate_wasmtime": "PASS"
+  },
+  {
+    "case": "array_copies",
+    "opt": 0,
+    "source_sha256": "84f21219cd5cea398f2e93dc662be4c418609e4b7180822b6ef3990504847f3a",
+    "native": "PASS",
+    "wasm_before": "PASS",
+    "candidate_node": "PASS",
+    "candidate_wasmtime": "PASS"
+  },
+  {
+    "case": "array_copies",
+    "opt": 2,
+    "source_sha256": "84f21219cd5cea398f2e93dc662be4c418609e4b7180822b6ef3990504847f3a",
+    "native": "PASS",
+    "wasm_before": "PASS",
+    "candidate_node": "PASS",
+    "candidate_wasmtime": "PASS"
+  },
+  {
+    "case": "nested_assignment",
+    "opt": 0,
+    "source_sha256": "75a95990c07f2a36dda0de76a152bc887bc84d66003dc0dc797809d91d5ecbc1",
+    "native": "PASS",
+    "wasm_before": "PASS",
+    "candidate_node": "PASS",
+    "candidate_wasmtime": "PASS"
+  },
+  {
+    "case": "nested_assignment",
+    "opt": 2,
+    "source_sha256": "75a95990c07f2a36dda0de76a152bc887bc84d66003dc0dc797809d91d5ecbc1",
+    "native": "PASS",
+    "wasm_before": "PASS",
+    "candidate_node": "PASS",
+    "candidate_wasmtime": "PASS"
+  }
+]

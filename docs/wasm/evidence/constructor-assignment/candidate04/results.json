@@ -1,0 +1,970 @@
+[
+  {
+    "case": "abandon",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "abandon",
+        "opt": 0,
+        "source_sha256": "c8d787ceed420355af3a6fc6d3755ac07b30d328ca0196f855304cc2d8f26115",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "abandon",
+        "opt": 2,
+        "source_sha256": "c8d787ceed420355af3a6fc6d3755ac07b30d328ca0196f855304cc2d8f26115",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "abandon",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "abandon",
+        "opt": 0,
+        "source_sha256": "c8d787ceed420355af3a6fc6d3755ac07b30d328ca0196f855304cc2d8f26115",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "abandon",
+        "opt": 2,
+        "source_sha256": "c8d787ceed420355af3a6fc6d3755ac07b30d328ca0196f855304cc2d8f26115",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "aggregate_exit",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "aggregate_exit",
+        "opt": 0,
+        "source_sha256": "d0ed6befd52ef6671c23ee72f64a99a280e3d38988c139a5a8df748a9b29f3d7",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "aggregate_exit",
+        "opt": 2,
+        "source_sha256": "d0ed6befd52ef6671c23ee72f64a99a280e3d38988c139a5a8df748a9b29f3d7",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "aggregate_exit",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "aggregate_exit",
+        "opt": 0,
+        "source_sha256": "d0ed6befd52ef6671c23ee72f64a99a280e3d38988c139a5a8df748a9b29f3d7",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "aggregate_exit",
+        "opt": 2,
+        "source_sha256": "d0ed6befd52ef6671c23ee72f64a99a280e3d38988c139a5a8df748a9b29f3d7",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "alias",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "alias",
+        "opt": 0,
+        "source_sha256": "5d7f55dbaf399b7019221dabbbe7a50a78daf8d4e69a6f92a09192bcf81a3e9f",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "alias",
+        "opt": 2,
+        "source_sha256": "5d7f55dbaf399b7019221dabbbe7a50a78daf8d4e69a6f92a09192bcf81a3e9f",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "alias",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "alias",
+        "opt": 0,
+        "source_sha256": "5d7f55dbaf399b7019221dabbbe7a50a78daf8d4e69a6f92a09192bcf81a3e9f",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "alias",
+        "opt": 2,
+        "source_sha256": "5d7f55dbaf399b7019221dabbbe7a50a78daf8d4e69a6f92a09192bcf81a3e9f",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "array_aggregate_exit",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "array_aggregate_exit",
+        "opt": 0,
+        "source_sha256": "13e3c3390dd241857d923f219de6aa74b68250a943f0e8246dd2bc41b8b15704",
+        "native": "PASS",
+        "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_aggregate_exit.goose:4: error: wasm target: aggregate adaptation needs the pending destination lowering\n"
+      },
+      {
+        "case": "array_aggregate_exit",
+        "opt": 2,
+        "source_sha256": "13e3c3390dd241857d923f219de6aa74b68250a943f0e8246dd2bc41b8b15704",
+        "native": "PASS",
+        "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_aggregate_exit.goose:4: error: wasm target: aggregate adaptation needs the pending destination lowering\n"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "array_aggregate_exit",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "array_aggregate_exit",
+        "opt": 0,
+        "source_sha256": "13e3c3390dd241857d923f219de6aa74b68250a943f0e8246dd2bc41b8b15704",
+        "native": "PASS",
+        "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_aggregate_exit.goose:4: error: wasm target: aggregate adaptation needs the pending destination lowering\n"
+      },
+      {
+        "case": "array_aggregate_exit",
+        "opt": 2,
+        "source_sha256": "13e3c3390dd241857d923f219de6aa74b68250a943f0e8246dd2bc41b8b15704",
+        "native": "PASS",
+        "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_aggregate_exit.goose:4: error: wasm target: aggregate adaptation needs the pending destination lowering\n"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "array_aggregate_limited_exit",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "array_aggregate_limited_exit",
+        "opt": 0,
+        "source_sha256": "635c776e39e704b90cef7d8c02f6e3e3742e709dc6c2634a0b0365ccf63719ca",
+        "native": "PASS",
+        "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_aggregate_limited_exit.goose:4: error: wasm target: aggregate adaptation needs the pending destination lowering\n"
+      },
+      {
+        "case": "array_aggregate_limited_exit",
+        "opt": 2,
+        "source_sha256": "635c776e39e704b90cef7d8c02f6e3e3742e709dc6c2634a0b0365ccf63719ca",
+        "native": "PASS",
+        "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_aggregate_limited_exit.goose:4: error: wasm target: aggregate adaptation needs the pending destination lowering\n"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "array_aggregate_limited_exit",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "array_aggregate_limited_exit",
+        "opt": 0,
+        "source_sha256": "635c776e39e704b90cef7d8c02f6e3e3742e709dc6c2634a0b0365ccf63719ca",
+        "native": "PASS",
+        "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_aggregate_limited_exit.goose:4: error: wasm target: aggregate adaptation needs the pending destination lowering\n"
+      },
+      {
+        "case": "array_aggregate_limited_exit",
+        "opt": 2,
+        "source_sha256": "635c776e39e704b90cef7d8c02f6e3e3742e709dc6c2634a0b0365ccf63719ca",
+        "native": "PASS",
+        "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_aggregate_limited_exit.goose:4: error: wasm target: aggregate adaptation needs the pending destination lowering\n"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "array_copies",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "array_copies",
+        "opt": 0,
+        "source_sha256": "84f21219cd5cea398f2e93dc662be4c418609e4b7180822b6ef3990504847f3a",
+        "native": "PASS",
+        "wasm_before": "PASS"
+      },
+      {
+        "case": "array_copies",
+        "opt": 2,
+        "source_sha256": "84f21219cd5cea398f2e93dc662be4c418609e4b7180822b6ef3990504847f3a",
+        "native": "PASS",
+        "wasm_before": "PASS"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "array_copies",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "array_copies",
+        "opt": 0,
+        "source_sha256": "84f21219cd5cea398f2e93dc662be4c418609e4b7180822b6ef3990504847f3a",
+        "native": "PASS",
+        "wasm_before": "PASS"
+      },
+      {
+        "case": "array_copies",
+        "opt": 2,
+        "source_sha256": "84f21219cd5cea398f2e93dc662be4c418609e4b7180822b6ef3990504847f3a",
+        "native": "PASS",
+        "wasm_before": "PASS"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "array_scalar_exit",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "array_scalar_exit",
+        "opt": 0,
+        "source_sha256": "e66e587fe10261fdd65f595357f7131c9d313ed855a7772746bec5e4a0f21e6d",
+        "native": "PASS",
+        "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_scalar_exit.goose:0: error: wasm target: this value layout is not implemented (scalar backend)\n"
+      },
+      {
+        "case": "array_scalar_exit",
+        "opt": 2,
+        "source_sha256": "e66e587fe10261fdd65f595357f7131c9d313ed855a7772746bec5e4a0f21e6d",
+        "native": "PASS",
+        "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_scalar_exit.goose:0: error: wasm target: this value layout is not implemented (scalar backend)\n"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "array_scalar_exit",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "array_scalar_exit",
+        "opt": 0,
+        "source_sha256": "e66e587fe10261fdd65f595357f7131c9d313ed855a7772746bec5e4a0f21e6d",
+        "native": "PASS",
+        "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_scalar_exit.goose:0: error: wasm target: this value layout is not implemented (scalar backend)\n"
+      },
+      {
+        "case": "array_scalar_exit",
+        "opt": 2,
+        "source_sha256": "e66e587fe10261fdd65f595357f7131c9d313ed855a7772746bec5e4a0f21e6d",
+        "native": "PASS",
+        "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_scalar_exit.goose:0: error: wasm target: this value layout is not implemented (scalar backend)\n"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "array_scalar_limited_exit",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "array_scalar_limited_exit",
+        "opt": 0,
+        "source_sha256": "dab0143aedaede97b346084452942cc52b92cd3b699a2c9c479aabd70f902f3d",
+        "native": "PASS",
+        "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_scalar_limited_exit.goose:0: error: wasm target: this value layout is not implemented (scalar backend)\n"
+      },
+      {
+        "case": "array_scalar_limited_exit",
+        "opt": 2,
+        "source_sha256": "dab0143aedaede97b346084452942cc52b92cd3b699a2c9c479aabd70f902f3d",
+        "native": "PASS",
+        "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_scalar_limited_exit.goose:0: error: wasm target: this value layout is not implemented (scalar backend)\n"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "array_scalar_limited_exit",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "array_scalar_limited_exit",
+        "opt": 0,
+        "source_sha256": "dab0143aedaede97b346084452942cc52b92cd3b699a2c9c479aabd70f902f3d",
+        "native": "PASS",
+        "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_scalar_limited_exit.goose:0: error: wasm target: this value layout is not implemented (scalar backend)\n"
+      },
+      {
+        "case": "array_scalar_limited_exit",
+        "opt": 2,
+        "source_sha256": "dab0143aedaede97b346084452942cc52b92cd3b699a2c9c479aabd70f902f3d",
+        "native": "PASS",
+        "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/array_scalar_limited_exit.goose:0: error: wasm target: this value layout is not implemented (scalar backend)\n"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "data_exit",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "data_exit",
+        "opt": 0,
+        "source_sha256": "ab541aaad2b5760da4bfeac416a5c70bf68b2adad76df1a507b37484e9562757",
+        "native": "PASS",
+        "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/data_exit.goose:2: error: wasm target: aggregate adaptation needs the pending destination lowering\n"
+      },
+      {
+        "case": "data_exit",
+        "opt": 2,
+        "source_sha256": "ab541aaad2b5760da4bfeac416a5c70bf68b2adad76df1a507b37484e9562757",
+        "native": "PASS",
+        "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/data_exit.goose:2: error: wasm target: aggregate adaptation needs the pending destination lowering\n"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "data_exit",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "data_exit",
+        "opt": 0,
+        "source_sha256": "ab541aaad2b5760da4bfeac416a5c70bf68b2adad76df1a507b37484e9562757",
+        "native": "PASS",
+        "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/data_exit.goose:2: error: wasm target: aggregate adaptation needs the pending destination lowering\n"
+      },
+      {
+        "case": "data_exit",
+        "opt": 2,
+        "source_sha256": "ab541aaad2b5760da4bfeac416a5c70bf68b2adad76df1a507b37484e9562757",
+        "native": "PASS",
+        "wasm_before": "/tmp/goose-wasm-constructor-assignment-20261107/more-parent/data_exit.goose:2: error: wasm target: aggregate adaptation needs the pending destination lowering\n"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "default",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "default",
+        "opt": 0,
+        "source_sha256": "38d9c9b09bdf4508e595d5a8349d6dee60f912c03906c3961927181abcf9c9f2",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "default",
+        "opt": 2,
+        "source_sha256": "38d9c9b09bdf4508e595d5a8349d6dee60f912c03906c3961927181abcf9c9f2",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "default",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "default",
+        "opt": 0,
+        "source_sha256": "38d9c9b09bdf4508e595d5a8349d6dee60f912c03906c3961927181abcf9c9f2",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "default",
+        "opt": 2,
+        "source_sha256": "38d9c9b09bdf4508e595d5a8349d6dee60f912c03906c3961927181abcf9c9f2",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "early",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "early",
+        "opt": 0,
+        "source_sha256": "85d3fda70b529e685dfc22afd490aa9ff4499e4d4f526b9bbaf52e7333e10728",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "early",
+        "opt": 2,
+        "source_sha256": "85d3fda70b529e685dfc22afd490aa9ff4499e4d4f526b9bbaf52e7333e10728",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "early",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "early",
+        "opt": 0,
+        "source_sha256": "85d3fda70b529e685dfc22afd490aa9ff4499e4d4f526b9bbaf52e7333e10728",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "early",
+        "opt": 2,
+        "source_sha256": "85d3fda70b529e685dfc22afd490aa9ff4499e4d4f526b9bbaf52e7333e10728",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "empty",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "empty",
+        "opt": 0,
+        "source_sha256": "d3bdbc96f26d5eefce2c42e0b4d9429804ec4db326fb9852c32f3c2e84b6daee",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "empty",
+        "opt": 2,
+        "source_sha256": "d3bdbc96f26d5eefce2c42e0b4d9429804ec4db326fb9852c32f3c2e84b6daee",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "empty",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "empty",
+        "opt": 0,
+        "source_sha256": "d3bdbc96f26d5eefce2c42e0b4d9429804ec4db326fb9852c32f3c2e84b6daee",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "empty",
+        "opt": 2,
+        "source_sha256": "d3bdbc96f26d5eefce2c42e0b4d9429804ec4db326fb9852c32f3c2e84b6daee",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "exits",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "exits",
+        "opt": 0,
+        "source_sha256": "483ea3a52c8e2d677e170b12152ebc5b4af6cbcaaec676823407c85c73e88d00",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "exits",
+        "opt": 2,
+        "source_sha256": "483ea3a52c8e2d677e170b12152ebc5b4af6cbcaaec676823407c85c73e88d00",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "exits",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "exits",
+        "opt": 0,
+        "source_sha256": "483ea3a52c8e2d677e170b12152ebc5b4af6cbcaaec676823407c85c73e88d00",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "exits",
+        "opt": 2,
+        "source_sha256": "483ea3a52c8e2d677e170b12152ebc5b4af6cbcaaec676823407c85c73e88d00",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "global",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "global",
+        "opt": 0,
+        "source_sha256": "0b62743c652de576b53ead61680515968ff368934c36862b793700ca4031988a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "global",
+        "opt": 2,
+        "source_sha256": "0b62743c652de576b53ead61680515968ff368934c36862b793700ca4031988a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "global",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "global",
+        "opt": 0,
+        "source_sha256": "0b62743c652de576b53ead61680515968ff368934c36862b793700ca4031988a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "global",
+        "opt": 2,
+        "source_sha256": "0b62743c652de576b53ead61680515968ff368934c36862b793700ca4031988a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "growth",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "growth",
+        "opt": 0,
+        "source_sha256": "bed7241d0cea7686f6fc66106933c9cbbfe1e4ec55a56980822be966327b5595",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "growth",
+        "opt": 2,
+        "source_sha256": "bed7241d0cea7686f6fc66106933c9cbbfe1e4ec55a56980822be966327b5595",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "growth",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "growth",
+        "opt": 0,
+        "source_sha256": "bed7241d0cea7686f6fc66106933c9cbbfe1e4ec55a56980822be966327b5595",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "growth",
+        "opt": 2,
+        "source_sha256": "bed7241d0cea7686f6fc66106933c9cbbfe1e4ec55a56980822be966327b5595",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "loop",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "loop",
+        "opt": 0,
+        "source_sha256": "52ffb8197192335f0bed2e506402f70c582d6b2a7fc40eb40caa2a4068abe52a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "loop",
+        "opt": 2,
+        "source_sha256": "52ffb8197192335f0bed2e506402f70c582d6b2a7fc40eb40caa2a4068abe52a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "loop",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "loop",
+        "opt": 0,
+        "source_sha256": "52ffb8197192335f0bed2e506402f70c582d6b2a7fc40eb40caa2a4068abe52a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "loop",
+        "opt": 2,
+        "source_sha256": "52ffb8197192335f0bed2e506402f70c582d6b2a7fc40eb40caa2a4068abe52a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "nested",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "nested",
+        "opt": 0,
+        "source_sha256": "6165dfb0770c5f25025a615e622405d55433ac1555966b51447619bf3632cd2a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "nested",
+        "opt": 2,
+        "source_sha256": "6165dfb0770c5f25025a615e622405d55433ac1555966b51447619bf3632cd2a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "nested",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "nested",
+        "opt": 0,
+        "source_sha256": "6165dfb0770c5f25025a615e622405d55433ac1555966b51447619bf3632cd2a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "nested",
+        "opt": 2,
+        "source_sha256": "6165dfb0770c5f25025a615e622405d55433ac1555966b51447619bf3632cd2a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "nested_assignment",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "nested_assignment",
+        "opt": 0,
+        "source_sha256": "75a95990c07f2a36dda0de76a152bc887bc84d66003dc0dc797809d91d5ecbc1",
+        "native": "PASS",
+        "wasm_before": "PASS"
+      },
+      {
+        "case": "nested_assignment",
+        "opt": 2,
+        "source_sha256": "75a95990c07f2a36dda0de76a152bc887bc84d66003dc0dc797809d91d5ecbc1",
+        "native": "PASS",
+        "wasm_before": "PASS"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "nested_assignment",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "nested_assignment",
+        "opt": 0,
+        "source_sha256": "75a95990c07f2a36dda0de76a152bc887bc84d66003dc0dc797809d91d5ecbc1",
+        "native": "PASS",
+        "wasm_before": "PASS"
+      },
+      {
+        "case": "nested_assignment",
+        "opt": 2,
+        "source_sha256": "75a95990c07f2a36dda0de76a152bc887bc84d66003dc0dc797809d91d5ecbc1",
+        "native": "PASS",
+        "wasm_before": "PASS"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "order",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "order",
+        "opt": 0,
+        "source_sha256": "7128756451aea87d9752ef2825918f1f7c69dbc1506d3b8305957c7fd51a6849",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "order",
+        "opt": 2,
+        "source_sha256": "7128756451aea87d9752ef2825918f1f7c69dbc1506d3b8305957c7fd51a6849",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "order",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "order",
+        "opt": 0,
+        "source_sha256": "7128756451aea87d9752ef2825918f1f7c69dbc1506d3b8305957c7fd51a6849",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "order",
+        "opt": 2,
+        "source_sha256": "7128756451aea87d9752ef2825918f1f7c69dbc1506d3b8305957c7fd51a6849",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "refs",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "refs",
+        "opt": 0,
+        "source_sha256": "0671a04adba1545b23033d7eb24ee03289117ddb8f4f15c6daa99dd3a36ca626",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "refs",
+        "opt": 2,
+        "source_sha256": "0671a04adba1545b23033d7eb24ee03289117ddb8f4f15c6daa99dd3a36ca626",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "refs",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "refs",
+        "opt": 0,
+        "source_sha256": "0671a04adba1545b23033d7eb24ee03289117ddb8f4f15c6daa99dd3a36ca626",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "refs",
+        "opt": 2,
+        "source_sha256": "0671a04adba1545b23033d7eb24ee03289117ddb8f4f15c6daa99dd3a36ca626",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "targets",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "targets",
+        "opt": 0,
+        "source_sha256": "f4d77c0ac25b57c469cfc3b7f63128e29631c7c8e86a1409faaf65d0ad745724",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "targets",
+        "opt": 2,
+        "source_sha256": "f4d77c0ac25b57c469cfc3b7f63128e29631c7c8e86a1409faaf65d0ad745724",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "targets",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "targets",
+        "opt": 0,
+        "source_sha256": "f4d77c0ac25b57c469cfc3b7f63128e29631c7c8e86a1409faaf65d0ad745724",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "targets",
+        "opt": 2,
+        "source_sha256": "f4d77c0ac25b57c469cfc3b7f63128e29631c7c8e86a1409faaf65d0ad745724",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "variant-empty",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "variant-empty",
+        "opt": 0,
+        "source_sha256": "d8a7151ab5f3d4b823055efb79bbc03dcbbfbd0dafb6a0d9f516d82c16949df4",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "variant-empty",
+        "opt": 2,
+        "source_sha256": "d8a7151ab5f3d4b823055efb79bbc03dcbbfbd0dafb6a0d9f516d82c16949df4",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "variant-empty",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "variant-empty",
+        "opt": 0,
+        "source_sha256": "d8a7151ab5f3d4b823055efb79bbc03dcbbfbd0dafb6a0d9f516d82c16949df4",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "variant-empty",
+        "opt": 2,
+        "source_sha256": "d8a7151ab5f3d4b823055efb79bbc03dcbbfbd0dafb6a0d9f516d82c16949df4",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  }
+]

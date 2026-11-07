@@ -56,7 +56,13 @@ struct WasmCodeGen : ValueLayout {
     };
     // The selected packed i64 address remains on the operand stack.
     struct ElementPlace { TypeExpr *type; int memory; bool bounded = true; };
-    enum class FreshFixedOrigin { PlannedFrame, ReservedDataElement };
+    enum class FreshFixedOrigin { PlannedFrame, ReservedDataElement, ReservedFrameTemporary };
+    struct FixedTemporaryOwner {
+        TypeExpr *type;
+        Node *expression;
+        uint32_t baseLocal, image, bytes;
+        size_t scope;
+    };
     struct FreshFixedDestination {
         FixedPlace place;
         VarDef *root;
@@ -64,6 +70,7 @@ struct WasmCodeGen : ValueLayout {
         FreshFixedOrigin origin = FreshFixedOrigin::PlannedFrame;
         Node *initialization = nullptr;
         uint32_t ownerBytes = 0;
+        const FixedTemporaryOwner *temporary = nullptr;
     };
     struct FreshDataArrayDestination {
         ArrayPlace image;
@@ -1217,6 +1224,10 @@ struct WasmCodeGen : ValueLayout {
                          uint32_t prefix, Line line);
     void ConstructAggregateArray(FreshFixedDestination destination, ArrayLit *literal);
     void CopyFixed(FreshFixedDestination destination, FixedPlace source, Line line);
+    TypeExpr *FreshRootType(const FreshFixedDestination &destination);
+    bool IsFreshWholeOwner(const FreshFixedDestination &destination);
+    void CheckFreshDestination(const FreshFixedDestination &destination, Line line);
+    template<class Consume> void WithFixedTemporary(TypeExpr *type, Node *expression, Consume consume);
     void AssignFixed(FixedPlace destination, Node *source, TType op, Line line);
     void EnumMatchStatement(MatchExpr *match);
     FixedPlace ResolvePlace(Node *n);
@@ -1228,6 +1239,7 @@ struct WasmCodeGen : ValueLayout {
     void StorePlace(const FixedPlace &place);
     void StoreAddress(const FixedPlace &place);
     void ConstructFixed(FreshFixedDestination destination, Node *source);
+    bool ExitingFixedInitializer(Node *source);
     void AssignField(Dot *field, Node *rhs, TType op, bool pointee, Line line);
     bool FieldPath(Node *n);
     TypeExpr *ArrayType(Node *n);

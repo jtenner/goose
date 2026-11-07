@@ -1,0 +1,13 @@
+{
+  "report": "/tmp/goose-wasm-constructor-assignment-review-20261107/report.md",
+  "reviewed_snapshot": "build03/source-hashes.json",
+  "finding": "No confirmed temporary ownership or cleanup defect; correctness gaps listed.",
+  "followup": {
+    "array_element_exits": "10 native-valid Wasm failures recorded in more-parent/results.json, passed with both engines in more-candidate/results.json and candidate04/results.json. Shared fixed initializer-exit helper added after review.",
+    "loop_exits": "Permanent exits fixture; live top checked at inner and outer defers.",
+    "nested_assignment": "Permanent nested_assignment fixture; host checks two live temporary extents, then outer extent, then restored top.",
+    "nominal_arrays": "Fixed/limited scalar/nominal element exits and named element copies are permanent fixtures.",
+    "invalid_target": "Exact native index 1/length 1 failure, no RHS print, no temporary allocation, and permanent image check in check_target_failure."
+  },
+  "scope": "No new review assessment is claimed for the later helper extension; native-first failures and passing correctness records are separate."
+}

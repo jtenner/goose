@@ -52,6 +52,63 @@ inline WasmCodeGen::FreshFixedDestination WasmCodeGen::FreshOwner(VarDef *owner,
             initialization, std::max(1u, image)};
 }
 
+inline TypeExpr *WasmCodeGen::FreshRootType(const FreshFixedDestination &destination) {
+    if (destination.origin == FreshFixedOrigin::ReservedFrameTemporary)
+        return destination.temporary ? destination.temporary->type : nullptr;
+    return destination.root ? destination.root->type : nullptr;
+}
+
+inline bool WasmCodeGen::IsFreshWholeOwner(const FreshFixedDestination &destination) {
+    auto root = FreshRootType(destination);
+    return root && !destination.rootOffset && TEq(root, destination.place.type);
+}
+
+inline void WasmCodeGen::CheckFreshDestination(const FreshFixedDestination &fresh, Line line) {
+    auto &place = fresh.place;
+    if (!fresh.initialization || !place.bounded || fresh.rootOffset > fresh.ownerBytes ||
+        fresh.image > fresh.ownerBytes - fresh.rootOffset || RequireFixed(place.type, line) != fresh.image)
+        Fail(line, "fixed construction needs its complete fresh owner span");
+    if (fresh.origin == FreshFixedOrigin::ReservedFrameTemporary) {
+        auto owner = fresh.temporary;
+        if (!owner || fresh.root || !owner->type || owner->scope >= scopes.size() ||
+            owner->expression != fresh.initialization || owner->bytes != fresh.ownerBytes ||
+            owner->image != RequireFixed(owner->type, line) || owner->bytes != std::max(1u, owner->image) ||
+            place.memory != 0 || place.packed || place.address != owner->baseLocal ||
+            place.offset != fresh.rootOffset)
+            Fail(line, "fixed temporary needs its active checked frame owner");
+        auto &actions = scopes[owner->scope];
+        if (none_of(actions.begin(), actions.end(), [&](const CleanupAction &action) {
+                return !action.deferred && action.snapshot == UINT32_MAX && !action.dynamic &&
+                       action.memory == 0 && action.top == owner->baseLocal;
+            })) Fail(line, "fixed temporary is missing its ordered frame restore");
+    } else {
+        if (!fresh.root || fresh.temporary ||
+            (fresh.origin == FreshFixedOrigin::PlannedFrame && place.memory != 0) ||
+            (fresh.origin == FreshFixedOrigin::ReservedDataElement &&
+             (!support.DataNominalArray(fresh.root->type) || !place.packed)))
+            Fail(line, "fixed construction needs a fresh planned destination");
+    }
+}
+
+template<class Consume>
+inline void WasmCodeGen::WithFixedTemporary(TypeExpr *type, Node *expression, Consume consume) {
+    assert(expression);
+    if (!Nominal(type)) Fail(expression->line, "fixed temporary needs a nominal value");
+    auto image = RequireFixed(type, expression->line);
+    auto bytes = std::max(1u, image);
+    auto scope = scopes.size(); scopes.emplace_back();
+    auto base = Local(WasmModule::I32);
+    code.I32((int32_t)bytes); code.Call(reservefn); code.Set(base);
+    // reservefn returns the old top, also the base of this complete reservation.
+    scopes.back().push_back({nullptr, 0, base, false});
+    FixedTemporaryOwner owner {type, expression, base, image, bytes, scope};
+    FreshFixedDestination fresh {{type, base, 0, 0, false, true}, nullptr, 0, image,
+                                 FreshFixedOrigin::ReservedFrameTemporary, expression, bytes, &owner};
+    ConstructFixed(fresh, expression);
+    consume(fresh.place);
+    Cleanup(scope); scopes.pop_back();
+}
+
 inline WasmCodeGen::FreshFixedDestination WasmCodeGen::FreshDataElement(
         const FreshDataArrayDestination &destination, uint32_t ordinal, Line line) {
     if (destination.literalCount == NoLocal || ordinal >= destination.literalCount ||
@@ -80,6 +137,7 @@ inline WasmCodeGen::FreshFixedDestination WasmCodeGen::FixedChild(
 
 inline WasmCodeGen::ArrayPlace WasmCodeGen::FreshArrayPlace(
         const FreshFixedDestination &destination, Line line) {
+    CheckFreshDestination(destination, line);
     auto place = ArrayFromPlace(destination.place, line);
     if (destination.origin == FreshFixedOrigin::ReservedDataElement) {
         if (!destination.root || !destination.initialization || !destination.place.bounded || !destination.place.packed ||
@@ -240,7 +298,15 @@ inline void WasmCodeGen::AssignFixed(FixedPlace destination, Node *source, TType
     while (from && from->kind == TY_REF) from = from->ref->sub;
     if (!from || !TEq(destination.type, from))
         Fail(line, "whole-aggregate assignment adaptation needs the pending destination lowering");
-    auto addressable = Is<Ident>(source) || Is<Dot>(source) || Is<Index>(source) ||
+    auto dot = Is<Dot>(source);
+    auto call = Is<Call>(source);
+    if (Is<StructLit>(source) || (dot && dot->variantconst) || (call && call->builtin == B_DEFAULT)) {
+        WithFixedTemporary(destination.type, source, [&](const FixedPlace &value) {
+            CopyBytes(destination, value, RequireFixed(destination.type, line), line, true);
+        });
+        return;
+    }
+    auto addressable = Is<Ident>(source) || (dot && dot->IsField()) || Is<Index>(source) ||
                        (Is<Unary>(source) && Is<Unary>(source)->op == T_BITAND) ||
                        ((Is<Call>(source) || Is<InlineBlock>(source)) && ActualType(source)->kind == TY_REF);
     if (!addressable)
@@ -281,6 +347,8 @@ inline void WasmCodeGen::InlineArrayLiteral(const ArrayPlace &place, ArrayLit *l
             Fail(literal->line, "this fixed array constructor needs the pending destination lowering");
         auto element = array->arr->sub;
         for (size_t i = 0; i < literal->elems.size(); i++) {
+            auto value = literal->elems[i];
+            if (ExitingFixedInitializer(value)) return;
             if (place.image.memory >= 0) {
                 EmitKnownOffset(place.image, (uint32_t)place.image.memory, literal->line);
                 code.I32((int32_t)(i * place.layout.stride)); code.Byte(0x6a);
@@ -288,7 +356,7 @@ inline void WasmCodeGen::InlineArrayLiteral(const ArrayPlace &place, ArrayLit *l
                 EmitPackedAddress(place.image, literal->line);
                 code.I64((int64_t)(i * place.layout.stride)); code.Byte(0x7c);
             }
-            auto value = literal->elems[i]; Gen(value); Convert(value->exprtype, element);
+            Gen(value); Convert(value->exprtype, element);
             if (place.elementMemory >= 0) StoreFixed(element, (uint32_t)place.elementMemory);
             else Store(element);
         }
@@ -305,8 +373,10 @@ inline void WasmCodeGen::InlineArrayLiteral(const ArrayPlace &place, ArrayLit *l
                                       Local(WasmModule::I64)};
             scratch = &*cached;
         }
-        for (auto value : literal->elems)
+        for (auto value : literal->elems) {
+            if (ExitingFixedInitializer(value)) return;
             PushArray(place, value, nullptr, value->line, scratch);
+        }
     }
 }
 
@@ -319,6 +389,9 @@ inline void WasmCodeGen::ConstructFields(FreshFixedDestination destination, Stru
         while (next < literal->fieldindices.size() && literal->fieldindices[next] < (int)i) next++;
         auto init = next < literal->fieldindices.size() && literal->fieldindices[next] == (int)i
                         ? literal->inits[next++].val : nullptr;
+        // The checker drops the value tail when an initializer always exits.
+        // No later field or destination store is reachable on this path.
+        if (init && ExitingFixedInitializer(init)) return;
         auto offset = (uint64_t)prefix + (uint64_t)view.layout.offs[i];
         if (offset > UINT32_MAX) Fail(line, "field offset exceeds memory32");
         auto child = FixedChild(destination, ft, (uint32_t)offset, line);
@@ -377,11 +450,12 @@ inline void WasmCodeGen::ConstructAggregateArray(FreshFixedDestination destinati
 }
 
 inline void WasmCodeGen::CopyFixed(FreshFixedDestination destination, FixedPlace source, Line line) {
+    CheckFreshDestination(destination, line);
     if (!TEq(destination.place.type, source.type))
         Fail(line, "aggregate adaptation needs the pending destination lowering");
     if (!destination.image) {
         // An empty standalone owner has an identity byte, but no payload image.
-        if (!destination.rootOffset && TEq(destination.root->type, destination.place.type)) {
+        if (IsFreshWholeOwner(destination)) {
             if (destination.place.memory >= 0) {
                 StoreAddress(destination.place); code.I32(0);
                 code.Mem(0x3a, (uint32_t)destination.place.memory, destination.place.offset);
@@ -400,14 +474,15 @@ inline void WasmCodeGen::CopyFixed(FreshFixedDestination destination, FixedPlace
               {source.type, src, 0, source.memory, true, source.bounded}, length, line);
 }
 
+inline bool WasmCodeGen::ExitingFixedInitializer(Node *source) {
+    if (!Void(source->exprtype)) return false;
+    Gen(source); code.Byte(0x00); return true;
+}
+
 inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *source) {
     auto destination = fresh.place;
-    if (!fresh.root || !destination.bounded || !fresh.initialization || fresh.rootOffset > fresh.ownerBytes ||
-        fresh.image > fresh.ownerBytes - fresh.rootOffset ||
-        (fresh.origin == FreshFixedOrigin::PlannedFrame && destination.memory != 0) ||
-        (fresh.origin == FreshFixedOrigin::ReservedDataElement &&
-         (!support.DataNominalArray(fresh.root->type) || !destination.packed)))
-        Fail(source->line, "fixed construction needs a fresh planned destination");
+    CheckFreshDestination(fresh, source->line);
+    if (ExitingFixedInitializer(source)) return;
     auto type = destination.type;
     if (type->kind == TY_ARRAY && !InlineArray(type))
         Fail(source->line, "nonfixed fields need the pending destination lowering");
@@ -455,7 +530,7 @@ inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *sourc
             auto prefix = type->kind == TY_ENUM ? (uint32_t)TagSize(ei->en) : 0u;
             if (type->kind == TY_ENUM) tag(ei, vi);
             if (LastRealField(view.fields) < 0) {
-                if (!prefix && (bytes || (!fresh.rootOffset && TEq(fresh.root->type, type))))
+                if (!prefix && (bytes || IsFreshWholeOwner(fresh)))
                     zero(std::max(1u, bytes));
             } else ConstructFields(fresh, literal, view, prefix, source->line);
         }

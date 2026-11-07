@@ -1,0 +1,94 @@
+[
+  {
+    "name": "exits-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-constructor-assignment-20261107/exits-parent/exits-O0.c",
+      "/tmp/goose-wasm-constructor-assignment-20261107/exits-parent/exits.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "exits-O0-cc",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-constructor-assignment-20261107/exits-parent/exits-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-constructor-assignment-20261107/exits-parent/exits-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "exits-O0-native",
+    "command": [
+      "/tmp/goose-wasm-constructor-assignment-20261107/exits-parent/exits-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "exits-O0-before",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-constructor-assignment-20261107/exits-parent/exits-O0.wasm",
+      "/tmp/goose-wasm-constructor-assignment-20261107/exits-parent/exits.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "exits-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-constructor-assignment-20261107/exits-parent/exits-O2.c",
+      "/tmp/goose-wasm-constructor-assignment-20261107/exits-parent/exits.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "exits-O2-cc",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-constructor-assignment-20261107/exits-parent/exits-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-constructor-assignment-20261107/exits-parent/exits-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "exits-O2-native",
+    "command": [
+      "/tmp/goose-wasm-constructor-assignment-20261107/exits-parent/exits-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "exits-O2-before",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-constructor-assignment-20261107/exits-parent/exits-O2.wasm",
+      "/tmp/goose-wasm-constructor-assignment-20261107/exits-parent/exits.goose"
+    ],
+    "exit": 1
+  }
+]

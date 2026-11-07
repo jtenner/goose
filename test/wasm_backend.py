@@ -135,7 +135,7 @@ def main():
             run([exe, f'-O{opt}', '--target', 'wasm', '-o', wasm, source])
             assert wasm.read_bytes()[:8] == b'\0asm\x01\0\0\0', 'invalid binary magic/version'
             run([args.validator, 'validate', wasm])
-            if source.stem.startswith(('wasm_inline_ref_abi_', 'wasm_data_aggregate_')):
+            if source.stem.startswith(('wasm_inline_ref_abi_', 'wasm_data_aggregate_', 'wasm_constructor_assignment_')):
                 actual = run([args.node, ROOT / 'test' / 'wasm_reference_abi.mjs', wasm,
                               out / f'{source.stem}-O{opt}-instance'])
             else:
@@ -225,6 +225,13 @@ def main():
                 checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
                 assert checked.stdout == reference.stdout and not checked.stderr
                 count += 1
+            if source.stem.startswith('wasm_constructor_assignment_'):
+                mode = '' if source.stem in ('wasm_constructor_assignment_targets',
+                                              'wasm_constructor_assignment_order',
+                                              'wasm_constructor_assignment_data_exit') else 'no-data'
+                checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
+                assert checked.stdout == reference.stdout and not checked.stderr
+                count += 1
             if source.stem.startswith('wasm_fixed_assignment_'):
                 mode = ('' if source.stem in ('wasm_fixed_assignment_data', 'wasm_fixed_assignment_refs',
                                              'wasm_fixed_assignment_opaque', 'wasm_fixed_assignment_order',
@@ -294,7 +301,13 @@ def main():
     count += check_field_iteration_paths(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out)
     from wasm_fixed_assignment_checks import check_images as check_fixed_assignment_images, check_guards as check_fixed_assignment_guards
     count += check_fixed_assignment_images(run, args.node, args.validator, out)
-    count += check_fixed_assignment_guards(run, exe, out)
+    count += check_fixed_assignment_guards(run, exe, out, args.node, args.validator, args.wasmtime_python)
+    from wasm_constructor_assignment_checks import check_owners as check_constructor_owners
+    count += check_constructor_owners(run, args.node, args.validator, out)
+    from wasm_constructor_assignment_checks import check_failure as check_constructor_failure
+    count += check_constructor_failure(run, exe, args.cc, args.node, args.validator, out)
+    from wasm_constructor_assignment_checks import check_target_failure as check_constructor_target_failure
+    count += check_constructor_target_failure(run, exe, args.cc, args.node, args.validator, out)
     count += check_data_iteration_footprint(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out,
                                           correctness_only=args.correctness_only)
     growth_source = out / 'frame-growth.goose'

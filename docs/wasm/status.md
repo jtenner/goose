@@ -246,8 +246,16 @@ suite passes 1,481 groups, native regressions and all 52 exact comparisons pass,
 and 294 unchanged-source module pairs are identical. Reference lifetime and
 complete Memory 0 copy-image controls pass. See the
 [fixed assignment evidence](evidence/fixed-assignment.md). Constructor
-replacement, whole-array assignment and general by-value calls/results remain
-compilation gaps.
+replacement was still guarded at that checkpoint.
+
+Plain exact fixed constructor replacement now uses a checked Memory 0 temporary
+and commits only the completed image. Defaults and initializers see the old
+target; ordered cleanup handles return, break, continue and inner defers. Empty
+values, nested assignments, scalar/nominal array element exits and dynamic memory
+targets have native-first and both-engine correctness checks. See
+[constructor assignment evidence](evidence/constructor-assignment.md).
+Whole-array assignment, aggregate array fills/defaults and general by-value
+calls/results remain compilation gaps.
 
 ## Host contract
 
@@ -314,7 +322,7 @@ BigInt operation for other values.
 
 - C: the growable scalar-array subset now has a symbolic storage plan, separate
   memories, checked growth/restores, and dynamic dispatch. Extend the plan to
-  protected destinations, temporary owners, and all compound lifetime events.
+  protected destinations, remaining temporary owners, and all compound lifetime events.
   General thin-reference propagation remains pending.
 - D: scalar/reference arrays now cover fixed, limited, variable and growable
   layouts, including same-layout copies and unsigned LEB count prefixes, plus

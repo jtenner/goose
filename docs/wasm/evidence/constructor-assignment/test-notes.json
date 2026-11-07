@@ -1,0 +1,10 @@
+{
+  "scope": "correctness only; no measurement lease or timing jobs",
+  "aggregate_parent_count_correction": {
+    "actual_native_cases": 2,
+    "actual_old_wasm_failures": 2,
+    "original_stdout": "Incorrectly reused text says 18; commands/results retain actual 2 cases."
+  },
+  "review_gap": "Read-only review identified untested array-element exits. Native-first checks then proved 10 Wasm compilation failures.",
+  "intermediate_validation": "full-correctness01 and native01 use frozen build03 compiler. Later array-exit changes require final build04 verification. Original compiler and source manifests remain saved."
+}

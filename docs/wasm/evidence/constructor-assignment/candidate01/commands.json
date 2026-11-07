@@ -1,0 +1,15 @@
+[
+  {
+    "name": "default-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-constructor-assignment-20261107/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-constructor-assignment-20261107/candidate01/default-O0.wasm",
+      "/tmp/goose-wasm-constructor-assignment-20261107/parent-first/default.goose"
+    ],
+    "exit": 1
+  }
+]

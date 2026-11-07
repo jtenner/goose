@@ -1,0 +1,530 @@
+[
+  {
+    "case": "default",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "default",
+        "opt": 0,
+        "source_sha256": "38d9c9b09bdf4508e595d5a8349d6dee60f912c03906c3961927181abcf9c9f2",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "default",
+        "opt": 2,
+        "source_sha256": "38d9c9b09bdf4508e595d5a8349d6dee60f912c03906c3961927181abcf9c9f2",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "default",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "default",
+        "opt": 0,
+        "source_sha256": "38d9c9b09bdf4508e595d5a8349d6dee60f912c03906c3961927181abcf9c9f2",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "default",
+        "opt": 2,
+        "source_sha256": "38d9c9b09bdf4508e595d5a8349d6dee60f912c03906c3961927181abcf9c9f2",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "alias",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "alias",
+        "opt": 0,
+        "source_sha256": "5d7f55dbaf399b7019221dabbbe7a50a78daf8d4e69a6f92a09192bcf81a3e9f",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "alias",
+        "opt": 2,
+        "source_sha256": "5d7f55dbaf399b7019221dabbbe7a50a78daf8d4e69a6f92a09192bcf81a3e9f",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "alias",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "alias",
+        "opt": 0,
+        "source_sha256": "5d7f55dbaf399b7019221dabbbe7a50a78daf8d4e69a6f92a09192bcf81a3e9f",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "alias",
+        "opt": 2,
+        "source_sha256": "5d7f55dbaf399b7019221dabbbe7a50a78daf8d4e69a6f92a09192bcf81a3e9f",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "refs",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "refs",
+        "opt": 0,
+        "source_sha256": "0671a04adba1545b23033d7eb24ee03289117ddb8f4f15c6daa99dd3a36ca626",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "refs",
+        "opt": 2,
+        "source_sha256": "0671a04adba1545b23033d7eb24ee03289117ddb8f4f15c6daa99dd3a36ca626",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "refs",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "refs",
+        "opt": 0,
+        "source_sha256": "0671a04adba1545b23033d7eb24ee03289117ddb8f4f15c6daa99dd3a36ca626",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "refs",
+        "opt": 2,
+        "source_sha256": "0671a04adba1545b23033d7eb24ee03289117ddb8f4f15c6daa99dd3a36ca626",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "nested",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "nested",
+        "opt": 0,
+        "source_sha256": "6165dfb0770c5f25025a615e622405d55433ac1555966b51447619bf3632cd2a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "nested",
+        "opt": 2,
+        "source_sha256": "6165dfb0770c5f25025a615e622405d55433ac1555966b51447619bf3632cd2a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "nested",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "nested",
+        "opt": 0,
+        "source_sha256": "6165dfb0770c5f25025a615e622405d55433ac1555966b51447619bf3632cd2a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "nested",
+        "opt": 2,
+        "source_sha256": "6165dfb0770c5f25025a615e622405d55433ac1555966b51447619bf3632cd2a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "early",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "early",
+        "opt": 0,
+        "source_sha256": "85d3fda70b529e685dfc22afd490aa9ff4499e4d4f526b9bbaf52e7333e10728",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "early",
+        "opt": 2,
+        "source_sha256": "85d3fda70b529e685dfc22afd490aa9ff4499e4d4f526b9bbaf52e7333e10728",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "early",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "early",
+        "opt": 0,
+        "source_sha256": "85d3fda70b529e685dfc22afd490aa9ff4499e4d4f526b9bbaf52e7333e10728",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "early",
+        "opt": 2,
+        "source_sha256": "85d3fda70b529e685dfc22afd490aa9ff4499e4d4f526b9bbaf52e7333e10728",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "growth",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "growth",
+        "opt": 0,
+        "source_sha256": "bed7241d0cea7686f6fc66106933c9cbbfe1e4ec55a56980822be966327b5595",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "growth",
+        "opt": 2,
+        "source_sha256": "bed7241d0cea7686f6fc66106933c9cbbfe1e4ec55a56980822be966327b5595",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "growth",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "growth",
+        "opt": 0,
+        "source_sha256": "bed7241d0cea7686f6fc66106933c9cbbfe1e4ec55a56980822be966327b5595",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "growth",
+        "opt": 2,
+        "source_sha256": "bed7241d0cea7686f6fc66106933c9cbbfe1e4ec55a56980822be966327b5595",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "loop",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "loop",
+        "opt": 0,
+        "source_sha256": "52ffb8197192335f0bed2e506402f70c582d6b2a7fc40eb40caa2a4068abe52a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "loop",
+        "opt": 2,
+        "source_sha256": "52ffb8197192335f0bed2e506402f70c582d6b2a7fc40eb40caa2a4068abe52a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "loop",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "loop",
+        "opt": 0,
+        "source_sha256": "52ffb8197192335f0bed2e506402f70c582d6b2a7fc40eb40caa2a4068abe52a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "loop",
+        "opt": 2,
+        "source_sha256": "52ffb8197192335f0bed2e506402f70c582d6b2a7fc40eb40caa2a4068abe52a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "global",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "global",
+        "opt": 0,
+        "source_sha256": "0b62743c652de576b53ead61680515968ff368934c36862b793700ca4031988a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "global",
+        "opt": 2,
+        "source_sha256": "0b62743c652de576b53ead61680515968ff368934c36862b793700ca4031988a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "global",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "global",
+        "opt": 0,
+        "source_sha256": "0b62743c652de576b53ead61680515968ff368934c36862b793700ca4031988a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "global",
+        "opt": 2,
+        "source_sha256": "0b62743c652de576b53ead61680515968ff368934c36862b793700ca4031988a",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "empty",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "empty",
+        "opt": 0,
+        "source_sha256": "d3bdbc96f26d5eefce2c42e0b4d9429804ec4db326fb9852c32f3c2e84b6daee",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "empty",
+        "opt": 2,
+        "source_sha256": "d3bdbc96f26d5eefce2c42e0b4d9429804ec4db326fb9852c32f3c2e84b6daee",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "empty",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "empty",
+        "opt": 0,
+        "source_sha256": "d3bdbc96f26d5eefce2c42e0b4d9429804ec4db326fb9852c32f3c2e84b6daee",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "empty",
+        "opt": 2,
+        "source_sha256": "d3bdbc96f26d5eefce2c42e0b4d9429804ec4db326fb9852c32f3c2e84b6daee",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "variant-empty",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "variant-empty",
+        "opt": 0,
+        "source_sha256": "d8a7151ab5f3d4b823055efb79bbc03dcbbfbd0dafb6a0d9f516d82c16949df4",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "variant-empty",
+        "opt": 2,
+        "source_sha256": "d8a7151ab5f3d4b823055efb79bbc03dcbbfbd0dafb6a0d9f516d82c16949df4",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "variant-empty",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "variant-empty",
+        "opt": 0,
+        "source_sha256": "d8a7151ab5f3d4b823055efb79bbc03dcbbfbd0dafb6a0d9f516d82c16949df4",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "variant-empty",
+        "opt": 2,
+        "source_sha256": "d8a7151ab5f3d4b823055efb79bbc03dcbbfbd0dafb6a0d9f516d82c16949df4",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "targets",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "targets",
+        "opt": 0,
+        "source_sha256": "f4d77c0ac25b57c469cfc3b7f63128e29631c7c8e86a1409faaf65d0ad745724",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "targets",
+        "opt": 2,
+        "source_sha256": "f4d77c0ac25b57c469cfc3b7f63128e29631c7c8e86a1409faaf65d0ad745724",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "targets",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "targets",
+        "opt": 0,
+        "source_sha256": "f4d77c0ac25b57c469cfc3b7f63128e29631c7c8e86a1409faaf65d0ad745724",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "targets",
+        "opt": 2,
+        "source_sha256": "f4d77c0ac25b57c469cfc3b7f63128e29631c7c8e86a1409faaf65d0ad745724",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "order",
+    "opt": 0,
+    "native_reused": [
+      {
+        "case": "order",
+        "opt": 0,
+        "source_sha256": "7128756451aea87d9752ef2825918f1f7c69dbc1506d3b8305957c7fd51a6849",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "order",
+        "opt": 2,
+        "source_sha256": "7128756451aea87d9752ef2825918f1f7c69dbc1506d3b8305957c7fd51a6849",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  },
+  {
+    "case": "order",
+    "opt": 2,
+    "native_reused": [
+      {
+        "case": "order",
+        "opt": 0,
+        "source_sha256": "7128756451aea87d9752ef2825918f1f7c69dbc1506d3b8305957c7fd51a6849",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      },
+      {
+        "case": "order",
+        "opt": 2,
+        "source_sha256": "7128756451aea87d9752ef2825918f1f7c69dbc1506d3b8305957c7fd51a6849",
+        "native": "PASS",
+        "wasm_before": "constructor temporary diagnostic"
+      }
+    ],
+    "node": "PASS",
+    "wasmtime": "PASS"
+  }
+]

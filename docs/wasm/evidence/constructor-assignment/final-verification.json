@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "purpose": "correctness only",
+  "compiler_sha256": "87903c01842fabdfcb8900cdd1536b6f4995811b41106634da4e6529b49d5f06",
+  "input_files_unchanged": 4455,
+  "wasm_correctness_checks": 1656,
+  "complete_memory_matrix_cases": 40,
+  "native_baseline": "all groups passed",
+  "native_frontend_groups": 1870,
+  "native_generated_c_runs": 911,
+  "native_tinycc_runs": 1083,
+  "exact_comparisons": 52,
+  "timing_jobs": 0,
+  "measurement_lease_used": false,
+  "unchanged_source_module_pairs": 314
+}

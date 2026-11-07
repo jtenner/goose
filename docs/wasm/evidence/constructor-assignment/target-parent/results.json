@@ -1,0 +1,44 @@
+[
+  {
+    "case": "targets",
+    "opt": 0,
+    "source_sha256": "f4d77c0ac25b57c469cfc3b7f63128e29631c7c8e86a1409faaf65d0ad745724",
+    "native": "PASS",
+    "wasm_before": "constructor temporary diagnostic"
+  },
+  {
+    "case": "targets",
+    "opt": 2,
+    "source_sha256": "f4d77c0ac25b57c469cfc3b7f63128e29631c7c8e86a1409faaf65d0ad745724",
+    "native": "PASS",
+    "wasm_before": "constructor temporary diagnostic"
+  },
+  {
+    "case": "order",
+    "opt": 0,
+    "source_sha256": "7128756451aea87d9752ef2825918f1f7c69dbc1506d3b8305957c7fd51a6849",
+    "native": "PASS",
+    "wasm_before": "constructor temporary diagnostic"
+  },
+  {
+    "case": "order",
+    "opt": 2,
+    "source_sha256": "7128756451aea87d9752ef2825918f1f7c69dbc1506d3b8305957c7fd51a6849",
+    "native": "PASS",
+    "wasm_before": "constructor temporary diagnostic"
+  },
+  {
+    "case": "abandon",
+    "opt": 0,
+    "source_sha256": "c8d787ceed420355af3a6fc6d3755ac07b30d328ca0196f855304cc2d8f26115",
+    "native": "PASS",
+    "wasm_before": "constructor temporary diagnostic"
+  },
+  {
+    "case": "abandon",
+    "opt": 2,
+    "source_sha256": "c8d787ceed420355af3a6fc6d3755ac07b30d328ca0196f855304cc2d8f26115",
+    "native": "PASS",
+    "wasm_before": "constructor temporary diagnostic"
+  }
+]

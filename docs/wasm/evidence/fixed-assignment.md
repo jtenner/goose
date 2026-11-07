@@ -52,3 +52,7 @@ Constructor replacement is the next compilation block. The native schedule
 constructs a plain fixed RHS before storing it. It needs a scoped Memory 0
 temporary and ordered cleanup; deleting the constructor guard or writing each
 field directly into the target would change initializer/default observations.
+
+The later [constructor assignment increment](constructor-assignment.md) resolves
+that specific constructor block with a checked temporary and ordered cleanup.
+The results above remain the original fixed-copy checkpoint.

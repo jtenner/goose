@@ -1,0 +1,7 @@
+{
+  "failure": "Assertion expected substring index out of bounds, but native includes the actual index between those words.",
+  "actual_native_exit": 1,
+  "actual_stdout": "before\n",
+  "actual_error": "index 1 out of bounds (length 1)",
+  "classification": "test assertion failure; native behavior correct"
+}

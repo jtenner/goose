@@ -1,0 +1,94 @@
+[
+  {
+    "name": "aggregate_exit-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-constructor-assignment-20261107/aggregate-parent/aggregate_exit-O0.c",
+      "/tmp/goose-wasm-constructor-assignment-20261107/aggregate-parent/aggregate_exit.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "aggregate_exit-O0-cc",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-constructor-assignment-20261107/aggregate-parent/aggregate_exit-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-constructor-assignment-20261107/aggregate-parent/aggregate_exit-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "aggregate_exit-O0-native",
+    "command": [
+      "/tmp/goose-wasm-constructor-assignment-20261107/aggregate-parent/aggregate_exit-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "aggregate_exit-O0-before",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-constructor-assignment-20261107/aggregate-parent/aggregate_exit-O0.wasm",
+      "/tmp/goose-wasm-constructor-assignment-20261107/aggregate-parent/aggregate_exit.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "aggregate_exit-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-constructor-assignment-20261107/aggregate-parent/aggregate_exit-O2.c",
+      "/tmp/goose-wasm-constructor-assignment-20261107/aggregate-parent/aggregate_exit.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "aggregate_exit-O2-cc",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-constructor-assignment-20261107/aggregate-parent/aggregate_exit-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-constructor-assignment-20261107/aggregate-parent/aggregate_exit-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "aggregate_exit-O2-native",
+    "command": [
+      "/tmp/goose-wasm-constructor-assignment-20261107/aggregate-parent/aggregate_exit-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "aggregate_exit-O2-before",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-constructor-assignment-20261107/aggregate-parent/aggregate_exit-O2.wasm",
+      "/tmp/goose-wasm-constructor-assignment-20261107/aggregate-parent/aggregate_exit.goose"
+    ],
+    "exit": 1
+  }
+]

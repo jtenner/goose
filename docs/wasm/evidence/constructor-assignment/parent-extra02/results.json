@@ -1,0 +1,16 @@
+[
+  {
+    "case": "variant-empty",
+    "opt": 0,
+    "source_sha256": "d8a7151ab5f3d4b823055efb79bbc03dcbbfbd0dafb6a0d9f516d82c16949df4",
+    "native": "PASS",
+    "wasm_before": "constructor temporary diagnostic"
+  },
+  {
+    "case": "variant-empty",
+    "opt": 2,
+    "source_sha256": "d8a7151ab5f3d4b823055efb79bbc03dcbbfbd0dafb6a0d9f516d82c16949df4",
+    "native": "PASS",
+    "wasm_before": "constructor temporary diagnostic"
+  }
+]
