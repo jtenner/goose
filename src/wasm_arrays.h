@@ -1000,12 +1000,12 @@ inline void WasmCodeGen::ArrayFor(ForLoop *loop) {
     if (copyAggregate) {
         auto plan = storage.fixedvalues.find(loop->vdef);
         if (loop->iterkind != IK_ARRAY || loop->byref || !loop->vdef->copybind ||
-            !InlineArray(array) || !Nominal(element) ||
+            !(InlineArray(array) || support.DataNominalArray(array)) || !Nominal(element) ||
             !TEq(element, loop->vdef->type) || plan == storage.fixedvalues.end() ||
             plan->second.origin != WasmStoragePlan::FixedOrigin::IterationCopy ||
             plan->second.initialization != loop || !RequireFixed(element, loop->line))
             Fail(loop->line, "by-value aggregate iteration needs a fixed Memory 0 copy owner");
-        RequireFixed(array, loop->line);
+        if (InlineArray(array)) RequireFixed(array, loop->line);
     }
     auto prefix = VarintPrefix(array) ? (int)Local(WasmModule::I32) : -1;
     auto position = Local(WasmModule::I64); code.I64(0); code.Set(position);
@@ -1021,7 +1021,7 @@ inline void WasmCodeGen::ArrayFor(ForLoop *loop) {
     ElementOffset({place, NoLocal, prefix < 0 ? NoLocal : (uint32_t)prefix}, position, loop->line);
     if (copyAggregate) {
         auto selected = CaptureElementPlace({element, memory});
-        // The length test and fixed array image bound the whole selected element.
+        // The current length test and valid complete source image bound the whole element.
         CopyFixed(FreshOwner(loop->vdef, loop), selected, loop->line);
     } else {
         if (!loop->byref || element->kind == TY_REF) {

@@ -1,0 +1,28 @@
+[
+  [
+    "identity",
+    [
+      "python3",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/verify.py"
+    ]
+  ],
+  [
+    "remaining-observers",
+    [
+      "mise",
+      "exec",
+      "wasm-tools@1.262.0",
+      "node@24.22.2",
+      "--",
+      "python3",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/checks.py"
+    ]
+  ],
+  [
+    "identity-after",
+    [
+      "python3",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/verify.py"
+    ]
+  ]
+]

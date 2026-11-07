@@ -260,6 +260,14 @@ def main():
     count += check_data_controls(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out)
     from wasm_data_aggregate_named import check_named_footprint
     count += check_named_footprint(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out, function_local_counts)
+    run([args.node, ROOT / 'test/wasm_memory_snapshot_checks.mjs'])
+    count += 2
+    from wasm_data_iteration_checks import check_modules as check_data_iteration_modules
+    from wasm_data_iteration_admission import check_admission as check_data_iteration_admission
+    from wasm_data_iteration_footprint import check_footprint as check_data_iteration_footprint
+    count += check_data_iteration_modules(run, args.node, args.validator, args.wasmtime_python, out)
+    count += check_data_iteration_admission(run, exe, out)
+    count += check_data_iteration_footprint(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out)
     growth_source = out / 'frame-growth.goose'
     lines = ['recursive fn grow(n: i64) -> i64 {']
     for i in range(96):

@@ -1,0 +1,45 @@
+{
+  "purpose": "correctness only",
+  "lease_used": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "identity",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-data-iteration-20261107/compatibility01/verify.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "exact-comparisons",
+      "command": [
+        "python3",
+        "test/backend_shared.py",
+        "--reference",
+        "build/goose-inline-checkpoint",
+        "--exe",
+        "/tmp/goose-wasm-data-iteration-20261107/build01/goose-tested",
+        "--out",
+        "/tmp/goose-wasm-data-iteration-20261107/compatibility01/exact"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "module-identity",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-data-iteration-20261107/compatibility01/module-identity.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "identity-after",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-data-iteration-20261107/compatibility01/verify.py"
+      ],
+      "exit": 0
+    }
+  ]
+}

@@ -12,6 +12,14 @@ master were preserved. Implementation commits: `a0dc5c8d` (ABI/baseline), `f3d13
 (scalar path), `08acfd56` (warning markers), `cd24b901` (conversion helper), and
 `4b260fef` (existing fixture checks). Neither remote nor local master was reset.
 
+## Current owner scope
+
+Joshua made this work correctness-only on 2026-11-07. Compilation, native and
+differential checks, and complete memory-image verification continue. No
+performance measurements or measurement-lease rotation are part of this
+thread. Earlier cost notes and queued measurement plans below are historical;
+they are not gates for completing compilation support.
+
 ## Implemented path
 
 - `src/main.cpp`: `--target wasm`, flag and build forms, frontend/BCE reuse,
@@ -209,9 +217,18 @@ review found one named-copy local-growth cost, reproduced and repaired with
 32-case/16-family scaling and complete image-model checks. The repaired compiler
 passes the full native baseline and all 52 final exact comparisons.
 See [data-aggregate evidence](evidence/data-aggregates.md).
-Wide/varint aggregate counts, fills/capacity, data by-value iteration, general
-adaptations and protected/by-value destinations remain guarded. This does not
-complete Stage D or performance acceptance. Results and adapters remain open.
+Wide/varint aggregate counts, fills/capacity, general adaptations and
+protected/by-value destinations remain guarded. This does not complete Stage D
+or performance acceptance. Results and adapters remain open.
+
+Copied binders now also admit the positive fixed nominal elements of ordinary
+u32-count data arrays. They use the existing planned Memory 0 slot and checked
+copy service before the body, with shallow reference semantics and current
+source/count reloads. Focused complete-image, cleanup, path, admission and
+count/stride checks pass, as does the integrated 1,476-group Wasm suite. Field-path
+loops and the other array/call/result limits remain guarded. See the
+[data iteration evidence](evidence/data-aggregate-iteration.md). This is a
+Stage D increment, with runtime and physical-memory acceptance still open.
 
 ## Host contract
 

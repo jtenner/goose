@@ -1,0 +1,13 @@
+Start identity
+identity exit 0
+Start extra-parent
+extra-parent exit 0
+Start release-build
+release-build exit 0
+Start freeze
+freeze exit 0
+Start candidate
+candidate exit 0
+Start identity-after
+identity-after exit 0
+All children reaped; lease released.

@@ -1,0 +1,30 @@
+[
+  [
+    "identity",
+    [
+      "python3",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/verify.py"
+    ]
+  ],
+  [
+    "cc-identity",
+    [
+      "cc",
+      "--version"
+    ]
+  ],
+  [
+    "parent-first",
+    [
+      "python3",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/checks.py"
+    ]
+  ],
+  [
+    "identity-after",
+    [
+      "python3",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/verify.py"
+    ]
+  ]
+]

@@ -1,0 +1,102 @@
+[
+  {
+    "kind": "control",
+    "opt": 0,
+    "source": "test/wasm/wasm_data_aggregate_iteration_control.goose",
+    "source_sha256": "55d4df66e405a6fbae03e504c804d4ec70e1e0c2864c799af55b456f1d72e555",
+    "native_sha256": "137ffdf8c65a7e0821a27e2087f00e89d87f536db3672e581f949df57cb0a25f",
+    "native_behavior": "PASS",
+    "parent_target_rejection": "by-value aggregate iteration needs a fixed Memory 0 copy owner",
+    "module_written": false
+  },
+  {
+    "kind": "control",
+    "opt": 2,
+    "source": "test/wasm/wasm_data_aggregate_iteration_control.goose",
+    "source_sha256": "55d4df66e405a6fbae03e504c804d4ec70e1e0c2864c799af55b456f1d72e555",
+    "native_sha256": "437564c53256adf34eb0d8cba1d2a57e62d50ff9f4351043d1f0d3117a69cfd8",
+    "native_behavior": "PASS",
+    "parent_target_rejection": "by-value aggregate iteration needs a fixed Memory 0 copy owner",
+    "module_written": false
+  },
+  {
+    "kind": "zero_control",
+    "opt": 0,
+    "source": "test/wasm/wasm_data_aggregate_iteration_zero_control.goose",
+    "source_sha256": "62367b747b6f197e43868b74694ec8a62ecbfdd50827c0b3b65010adbcb1f83a",
+    "native_sha256": "7f30ec266674bf2d21c4c6fe8004f2f2bfa8a588f5a63a99741cf5dc653b1535",
+    "native_behavior": "PASS",
+    "parent_target_rejection": "by-value aggregate iteration needs a fixed Memory 0 copy owner",
+    "module_written": false
+  },
+  {
+    "kind": "zero_control",
+    "opt": 2,
+    "source": "test/wasm/wasm_data_aggregate_iteration_zero_control.goose",
+    "source_sha256": "62367b747b6f197e43868b74694ec8a62ecbfdd50827c0b3b65010adbcb1f83a",
+    "native_sha256": "0b7113c4d9265eda4591153c8c1cb95fca2ce280170c020461b37d1b34973ba1",
+    "native_behavior": "PASS",
+    "parent_target_rejection": "by-value aggregate iteration needs a fixed Memory 0 copy owner",
+    "module_written": false
+  },
+  {
+    "kind": "checkpoint",
+    "opt": 0,
+    "source": "test/wasm/wasm_data_aggregate_iteration_checkpoint.goose",
+    "source_sha256": "86be40b897fdd1b110eb89a32371dacb632889bb60df7254190a781e0aa4d731",
+    "native_sha256": "032f1f9a81cf3c5a56705d7cb554013c83037b0bc2aec557d8d679dfd6c7fbfb",
+    "native_behavior": "PASS",
+    "parent_target_rejection": "by-value aggregate iteration needs a fixed Memory 0 copy owner",
+    "module_written": false
+  },
+  {
+    "kind": "checkpoint",
+    "opt": 2,
+    "source": "test/wasm/wasm_data_aggregate_iteration_checkpoint.goose",
+    "source_sha256": "86be40b897fdd1b110eb89a32371dacb632889bb60df7254190a781e0aa4d731",
+    "native_sha256": "16a8bf678afeab510f0e4d81fa332997561bf664553ba9981ee48345f784760f",
+    "native_behavior": "PASS",
+    "parent_target_rejection": "by-value aggregate iteration needs a fixed Memory 0 copy owner",
+    "module_written": false
+  },
+  {
+    "kind": "enum_image",
+    "opt": 0,
+    "source": "test/wasm/wasm_data_aggregate_iteration_enum_image.goose",
+    "source_sha256": "5701872b61da36a164ff1b6c4151a05a50a364e3b6dbaab390c4c7cda500a5f6",
+    "native_sha256": "4cf7c67d1d39f637384196b4df8c5ad50b0e368db6ffe3196f3883dd3e341c0c",
+    "native_behavior": "PASS",
+    "parent_target_rejection": "by-value aggregate iteration needs a fixed Memory 0 copy owner",
+    "module_written": false
+  },
+  {
+    "kind": "enum_image",
+    "opt": 2,
+    "source": "test/wasm/wasm_data_aggregate_iteration_enum_image.goose",
+    "source_sha256": "5701872b61da36a164ff1b6c4151a05a50a364e3b6dbaab390c4c7cda500a5f6",
+    "native_sha256": "13dde37285c90e6271bdb365a4fde09010c2e2c8a48621e1cb0169445fd3795b",
+    "native_behavior": "PASS",
+    "parent_target_rejection": "by-value aggregate iteration needs a fixed Memory 0 copy owner",
+    "module_written": false
+  },
+  {
+    "kind": "inline_image",
+    "opt": 0,
+    "source": "test/wasm/wasm_data_aggregate_iteration_inline_image.goose",
+    "source_sha256": "99ef80e2fcb8060fc76160424a8e254649c2aba5dd367dd47804fdcc3eb261cf",
+    "native_sha256": "0105418f885af2f0a765f59393ead157d28a28a6be54cb14779ed6bb6000bf21",
+    "native_behavior": "PASS",
+    "parent_target_rejection": "by-value aggregate iteration needs a fixed Memory 0 copy owner",
+    "module_written": false
+  },
+  {
+    "kind": "inline_image",
+    "opt": 2,
+    "source": "test/wasm/wasm_data_aggregate_iteration_inline_image.goose",
+    "source_sha256": "99ef80e2fcb8060fc76160424a8e254649c2aba5dd367dd47804fdcc3eb261cf",
+    "native_sha256": "dc4009d9c5aef71ccbb0597e5b15643d76ae17ea49b91e789174f7a109a473ca",
+    "native_behavior": "PASS",
+    "parent_target_rejection": "by-value aggregate iteration needs a fixed Memory 0 copy owner",
+    "module_written": false
+  }
+]

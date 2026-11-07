@@ -1,0 +1,35 @@
+[
+  [
+    "identity",
+    [
+      "python3",
+      "/tmp/goose-wasm-data-iteration-20261107/qualification01/verify.py"
+    ]
+  ],
+  [
+    "parent",
+    [
+      "python3",
+      "/tmp/goose-wasm-data-iteration-20261107/qualification01/parent.py"
+    ]
+  ],
+  [
+    "focused",
+    [
+      "mise",
+      "exec",
+      "wasm-tools@1.262.0",
+      "node@24.22.2",
+      "--",
+      "python3",
+      "/tmp/goose-wasm-data-iteration-20261107/qualification01/checks.py"
+    ]
+  ],
+  [
+    "identity-after",
+    [
+      "python3",
+      "/tmp/goose-wasm-data-iteration-20261107/qualification01/verify.py"
+    ]
+  ]
+]

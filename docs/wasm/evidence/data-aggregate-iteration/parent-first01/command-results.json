@@ -1,0 +1,554 @@
+[
+  {
+    "name": "values-O0-native-emit",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/values-O0.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_values.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "values-O0-native-build",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/values-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/values-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "values-O0-native-run",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/values-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "values-O0-parent-reject",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/values-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_values.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "values-O2-native-emit",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/values-O2.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_values.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "values-O2-native-build",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/values-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/values-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "values-O2-native-run",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/values-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "values-O2-parent-reject",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/values-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_values.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "refs_packed-O0-native-emit",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/refs_packed-O0.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_refs_packed.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs_packed-O0-native-build",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/refs_packed-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/refs_packed-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs_packed-O0-native-run",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/refs_packed-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs_packed-O0-parent-reject",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/refs_packed-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_refs_packed.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "refs_packed-O2-native-emit",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/refs_packed-O2.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_refs_packed.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs_packed-O2-native-build",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/refs_packed-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/refs_packed-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs_packed-O2-native-run",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/refs_packed-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs_packed-O2-parent-reject",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/refs_packed-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_refs_packed.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "paths-O0-native-emit",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/paths-O0.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_paths.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "paths-O0-native-build",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/paths-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/paths-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "paths-O0-native-run",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/paths-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "paths-O0-parent-reject",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/paths-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_paths.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "paths-O2-native-emit",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/paths-O2.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_paths.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "paths-O2-native-build",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/paths-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/paths-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "paths-O2-native-run",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/paths-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "paths-O2-parent-reject",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/paths-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_paths.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "enums-O0-native-emit",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/enums-O0.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_enums.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "enums-O0-native-build",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/enums-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/enums-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "enums-O0-native-run",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/enums-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "enums-O0-parent-reject",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/enums-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_enums.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "enums-O2-native-emit",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/enums-O2.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_enums.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "enums-O2-native-build",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/enums-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/enums-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "enums-O2-native-run",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/enums-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "enums-O2-parent-reject",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/enums-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_enums.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "fields-O0-native-emit",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/fields-O0.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_fields.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fields-O0-native-build",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/fields-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/fields-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fields-O0-native-run",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/fields-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fields-O0-parent-reject",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/fields-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_fields.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "fields-O2-native-emit",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/fields-O2.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_fields.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fields-O2-native-build",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/fields-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/fields-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fields-O2-native-run",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/fields-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fields-O2-parent-reject",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/fields-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_fields.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "cleanup-O0-native-emit",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/cleanup-O0.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_cleanup.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O0-native-build",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/cleanup-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/cleanup-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O0-native-run",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/cleanup-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O0-parent-reject",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/cleanup-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_cleanup.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "cleanup-O2-native-emit",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/cleanup-O2.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_cleanup.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O2-native-build",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/cleanup-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/cleanup-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O2-native-run",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/cleanup-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O2-parent-reject",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/parent-first01/cleanup-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_cleanup.goose"
+    ],
+    "exit": 1
+  }
+]

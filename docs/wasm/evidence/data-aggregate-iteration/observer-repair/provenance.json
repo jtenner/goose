@@ -1,0 +1,18 @@
+{
+  "scope": "Persistent expected-image capture only. Complete-source models and actual-memory reads unchanged.",
+  "cause": "Buffer.from(ArrayBuffer) aliases memory; writes change snapshot and memory.grow detaches it.",
+  "original_matrix_failure": "footprint01/command-361.stderr",
+  "before_sources": [
+    {
+      "source": "test/wasm_data_iteration_global.mjs",
+      "before_sha256": "69ba8e88faaa6a22f182dbaed670eabfd57072be39f3c7dfafaa10054545ad76",
+      "after_sha256": "ef8e65b40e80254f9eae5d9a198179616a2ed2679e009432051f05e6d8272c7d"
+    },
+    {
+      "source": "test/wasm_data_iteration_owner.mjs",
+      "before_sha256": "a9c50a4a97726106e56b0e0b76c5657d243925a2e7553d31423464dd8e60cb1b",
+      "after_sha256": "1dac137581094e84321a93698898acb8536be6f80fa2a5f411e8f92f77018567"
+    }
+  ],
+  "production_Cpp_change": false
+}

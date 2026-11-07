@@ -1,0 +1,130 @@
+[
+  {
+    "kind": "values",
+    "opt": 0,
+    "source_sha256": "0a7977828bb24a4aaf5bda208dd5ee82fb04018768a9b8e2386fcd0225edd077",
+    "module_sha256": "ad051c2e04bb710c763b9bf0f10391d94582ff5224badcdd4d6de8abe35ae51c",
+    "Node_Wasmtime_owner_checks": "PASS",
+    "native_reference_reused": true
+  },
+  {
+    "kind": "values",
+    "opt": 2,
+    "source_sha256": "0a7977828bb24a4aaf5bda208dd5ee82fb04018768a9b8e2386fcd0225edd077",
+    "module_sha256": "ad051c2e04bb710c763b9bf0f10391d94582ff5224badcdd4d6de8abe35ae51c",
+    "Node_Wasmtime_owner_checks": "PASS",
+    "native_reference_reused": true
+  },
+  {
+    "kind": "refs_packed",
+    "opt": 0,
+    "source_sha256": "77efe047e90d3b55f475f074c19b7c2dda42a26db6bc1a10330f008d468686df",
+    "module_sha256": "3759848acc2d19d06ad322706c8a168cfc905adddb429cc85a872fef58a2ba54",
+    "Node_Wasmtime_owner_checks": "PASS",
+    "native_reference_reused": true
+  },
+  {
+    "kind": "refs_packed",
+    "opt": 2,
+    "source_sha256": "77efe047e90d3b55f475f074c19b7c2dda42a26db6bc1a10330f008d468686df",
+    "module_sha256": "3759848acc2d19d06ad322706c8a168cfc905adddb429cc85a872fef58a2ba54",
+    "Node_Wasmtime_owner_checks": "PASS",
+    "native_reference_reused": true
+  },
+  {
+    "kind": "paths",
+    "opt": 0,
+    "source_sha256": "56bf18cc6b99180ee502fb78db1572558a7fbf4729dc93f84d8dde0d738fc8d4",
+    "module_sha256": "92febd1a196509bf2a37152c2a55f4be340b2d73278dc5e37213fc3e392460c9",
+    "Node_Wasmtime_owner_checks": "PASS",
+    "native_reference_reused": true
+  },
+  {
+    "kind": "paths",
+    "opt": 2,
+    "source_sha256": "56bf18cc6b99180ee502fb78db1572558a7fbf4729dc93f84d8dde0d738fc8d4",
+    "module_sha256": "92febd1a196509bf2a37152c2a55f4be340b2d73278dc5e37213fc3e392460c9",
+    "Node_Wasmtime_owner_checks": "PASS",
+    "native_reference_reused": true
+  },
+  {
+    "kind": "enums",
+    "opt": 0,
+    "source_sha256": "f2e537c8077f45142b902fb45887ae8f2db42a3da44d9e314e9f767b5b6b8712",
+    "module_sha256": "22f506f9d74a01c19c00ad36f3b22bdaa9afc46da62c5548ac6090ac81c94b95",
+    "Node_Wasmtime_owner_checks": "PASS",
+    "native_reference_reused": true
+  },
+  {
+    "kind": "enums",
+    "opt": 2,
+    "source_sha256": "f2e537c8077f45142b902fb45887ae8f2db42a3da44d9e314e9f767b5b6b8712",
+    "module_sha256": "22f506f9d74a01c19c00ad36f3b22bdaa9afc46da62c5548ac6090ac81c94b95",
+    "Node_Wasmtime_owner_checks": "PASS",
+    "native_reference_reused": true
+  },
+  {
+    "kind": "fields",
+    "opt": 0,
+    "source_sha256": "dbb5963f788716b22c90cf26f70f030e585fad34dd1386201aacf5b9740a2d56",
+    "module_sha256": "cf87747ea67a94aae8fe0f7b8486d6560e9a82a540ca31cebbf5944687770a29",
+    "Node_Wasmtime_owner_checks": "PASS",
+    "native_reference_reused": true
+  },
+  {
+    "kind": "fields",
+    "opt": 2,
+    "source_sha256": "dbb5963f788716b22c90cf26f70f030e585fad34dd1386201aacf5b9740a2d56",
+    "module_sha256": "1b60c6815207398b08ec4036759ccf12be89f5f0dd62324f9cfb8d6769ffb7e9",
+    "Node_Wasmtime_owner_checks": "PASS",
+    "native_reference_reused": true
+  },
+  {
+    "kind": "cleanup",
+    "opt": 0,
+    "source_sha256": "838d43cc56058470f2f65e8f1264231c006890f6d0b0bd1f66b6b7dfdfbdc89c",
+    "module_sha256": "4090ea14ff32f146346b2f50382f2a83c583aae03b5a31b41e451768b25e10e2",
+    "Node_Wasmtime_owner_checks": "PASS",
+    "native_reference_reused": true
+  },
+  {
+    "kind": "cleanup",
+    "opt": 2,
+    "source_sha256": "838d43cc56058470f2f65e8f1264231c006890f6d0b0bd1f66b6b7dfdfbdc89c",
+    "module_sha256": "4090ea14ff32f146346b2f50382f2a83c583aae03b5a31b41e451768b25e10e2",
+    "Node_Wasmtime_owner_checks": "PASS",
+    "native_reference_reused": true
+  },
+  {
+    "kind": "callbacks",
+    "opt": 0,
+    "source_sha256": "6cd74c1cad8777efe531143f5857726eb8f59472e49e4ac2d005dbd060cfa18b",
+    "module_sha256": "4caf80eb18bccdbdd93cfcd42d93e6dede8345ce44b89902f8f0ebfd6af82e32",
+    "Node_Wasmtime_owner_checks": "PASS",
+    "native_reference_reused": true
+  },
+  {
+    "kind": "callbacks",
+    "opt": 2,
+    "source_sha256": "6cd74c1cad8777efe531143f5857726eb8f59472e49e4ac2d005dbd060cfa18b",
+    "module_sha256": "28c0594ad37f53379f6147ccbacff940e31068bd15180f5ef1882c7f5a27d74e",
+    "Node_Wasmtime_owner_checks": "PASS",
+    "native_reference_reused": true
+  },
+  {
+    "kind": "defaults",
+    "opt": 0,
+    "source_sha256": "db69ceee49064dd2806fbdc855e7f751ec8e057d36827026def3b27da257158b",
+    "module_sha256": "c29a002f4a2f532b62ddfdaffde066a8fb4e2c10e465d249f4744c9667add6f8",
+    "Node_Wasmtime_owner_checks": "PASS",
+    "native_reference_reused": true
+  },
+  {
+    "kind": "defaults",
+    "opt": 2,
+    "source_sha256": "db69ceee49064dd2806fbdc855e7f751ec8e057d36827026def3b27da257158b",
+    "module_sha256": "416f23d57a4caf91817d8c9cef00d8ef478991aefb5dce7c508267a856d5a807",
+    "Node_Wasmtime_owner_checks": "PASS",
+    "native_reference_reused": true
+  }
+]

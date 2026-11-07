@@ -1,0 +1,186 @@
+[
+  {
+    "name": "callbacks-O0-native-emit",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/build01/callbacks-O0.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_callbacks.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "callbacks-O0-native-build",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-iteration-20261107/build01/callbacks-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/build01/callbacks-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "callbacks-O0-native-run",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/callbacks-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "callbacks-O0-parent-reject",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/build01/callbacks-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_callbacks.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "callbacks-O2-native-emit",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/build01/callbacks-O2.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_callbacks.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "callbacks-O2-native-build",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-iteration-20261107/build01/callbacks-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/build01/callbacks-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "callbacks-O2-native-run",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/callbacks-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "callbacks-O2-parent-reject",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/build01/callbacks-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_callbacks.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "defaults-O0-native-emit",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/build01/defaults-O0.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_defaults.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "defaults-O0-native-build",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-iteration-20261107/build01/defaults-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/build01/defaults-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "defaults-O0-native-run",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/defaults-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "defaults-O0-parent-reject",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/build01/defaults-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_defaults.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "defaults-O2-native-emit",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/build01/defaults-O2.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_defaults.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "defaults-O2-native-build",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-iteration-20261107/build01/defaults-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/build01/defaults-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "defaults-O2-native-run",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/defaults-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "defaults-O2-parent-reject",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/build01/defaults-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_iteration_defaults.goose"
+    ],
+    "exit": 1
+  }
+]

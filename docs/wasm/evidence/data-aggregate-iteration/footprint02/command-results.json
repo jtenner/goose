@@ -1,0 +1,1431 @@
+[
+  {
+    "name": "command-000",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_memory_snapshot_checks.mjs"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-001",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_memory_snapshot_checks.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/legacy-snapshot.mjs",
+      "write"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-002",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_memory_snapshot_checks.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/legacy-snapshot.mjs",
+      "grow"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-003",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-1-0-O0.owner.wasm",
+      "1",
+      "0",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-1-0-O0.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-004",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-1-0-O2.owner.wasm",
+      "1",
+      "0",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-1-0-O2.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-005",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-1-1-O0.owner.wasm",
+      "1",
+      "1",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-1-1-O0.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-006",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-1-1-O2.owner.wasm",
+      "1",
+      "1",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-1-1-O2.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-007",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-1-32-O0.owner.wasm",
+      "1",
+      "32",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-1-32-O0.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-008",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-1-32-O2.owner.wasm",
+      "1",
+      "32",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-1-32-O2.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-009",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-1-256-O0.owner.wasm",
+      "1",
+      "256",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-1-256-O0.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-010",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-1-256-O2.owner.wasm",
+      "1",
+      "256",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-1-256-O2.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-011",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-7-0-O0.owner.wasm",
+      "7",
+      "0",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-7-0-O0.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-012",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-7-0-O2.owner.wasm",
+      "7",
+      "0",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-7-0-O2.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-013",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-7-1-O0.owner.wasm",
+      "7",
+      "1",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-7-1-O0.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-014",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-7-1-O2.owner.wasm",
+      "7",
+      "1",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-7-1-O2.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-015",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-7-32-O0.owner.wasm",
+      "7",
+      "32",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-7-32-O0.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-016",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-7-32-O2.owner.wasm",
+      "7",
+      "32",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-7-32-O2.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-017",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-7-256-O0.owner.wasm",
+      "7",
+      "256",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-7-256-O0.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-018",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-7-256-O2.owner.wasm",
+      "7",
+      "256",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-7-256-O2.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-019",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-16-0-O0.owner.wasm",
+      "16",
+      "0",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-16-0-O0.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-020",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-16-0-O2.owner.wasm",
+      "16",
+      "0",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-16-0-O2.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-021",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-16-1-O0.owner.wasm",
+      "16",
+      "1",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-16-1-O0.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-022",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-16-1-O2.owner.wasm",
+      "16",
+      "1",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-16-1-O2.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-023",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-16-32-O0.owner.wasm",
+      "16",
+      "32",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-16-32-O0.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-024",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-16-32-O2.owner.wasm",
+      "16",
+      "32",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-16-32-O2.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-025",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-16-256-O0.owner.wasm",
+      "16",
+      "256",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-16-256-O0.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-026",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-16-256-O2.owner.wasm",
+      "16",
+      "256",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-16-256-O2.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-027",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-256-0-O0.owner.wasm",
+      "256",
+      "0",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-256-0-O0.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-028",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-256-0-O2.owner.wasm",
+      "256",
+      "0",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-256-0-O2.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-029",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-256-1-O0.owner.wasm",
+      "256",
+      "1",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-256-1-O0.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-030",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-256-1-O2.owner.wasm",
+      "256",
+      "1",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-256-1-O2.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-031",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-256-32-O0.owner.wasm",
+      "256",
+      "32",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-256-32-O0.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-032",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-256-32-O2.owner.wasm",
+      "256",
+      "32",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-256-32-O2.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-033",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-256-256-O0.owner.wasm",
+      "256",
+      "256",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-256-256-O0.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-034",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-256-256-O2.owner.wasm",
+      "256",
+      "256",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-256-256-O2.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-035",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-0-O0.owner.wasm",
+      "40008",
+      "0",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-0-O0.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-036",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-0-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-037",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-0-O2.c",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-0.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-038",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-0-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-0-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-039",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-0-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-040",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-0-O2.parent.wasm",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-0.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-041",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-0-O2.wasm",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-0.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-042",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-0-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-043",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-0-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-044",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-0-O2.owner.wat",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-0-O2.owner.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-045",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-0-O2.owner.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-046",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-0-O2.owner.wasm",
+      "40008",
+      "0",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-0-O2.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-047",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-0-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-048",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O0.c",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-049",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-050",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-051",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O0.parent.wasm",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-052",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O0.wasm",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-053",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-054",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-055",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O0.owner.wat",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O0.owner.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-056",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O0.owner.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-057",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O0.owner.wasm",
+      "40008",
+      "1",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O0.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-058",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-059",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O2.c",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-060",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-061",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-062",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O2.parent.wasm",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-063",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O2.wasm",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-064",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-065",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-066",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O2.owner.wat",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O2.owner.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-067",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O2.owner.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-068",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O2.owner.wasm",
+      "40008",
+      "1",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O2.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-069",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-1-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-070",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O0.c",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-071",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-072",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-073",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O0.parent.wasm",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-074",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O0.wasm",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-075",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-076",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-077",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O0.owner.wat",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O0.owner.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-078",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O0.owner.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-079",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O0.owner.wasm",
+      "40008",
+      "32",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O0.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-080",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-081",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O2.c",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-082",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-083",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-084",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O2.parent.wasm",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-085",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O2.wasm",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-086",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-087",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-088",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O2.owner.wat",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O2.owner.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-089",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O2.owner.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-090",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O2.owner.wasm",
+      "40008",
+      "32",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O2.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-091",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-32-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-092",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O0.c",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-093",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-094",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-095",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O0.parent.wasm",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-096",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O0.wasm",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-097",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-098",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-099",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O0.owner.wat",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O0.owner.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-100",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O0.owner.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-101",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O0.owner.wasm",
+      "40008",
+      "256",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O0.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-102",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-103",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O2.c",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-104",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-105",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-106",
+    "args": [
+      "/tmp/goose-wasm-data-aggregates-20261107/build06/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O2.parent.wasm",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-107",
+    "args": [
+      "/tmp/goose-wasm-data-iteration-20261107/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O2.wasm",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-108",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-109",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-110",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O2.owner.wat",
+      "-o",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O2.owner.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-111",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O2.owner.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-112",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_global.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O2.owner.wasm",
+      "40008",
+      "256",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O2.owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-113",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/artifacts/data-iteration-footprint/rows-40008-256-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-114",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_owner.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/qualification01/artifacts/data-iteration-control-O0.wasm",
+      "copy",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/control-O0-owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-115",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_owner.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/qualification01/artifacts/data-iteration-zero_control-O0.wasm",
+      "zero",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/zero_control-O0-owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-116",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_owner.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/qualification01/artifacts/data-iteration-checkpoint-O0.wasm",
+      "cleanup",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/checkpoint-O0-owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-117",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_owner.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/qualification01/artifacts/data-iteration-enum_image-O0.wasm",
+      "enum",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/enum_image-O0-owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-118",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_owner.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/qualification01/artifacts/data-iteration-inline_image-O0.wasm",
+      "inline",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/inline_image-O0-owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-119",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_owner.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/qualification01/artifacts/data-long-O0.wasm",
+      "copy"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-120",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_owner.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/qualification01/artifacts/data-eager-O0.wasm",
+      "zero"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-121",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_owner.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/qualification01/artifacts/data-cleanup-O0.wasm",
+      "cleanup"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-122",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_owner.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/qualification01/artifacts/data-iteration-control-O2.wasm",
+      "copy",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/control-O2-owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-123",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_owner.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/qualification01/artifacts/data-iteration-zero_control-O2.wasm",
+      "zero",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/zero_control-O2-owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-124",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_owner.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/qualification01/artifacts/data-iteration-checkpoint-O2.wasm",
+      "cleanup",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/checkpoint-O2-owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-125",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_owner.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/qualification01/artifacts/data-iteration-enum_image-O2.wasm",
+      "enum",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/enum_image-O2-owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-126",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_owner.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/qualification01/artifacts/data-iteration-inline_image-O2.wasm",
+      "inline",
+      "/tmp/goose-wasm-data-iteration-20261107/footprint02/inline_image-O2-owner.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-127",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_owner.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/qualification01/artifacts/data-long-O2.wasm",
+      "copy"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-128",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_owner.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/qualification01/artifacts/data-eager-O2.wasm",
+      "zero"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-129",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_owner.mjs",
+      "/tmp/goose-wasm-data-iteration-20261107/qualification01/artifacts/data-cleanup-O2.wasm",
+      "cleanup"
+    ],
+    "exit": 1
+  }
+]

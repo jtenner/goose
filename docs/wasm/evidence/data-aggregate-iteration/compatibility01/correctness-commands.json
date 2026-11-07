@@ -1,0 +1,36 @@
+[
+  [
+    "identity",
+    [
+      "python3",
+      "/tmp/goose-wasm-data-iteration-20261107/compatibility01/verify.py"
+    ]
+  ],
+  [
+    "exact-comparisons",
+    [
+      "python3",
+      "test/backend_shared.py",
+      "--reference",
+      "build/goose-inline-checkpoint",
+      "--exe",
+      "/tmp/goose-wasm-data-iteration-20261107/build01/goose-tested",
+      "--out",
+      "/tmp/goose-wasm-data-iteration-20261107/compatibility01/exact"
+    ]
+  ],
+  [
+    "module-identity",
+    [
+      "python3",
+      "/tmp/goose-wasm-data-iteration-20261107/compatibility01/module-identity.py"
+    ]
+  ],
+  [
+    "identity-after",
+    [
+      "python3",
+      "/tmp/goose-wasm-data-iteration-20261107/compatibility01/verify.py"
+    ]
+  ]
+]
