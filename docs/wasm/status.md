@@ -66,9 +66,18 @@ than one set of locals per element. Final validation passed 289 Wasm checks,
 all native groups across the full run and targeted setup correction, 52 exact
 comparisons and 62 byte-identical old modules. An independent Astra review
 found no confirmed production defect. See [variable-array evidence](evidence/variable-arrays.md).
-Strings, varints, fills, variable elements and general by-value destinations
+Strings, varints, variable elements and general by-value destinations
 remain pending. These checks establish module/local-count changes, not a
 compiler CPU/RSS or guest throughput result.
+
+Scalar/reference fill literals now work for all admitted array layouts. A
+saved fill value runs once even for zero elements; nonempty fills use a loop
+and one whole-payload data reservation where needed. Targeted checks include
+large dynamic bases and direct variable-owner cleanup exits. This stage passed
+301 Wasm checks, 52 exact comparisons and 68 unchanged prior modules. The
+independent Astra review found no confirmed defect. See [fill evidence](evidence/array-fills.md)
+for exact identities, the earlier native baseline's setup correction and
+remaining measurement/coverage limits.
 
 ## Host contract
 

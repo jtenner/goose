@@ -1,0 +1,22 @@
+{
+  "scripts/run_wasm.mjs": "b84fd6f65b321aa6149b5edd1a13246daba305a477d31e8698896fd6e6ad0409",
+  "src/ast.h": "c6ba4a65898724f407ab3b43a2c391e483fe86345d8c95bc2d567bf58703f73e",
+  "src/codegen.h": "c925e88bafaf152ea916ef2718a28f3943c6de73d87642b2b4fd9833e35da623",
+  "src/codegen_calls.h": "923a40b0cff096ff79f19467bbf43d07dcdb24a02983db6d314734d476eba2fa",
+  "src/codegen_construct.h": "705ea5dae2e0209dc186840e2402c8c3d78186a45494b42d9086fd0fb80c5d52",
+  "src/codegen_frames.h": "b995d2130674953363d92bb4f5bb916b77488e4d837ef46028c67711f8e8f616",
+  "src/data_stacks.h": "e68d48103069c906451b5557a10398377d191469a131f7ce5d2886161fe6f264",
+  "src/value_layout.h": "d73b163354d5fe3b76494d97942c879cf39b70c8c371a7621454e2c06c838dc6",
+  "src/wasm_arrays.h": "0bad310dfa25109e2634c49163f75d371f9e636897f5af8b257683efdbb6ce00",
+  "src/wasm_binary.h": "9fa49debc8d8592d3e3a7d38142b736d6bbcfd920f2bdaca491b537400ff9ce2",
+  "src/wasm_codegen.h": "b2e504268fb00e04643a5fcd361e1340723485306c87003daaff9bd6063a48d5",
+  "src/wasm_memory.h": "0569b4496f92b6de10d28da9f0ecad90a9cc66284e98131c2eeb43109206e64d",
+  "src/wasm_storage.h": "b7f483a6c7eac909cc2e8274337245ec12ddfdf2af3bb51ae456fe4a49363bbc",
+  "test/expected/wasm_array_fills.out": "da195a47544b9380609e527fdeea3c0b86d0df4b5c299d50e3f054b76b837310",
+  "test/expected/wasm_variable_cleanup.out": "4d955e0e0b27aa60b8e0f286dc5076107d7d8c8fea1b5a3c5b6fe80939159752",
+  "test/wasm/wasm_array_fills.goose": "9ab57af7b31db7cd20eae4524fa68358d085212f950eb528e8ffc17cbf4874e7",
+  "test/wasm/wasm_variable_cleanup.goose": "e4001a584d59e50a4760bde5a204b9cf91e404a6a05b9fd58ef51c279bbad67a",
+  "test/wasm_backend.py": "1058733a10f1324e36db8a69176ae62893999e07a8d621e532191143622e1274",
+  "test/wasm_multimemory.mjs": "0497f4e5df8ac49beb0c5dbc2f94652a556bc83526ea9a8a0dcd4cf5f9c34aed",
+  "test/wasmtime_host.py": "538242c0c19469a69b141467b7a333606240a385a899407ddd2e4b810b5801ef"
+}

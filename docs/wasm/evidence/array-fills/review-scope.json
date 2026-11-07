@@ -1,0 +1,29 @@
+{
+  "baseline": "7744624b3013ce6952a1ad9cfb0e5db683416fdd",
+  "changed_files": [
+    "src/wasm_arrays.h",
+    "src/wasm_codegen.h",
+    "test/wasm_backend.py",
+    "test/expected/wasm_array_fills.out",
+    "test/expected/wasm_variable_cleanup.out",
+    "test/wasm/wasm_array_fills.goose",
+    "test/wasm/wasm_variable_cleanup.goose"
+  ],
+  "context_files": [
+    "scripts/run_wasm.mjs",
+    "src/ast.h",
+    "src/codegen.h",
+    "src/codegen_calls.h",
+    "src/codegen_construct.h",
+    "src/codegen_frames.h",
+    "src/data_stacks.h",
+    "src/value_layout.h",
+    "src/wasm_binary.h",
+    "src/wasm_memory.h",
+    "src/wasm_storage.h",
+    "test/wasm_multimemory.mjs",
+    "test/wasmtime_host.py"
+  ],
+  "compiler_sha256": "668f2d0c863823789a1b6fc04dac145e49996602fc79641950ea69f0cb570ffb",
+  "reference_compiler_sha256": "ccb45b63e07c3dc3a80ef392e12db035453b6fd65cd7e7b4387efb5222ad464f"
+}

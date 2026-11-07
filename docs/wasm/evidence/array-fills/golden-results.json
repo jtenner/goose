@@ -1,0 +1,186 @@
+[
+  {
+    "name": "fills-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-variable-arrays-20261107/constructor-repair/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-fills-20261107/fills-O0.c",
+      "/tmp/goose-wasm-array-fills-20261107/fills.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fills-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-fills-20261107/fills-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-fills-20261107/fills-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fills-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-array-fills-20261107/fills-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fills-O0-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-variable-arrays-20261107/constructor-repair/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-fills-20261107/fills-O0-before.wasm",
+      "/tmp/goose-wasm-array-fills-20261107/fills.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "fills-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-variable-arrays-20261107/constructor-repair/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-fills-20261107/fills-O2.c",
+      "/tmp/goose-wasm-array-fills-20261107/fills.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fills-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-fills-20261107/fills-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-fills-20261107/fills-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fills-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-array-fills-20261107/fills-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fills-O2-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-variable-arrays-20261107/constructor-repair/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-fills-20261107/fills-O2-before.wasm",
+      "/tmp/goose-wasm-array-fills-20261107/fills.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "cleanup-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-variable-arrays-20261107/constructor-repair/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-fills-20261107/cleanup-O0.c",
+      "/tmp/goose-wasm-array-fills-20261107/cleanup.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-fills-20261107/cleanup-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-fills-20261107/cleanup-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-array-fills-20261107/cleanup-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O0-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-variable-arrays-20261107/constructor-repair/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-fills-20261107/cleanup-O0-before.wasm",
+      "/tmp/goose-wasm-array-fills-20261107/cleanup.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-variable-arrays-20261107/constructor-repair/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-fills-20261107/cleanup-O2.c",
+      "/tmp/goose-wasm-array-fills-20261107/cleanup.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-fills-20261107/cleanup-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-fills-20261107/cleanup-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-array-fills-20261107/cleanup-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O2-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-variable-arrays-20261107/constructor-repair/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-fills-20261107/cleanup-O2-before.wasm",
+      "/tmp/goose-wasm-array-fills-20261107/cleanup.goose"
+    ],
+    "exit": 0
+  }
+]

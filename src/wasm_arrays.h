@@ -54,6 +54,81 @@ inline int WasmCodeGen::ArrayMemory(Node *n) {
     return storage.Memory(id->vdef, current);
 }
 
+inline void WasmCodeGen::InitFilledArray(VarDef *owner, const Slot &slot, ArrayLit *literal) {
+    auto array = owner->type, element = array->arr->sub;
+    auto countnode = Is<IntLit>(literal->fillcount);
+    if (!countnode || countnode->val < 0)
+        Fail(literal->line, "array fill needs a nonnegative constant count");
+    auto count = (uint64_t)countnode->val;
+    auto stride = Size(element);
+    auto prefix = VariableArray(array) ? (uint32_t)IntSize(LenStore(array->arr)) : 0u;
+    if (count > (UINT32_MAX - prefix) / stride)
+        Fail(owner->line, "array allocation exceeds memory32");
+    if (prefix && prefix < 8 && count > ((1ull << (prefix * 8)) - 1))
+        Fail(owner->line, "array length exceeds its stored prefix");
+    auto memory = InlineArray(array) ? 0 : storage.Memory(owner, current);
+    auto base = Local(WasmModule::I64);
+    if (InlineArray(array)) {
+        auto capacity = (uint64_t)ArrSize(array->arr);
+        if (count > capacity || (array->arr->akind == A_FIXED && count != capacity))
+            Fail(owner->line, "array fill does not fit its static layout");
+        auto header = Local(WasmModule::I32); Address(slot); code.Set(header);
+        if (array->arr->akind == A_LIMITED) {
+            code.Get(header); code.I64((int64_t)count); StoreArrayLength(array);
+        }
+        code.Get(header);
+        if (array->arr->akind == A_LIMITED) {
+            code.I32((int32_t)IntSize(LenStore(array->arr))); code.Byte(0x6a);
+        }
+        code.Byte(0xad); code.Set(base);
+    } else {
+        auto bytes = prefix + (uint32_t)count * stride;
+        auto identity = Local(WasmModule::I32), saved = Local(WasmModule::I32);
+        if (memory >= 0) code.I32(memory);
+        else StackIndex(storage.owners.at(owner) + 1);
+        code.Set(identity);
+        if (memory >= 0) { code.I32((int32_t)bytes); code.Call(memories->Reserve(memory)); }
+        else { code.Get(identity); code.I32((int32_t)bytes); code.Call(memories->ReserveDynamic()); }
+        code.Set(saved);
+        if (!owner->isglobal) {
+            assert(!scopes.empty());
+            scopes.back().push_back({nullptr, memory >= 0 ? (uint32_t)memory : identity, saved, memory < 0});
+        }
+        code.Get(identity); code.Byte(0xad); code.I64(32); code.Byte(0x86);
+        code.Get(saved); code.Byte(0xad); code.Byte(0x84); code.Set(base);
+        if (VariableArray(array)) {
+            code.Get(base); Write(slot);
+            code.Get(base); code.I64((int64_t)count); StoreArrayLength(array, memory);
+        } else {
+            Address(slot); code.Get(base); code.Mem(0x37);
+            Address(slot); code.I64((int64_t)count); code.Mem(0x37, 0, 8);
+        }
+    }
+    // The language evaluates even a zero-count fill once. Capturing before
+    // the loop also keeps reference targets and call side effects stable.
+    auto item = Temp(element);
+    Gen(literal->fillval); Convert(literal->fillval->exprtype, element); code.Set(item);
+    if (!count) return;
+    auto position = Local(WasmModule::I64); code.I64(0); code.Set(position);
+    auto done = Open(), head = Open(0x03);
+    code.Get(position); code.I64((int64_t)count); code.Byte(0x5a); Branch(done, true);
+    // The whole payload was reserved, or is inside the checked activation
+    // frame. The loop bounds prove that these additions cannot wrap.
+    code.Get(base);
+    if (memory >= 0) {
+        code.Byte(0xa7); code.Get(position); code.Byte(0xa7);
+        code.I32((int32_t)stride); code.Byte(0x6c); code.Byte(0x6a);
+        if (prefix) { code.I32((int32_t)prefix); code.Byte(0x6a); }
+        code.Get(item); StoreFixed(element, (uint32_t)memory);
+    } else {
+        code.Get(position); code.I64(stride); code.Byte(0x7e); code.Byte(0x7c);
+        if (prefix) { code.I64(prefix); code.Byte(0x7c); }
+        code.Get(item); Store(element);
+    }
+    code.Get(position); code.I64(1); code.Byte(0x7c); code.Set(position);
+    Branch(head); Close(); Close();
+}
+
 inline void WasmCodeGen::InitVariableArray(VarDef *owner, const Slot &slot, ArrayLit *literal) {
     auto array = owner->type, element = array->arr->sub;
     auto prefix = (uint32_t)IntSize(LenStore(array->arr)), stride = Size(element);
@@ -107,9 +182,10 @@ inline void WasmCodeGen::InitArray(VarDef *owner, const Slot &slot, Node *init) 
         init = call->defaultinit;
     }
     auto literal = Is<ArrayLit>(init);
-    if (!literal || literal->fillval || literal->capexpr)
+    if (!literal || literal->capexpr)
         Fail(init->line, "this array constructor needs the pending destination lowering");
     auto array = owner->type;
+    if (literal->fillval) { InitFilledArray(owner, slot, literal); return; }
     if (VariableArray(array)) { InitVariableArray(owner, slot, literal); return; }
     if (!IsResz(array)) {
         auto header = Local(WasmModule::I32);

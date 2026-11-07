@@ -910,6 +910,7 @@ struct WasmCodeGen : ValueLayout {
     void ArrayLength(uint32_t header, TypeExpr *array, int memory = -1);
     void StoreArrayLength(TypeExpr *array, int memory = -1);
     void InitArray(VarDef *owner, const Slot &slot, Node *init);
+    void InitFilledArray(VarDef *owner, const Slot &slot, ArrayLit *literal);
     void InitVariableArray(VarDef *owner, const Slot &slot, ArrayLit *literal);
     void PushArray(uint32_t header, TypeExpr *array, Node *value, TypeExpr *result, Line line, int memory);
     void ArrayBuiltin(Call *call, const vector<Node *> &arguments);

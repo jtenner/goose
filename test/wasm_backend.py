@@ -120,17 +120,19 @@ def main():
                                'wasm_inline_nested_path', 'wasm_inline_boundaries',
                                'wasm_inline_optional_references', 'wasm_array_equality',
                                'wasm_inline_equality_modes', 'wasm_inline_deferred_rebind',
-                               'wasm_variable_arrays', 'wasm_variable_paths', 'wasm_variable_no_owner'):
+                               'wasm_variable_arrays', 'wasm_variable_paths', 'wasm_variable_no_owner',
+                               'wasm_array_fills', 'wasm_variable_cleanup'):
                 if source.stem == 'wasm_inline_arrays':
                     assert wasm.stat().st_size < 32768, 'unused global capacity was serialized'
-                persistent = '1' if source.stem in ('wasm_multimemory', 'wasm_variable_arrays') else '0'
+                persistent = '1' if source.stem in ('wasm_multimemory', 'wasm_variable_arrays', 'wasm_array_fills') else '0'
                 mode = {'wasm_multimemory': 'growth', 'wasm_scoped_data_reuse': 'reuse',
                         'wasm_array_widths': 'typed-reuse', 'wasm_no_data_owner': 'no-data',
                         'wasm_inline_arrays': 'no-data', 'wasm_inline_reference_path': 'no-data',
                         'wasm_inline_limited_path': 'no-data', 'wasm_inline_effect_path': 'no-data',
                         'wasm_inline_nested_path': 'no-data', 'wasm_inline_boundaries': 'no-data',
                         'wasm_inline_equality_modes': 'no-data', 'wasm_variable_no_owner': 'no-data',
-                        'wasm_variable_paths': 'variable-reuse'}.get(source.stem, '')
+                        'wasm_variable_paths': 'variable-reuse',
+                        'wasm_array_fills': 'variable-growth'}.get(source.stem, '')
                 resource = run([args.node, ROOT / 'test' / 'wasm_multimemory.mjs', wasm, persistent, mode])
                 assert resource.stdout == reference.stdout, 'completed owner-state check changed output'
                 count += 1
