@@ -1,0 +1,376 @@
+[
+  {
+    "case": "fixed-limited",
+    "opt": 0,
+    "source_sha256": "320da24e8a5bac46a77066aa1f0d91fbb2497405e15b75ac632d7c565907450f",
+    "command": [
+      "/home/dev/Projects/goose-wasm-backend/build/goose",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/final-validation/fixed-limited-O0-rejected.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/fixed-limited.goose"
+    ],
+    "exit": 1,
+    "no_module": true,
+    "expected_reason": "array adaptation needs the pending destination lowering"
+  },
+  {
+    "case": "fixed-limited",
+    "opt": 2,
+    "source_sha256": "320da24e8a5bac46a77066aa1f0d91fbb2497405e15b75ac632d7c565907450f",
+    "command": [
+      "/home/dev/Projects/goose-wasm-backend/build/goose",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/final-validation/fixed-limited-O2-rejected.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/fixed-limited.goose"
+    ],
+    "exit": 1,
+    "no_module": true,
+    "expected_reason": "array adaptation needs the pending destination lowering"
+  },
+  {
+    "case": "ref-fixed-limited",
+    "opt": 0,
+    "source_sha256": "4f9bc853b58a108311682c35042c2ef14b790054534b9ec9346502f3d6678dc7",
+    "command": [
+      "/home/dev/Projects/goose-wasm-backend/build/goose",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/final-validation/ref-fixed-limited-O0-rejected.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/ref-fixed-limited.goose"
+    ],
+    "exit": 1,
+    "no_module": true,
+    "expected_reason": "array adaptation needs the pending destination lowering"
+  },
+  {
+    "case": "ref-fixed-limited",
+    "opt": 2,
+    "source_sha256": "4f9bc853b58a108311682c35042c2ef14b790054534b9ec9346502f3d6678dc7",
+    "command": [
+      "/home/dev/Projects/goose-wasm-backend/build/goose",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/final-validation/ref-fixed-limited-O2-rejected.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/ref-fixed-limited.goose"
+    ],
+    "exit": 1,
+    "no_module": true,
+    "expected_reason": "array adaptation needs the pending destination lowering"
+  },
+  {
+    "case": "limited-capacity",
+    "opt": 0,
+    "source_sha256": "2c04d38bba518e243f6c2ff13f3adc335c41eb1b8301d5f575d65ff71f2c0db7",
+    "command": [
+      "/home/dev/Projects/goose-wasm-backend/build/goose",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/final-validation/limited-capacity-O0-rejected.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/limited-capacity.goose"
+    ],
+    "exit": 1,
+    "no_module": true,
+    "expected_reason": "array adaptation needs the pending destination lowering"
+  },
+  {
+    "case": "limited-capacity",
+    "opt": 2,
+    "source_sha256": "2c04d38bba518e243f6c2ff13f3adc335c41eb1b8301d5f575d65ff71f2c0db7",
+    "command": [
+      "/home/dev/Projects/goose-wasm-backend/build/goose",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/final-validation/limited-capacity-O2-rejected.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/limited-capacity.goose"
+    ],
+    "exit": 1,
+    "no_module": true,
+    "expected_reason": "array adaptation needs the pending destination lowering"
+  },
+  {
+    "case": "ref-limited-capacity",
+    "opt": 0,
+    "source_sha256": "f667ad9d37efa19d75e84ddd0fa865fbb62dbe60fb518a8289787c71152080d0",
+    "command": [
+      "/home/dev/Projects/goose-wasm-backend/build/goose",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/final-validation/ref-limited-capacity-O0-rejected.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/ref-limited-capacity.goose"
+    ],
+    "exit": 1,
+    "no_module": true,
+    "expected_reason": "array adaptation needs the pending destination lowering"
+  },
+  {
+    "case": "ref-limited-capacity",
+    "opt": 2,
+    "source_sha256": "f667ad9d37efa19d75e84ddd0fa865fbb62dbe60fb518a8289787c71152080d0",
+    "command": [
+      "/home/dev/Projects/goose-wasm-backend/build/goose",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/final-validation/ref-limited-capacity-O2-rejected.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/ref-limited-capacity.goose"
+    ],
+    "exit": 1,
+    "no_module": true,
+    "expected_reason": "array adaptation needs the pending destination lowering"
+  },
+  {
+    "case": "prefix-width",
+    "opt": 0,
+    "source_sha256": "3566a91c77305f1b8d23ed17cb8a0b971a00f1230da3e3a0c1d49477ff69749b",
+    "command": [
+      "/home/dev/Projects/goose-wasm-backend/build/goose",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/final-validation/prefix-width-O0-rejected.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/prefix-width.goose"
+    ],
+    "exit": 1,
+    "no_module": true,
+    "expected_reason": "array adaptation needs the pending destination lowering"
+  },
+  {
+    "case": "prefix-width",
+    "opt": 2,
+    "source_sha256": "3566a91c77305f1b8d23ed17cb8a0b971a00f1230da3e3a0c1d49477ff69749b",
+    "command": [
+      "/home/dev/Projects/goose-wasm-backend/build/goose",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/final-validation/prefix-width-O2-rejected.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/prefix-width.goose"
+    ],
+    "exit": 1,
+    "no_module": true,
+    "expected_reason": "array adaptation needs the pending destination lowering"
+  },
+  {
+    "case": "ref-prefix-width",
+    "opt": 0,
+    "source_sha256": "26111b46afc8bc917c3931d28eb1903175b2cb1b2221e18eeca0185593ed29a9",
+    "command": [
+      "/home/dev/Projects/goose-wasm-backend/build/goose",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/final-validation/ref-prefix-width-O0-rejected.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/ref-prefix-width.goose"
+    ],
+    "exit": 1,
+    "no_module": true,
+    "expected_reason": "array adaptation needs the pending destination lowering"
+  },
+  {
+    "case": "ref-prefix-width",
+    "opt": 2,
+    "source_sha256": "26111b46afc8bc917c3931d28eb1903175b2cb1b2221e18eeca0185593ed29a9",
+    "command": [
+      "/home/dev/Projects/goose-wasm-backend/build/goose",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/final-validation/ref-prefix-width-O2-rejected.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/ref-prefix-width.goose"
+    ],
+    "exit": 1,
+    "no_module": true,
+    "expected_reason": "array adaptation needs the pending destination lowering"
+  },
+  {
+    "case": "call-layout",
+    "opt": 0,
+    "source_sha256": "14fc723cabbd8d9fab5627f7c8f4eab97bf10ee28994bf637dfc06023725d04a",
+    "command": [
+      "/home/dev/Projects/goose-wasm-backend/build/goose",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/final-validation/call-layout-O0-rejected.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/call-layout.goose"
+    ],
+    "exit": 1,
+    "no_module": true,
+    "expected_reason": "array adaptation needs the pending destination lowering"
+  },
+  {
+    "case": "call-layout",
+    "opt": 2,
+    "source_sha256": "14fc723cabbd8d9fab5627f7c8f4eab97bf10ee28994bf637dfc06023725d04a",
+    "command": [
+      "/home/dev/Projects/goose-wasm-backend/build/goose",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/final-validation/call-layout-O2-rejected.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/call-layout.goose"
+    ],
+    "exit": 1,
+    "no_module": true,
+    "expected_reason": "array adaptation needs the pending destination lowering"
+  },
+  {
+    "case": "inline-call-layout",
+    "opt": 0,
+    "source_sha256": "181f8894d73d28fdb087ac90400e3de80638eba45ee5b6eee65e343c7356ebd2",
+    "command": [
+      "/home/dev/Projects/goose-wasm-backend/build/goose",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/final-validation/inline-call-layout-O0-rejected.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/inline-call-layout.goose"
+    ],
+    "exit": 1,
+    "no_module": true,
+    "expected_reason": "array adaptation needs the pending destination lowering"
+  },
+  {
+    "case": "inline-call-layout",
+    "opt": 2,
+    "source_sha256": "181f8894d73d28fdb087ac90400e3de80638eba45ee5b6eee65e343c7356ebd2",
+    "command": [
+      "/home/dev/Projects/goose-wasm-backend/build/goose",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/final-validation/inline-call-layout-O2-rejected.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/inline-call-layout.goose"
+    ],
+    "exit": 1,
+    "no_module": true,
+    "expected_reason": "array adaptation needs the pending destination lowering"
+  },
+  {
+    "case": "indexed-layout",
+    "opt": 0,
+    "source_sha256": "1b0993d2a6ee269107fcb64dc563a903f794d38989808f595044aa3f363ff837",
+    "command": [
+      "/home/dev/Projects/goose-wasm-backend/build/goose",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/final-validation/indexed-layout-O0-rejected.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/indexed-layout.goose"
+    ],
+    "exit": 1,
+    "no_module": true,
+    "expected_reason": "array adaptation needs the pending destination lowering"
+  },
+  {
+    "case": "indexed-layout",
+    "opt": 2,
+    "source_sha256": "1b0993d2a6ee269107fcb64dc563a903f794d38989808f595044aa3f363ff837",
+    "command": [
+      "/home/dev/Projects/goose-wasm-backend/build/goose",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/final-validation/indexed-layout-O2-rejected.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/indexed-layout.goose"
+    ],
+    "exit": 1,
+    "no_module": true,
+    "expected_reason": "array adaptation needs the pending destination lowering"
+  },
+  {
+    "case": "inline-fixed-argument",
+    "opt": 0,
+    "source_sha256": "6ae836daee04af6cd89ba34da20938e0742ca900a0d3ba64d9d877f673462188",
+    "command": [
+      "/home/dev/Projects/goose-wasm-backend/build/goose",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/final-validation/inline-fixed-argument-O0-rejected.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/inline-fixed-argument.goose"
+    ],
+    "exit": 1,
+    "no_module": true,
+    "expected_reason": "by-value arrays need the pending destination lowering"
+  },
+  {
+    "case": "inline-fixed-argument",
+    "opt": 2,
+    "source_sha256": "6ae836daee04af6cd89ba34da20938e0742ca900a0d3ba64d9d877f673462188",
+    "command": [
+      "/home/dev/Projects/goose-wasm-backend/build/goose",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/final-validation/inline-fixed-argument-O2-rejected.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/inline-fixed-argument.goose"
+    ],
+    "exit": 1,
+    "no_module": true,
+    "expected_reason": "by-value arrays need the pending destination lowering"
+  },
+  {
+    "case": "inline-variable-argument",
+    "opt": 0,
+    "source_sha256": "19138af73dc131d84b82e3497120a4f43b2ee70f4f601acb8eab569e376090ff",
+    "command": [
+      "/home/dev/Projects/goose-wasm-backend/build/goose",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/final-validation/inline-variable-argument-O0-rejected.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/inline-variable-argument.goose"
+    ],
+    "exit": 1,
+    "no_module": true,
+    "expected_reason": "by-value arrays need the pending destination lowering"
+  },
+  {
+    "case": "inline-variable-argument",
+    "opt": 2,
+    "source_sha256": "19138af73dc131d84b82e3497120a4f43b2ee70f4f601acb8eab569e376090ff",
+    "command": [
+      "/home/dev/Projects/goose-wasm-backend/build/goose",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/final-validation/inline-variable-argument-O2-rejected.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/inline-variable-argument.goose"
+    ],
+    "exit": 1,
+    "no_module": true,
+    "expected_reason": "by-value arrays need the pending destination lowering"
+  }
+]

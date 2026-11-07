@@ -59,3 +59,14 @@ Full generated modules, C sources, native references, and the retained initial
 compiler remain under `/tmp/goose-wasm-evidence-upstream/scalar-baseline` and
 `/tmp/goose-wasm-evidence-upstream/scalar-candidate`. No further timing was run
 under either grant.
+
+## Pending array-copy measurements
+
+The [array-copy stage](evidence/array-copies.md) has functional and static-size
+evidence. Its matched accepted modules are unchanged by the two admission
+guards. No controlled compiler CPU/RSS/allocation or guest-copy measurements
+have been taken. The queued work covers concrete and dynamic identities,
+owner count up to the 65-memory limit, payload size, sparse capacity, engine
+initialization and high-water retention. It needs matched native/reference
+identities, normal host controls and a fresh shared lease. The earlier scalar
+grants are closed. No speed or physical-memory improvement is claimed.

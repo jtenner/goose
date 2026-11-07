@@ -53,6 +53,8 @@ def function_local_counts(data):
 
 
 def main():
+    from wasm_array_copy_admission import CASES as COPY_ADMISSION_CASES, reason as copy_admission_reason
+
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--exe', type=Path, default=ROOT / 'build' / 'goose')
     p.add_argument('--node', default='node')
@@ -81,6 +83,14 @@ def main():
     count += 1
     if args.wasmtime_python:
         run([args.wasmtime_python, ROOT / 'test' / 'wasm_memory.py', memory_wasm, limited_memory])
+        count += 1
+    copy_matrix = out / 'memory-copy-matrix.wasm'
+    run([memory_exe, copy_matrix, '65'])
+    run([args.validator, 'validate', copy_matrix])
+    run([args.node, ROOT / 'test' / 'wasm_copy_matrix.mjs', copy_matrix])
+    count += 1
+    if args.wasmtime_python:
+        run([args.wasmtime_python, ROOT / 'test' / 'wasm_copy_matrix.py', copy_matrix])
         count += 1
     sources = sorted((ROOT / 'test' / 'wasm').glob('*.goose'))
     sources.extend(ROOT / 'test' / 'typing' / f'{name}.goose' for name in (
@@ -124,10 +134,13 @@ def main():
                                'wasm_array_fills', 'wasm_variable_cleanup',
                                'wasm_byte_strings', 'wasm_byte_print', 'wasm_runtime_limited',
                                'wasm_runtime_limited_bytes', 'wasm_runtime_limited_cleanup',
-                               'wasm_runtime_limited_no_owner'):
+                               'wasm_runtime_limited_no_owner', 'wasm_array_copy',
+                               'wasm_array_copy_inline', 'wasm_array_copy_cleanup',
+                               'wasm_array_copy_sources'):
                 if source.stem == 'wasm_inline_arrays':
                     assert wasm.stat().st_size < 32768, 'unused global capacity was serialized'
-                persistent = '1' if source.stem in ('wasm_multimemory', 'wasm_variable_arrays', 'wasm_array_fills', 'wasm_byte_strings', 'wasm_runtime_limited', 'wasm_runtime_limited_bytes') else '0'
+                persistent = ('2' if source.stem == 'wasm_array_copy_sources' else
+                              '1' if source.stem in ('wasm_multimemory', 'wasm_variable_arrays', 'wasm_array_fills', 'wasm_byte_strings', 'wasm_runtime_limited', 'wasm_runtime_limited_bytes', 'wasm_array_copy') else '0')
                 mode = {'wasm_multimemory': 'growth', 'wasm_scoped_data_reuse': 'reuse',
                         'wasm_array_widths': 'typed-reuse', 'wasm_no_data_owner': 'no-data',
                         'wasm_inline_arrays': 'no-data', 'wasm_inline_reference_path': 'no-data',
@@ -140,7 +153,9 @@ def main():
                         'wasm_byte_print': 'variable-growth',
                         'wasm_runtime_limited': 'variable-reuse',
                         'wasm_runtime_limited_bytes': 'variable-growth',
-                        'wasm_runtime_limited_no_owner': 'no-data'}.get(source.stem, '')
+                        'wasm_runtime_limited_no_owner': 'no-data',
+                        'wasm_array_copy': 'growth',
+                        'wasm_array_copy_inline': 'no-data'}.get(source.stem, '')
                 resource = run([args.node, ROOT / 'test' / 'wasm_multimemory.mjs', wasm, persistent, mode])
                 assert resource.stdout == reference.stdout, 'completed owner-state check changed output'
                 count += 1
@@ -402,6 +417,23 @@ a.equal(new DataView(x.memory.buffer).getBigInt64(1,true),65n<<56n);"""
                 second = run([args.wasmtime_python, ROOT / 'test' / 'wasmtime_host.py', wasm], ok=False)
                 assert second.returncode and reason in second.stderr and not second.stdout, (name, opt, second.stderr)
                 count += 1
+            count += 1
+    # The checker can adapt an expression's type without changing its storage.
+    # Copies must reject unequal layouts and inlined by-value argument bindings.
+    for name, text in COPY_ADMISSION_CASES.items():
+        source = out / f'copy-admission-{name}.goose'
+        source.write_text(text + '\n')
+        for opt in (0, 2):
+            prefix = out / f'copy-admission-{name}-O{opt}'
+            c, native, wasm = prefix.with_suffix('.c'), prefix.with_suffix('.native'), prefix.with_suffix('.wasm')
+            run([exe, f'-O{opt}', '--standalone', '-o', c, source])
+            run([args.cc, '-O0', c, '-pthread', '-lm', '-ldl', '-o', native])
+            expected = b'1\n' if name.endswith('-argument') else b'3,1\n'
+            assert run([native]).stdout == expected, (name, 'invalid native admission oracle')
+            wasm.unlink(missing_ok=True)
+            result = run([exe, f'-O{opt}', '--target', 'wasm', '-o', wasm, source], ok=False)
+            assert result.returncode and copy_admission_reason(name) in result.stderr, (name, opt, result.stderr)
+            assert not wasm.exists(), (name, opt, 'rejected copy left a partial module')
             count += 1
     # Array-valued temporaries need destination protection. Reject each valid
     # source for that reason at both levels, including fully inlined calls.

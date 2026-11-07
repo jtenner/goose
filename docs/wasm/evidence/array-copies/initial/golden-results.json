@@ -1,0 +1,278 @@
+[
+  {
+    "name": "values-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/values-O0.c",
+      "/tmp/goose-wasm-array-copy-20261107/values.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "values-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-copy-20261107/values-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/values-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "values-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-array-copy-20261107/values-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "values-O0-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/values-O0-before.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/values.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "values-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/values-O2.c",
+      "/tmp/goose-wasm-array-copy-20261107/values.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "values-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-copy-20261107/values-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/values-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "values-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-array-copy-20261107/values-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "values-O2-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/values-O2-before.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/values.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "inline-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/inline-O0.c",
+      "/tmp/goose-wasm-array-copy-20261107/inline.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "inline-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-copy-20261107/inline-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/inline-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "inline-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-array-copy-20261107/inline-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "inline-O0-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/inline-O0-before.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/inline.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "inline-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/inline-O2.c",
+      "/tmp/goose-wasm-array-copy-20261107/inline.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "inline-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-copy-20261107/inline-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/inline-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "inline-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-array-copy-20261107/inline-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "inline-O2-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/inline-O2-before.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/inline.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "cleanup-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/cleanup-O0.c",
+      "/tmp/goose-wasm-array-copy-20261107/cleanup.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-copy-20261107/cleanup-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/cleanup-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-array-copy-20261107/cleanup-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O0-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/cleanup-O0-before.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/cleanup.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "cleanup-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/cleanup-O2.c",
+      "/tmp/goose-wasm-array-copy-20261107/cleanup.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-copy-20261107/cleanup-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/cleanup-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-array-copy-20261107/cleanup-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O2-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-runtime-limited-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-copy-20261107/cleanup-O2-before.wasm",
+      "/tmp/goose-wasm-array-copy-20261107/cleanup.goose"
+    ],
+    "exit": 1
+  }
+]

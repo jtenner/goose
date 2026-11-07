@@ -1,0 +1,22 @@
+{
+  "owner": "Goose array-copy review failure reproduction",
+  "pid": 3839747,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "reproduce",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce.py"
+      ],
+      "exit": 1
+    }
+  ],
+  "exit": 1
+}

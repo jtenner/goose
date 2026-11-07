@@ -1,0 +1,138 @@
+[
+  {
+    "case": "fixed-limited",
+    "opt": 0,
+    "native": "3,1\n",
+    "wasm_emit": 0,
+    "diagnostic": "",
+    "node": {
+      "exit": 0,
+      "stdout": "1,2\n",
+      "stderr": ""
+    },
+    "wasmtime": {
+      "exit": 0,
+      "stdout": "1,2\n",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "fixed-limited",
+    "opt": 2,
+    "native": "3,1\n",
+    "wasm_emit": 0,
+    "diagnostic": "",
+    "node": {
+      "exit": 0,
+      "stdout": "1,2\n",
+      "stderr": ""
+    },
+    "wasmtime": {
+      "exit": 0,
+      "stdout": "1,2\n",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "ref-fixed-limited",
+    "opt": 0,
+    "native": "3,1\n",
+    "wasm_emit": 0,
+    "diagnostic": "",
+    "node": {
+      "exit": 0,
+      "stdout": "1,2\n",
+      "stderr": ""
+    },
+    "wasmtime": {
+      "exit": 0,
+      "stdout": "1,2\n",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "ref-fixed-limited",
+    "opt": 2,
+    "native": "3,1\n",
+    "wasm_emit": 0,
+    "diagnostic": "",
+    "node": {
+      "exit": 0,
+      "stdout": "1,2\n",
+      "stderr": ""
+    },
+    "wasmtime": {
+      "exit": 0,
+      "stdout": "1,2\n",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "limited-capacity",
+    "opt": 0,
+    "native": "3,1\n",
+    "wasm_emit": 0,
+    "diagnostic": "",
+    "node": {
+      "exit": 0,
+      "stdout": "3,1\n",
+      "stderr": ""
+    },
+    "wasmtime": {
+      "exit": 0,
+      "stdout": "3,1\n",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "limited-capacity",
+    "opt": 2,
+    "native": "3,1\n",
+    "wasm_emit": 0,
+    "diagnostic": "",
+    "node": {
+      "exit": 0,
+      "stdout": "3,1\n",
+      "stderr": ""
+    },
+    "wasmtime": {
+      "exit": 0,
+      "stdout": "3,1\n",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "ref-limited-capacity",
+    "opt": 0,
+    "native": "3,1\n",
+    "wasm_emit": 0,
+    "diagnostic": "",
+    "node": {
+      "exit": 0,
+      "stdout": "3,1\n",
+      "stderr": ""
+    },
+    "wasmtime": {
+      "exit": 0,
+      "stdout": "3,1\n",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "ref-limited-capacity",
+    "opt": 2,
+    "native": "3,1\n",
+    "wasm_emit": 0,
+    "diagnostic": "",
+    "node": {
+      "exit": 0,
+      "stdout": "3,1\n",
+      "stderr": ""
+    },
+    "wasmtime": {
+      "exit": 0,
+      "stdout": "3,1\n",
+      "stderr": ""
+    }
+  }
+]

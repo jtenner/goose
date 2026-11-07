@@ -1,0 +1,256 @@
+[
+  {
+    "case": "fixed-limited",
+    "opt": 0,
+    "native": "3,1\n",
+    "wasm_emit": 0,
+    "diagnostic": "",
+    "node": {
+      "exit": 0,
+      "stdout": "1,2\n",
+      "stderr": ""
+    },
+    "wasmtime": {
+      "exit": 0,
+      "stdout": "1,2\n",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "fixed-limited",
+    "opt": 2,
+    "native": "3,1\n",
+    "wasm_emit": 0,
+    "diagnostic": "",
+    "node": {
+      "exit": 0,
+      "stdout": "1,2\n",
+      "stderr": ""
+    },
+    "wasmtime": {
+      "exit": 0,
+      "stdout": "1,2\n",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "ref-fixed-limited",
+    "opt": 0,
+    "native": "3,1\n",
+    "wasm_emit": 0,
+    "diagnostic": "",
+    "node": {
+      "exit": 0,
+      "stdout": "1,2\n",
+      "stderr": ""
+    },
+    "wasmtime": {
+      "exit": 0,
+      "stdout": "1,2\n",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "ref-fixed-limited",
+    "opt": 2,
+    "native": "3,1\n",
+    "wasm_emit": 0,
+    "diagnostic": "",
+    "node": {
+      "exit": 0,
+      "stdout": "1,2\n",
+      "stderr": ""
+    },
+    "wasmtime": {
+      "exit": 0,
+      "stdout": "1,2\n",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "limited-capacity",
+    "opt": 0,
+    "native": "3,1\n",
+    "wasm_emit": 0,
+    "diagnostic": "",
+    "node": {
+      "exit": 0,
+      "stdout": "3,1\n",
+      "stderr": ""
+    },
+    "wasmtime": {
+      "exit": 0,
+      "stdout": "3,1\n",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "limited-capacity",
+    "opt": 2,
+    "native": "3,1\n",
+    "wasm_emit": 0,
+    "diagnostic": "",
+    "node": {
+      "exit": 0,
+      "stdout": "3,1\n",
+      "stderr": ""
+    },
+    "wasmtime": {
+      "exit": 0,
+      "stdout": "3,1\n",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "ref-limited-capacity",
+    "opt": 0,
+    "native": "3,1\n",
+    "wasm_emit": 0,
+    "diagnostic": "",
+    "node": {
+      "exit": 0,
+      "stdout": "3,1\n",
+      "stderr": ""
+    },
+    "wasmtime": {
+      "exit": 0,
+      "stdout": "3,1\n",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "ref-limited-capacity",
+    "opt": 2,
+    "native": "3,1\n",
+    "wasm_emit": 0,
+    "diagnostic": "",
+    "node": {
+      "exit": 0,
+      "stdout": "3,1\n",
+      "stderr": ""
+    },
+    "wasmtime": {
+      "exit": 0,
+      "stdout": "3,1\n",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "prefix-width",
+    "opt": 0,
+    "native": "3,1\n",
+    "wasm_emit": 1,
+    "diagnostic": "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/prefix-width.goose:1: error: wasm target: array adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "prefix-width",
+    "opt": 2,
+    "native": "3,1\n",
+    "wasm_emit": 1,
+    "diagnostic": "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/prefix-width.goose:1: error: wasm target: array adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "ref-prefix-width",
+    "opt": 0,
+    "native": "3,1\n",
+    "wasm_emit": 1,
+    "diagnostic": "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/ref-prefix-width.goose:1: error: wasm target: array adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "ref-prefix-width",
+    "opt": 2,
+    "native": "3,1\n",
+    "wasm_emit": 1,
+    "diagnostic": "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/ref-prefix-width.goose:1: error: wasm target: array adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "call-layout",
+    "opt": 0,
+    "native": "3,1\n",
+    "wasm_emit": 1,
+    "diagnostic": "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/call-layout.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  },
+  {
+    "case": "call-layout",
+    "opt": 2,
+    "native": "3,1\n",
+    "wasm_emit": 1,
+    "diagnostic": "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/call-layout.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  },
+  {
+    "case": "inline-call-layout",
+    "opt": 0,
+    "native": "3,1\n",
+    "wasm_emit": 1,
+    "diagnostic": "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/inline-call-layout.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  },
+  {
+    "case": "inline-call-layout",
+    "opt": 2,
+    "native": "3,1\n",
+    "wasm_emit": 1,
+    "diagnostic": "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/inline-call-layout.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  },
+  {
+    "case": "indexed-layout",
+    "opt": 0,
+    "native": "3,1\n",
+    "wasm_emit": 1,
+    "diagnostic": "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/indexed-layout.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  },
+  {
+    "case": "indexed-layout",
+    "opt": 2,
+    "native": "3,1\n",
+    "wasm_emit": 1,
+    "diagnostic": "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/indexed-layout.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  },
+  {
+    "case": "inline-fixed-argument",
+    "opt": 0,
+    "native": "1\n",
+    "wasm_emit": 1,
+    "diagnostic": "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/inline-fixed-argument.goose:1: error: wasm target: by-value arrays need the pending destination lowering\n"
+  },
+  {
+    "case": "inline-fixed-argument",
+    "opt": 2,
+    "native": "1\n",
+    "wasm_emit": 0,
+    "diagnostic": "",
+    "node": {
+      "exit": 0,
+      "stdout": "1\n",
+      "stderr": ""
+    },
+    "wasmtime": {
+      "exit": 0,
+      "stdout": "1\n",
+      "stderr": ""
+    }
+  },
+  {
+    "case": "inline-variable-argument",
+    "opt": 0,
+    "native": "1\n",
+    "wasm_emit": 1,
+    "diagnostic": "/tmp/goose-wasm-array-copy-20261107/review-repair/reproduce02/inline-variable-argument.goose:1: error: wasm target: by-value arrays need the pending destination lowering\n"
+  },
+  {
+    "case": "inline-variable-argument",
+    "opt": 2,
+    "native": "1\n",
+    "wasm_emit": 0,
+    "diagnostic": "",
+    "node": {
+      "exit": 0,
+      "stdout": "1\n",
+      "stderr": ""
+    },
+    "wasmtime": {
+      "exit": 0,
+      "stdout": "1\n",
+      "stderr": ""
+    }
+  }
+]

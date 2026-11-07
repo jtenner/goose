@@ -74,6 +74,89 @@ inline int WasmCodeGen::ArrayMemory(Node *n) {
     return storage.Memory(id->vdef, current);
 }
 
+inline void WasmCodeGen::CopyBytes(uint32_t destination, int destinationMemory,
+                                  uint32_t source, int sourceMemory, uint32_t bytes) {
+    code.Get(destination);
+    if (destinationMemory >= 0 && sourceMemory >= 0) {
+        code.Byte(0xa7); code.Get(source); code.Byte(0xa7); code.Get(bytes);
+        code.Copy((uint32_t)destinationMemory, (uint32_t)sourceMemory);
+    } else if (sourceMemory == 0) {
+        code.Get(source); code.Byte(0xa7); code.Get(bytes); code.Call(memories->CopyFromFrame());
+    } else {
+        code.Get(source); code.Get(bytes); code.Call(memories->Copy());
+    }
+}
+
+inline void WasmCodeGen::InitArrayCopy(VarDef *owner, const Slot &slot, Node *source) {
+    auto array = owner->type;
+    // Check the storage type, not exprtype: the checker can adapt exprtype
+    // to the destination while the source still has its original layout.
+    auto storageSource = source;
+    while (auto address = Is<Unary>(storageSource)) {
+        if (address->op != T_BITAND) break;
+        storageSource = address->child;
+    }
+    TypeExpr *from = nullptr;
+    if (auto id = Is<Ident>(storageSource)) from = id->vdef ? id->vdef->type : nullptr;
+    else if (auto index = Is<Index>(storageSource)) from = ArrayElement(index->obj);
+    else if (auto call = Is<Call>(storageSource)) {
+        auto &rets = call->spec ? call->spec->rets : call->rettypes;
+        if (rets.size() == 1) from = rets[0];
+    } else if (auto inlined = Is<InlineBlock>(storageSource)) {
+        if (inlined->spec->rets.size() == 1) from = inlined->spec->rets[0];
+    }
+    while (from && from->kind == TY_REF) from = from->ref->sub;
+    if (!from || !TEq(array, from))
+        Fail(source->line, "array adaptation needs the pending destination lowering");
+    auto header = ArrayHeader(source);
+    auto sourceMemory = ArrayMemory(source);
+    auto bytes = Local(WasmModule::I32), sourceBase = Local(WasmModule::I64);
+    int count = -1;
+    if (InlineArray(array)) {
+        code.I32((int32_t)Size(array)); code.Set(bytes);
+        code.Get(header); code.Byte(0xad); code.Set(sourceBase);
+    } else {
+        auto prefix = DataArray(array) ? DataPrefix(array) : 0u, stride = Size(array->arr->sub);
+        count = (int)Local(WasmModule::I64);
+        if (RuntimeLimited(array)) ArrayCapacity(header, array, sourceMemory);
+        else ArrayLength(header, array, sourceMemory);
+        code.Set(count);
+        code.Get(count); code.I64((UINT32_MAX - prefix) / stride); code.Byte(0x56);
+        Open(0x04); Trap(6, source->line); Close();
+        code.Get(count); code.I64(stride); code.Byte(0x7e);
+        if (prefix) { code.I64(prefix); code.Byte(0x7c); }
+        code.Byte(0xa7); code.Set(bytes);
+        code.Get(header);
+        if (IsResz(array)) code.Mem(0x29);
+        code.Set(sourceBase);
+    }
+    auto destination = Local(WasmModule::I64);
+    auto memory = InlineArray(array) ? 0 : storage.Memory(owner, current);
+    if (InlineArray(array)) {
+        Address(slot); code.Byte(0xad); code.Set(destination);
+    } else {
+        auto identity = Local(WasmModule::I32), saved = Local(WasmModule::I32);
+        if (memory >= 0) code.I32(memory);
+        else StackIndex(storage.owners.at(owner) + 1);
+        code.Set(identity);
+        if (memory < 0) code.Get(identity);
+        code.Get(bytes); code.Call(memory >= 0 ? memories->Reserve((uint32_t)memory) : memories->ReserveDynamic());
+        code.Set(saved);
+        if (!owner->isglobal) {
+            assert(!scopes.empty());
+            scopes.back().push_back({nullptr, memory >= 0 ? (uint32_t)memory : identity, saved, memory < 0});
+        }
+        code.Get(identity); code.Byte(0xad); code.I64(32); code.Byte(0x86);
+        code.Get(saved); code.Byte(0xad); code.Byte(0x84); code.Set(destination);
+        if (DataArray(array)) { code.Get(destination); Write(slot); }
+        else {
+            Address(slot); code.Get(destination); code.Mem(0x37);
+            Address(slot); code.Get(count); code.Mem(0x37, 0, 8);
+        }
+    }
+    CopyBytes(destination, memory, sourceBase, sourceMemory, bytes);
+}
+
 inline void WasmCodeGen::InitLimitedCapacity(VarDef *owner, const Slot &slot, ArrayLit *literal) {
     auto array = owner->type;
     if (!RuntimeLimited(array)) Fail(literal->line, "runtime capacity needs a limited array");
@@ -283,13 +366,13 @@ inline void WasmCodeGen::InitDataArray(VarDef *owner, const Slot &slot, ArrayLit
 inline void WasmCodeGen::InitArray(VarDef *owner, const Slot &slot, Node *init) {
     if (owner->reusable) Fail(owner->line, "pool owners need the pending descriptor lowering");
     while (auto call = Is<Call>(init)) {
-        if (!call->defaultinit) break;
-        init = call->defaultinit;
+        if (call->defaultinit) init = call->defaultinit;
+        else if (call->builtin == B_COPY) init = call->ValueArgNodes().at(0);
+        else break;
     }
     if (auto literal = Is<StrLit>(init)) { InitByteString(owner, slot, literal); return; }
     auto literal = Is<ArrayLit>(init);
-    if (!literal)
-        Fail(init->line, "this array constructor needs the pending destination lowering");
+    if (!literal) { InitArrayCopy(owner, slot, init); return; }
     auto array = owner->type;
     if (literal->capexpr) { InitLimitedCapacity(owner, slot, literal); return; }
     if (literal->fillval) { InitFilledArray(owner, slot, literal); return; }

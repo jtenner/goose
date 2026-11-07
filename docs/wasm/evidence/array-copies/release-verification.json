@@ -1,0 +1,110 @@
+{
+  "owner_pid": 3857752,
+  "owner_exited": true,
+  "children_reaped": true,
+  "lease_active": false,
+  "exact_owned_processes": [],
+  "nonblocking_exclusive_probe": "PASS",
+  "probe_released": true,
+  "checked_at": "2026-11-07T08:39:53.947098+00:00",
+  "exit": 0,
+  "source_manifest_matches": true,
+  "compiler_sha256": "8cf49b9eb51ef6c312cedb1222d32e17f18c6c33bcf659cc4586c3e016bc78b7",
+  "commands": [
+    {
+      "name": "golden",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-array-copy-20261107/final-validation/golden.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "promote",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-array-copy-20261107/final-validation/promote.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "build",
+      "command": [
+        "cmake",
+        "--build",
+        "build",
+        "--parallel",
+        "2"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "admission",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-array-copy-20261107/final-validation/admission.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "targeted",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-array-copy-20261107/final-validation/targeted.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "wasm",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "test/wasm_backend.py",
+        "--exe",
+        "build/goose",
+        "--wasmtime-python",
+        "/tmp/goose-wasm-runtime-env/bin/python"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "compatibility",
+      "command": [
+        "python3",
+        "test/backend_shared.py",
+        "--reference",
+        "build/goose-inline-checkpoint",
+        "--exe",
+        "build/goose",
+        "--out",
+        "/tmp/goose-wasm-array-copy-20261107/final-validation/native-compatibility"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "equivalence",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-array-copy-20261107/final-validation/equivalence.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "positive-equivalence",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-array-copy-20261107/final-validation/positive-equivalence.py"
+      ],
+      "exit": 0
+    }
+  ]
+}

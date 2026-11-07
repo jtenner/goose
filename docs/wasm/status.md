@@ -98,6 +98,16 @@ stage passed 375 Wasm checks, a fresh native baseline, 52 exact comparisons and
 two test expectations were tightened and checked with a valid wrong-field
 control. See [runtime-limited evidence](evidence/runtime-limited.md).
 
+Same-layout array copies now construct fresh inline or data owners with bulk
+`memory.copy`, including dynamic identity dispatch, runtime capacity, ordinary
+reference elements and scoped/global destinations. The independent review
+found an adapted-layout check and an inlined by-value admission bypass. Both
+were reproduced and repaired with narrow guards. Final validation passed 423
+Wasm checks, 52 exact comparisons, 84 prior-module pairs and eight accepted
+copy-module pairs. See [array-copy evidence](evidence/array-copies.md) for the
+failure records, source identity, review, cost analysis and missing measurements.
+General adaptation and protected/by-value destinations remain pending.
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping
@@ -166,8 +176,8 @@ BigInt operation for other values.
   protected destinations, temporary owners, and all compound lifetime events.
   General thin-reference propagation remains pending.
 - D: scalar/reference arrays now cover fixed, limited, variable and growable
-  layouts. Complete varint prefixes/elements, general constructors and value
-  copies, packed/variable aggregates, ADTs, root/pool descriptors, relative
+  layouts, including same-layout copies. Complete varint prefixes/elements,
+  layout adaptations, general constructors, packed/variable aggregates, ADTs, root/pool descriptors, relative
   references, slices, byte views, and serialization.
 - E: implement direct nonfixed construction, named-result landing/relocation,
   destination protection, cleanup for all remaining value lifetimes, and `try_table` /

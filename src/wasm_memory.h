@@ -11,6 +11,7 @@ struct WasmMemoryRuntime {
     unordered_map<uint64_t, uint32_t> accesses;
     uint32_t dynamicreserve = UINT32_MAX, gettop = UINT32_MAX, settop = UINT32_MAX;
     uint32_t copyfromframe = UINT32_MAX;
+    uint32_t copy = UINT32_MAX;
 
     WasmMemoryRuntime(WasmModule &m, uint32_t fail) : module(m), failure(fail) {}
 
@@ -138,10 +139,32 @@ struct WasmMemoryRuntime {
                  [&] { c.Get(0); c.I64(32); c.Byte(0x88); c.Byte(0xa7); },
                  [&](uint32_t memory) {
             c.Get(0); c.Byte(0xa7); c.Get(1); c.Get(2);
-            c.Byte(0xfc); c.U(10); c.U(memory); c.U(0); // memory.copy destination, source.
+            c.Copy(memory, 0);
         });
         Save(copyfromframe, std::move(c));
         return copyfromframe;
+    }
+
+    uint32_t Copy() {
+        if (copy != UINT32_MAX) return copy;
+        copy = module.AddFn("goose.copy_memory", {WasmModule::I64, WasmModule::I64, WasmModule::I32}, {});
+        WasmBytes c;
+        // A single shared fallback covers pairs of dynamic identities. Both
+        // indices are concrete at each memory.copy. The backend's fixed
+        // memory limit bounds this helper; callers with known indices emit
+        // one instruction and do not use this table.
+        Dispatch(c, 0, 0x40,
+                 [&] { c.Get(0); c.I64(32); c.Byte(0x88); c.Byte(0xa7); },
+                 [&](uint32_t destination) {
+            Dispatch(c, 0, 0x40,
+                     [&] { c.Get(1); c.I64(32); c.Byte(0x88); c.Byte(0xa7); },
+                     [&](uint32_t source) {
+                c.Get(0); c.Byte(0xa7); c.Get(1); c.Byte(0xa7); c.Get(2);
+                c.Copy(destination, source);
+            });
+        });
+        Save(copy, std::move(c));
+        return copy;
     }
 };
 

@@ -815,7 +815,11 @@ struct WasmCodeGen : ValueLayout {
                         Fail(v->defs[i]->line, "default array construction needs the pending destination lowering");
                     continue;
                 }
-                if (s.type->kind == TY_ARRAY) { InitArray(v->defs[i], s, v->inits[i]); continue; }
+                if (s.type->kind == TY_ARRAY) {
+                    if (v->inline_arg)
+                        Fail(n->line, "by-value arrays need the pending destination lowering");
+                    InitArray(v->defs[i], s, v->inits[i]); continue;
+                }
                 Gen(v->inits[i]); Convert(v->inits[i]->exprtype, s.type); Write(s);
             }
             return;
@@ -985,6 +989,9 @@ struct WasmCodeGen : ValueLayout {
     void StoreArrayLength(TypeExpr *array, int memory = -1);
     void InitArrayCount(uint32_t header, TypeExpr *array, uint64_t count, int memory);
     void InitArray(VarDef *owner, const Slot &slot, Node *init);
+    void InitArrayCopy(VarDef *owner, const Slot &slot, Node *source);
+    void CopyBytes(uint32_t destination, int destinationMemory, uint32_t source, int sourceMemory,
+                   uint32_t bytes);
     void InitFilledArray(VarDef *owner, const Slot &slot, ArrayLit *literal);
     void InitByteString(VarDef *owner, const Slot &slot, StrLit *literal);
     void InitDataArray(VarDef *owner, const Slot &slot, ArrayLit *literal);

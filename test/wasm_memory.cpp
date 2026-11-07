@@ -5,9 +5,10 @@
 
 int main(int argc, char **argv) {
     using namespace goose;
-    if (argc != 2) return 2;
+    if (argc != 2 && argc != 3) return 2;
     WasmModule module;
-    module.memories = 3;
+    module.memories = argc == 3 ? (uint32_t)std::stoi(argv[2]) : 3;
+    if (module.memories < 3 || module.memories > 65) return 2;
     auto fail = module.ImportFn("fail_v1", {WasmModule::I32, WasmModule::I32,
                                            WasmModule::I32, WasmModule::I32}, {});
     WasmMemoryRuntime runtime(module, fail);
@@ -20,6 +21,9 @@ int main(int argc, char **argv) {
     auto copy = runtime.CopyFromFrame();
     if (runtime.CopyFromFrame() != copy) return 1;
     add("copy_from_frame", copy);
+    auto paircopy = runtime.Copy();
+    if (runtime.Copy() != paircopy) return 1;
+    add("copy", paircopy);
     auto offsetload = runtime.Access(0x35, 4), hugeload = runtime.Access(0x35, 0x1000000);
     if (offsetload == runtime.Access(0x35) || hugeload == runtime.Access(0x35) ||
         offsetload != runtime.Access(0x35, 4)) return 1;

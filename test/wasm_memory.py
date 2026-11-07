@@ -84,6 +84,21 @@ def main():
     throws(lambda: call('load32huge', pointer(0, 0)), 'out of bounds')
     throws(lambda: call('load32off', pointer(3, 2000)), 'memory failure 7')
     throws(lambda: call('load32off', pointer(2, 65532)), 'out of bounds')
+    for memory in range(3):
+        exports[f'memory{memory}'].write(store, bytes([memory, 0, 127, 255]), 3000)
+    for source in range(3):
+        for destination in range(3):
+            call('copy', pointer(destination, 4000), pointer(source, 3000), 4)
+            assert bytes(exports[f'memory{destination}'].read(store, 4000, 4004)) == bytes([source, 0, 127, 255])
+    exports['memory1'].write(store, bytes([1, 2, 3, 4, 5]), 5000)
+    call('copy', pointer(1, 5001), pointer(1, 5000), 4)
+    assert bytes(exports['memory1'].read(store, 5000, 5005)) == bytes([1, 1, 2, 3, 4])
+    call('copy', pointer(1, 5000), pointer(1, 5001), 4)
+    assert bytes(exports['memory1'].read(store, 5000, 5004)) == bytes([1, 2, 3, 4])
+    throws(lambda: call('copy', pointer(3, 4000), pointer(0, 3000), 4), 'memory failure 7')
+    throws(lambda: call('copy', pointer(0, 4000), pointer(3, 3000), 4), 'memory failure 7')
+    throws(lambda: call('copy', pointer(2, 4000), pointer(0, 65535), 2), 'out of bounds')
+    assert bytes(exports['memory2'].read(store, 4000, 4004)) == bytes([2, 0, 127, 255])
     assert call('reserve1', 65536 - 65) == 65
     assert call('reserve1', 1) == 65536
     assert size(1) == 131072 and size(2) == 65536

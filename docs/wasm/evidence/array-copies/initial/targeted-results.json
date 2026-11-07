@@ -1,0 +1,44 @@
+[
+  {
+    "case": "values",
+    "opt": 0,
+    "bytes": 22123,
+    "max_function_locals": 390,
+    "sha256": "1d1ff4f033ff51f069d2ea7249ec199aa56b72658aa1f32cf820904a8bb548f5"
+  },
+  {
+    "case": "values",
+    "opt": 2,
+    "bytes": 22111,
+    "max_function_locals": 392,
+    "sha256": "2b470e3c6733982ead10a20f20aa049b2979e74008e964a91202eb1c27778bab"
+  },
+  {
+    "case": "inline",
+    "opt": 0,
+    "bytes": 2239,
+    "max_function_locals": 76,
+    "sha256": "ad92827a550e02aca9ddc0daf38028887574f7c6c80088c8da4673ff987df2bc"
+  },
+  {
+    "case": "inline",
+    "opt": 2,
+    "bytes": 2225,
+    "max_function_locals": 78,
+    "sha256": "0861ae7b03660c7995105ef9df018e1a9c8d95cc5bf4262b151b0c3c20e4cd0e"
+  },
+  {
+    "case": "cleanup",
+    "opt": 0,
+    "bytes": 6467,
+    "max_function_locals": 88,
+    "sha256": "a98e119792e53aaf0b3d060340749f0ae2b96cdff43cf25ee808bb80bc8d2388"
+  },
+  {
+    "case": "cleanup",
+    "opt": 2,
+    "bytes": 6467,
+    "max_function_locals": 88,
+    "sha256": "a98e119792e53aaf0b3d060340749f0ae2b96cdff43cf25ee808bb80bc8d2388"
+  }
+]

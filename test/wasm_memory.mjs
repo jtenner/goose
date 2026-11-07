@@ -64,6 +64,22 @@ for (let memory = 0; memory < 3; memory++) {
 assert.throws(() => x.load32huge(pointer(0, 0)), WebAssembly.RuntimeError);
 assert.throws(() => x.load32off(pointer(3, 2000)), /memory failure 7/);
 assert.throws(() => x.load32off(pointer(2, 65532)), WebAssembly.RuntimeError);
+for (let memory = 0; memory < 3; memory++)
+    new Uint8Array(x[`memory${memory}`].buffer).set([memory, 0, 127, 255], 3000);
+for (let source = 0; source < 3; source++) for (let destination = 0; destination < 3; destination++) {
+    x.copy(pointer(destination, 4000), pointer(source, 3000), 4);
+    assert.deepEqual([...new Uint8Array(x[`memory${destination}`].buffer, 4000, 4)], [source, 0, 127, 255]);
+}
+const overlap = new Uint8Array(x.memory1.buffer);
+overlap.set([1, 2, 3, 4, 5], 5000);
+x.copy(pointer(1, 5001), pointer(1, 5000), 4);
+assert.deepEqual([...overlap.subarray(5000, 5005)], [1, 1, 2, 3, 4]);
+x.copy(pointer(1, 5000), pointer(1, 5001), 4);
+assert.deepEqual([...overlap.subarray(5000, 5004)], [1, 2, 3, 4]);
+assert.throws(() => x.copy(pointer(3, 4000), pointer(0, 3000), 4), /memory failure 7/);
+assert.throws(() => x.copy(pointer(0, 4000), pointer(3, 3000), 4), /memory failure 7/);
+assert.throws(() => x.copy(pointer(2, 4000), pointer(0, 65535), 2), WebAssembly.RuntimeError);
+assert.deepEqual([...new Uint8Array(x.memory2.buffer, 4000, 4)], [2, 0, 127, 255]);
 
 assert.equal(x.reserve1(65536 - 65), 65);
 assert.equal(x.top(1), 65536);
