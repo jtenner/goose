@@ -6,9 +6,9 @@ an intermediate representation. The default C backend must keep its current
 behavior. This document describes the target ABI and the implementation gates;
 it does not claim that all gates are complete.
 
-The implemented path is scalar code with Memory 0 frames and a Node adapter.
-The complete multi-memory Goose backend is unfinished. Encoder tests with
-multiple memories do not establish Goose data-stack assignment.
+The implemented path includes scalar code with Memory 0 frames and an initial
+growable scalar-array subset with separate data memories. The complete backend
+is unfinished. See `docs/wasm/status.md` for the admitted operations and limits.
 
 ## Frontend and storage analysis
 
@@ -24,7 +24,7 @@ it does not collect that graph. `ValueLayout` supplies concrete type queries,
 `FixedSize`, `LayoutFields`, and numeric frame-object byte prefixes to both
 backends. C names and emitted frame-header expressions remain in `CodeGen`.
 A backend must not construct `CodeGen` and discard its C to obtain analysis.
-The Wasm storage plan must collect its own lifetime events before emission.
+The Wasm storage plan collects its admitted owner and call events before emission.
 Lifetime classes constrain storage; they are not physical stack identities.
 
 The storage plan must record slots, ordered scope saves/deferred bodies, call

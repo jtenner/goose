@@ -7,6 +7,8 @@ namespace goose {
 struct WasmCodeGen : ValueLayout {
     Ast &ast;
     WasmModule module;
+    WasmStoragePlan storage;
+    optional<WasmMemoryRuntime> memories;
     WasmBytes code;
     FnSpec *current = nullptr;
     uint32_t fn = 0;
@@ -19,7 +21,12 @@ struct WasmCodeGen : ValueLayout {
     unordered_map<VarDef *, Slot> globals, slots;
     unordered_map<FnSpec *, uint32_t> functions;
     set<VarDef *> addressed;
-    vector<vector<Defer *>> scopes;
+    struct CleanupAction {
+        Defer *deferred = nullptr;
+        uint32_t memory = 0, top = 0;
+        bool dynamic = false;
+    };
+    vector<vector<CleanupAction>> scopes;
     struct Target {
         enum Kind { Function, Inline, Loop, Early } kind;
         SFunction *sf = nullptr;
@@ -32,7 +39,15 @@ struct WasmCodeGen : ValueLayout {
     vector<int> labels;
     int nextlabel = 0;
 
-    explicit WasmCodeGen(Ast &a) : ast(a) {}
+    explicit WasmCodeGen(Ast &a) : ast(a), storage(a, *this) {}
+    bool FatPointers() const { return storage.dataaddresses; }
+    bool HeaderRef(TypeExpr *t) { return t->kind == TY_REF && IsResz(t->ref->sub); }
+    bool NeedsBase(FnSpec *sp) { return storage.counts.need[sp] && storage.Base(sp) < 0; }
+    void StackIndex(uint32_t offset) {
+        auto base = storage.Base(current);
+        if (base >= 0) code.I32(base + (int32_t)offset);
+        else { code.Get((uint32_t)current->params.size()); code.I32(offset); code.Byte(0x6a); }
+    }
     [[noreturn]] void Fail(Line l, const string &message) {
         Diagnostic d;
         d.where = LocOf(l);
@@ -53,14 +68,24 @@ struct WasmCodeGen : ValueLayout {
             case TY_FLT: return t->fltstorage == FS_F32 ? WasmModule::F32 : WasmModule::F64;
             case TY_REF:
                 if (t->ref->lenstorage >= 0) Fail(t->line, "relative references are not implemented");
-                Type(t->ref->sub); // Only scalar frame/global pointees have Memory 0 identity.
-                return WasmModule::I32;
+                Type(t->ref->sub);
+                // A resizable header is in Memory 0. Ordinary pointees may
+                // also lie in any assigned data memory.
+                return FatPointers() && !HeaderRef(t) ? WasmModule::I64 : WasmModule::I32;
+            case TY_ARRAY: {
+                if (!IsResz(t)) Fail(t->line, "this array layout needs the pending compound lowering");
+                auto element = t->arr->sub;
+                if (element->kind == TY_ARRAY || HeaderRef(element))
+                    Fail(t->line, "compound array elements need the pending layout lowering");
+                Type(element);
+                return WasmModule::I32; // Address of the authoritative owner header.
+            }
             default: Fail(t->line, "this value layout is not implemented (scalar backend)");
         }
     }
     uint32_t Size(TypeExpr *t) {
         Type(t);
-        auto size = FixedSize(t);
+        auto size = IsResz(t) ? 16 : FixedSize(t);
         if (size < 0 || size > UINT32_MAX) Fail(t->line, "value exceeds memory32");
         return (uint32_t)size;
     }
@@ -90,9 +115,11 @@ struct WasmCodeGen : ValueLayout {
         code.I32(error); code.I32((int32_t)offset); code.I32((int32_t)file.size());
         code.I32(l.line); code.Call(failfn); code.Byte(0x00);
     }
-    void CheckNull(Line l) {
-        auto p = Local(WasmModule::I32);
-        code.Tee(p); code.Byte(0x45); Open(0x04); Trap(4, l); Close(); code.Get(p);
+    void CheckNull(Line l, uint8_t type = 0) {
+        if (!type) type = FatPointers() ? WasmModule::I64 : WasmModule::I32;
+        auto p = Local(type);
+        code.Tee(p); code.Byte(type == WasmModule::I64 ? 0x50 : 0x45);
+        Open(0x04); Trap(4, l); Close(); code.Get(p);
     }
     void Normalize(TypeExpr *t) {
         if (t->kind != TY_INT) return;
@@ -104,8 +131,16 @@ struct WasmCodeGen : ValueLayout {
     }
     void Convert(TypeExpr *from, TypeExpr *to) {
         if (!to || from == to) return;
+        // A bare null has the checker's optional-void placeholder. It has no
+        // pointee layout to lower; only its zero address needs conversion.
+        if (from->kind == TY_REF && from->ref->sub->kind == TY_VOID && to->kind == TY_REF) {
+            auto source = FatPointers() ? WasmModule::I64 : WasmModule::I32;
+            auto target = Type(to);
+            if (source != target) code.Byte(target == WasmModule::I32 ? 0xa7 : 0xad);
+            return;
+        }
         while (from->kind == TY_REF && to->kind != TY_REF) {
-            CheckNull(from->line); from = from->ref->sub; Load(from);
+            CheckNull(from->line, Type(from)); from = from->ref->sub; Load(from);
         }
         auto f = Type(from), t = Type(to);
         if (from->kind == TY_INT && to->kind == TY_FLT) {
@@ -121,33 +156,59 @@ struct WasmCodeGen : ValueLayout {
         } else if (f != t) Fail(to->line, "unsupported scalar conversion");
         Normalize(to);
     }
-    void Load(TypeExpr *t) {
+    uint8_t LoadOpcode(TypeExpr *t) {
         switch (t->kind) {
-            case TY_BOOL: code.Mem(0x2d); break;
+            case TY_BOOL: return 0x2d;
             case TY_INT: {
                 auto bits = IntBits(t->intstorage);
                 auto uns = IsUnsigned(t->intstorage);
-                code.Mem(bits == 64 ? 0x29 : bits == 32 ? (uns ? 0x35 : 0x34)
-                                  : bits == 16 ? (uns ? 0x33 : 0x32) : (uns ? 0x31 : 0x30));
-                break;
+                return bits == 64 ? 0x29 : bits == 32 ? (uns ? 0x35 : 0x34)
+                                  : bits == 16 ? (uns ? 0x33 : 0x32) : (uns ? 0x31 : 0x30);
             }
-            case TY_FLT: code.Mem(t->fltstorage == FS_F32 ? 0x2a : 0x2b); break;
-            case TY_REF: code.Mem(0x29); code.Byte(0xa7); break;
-            default: Type(t);
+            case TY_FLT: return t->fltstorage == FS_F32 ? 0x2a : 0x2b;
+            case TY_REF: return 0x29;
+            default: Fail(t->line, "this load layout is not implemented");
         }
     }
-    void Store(TypeExpr *t) {
+    void LoadFixed(TypeExpr *t, uint32_t memory = 0) {
+        code.Mem(LoadOpcode(t), memory);
+        if (t->kind == TY_REF && Type(t) == WasmModule::I32) code.Byte(0xa7);
+    }
+    void Load(TypeExpr *t) {
+        if (t->kind == TY_ARRAY) return; // Its reference already denotes the header.
+        if (!FatPointers()) { LoadFixed(t); return; }
+        code.Call(memories->Access(LoadOpcode(t)));
+        if (HeaderRef(t)) code.Byte(0xa7);
+    }
+    uint8_t StoreOpcode(TypeExpr *t) {
         switch (t->kind) {
-            case TY_BOOL: code.Mem(0x3a); break;
+            case TY_BOOL: return 0x3a;
             case TY_INT: {
                 auto bits = IntBits(t->intstorage);
-                code.Mem(bits == 64 ? 0x37 : bits == 32 ? 0x3e : bits == 16 ? 0x3d : 0x3c);
-                break;
+                return bits == 64 ? 0x37 : bits == 32 ? 0x3e : bits == 16 ? 0x3d : 0x3c;
             }
-            case TY_FLT: code.Mem(t->fltstorage == FS_F32 ? 0x38 : 0x39); break;
-            case TY_REF: code.Byte(0xad); code.Mem(0x37); break;
-            default: Type(t);
+            case TY_FLT: return t->fltstorage == FS_F32 ? 0x38 : 0x39;
+            case TY_REF: return 0x37;
+            default: Fail(t->line, "this store layout is not implemented");
         }
+    }
+    void StoreFixed(TypeExpr *t, uint32_t memory = 0) {
+        if (HeaderRef(t)) {
+            auto value = Local(WasmModule::I32), at = Local(WasmModule::I32);
+            code.Set(value); code.Set(at);
+            code.Get(at); code.Get(value); code.Byte(0xad); code.Mem(0x37, memory);
+            code.Get(at); code.Get(value); Open(0x04, WasmModule::I64);
+            code.Get(value); code.Mem(0x29); code.I64(32); code.Byte(0x88);
+            code.Byte(0x05); code.I64(0); Close(); code.Mem(0x37, memory, 8);
+            return;
+        }
+        if (t->kind == TY_REF && Type(t) == WasmModule::I32) code.Byte(0xad);
+        code.Mem(StoreOpcode(t), memory);
+    }
+    void Store(TypeExpr *t) {
+        if (!FatPointers()) { StoreFixed(t); return; }
+        if (HeaderRef(t)) Fail(t->line, "dynamic compound-reference stores are not implemented");
+        code.Call(memories->Access(StoreOpcode(t)));
     }
     Slot &Find(VarDef *v) {
         auto g = globals.find(v);
@@ -162,19 +223,19 @@ struct WasmCodeGen : ValueLayout {
         else { code.Get(framebase); code.I32((int32_t)s.offset); code.Byte(0x6a); }
     }
     void Read(const Slot &s) {
-        if (s.memory) { Address(s); Load(s.type); }
+        if (s.memory) { Address(s); if (s.type->kind != TY_ARRAY) LoadFixed(s.type); }
         else code.Get(s.local);
     }
     void Write(const Slot &s) {
         if (s.memory) {
-            auto temp = Temp(s.type); code.Set(temp); Address(s); code.Get(temp); Store(s.type);
+            auto temp = Temp(s.type); code.Set(temp); Address(s); code.Get(temp); StoreFixed(s.type);
         } else code.Set(s.local);
     }
     void Bind(VarDef *v, optional<uint32_t> param = {}) {
         if (v->isglobal || slots.count(v)) return;
         auto t = Type(v->type);
         Slot s {v->type};
-        if (addressed.count(v)) {
+        if (addressed.count(v) || v->type->kind == TY_ARRAY) {
             s.memory = true;
             s.offset = framesize;
             if (framesize > UINT32_MAX - Size(v->type)) Fail(v->line, "frame exceeds memory32");
@@ -205,7 +266,12 @@ struct WasmCodeGen : ValueLayout {
         // Copy each list. Emitting a deferred body opens scopes of its own.
         for (size_t i = scopes.size(); i > bottom; i--) {
             auto list = scopes[i - 1];
-            for (auto it = list.rbegin(); it != list.rend(); ++it) BlockValue((*it)->body, false);
+            for (auto it = list.rbegin(); it != list.rend(); ++it) {
+                if (it->deferred) BlockValue(it->deferred->body, false);
+                else if (it->dynamic) {
+                    code.Get(it->memory); code.Get(it->top); code.Call(memories->Top(true));
+                } else { code.Get(it->top); code.Byte(0x24); code.U(it->memory); }
+            }
         }
     }
     void BlockValue(Block *b, bool value, TypeExpr *wanted = nullptr) {
@@ -279,30 +345,55 @@ struct WasmCodeGen : ValueLayout {
     }
     void Truth(Node *n) {
         Gen(n);
-        if (n->exprtype->kind == TY_REF) { code.Byte(0x45); code.Byte(0x45); }
+        if (n->exprtype->kind == TY_REF) {
+            code.Byte(ReferenceType(n) == WasmModule::I64 ? 0x50 : 0x45); code.Byte(0x45);
+        }
     }
-    void ReferenceValue(Node *n) {
-        if (Is<NullLit>(n)) { code.I32(0); return; }
+    void Condition(Node *n) {
+        Gen(n);
+        if (n->exprtype->kind == TY_REF && ReferenceType(n) == WasmModule::I64) {
+            code.Byte(0x50); code.Byte(0x45);
+        }
+    }
+    uint8_t ReferenceType(Node *n) {
+        if (Is<NullLit>(n) && n->exprtype->kind == TY_REF && n->exprtype->ref->sub->kind == TY_VOID)
+            return FatPointers() ? WasmModule::I64 : WasmModule::I32;
+        if (auto id = Is<Ident>(n); id && id->vdef && id->vdef->type->kind == TY_REF)
+            return Type(id->vdef->type);
+        return Type(n->exprtype);
+    }
+    void ReferenceValue(Node *n, uint8_t wanted = 0) {
+        if (Is<NullLit>(n)) {
+            if ((wanted ? wanted : ReferenceType(n)) == WasmModule::I64) code.I64(0); else code.I32(0);
+            return;
+        }
         // Narrowing can give an optional identifier its pointee's exprtype.
         // Identity and null tests still read the stored reference itself.
         if (auto id = Is<Ident>(n); id && id->vdef && id->vdef->type->kind == TY_REF) {
-            Read(Find(id->vdef)); return;
+            Read(Find(id->vdef));
+        } else {
+            if (!n->exprtype || n->exprtype->kind != TY_REF)
+                Fail(n->line, "reference identity requires an address value");
+            Gen(n);
         }
-        if (!n->exprtype || n->exprtype->kind != TY_REF)
-            Fail(n->line, "reference identity requires an address value");
-        Gen(n);
+        if (wanted && ReferenceType(n) != wanted) {
+            if (wanted != WasmModule::I64) Fail(n->line, "incompatible reference memory representation");
+            code.Byte(0xad);
+        }
     }
     void BinaryValue(Binary *n) {
         auto op = n->op;
         auto identity = op == T_DOTEQ || op == T_DOTNEQ;
         auto nulltest = (op == T_EQ || op == T_NEQ) && (Is<NullLit>(n->left) || Is<NullLit>(n->right));
         if (identity || nulltest) {
-            ReferenceValue(n->left); ReferenceValue(n->right);
-            code.Byte(op == T_EQ || op == T_DOTEQ ? 0x46 : 0x47);
+            auto pointer = FatPointers() ? WasmModule::I64 : WasmModule::I32;
+            ReferenceValue(n->left, pointer); ReferenceValue(n->right, pointer);
+            auto base = pointer == WasmModule::I64 ? 0x51 : 0x46;
+            code.Byte(base + (op == T_NEQ || op == T_DOTNEQ));
             return;
         }
         if (n->op == T_ANDAND || n->op == T_OROR) {
-            Gen(n->left); Open(0x04, WasmModule::I32);
+            Condition(n->left); Open(0x04, WasmModule::I32);
             if (n->op == T_ANDAND) Truth(n->right); else code.I32(1);
             code.Byte(0x05);
             if (n->op == T_OROR) Truth(n->right); else code.I32(0);
@@ -353,7 +444,7 @@ struct WasmCodeGen : ValueLayout {
                 if (null < 0) { null = (int)Local(WasmModule::I32); code.I32(0); code.Set(null); }
                 auto sub = t->ref->sub;
                 auto next = Temp(sub);
-                code.Get(value); code.Byte(0x45); Open(0x04);
+                code.Get(value); code.Byte(Type(t) == WasmModule::I64 ? 0x50 : 0x45); Open(0x04);
                 code.I32(1); code.Set(null);
                 code.Byte(0x05); code.Get(value); Load(sub); code.Set(next); Close();
                 value = next; t = sub;
@@ -383,9 +474,11 @@ struct WasmCodeGen : ValueLayout {
             switch ((BuiltinKind)c->builtin) {
                 case B_PRINT: Print(c); return;
                 case B_ASSERT:
-                    Gen(an[0]); code.Byte(0x45); Open(0x04); Trap(1, c->line); Close(); return;
+                    Condition(an[0]); code.Byte(0x45); Open(0x04); Trap(1, c->line); Close(); return;
                 case B_EXIT:
                     Gen(an[0]); code.Byte(0xa7); code.Call(exitfn); code.Byte(0x00); return;
+                case B_LEN: case B_PUSH: case B_POP: case B_CLEAR:
+                    ArrayBuiltin(c, an); return;
                 default: Fail(c->line, cat("builtin ", builtindefs[c->builtin].name, " is not implemented"));
             }
         }
@@ -405,32 +498,54 @@ struct WasmCodeGen : ValueLayout {
         for (size_t i = 0; i < args.size(); i++) {
             Gen(args[i]); Convert(args[i]->exprtype, c->spec->params[i]->type);
         }
+        if (NeedsBase(c->spec)) StackIndex((uint32_t)storage.calltops.at(c));
         code.Call(it->second);
         if (!c->spec->rets.empty()) Convert(c->spec->rets[0], c->exprtype);
     }
     void Gen(Node *n) {
+        if (n->exprtype && n->exprtype->kind == TY_ARRAY && !Is<Ident>(n) && !Is<Unary>(n))
+            Fail(n->line, "array-valued temporary results need the pending destination lowering");
         if (auto v = Is<IntLit>(n)) { code.I64(v->val); return; }
         if (auto v = Is<FltLit>(n)) {
             if (Type(n->exprtype) == WasmModule::F32) code.F32((float)v->val); else code.F64(v->val);
             return;
         }
         if (auto v = Is<BoolLit>(n)) { code.I32(v->val); return; }
-        if (Is<NullLit>(n)) { code.I32(0); return; }
+        if (Is<NullLit>(n)) {
+            if (ReferenceType(n) == WasmModule::I64) code.I64(0); else code.I32(0);
+            return;
+        }
         if (auto v = Is<Ident>(n)) {
             if (!v->vdef) Fail(n->line, "function value is not a runtime scalar");
             auto &s = Find(v->vdef); Read(s); auto actual = s.type;
             while (actual->kind == TY_REF && n->exprtype->kind != TY_REF) {
-                CheckNull(n->line); actual = actual->ref->sub; Load(actual);
+                CheckNull(n->line, Type(actual)); actual = actual->ref->sub; Load(actual);
             }
             Convert(actual, n->exprtype); return;
         }
         if (auto v = Is<Unary>(n)) {
             if (v->op == T_BITAND) {
+                if (auto index = Is<Index>(v->child)) {
+                    auto element = ElementAddress(index);
+                    if (element.first->kind == TY_REF) {
+                        LoadElement(element.first, element.second);
+                        Convert(element.first, n->exprtype);
+                    } else if (n->exprtype->kind != TY_REF) {
+                        LoadElement(element.first, element.second); Convert(element.first, n->exprtype);
+                    }
+                    return;
+                }
                 auto id = Is<Ident>(v->child);
                 if (!id || !id->vdef) Fail(n->line, "only scalar local/global addresses are implemented");
                 auto &s = Find(id->vdef);
-                if (s.type->kind == TY_REF) Read(s); else Address(s);
-                if (n->exprtype->kind != TY_REF) { CheckNull(n->line); Load(Operand(v->child->exprtype)); }
+                if (s.type->kind == TY_REF) Read(s);
+                else { Address(s); if (FatPointers() && s.type->kind != TY_ARRAY) code.Byte(0xad); }
+                if (n->exprtype->kind != TY_REF) {
+                    auto pointertype = s.type->kind == TY_REF ? Type(s.type)
+                                      : s.type->kind == TY_ARRAY ? WasmModule::I32
+                                      : FatPointers() ? WasmModule::I64 : WasmModule::I32;
+                    CheckNull(n->line, pointertype); Load(Operand(v->child->exprtype));
+                }
                 return;
             }
             auto t = Operand(v->child->exprtype);
@@ -445,13 +560,23 @@ struct WasmCodeGen : ValueLayout {
             Convert(v->op == T_NOT ? ast.booltype : t, n->exprtype); return;
         }
         if (auto v = Is<Binary>(n)) { BinaryValue(v); return; }
+        if (auto v = Is<Index>(n)) {
+            auto element = ElementAddress(v);
+            if (n->exprtype->kind != TY_REF || !TEq(n->exprtype->ref->sub, element.first)) {
+                LoadElement(element.first, element.second); Convert(element.first, n->exprtype);
+            }
+            return;
+        }
+        if (auto v = Is<Dot>(n); v && v->member == B_LEN) {
+            auto header = ArrayHeader(v->obj); code.Get(header); code.Mem(0x29, 0, 8); return;
+        }
         if (auto v = Is<AsCast>(n)) {
             Gen(v->child); Convert(Operand(v->child->exprtype), v->totype); Convert(v->totype, n->exprtype); return;
         }
         if (auto v = Is<Call>(n)) { CallValue(v); return; }
         if (auto v = Is<Block>(n)) { BlockValue(v, !Void(n->exprtype), n->exprtype); return; }
         if (auto v = Is<IfExpr>(n)) {
-            Gen(v->cond); Open(0x04, Void(n->exprtype) ? 0x40 : Type(n->exprtype));
+            Condition(v->cond); Open(0x04, Void(n->exprtype) ? 0x40 : Type(n->exprtype));
             BlockValue(v->thenb, !Void(n->exprtype), n->exprtype);
             if (v->elseb) { code.Byte(0x05); Gen(v->elseb); if (!Void(n->exprtype) && !Void(v->elseb->exprtype)) Convert(v->elseb->exprtype, n->exprtype); if (Void(n->exprtype) && !Void(v->elseb->exprtype)) code.Byte(0x1a); }
             Close(); return;
@@ -494,13 +619,13 @@ struct WasmCodeGen : ValueLayout {
         auto result = Void(resulttype) ? -1 : (int)Temp(resulttype);
         auto end = Open(), head = Open(0x03);
         targets.push_back({Target::Loop, nullptr, scopes.size(), end, head, result, resulttype});
-        if (cond) { Gen(cond); code.Byte(0x45); Branch(end, true); }
+        if (cond) { Condition(cond); code.Byte(0x45); Branch(end, true); }
         BlockValue(body, false); Branch(head);
         targets.pop_back(); Close(); Close(); if (result >= 0) code.Get(result);
     }
     void For(ForLoop *f) {
         if (f->iterkind != IK_RANGE && f->iterkind != IK_COUNT)
-            Fail(f->line, "array iteration is not implemented");
+            { ArrayFor(f); return; }
         auto r = Is<RangeExpr>(f->iter);
         auto ct = f->iter->exprtype;
         auto counter = Temp(ct), high = Temp(ct);
@@ -529,6 +654,7 @@ struct WasmCodeGen : ValueLayout {
         }
     }
     void Assign(Node *lv, Node *rhs, TType op, bool pointee, Line line) {
+        if (auto index = Is<Index>(lv)) { AssignElement(index, rhs, op, pointee, line); return; }
         auto id = Is<Ident>(lv);
         if (!id || !id->vdef) Fail(line, "only scalar variable assignment is implemented");
         auto s = Find(id->vdef);
@@ -536,15 +662,16 @@ struct WasmCodeGen : ValueLayout {
         if (op == T_DOTASSIGN) {
             if (t->kind != TY_REF) Fail(line, "only scalar reference rebinding is implemented");
             if (auto source = Is<Ident>(rhs); source && source->vdef && source->vdef->type->kind != TY_REF)
-                Address(Find(source->vdef));
-            else ReferenceValue(rhs);
+                { Address(Find(source->vdef)); if (FatPointers() && source->vdef->type->kind != TY_ARRAY) code.Byte(0xad); }
+            else ReferenceValue(rhs, Type(t));
             Write(s);
             return;
         }
         int address = -1;
         if (pointee) {
-            Read(s); CheckNull(line); address = (int)Local(WasmModule::I32); code.Set(address);
+            Read(s); CheckNull(line, Type(t)); address = (int)Local(Type(t)); code.Set(address);
             t = t->ref->sub;
+            if (t->kind == TY_ARRAY) Fail(line, "whole-array assignment needs the pending destination lowering");
         }
         if (op != T_ASSIGN) {
             if (address >= 0) { code.Get(address); Load(t); } else Read(s);
@@ -563,7 +690,9 @@ struct WasmCodeGen : ValueLayout {
             if (v->defs.size() > 1 && v->inits.size() == 1)
                 Fail(n->line, "multiple-result bindings are not implemented");
             for (size_t i = 0; i < v->defs.size(); i++) if (i < v->inits.size()) {
-                auto &s = Find(v->defs[i]); Gen(v->inits[i]); Convert(v->inits[i]->exprtype, s.type); Write(s);
+                auto &s = Find(v->defs[i]);
+                if (s.type->kind == TY_ARRAY) { InitArray(v->defs[i], s, v->inits[i]); continue; }
+                Gen(v->inits[i]); Convert(v->inits[i]->exprtype, s.type); Write(s);
             }
             return;
         }
@@ -580,7 +709,7 @@ struct WasmCodeGen : ValueLayout {
         }
         if (auto v = Is<Break>(n)) { Exit(FindTarget(), v->val); return; }
         if (Is<Continue>(n)) { auto t = FindTarget(true); Cleanup(t.scope); Branch(t.cont); return; }
-        if (auto v = Is<Defer>(n)) { assert(!scopes.empty()); scopes.back().push_back(v); return; }
+        if (auto v = Is<Defer>(n)) { assert(!scopes.empty()); scopes.back().push_back({v}); return; }
         if (auto v = Is<While>(n)) { Loop(v->body, v->cond, nullptr); return; }
         if (auto v = Is<ForLoop>(n)) { For(v); return; }
         if (Is<FnDecl>(n)) return;
@@ -632,7 +761,7 @@ struct WasmCodeGen : ValueLayout {
             code.I32((int32_t)framesize); code.Call(reservefn); code.Set(framebase);
             for (size_t i = 0; i < sp->params.size(); i++) {
                 auto &s = Find(sp->params[i]);
-                if (s.memory) { Address(s); code.Get((uint32_t)i); Store(s.type); }
+                if (s.memory) { Address(s); code.Get((uint32_t)i); StoreFixed(s.type); }
             }
         }
         auto ret = sp->rets.empty() ? nullptr : sp->rets[0];
@@ -646,6 +775,8 @@ struct WasmCodeGen : ValueLayout {
         EndFunction();
     }
     string Run() {
+        storage.Build([&](Line l, const string &message) { Fail(l, message); });
+        module.memories = storage.Memories();
         // Imports are versioned as a group. The adapter rejects reentry and runs
         // one program per instance. There is no implicit native extern bridge.
         beginprint = module.ImportFn("print_begin_v1", {}, {WasmModule::I32});
@@ -658,6 +789,7 @@ struct WasmCodeGen : ValueLayout {
         exitfn = module.ImportFn("exit_v1", {WasmModule::I32}, {});
         fmodfn = module.ImportFn("fmod_v1", {WasmModule::F64, WasmModule::F64}, {WasmModule::F64});
         f2islowfn = module.ImportFn("float_to_int_v1", {WasmModule::F64}, {WasmModule::I64});
+        if (FatPointers()) memories.emplace(module, failfn);
         reservefn = module.AddFn("goose.reserve_frame", {WasmModule::I32}, {WasmModule::I32});
         for (auto sp : ast.fnspecs) if (sp->live) {
             if (sp->sf->isextern) Fail(sp->sf->line, "native extern functions need an explicit Wasm host adapter");
@@ -665,8 +797,15 @@ struct WasmCodeGen : ValueLayout {
             if (sp->sf->isthread) Fail(sp->sf->line, "workers need the pending isolated-instance adapter");
             if (sp->rets.size() > 1) Fail(sp->sf->line, "multiple results are not implemented");
             vector<uint8_t> args, rets;
-            for (auto p : sp->params) args.push_back(Type(p->type));
-            for (auto r : sp->rets) rets.push_back(Type(r));
+            for (auto p : sp->params) {
+                if (p->type->kind == TY_ARRAY) Fail(p->line, "by-value arrays need the pending destination lowering");
+                args.push_back(Type(p->type));
+            }
+            for (auto r : sp->rets) {
+                if (r->kind == TY_ARRAY) Fail(r->line, "array results need the pending destination lowering");
+                rets.push_back(Type(r));
+            }
+            if (NeedsBase(sp)) args.push_back(WasmModule::I32);
             functions[sp] = module.AddFn(cat(sp->sf->qname, ".", sp->id), args, rets);
         }
         initfn = module.AddFn("goose.init", {}, {});
@@ -690,15 +829,32 @@ struct WasmCodeGen : ValueLayout {
         code.Call(initfn);
         auto main = ast.MainFunction();
         if (main && !main->specs.empty()) {
-            auto sp = main->specs[0]; code.Call(functions.at(sp));
+            auto sp = main->specs[0];
+            if (NeedsBase(sp)) code.I32(0);
+            code.Call(functions.at(sp));
             for (auto r : sp->rets) { (void)r; code.Byte(0x1a); }
         }
         EndFunction();
         if (f2ifn != UINT32_MAX) EmitFloatToInt();
         module.exports.push_back({"memory", 2, 0});
+        for (uint32_t i = 1; i < module.memories; i++)
+            module.exports.push_back({cat("data_memory_", i), 2, i});
         module.exports.push_back({"_start", 0, startfn});
         return module.Finish();
     }
+
+    uint32_t ArrayHeader(Node *n);
+    int ArrayMemory(Node *n);
+    TypeExpr *ArrayElement(Node *n);
+    void InitArray(VarDef *owner, const Slot &slot, Node *init);
+    void PushArray(uint32_t header, TypeExpr *element, Node *value, TypeExpr *result, Line line, int memory);
+    void ArrayBuiltin(Call *call, const vector<Node *> &arguments);
+    pair<TypeExpr *, int> ElementAddress(Index *index);
+    void ElementOffset(uint32_t header, uint32_t index, TypeExpr *element, Line line);
+    void LoadElement(TypeExpr *element, int memory);
+    void StoreElement(TypeExpr *element, int memory);
+    void AssignElement(Index *index, Node *rhs, TType op, bool pointee, Line line);
+    void ArrayFor(ForLoop *loop);
 };
 
 }  // namespace goose

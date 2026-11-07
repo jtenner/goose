@@ -122,8 +122,12 @@ struct WasmModule {
             ms.Byte(1); ms.U(i ? 1 : ((uint64_t)top + 65535) / 65536); ms.U(65536);
         }
         out.Section(5, ms);
-        WasmBytes gs; gs.U(1); gs.Byte(I32); gs.Byte(1);
-        gs.I32((int32_t)top); gs.Byte(0x0b);
+        // One mutable top per physical memory. Memory 0 starts after static
+        // data; data memories reserve offset zero and otherwise start empty.
+        WasmBytes gs; gs.U(memories);
+        for (uint32_t i = 0; i < memories; i++) {
+            gs.Byte(I32); gs.Byte(1); gs.I32(i ? 1 : (int32_t)top); gs.Byte(0x0b);
+        }
         out.Section(6, gs);
         WasmBytes es; es.U(exports.size());
         for (auto &e : exports) { es.Name(e.name); es.Byte(e.kind); es.U(e.index); }

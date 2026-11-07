@@ -1,7 +1,7 @@
-# Direct Wasm scalar checkpoint
+# Direct Wasm backend progress
 
 The complete native multi-memory Goose backend is **not finished**. This
-checkpoint implements a working direct scalar path. It does not use generated
+checkpoint implements a working direct scalar path and an initial growable scalar-array path. It does not use generated
 C as the Wasm compiler's intermediate representation.
 
 Branch: `feat/wasm-multimemory-backend`.
@@ -27,11 +27,24 @@ master were preserved. Implementation commits: `a0dc5c8d` (ABI/baseline), `f3d13
 - `CMakeLists.txt`: lists the compiler headers. Native runtime sources are
   unchanged. Exact output checks preserve native lowering behavior.
 
+The initial data-stack path adds a separate symbolic storage pass, one physical
+memory per overlapping logical stack, a checked bump top for each memory, and
+ordered scope restoration. Grow-only and grow-shrink arrays currently accept
+explicit scalar or ordinary scalar-reference element literals. Indexing,
+iteration, push, pop, clear, length, owner references, and calls through array
+references are supported within this subset. By-value array arguments/results,
+array temporaries, other constructors, slices, compound elements, and pools
+remain target diagnostics.
+
 The emitted modules use Memory32, i32/i64/f32/f64 scalar instructions,
 ordinary calls, block/loop/if branches, unaligned loads/stores, global/data
-sections, and checked `memory.grow`. Thin scalar addresses have known Memory 0
-identity. Independent encoder tests use a second memory. They do not establish
-Goose multi-memory stack assignment or dynamic fat pointers.
+sections, and checked `memory.grow`. Memory 0 frame addresses remain thin. When an array interface is live, ordinary
+references use packed i64 addresses; owner-header addresses remain i32 because
+all admitted headers reside in Memory 0. Stored owner references retain the
+16-byte layout. Known array memories use direct fixed-index loads/stores;
+dynamic references use shared checked `br_table` helpers. The backend has an
+explicit limit of 64 data memories and rejects a larger valid program before
+writing a module. General memory-identity specialization remains pending.
 
 ## Host contract
 
@@ -66,6 +79,18 @@ corrected before the final suites. The later shared-service extraction also
 passed 52 exact C/stack-report/diagnostic/Wasm comparisons, the native baseline,
 and 94 Wasm checks. See [shared-service evidence](evidence/shared-services.md).
 
+The later data-stack Release validation passed 163 Wasm checks and the full
+native baseline suite. It independently tests growth failure, all scalar load/store
+widths, invalid memory identities, saved-top restoration, separate same-type
+owners, stable references across growth, mutable array iteration, reference
+elements, and reuse across scopes and element types. The prior 52 exact native
+and scalar-Wasm comparisons also passed after the storage implementation.
+These results are from Linux x86-64, Node 24.22.2, wasm-tools 1.262.0, and
+Wasmtime Python 49.0.0. An independent Astra source review found no confirmed
+new defect. Follow-up cleanup checks cover return, break, continue and deferred
+allocations at multiple stack bases. See the
+[data-stack evidence](evidence/data-stacks.md) for exact identities and limits.
+
 ## Measurements
 
 The two initial workloads and converter candidate were measured in separate,
@@ -84,9 +109,10 @@ BigInt operation for other values.
 
 ## Remaining stages and trade-offs
 
-- C: complete a symbolic storage/lifetime plan, bind logical stacks to separate
-  physical memories, implement data-stack bump/growth/restores, memory identity
-  propagation, packed fat pointers, and fixed-index dynamic dispatch.
+- C: the growable scalar-array subset now has a symbolic storage plan, separate
+  memories, checked growth/restores, and dynamic dispatch. Extend the plan to
+  protected destinations, temporary owners, and all compound lifetime events.
+  General thin-reference propagation remains pending.
 - D: use the shared numeric layout authority to implement arrays of all classes, packed/variable aggregates, ADTs, root and
   pool descriptors, relative references, slices, byte views, and serialization.
 - E: implement direct nonfixed construction, named-result landing/relocation,
@@ -108,6 +134,6 @@ not implemented, and `--debug` is rejected. Wasm recursion uses the engine's
 ordinary execution stack. These are explicit limits of this checkpoint.
 
 The shared numeric layout and call-bound services are now extracted. The C
-backend still collects lifetime events during emission. The Wasm backend must
-collect its own complete storage plan before it can bind logical stacks to
-memories. It must use the shared layout authority for compound values.
+backend still collects lifetime events during emission. The Wasm backend now collects a storage plan before binding the admitted
+array owners to memories. That plan must expand with the remaining compound
+and destination support. It uses the shared layout authority for sizes.

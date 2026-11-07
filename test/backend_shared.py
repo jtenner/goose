@@ -32,7 +32,13 @@ def main():
         'storage/resizable_adt_payload_links.goose', 'threads/thread_spawn_stack.goose',
         'runtime/stack_stats.goose',
     )]
-    wasm = sorted((ROOT / 'test' / 'wasm').glob('*.goose'))
+    # Keep the original scalar checkpoint's admitted corpus fixed. New
+    # array fixtures require functionality absent from that reference.
+    wasm = [ROOT / 'test' / 'wasm' / (name + '.goose') for name in (
+        'wasm_control', 'wasm_conversion_boundaries', 'wasm_conversion_global',
+        'wasm_frames', 'wasm_reference_identity', 'wasm_reference_rebind',
+        'wasm_reference_returns', 'wasm_scalars', 'wasm_tail_values',
+    )]
     records = []
     for target, sources in (('native', native), ('wasm', wasm)):
         for source in sources:

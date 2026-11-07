@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Differential tests for the direct scalar Wasm backend; no generated-C Wasm path."""
+"""Differential tests for the direct Wasm backend; no generated-C Wasm path."""
 import argparse
 import random
 import math
@@ -38,6 +38,19 @@ def main():
     out = ROOT / 'build' / 'gen' / 'wasm'
     out.mkdir(parents=True, exist_ok=True)
     count = 0
+    # Exercise the production data-memory helpers independently of AST
+    # lowering, including genuine memory.grow failure under a hard limit.
+    memory_exe, memory_wasm = out / 'memory-runtime', out / 'memory-runtime.wasm'
+    limited_memory = out / 'memory-runtime-limited.wasm'
+    run([args.cxx, '-std=c++20', '-O2', ROOT / 'test' / 'wasm_memory.cpp', '-o', memory_exe])
+    run([memory_exe, memory_wasm])
+    run([args.validator, 'validate', memory_wasm])
+    run([args.node, ROOT / 'test' / 'wasm_memory.mjs', memory_wasm, limited_memory])
+    run([args.validator, 'validate', limited_memory])
+    count += 1
+    if args.wasmtime_python:
+        run([args.wasmtime_python, ROOT / 'test' / 'wasm_memory.py', memory_wasm, limited_memory])
+        count += 1
     sources = sorted((ROOT / 'test' / 'wasm').glob('*.goose'))
     sources.extend(ROOT / 'test' / 'typing' / f'{name}.goose' for name in (
         'global_optional_flow', 'optional_loop_callee_assignments',
@@ -67,6 +80,15 @@ def main():
             if source.stem == 'wasm_tail_values':
                 resource = run([args.node, ROOT / 'test' / 'wasm_runtime.mjs', wasm, 'print'])
                 assert resource.stdout == reference.stdout, 'print owner check changed output'
+                count += 1
+            if source.stem in ('wasm_multimemory', 'wasm_scoped_data_reuse', 'wasm_array_widths',
+                               'wasm_array_shrink', 'wasm_no_data_owner', 'wasm_entry_stack_base',
+                               'wasm_ordered_array_cleanup'):
+                persistent = '1' if source.stem == 'wasm_multimemory' else '0'
+                mode = {'wasm_multimemory': 'growth', 'wasm_scoped_data_reuse': 'reuse',
+                        'wasm_array_widths': 'typed-reuse', 'wasm_no_data_owner': 'no-data'}.get(source.stem, '')
+                resource = run([args.node, ROOT / 'test' / 'wasm_multimemory.mjs', wasm, persistent, mode])
+                assert resource.stdout == reference.stdout, 'completed owner-state check changed output'
                 count += 1
             count += 1
     growth_source = out / 'frame-growth.goose'
@@ -215,10 +237,13 @@ a.equal(new DataView(x.memory.buffer).getBigInt64(1,true),0n);"""
         ('assert', 'assert(false);', b'assert failed'),
         ('zero', 'var n = 0; print(7 / n);', b'division by zero'),
         ('divoverflow', 'var n = -9223372036854775808; var m = -1; print(n / m);', b'overflow'),
+        ('array-index', 'var a: i64[>..] = [1]; print("bad=", a[failure_index]);', b'out of bounds'),
+        ('empty-pop', 'var a: i64[>..<] = []; print("bad=", a.pop());', b'empty'),
     ]
     for name, body, reason in failures:
         source = out / f'failure-{name}.goose'
-        source.write_text('fn main() { ' + body + ' }\n')
+        globals = 'var failure_index: i64 = 2;\n' if name == 'array-index' else ''
+        source.write_text(globals + 'fn main() { ' + body + ' }\n')
         for opt in (0, 2):
             wasm = out / f'failure-{name}-O{opt}.wasm'
             native = out / f'failure-{name}-O{opt}.native'
@@ -237,6 +262,45 @@ a.equal(new DataView(x.memory.buffer).getBigInt64(1,true),0n);"""
                 assert second.returncode and reason in second.stderr and not second.stdout, (name, opt, second.stderr)
                 count += 1
             count += 1
+    # Array-valued temporaries need destination protection. Reject each valid
+    # source for that reason at both levels, including fully inlined calls.
+    index = 'fn index() -> i64 { var b: i64[>..] = [99]; return 0; }\n'
+    array_results = {
+        'call': 'fn make() -> i64[>..] { var a: i64[>..] = [7]; return a; }\n'
+                + index + 'fn main() { print(make()[index()]); }\n',
+        'block': index + 'fn main() { print(({ var a: i64[>..] = [7]; copy(a) })[index()]); }\n',
+        'branch': index + 'fn main() { var choose = true; print((if choose { '
+                  'var a: i64[>..] = [7]; copy(a) } else { var b: i64[>..] = [8]; copy(b) })[index()]); }\n',
+    }
+    for name, text in array_results.items():
+        source = out / f'array-result-{name}.goose'
+        source.write_text(text)
+        for opt in (0, 2):
+            prefix = out / f'array-result-{name}-O{opt}'
+            c, native, wasm = prefix.with_suffix('.c'), prefix.with_suffix('.native'), prefix.with_suffix('.wasm')
+            run([exe, f'-O{opt}', '--standalone', '-o', c, source])
+            run([args.cc, '-O2', c, '-pthread', '-lm', '-ldl', '-o', native])
+            assert run([native]).stdout == b'7\n', 'invalid native temporary-result oracle'
+            wasm.unlink(missing_ok=True)
+            result = run([exe, f'-O{opt}', '--target', 'wasm', '-o', wasm, source], ok=False)
+            assert result.returncode and b'wasm target:' in result.stderr and b'destination' in result.stderr
+            assert not wasm.exists(), 'unsupported array result left a partial module'
+            count += 1
+    # The explicit backend limit must reject a valid program before writing
+    # any output. Keep every owner live to avoid testing dead-code removal.
+    limit = out / 'data-memory-limit.goose'
+    lines = ['fn main() {']
+    for i in range(65):
+        lines += [f'var a{i}: i64[>..] = [];', f'a{i}.push({i});']
+    lines += ['print(' + ' + '.join(f'a{i}[0]' for i in range(65)) + ');', '}']
+    limit.write_text('\n'.join(lines) + '\n')
+    run([exe, 'check', limit])
+    output = out / 'data-memory-limit.wasm'
+    output.unlink(missing_ok=True)
+    result = run([exe, '-O0', '--target', 'wasm', '-o', output, limit], ok=False)
+    assert result.returncode and b'64 data-memory limit' in result.stderr
+    assert not output.exists(), 'memory-limit failure left a partial module'
+    count += 1
     # No stubs, no native extern reinterpretation, and no partial output on error.
     unsupported = [
         ('array', 'fn main() { var a = [1, 2]; print(a); }', b'layout'),
