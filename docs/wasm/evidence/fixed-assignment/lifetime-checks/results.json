@@ -1,0 +1,16 @@
+[
+  {
+    "case": "outer",
+    "opt": 0,
+    "source_sha256": "86fdbf05221e4836b38a69366468e8b33bd8f9e7986cc806e6581b0197cdf4e3",
+    "native": "PASS",
+    "wasm_before": "exact whole-aggregate assignment rejection"
+  },
+  {
+    "case": "outer",
+    "opt": 2,
+    "source_sha256": "86fdbf05221e4836b38a69366468e8b33bd8f9e7986cc806e6581b0197cdf4e3",
+    "native": "PASS",
+    "wasm_before": "exact whole-aggregate assignment rejection"
+  }
+]

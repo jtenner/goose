@@ -985,9 +985,13 @@ struct WasmCodeGen : ValueLayout {
             return;
         }
         if (t->kind == TY_ARRAY) Fail(line, "whole-array assignment needs the pending destination lowering");
-        if (Nominal(t)) Fail(line, "whole-aggregate assignment needs the pending destination lowering");
+        if (Nominal(t)) { AssignFixed(OwnerPlace(id->vdef), rhs, op, line); return; }
         int address = -1;
         if (pointee) {
+            if (t->kind == TY_REF && Nominal(t->ref->sub)) {
+                Read(s); auto destination = PointeePlace(t, line);
+                AssignFixed(destination, rhs, op, line); return;
+            }
             Read(s); CheckNull(line, Type(t)); address = (int)Local(Type(t)); code.Set(address);
             t = t->ref->sub;
             if (t->kind == TY_ARRAY) Fail(line, "whole-array assignment needs the pending destination lowering");
@@ -1213,6 +1217,7 @@ struct WasmCodeGen : ValueLayout {
                          uint32_t prefix, Line line);
     void ConstructAggregateArray(FreshFixedDestination destination, ArrayLit *literal);
     void CopyFixed(FreshFixedDestination destination, FixedPlace source, Line line);
+    void AssignFixed(FixedPlace destination, Node *source, TType op, Line line);
     void EnumMatchStatement(MatchExpr *match);
     FixedPlace ResolvePlace(Node *n);
     FixedPlace FieldPlace(Dot *field);

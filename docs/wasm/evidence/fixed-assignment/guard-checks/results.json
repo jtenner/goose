@@ -1,0 +1,38 @@
+[
+  {
+    "case": "constructor",
+    "phase": "front",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "case": "constructor",
+    "phase": "wasm",
+    "exit": 1,
+    "stderr": "/tmp/goose-wasm-fixed-assignment-20261107/guard-checks/constructor.goose:2: error: wasm target: whole-aggregate assignment from a temporary needs the pending destination lowering\n"
+  },
+  {
+    "case": "enum-constant",
+    "phase": "front",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "case": "enum-constant",
+    "phase": "wasm",
+    "exit": 1,
+    "stderr": "/tmp/goose-wasm-fixed-assignment-20261107/guard-checks/enum-constant.goose:2: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  },
+  {
+    "case": "adaptation",
+    "phase": "front",
+    "exit": 1,
+    "stderr": "/tmp/goose-wasm-fixed-assignment-20261107/guard-checks/adaptation.goose:3: error: expected a value of type A, got B\nfn main() { var a: A = A { n: 1 }; var b: B = B { n: 2 }; a = b; print(a.n); }\n                                                              ^\n  in fn main() instantiated from /tmp/goose-wasm-fixed-assignment-20261107/guard-checks/adaptation.goose:3\n"
+  },
+  {
+    "case": "adaptation",
+    "phase": "wasm",
+    "exit": 1,
+    "stderr": "/tmp/goose-wasm-fixed-assignment-20261107/guard-checks/adaptation.goose:3: error: expected a value of type A, got B\nfn main() { var a: A = A { n: 1 }; var b: B = B { n: 2 }; a = b; print(a.n); }\n                                                              ^\n  in fn main() instantiated from /tmp/goose-wasm-fixed-assignment-20261107/guard-checks/adaptation.goose:3\n"
+  }
+]

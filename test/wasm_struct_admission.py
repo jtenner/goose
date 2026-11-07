@@ -89,6 +89,12 @@ def check_admission(run, exe, node, validator, wasmtime_python, out):
                 assert run([node, root / 'scripts/run_wasm.mjs', module]).stdout == b'1\n2\n'
                 if wasmtime_python:
                     assert run([wasmtime_python, root / 'test/wasmtime_host.py', module]).stdout == b'1\n2\n'
+            elif name in ('assign', 'field-assign', 'element-assign'):
+                assert not result.returncode and not result.stderr
+                run([validator, 'validate', module])
+                assert run([node, root / 'scripts/run_wasm.mjs', module]).stdout == b'2\n'
+                if wasmtime_python:
+                    assert run([wasmtime_python, root / 'test/wasmtime_host.py', module]).stdout == b'2\n'
             else:
                 assert result.returncode and reason.encode() in result.stderr, (name, opt, result.stderr)
                 assert not module.exists(), (name, opt, 'partial aggregate module')

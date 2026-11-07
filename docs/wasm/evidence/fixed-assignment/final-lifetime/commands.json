@@ -1,0 +1,277 @@
+[
+  {
+    "name": "command-000",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/O0.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_assignment_lifetime.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-001",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-002",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-003",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_assignment_lifetime.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-004",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-005",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-006",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-007",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/O0.wasm",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-008",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/O2.c",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_assignment_lifetime.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-009",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-010",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-011",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_assignment_lifetime.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-012",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-013",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-014",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-015",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/O2.wasm",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-016",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/fixed-assignment-constructor-guard-O0.c",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/fixed-assignment-constructor-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-017",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/fixed-assignment-constructor-guard-O0.wasm",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/fixed-assignment-constructor-guard.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-018",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/fixed-assignment-constructor-guard-O2.c",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/fixed-assignment-constructor-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-019",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/fixed-assignment-constructor-guard-O2.wasm",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/fixed-assignment-constructor-guard.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-020",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/fixed-assignment-enum-constant-guard-O0.c",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/fixed-assignment-enum-constant-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-021",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/fixed-assignment-enum-constant-guard-O0.wasm",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/fixed-assignment-enum-constant-guard.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-022",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/fixed-assignment-enum-constant-guard-O2.c",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/fixed-assignment-enum-constant-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-023",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/fixed-assignment-enum-constant-guard-O2.wasm",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/fixed-assignment-enum-constant-guard.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-024",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "--check",
+      "/tmp/goose-wasm-fixed-assignment-20261107/final-lifetime/fixed-assignment-lifetime-guard.goose"
+    ],
+    "exit": 1
+  }
+]

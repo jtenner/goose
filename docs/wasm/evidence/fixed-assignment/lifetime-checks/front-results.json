@@ -1,0 +1,12 @@
+[
+  {
+    "case": "escape",
+    "front_exit": 1,
+    "stderr": "/tmp/goose-wasm-fixed-assignment-20261107/lifetime-checks/escape.goose:2: error: storing a reference rooted at inner, which does not outlive the destination (\u00a79.2)\nfn main() { var old: i64[] = [1]; var holder: S = S { value: old[0] }; { var inner: i64[] = [7]; var source: S = S { value: inner[0] }; holder = source; } var scratch: i64[] = [99]; assert(holder.value == 7); assert(scratch[0] == 99); print(\"lifetime\"); }\n                                                                                                                                                 ^~~~~~\n  in fn main() instantiated from /tmp/goose-wasm-fixed-assignment-20261107/lifetime-checks/escape.goose:2\n"
+  },
+  {
+    "case": "outer",
+    "front_exit": 0,
+    "stderr": ""
+  }
+]

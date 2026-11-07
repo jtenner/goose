@@ -238,8 +238,16 @@ suite passes 1,409 groups, including complete Memory 0/data images and real
 recursive binder activations. Native regressions and 52 exact comparisons
 pass; 272 unchanged-source parent modules are byte-identical. See
 [field iteration evidence](evidence/field-iteration.md). The earlier field-path
-guard statements describe their historical checkpoints. Whole aggregate
-assignment and general by-value/result support are still compilation gaps.
+guard statements describe their historical checkpoints.
+
+Exact fixed aggregate copies now assign existing structs, enums and variants
+through locals, globals, fields, elements and references. The correctness-only
+suite passes 1,481 groups, native regressions and all 52 exact comparisons pass,
+and 294 unchanged-source module pairs are identical. Reference lifetime and
+complete Memory 0 copy-image controls pass. See the
+[fixed assignment evidence](evidence/fixed-assignment.md). Constructor
+replacement, whole-array assignment and general by-value calls/results remain
+compilation gaps.
 
 ## Host contract
 

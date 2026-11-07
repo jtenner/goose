@@ -1,0 +1,30 @@
+[
+  {
+    "case": "opaque",
+    "opt": 0,
+    "source_sha256": "8395e6d98eb23408bcbf136830d76acefdfd54527d630cc8f1fe665cb200e56d",
+    "native": "PASS",
+    "wasm_before": "exact whole-aggregate assignment rejection"
+  },
+  {
+    "case": "opaque",
+    "opt": 2,
+    "source_sha256": "8395e6d98eb23408bcbf136830d76acefdfd54527d630cc8f1fe665cb200e56d",
+    "native": "PASS",
+    "wasm_before": "exact whole-aggregate assignment rejection"
+  },
+  {
+    "case": "order",
+    "opt": 0,
+    "source_sha256": "8773edb60f5251500b77e0deb4bb9df552a9c2414fa9959da2188cf0bbf7d723",
+    "native": "PASS",
+    "wasm_before": "exact whole-aggregate assignment rejection"
+  },
+  {
+    "case": "order",
+    "opt": 2,
+    "source_sha256": "8773edb60f5251500b77e0deb4bb9df552a9c2414fa9959da2188cf0bbf7d723",
+    "native": "PASS",
+    "wasm_before": "exact whole-aggregate assignment rejection"
+  }
+]

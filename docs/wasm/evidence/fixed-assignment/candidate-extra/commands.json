@@ -1,0 +1,162 @@
+[
+  {
+    "name": "opaque-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-assignment-20261107/candidate-extra/opaque-O0.wasm",
+      "/tmp/goose-wasm-fixed-assignment-20261107/parent-extra/opaque.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "opaque-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-assignment-20261107/candidate-extra/opaque-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "opaque-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-assignment-20261107/candidate-extra/opaque-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "opaque-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-assignment-20261107/candidate-extra/opaque-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "opaque-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-assignment-20261107/candidate-extra/opaque-O2.wasm",
+      "/tmp/goose-wasm-fixed-assignment-20261107/parent-extra/opaque.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "opaque-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-assignment-20261107/candidate-extra/opaque-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "opaque-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-assignment-20261107/candidate-extra/opaque-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "opaque-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-assignment-20261107/candidate-extra/opaque-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "order-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-assignment-20261107/candidate-extra/order-O0.wasm",
+      "/tmp/goose-wasm-fixed-assignment-20261107/parent-extra/order.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "order-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-assignment-20261107/candidate-extra/order-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "order-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-assignment-20261107/candidate-extra/order-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "order-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-assignment-20261107/candidate-extra/order-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "order-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-assignment-20261107/candidate-extra/order-O2.wasm",
+      "/tmp/goose-wasm-fixed-assignment-20261107/parent-extra/order.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "order-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-assignment-20261107/candidate-extra/order-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "order-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-assignment-20261107/candidate-extra/order-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "order-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-assignment-20261107/candidate-extra/order-O2.wasm"
+    ],
+    "exit": 0
+  }
+]

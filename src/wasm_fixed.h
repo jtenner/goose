@@ -229,6 +229,28 @@ inline WasmCodeGen::FixedPlace WasmCodeGen::FieldPlace(Dot *field) {
     return object;
 }
 
+inline void WasmCodeGen::AssignFixed(FixedPlace destination, Node *source, TType op, Line line) {
+    if (op != T_ASSIGN || !source || !Nominal(destination.type))
+        Fail(line, "whole-aggregate assignment needs an exact fixed value");
+    while (auto call = Is<Call>(source)) {
+        if (call->builtin != B_COPY) break;
+        source = call->ValueArgNodes().at(0);
+    }
+    auto from = ActualType(source);
+    while (from && from->kind == TY_REF) from = from->ref->sub;
+    if (!from || !TEq(destination.type, from))
+        Fail(line, "whole-aggregate assignment adaptation needs the pending destination lowering");
+    auto addressable = Is<Ident>(source) || Is<Dot>(source) || Is<Index>(source) ||
+                       (Is<Unary>(source) && Is<Unary>(source)->op == T_BITAND) ||
+                       ((Is<Call>(source) || Is<InlineBlock>(source)) && ActualType(source)->kind == TY_REF);
+    if (!addressable)
+        Fail(line, "whole-aggregate assignment from a temporary needs the pending destination lowering");
+    auto selected = ResolvePlace(source);
+    if (!TEq(destination.type, selected.type))
+        Fail(line, "whole-aggregate assignment has an inconsistent source layout");
+    CopyBytes(destination, selected, RequireFixed(destination.type, line), line, true);
+}
+
 inline void WasmCodeGen::AssignField(Dot *field, Node *rhs, TType op, bool pointee, Line line) {
     auto place = FieldPlace(field);
     if (op == T_DOTASSIGN) {
@@ -240,6 +262,7 @@ inline void WasmCodeGen::AssignField(Dot *field, Node *rhs, TType op, bool point
         StorePlace(place); return;
     }
     if (pointee && place.type->kind == TY_REF) place = DereferencePlace(place, line);
+    if (Nominal(place.type)) { AssignFixed(place, rhs, op, line); return; }
     if (Aggregate(place.type)) Fail(line, "whole-aggregate assignment needs the pending destination lowering");
     StoreAddress(place);
     if (op != T_ASSIGN) ReadPlace(place);

@@ -838,10 +838,15 @@ inline WasmCodeGen::FixedPlace WasmCodeGen::CaptureElementPlace(const ElementPla
 inline void WasmCodeGen::AssignElement(Index *index, Node *rhs, TType op, bool pointee, Line line) {
     auto selected = ElementAddress(index);
     auto type = selected.type; auto memory = selected.memory;
-    if (Nominal(type)) Fail(line, "whole-aggregate assignment needs the pending destination lowering");
+    if (Nominal(type)) { AssignFixed(CaptureElementPlace(selected), rhs, op, line); return; }
     auto address = Local(WasmModule::I64); code.Set(address);
     if (pointee && type->kind == TY_REF && op != T_DOTASSIGN) {
-        code.Get(address); LoadElement({type, memory}); CheckNull(line, Type(type));
+        code.Get(address); LoadElement({type, memory});
+        if (Nominal(type->ref->sub)) {
+            auto destination = PointeePlace(type, line);
+            AssignFixed(destination, rhs, op, line); return;
+        }
+        CheckNull(line, Type(type));
         if (type->ref->sub->kind == TY_ARRAY) Fail(line, "whole-array assignment needs the pending destination lowering");
         if (Nominal(type->ref->sub)) Fail(line, "whole-aggregate assignment needs the pending destination lowering");
         if (Type(type) == WasmModule::I32) address = Local(WasmModule::I32);

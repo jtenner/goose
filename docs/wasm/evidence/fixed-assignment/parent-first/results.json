@@ -1,0 +1,100 @@
+[
+  {
+    "case": "local",
+    "opt": 0,
+    "source_sha256": "a8b62342b6f8f648fb3c525c9164c38356aad4476e2c3bc65064efbf585b9d72",
+    "native": "PASS",
+    "wasm_before": "exact whole-aggregate assignment rejection"
+  },
+  {
+    "case": "local",
+    "opt": 2,
+    "source_sha256": "a8b62342b6f8f648fb3c525c9164c38356aad4476e2c3bc65064efbf585b9d72",
+    "native": "PASS",
+    "wasm_before": "exact whole-aggregate assignment rejection"
+  },
+  {
+    "case": "data",
+    "opt": 0,
+    "source_sha256": "96d218329376c7697d73d2b713c47b6c5ca69563cbfe2c87c232ee49adf4f7b4",
+    "native": "PASS",
+    "wasm_before": "exact whole-aggregate assignment rejection"
+  },
+  {
+    "case": "data",
+    "opt": 2,
+    "source_sha256": "96d218329376c7697d73d2b713c47b6c5ca69563cbfe2c87c232ee49adf4f7b4",
+    "native": "PASS",
+    "wasm_before": "exact whole-aggregate assignment rejection"
+  },
+  {
+    "case": "refs",
+    "opt": 0,
+    "source_sha256": "8ba7e36d2ae4e248c6ebd59e084370de660977c6c5cfaa6843e0d27a9ed2eb91",
+    "native": "PASS",
+    "wasm_before": "exact whole-aggregate assignment rejection"
+  },
+  {
+    "case": "refs",
+    "opt": 2,
+    "source_sha256": "8ba7e36d2ae4e248c6ebd59e084370de660977c6c5cfaa6843e0d27a9ed2eb91",
+    "native": "PASS",
+    "wasm_before": "exact whole-aggregate assignment rejection"
+  },
+  {
+    "case": "effects",
+    "opt": 0,
+    "source_sha256": "c041831d06797f8cc1548963e5b1ba2ebb9d72d0c1d45ccbac3910bbfc1cde10",
+    "native": "PASS",
+    "wasm_before": "exact whole-aggregate assignment rejection"
+  },
+  {
+    "case": "effects",
+    "opt": 2,
+    "source_sha256": "c041831d06797f8cc1548963e5b1ba2ebb9d72d0c1d45ccbac3910bbfc1cde10",
+    "native": "PASS",
+    "wasm_before": "exact whole-aggregate assignment rejection"
+  },
+  {
+    "case": "enum",
+    "opt": 0,
+    "source_sha256": "eb28fe20b4399bd1fe05dc9f582170ea08d1e1701209ddfcddbafe148b289346",
+    "native": "PASS",
+    "wasm_before": "exact whole-aggregate assignment rejection"
+  },
+  {
+    "case": "enum",
+    "opt": 2,
+    "source_sha256": "eb28fe20b4399bd1fe05dc9f582170ea08d1e1701209ddfcddbafe148b289346",
+    "native": "PASS",
+    "wasm_before": "exact whole-aggregate assignment rejection"
+  },
+  {
+    "case": "variant",
+    "opt": 0,
+    "source_sha256": "9603f66d90e49348f02c9157c2dad11100621737e6f47d4befa1f7a1903679f2",
+    "native": "PASS",
+    "wasm_before": "exact whole-aggregate assignment rejection"
+  },
+  {
+    "case": "variant",
+    "opt": 2,
+    "source_sha256": "9603f66d90e49348f02c9157c2dad11100621737e6f47d4befa1f7a1903679f2",
+    "native": "PASS",
+    "wasm_before": "exact whole-aggregate assignment rejection"
+  },
+  {
+    "case": "empty",
+    "opt": 0,
+    "source_sha256": "d73510a4208b6e1049deb644b68d541f899b6fea9ecface090937551e048050c",
+    "native": "PASS",
+    "wasm_before": "exact whole-aggregate assignment rejection"
+  },
+  {
+    "case": "empty",
+    "opt": 2,
+    "source_sha256": "d73510a4208b6e1049deb644b68d541f899b6fea9ecface090937551e048050c",
+    "native": "PASS",
+    "wasm_before": "exact whole-aggregate assignment rejection"
+  }
+]

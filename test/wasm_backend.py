@@ -225,6 +225,13 @@ def main():
                 checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
                 assert checked.stdout == reference.stdout and not checked.stderr
                 count += 1
+            if source.stem.startswith('wasm_fixed_assignment_'):
+                mode = ('' if source.stem in ('wasm_fixed_assignment_data', 'wasm_fixed_assignment_refs',
+                                             'wasm_fixed_assignment_opaque', 'wasm_fixed_assignment_order',
+                                             'wasm_fixed_assignment_lifetime') else 'no-data')
+                checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
+                assert checked.stdout == reference.stdout and not checked.stderr
+                count += 1
             if source.stem == 'wasm_byte_print':
                 checked = run([args.node, ROOT / 'test' / 'wasm_bytes.mjs', wasm])
                 assert checked.stdout == reference.stdout
@@ -244,7 +251,7 @@ def main():
     from wasm_enum_checks import check_modules as check_enum_modules, check_footprint as check_enum_footprint
     from wasm_enum_admission import check_admission as check_enum_admission
     count += check_enum_modules(run, args.node, args.validator, args.wasmtime_python, out)
-    count += check_enum_admission(run, exe, args.cc, out)
+    count += check_enum_admission(run, exe, args.cc, out, args.node, args.validator, args.wasmtime_python)
     if not args.correctness_only:
         count += check_enum_footprint(run, exe, args.node, args.validator, args.wasmtime_python, out, function_local_counts)
     from wasm_aggregate_checks import check_controls as check_aggregate_controls, check_reference_abi, check_footprint as check_aggregate_footprint
@@ -285,6 +292,9 @@ def main():
     count += check_data_iteration_admission(run, exe, out, args.node, args.validator, args.wasmtime_python)
     from wasm_field_iteration_checks import check_paths as check_field_iteration_paths
     count += check_field_iteration_paths(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out)
+    from wasm_fixed_assignment_checks import check_images as check_fixed_assignment_images, check_guards as check_fixed_assignment_guards
+    count += check_fixed_assignment_images(run, args.node, args.validator, out)
+    count += check_fixed_assignment_guards(run, exe, out)
     count += check_data_iteration_footprint(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out,
                                           correctness_only=args.correctness_only)
     growth_source = out / 'frame-growth.goose'

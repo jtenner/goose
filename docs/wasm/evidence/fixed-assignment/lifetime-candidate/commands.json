@@ -1,0 +1,82 @@
+[
+  {
+    "name": "outer-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-assignment-20261107/lifetime-candidate/outer-O0.wasm",
+      "/tmp/goose-wasm-fixed-assignment-20261107/lifetime-checks/outer.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "outer-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-assignment-20261107/lifetime-candidate/outer-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "outer-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-assignment-20261107/lifetime-candidate/outer-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "outer-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-assignment-20261107/lifetime-candidate/outer-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "outer-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-assignment-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-assignment-20261107/lifetime-candidate/outer-O2.wasm",
+      "/tmp/goose-wasm-fixed-assignment-20261107/lifetime-checks/outer.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "outer-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-assignment-20261107/lifetime-candidate/outer-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "outer-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-assignment-20261107/lifetime-candidate/outer-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "outer-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-assignment-20261107/lifetime-candidate/outer-O2.wasm"
+    ],
+    "exit": 0
+  }
+]

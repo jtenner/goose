@@ -46,7 +46,8 @@ CASES = {'argument': ('enum E { A { x: i64 }, B }\n'
                    'fn main() { var a: E; a = E.B; match a { A p => print(p.x), B => print(0) } }\n',
                    'uninitialized aggregate')}
 
-def check_admission(run, exe, cc, out):
+def check_admission(run, exe, cc, out, node='node', validator='wasm-tools', wasmtime_python=None):
+    root = Path(__file__).resolve().parents[1]
     count = 0
     for name, (source, reason) in CASES.items():
         path = out / ('enum-admission-' + name + '.goose')
@@ -56,9 +57,17 @@ def check_admission(run, exe, cc, out):
             c, binary, module = (prefix.with_suffix(ext) for ext in ('.c', '.native', '.wasm'))
             run([exe, f'-O{opt}', '--standalone', '-o', c, path])
             run([cc, '-O0', c, '-pthread', '-lm', '-ldl', '-o', binary])
-            run([binary])
+            reference = run([binary])
             module.unlink(missing_ok=True)
             result = run([exe, f'-O{opt}', '--target', 'wasm', '-o', module, path], ok=False)
+            if name in ('assign', 'element-assign'):
+                assert not result.returncode and not result.stderr
+                run([validator, 'validate', module])
+                assert run([node, root / 'scripts/run_wasm.mjs', module]).stdout == reference.stdout == b'0\n'
+                if wasmtime_python:
+                    assert run([wasmtime_python, root / 'test/wasmtime_host.py', module]).stdout == reference.stdout
+                count += 1
+                continue
             assert result.returncode and b'wasm target: ' in result.stderr and reason.encode() in result.stderr, (name, opt, result.stderr)
             assert not module.exists(), (name, opt, 'partial enum module')
             count += 1
