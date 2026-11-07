@@ -1,0 +1,16 @@
+{
+  "equivalence.stdout": "92 prior modules unchanged\n",
+  "compatibility.stdout": "shared backend services: 52 exact output and diagnostic comparisons passed\n",
+  "provenance.stderr": "",
+  "wasm.stdout": "wasm backend: 455 checks passed\n",
+  "unit.stdout": "Acquired shared lease for build/tests; no performance samples.\nStart provenance\nprovenance exit 0\nStart wasm\nwasm exit 0\nStart compatibility\ncompatibility exit 0\nStart equivalence\nequivalence exit 0\nAll owned children reaped; shared lease released.\n",
+  "wasm.exit": "0\n",
+  "provenance.exit": "0\n",
+  "wasm.stderr": "",
+  "compatibility.stderr": "",
+  "unit.stderr": "",
+  "equivalence.exit": "0\n",
+  "compatibility.exit": "0\n",
+  "equivalence.stderr": "",
+  "provenance.stdout": "Preserved compiler verified;only the test expectation changed.\n"
+}

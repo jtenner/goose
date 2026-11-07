@@ -127,7 +127,8 @@ def execute(path):
                       4: 'null reference', 5: 'out of memory growing frame storage',
                       6: 'out of memory growing data storage', 7: 'invalid memory identity or watermark',
                       8: 'array index out of bounds', 9: 'pop from empty array', 10: 'array capacity exceeded',
-                      11: 'memory32 address overflow', 12: 'array capacity out of range'}[code]
+                      11: 'memory32 address overflow', 12: 'array capacity out of range',
+                      13: 'invalid variable-length array prefix'}[code]
             source = read(caller, offset, length).decode()
             raise RuntimeError(f'goose runtime error: {reason}' + (f' at {source}:{line}' if source else ''))
         elif name == 'exit_v1':

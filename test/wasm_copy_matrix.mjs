@@ -5,6 +5,11 @@ const x = new WebAssembly.Instance(new WebAssembly.Module(fs.readFileSync(proces
 }).exports;
 const count = 65;
 const pointer = (memory, offset) => (BigInt(memory) << 32n) | BigInt(offset);
+for (let i = 0; i < count; i++) {
+    new Uint8Array(x[`memory${i}`].buffer).set([128, 1], 500);
+    assert.deepEqual(x.read_prefix(pointer(i, 500)), [128n, 2]);
+}
+assert.throws(() => x.read_prefix(pointer(count, 500)), /memory failure 7/);
 for (let i = 0; i < count; i++) new Uint8Array(x[`memory${i}`].buffer).set([i, 0, 127, 255], 100);
 for (let source = 0; source < count; source++) for (let destination = 0; destination < count; destination++) {
     x.copy(pointer(destination, 200), pointer(source, 100), 4);

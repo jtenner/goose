@@ -10,7 +10,29 @@ function instance(binary) {
     } }).exports;
 }
 const pointer = (memory, offset) => (BigInt(memory) << 32n) | BigInt(offset);
+const uleb = value => {
+    const bytes = [];
+    do { const byte = Number(value & 127n); value >>= 7n; bytes.push(byte | (value ? 128 : 0)); } while (value);
+    return bytes;
+};
 const x = instance(bytes);
+for (let memory = 0; memory < 3; memory++) {
+    for (const value of [0n, 1n, 127n, 128n, 16383n, 16384n, (1n << 32n) - 1n,
+                         (1n << 63n) - 1n, 1n << 63n, (1n << 64n) - 1n]) {
+        const encoded = uleb(value);
+        new Uint8Array(x[`memory${memory}`].buffer).set(encoded, 6000);
+        assert.deepEqual(x.read_prefix(pointer(memory, 6000)), [BigInt.asIntN(64, value), encoded.length]);
+    }
+    for (const malformed of [[128, 0], [...Array(9).fill(255), 2], Array(10).fill(128)]) {
+        new Uint8Array(x[`memory${memory}`].buffer).set(malformed, 6000);
+        assert.throws(() => x.read_prefix(pointer(memory, 6000)), /memory failure 13/);
+    }
+    const last = x[`memory${memory}`].buffer.byteLength - 1;
+    new Uint8Array(x[`memory${memory}`].buffer)[last] = 128;
+    assert.throws(() => x.read_prefix(pointer(memory, last)), WebAssembly.RuntimeError);
+}
+assert.throws(() => x.read_prefix(pointer(3, 6000)), /memory failure 7/);
+assert.throws(() => x.read_prefix(pointer(0, 0xffffffff)), WebAssembly.RuntimeError);
 assert.equal(x.top(1), 1);
 assert.equal(x.top(2), 1);
 assert.equal(x.reserve1(64), 1);

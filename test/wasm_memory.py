@@ -33,6 +33,27 @@ def throws(call, reason):
 
 def main():
     store, exports = instance(sys.argv[1])
+    for memory in range(3):
+        for value in [0, 1, 127, 128, 16383, 16384, (1 << 32) - 1,
+                      (1 << 63) - 1, 1 << 63, (1 << 64) - 1]:
+            remaining, encoded = value, []
+            while True:
+                byte = remaining & 127
+                remaining >>= 7
+                encoded.append(byte | (128 if remaining else 0))
+                if not remaining:
+                    break
+            exports[f'memory{memory}'].write(store, bytes(encoded), 6000)
+            signed = value if value < 1 << 63 else value - (1 << 64)
+            assert exports['read_prefix'](store, (memory << 32) | 6000) == [signed, len(encoded)]
+        for malformed in [[128, 0], [255] * 9 + [2], [128] * 10]:
+            exports[f'memory{memory}'].write(store, bytes(malformed), 6000)
+            throws(lambda: exports['read_prefix'](store, (memory << 32) | 6000), 'memory failure 13')
+        last = exports[f'memory{memory}'].data_len(store) - 1
+        exports[f'memory{memory}'].write(store, bytes([128]), last)
+        throws(lambda: exports['read_prefix'](store, (memory << 32) | last), 'out of bounds')
+    throws(lambda: exports['read_prefix'](store, (3 << 32) | 6000), 'memory failure 7')
+    throws(lambda: exports['read_prefix'](store, 0xffffffff), 'out of bounds')
 
     def call(name, *args):
         return exports[name](store, *args)

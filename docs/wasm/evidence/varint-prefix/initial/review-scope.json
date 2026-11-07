@@ -1,0 +1,39 @@
+{
+  "baseline": "d1044b66e3dd96b71a9bbfd530e0f00b220296fa",
+  "changed_files": [
+    "scripts/run_wasm.mjs",
+    "src/wasm_arrays.h",
+    "src/wasm_codegen.h",
+    "src/wasm_memory.h",
+    "test/expected/wasm_varint_bytes.out",
+    "test/expected/wasm_varint_cleanup.out",
+    "test/expected/wasm_varint_paths.out",
+    "test/expected/wasm_varint_prefix.out",
+    "test/wasm/wasm_varint_bytes.goose",
+    "test/wasm/wasm_varint_cleanup.goose",
+    "test/wasm/wasm_varint_paths.goose",
+    "test/wasm/wasm_varint_prefix.goose",
+    "test/wasm_array_copy_admission.py",
+    "test/wasm_backend.py",
+    "test/wasm_copy_matrix.mjs",
+    "test/wasm_copy_matrix.py",
+    "test/wasm_memory.cpp",
+    "test/wasm_memory.mjs",
+    "test/wasm_memory.py",
+    "test/wasm_multimemory.mjs",
+    "test/wasmtime_host.py"
+  ],
+  "context_files": [
+    "src/ast.h",
+    "src/value_layout.h",
+    "src/wasm_binary.h",
+    "src/wasm_storage.h",
+    "src/data_stacks.h",
+    "src/codegen_construct.h",
+    "src/codegen_values.h",
+    "src/runtime/runtime.h",
+    "src/runtime_inline.h",
+    "test/backend_shared.py"
+  ],
+  "compiler_sha256": "6f110d8e62ab7e5bae82eee65d42aa82bc979058ac2abb6203a1adea01360b66"
+}

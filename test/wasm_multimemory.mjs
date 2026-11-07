@@ -57,6 +57,11 @@ assert.equal(new Set(memoriesAfter.map(memory => memory.buffer)).size, memories)
 // The operation completion is _start's return. Only then inspect the
 // resource owner's current top. Scoped stacks must have their saved top.
 const persistent = Number(process.argv[3] ?? 0);
+if (process.argv[4] === 'varint-prefix') {
+    const memory = memoriesAfter[memories - 1];
+    assert.deepEqual([...new Uint8Array(memory.buffer, 1, 130)], [128, 1, ...Array(128).fill(65)]);
+    assert.equal(exports[`test_stack_top_${memories - 1}`].value, 131);
+}
 for (let i = 1; i < memories - persistent; i++)
     assert.equal(exports[`test_stack_top_${i}`].value, 1, `data stack ${i} was not restored`);
 if (process.argv[4] === 'growth')

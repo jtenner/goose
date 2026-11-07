@@ -136,11 +136,12 @@ def main():
                                'wasm_runtime_limited_bytes', 'wasm_runtime_limited_cleanup',
                                'wasm_runtime_limited_no_owner', 'wasm_array_copy',
                                'wasm_array_copy_inline', 'wasm_array_copy_cleanup',
-                               'wasm_array_copy_sources'):
+                               'wasm_array_copy_sources', 'wasm_varint_prefix',
+                               'wasm_varint_paths', 'wasm_varint_bytes', 'wasm_varint_cleanup'):
                 if source.stem == 'wasm_inline_arrays':
                     assert wasm.stat().st_size < 32768, 'unused global capacity was serialized'
                 persistent = ('2' if source.stem == 'wasm_array_copy_sources' else
-                              '1' if source.stem in ('wasm_multimemory', 'wasm_variable_arrays', 'wasm_array_fills', 'wasm_byte_strings', 'wasm_runtime_limited', 'wasm_runtime_limited_bytes', 'wasm_array_copy') else '0')
+                              '1' if source.stem in ('wasm_multimemory', 'wasm_variable_arrays', 'wasm_array_fills', 'wasm_byte_strings', 'wasm_runtime_limited', 'wasm_runtime_limited_bytes', 'wasm_array_copy', 'wasm_varint_prefix') else '0')
                 mode = {'wasm_multimemory': 'growth', 'wasm_scoped_data_reuse': 'reuse',
                         'wasm_array_widths': 'typed-reuse', 'wasm_no_data_owner': 'no-data',
                         'wasm_inline_arrays': 'no-data', 'wasm_inline_reference_path': 'no-data',
@@ -155,7 +156,9 @@ def main():
                         'wasm_runtime_limited_bytes': 'variable-growth',
                         'wasm_runtime_limited_no_owner': 'no-data',
                         'wasm_array_copy': 'growth',
-                        'wasm_array_copy_inline': 'no-data'}.get(source.stem, '')
+                        'wasm_array_copy_inline': 'no-data',
+                        'wasm_varint_prefix': 'varint-prefix',
+                        'wasm_varint_bytes': 'growth'}.get(source.stem, '')
                 resource = run([args.node, ROOT / 'test' / 'wasm_multimemory.mjs', wasm, persistent, mode])
                 assert resource.stdout == reference.stdout, 'completed owner-state check changed output'
                 count += 1
@@ -376,6 +379,7 @@ a.equal(new DataView(x.memory.buffer).getBigInt64(1,true),65n<<56n);"""
             count += 1
     # Known runtime failures must occur for the same operation, not just any trap.
     failures = [
+        ('varint-index', 'var a: u8[varint] = [7; 128]; print("bad=", a[failure_index]);', b'array index out of bounds'),
         ('assert', 'assert(false);', b'assert failed'),
         ('zero', 'var n = 0; print(7 / n);', b'division by zero'),
         ('byte-print-zero', 'var a: u8[] = [65]; var n = 0; print("bad=", a, 7 / n);', b'division by zero'),
@@ -396,7 +400,8 @@ a.equal(new DataView(x.memory.buffer).getBigInt64(1,true),65n<<56n);"""
     ]
     for name, body, reason in failures:
         source = out / f'failure-{name}.goose'
-        globals = ('var failure_index: i64 = 1;\n' if name == 'runtime-index' else
+        globals = ('var failure_index: i64 = 128;\n' if name == 'varint-index' else
+                   'var failure_index: i64 = 1;\n' if name == 'runtime-index' else
                    'var failure_index: i64 = 2;\n' if name in ('array-index', 'inline-index', 'variable-index') else '')
         source.write_text(globals + 'fn main() { ' + body + ' }\n')
         for opt in (0, 2):
@@ -410,7 +415,8 @@ a.equal(new DataView(x.memory.buffer).getBigInt64(1,true),65n<<56n);"""
             run([args.validator, 'validate', wasm])
             actual = run([args.node, ROOT / 'scripts' / 'run_wasm.mjs', wasm], ok=False)
             assert ref.returncode and actual.returncode, (name, opt, 'missing failure')
-            native_reason = b'invalid capacity' if name in ('runtime-negative', 'runtime-large') else reason
+            native_reason = (b'index 128 out of bounds (length 128)' if name == 'varint-index' else
+                             b'invalid capacity' if name in ('runtime-negative', 'runtime-large') else reason)
             assert native_reason in ref.stderr and reason in actual.stderr, (name, ref.stderr, actual.stderr)
             assert ref.stdout == actual.stdout == b'', (name, 'partial print leaked')
             if args.wasmtime_python:

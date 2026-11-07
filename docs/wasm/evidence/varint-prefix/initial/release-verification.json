@@ -1,0 +1,72 @@
+{
+  "owner_pid": 3911545,
+  "owner_exited": true,
+  "children_reaped": true,
+  "lease_active": false,
+  "exact_owned_processes": [],
+  "nonblocking_exclusive_probe": "PASS",
+  "probe_released": true,
+  "checked_at": "2026-11-07T08:54:14.868729+00:00",
+  "exit": 1,
+  "source_manifest_matches": true,
+  "compiler_sha256": "6f110d8e62ab7e5bae82eee65d42aa82bc979058ac2abb6203a1adea01360b66",
+  "commands": [
+    {
+      "name": "golden",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-varint-prefix-20261107/golden.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "promote",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-varint-prefix-20261107/promote.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "build",
+      "command": [
+        "cmake",
+        "--build",
+        "build",
+        "--parallel",
+        "2"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "targeted",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-varint-prefix-20261107/targeted.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "wasm",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "test/wasm_backend.py",
+        "--exe",
+        "build/goose",
+        "--wasmtime-python",
+        "/tmp/goose-wasm-runtime-env/bin/python"
+      ],
+      "exit": 1
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "owner_pid": 3921947,
+  "owner_exited": true,
+  "children_reaped": true,
+  "lease_active": false,
+  "exact_owned_processes": [],
+  "nonblocking_exclusive_probe": "PASS",
+  "probe_released": true,
+  "checked_at": "2026-11-07T08:57:21.818821+00:00",
+  "exit": 0,
+  "source_manifest_matches": true,
+  "compiler_sha256": "6f110d8e62ab7e5bae82eee65d42aa82bc979058ac2abb6203a1adea01360b66",
+  "commands": [
+    {
+      "name": "provenance",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-varint-prefix-20261107/continuation/provenance.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "wasm",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "test/wasm_backend.py",
+        "--exe",
+        "build/goose",
+        "--wasmtime-python",
+        "/tmp/goose-wasm-runtime-env/bin/python"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "compatibility",
+      "command": [
+        "python3",
+        "test/backend_shared.py",
+        "--reference",
+        "build/goose-inline-checkpoint",
+        "--exe",
+        "build/goose",
+        "--out",
+        "/tmp/goose-wasm-varint-prefix-20261107/native-compatibility"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "equivalence",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-varint-prefix-20261107/equivalence.py"
+      ],
+      "exit": 0
+    }
+  ]
+}

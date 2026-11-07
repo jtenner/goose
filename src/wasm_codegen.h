@@ -50,7 +50,18 @@ struct WasmCodeGen : ValueLayout {
         return t->kind == TY_ARRAY && t->arr->akind == A_LIMITED && ArrSize(t->arr) < 0;
     }
     bool DataArray(TypeExpr *t) { return VariableArray(t) || RuntimeLimited(t); }
-    uint32_t DataPrefix(TypeExpr *t) { return (uint32_t)ArrayPrefix(t->arr).elements; }
+    bool VarintPrefix(TypeExpr *t) { return VariableArray(t) && LenStore(t->arr) == IS_VARINT; }
+    uint32_t DataPrefix(TypeExpr *t) {
+        auto prefix = ArrayPrefix(t->arr).elements;
+        assert(prefix >= 0);
+        return (uint32_t)prefix;
+    }
+    uint32_t DataPrefix(TypeExpr *t, uint64_t count) {
+        if (!VarintPrefix(t)) return DataPrefix(t);
+        uint32_t bytes = 1;
+        while (count >= 128) { count >>= 7; bytes++; }
+        return bytes;
+    }
     bool FrameRef(TypeExpr *t) {
         return t->kind == TY_REF && t->ref->sub->kind == TY_ARRAY && !DataArray(t->ref->sub);
     }
@@ -96,8 +107,6 @@ struct WasmCodeGen : ValueLayout {
             case TY_ARRAY: {
                 if (!IsResz(t) && !InlineArray(t) && !DataArray(t))
                     Fail(t->line, "this array layout needs the pending compound lowering");
-                if (VariableArray(t) && LenStore(t->arr) == IS_VARINT)
-                    Fail(t->line, "varint array prefixes need the pending encoding lowering");
                 auto element = t->arr->sub;
                 if (element->kind == TY_ARRAY || HeaderRef(element))
                     Fail(t->line, "compound array elements need the pending layout lowering");
@@ -497,8 +506,9 @@ struct WasmCodeGen : ValueLayout {
         }
         auto memory = ArrayMemory(arg);
         auto length = Local(WasmModule::I64), zero = Local(WasmModule::I64);
-        ArrayLength(value, t, memory); code.Set(length);
-        code.I64(0); code.Set(zero); ElementOffset(value, zero, t, arg->line);
+        auto prefix = VarintPrefix(t) ? (int)Local(WasmModule::I32) : -1;
+        ArrayLength(value, t, memory, prefix); code.Set(length);
+        code.I64(0); code.Set(zero); ElementOffset(value, zero, t, arg->line, prefix);
         auto address = Local(WasmModule::I64); code.Set(address);
         code.Get(address); code.I64(32); code.Byte(0x88); code.Byte(0xa7);
         code.Get(address); code.Byte(0xa7); code.Get(length); code.Byte(0xa7); code.Call(snapshotbytes);
@@ -982,7 +992,7 @@ struct WasmCodeGen : ValueLayout {
     int ArrayMemory(Node *n);
     TypeExpr *ArrayType(Node *n);
     TypeExpr *ArrayElement(Node *n);
-    void ArrayLength(uint32_t header, TypeExpr *array, int memory = -1);
+    void ArrayLength(uint32_t header, TypeExpr *array, int memory = -1, int prefix = -1);
     void ArrayCapacity(uint32_t header, TypeExpr *array, int memory = -1);
     void LoadArrayField(uint32_t header, TypeExpr *array, int memory, uint32_t offset);
     void StoreArrayField(TypeExpr *array, int memory, uint32_t offset);
@@ -1000,7 +1010,7 @@ struct WasmCodeGen : ValueLayout {
     void ArrayBuiltin(Call *call, const vector<Node *> &arguments);
     void ArrayEquality(Binary *node);
     pair<TypeExpr *, int> ElementAddress(Index *index);
-    void ElementOffset(uint32_t header, uint32_t index, TypeExpr *array, Line line);
+    void ElementOffset(uint32_t header, uint32_t index, TypeExpr *array, Line line, int prefix = -1);
     void LoadElement(TypeExpr *element, int memory);
     void StoreElement(TypeExpr *element, int memory);
     void AssignElement(Index *index, Node *rhs, TType op, bool pointee, Line line);

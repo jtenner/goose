@@ -24,9 +24,15 @@ inline void WasmCodeGen::LoadArrayField(uint32_t header, TypeExpr *array, int me
     else code.Call(memories->Access(opcode, offset));
 }
 
-inline void WasmCodeGen::ArrayLength(uint32_t header, TypeExpr *array, int memory) {
+inline void WasmCodeGen::ArrayLength(uint32_t header, TypeExpr *array, int memory, int prefix) {
     if (array->arr->akind == A_FIXED) { code.I64(ArrSize(array->arr)); return; }
     if (IsResz(array)) { code.Get(header); code.Mem(0x29, 0, 8); return; }
+    if (VarintPrefix(array)) {
+        code.Get(header); code.Call(memories->ReadPrefix());
+        if (prefix >= 0) code.Set((uint32_t)prefix);
+        else code.Byte(0x1a);
+        return;
+    }
     LoadArrayField(header, array, memory, (uint32_t)ArrayPrefix(array->arr).length);
 }
 
@@ -51,6 +57,17 @@ inline void WasmCodeGen::StoreArrayLength(TypeExpr *array, int memory) {
 }
 
 inline void WasmCodeGen::InitArrayCount(uint32_t header, TypeExpr *array, uint64_t count, int memory) {
+    if (VarintPrefix(array)) {
+        WasmBytes prefix; prefix.U(count);
+        for (uint32_t i = 0; i < prefix.bytes.size(); i++) {
+            code.Get(header);
+            if (memory >= 0) code.Byte(0xa7);
+            code.I64((uint8_t)prefix.bytes[i]);
+            if (memory >= 0) code.Mem(0x3c, (uint32_t)memory, i);
+            else code.Call(memories->Access(0x3c, i));
+        }
+        return;
+    }
     if (RuntimeLimited(array)) {
         code.Get(header); code.I64((int64_t)count); StoreArrayField(array, memory, 0);
     }
@@ -116,15 +133,23 @@ inline void WasmCodeGen::InitArrayCopy(VarDef *owner, const Slot &slot, Node *so
         code.I32((int32_t)Size(array)); code.Set(bytes);
         code.Get(header); code.Byte(0xad); code.Set(sourceBase);
     } else {
-        auto prefix = DataArray(array) ? DataPrefix(array) : 0u, stride = Size(array->arr->sub);
+        auto prefix = DataArray(array) && !VarintPrefix(array) ? DataPrefix(array) : 0u;
+        auto stride = Size(array->arr->sub);
+        auto decodedPrefix = VarintPrefix(array) ? (int)Local(WasmModule::I32) : -1;
         count = (int)Local(WasmModule::I64);
         if (RuntimeLimited(array)) ArrayCapacity(header, array, sourceMemory);
-        else ArrayLength(header, array, sourceMemory);
+        else ArrayLength(header, array, sourceMemory, decodedPrefix);
         code.Set(count);
         code.Get(count); code.I64((UINT32_MAX - prefix) / stride); code.Byte(0x56);
         Open(0x04); Trap(6, source->line); Close();
         code.Get(count); code.I64(stride); code.Byte(0x7e);
-        if (prefix) { code.I64(prefix); code.Byte(0x7c); }
+        if (decodedPrefix >= 0) {
+            code.Get((uint32_t)decodedPrefix); code.Byte(0xad); code.Byte(0x7c);
+            auto total = Local(WasmModule::I64); code.Tee(total);
+            code.I64(UINT32_MAX); code.Byte(0x56);
+            Open(0x04); Trap(6, source->line); Close();
+            code.Get(total);
+        } else if (prefix) { code.I64(prefix); code.Byte(0x7c); }
         code.Byte(0xa7); code.Set(bytes);
         code.Get(header);
         if (IsResz(array)) code.Mem(0x29);
@@ -193,7 +218,7 @@ inline void WasmCodeGen::InitByteString(VarDef *owner, const Slot &slot, StrLit 
     auto array = owner->type;
     if (!ByteArray(array)) Fail(literal->line, "string literals require byte elements");
     auto count = literal->val.size();
-    auto prefix = DataArray(array) ? DataPrefix(array) : 0u;
+    auto prefix = DataArray(array) ? DataPrefix(array, count) : 0u;
     if (count > UINT32_MAX - prefix) Fail(owner->line, "array allocation exceeds memory32");
     if (prefix && prefix < 8 && count > ((1ull << (prefix * 8)) - 1))
         Fail(owner->line, "array length exceeds its stored prefix");
@@ -249,7 +274,7 @@ inline void WasmCodeGen::InitFilledArray(VarDef *owner, const Slot &slot, ArrayL
         Fail(literal->line, "array fill needs a nonnegative constant count");
     auto count = (uint64_t)countnode->val;
     auto stride = Size(element);
-    auto prefix = DataArray(array) ? DataPrefix(array) : 0u;
+    auto prefix = DataArray(array) ? DataPrefix(array, count) : 0u;
     if (count > (UINT32_MAX - prefix) / stride)
         Fail(owner->line, "array allocation exceeds memory32");
     if (prefix && prefix < 8 && count > ((1ull << (prefix * 8)) - 1))
@@ -319,8 +344,8 @@ inline void WasmCodeGen::InitFilledArray(VarDef *owner, const Slot &slot, ArrayL
 
 inline void WasmCodeGen::InitDataArray(VarDef *owner, const Slot &slot, ArrayLit *literal) {
     auto array = owner->type, element = array->arr->sub;
-    auto prefix = DataPrefix(array), stride = Size(element);
     auto count = literal->elems.size();
+    auto prefix = DataPrefix(array, count), stride = Size(element);
     if (count > (UINT32_MAX - prefix) / stride)
         Fail(owner->line, "array allocation exceeds memory32");
     if (prefix < 8 && count > ((1ull << (prefix * 8)) - 1))
@@ -463,7 +488,7 @@ inline void WasmCodeGen::PushArray(uint32_t header, TypeExpr *array, Node *value
     (void)line;
 }
 
-inline void WasmCodeGen::ElementOffset(uint32_t header, uint32_t index, TypeExpr *array, Line line) {
+inline void WasmCodeGen::ElementOffset(uint32_t header, uint32_t index, TypeExpr *array, Line line, int prefix) {
     auto element = array->arr->sub;
     auto base = Local(WasmModule::I64), offset = Local(WasmModule::I64);
     code.Get(header);
@@ -476,7 +501,14 @@ inline void WasmCodeGen::ElementOffset(uint32_t header, uint32_t index, TypeExpr
     }
     code.Set(base);
     code.Get(base); code.I64(UINT32_MAX); code.Byte(0x83);
-    if (DataArray(array)) { code.I64(DataPrefix(array)); code.Byte(0x7c); }
+    if (VarintPrefix(array)) {
+        if (prefix >= 0) code.Get((uint32_t)prefix);
+        else {
+            code.Get(header); code.Call(memories->ReadPrefix());
+            auto width = Local(WasmModule::I32); code.Set(width); code.Byte(0x1a); code.Get(width);
+        }
+        code.Byte(0xad); code.Byte(0x7c);
+    } else if (DataArray(array)) { code.I64(DataPrefix(array)); code.Byte(0x7c); }
     code.Get(index); code.I64(Size(element)); code.Byte(0x7e); code.Byte(0x7c); code.Tee(offset);
     code.I64(UINT32_MAX); code.Byte(0x56); Open(0x04); Trap(11, line); Close();
     code.Get(base); code.I64(-4294967296ll); code.Byte(0x83); code.Get(offset); code.Byte(0x84);
@@ -488,13 +520,14 @@ inline pair<TypeExpr *, int> WasmCodeGen::ElementAddress(Index *index) {
     // C's IndexLoc snapshots the view before an index with statement
     // effects. Snapshot its length here as well; bases remain stable.
     auto length = Local(WasmModule::I64), position = Local(WasmModule::I64);
-    ArrayLength(header, array, ArrayMemory(index->obj)); code.Set(length);
+    auto prefix = VarintPrefix(array) ? (int)Local(WasmModule::I32) : -1;
+    ArrayLength(header, array, ArrayMemory(index->obj), prefix); code.Set(length);
     Gen(index->idx); code.Set(position);
     if (!index->nobc) {
         code.Get(position); code.Get(length); code.Byte(0x5a);
         Open(0x04); Trap(8, index->line); Close();
     }
-    ElementOffset(header, position, array, index->line);
+    ElementOffset(header, position, array, index->line, prefix);
     return {element, ArrayMemory(index->obj)};
 }
 
@@ -560,17 +593,19 @@ inline void WasmCodeGen::ArrayEquality(Binary *node) {
     auto lefttype = ArrayType(node->left), righttype = ArrayType(node->right);
     auto element = lefttype->arr->sub;
     auto left = ArrayHeader(node->left), length = Local(WasmModule::I64);
-    ArrayLength(left, lefttype, ArrayMemory(node->left)); code.Set(length);
+    auto leftprefix = VarintPrefix(lefttype) ? (int)Local(WasmModule::I32) : -1;
+    auto rightprefix = VarintPrefix(righttype) ? (int)Local(WasmModule::I32) : -1;
+    ArrayLength(left, lefttype, ArrayMemory(node->left), leftprefix); code.Set(length);
     auto right = ArrayHeader(node->right);
     auto result = Local(WasmModule::I32), position = Local(WasmModule::I64);
     code.I32(0); code.Set(result);
-    code.Get(length); ArrayLength(right, righttype, ArrayMemory(node->right)); code.Byte(0x51); Open(0x04);
+    code.Get(length); ArrayLength(right, righttype, ArrayMemory(node->right), rightprefix); code.Byte(0x51); Open(0x04);
     code.I32(1); code.Set(result); code.I64(0); code.Set(position);
     auto done = Open(), head = Open(0x03);
     code.Get(position); code.Get(length); code.Byte(0x5a); Branch(done, true);
-    ElementOffset(left, position, lefttype, node->line);
+    ElementOffset(left, position, lefttype, node->line, leftprefix);
     LoadElement(element, ArrayMemory(node->left));
-    ElementOffset(right, position, righttype, node->line);
+    ElementOffset(right, position, righttype, node->line, rightprefix);
     LoadElement(righttype->arr->sub, ArrayMemory(node->right));
     auto type = Type(element);
     code.Byte(type == WasmModule::F32 ? 0x5b : type == WasmModule::F64 ? 0x61 :
@@ -645,6 +680,7 @@ inline void WasmCodeGen::ArrayFor(ForLoop *loop) {
     if (Is<Index>(loop->iter)) { walk.emplace(); CaptureArrayWalk(loop->iter, *walk); }
     auto header = reload || walk ? Local(Type(array)) : ArrayHeader(loop->iter);
     auto memory = ArrayMemory(loop->iter);
+    auto prefix = VarintPrefix(array) ? (int)Local(WasmModule::I32) : -1;
     auto position = Local(WasmModule::I64); code.I64(0); code.Set(position);
     auto end = Open(), head = Open(0x03);
     if (walk) {
@@ -654,8 +690,8 @@ inline void WasmCodeGen::ArrayFor(ForLoop *loop) {
     }
     // Growth during iteration is permitted. Read the current count on each
     // test rather than assuming the entry view has a fixed length.
-    code.Get(position); ArrayLength(header, array, memory); code.Byte(0x5a); Branch(end, true);
-    ElementOffset(header, position, array, loop->line);
+    code.Get(position); ArrayLength(header, array, memory, prefix); code.Byte(0x5a); Branch(end, true);
+    ElementOffset(header, position, array, loop->line, prefix);
     if (!loop->byref || element->kind == TY_REF) {
         LoadElement(element, memory); Convert(element, loop->vdef->type);
     } else if (Type(loop->vdef->type) == WasmModule::I32) code.Byte(0xa7);

@@ -12,6 +12,7 @@ struct WasmMemoryRuntime {
     uint32_t dynamicreserve = UINT32_MAX, gettop = UINT32_MAX, settop = UINT32_MAX;
     uint32_t copyfromframe = UINT32_MAX;
     uint32_t copy = UINT32_MAX;
+    uint32_t readprefix = UINT32_MAX;
 
     WasmMemoryRuntime(WasmModule &m, uint32_t fail) : module(m), failure(fail) {}
 
@@ -143,6 +144,48 @@ struct WasmMemoryRuntime {
         });
         Save(copyfromframe, std::move(c));
         return copyfromframe;
+    }
+
+    uint32_t ReadPrefix() {
+        if (readprefix != UINT32_MAX) return readprefix;
+        readprefix = module.AddFn("goose.read_array_prefix", {WasmModule::I64},
+                                  {WasmModule::I64, WasmModule::I32});
+        WasmBytes c;
+        // Locals: decoded count, bytes consumed, current byte, byte offset.
+        // Dispatch once, then all decoder loads use the selected memory.
+        Dispatch(c, 0, 0x40,
+                 [&] { c.Get(0); c.I64(32); c.Byte(0x88); c.Byte(0xa7); },
+                 [&](uint32_t memory) {
+            c.Get(0); c.Byte(0xa7); c.Mem(0x31, memory); c.Tee(3);
+            c.I64(128); c.Byte(0x54); c.Byte(0x04); c.Byte(0x40);
+            // The common one-byte prefix needs no decode loop.
+            c.Get(3); c.Set(1); c.I32(1); c.Set(2);
+            c.Byte(0x05);
+            c.Get(3); c.I64(127); c.Byte(0x83); c.Set(1);
+            c.I32(1); c.Set(2);
+            c.Byte(0x02); c.Byte(0x40); c.Byte(0x03); c.Byte(0x40);
+            c.Get(0); c.I64(UINT32_MAX); c.Byte(0x83);
+            c.Get(2); c.Byte(0xad); c.Byte(0x7c); c.Tee(4);
+            c.I64(UINT32_MAX); c.Byte(0x56); c.Byte(0x04); c.Byte(0x40);
+            Trap(c, 11); c.Byte(0x0b);
+            c.Get(4); c.Byte(0xa7); c.Mem(0x31, memory); c.Set(3);
+            // At most ten bytes, no payload above bit 63, shortest encoding.
+            c.Get(2); c.I32(9); c.Byte(0x46);
+            c.Get(3); c.I64(1); c.Byte(0x56); c.Byte(0x71);
+            c.Get(3); c.Byte(0x50); c.Byte(0x72);
+            c.Byte(0x04); c.Byte(0x40); Trap(c, 13); c.Byte(0x0b);
+            c.Get(1); c.Get(3); c.I64(127); c.Byte(0x83);
+            c.Get(2); c.I32(7); c.Byte(0x6c); c.Byte(0xad); c.Byte(0x86);
+            c.Byte(0x84); c.Set(1);
+            c.Get(2); c.I32(1); c.Byte(0x6a); c.Set(2);
+            c.Get(3); c.I64(128); c.Byte(0x83); c.Byte(0x50);
+            c.Byte(0x0d); c.U(1); c.Byte(0x0c); c.U(0);
+            c.Byte(0x0b); c.Byte(0x0b); c.Byte(0x0b);
+        });
+        c.Get(1); c.Get(2);
+        Save(readprefix, std::move(c), {WasmModule::I64, WasmModule::I32,
+                                       WasmModule::I64, WasmModule::I64});
+        return readprefix;
     }
 
     uint32_t Copy() {

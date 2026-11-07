@@ -1,0 +1,56 @@
+{
+  "owner": "Goose preserved varint-prefix functional continuation",
+  "pid": 3921947,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "provenance",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-varint-prefix-20261107/continuation/provenance.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "wasm",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "test/wasm_backend.py",
+        "--exe",
+        "build/goose",
+        "--wasmtime-python",
+        "/tmp/goose-wasm-runtime-env/bin/python"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "compatibility",
+      "command": [
+        "python3",
+        "test/backend_shared.py",
+        "--reference",
+        "build/goose-inline-checkpoint",
+        "--exe",
+        "build/goose",
+        "--out",
+        "/tmp/goose-wasm-varint-prefix-20261107/native-compatibility"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "equivalence",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-varint-prefix-20261107/equivalence.py"
+      ],
+      "exit": 0
+    }
+  ],
+  "exit": 0
+}

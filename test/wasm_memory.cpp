@@ -24,6 +24,9 @@ int main(int argc, char **argv) {
     auto paircopy = runtime.Copy();
     if (runtime.Copy() != paircopy) return 1;
     add("copy", paircopy);
+    auto prefix = runtime.ReadPrefix();
+    if (runtime.ReadPrefix() != prefix) return 1;
+    add("read_prefix", prefix);
     auto offsetload = runtime.Access(0x35, 4), hugeload = runtime.Access(0x35, 0x1000000);
     if (offsetload == runtime.Access(0x35) || hugeload == runtime.Access(0x35) ||
         offsetload != runtime.Access(0x35, 4)) return 1;

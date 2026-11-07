@@ -108,6 +108,15 @@ copy-module pairs. See [array-copy evidence](evidence/array-copies.md) for the
 failure records, source identity, review, cost analysis and missing measurements.
 General adaptation and protected/by-value destinations remain pending.
 
+Canonical unsigned LEB128 array counts now support `T[varint]` with the
+admitted scalar/reference elements. Constructors, exact-layout copies,
+indexing, iteration, equality and byte snapshots share the decoded prefix width.
+Validation passed 455 Wasm checks, 52 exact comparisons and 92 prior-module
+pairs. Independent Astra review found no confirmed defect. See
+[varint-prefix evidence](evidence/varint-prefix.md) for the preserved test-wording
+correction, exact provenance, costs, gaps and missing measurements. Signed
+varint elements and general mixed-layout/slice operations remain pending.
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping
@@ -176,9 +185,10 @@ BigInt operation for other values.
   protected destinations, temporary owners, and all compound lifetime events.
   General thin-reference propagation remains pending.
 - D: scalar/reference arrays now cover fixed, limited, variable and growable
-  layouts, including same-layout copies. Complete varint prefixes/elements,
-  layout adaptations, general constructors, packed/variable aggregates, ADTs, root/pool descriptors, relative
-  references, slices, byte views, and serialization.
+  layouts, including same-layout copies and unsigned LEB count prefixes. Complete
+  signed varint elements, layout adaptations, general constructors, packed and
+  variable aggregates, ADTs, root/pool descriptors, relative references, slices,
+  byte views, and serialization.
 - E: implement direct nonfixed construction, named-result landing/relocation,
   destination protection, cleanup for all remaining value lifetimes, and `try_table` /
   `throw` fallback across remaining nonlocal call boundaries. Engine capability

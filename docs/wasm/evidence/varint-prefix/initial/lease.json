@@ -1,0 +1,66 @@
+{
+  "owner": "Goose varint-prefix Release validation",
+  "pid": 3911545,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "golden",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-varint-prefix-20261107/golden.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "promote",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-varint-prefix-20261107/promote.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "build",
+      "command": [
+        "cmake",
+        "--build",
+        "build",
+        "--parallel",
+        "2"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "targeted",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-varint-prefix-20261107/targeted.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "wasm",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "test/wasm_backend.py",
+        "--exe",
+        "build/goose",
+        "--wasmtime-python",
+        "/tmp/goose-wasm-runtime-env/bin/python"
+      ],
+      "exit": 1
+    }
+  ],
+  "exit": 1
+}

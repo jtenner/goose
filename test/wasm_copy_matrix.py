@@ -6,6 +6,10 @@ store, x = instance(sys.argv[1])
 count = 65
 pointer = lambda memory, offset: (memory << 32) | offset
 for i in range(count):
+    x[f'memory{i}'].write(store, bytes([128, 1]), 500)
+    assert x['read_prefix'](store, pointer(i, 500)) == [128, 2]
+throws(lambda: x['read_prefix'](store, pointer(count, 500)), 'memory failure 7')
+for i in range(count):
     x[f'memory{i}'].write(store, bytes([i, 0, 127, 255]), 100)
 for source in range(count):
     for destination in range(count):

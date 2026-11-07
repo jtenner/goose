@@ -70,3 +70,12 @@ owner count up to the 65-memory limit, payload size, sparse capacity, engine
 initialization and high-water retention. It needs matched native/reference
 identities, normal host controls and a fresh shared lease. The earlier scalar
 grants are closed. No speed or physical-memory improvement is claimed.
+
+## Pending variable-length prefix measurements
+
+The [prefix stage](evidence/varint-prefix.md) has functional and static-size
+evidence. Runtime decoding, compiler emission/allocation, initialization and
+retention remain unmeasured. The queued cases cover prefix width, memory
+identity, owner count and nested paths, with exact native/reference identities
+and a fresh shared lease. Prior scalar grants are closed. No speed or physical
+memory improvement is established.
