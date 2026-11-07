@@ -1,0 +1,58 @@
+{
+  "wasm_enum_layout": {
+    "source": "/tmp/goose-wasm-fixed-enum-20261107/layout.goose",
+    "expected": "/tmp/goose-wasm-fixed-enum-20261107/native01/layout-O0-native-run.stdout"
+  },
+  "wasm_enum_effects": {
+    "source": "/tmp/goose-wasm-fixed-enum-20261107/effects.goose",
+    "expected": "/tmp/goose-wasm-fixed-enum-20261107/native01/effects-O0-native-run.stdout"
+  },
+  "wasm_enum_references": {
+    "source": "/tmp/goose-wasm-fixed-enum-20261107/references.goose",
+    "expected": "/tmp/goose-wasm-fixed-enum-20261107/native01/references-O0-native-run.stdout"
+  },
+  "wasm_enum_containers": {
+    "source": "/tmp/goose-wasm-fixed-enum-20261107/containers.goose",
+    "expected": "/tmp/goose-wasm-fixed-enum-20261107/native01/containers-O0-native-run.stdout"
+  },
+  "wasm_enum_hidden": {
+    "source": "/tmp/goose-wasm-fixed-enum-20261107/hidden.goose",
+    "expected": "/tmp/goose-wasm-fixed-enum-20261107/native01/hidden-O0-native-run.stdout"
+  },
+  "wasm_enum_variant": {
+    "source": "/tmp/goose-wasm-fixed-enum-20261107/variant.goose",
+    "expected": "/tmp/goose-wasm-fixed-enum-20261107/native01/variant-O0-native-run.stdout"
+  },
+  "wasm_enum_cleanup": {
+    "source": "/tmp/goose-wasm-fixed-enum-20261107/cleanup.goose",
+    "expected": "/tmp/goose-wasm-fixed-enum-20261107/native01/cleanup-O0-native-run.stdout"
+  },
+  "wasm_enum_empty": {
+    "source": "/tmp/goose-wasm-fixed-enum-20261107/empty.goose",
+    "expected": "/tmp/goose-wasm-fixed-enum-20261107/native02/empty-O0-native-run.stdout"
+  },
+  "wasm_enum_tags": {
+    "source": "/tmp/goose-wasm-fixed-enum-20261107/tags.goose",
+    "expected": "/tmp/goose-wasm-fixed-enum-20261107/native01/tags-O0-native-run.stdout"
+  },
+  "wasm_callback_local": {
+    "source": "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-local.goose",
+    "expected": "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-local-O0-native-run.stdout"
+  },
+  "wasm_callback_address": {
+    "source": "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-address.goose",
+    "expected": "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-address-O0-native-run.stdout"
+  },
+  "wasm_callback_inline_reference": {
+    "source": "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/struct-inline-callback.goose",
+    "expected": "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/struct-inline-callback-O0-native-run.stdout"
+  },
+  "wasm_enum_callback_match": {
+    "source": "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/enum-callback-match.goose",
+    "expected": "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/enum-callback-match-O0-native-run.stdout"
+  },
+  "wasm_callback_default": {
+    "source": "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/default-callback.goose",
+    "expected": "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/default-callback-O0-native-run.stdout"
+  }
+}

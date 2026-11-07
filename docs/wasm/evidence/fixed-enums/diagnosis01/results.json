@@ -1,0 +1,592 @@
+[
+  {
+    "name": "scalar-local-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-local-O0.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-local.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "scalar-local-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-local-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-local-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "scalar-local-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-local-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "scalar-local-O0-prior",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-local-O0-prior.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-local.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "scalar-local-O0-before",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-local-O0-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-local.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "scalar-local-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-local-O2.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-local.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "scalar-local-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-local-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-local-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "scalar-local-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-local-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "scalar-local-O2-prior",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-local-O2-prior.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-local.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "scalar-local-O2-before",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-local-O2-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-local.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "scalar-address-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-address-O0.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-address.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "scalar-address-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-address-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-address-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "scalar-address-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-address-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "scalar-address-O0-prior",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-address-O0-prior.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-address.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "scalar-address-O0-before",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-address-O0-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-address.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "scalar-address-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-address-O2.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-address.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "scalar-address-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-address-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-address-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "scalar-address-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-address-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "scalar-address-O2-prior",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-address-O2-prior.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-address.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "scalar-address-O2-before",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-address-O2-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/scalar-address.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "struct-inline-callback-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/struct-inline-callback-O0.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/struct-inline-callback.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "struct-inline-callback-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/struct-inline-callback-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/struct-inline-callback-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "struct-inline-callback-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/struct-inline-callback-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "struct-inline-callback-O0-prior",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/struct-inline-callback-O0-prior.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/struct-inline-callback.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "struct-inline-callback-O0-before",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/struct-inline-callback-O0-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/struct-inline-callback.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "struct-inline-callback-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/struct-inline-callback-O2.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/struct-inline-callback.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "struct-inline-callback-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/struct-inline-callback-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/struct-inline-callback-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "struct-inline-callback-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/struct-inline-callback-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "struct-inline-callback-O2-prior",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/struct-inline-callback-O2-prior.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/struct-inline-callback.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "struct-inline-callback-O2-before",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/struct-inline-callback-O2-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/struct-inline-callback.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "enum-callback-match-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/enum-callback-match-O0.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/enum-callback-match.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "enum-callback-match-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/enum-callback-match-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/enum-callback-match-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "enum-callback-match-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/enum-callback-match-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "enum-callback-match-O0-prior",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/enum-callback-match-O0-prior.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/enum-callback-match.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "enum-callback-match-O0-before",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/enum-callback-match-O0-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/enum-callback-match.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "enum-callback-match-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/enum-callback-match-O2.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/enum-callback-match.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "enum-callback-match-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/enum-callback-match-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/enum-callback-match-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "enum-callback-match-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/enum-callback-match-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "enum-callback-match-O2-prior",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/enum-callback-match-O2-prior.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/enum-callback-match.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "enum-callback-match-O2-before",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/enum-callback-match-O2-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/enum-callback-match.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "default-callback-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/default-callback-O0.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/default-callback.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "default-callback-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/default-callback-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/default-callback-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "default-callback-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/default-callback-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "default-callback-O0-prior",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/default-callback-O0-prior.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/default-callback.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "default-callback-O0-before",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/default-callback-O0-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/default-callback.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "default-callback-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/default-callback-O2.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/default-callback.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "default-callback-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/default-callback-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/default-callback-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "default-callback-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/default-callback-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "default-callback-O2-prior",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/default-callback-O2-prior.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/default-callback.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "default-callback-O2-before",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/default-callback-O2-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/default-callback.goose"
+    ],
+    "exit": 0
+  }
+]

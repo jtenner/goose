@@ -89,6 +89,14 @@ def main():
     for memory in range(3):
         call('copy_from_frame', pointer(memory, 1000), 100, len(pattern))
         assert bytes(exports[f'memory{memory}'].read(store, 1000, 1004)) == pattern
+    for memory in range(3):
+        frame = exports['memory0']
+        frame.write(store, bytes([90] * 6), 1100)
+        call('copy_to_frame', 1101, pointer(memory, 1000), 4)
+        assert bytes(frame.read(store, 1100, 1106)) == bytes([90, 0, 127, 128, 255, 90])
+    for memory in (3, 0xffffffff):
+        throws(lambda: call('copy_to_frame', 1101, pointer(memory, 1000), 4), 'memory failure 7')
+    call('copy_to_frame', 65536, pointer(2, 65536), 0)
     call('copy_from_frame', pointer(2, 65536), 65536, 0)
     for memory in (3, 0xffffffff):
         throws(lambda: call('copy_from_frame', pointer(memory, 1000), 100, 4), 'memory failure 7')

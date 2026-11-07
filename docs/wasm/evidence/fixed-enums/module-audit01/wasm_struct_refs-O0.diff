@@ -1,0 +1,778 @@
+--- wasm_struct_refs-O0-before
++++ wasm_struct_refs-O0-after
+@@ -13,7 +13,6 @@
+   (type (;11;) (func (param i64) (result i64)))
+   (type (;12;) (func (param i64 i64)))
+   (type (;13;) (func (param i64) (result i64 i32)))
+-  (type (;14;) (func (param i64 i64 i32)))
+   (import "goose" "print_begin_v1" (func (;0;) (type 0) (result i32)))
+   (import "goose" "print_int_v1" (func (;1;) (type 1) (param i32 i64 i32)))
+   (import "goose" "print_float_v1" (func (;2;) (type 2) (param i32 f64 i32)))
+@@ -2418,9 +2417,10 @@
+       i32.const 9
+       local.set 259
+       local.get 257
++      i32.wrap_i64
+       local.get 258
+       local.get 259
+-      call $goose.copy_memory
++      call $goose.copy_to_frame
+       local.get 0
+       i32.const 113
+       i32.add
+@@ -3884,7 +3884,7 @@
+       unreachable
+     end
+   )
+-  (func $goose.copy_memory (;25;) (type 14) (param i64 i64 i32)
++  (func $goose.copy_to_frame (;25;) (type 1) (param i32 i64 i32)
+     block ;; label = @1
+       block ;; label = @2
+         block ;; label = @3
+@@ -3895,722 +3895,66 @@
+                   block ;; label = @8
+                     block ;; label = @9
+                       block ;; label = @10
+-                        local.get 0
++                        local.get 1
+                         i64.const 32
+                         i64.shr_u
+                         i32.wrap_i64
+                         br_table 0 (;@10;) 1 (;@9;) 2 (;@8;) 3 (;@7;) 4 (;@6;) 5 (;@5;) 6 (;@4;) 7 (;@3;) 8 (;@2;)
+                       end
+-                      block ;; label = @10
+-                        block ;; label = @11
+-                          block ;; label = @12
+-                            block ;; label = @13
+-                              block ;; label = @14
+-                                block ;; label = @15
+-                                  block ;; label = @16
+-                                    block ;; label = @17
+-                                      block ;; label = @18
+-                                        block ;; label = @19
+-                                          local.get 1
+-                                          i64.const 32
+-                                          i64.shr_u
+-                                          i32.wrap_i64
+-                                          br_table 0 (;@19;) 1 (;@18;) 2 (;@17;) 3 (;@16;) 4 (;@15;) 5 (;@14;) 6 (;@13;) 7 (;@12;) 8 (;@11;)
+-                                        end
+-                                        local.get 0
+-                                        i32.wrap_i64
+-                                        local.get 1
+-                                        i32.wrap_i64
+-                                        local.get 2
+-                                        memory.copy
+-                                        br 8 (;@10;)
+-                                      end
+-                                      local.get 0
+-                                      i32.wrap_i64
+-                                      local.get 1
+-                                      i32.wrap_i64
+-                                      local.get 2
+-                                      memory.copy 0 1
+-                                      br 7 (;@10;)
+-                                    end
+-                                    local.get 0
+-                                    i32.wrap_i64
+-                                    local.get 1
+-                                    i32.wrap_i64
+-                                    local.get 2
+-                                    memory.copy 0 2
+-                                    br 6 (;@10;)
+-                                  end
+-                                  local.get 0
+-                                  i32.wrap_i64
+-                                  local.get 1
+-                                  i32.wrap_i64
+-                                  local.get 2
+-                                  memory.copy 0 3
+-                                  br 5 (;@10;)
+-                                end
+-                                local.get 0
+-                                i32.wrap_i64
+-                                local.get 1
+-                                i32.wrap_i64
+-                                local.get 2
+-                                memory.copy 0 4
+-                                br 4 (;@10;)
+-                              end
+-                              local.get 0
+-                              i32.wrap_i64
+-                              local.get 1
+-                              i32.wrap_i64
+-                              local.get 2
+-                              memory.copy 0 5
+-                              br 3 (;@10;)
+-                            end
+-                            local.get 0
+-                            i32.wrap_i64
+-                            local.get 1
+-                            i32.wrap_i64
+-                            local.get 2
+-                            memory.copy 0 6
+-                            br 2 (;@10;)
+-                          end
+-                          local.get 0
+-                          i32.wrap_i64
+-                          local.get 1
+-                          i32.wrap_i64
+-                          local.get 2
+-                          memory.copy 0 7
+-                          br 1 (;@10;)
+-                        end
+-                        i32.const 7
+-                        i32.const 0
+-                        i32.const 0
+-                        i32.const 0
+-                        call 6
+-                        unreachable
+-                      end
+-                      br 8 (;@1;)
+-                    end
+-                    block ;; label = @9
+-                      block ;; label = @10
+-                        block ;; label = @11
+-                          block ;; label = @12
+-                            block ;; label = @13
+-                              block ;; label = @14
+-                                block ;; label = @15
+-                                  block ;; label = @16
+-                                    block ;; label = @17
+-                                      block ;; label = @18
+-                                        local.get 1
+-                                        i64.const 32
+-                                        i64.shr_u
+-                                        i32.wrap_i64
+-                                        br_table 0 (;@18;) 1 (;@17;) 2 (;@16;) 3 (;@15;) 4 (;@14;) 5 (;@13;) 6 (;@12;) 7 (;@11;) 8 (;@10;)
+-                                      end
+-                                      local.get 0
+-                                      i32.wrap_i64
+-                                      local.get 1
+-                                      i32.wrap_i64
+-                                      local.get 2
+-                                      memory.copy 1 0
+-                                      br 8 (;@9;)
+-                                    end
+-                                    local.get 0
+-                                    i32.wrap_i64
+-                                    local.get 1
+-                                    i32.wrap_i64
+-                                    local.get 2
+-                                    memory.copy 1 1
+-                                    br 7 (;@9;)
+-                                  end
+-                                  local.get 0
+-                                  i32.wrap_i64
+-                                  local.get 1
+-                                  i32.wrap_i64
+-                                  local.get 2
+-                                  memory.copy 1 2
+-                                  br 6 (;@9;)
+-                                end
+-                                local.get 0
+-                                i32.wrap_i64
+-                                local.get 1
+-                                i32.wrap_i64
+-                                local.get 2
+-                                memory.copy 1 3
+-                                br 5 (;@9;)
+-                              end
+-                              local.get 0
+-                              i32.wrap_i64
+-                              local.get 1
+-                              i32.wrap_i64
+-                              local.get 2
+-                              memory.copy 1 4
+-                              br 4 (;@9;)
+-                            end
+-                            local.get 0
+-                            i32.wrap_i64
+-                            local.get 1
+-                            i32.wrap_i64
+-                            local.get 2
+-                            memory.copy 1 5
+-                            br 3 (;@9;)
+-                          end
+-                          local.get 0
+-                          i32.wrap_i64
+-                          local.get 1
+-                          i32.wrap_i64
+-                          local.get 2
+-                          memory.copy 1 6
+-                          br 2 (;@9;)
+-                        end
+-                        local.get 0
+-                        i32.wrap_i64
+-                        local.get 1
+-                        i32.wrap_i64
+-                        local.get 2
+-                        memory.copy 1 7
+-                        br 1 (;@9;)
+-                      end
+-                      i32.const 7
+-                      i32.const 0
+-                      i32.const 0
+-                      i32.const 0
+-                      call 6
+-                      unreachable
+-                    end
+-                    br 7 (;@1;)
+-                  end
+-                  block ;; label = @8
+-                    block ;; label = @9
+-                      block ;; label = @10
+-                        block ;; label = @11
+-                          block ;; label = @12
+-                            block ;; label = @13
+-                              block ;; label = @14
+-                                block ;; label = @15
+-                                  block ;; label = @16
+-                                    block ;; label = @17
+-                                      local.get 1
+-                                      i64.const 32
+-                                      i64.shr_u
+-                                      i32.wrap_i64
+-                                      br_table 0 (;@17;) 1 (;@16;) 2 (;@15;) 3 (;@14;) 4 (;@13;) 5 (;@12;) 6 (;@11;) 7 (;@10;) 8 (;@9;)
+-                                    end
+-                                    local.get 0
+-                                    i32.wrap_i64
+-                                    local.get 1
+-                                    i32.wrap_i64
+-                                    local.get 2
+-                                    memory.copy 2 0
+-                                    br 8 (;@8;)
+-                                  end
+-                                  local.get 0
+-                                  i32.wrap_i64
+-                                  local.get 1
+-                                  i32.wrap_i64
+-                                  local.get 2
+-                                  memory.copy 2 1
+-                                  br 7 (;@8;)
+-                                end
+-                                local.get 0
+-                                i32.wrap_i64
+-                                local.get 1
+-                                i32.wrap_i64
+-                                local.get 2
+-                                memory.copy 2 2
+-                                br 6 (;@8;)
+-                              end
+-                              local.get 0
+-                              i32.wrap_i64
+-                              local.get 1
+-                              i32.wrap_i64
+-                              local.get 2
+-                              memory.copy 2 3
+-                              br 5 (;@8;)
+-                            end
+-                            local.get 0
+-                            i32.wrap_i64
+-                            local.get 1
+-                            i32.wrap_i64
+-                            local.get 2
+-                            memory.copy 2 4
+-                            br 4 (;@8;)
+-                          end
+-                          local.get 0
+-                          i32.wrap_i64
+-                          local.get 1
+-                          i32.wrap_i64
+-                          local.get 2
+-                          memory.copy 2 5
+-                          br 3 (;@8;)
+-                        end
+-                        local.get 0
+-                        i32.wrap_i64
+-                        local.get 1
+-                        i32.wrap_i64
+-                        local.get 2
+-                        memory.copy 2 6
+-                        br 2 (;@8;)
+-                      end
+                       local.get 0
+-                      i32.wrap_i64
+                       local.get 1
+                       i32.wrap_i64
+                       local.get 2
+-                      memory.copy 2 7
+-                      br 1 (;@8;)
+-                    end
+-                    i32.const 7
+-                    i32.const 0
+-                    i32.const 0
+-                    i32.const 0
+-                    call 6
+-                    unreachable
+-                  end
+-                  br 6 (;@1;)
+-                end
+-                block ;; label = @7
+-                  block ;; label = @8
+-                    block ;; label = @9
+-                      block ;; label = @10
+-                        block ;; label = @11
+-                          block ;; label = @12
+-                            block ;; label = @13
+-                              block ;; label = @14
+-                                block ;; label = @15
+-                                  block ;; label = @16
+-                                    local.get 1
+-                                    i64.const 32
+-                                    i64.shr_u
+-                                    i32.wrap_i64
+-                                    br_table 0 (;@16;) 1 (;@15;) 2 (;@14;) 3 (;@13;) 4 (;@12;) 5 (;@11;) 6 (;@10;) 7 (;@9;) 8 (;@8;)
+-                                  end
+-                                  local.get 0
+-                                  i32.wrap_i64
+-                                  local.get 1
+-                                  i32.wrap_i64
+-                                  local.get 2
+-                                  memory.copy 3 0
+-                                  br 8 (;@7;)
+-                                end
+-                                local.get 0
+-                                i32.wrap_i64
+-                                local.get 1
+-                                i32.wrap_i64
+-                                local.get 2
+-                                memory.copy 3 1
+-                                br 7 (;@7;)
+-                              end
+-                              local.get 0
+-                              i32.wrap_i64
+-                              local.get 1
+-                              i32.wrap_i64
+-                              local.get 2
+-                              memory.copy 3 2
+-                              br 6 (;@7;)
+-                            end
+-                            local.get 0
+-                            i32.wrap_i64
+-                            local.get 1
+-                            i32.wrap_i64
+-                            local.get 2
+-                            memory.copy 3 3
+-                            br 5 (;@7;)
+-                          end
+-                          local.get 0
+-                          i32.wrap_i64
+-                          local.get 1
+-                          i32.wrap_i64
+-                          local.get 2
+-                          memory.copy 3 4
+-                          br 4 (;@7;)
+-                        end
+-                        local.get 0
+-                        i32.wrap_i64
+-                        local.get 1
+-                        i32.wrap_i64
+-                        local.get 2
+-                        memory.copy 3 5
+-                        br 3 (;@7;)
+-                      end
+-                      local.get 0
+-                      i32.wrap_i64
+-                      local.get 1
+-                      i32.wrap_i64
+-                      local.get 2
+-                      memory.copy 3 6
+-                      br 2 (;@7;)
++                      memory.copy
++                      br 8 (;@1;)
+                     end
+                     local.get 0
+-                    i32.wrap_i64
+                     local.get 1
+                     i32.wrap_i64
+                     local.get 2
+-                    memory.copy 3 7
+-                    br 1 (;@7;)
+-                  end
+-                  i32.const 7
+-                  i32.const 0
+-                  i32.const 0
+-                  i32.const 0
+-                  call 6
+-                  unreachable
+-                end
+-                br 5 (;@1;)
+-              end
+-              block ;; label = @6
+-                block ;; label = @7
+-                  block ;; label = @8
+-                    block ;; label = @9
+-                      block ;; label = @10
+-                        block ;; label = @11
+-                          block ;; label = @12
+-                            block ;; label = @13
+-                              block ;; label = @14
+-                                block ;; label = @15
+-                                  local.get 1
+-                                  i64.const 32
+-                                  i64.shr_u
+-                                  i32.wrap_i64
+-                                  br_table 0 (;@15;) 1 (;@14;) 2 (;@13;) 3 (;@12;) 4 (;@11;) 5 (;@10;) 6 (;@9;) 7 (;@8;) 8 (;@7;)
+-                                end
+-                                local.get 0
+-                                i32.wrap_i64
+-                                local.get 1
+-                                i32.wrap_i64
+-                                local.get 2
+-                                memory.copy 4 0
+-                                br 8 (;@6;)
+-                              end
+-                              local.get 0
+-                              i32.wrap_i64
+-                              local.get 1
+-                              i32.wrap_i64
+-                              local.get 2
+-                              memory.copy 4 1
+-                              br 7 (;@6;)
+-                            end
+-                            local.get 0
+-                            i32.wrap_i64
+-                            local.get 1
+-                            i32.wrap_i64
+-                            local.get 2
+-                            memory.copy 4 2
+-                            br 6 (;@6;)
+-                          end
+-                          local.get 0
+-                          i32.wrap_i64
+-                          local.get 1
+-                          i32.wrap_i64
+-                          local.get 2
+-                          memory.copy 4 3
+-                          br 5 (;@6;)
+-                        end
+-                        local.get 0
+-                        i32.wrap_i64
+-                        local.get 1
+-                        i32.wrap_i64
+-                        local.get 2
+-                        memory.copy 4 4
+-                        br 4 (;@6;)
+-                      end
+-                      local.get 0
+-                      i32.wrap_i64
+-                      local.get 1
+-                      i32.wrap_i64
+-                      local.get 2
+-                      memory.copy 4 5
+-                      br 3 (;@6;)
+-                    end
+-                    local.get 0
+-                    i32.wrap_i64
+-                    local.get 1
+-                    i32.wrap_i64
+-                    local.get 2
+-                    memory.copy 4 6
+-                    br 2 (;@6;)
++                    memory.copy 0 1
++                    br 7 (;@1;)
+                   end
+                   local.get 0
+-                  i32.wrap_i64
+                   local.get 1
+                   i32.wrap_i64
+                   local.get 2
+-                  memory.copy 4 7
+-                  br 1 (;@6;)
+-                end
+-                i32.const 7
+-                i32.const 0
+-                i32.const 0
+-                i32.const 0
+-                call 6
+-                unreachable
+-              end
+-              br 4 (;@1;)
+-            end
+-            block ;; label = @5
+-              block ;; label = @6
+-                block ;; label = @7
+-                  block ;; label = @8
+-                    block ;; label = @9
+-                      block ;; label = @10
+-                        block ;; label = @11
+-                          block ;; label = @12
+-                            block ;; label = @13
+-                              block ;; label = @14
+-                                local.get 1
+-                                i64.const 32
+-                                i64.shr_u
+-                                i32.wrap_i64
+-                                br_table 0 (;@14;) 1 (;@13;) 2 (;@12;) 3 (;@11;) 4 (;@10;) 5 (;@9;) 6 (;@8;) 7 (;@7;) 8 (;@6;)
+-                              end
+-                              local.get 0
+-                              i32.wrap_i64
+-                              local.get 1
+-                              i32.wrap_i64
+-                              local.get 2
+-                              memory.copy 5 0
+-                              br 8 (;@5;)
+-                            end
+-                            local.get 0
+-                            i32.wrap_i64
+-                            local.get 1
+-                            i32.wrap_i64
+-                            local.get 2
+-                            memory.copy 5 1
+-                            br 7 (;@5;)
+-                          end
+-                          local.get 0
+-                          i32.wrap_i64
+-                          local.get 1
+-                          i32.wrap_i64
+-                          local.get 2
+-                          memory.copy 5 2
+-                          br 6 (;@5;)
+-                        end
+-                        local.get 0
+-                        i32.wrap_i64
+-                        local.get 1
+-                        i32.wrap_i64
+-                        local.get 2
+-                        memory.copy 5 3
+-                        br 5 (;@5;)
+-                      end
+-                      local.get 0
+-                      i32.wrap_i64
+-                      local.get 1
+-                      i32.wrap_i64
+-                      local.get 2
+-                      memory.copy 5 4
+-                      br 4 (;@5;)
+-                    end
+-                    local.get 0
+-                    i32.wrap_i64
+-                    local.get 1
+-                    i32.wrap_i64
+-                    local.get 2
+-                    memory.copy 5 5
+-                    br 3 (;@5;)
+-                  end
+-                  local.get 0
+-                  i32.wrap_i64
+-                  local.get 1
+-                  i32.wrap_i64
+-                  local.get 2
+-                  memory.copy 5 6
+-                  br 2 (;@5;)
++                  memory.copy 0 2
++                  br 6 (;@1;)
+                 end
+                 local.get 0
+-                i32.wrap_i64
+                 local.get 1
+                 i32.wrap_i64
+                 local.get 2
+-                memory.copy 5 7
+-                br 1 (;@5;)
+-              end
+-              i32.const 7
+-              i32.const 0
+-              i32.const 0
+-              i32.const 0
+-              call 6
+-              unreachable
+-            end
+-            br 3 (;@1;)
+-          end
+-          block ;; label = @4
+-            block ;; label = @5
+-              block ;; label = @6
+-                block ;; label = @7
+-                  block ;; label = @8
+-                    block ;; label = @9
+-                      block ;; label = @10
+-                        block ;; label = @11
+-                          block ;; label = @12
+-                            block ;; label = @13
+-                              local.get 1
+-                              i64.const 32
+-                              i64.shr_u
+-                              i32.wrap_i64
+-                              br_table 0 (;@13;) 1 (;@12;) 2 (;@11;) 3 (;@10;) 4 (;@9;) 5 (;@8;) 6 (;@7;) 7 (;@6;) 8 (;@5;)
+-                            end
+-                            local.get 0
+-                            i32.wrap_i64
+-                            local.get 1
+-                            i32.wrap_i64
+-                            local.get 2
+-                            memory.copy 6 0
+-                            br 8 (;@4;)
+-                          end
+-                          local.get 0
+-                          i32.wrap_i64
+-                          local.get 1
+-                          i32.wrap_i64
+-                          local.get 2
+-                          memory.copy 6 1
+-                          br 7 (;@4;)
+-                        end
+-                        local.get 0
+-                        i32.wrap_i64
+-                        local.get 1
+-                        i32.wrap_i64
+-                        local.get 2
+-                        memory.copy 6 2
+-                        br 6 (;@4;)
+-                      end
+-                      local.get 0
+-                      i32.wrap_i64
+-                      local.get 1
+-                      i32.wrap_i64
+-                      local.get 2
+-                      memory.copy 6 3
+-                      br 5 (;@4;)
+-                    end
+-                    local.get 0
+-                    i32.wrap_i64
+-                    local.get 1
+-                    i32.wrap_i64
+-                    local.get 2
+-                    memory.copy 6 4
+-                    br 4 (;@4;)
+-                  end
+-                  local.get 0
+-                  i32.wrap_i64
+-                  local.get 1
+-                  i32.wrap_i64
+-                  local.get 2
+-                  memory.copy 6 5
+-                  br 3 (;@4;)
+-                end
+-                local.get 0
+-                i32.wrap_i64
+-                local.get 1
+-                i32.wrap_i64
+-                local.get 2
+-                memory.copy 6 6
+-                br 2 (;@4;)
++                memory.copy 0 3
++                br 5 (;@1;)
+               end
+               local.get 0
+-              i32.wrap_i64
+               local.get 1
+               i32.wrap_i64
+               local.get 2
+-              memory.copy 6 7
+-              br 1 (;@4;)
+-            end
+-            i32.const 7
+-            i32.const 0
+-            i32.const 0
+-            i32.const 0
+-            call 6
+-            unreachable
+-          end
+-          br 2 (;@1;)
+-        end
+-        block ;; label = @3
+-          block ;; label = @4
+-            block ;; label = @5
+-              block ;; label = @6
+-                block ;; label = @7
+-                  block ;; label = @8
+-                    block ;; label = @9
+-                      block ;; label = @10
+-                        block ;; label = @11
+-                          block ;; label = @12
+-                            local.get 1
+-                            i64.const 32
+-                            i64.shr_u
+-                            i32.wrap_i64
+-                            br_table 0 (;@12;) 1 (;@11;) 2 (;@10;) 3 (;@9;) 4 (;@8;) 5 (;@7;) 6 (;@6;) 7 (;@5;) 8 (;@4;)
+-                          end
+-                          local.get 0
+-                          i32.wrap_i64
+-                          local.get 1
+-                          i32.wrap_i64
+-                          local.get 2
+-                          memory.copy 7 0
+-                          br 8 (;@3;)
+-                        end
+-                        local.get 0
+-                        i32.wrap_i64
+-                        local.get 1
+-                        i32.wrap_i64
+-                        local.get 2
+-                        memory.copy 7 1
+-                        br 7 (;@3;)
+-                      end
+-                      local.get 0
+-                      i32.wrap_i64
+-                      local.get 1
+-                      i32.wrap_i64
+-                      local.get 2
+-                      memory.copy 7 2
+-                      br 6 (;@3;)
+-                    end
+-                    local.get 0
+-                    i32.wrap_i64
+-                    local.get 1
+-                    i32.wrap_i64
+-                    local.get 2
+-                    memory.copy 7 3
+-                    br 5 (;@3;)
+-                  end
+-                  local.get 0
+-                  i32.wrap_i64
+-                  local.get 1
+-                  i32.wrap_i64
+-                  local.get 2
+-                  memory.copy 7 4
+-                  br 4 (;@3;)
+-                end
+-                local.get 0
+-                i32.wrap_i64
+-                local.get 1
+-                i32.wrap_i64
+-                local.get 2
+-                memory.copy 7 5
+-                br 3 (;@3;)
+-              end
+-              local.get 0
+-              i32.wrap_i64
+-              local.get 1
+-              i32.wrap_i64
+-              local.get 2
+-              memory.copy 7 6
+-              br 2 (;@3;)
++              memory.copy 0 4
++              br 4 (;@1;)
+             end
+             local.get 0
+-            i32.wrap_i64
+             local.get 1
+             i32.wrap_i64
+             local.get 2
+-            memory.copy 7 7
+-            br 1 (;@3;)
++            memory.copy 0 5
++            br 3 (;@1;)
+           end
+-          i32.const 7
+-          i32.const 0
+-          i32.const 0
+-          i32.const 0
+-          call 6
+-          unreachable
++          local.get 0
++          local.get 1
++          i32.wrap_i64
++          local.get 2
++          memory.copy 0 6
++          br 2 (;@1;)
+         end
++        local.get 0
++        local.get 1
++        i32.wrap_i64
++        local.get 2
++        memory.copy 0 7
+         br 1 (;@1;)
+       end
+       i32.const 7

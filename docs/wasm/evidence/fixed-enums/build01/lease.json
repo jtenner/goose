@@ -1,0 +1,42 @@
+{
+  "owner": "Goose fixed-enum functional unit",
+  "pid": 155991,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "release-build",
+      "command": [
+        "cmake",
+        "--build",
+        "build",
+        "--parallel",
+        "2"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "freeze",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-fixed-enum-20261107/build01/freeze.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "enum-checks",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "node@24.22.2",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-fixed-enum-20261107/build01/checks.py"
+      ],
+      "exit": 1
+    }
+  ],
+  "exit": 1,
+  "released_at": "2026-11-07T12:00:51.192417+00:00"
+}

@@ -1,0 +1,800 @@
+[
+  {
+    "name": "layout-build",
+    "command": [
+      "c++",
+      "-std=c++20",
+      "-O2",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_layout.cpp",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/layout"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "layout-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/layout"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "memory-build",
+    "command": [
+      "c++",
+      "-std=c++20",
+      "-O2",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_memory.cpp",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/memory"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "memory3-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/memory",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/memory3.wasm",
+      "3"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "memory3-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/memory3.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "memory3-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_memory.mjs",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/memory3.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/limited.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "memory3-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_memory.py",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/memory3.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/limited.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "memory65-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/memory",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/memory65.wasm",
+      "65"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "memory65-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/memory65.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "memory65-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_copy_matrix.mjs",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/memory65.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "memory65-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_copy_matrix.py",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/memory65.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "layout-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/layout-O0.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/layout.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "layout-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/layout-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "layout-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/layout-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "layout-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/layout-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "layout-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/layout-O2.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/layout.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "layout-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/layout-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "layout-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/layout-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "layout-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/layout-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/effects-O0.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/effects.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/effects-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/effects-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/effects-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/effects-O2.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/effects.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/effects-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/effects-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/effects-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "references-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/references-O0.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/references.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "references-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/references-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "references-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/references-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "references-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/references-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "references-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/references-O2.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/references.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "containers-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/containers-O0.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/containers.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "containers-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/containers-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "containers-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/containers-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "containers-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/containers-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "containers-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/containers-O2.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/containers.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "containers-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/containers-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "containers-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/containers-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "containers-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/containers-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "hidden-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/hidden-O0.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/hidden.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "hidden-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/hidden-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "hidden-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/hidden-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "hidden-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/hidden-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "hidden-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/hidden-O2.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/hidden.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "hidden-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/hidden-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "hidden-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/hidden-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "hidden-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/hidden-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "variant-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/variant-O0.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/variant.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "variant-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/variant-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "variant-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/variant-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "variant-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/variant-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "variant-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/variant-O2.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/variant.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "variant-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/variant-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "variant-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/variant-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "variant-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/variant-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/cleanup-O0.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/cleanup.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/cleanup-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/cleanup-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/cleanup-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/cleanup-O2.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/cleanup.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/cleanup-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/cleanup-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/cleanup-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "empty-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/empty-O0.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/empty.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "empty-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/empty-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "empty-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/empty-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "empty-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/empty-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "empty-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/empty-O2.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/empty.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "empty-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/empty-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "empty-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/empty-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "empty-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/empty-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "tags-O0-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/tags-O0.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/tags.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "tags-O0-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/tags-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "tags-O0-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/tags-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "tags-O0-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/tags-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "tags-O2-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/tags-O2.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/tags.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "tags-O2-validate",
+    "command": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/tags-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "tags-O2-node",
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/tags-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "tags-O2-wasmtime",
+    "command": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-enum-20261107/build01/tags-O2.wasm"
+    ],
+    "exit": 0
+  }
+]

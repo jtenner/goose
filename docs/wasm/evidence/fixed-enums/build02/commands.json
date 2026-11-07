@@ -1,0 +1,31 @@
+[
+  [
+    "release-build",
+    [
+      "cmake",
+      "--build",
+      "build",
+      "--parallel",
+      "2"
+    ]
+  ],
+  [
+    "freeze",
+    [
+      "python3",
+      "/tmp/goose-wasm-fixed-enum-20261107/build02/freeze.py"
+    ]
+  ],
+  [
+    "repair-checks",
+    [
+      "mise",
+      "exec",
+      "wasm-tools@1.262.0",
+      "node@24.22.2",
+      "--",
+      "python3",
+      "/tmp/goose-wasm-fixed-enum-20261107/build02/checks.py"
+    ]
+  ]
+]

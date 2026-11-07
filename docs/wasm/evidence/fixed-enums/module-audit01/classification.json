@@ -1,0 +1,80 @@
+[
+  {
+    "source": "test/wasm/wasm_struct_cleanup.goose",
+    "opt": 0,
+    "identical": false,
+    "before_bytes": 3307,
+    "after_bytes": 3201,
+    "before_sha256": "6cea6b3d698b3f0648e250f7b52b558a85769ed69dfc67cc8c5e908ea2ba8fa4",
+    "after_sha256": "304b42c81c697c8f3f30c2961c6b7ce4c2e495871ac6c0a41b7106129b316cf6",
+    "classification": "copy-to-frame helper and destination conversion only",
+    "converted_calls": 1,
+    "other_instructions_equal": true,
+    "type_change": "unused generic-copy signature removed"
+  },
+  {
+    "source": "test/wasm/wasm_struct_cleanup.goose",
+    "opt": 2,
+    "identical": false,
+    "before_bytes": 4063,
+    "after_bytes": 3958,
+    "before_sha256": "12c465512c741cb28f49832df57ef79263c264ad8cbc7eddac87e64d455e8bdb",
+    "after_sha256": "c0c10a5bac73faebec97bdef398d056cf00df4028f433fd705cded90e58090cb",
+    "classification": "copy-to-frame helper and destination conversion only",
+    "converted_calls": 2,
+    "other_instructions_equal": true,
+    "type_change": "unused generic-copy signature removed"
+  },
+  {
+    "source": "test/wasm/wasm_struct_refs.goose",
+    "opt": 0,
+    "identical": false,
+    "before_bytes": 15858,
+    "after_bytes": 14583,
+    "before_sha256": "4368ea59767b3cad65fe94d2234950c72bbcd0dcafef3f99456402b761e87d33",
+    "after_sha256": "8a9610046ab2ba8441410240bb4a76c5a919131de2592a2251b2352f4c6b879d",
+    "classification": "copy-to-frame helper and destination conversion only",
+    "converted_calls": 1,
+    "other_instructions_equal": true,
+    "type_change": "unused generic-copy signature removed"
+  },
+  {
+    "source": "test/wasm/wasm_struct_refs.goose",
+    "opt": 2,
+    "identical": false,
+    "before_bytes": 15858,
+    "after_bytes": 14583,
+    "before_sha256": "4368ea59767b3cad65fe94d2234950c72bbcd0dcafef3f99456402b761e87d33",
+    "after_sha256": "8a9610046ab2ba8441410240bb4a76c5a919131de2592a2251b2352f4c6b879d",
+    "classification": "copy-to-frame helper and destination conversion only",
+    "converted_calls": 1,
+    "other_instructions_equal": true,
+    "type_change": "unused generic-copy signature removed"
+  },
+  {
+    "source": "test/wasm/wasm_struct_review_calls_packed.goose",
+    "opt": 0,
+    "identical": false,
+    "before_bytes": 4150,
+    "after_bytes": 4044,
+    "before_sha256": "dba8f93c7e21bf7f76363c390c3b8a7260b64d53dee2bd1b8431c7b51adc88de",
+    "after_sha256": "efeb96cd6198f0fe3c79dcb4434c146732129463a0a621cdc3dbb27f81be2d99",
+    "classification": "copy-to-frame helper and destination conversion only",
+    "converted_calls": 1,
+    "other_instructions_equal": true,
+    "type_change": "unused generic-copy signature removed"
+  },
+  {
+    "source": "test/wasm/wasm_struct_review_calls_packed.goose",
+    "opt": 2,
+    "identical": false,
+    "before_bytes": 4095,
+    "after_bytes": 3989,
+    "before_sha256": "f76fb78e7a78ad52772cd4cdb88cb1101a8f7caddb3b0d590ecd9eded7c530e6",
+    "after_sha256": "90142e410ce2e691f8d78fa165fba32a92a950602df64dd251d6f3a2329a2e9d",
+    "classification": "copy-to-frame helper and destination conversion only",
+    "converted_calls": 1,
+    "other_instructions_equal": true,
+    "type_change": "unused generic-copy signature removed"
+  }
+]

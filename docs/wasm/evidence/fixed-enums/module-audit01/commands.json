@@ -1,0 +1,13 @@
+[
+  [
+    "module-dumps",
+    [
+      "mise",
+      "exec",
+      "wasm-tools@1.262.0",
+      "--",
+      "python3",
+      "/tmp/goose-wasm-fixed-enum-20261107/module-audit01/print.py"
+    ]
+  ]
+]

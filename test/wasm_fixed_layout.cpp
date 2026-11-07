@@ -68,5 +68,47 @@ int main() {
     assert(layout.TryFixedSize(&growRef, 16, bytes, sizes) && bytes == 16);
     assert(layout.TryFixedSize(&next, 8, bytes, sizes) && bytes == 8);
     assert(!layout.TryFixedSize(&growRef, 15, bytes, sizes));
+    struct Enum {
+        SEnum declaration;
+        EnumInst instance;
+        TypeEnum detail;
+        TypeExpr type {TY_ENUM, {}};
+        TypeVariant selected;
+        TypeExpr variant {TY_VARIANT, {}};
+        Enum(size_t count, std::initializer_list<TypeExpr *> fields) {
+            declaration.variants.resize(count); instance.vftypes.resize(count);
+            instance.en = &declaration; detail.en = &declaration; detail.inst = &instance;
+            type.enu = &detail; selected.adt = &type;
+            selected.variant = &declaration.variants.back(); variant.var = &selected;
+            for (auto t : fields) {
+                Field field; field.type = t; field.ispad = !t;
+                declaration.variants.back().fields.push_back(field);
+                instance.vftypes.back().push_back(t);
+            }
+            for (size_t i = 0; i < count; i++)
+                instance.runs.push_back({&declaration.variants[i].fields, &instance.vftypes[i]});
+        }
+    } tag8(256, {&word}), tag16(257, {&word}), tagOnly(1, {}), overflow(2, {&array});
+    assert(layout.TryFixedSize(&tag8.type, 5, bytes, sizes) && bytes == 5);
+    assert(layout.TagStore(&tag8.declaration) == IS_U8);
+    assert(!layout.TryFixedSize(&tag16.type, 5, bytes, sizes));
+    assert(layout.TryFixedSize(&tag16.type, 6, bytes, sizes) && bytes == 6);
+    assert(layout.TagStore(&tag16.declaration) == IS_U16);
+    assert(!layout.TryFixedSize(&tag16.type, 5, bytes, sizes));
+    assert(layout.TryFixedSize(&tagOnly.variant, 0, bytes, sizes) && bytes == 0);
+    assert(layout.TryFixedSize(&tagOnly.type, 1, bytes, sizes) && bytes == 1);
+    assert(!layout.TryFixedSize(&overflow.type, UINT32_MAX, bytes, sizes));
+    assert(!sizes.count(&overflow.type));
+    Enum mixed(2, {&byte});
+    mixed.instance.allfixed = false;
+    Field growField; growField.type = &grow;
+    mixed.declaration.variants[0].fields.push_back(growField);
+    mixed.instance.vftypes[0].push_back(&grow);
+    WasmValueSupport selectedOnly(layout);
+    assert(!selectedOnly.Check(&mixed.variant));
+    assert(selectedOnly.Check(&mixed.type));
+    Enum bad(1, {&relative});
+    WasmValueSupport badPayload(layout);
+    assert(badPayload.Check(&bad.type) && badPayload.validated.empty());
     puts("checked fixed layouts: PASS");
 }

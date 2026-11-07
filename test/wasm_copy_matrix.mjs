@@ -15,6 +15,27 @@ for (let source = 0; source < count; source++) for (let destination = 0; destina
     x.copy(pointer(destination, 200), pointer(source, 100), 4);
     assert.deepEqual([...new Uint8Array(x[`memory${destination}`].buffer, 200, 4)], [source, 0, 127, 255]);
 }
+for (let source = 0; source < count; source++) {
+    const frame = new Uint8Array(x.memory0.buffer);
+    frame.fill(91, 299, 305);
+    x.copy_to_frame(300, pointer(source, 100), 4);
+    assert.deepEqual([...frame.slice(299, 305)], [91, source, 0, 127, 255, 91]);
+}
+x.copy_to_frame(65536, pointer(64, 65536), 0);
+const frame = new Uint8Array(x.memory0.buffer);
+frame.fill(91, 299, 305);
+for (const invalid of [count, 0xffffffff]) {
+    assert.throws(() => x.copy_to_frame(300, pointer(invalid, 100), 4), /memory failure 7/);
+    assert.deepEqual([...frame.slice(299, 305)], [91, 91, 91, 91, 91, 91]);
+}
+assert.throws(() => x.copy_to_frame(300, pointer(64, 65535), 2), WebAssembly.RuntimeError);
+assert.deepEqual([...frame.slice(299, 305)], [91, 91, 91, 91, 91, 91]);
+frame[65535] = 92;
+assert.throws(() => x.copy_to_frame(65535, pointer(64, 100), 2), WebAssembly.RuntimeError);
+assert.equal(frame[65535], 92);
+frame.set([1, 2, 3, 4, 5], 400);
+x.copy_to_frame(401, pointer(0, 400), 4);
+assert.deepEqual([...frame.slice(400, 405)], [1, 1, 2, 3, 4]);
 x.copy(pointer(64, 65536), pointer(63, 65536), 0);
 assert.throws(() => x.copy(pointer(count, 200), pointer(0, 100), 4), /memory failure 7/);
 assert.throws(() => x.copy(pointer(0, 200), pointer(count, 100), 4), /memory failure 7/);

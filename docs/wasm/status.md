@@ -129,6 +129,19 @@ coverage. See [fixed-struct evidence](evidence/fixed-structs.md) for
 exact build identities, preserved failures, evidence-record corrections,
 remaining scope and unmeasured costs. This does not complete Stage D.
 
+Fresh fixed enum and standalone variant owners now use shared bounded packed
+layouts, exact copies/defaults, field places and statement matches with owned
+payload copies. Empty standalone owners keep distinct identities; invalid tags
+fail before wildcard/payload access. A reproduced checked-callback scan defect
+is repaired with the existing runtime-child walk. The frozen increment passed
+744 Wasm checks and the full native baseline, plus 52 exact comparisons.
+Of 136 prior-module pairs, 130 are unchanged and six are smaller solely from
+the one-source-memory copy helper. Constructor scratch stays at 28 locals for
+32/256 elements. Independent Astra review found no confirmed production defect. See
+[fixed-enum evidence](evidence/fixed-enums.md) for preserved failures, setup
+corrections, exact identities and unmeasured costs. This still does not complete
+Stage D or add the general by-value/result ABI.
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping
@@ -200,7 +213,7 @@ BigInt operation for other values.
   layouts, including same-layout copies and unsigned LEB count prefixes, plus
   fresh ordinary fixed structs in the admitted field subset. Complete signed
   varint elements, layout adaptations, general aggregate constructors, remaining
-  fixed and variable aggregates, ADTs, root/pool descriptors, relative references, slices,
+  aggregate arrays and fixed destinations, nonfixed ADTs, root/pool descriptors, relative references, slices,
   byte views, and serialization.
 - E: implement direct nonfixed construction, named-result landing/relocation,
   destination protection, cleanup for all remaining value lifetimes, and `try_table` /

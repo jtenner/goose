@@ -79,3 +79,14 @@ retention remain unmeasured. The queued cases cover prefix width, memory
 identity, owner count and nested paths, with exact native/reference identities
 and a fresh shared lease. Prior scalar grants are closed. No speed or physical
 memory improvement is established.
+
+## Pending fixed-enum and checked-callback measurements
+
+The [fixed-enum increment](evidence/fixed-enums.md) has functional and static
+footprint checks. Its dynamic-source-to-frame helper body is 79/1,133 bytes
+for 3/65 memories. Limited-field construction uses 28 locals for both 32 and
+256 elements. These results do not measure compiler CPU/RSS, allocations,
+guest throughput or retained physical memory. The evidence report gives a
+concrete matched-compiler handoff for those costs, including shared struct
+callers and checked callback scans. It needs a fresh coordinated lease and
+host controls; the scalar timing grants remain closed.

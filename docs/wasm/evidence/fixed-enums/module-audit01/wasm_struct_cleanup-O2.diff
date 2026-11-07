@@ -1,0 +1,132 @@
+--- wasm_struct_cleanup-O2-before
++++ wasm_struct_cleanup-O2-after
+@@ -12,7 +12,6 @@
+   (type (;10;) (func))
+   (type (;11;) (func (param i64) (result i64)))
+   (type (;12;) (func (param i64 i64)))
+-  (type (;13;) (func (param i64 i64 i32)))
+   (import "goose" "print_begin_v1" (func (;0;) (type 0) (result i32)))
+   (import "goose" "print_int_v1" (func (;1;) (type 1) (param i32 i64 i32)))
+   (import "goose" "print_float_v1" (func (;2;) (type 2) (param i32 f64 i32)))
+@@ -282,9 +281,10 @@
+         i32.const 8
+         local.set 35
+         local.get 33
++        i32.wrap_i64
+         local.get 34
+         local.get 35
+-        call $goose.copy_memory
++        call $goose.copy_to_frame
+         local.get 0
+         i32.const 70016
+         i32.add
+@@ -636,9 +636,10 @@
+         i32.const 8
+         local.set 91
+         local.get 89
++        i32.wrap_i64
+         local.get 90
+         local.get 91
+-        call $goose.copy_memory
++        call $goose.copy_to_frame
+         local.get 0
+         i32.const 70024
+         i32.add
+@@ -1090,85 +1091,29 @@
+       unreachable
+     end
+   )
+-  (func $goose.copy_memory (;16;) (type 13) (param i64 i64 i32)
++  (func $goose.copy_to_frame (;16;) (type 1) (param i32 i64 i32)
+     block ;; label = @1
+       block ;; label = @2
+         block ;; label = @3
+           block ;; label = @4
+-            local.get 0
++            local.get 1
+             i64.const 32
+             i64.shr_u
+             i32.wrap_i64
+             br_table 0 (;@4;) 1 (;@3;) 2 (;@2;)
+           end
+-          block ;; label = @4
+-            block ;; label = @5
+-              block ;; label = @6
+-                block ;; label = @7
+-                  local.get 1
+-                  i64.const 32
+-                  i64.shr_u
+-                  i32.wrap_i64
+-                  br_table 0 (;@7;) 1 (;@6;) 2 (;@5;)
+-                end
+-                local.get 0
+-                i32.wrap_i64
+-                local.get 1
+-                i32.wrap_i64
+-                local.get 2
+-                memory.copy
+-                br 2 (;@4;)
+-              end
+-              local.get 0
+-              i32.wrap_i64
+-              local.get 1
+-              i32.wrap_i64
+-              local.get 2
+-              memory.copy 0 1
+-              br 1 (;@4;)
+-            end
+-            i32.const 7
+-            i32.const 0
+-            i32.const 0
+-            i32.const 0
+-            call 6
+-            unreachable
+-          end
++          local.get 0
++          local.get 1
++          i32.wrap_i64
++          local.get 2
++          memory.copy
+           br 2 (;@1;)
+         end
+-        block ;; label = @3
+-          block ;; label = @4
+-            block ;; label = @5
+-              block ;; label = @6
+-                local.get 1
+-                i64.const 32
+-                i64.shr_u
+-                i32.wrap_i64
+-                br_table 0 (;@6;) 1 (;@5;) 2 (;@4;)
+-              end
+-              local.get 0
+-              i32.wrap_i64
+-              local.get 1
+-              i32.wrap_i64
+-              local.get 2
+-              memory.copy 1 0
+-              br 2 (;@3;)
+-            end
+-            local.get 0
+-            i32.wrap_i64
+-            local.get 1
+-            i32.wrap_i64
+-            local.get 2
+-            memory.copy 1 1
+-            br 1 (;@3;)
+-          end
+-          i32.const 7
+-          i32.const 0
+-          i32.const 0
+-          i32.const 0
+-          call 6
+-          unreachable
+-        end
++        local.get 0
++        local.get 1
++        i32.wrap_i64
++        local.get 2
++        memory.copy 0 1
+         br 1 (;@1;)
+       end
+       i32.const 7

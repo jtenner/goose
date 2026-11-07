@@ -103,6 +103,8 @@ inline void WasmCodeGen::CopyBytes(uint32_t destination, int destinationMemory,
     if (destinationMemory >= 0 && sourceMemory >= 0) {
         code.Byte(0xa7); code.Get(source); code.Byte(0xa7); code.Get(bytes);
         code.Copy((uint32_t)destinationMemory, (uint32_t)sourceMemory);
+    } else if (destinationMemory == 0) {
+        code.Byte(0xa7); code.Get(source); code.Get(bytes); code.Call(memories->CopyToFrame());
     } else if (sourceMemory == 0) {
         code.Get(source); code.Byte(0xa7); code.Get(bytes); code.Call(memories->CopyFromFrame());
     } else {
@@ -392,10 +394,10 @@ inline void WasmCodeGen::InitDataArray(VarDef *owner, const Slot &slot, ArrayLit
     }
 }
 
-inline void WasmCodeGen::InitArray(VarDef *owner, const Slot &slot, Node *init) {
+inline void WasmCodeGen::InitArray(VarDef *owner, const Slot &slot, Node *init, VarDecl *declaration) {
     if (owner->reusable) Fail(owner->line, "pool owners need the pending descriptor lowering");
     if (auto call = Is<Call>(init); call && call->builtin == B_DEFAULT && InlineArray(owner->type)) {
-        ConstructFixed(OwnerPlace(owner), init); return;
+        ConstructFixed(FreshOwner(owner, declaration), init); return;
     }
     while (auto call = Is<Call>(init)) {
         if (call->defaultinit) init = call->defaultinit;
@@ -538,7 +540,7 @@ inline void WasmCodeGen::AssignElement(Index *index, Node *rhs, TType op, bool p
     if (pointee && type->kind == TY_REF && op != T_DOTASSIGN) {
         code.Get(address); LoadElement(type, memory); CheckNull(line, Type(type));
         if (type->ref->sub->kind == TY_ARRAY) Fail(line, "whole-array assignment needs the pending destination lowering");
-        if (type->ref->sub->kind == TY_STRUCT) Fail(line, "whole-aggregate assignment needs the pending destination lowering");
+        if (Nominal(type->ref->sub)) Fail(line, "whole-aggregate assignment needs the pending destination lowering");
         if (Type(type) == WasmModule::I32) address = Local(WasmModule::I32);
         code.Set(address); type = type->ref->sub; memory = -1;
     }

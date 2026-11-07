@@ -1,0 +1,9 @@
+/tmp/goose-wasm-fixed-enum-20261107/empty.goose:5: error: expected identifier in variable declaration, found 'pad'
+ var tagged: Z = Z.Empty; var pad: Z.Pad = Z.Pad {}; var other: Z.Pad = copy(pad); assert(&pad .!= &other);
+                              ^~~
+/tmp/goose-wasm-fixed-enum-20261107/empty.goose:5: error: expression expected, found 'pad'
+ var tagged: Z = Z.Empty; var pad: Z.Pad = Z.Pad {}; var other: Z.Pad = copy(pad); assert(&pad .!= &other);
+                                                                             ^~~
+/tmp/goose-wasm-fixed-enum-20261107/empty.goose:5: error: expression expected, found 'pad'
+ var tagged: Z = Z.Empty; var pad: Z.Pad = Z.Pad {}; var other: Z.Pad = copy(pad); assert(&pad .!= &other);
+                                                                                           ^~~

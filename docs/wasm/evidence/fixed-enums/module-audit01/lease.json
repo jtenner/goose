@@ -1,0 +1,22 @@
+{
+  "owner": "Goose fixed-enum functional unit",
+  "pid": 226409,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "module-dumps",
+      "command": [
+        "mise",
+        "exec",
+        "wasm-tools@1.262.0",
+        "--",
+        "python3",
+        "/tmp/goose-wasm-fixed-enum-20261107/module-audit01/print.py"
+      ],
+      "exit": 0
+    }
+  ],
+  "exit": 0,
+  "released_at": "2026-11-07T12:18:57.034682+00:00"
+}

@@ -61,6 +61,7 @@ def main():
     p.add_argument('--validator', default='wasm-tools')
     p.add_argument('--cc', default='cc')
     p.add_argument('--cxx', default='c++')
+    p.add_argument('--out', type=Path, default=ROOT / 'build' / 'gen' / 'wasm')
     p.add_argument('--wasmtime-python', type=Path, help='Python with optional wasmtime==49.0.0')
     args = p.parse_args()
     exe = args.exe.resolve()
@@ -68,7 +69,7 @@ def main():
         if not shutil.which(command):
             p.error(f'required executable is missing: {command}')
         run([command, '--version'])  # Check broken version-manager shims too.
-    out = ROOT / 'build' / 'gen' / 'wasm'
+    out = args.out.resolve()
     out.mkdir(parents=True, exist_ok=True)
     count = 0
     # Exercise the production data-memory helpers independently of AST
@@ -179,6 +180,12 @@ def main():
                 resource = run([args.node, ROOT / 'test' / 'wasm_multimemory.mjs', wasm, persistent, mode])
                 assert resource.stdout == reference.stdout, 'completed owner-state check changed output'
                 count += 1
+            if source.stem.startswith(('wasm_enum_', 'wasm_callback_')):
+                mode = ('frame-growth' if source.stem == 'wasm_enum_cleanup' else
+                        '' if source.stem == 'wasm_enum_containers' else 'no-data')
+                resource = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
+                assert resource.stdout == reference.stdout, 'completed enum/callback owner-state check changed output'
+                count += 1
             if source.stem == 'wasm_byte_print':
                 checked = run([args.node, ROOT / 'test' / 'wasm_bytes.mjs', wasm])
                 assert checked.stdout == reference.stdout
@@ -194,6 +201,11 @@ def main():
     from wasm_struct_admission import check_admission as check_struct_admission
     count += check_struct_admission(run, exe, args.node, args.validator, args.wasmtime_python, out)
     count += check_constructor_locals(run, exe, args.node, args.validator, args.wasmtime_python, out, function_local_counts)
+    from wasm_enum_checks import check_modules as check_enum_modules, check_footprint as check_enum_footprint
+    from wasm_enum_admission import check_admission as check_enum_admission
+    count += check_enum_modules(run, args.node, args.validator, args.wasmtime_python, out)
+    count += check_enum_admission(run, exe, args.cc, out)
+    count += check_enum_footprint(run, exe, args.node, args.validator, args.wasmtime_python, out, function_local_counts)
     growth_source = out / 'frame-growth.goose'
     lines = ['recursive fn grow(n: i64) -> i64 {']
     for i in range(96):

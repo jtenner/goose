@@ -65,6 +65,9 @@ struct ValueLayout {
     // Reference pointees do not contribute to the stored reference size.
     using FixedSizes = unordered_map<TypeExpr *, uint64_t>;
     bool TryFixedSize(TypeExpr *t, uint64_t limit, uint64_t &bytes, FixedSizes &checked);
+    bool TryFieldLayout(const void *owner, int variant, const vector<Field> &fields,
+                        const vector<TypeExpr *> &types, uint64_t limit, uint64_t &bytes,
+                        FixedSizes &checked);
 
     TypeExpr *FoTailArr(TypeExpr *t);
     // Prefix before the innermost resizable tail in its byte image.
@@ -259,6 +262,21 @@ inline ValueLayout::Layout ValueLayout::LayoutFields(const vector<Field> &fields
     return lo;
 }
 
+inline bool ValueLayout::TryFieldLayout(const void *owner, int variant, const vector<Field> &fields,
+                                      const vector<TypeExpr *> &types, uint64_t limit, uint64_t &bytes,
+                                      FixedSizes &checked) {
+    for (auto field : types) {
+        uint64_t child;
+        if (field && !TryFixedSize(field, limit, child, checked)) return false;
+    }
+    bool fits = true;
+    auto layout = LayoutFields(fields, types, limit, &fits);
+    if (!fits) return false;
+    bytes = (uint64_t)layout.size;
+    layouts[{owner, variant}] = std::move(layout);
+    return true;
+}
+
 inline bool ValueLayout::TryFixedSize(TypeExpr *t, uint64_t limit, uint64_t &bytes, FixedSizes &checked) {
     limit = std::min(limit, (uint64_t)INT64_MAX);
     if (auto it = checked.find(t); it != checked.end()) {
@@ -286,16 +304,33 @@ inline bool ValueLayout::TryFixedSize(TypeExpr *t, uint64_t limit, uint64_t &byt
         }
         case TY_STRUCT: {
             auto si = SI(t);
-            for (auto ft : si->ftypes) {
+            if (!limit || !TryFieldLayout(si, -1, si->st->fields, si->ftypes, limit, size, checked))
+                return false;
+            size = std::max((uint64_t)1, size);
+            break;
+        }
+        case TY_VARIANT: {
+            auto ei = EIVar(t);
+            auto vi = ei->en->VariantIndex(t->var->variant);
+            if (vi < 0 || (size_t)vi >= ei->vftypes.size() ||
+                !TryFieldLayout(ei, vi, ei->en->variants[vi].fields, ei->vftypes[vi], limit, size, checked))
+                return false;
+            break;
+        }
+        case TY_ENUM: {
+            auto ei = EIOf(t);
+            if (t->enu->varmode || ei->en->variants.empty() || ei->en->variants.size() > 65536)
+                return false;
+            auto tag = (uint64_t)TagSize(ei->en);
+            if (tag > limit) return false;
+            uint64_t payload = 0;
+            for (size_t vi = 0; vi < ei->vftypes.size(); vi++) {
                 uint64_t child;
-                if (ft && !TryFixedSize(ft, limit, child, checked)) return false;
+                if (!TryFieldLayout(ei, (int)vi, ei->en->variants[vi].fields, ei->vftypes[vi],
+                                    limit - tag, child, checked)) return false;
+                payload = std::max(payload, child);
             }
-            bool fits = true;
-            auto lo = LayoutFields(si->st->fields, si->ftypes, limit, &fits);
-            if (!fits) return false;
-            size = std::max((uint64_t)1, (uint64_t)lo.size);
-            if (size > limit) return false;
-            layouts[pair<const void *, int>(si, -1)] = std::move(lo);
+            size = tag + payload;
             break;
         }
         default: return false;

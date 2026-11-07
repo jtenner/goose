@@ -69,6 +69,15 @@ for (let memory = 0; memory < 3; memory++) {
     x.copy_from_frame(pointer(memory, 1000), 100, pattern.length);
     assert.deepEqual(new Uint8Array(x[`memory${memory}`].buffer, 1000, 4), pattern);
 }
+for (let memory = 0; memory < 3; memory++) {
+    const frame = new Uint8Array(x.memory0.buffer);
+    frame.fill(90, 1100, 1106);
+    x.copy_to_frame(1101, pointer(memory, 1000), 4);
+    assert.deepEqual([...frame.slice(1100, 1106)], [90, ...pattern, 90]);
+}
+for (const memory of [3, 0xffffffff])
+    assert.throws(() => x.copy_to_frame(1101, pointer(memory, 1000), 4), /memory failure 7/);
+x.copy_to_frame(65536, pointer(2, 65536), 0);
 x.copy_from_frame(pointer(2, 65536), 65536, 0);
 for (const memory of [3, 0xffffffff])
     assert.throws(() => x.copy_from_frame(pointer(memory, 1000), 100, 4), /memory failure 7/);

@@ -1,0 +1,18 @@
+{
+  "owner": "Goose fixed-enum functional unit",
+  "pid": 160584,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "failing-first",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-fixed-enum-20261107/diagnosis01/checks.py"
+      ],
+      "exit": 1
+    }
+  ],
+  "exit": 1,
+  "released_at": "2026-11-07T12:03:19.466644+00:00"
+}

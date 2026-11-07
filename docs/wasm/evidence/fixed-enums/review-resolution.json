@@ -1,0 +1,16 @@
+{
+  "review": "astra-review.md",
+  "confirmed_production_findings": 0,
+  "review_files_read": 53,
+  "source_or_test_changes_after_review": false,
+  "compiler_sha256": "250902481fe28fadfd7102f7ac64475814c864dbc91ff2060ce5b9ed360eb73c",
+  "reviewed_patch_sha256": "de9ee154e9b9b08a7edc4cb05c67976f5f02ed429004ba092aa16d63b6d144a6",
+  "limits": [
+    "Compiler CPU/RSS/allocations, guest throughput, engine native-code size and physical retention unmeasured.",
+    "Linux-only native evidence; saved execution evidence, no execution during review.",
+    "Small-versus-large selected payload neighbor control and wider callback data-owner/default cases remain test extensions.",
+    "The review brief named report/measurements.md in error. Actual measurement handoff at docs/wasm/measurements.md and docs/wasm/evidence/fixed-enums.md was inspected.",
+    "Generated Python bytecode differs in the test snapshot; C++ and actual test source identities match."
+  ],
+  "after_review_changes": "Archive report/scope and update documentation only."
+}

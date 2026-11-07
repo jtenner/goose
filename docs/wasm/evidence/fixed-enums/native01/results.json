@@ -1,0 +1,762 @@
+[
+  {
+    "name": "layout-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/layout-O0.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/layout.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "layout-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/layout-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/layout-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "layout-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/layout-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "layout-O0-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/layout-O0-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/layout.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "layout-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/layout-O2.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/layout.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "layout-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/layout-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/layout-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "layout-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/layout-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "layout-O2-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/layout-O2-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/layout.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "effects-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/effects-O0.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/effects.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/effects-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/effects-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/effects-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O0-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/effects-O0-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/effects.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "effects-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/effects-O2.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/effects.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/effects-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/effects-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/effects-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "effects-O2-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/effects-O2-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/effects.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "references-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/references-O0.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/references.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "references-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/references-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/references-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "references-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/references-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "references-O0-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/references-O0-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/references.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "references-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/references-O2.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/references.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "references-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/references-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/references-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "references-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/references-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "references-O2-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/references-O2-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/references.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "containers-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/containers-O0.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/containers.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "containers-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/containers-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/containers-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "containers-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/containers-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "containers-O0-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/containers-O0-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/containers.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "containers-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/containers-O2.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/containers.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "containers-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/containers-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/containers-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "containers-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/containers-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "containers-O2-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/containers-O2-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/containers.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "hidden-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/hidden-O0.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/hidden.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "hidden-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/hidden-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/hidden-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "hidden-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/hidden-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "hidden-O0-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/hidden-O0-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/hidden.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "hidden-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/hidden-O2.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/hidden.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "hidden-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/hidden-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/hidden-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "hidden-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/hidden-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "hidden-O2-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/hidden-O2-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/hidden.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "variant-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/variant-O0.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/variant.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "variant-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/variant-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/variant-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "variant-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/variant-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "variant-O0-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/variant-O0-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/variant.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "variant-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/variant-O2.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/variant.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "variant-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/variant-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/variant-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "variant-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/variant-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "variant-O2-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/variant-O2-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/variant.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "cleanup-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/cleanup-O0.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/cleanup.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/cleanup-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/cleanup-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/cleanup-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O0-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/cleanup-O0-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/cleanup.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "cleanup-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/cleanup-O2.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/cleanup.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/cleanup-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/cleanup-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/cleanup-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "cleanup-O2-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/cleanup-O2-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/cleanup.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "empty-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/empty-O0.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/empty.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "empty-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/empty-O2.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/empty.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "tags-O0-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/tags-O0.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/tags.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "tags-O0-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/tags-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/tags-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "tags-O0-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/tags-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "tags-O0-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/tags-O0-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/tags.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "tags-O2-native-emit",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/tags-O2.c",
+      "/tmp/goose-wasm-fixed-enum-20261107/tags.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "tags-O2-native-build",
+    "command": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/tags-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/tags-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "tags-O2-native-run",
+    "command": [
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/tags-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "tags-O2-prior-wasm",
+    "command": [
+      "/tmp/goose-wasm-fixed-struct-20261107/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-enum-20261107/native01/tags-O2-before.wasm",
+      "/tmp/goose-wasm-fixed-enum-20261107/tags.goose"
+    ],
+    "exit": 1
+  }
+]

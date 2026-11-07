@@ -1,0 +1,7 @@
+Start release-build
+release-build exit 0
+Start freeze
+freeze exit 0
+Start enum-checks
+enum-checks exit 1
+All children reaped; lease released.

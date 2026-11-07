@@ -10,7 +10,7 @@ struct WasmMemoryRuntime {
     unordered_map<uint32_t, uint32_t> reserves;
     unordered_map<uint64_t, uint32_t> accesses;
     uint32_t dynamicreserve = UINT32_MAX, gettop = UINT32_MAX, settop = UINT32_MAX;
-    uint32_t copyfromframe = UINT32_MAX;
+    uint32_t copyfromframe = UINT32_MAX, copytoframe = UINT32_MAX;
     uint32_t copy = UINT32_MAX;
     uint32_t readprefix = UINT32_MAX;
 
@@ -144,6 +144,20 @@ struct WasmMemoryRuntime {
         });
         Save(copyfromframe, std::move(c));
         return copyfromframe;
+    }
+
+    uint32_t CopyToFrame() {
+        if (copytoframe != UINT32_MAX) return copytoframe;
+        copytoframe = module.AddFn("goose.copy_to_frame",
+                                  {WasmModule::I32, WasmModule::I64, WasmModule::I32}, {});
+        WasmBytes c;
+        Dispatch(c, 0, 0x40,
+                 [&] { c.Get(1); c.I64(32); c.Byte(0x88); c.Byte(0xa7); },
+                 [&](uint32_t memory) {
+            c.Get(0); c.Get(1); c.Byte(0xa7); c.Get(2); c.Copy(0, memory);
+        });
+        Save(copytoframe, std::move(c));
+        return copytoframe;
     }
 
     uint32_t ReadPrefix() {

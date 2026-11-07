@@ -1,0 +1,29 @@
+[
+  [
+    "source-identity",
+    [
+      "python3",
+      "/tmp/goose-wasm-fixed-enum-20261107/full-wasm01/verify-source.py"
+    ]
+  ],
+  [
+    "exact-comparisons",
+    [
+      "python3",
+      "test/backend_shared.py",
+      "--reference",
+      "build/goose-inline-checkpoint",
+      "--exe",
+      "/tmp/goose-wasm-fixed-enum-20261107/build02/goose-tested",
+      "--out",
+      "/tmp/goose-wasm-fixed-enum-20261107/compatibility01/exact"
+    ]
+  ],
+  [
+    "prior-modules",
+    [
+      "python3",
+      "/tmp/goose-wasm-fixed-enum-20261107/compatibility01/prior-modules.py"
+    ]
+  ]
+]

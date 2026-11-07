@@ -15,6 +15,24 @@ for source in range(count):
     for destination in range(count):
         x['copy'](store, pointer(destination, 200), pointer(source, 100), 4)
         assert bytes(x[f'memory{destination}'].read(store, 200, 204)) == bytes([source, 0, 127, 255])
+frame = x['memory0']
+for source in range(count):
+    frame.write(store, bytes([91] * 6), 299)
+    x['copy_to_frame'](store, 300, pointer(source, 100), 4)
+    assert bytes(frame.read(store, 299, 305)) == bytes([91, source, 0, 127, 255, 91])
+x['copy_to_frame'](store, 65536, pointer(64, 65536), 0)
+frame.write(store, bytes([91] * 6), 299)
+for invalid in (count, 0xffffffff):
+    throws(lambda: x['copy_to_frame'](store, 300, pointer(invalid, 100), 4), 'memory failure 7')
+    assert bytes(frame.read(store, 299, 305)) == bytes([91] * 6)
+throws(lambda: x['copy_to_frame'](store, 300, pointer(64, 65535), 2), 'out of bounds')
+assert bytes(frame.read(store, 299, 305)) == bytes([91] * 6)
+frame.write(store, bytes([92]), 65535)
+throws(lambda: x['copy_to_frame'](store, 65535, pointer(64, 100), 2), 'out of bounds')
+assert bytes(frame.read(store, 65535, 65536)) == bytes([92])
+frame.write(store, bytes([1, 2, 3, 4, 5]), 400)
+x['copy_to_frame'](store, 401, pointer(0, 400), 4)
+assert bytes(frame.read(store, 400, 405)) == bytes([1, 1, 2, 3, 4])
 x['copy'](store, pointer(64, 65536), pointer(63, 65536), 0)
 throws(lambda: x['copy'](store, pointer(count, 200), pointer(0, 100), 4), 'memory failure 7')
 throws(lambda: x['copy'](store, pointer(0, 200), pointer(count, 100), 4), 'memory failure 7')

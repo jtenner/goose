@@ -21,6 +21,9 @@ int main(int argc, char **argv) {
     auto copy = runtime.CopyFromFrame();
     if (runtime.CopyFromFrame() != copy) return 1;
     add("copy_from_frame", copy);
+    auto toframe = runtime.CopyToFrame();
+    if (runtime.CopyToFrame() != toframe) return 1;
+    add("copy_to_frame", toframe);
     auto paircopy = runtime.Copy();
     if (runtime.Copy() != paircopy) return 1;
     add("copy", paircopy);

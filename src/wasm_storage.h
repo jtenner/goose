@@ -12,7 +12,13 @@ struct WasmStoragePlan {
     unordered_map<VarDef *, uint32_t> owners;
     unordered_map<Call *, int> calltops;
     vector<VarDef *> globals;
-    struct FixedOwner { uint32_t bytes = 0; bool argument = false, initialized = false; };
+    enum class FixedOrigin { Declaration, MatchCopy };
+    struct FixedOwner {
+        uint32_t bytes = 0, image = 0;
+        Node *initialization = nullptr;
+        FixedOrigin origin = FixedOrigin::Declaration;
+        bool argument = false, initialized = false;
+    };
     unordered_map<VarDef *, FixedOwner> fixedvalues;
     unordered_set<TypeExpr *> notedtypes;
     // -1 is dynamic, a missing entry is not yet reached. A concrete base is
@@ -36,6 +42,13 @@ struct WasmStoragePlan {
                 work.push_back(t->arr->sub);
             } else if (t->kind == TY_STRUCT) {
                 for (auto ft : layout.SI(t)->ftypes) if (ft) work.push_back(ft);
+            } else if (t->kind == TY_ENUM) {
+                for (auto &types : layout.EIOf(t)->vftypes)
+                    for (auto ft : types) if (ft) work.push_back(ft);
+            } else if (t->kind == TY_VARIANT) {
+                auto ei = layout.EIVar(t);
+                for (auto ft : ei->vftypes[ei->en->VariantIndex(t->var->variant)])
+                    if (ft) work.push_back(ft);
             }
         }
     }
@@ -71,8 +84,12 @@ struct WasmStoragePlan {
             for (size_t i = 0; i < v->defs.size(); i++) {
                 auto d = v->defs[i];
                 NoteType(d->type);
-                if (d->type->kind == TY_STRUCT)
-                    fixedvalues[d] = {0, v->inline_arg, i < v->inits.size()};
+                if (WasmValueSupport::Nominal(d->type)) {
+                    auto &fixed = fixedvalues[d];
+                    fixed.initialization = v;
+                    fixed.argument = v->inline_arg;
+                    fixed.initialized = i < v->inits.size();
+                }
                 if (!Owns(d->type)) continue;
                 if (d->isglobal) {
                     if (owners.emplace(d, 0).second) globals.push_back(d);
@@ -82,6 +99,23 @@ struct WasmStoragePlan {
                 }
             }
             for (auto init : v->inits) Walk(init, function, next);
+            return;
+        }
+        if (auto match = Is<MatchExpr>(n)) {
+            Walk(match->scrutinee, function, next);
+            auto incoming = next;
+            for (auto &arm : match->arms) {
+                next = incoming;
+                if (arm.binder && WasmValueSupport::Nominal(arm.binder->type)) {
+                    NoteType(arm.binder->type);
+                    auto &fixed = fixedvalues[arm.binder];
+                    fixed.initialization = match;
+                    fixed.origin = FixedOrigin::MatchCopy;
+                    fixed.initialized = true;
+                }
+                Walk(arm.body, function, next);
+            }
+            next = incoming;
             return;
         }
         if (auto c = Is<Call>(n)) {
@@ -122,7 +156,8 @@ struct WasmStoragePlan {
             if (plan.argument) fail(owner->line, "by-value aggregates need the pending destination lowering");
             if (!plan.initialized) fail(owner->line, "uninitialized aggregate declarations need the pending destination lowering");
             if (owner->reusable) fail(owner->line, "pool owners need the pending descriptor lowering");
-            plan.bytes = fixedsize(owner->type, owner->line);
+            plan.image = fixedsize(owner->type, owner->line);
+            plan.bytes = std::max(1u, plan.image);
         }
         counts.Bound(functions, [&](FnSpec *caller, const auto &edge) {
             fail(edge.line, cat("live data stack across recursive call from ", caller->sf->name,

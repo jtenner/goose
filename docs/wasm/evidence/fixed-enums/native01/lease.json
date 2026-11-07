@@ -1,0 +1,18 @@
+{
+  "owner": "Goose fixed-enum functional unit",
+  "pid": 136283,
+  "active": false,
+  "children_reaped": true,
+  "commands": [
+    {
+      "name": "native-oracles",
+      "command": [
+        "python3",
+        "/tmp/goose-wasm-fixed-enum-20261107/native01/golden.py"
+      ],
+      "exit": 1
+    }
+  ],
+  "exit": 1,
+  "released_at": "2026-11-07T11:50:48.665266+00:00"
+}

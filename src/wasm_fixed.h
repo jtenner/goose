@@ -8,11 +8,7 @@ inline TypeExpr *WasmCodeGen::ActualType(Node *n) {
     if (auto field = Is<Dot>(n); field && field->IsField()) {
         auto t = ActualType(field->obj);
         while (t->kind == TY_REF) t = t->ref->sub;
-        if (t->kind != TY_STRUCT) Fail(n->line, "this field receiver needs the pending layout lowering");
-        auto si = SI(t);
-        if (field->fieldidx < 0 || (size_t)field->fieldidx >= si->ftypes.size() || !si->ftypes[field->fieldidx])
-            Fail(n->line, "this field selector needs the pending layout lowering");
-        return si->ftypes[field->fieldidx];
+        return StoredField(t, field->fieldidx, n->line).first;
     }
     if (auto index = Is<Index>(n)) {
         auto t = ActualType(index->obj);
@@ -37,6 +33,61 @@ inline WasmCodeGen::FixedPlace WasmCodeGen::OwnerPlace(VarDef *owner) {
     if (!slot.memory) Fail(owner->line, "fixed owner is missing planned storage");
     auto address = Local(WasmModule::I32); Address(slot); code.Set(address);
     return {owner->type, address, 0, 0, false, true};
+}
+
+inline WasmCodeGen::FreshFixedDestination WasmCodeGen::FreshOwner(VarDef *owner, Node *initialization) {
+    auto image = RequireFixed(owner->type, owner->line);
+    if (Nominal(owner->type)) {
+        auto it = storage.fixedvalues.find(owner);
+        if (it == storage.fixedvalues.end() || it->second.initialization != initialization ||
+            it->second.argument || !it->second.initialized || it->second.image != image)
+            Fail(owner->line, "fixed construction needs its planned fresh owner");
+    } else {
+        auto declaration = Is<VarDecl>(initialization);
+        if (!InlineArray(owner->type) || !declaration || declaration->inline_arg ||
+            find(declaration->defs.begin(), declaration->defs.end(), owner) == declaration->defs.end())
+            Fail(owner->line, "fixed construction needs its planned fresh owner");
+    }
+    return {OwnerPlace(owner), owner, 0, image};
+}
+
+inline WasmCodeGen::FreshFixedDestination WasmCodeGen::FixedChild(
+        FreshFixedDestination parent, TypeExpr *type, uint32_t offset, Line line) {
+    auto image = RequireFixed(type, line);
+    if (offset > parent.image || image > parent.image - offset ||
+        offset > UINT32_MAX - parent.place.offset || offset > UINT32_MAX - parent.rootOffset)
+        Fail(line, "fixed child exceeds its planned owner image");
+    parent.place.offset += offset; parent.place.type = type;
+    parent.rootOffset += offset; parent.image = image;
+    return parent;
+}
+
+inline WasmCodeGen::FixedFields WasmCodeGen::VariantFields(EnumInst *instance, int variant, Line line) {
+    if (variant < 0 || (size_t)variant >= instance->en->variants.size() ||
+        (size_t)variant >= instance->vftypes.size())
+        Fail(line, "missing checked variant layout");
+    return {instance->en->variants[variant].fields, instance->vftypes[variant],
+            VariantLayout(instance, variant)};
+}
+
+inline WasmCodeGen::FixedFields WasmCodeGen::FieldsOf(TypeExpr *type, Line line) {
+    RequireFixed(type, line);
+    if (type->kind == TY_STRUCT) {
+        auto si = SI(type);
+        return {si->st->fields, si->ftypes, StructLayout(si)};
+    }
+    if (type->kind == TY_VARIANT) {
+        auto ei = EIVar(type);
+        return VariantFields(ei, ei->en->VariantIndex(type->var->variant), line);
+    }
+    Fail(line, "this field receiver needs the pending layout lowering");
+}
+
+inline pair<TypeExpr *, uint32_t> WasmCodeGen::StoredField(TypeExpr *type, int field, Line line) {
+    auto view = FieldsOf(type, line);
+    if (field < 0 || (size_t)field >= view.types.size() || !view.types[field])
+        Fail(line, "this field selector needs the pending layout lowering");
+    return {view.types[field], (uint32_t)view.layout.offs[field]};
 }
 
 inline void WasmCodeGen::PlaceAddress(const FixedPlace &p, uint8_t representation, Line line) {
@@ -142,13 +193,9 @@ inline WasmCodeGen::FixedPlace WasmCodeGen::ResolvePlace(Node *n) {
 
 inline WasmCodeGen::FixedPlace WasmCodeGen::FieldPlace(Dot *field) {
     auto object = ResolvePlace(field->obj);
-    if (object.type->kind != TY_STRUCT) Fail(field->line, "this field receiver needs the pending layout lowering");
-    RequireFixed(object.type, field->line);
-    auto si = SI(object.type);
-    if (field->accessorowner && SI(field->accessorowner) != si)
+    auto [type, offset] = StoredField(object.type, field->fieldidx, field->line);
+    if (field->accessorowner && !TEq(field->accessorowner, object.type))
         Fail(field->line, "field adaptation needs the pending layout lowering");
-    auto type = ActualType(field);
-    auto offset = StructLayout(si).offs[field->fieldidx];
     if ((uint64_t)offset > UINT32_MAX - object.offset) Fail(field->line, "field offset exceeds memory32");
     object.offset += (uint32_t)offset; object.type = type;
     return object;
@@ -198,13 +245,59 @@ inline void WasmCodeGen::InlineArrayLiteral(TypeExpr *array, uint32_t header, Ar
     }
 }
 
-inline void WasmCodeGen::ConstructFixed(FixedPlace destination, Node *source) {
+inline void WasmCodeGen::ConstructFields(FreshFixedDestination destination, StructLit *literal,
+                                         const FixedFields &view, uint32_t prefix, Line line) {
+    size_t next = 0;
+    for (size_t i = 0; i < view.types.size(); i++) {
+        auto ft = view.types[i];
+        if (!ft) continue;
+        while (next < literal->fieldindices.size() && literal->fieldindices[next] < (int)i) next++;
+        auto init = next < literal->fieldindices.size() && literal->fieldindices[next] == (int)i
+                        ? literal->inits[next++].val : nullptr;
+        auto offset = (uint64_t)prefix + (uint64_t)view.layout.offs[i];
+        if (offset > UINT32_MAX) Fail(line, "field offset exceeds memory32");
+        auto child = FixedChild(destination, ft, (uint32_t)offset, line);
+        if (Aggregate(ft)) {
+            if (!init) Fail(line, "missing checked aggregate initializer");
+            ConstructFixed(child, init);
+        } else {
+            StoreAddress(child.place);
+            if (init) { Gen(init); Convert(init->exprtype, ft); }
+            else {
+                if (ft->kind != TY_REF || !ft->ref->optional) Fail(line, "missing checked field initializer");
+                if (Type(ft) == WasmModule::I64) code.I64(0); else code.I32(0);
+            }
+            StorePlace(child.place);
+        }
+    }
+}
+
+inline void WasmCodeGen::CopyFixed(FreshFixedDestination destination, FixedPlace source, Line line) {
+    if (!TEq(destination.place.type, source.type))
+        Fail(line, "aggregate adaptation needs the pending destination lowering");
+    if (!destination.image) {
+        // An empty standalone owner has an identity byte, but no payload image.
+        if (!destination.rootOffset && TEq(destination.root->type, destination.place.type)) {
+            StoreAddress(destination.place); code.I32(0); code.Mem(0x3a, 0, destination.place.offset);
+        }
+        return;
+    }
+    auto dest = Local(WasmModule::I64), src = Local(WasmModule::I64), length = Local(WasmModule::I32);
+    PlaceAddress(destination.place, WasmModule::I64, line); code.Set(dest);
+    PlaceAddress(source, WasmModule::I64, line); code.Set(src);
+    code.I32((int32_t)destination.image); code.Set(length);
+    CopyBytes(dest, 0, src, source.memory, length);
+}
+
+inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *source) {
+    auto destination = fresh.place;
     if (destination.memory != 0 || !destination.bounded)
         Fail(source->line, "fixed construction needs a fresh planned destination");
     auto type = destination.type;
     if (type->kind == TY_ARRAY && !InlineArray(type))
         Fail(source->line, "nonfixed fields need the pending destination lowering");
     auto bytes = RequireFixed(type, source->line);
+    if (bytes != fresh.image) Fail(source->line, "fixed construction has an inconsistent image");
     auto zero = [&](uint32_t count) {
         if (!count) return;
         PlaceAddress(destination, WasmModule::I32, source->line);
@@ -213,7 +306,7 @@ inline void WasmCodeGen::ConstructFixed(FixedPlace destination, Node *source) {
     while (auto call = Is<Call>(source)) {
         if (call->builtin == B_COPY) { source = call->ValueArgNodes().at(0); continue; }
         if (call->builtin != B_DEFAULT) break;
-        if (type->kind == TY_STRUCT && call->defaultinit) { source = call->defaultinit; continue; }
+        if (Nominal(type) && call->defaultinit) { source = call->defaultinit; continue; }
         if (InlineArray(type)) {
             if (type->arr->akind == A_FIXED) zero(bytes);
             else {
@@ -224,36 +317,41 @@ inline void WasmCodeGen::ConstructFixed(FixedPlace destination, Node *source) {
         }
         Fail(source->line, "this default needs the pending destination lowering");
     }
-    if (type->kind == TY_STRUCT) if (auto literal = Is<StructLit>(source)) {
-        auto si = SI(type);
-        if (literal->sinst != si) Fail(source->line, "aggregate adaptation needs the pending destination lowering");
-        if (LastRealField(si->st->fields) < 0) { zero(bytes); return; }
-        auto &offsets = StructLayout(si).offs;
-        size_t next = 0;
-        for (size_t i = 0; i < si->ftypes.size(); i++) {
-            auto ft = si->ftypes[i];
-            if (!ft) continue;
-            while (next < literal->fieldindices.size() && literal->fieldindices[next] < (int)i) next++;
-            auto init = next < literal->fieldindices.size() && literal->fieldindices[next] == (int)i
-                          ? literal->inits[next++].val : nullptr;
-            auto child = destination;
-            child.type = ft;
-            if ((uint64_t)offsets[i] > UINT32_MAX - child.offset) Fail(source->line, "field offset exceeds memory32");
-            child.offset += (uint32_t)offsets[i];
-            if (Aggregate(ft)) {
-                if (!init) Fail(source->line, "missing checked aggregate initializer");
-                ConstructFixed(child, init);
-            } else {
-                StoreAddress(child);
-                if (init) { Gen(init); Convert(init->exprtype, ft); }
-                else {
-                    if (ft->kind != TY_REF || !ft->ref->optional) Fail(source->line, "missing checked field initializer");
-                    if (Type(ft) == WasmModule::I64) code.I64(0); else code.I32(0);
-                }
-                StorePlace(child);
-            }
+    auto tag = [&](EnumInst *instance, int variant) {
+        auto field = destination;
+        field.type = ast.inttypes[TagStore(instance->en)];
+        StoreAddress(field); code.I64(variant); StorePlace(field);
+    };
+    if (Nominal(type)) if (auto literal = Is<StructLit>(source)) {
+        if (type->kind == TY_STRUCT) {
+            auto si = SI(type);
+            if (literal->sinst != si)
+                Fail(source->line, "aggregate adaptation needs the pending destination lowering");
+            if (LastRealField(si->st->fields) < 0) { zero(bytes); return; }
+            ConstructFields(fresh, literal, FieldsOf(type, source->line), 0, source->line);
+        } else {
+            auto ei = type->kind == TY_ENUM ? EIOf(type) : EIVar(type);
+            if (literal->einst != ei || !literal->variant ||
+                (type->kind == TY_VARIANT && literal->variant != type->var->variant))
+                Fail(source->line, "aggregate adaptation needs the pending destination lowering");
+            auto vi = ei->en->VariantIndex(literal->variant);
+            auto view = VariantFields(ei, vi, source->line);
+            auto prefix = type->kind == TY_ENUM ? (uint32_t)TagSize(ei->en) : 0u;
+            if (type->kind == TY_ENUM) tag(ei, vi);
+            if (LastRealField(view.fields) < 0) {
+                if (!prefix && (bytes || (!fresh.rootOffset && TEq(fresh.root->type, type))))
+                    zero(std::max(1u, bytes));
+            } else ConstructFields(fresh, literal, view, prefix, source->line);
         }
         return;
+    }
+    if (type->kind == TY_ENUM) if (auto constant = Is<Dot>(source); constant && constant->variantconst) {
+        auto ei = EIOf(type);
+        if (constant->einst != ei) Fail(source->line, "aggregate adaptation needs the pending destination lowering");
+        auto vi = ei->en->VariantIndex(constant->variantconst);
+        auto view = VariantFields(ei, vi, source->line);
+        if (view.layout.size) Fail(source->line, "variant constant has a nonempty payload");
+        tag(ei, vi); return;
     }
     if (InlineArray(type)) {
         if (auto text = Is<StrLit>(source)) { InitByteString(nullptr, nullptr, text, &destination); return; }
@@ -268,12 +366,52 @@ inline void WasmCodeGen::ConstructFixed(FixedPlace destination, Node *source) {
     auto from = ActualType(source);
     while (from && from->kind == TY_REF) from = from->ref->sub;
     if (!from || !TEq(type, from)) Fail(source->line, "aggregate adaptation needs the pending destination lowering");
-    auto existing = ResolvePlace(source);
-    auto dest = Local(WasmModule::I64), src = Local(WasmModule::I64), length = Local(WasmModule::I32);
-    PlaceAddress(destination, WasmModule::I64, source->line); code.Set(dest);
-    PlaceAddress(existing, WasmModule::I64, source->line); code.Set(src);
-    code.I32((int32_t)bytes); code.Set(length);
-    if (bytes) CopyBytes(dest, 0, src, existing.memory, length);
+    CopyFixed(fresh, ResolvePlace(source), source->line);
+}
+
+inline void WasmCodeGen::EnumMatchStatement(MatchExpr *match) {
+    if (!Void(match->exprtype)) Fail(match->line, "value-producing matches need the pending destination lowering");
+    auto source = ResolvePlace(match->scrutinee);
+    if (source.type->kind != TY_ENUM)
+        Fail(match->line, "this match needs the pending destination lowering");
+    auto image = RequireFixed(source.type, match->line);
+    auto ei = EIOf(source.type);
+    auto prefix = (uint32_t)TagSize(ei->en);
+    auto tag = source; tag.type = ast.inttypes[TagStore(ei->en)];
+    auto captured = Local(WasmModule::I64);
+    ReadPlace(tag); code.Set(captured);
+    code.Get(captured); code.I64((int64_t)ei->en->variants.size()); code.Byte(0x5a);
+    Open(0x04); Trap(14, match->line); Close();
+    auto done = Open();
+    for (auto &arm : match->arms) {
+        auto conditional = arm.pat.kind != P_WILDCARD;
+        if (conditional) {
+            if (arm.variants.empty()) Fail(match->line, "missing checked enum arm");
+            for (size_t i = 0; i < arm.variants.size(); i++) {
+                code.Get(captured); code.I64(ei->en->VariantIndex(arm.variants[i])); code.Byte(0x51);
+                if (i) code.Byte(0x72);
+            }
+            Open(0x04);
+        }
+        scopes.emplace_back();
+        if (arm.binder) {
+            if (arm.pat.byref || arm.variants.size() != 1 || arm.binder->type->kind != TY_VARIANT)
+                Fail(match->line, "reference payload bindings need the pending destination lowering");
+            auto type = arm.binder->type;
+            if (EIVar(type) != ei || type->var->variant != arm.variants[0])
+                Fail(match->line, "payload binding has an inconsistent variant");
+            auto payload = RequireFixed(type, match->line);
+            if (prefix > image || payload > image - prefix || prefix > UINT32_MAX - source.offset)
+                Fail(match->line, "payload exceeds its fixed enum image");
+            auto selected = source; selected.offset += prefix; selected.type = type;
+            CopyFixed(FreshOwner(arm.binder, match), selected, match->line);
+        }
+        Statement(arm.body);
+        Cleanup(scopes.size() - 1); scopes.pop_back(); Branch(done);
+        if (conditional) Close();
+        else break;
+    }
+    Close();
 }
 
 inline bool WasmCodeGen::FieldPath(Node *n) {
