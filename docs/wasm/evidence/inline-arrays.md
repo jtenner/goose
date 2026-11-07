@@ -163,3 +163,13 @@ The later [equality validation](inline-arrays/equality-validation.json),
 [compiler identities](inline-arrays/compiler-identities.json) retain the
 additional checks and exact preserved executables. The final reviewed source
 is the snapshot that produced the 247-check Release result.
+
+
+A post-review test-only unit on the same preserved compiler covers the proposed
+inline-only scalar/reference/optional-reference element equality cases, f32 NaN
+self-comparison and inequality, and mixed inline/growable deferred rebinding
+during early exit. Native O0/O2 outputs match Node and Wasmtime, and completed
+owner-state checks pass. These two fixtures and their runner registration were
+added after review. No compiler source changed for this follow-up. See
+[the raw text records](inline-arrays/review-coverage.json). The earlier full
+suite count remains the recorded 247; these are additional targeted checks.
