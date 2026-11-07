@@ -1,0 +1,31 @@
+{
+  "baseline": "660e9f68aef4187924a37037f7f017b05634d920",
+  "branch": "feat/wasm-multimemory-backend",
+  "changed_files": [
+    "src/wasm_arrays.h",
+    "src/wasm_codegen.h",
+    "src/wasm_storage.h",
+    "test/wasm_backend.py",
+    "test/wasm_multimemory.mjs",
+    "docs/wasm/evidence/variable-arrays.md",
+    "test/expected/wasm_variable_arrays.out",
+    "test/expected/wasm_variable_no_owner.out",
+    "test/expected/wasm_variable_paths.out",
+    "test/wasm/wasm_variable_arrays.goose",
+    "test/wasm/wasm_variable_no_owner.goose",
+    "test/wasm/wasm_variable_paths.goose"
+  ],
+  "context_files": [
+    "scripts/run_wasm.mjs",
+    "src/ast.h",
+    "src/codegen.h",
+    "src/codegen_builtins.h",
+    "src/data_stacks.h",
+    "src/value_layout.h",
+    "src/wasm_binary.h",
+    "src/wasm_memory.h",
+    "test/wasmtime_host.py"
+  ],
+  "candidate_compiler_sha256": "ccb45b63e07c3dc3a80ef392e12db035453b6fd65cd7e7b4387efb5222ad464f",
+  "validation": "continuation pending"
+}

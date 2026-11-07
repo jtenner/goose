@@ -22,13 +22,19 @@ struct WasmStoragePlan {
 
     void NoteType(TypeExpr *type) {
         if (dataaddresses) return;
-        while (type && type->kind == TY_REF) type = type->ref->sub;
-        dataaddresses = type && type->kind == TY_ARRAY && layout.IsResz(type);
+        while (type) {
+            if (type->kind == TY_REF) { type = type->ref->sub; continue; }
+            if (type->kind != TY_ARRAY) return;
+            if (layout.IsResz(type) || type->arr->akind == A_VAR) { dataaddresses = true; return; }
+            type = type->arr->sub;
+        }
     }
 
     // Owners admitted by the current array lowering. Other compound classes
     // are rejected before emission until their destination plan is complete.
-    bool Owns(TypeExpr *t) { return t && t->kind == TY_ARRAY && layout.IsResz(t); }
+    bool Owns(TypeExpr *t) {
+        return t && t->kind == TY_ARRAY && (layout.IsResz(t) || t->arr->akind == A_VAR);
+    }
 
     void Walk(Node *n, FnSpec *function, int &next) {
         if (!n || Is<FnDecl>(n)) return;

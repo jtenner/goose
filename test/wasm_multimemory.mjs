@@ -39,7 +39,8 @@ for (const { id, start, end } of sections) {
             body.push(...encode(name.length), ...name, 3, ...encode(i));
         }
     }
-    output.push(id, ...encode(body.length), ...body);
+    output.push(id, ...encode(body.length));
+    for (const byte of body) output.push(byte);
 }
 const runtime = instantiate(new Uint8Array(output), buffer => fs.writeSync(1, buffer));
 const initialFrameTop = runtime.instance.exports.test_stack_top_0.value;
@@ -61,3 +62,10 @@ if (process.argv[4] === 'reuse')
     assert.equal(exports.data_memory_1.buffer.byteLength, 131072, 'scoped stack storage accumulated across iterations');
 if (process.argv[4] === 'typed-reuse')
     assert.equal(memories, 2, 'sequential type classes did not reuse one logical stack');
+
+if (process.argv[4] === 'variable-reuse')
+    for (const memory of memoriesAfter.slice(1))
+        assert.equal(memory.buffer.byteLength, 65536, 'small variable allocations accumulated across scopes');
+
+if (process.argv[4] === 'variable-growth')
+    assert(memoriesAfter.slice(1).some(memory => memory.buffer.byteLength >= 131072), 'variable payload did not grow its data memory');

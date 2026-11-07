@@ -1,0 +1,314 @@
+{
+  "candidate_compiler_sha256": "ccb45b63e07c3dc3a80ef392e12db035453b6fd65cd7e7b4387efb5222ad464f",
+  "baseline_commit": "660e9f68aef4187924a37037f7f017b05634d920",
+  "stages": [
+    {
+      "stage": "constructor-repair",
+      "raw_directory": "/tmp/goose-wasm-variable-arrays-20261107/constructor-repair",
+      "lease": {
+        "owner": "Goose variable-array Release validation",
+        "pid": 3289406,
+        "active": false,
+        "children_reaped": true,
+        "commands": [
+          {
+            "name": "build",
+            "command": [
+              "cmake",
+              "--build",
+              "build",
+              "--parallel",
+              "2"
+            ],
+            "exit": 0
+          },
+          {
+            "name": "large",
+            "command": [
+              "mise",
+              "exec",
+              "wasm-tools@1.262.0",
+              "node@24.22.2",
+              "--",
+              "python3",
+              "/tmp/goose-wasm-variable-arrays-20261107/constructor-repair/large.py"
+            ],
+            "exit": 1
+          }
+        ],
+        "exit": 1
+      },
+      "release_verification": {
+        "owner_pid": 3289406,
+        "owner_exited": true,
+        "children_reaped": true,
+        "lease_active": false,
+        "nonblocking_exclusive_probe": "PASS",
+        "failure": "owner checker spread argument limit, before remaining suites"
+      },
+      "records": {
+        "build.stdout": {
+          "file": "constructor-repair-build.stdout",
+          "sha256": "dca4844d18e8e16e90e3ffb686854915b2f246bbdd44ac6bcf4154cf087524eb"
+        },
+        "build.stderr": {
+          "file": "constructor-repair-build.stderr",
+          "sha256": "077acb44e8c120edcb9d0bb6d06fa39132f5e7314548f6a4953f563920dd7037"
+        },
+        "build.exit": {
+          "file": "constructor-repair-build.exit",
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        },
+        "large.stdout": {
+          "file": "constructor-repair-large.stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "large.stderr": {
+          "file": "constructor-repair-large.stderr",
+          "sha256": "2fdff4a4b650d4a3ec07e75bb4cc956e690e2dbecf87ac25471276e955735a30"
+        },
+        "large.exit": {
+          "file": "constructor-repair-large.exit",
+          "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+        }
+      }
+    },
+    {
+      "stage": "constructor-repair02",
+      "raw_directory": "/tmp/goose-wasm-variable-arrays-20261107/constructor-repair02",
+      "lease": {
+        "owner": "Goose variable-array Release validation",
+        "pid": 3312199,
+        "active": false,
+        "children_reaped": true,
+        "commands": [
+          {
+            "name": "large",
+            "command": [
+              "mise",
+              "exec",
+              "wasm-tools@1.262.0",
+              "node@24.22.2",
+              "--",
+              "python3",
+              "/tmp/goose-wasm-variable-arrays-20261107/constructor-repair02/large.py"
+            ],
+            "exit": 0
+          },
+          {
+            "name": "wasm",
+            "command": [
+              "mise",
+              "exec",
+              "wasm-tools@1.262.0",
+              "node@24.22.2",
+              "--",
+              "python3",
+              "test/wasm_backend.py",
+              "--exe",
+              "/tmp/goose-wasm-variable-arrays-20261107/constructor-repair/goose-tested",
+              "--wasmtime-python",
+              "/tmp/goose-wasm-runtime-env/bin/python"
+            ],
+            "exit": 0
+          },
+          {
+            "name": "native",
+            "command": [
+              "mise",
+              "exec",
+              "clang@23.1.3",
+              "--",
+              "python3",
+              "test/run_tests.py",
+              "--profile",
+              "baseline",
+              "--cc",
+              "native",
+              "--require-clang",
+              "--exe",
+              "/tmp/goose-wasm-variable-arrays-20261107/constructor-repair/goose-tested"
+            ],
+            "exit": 1
+          }
+        ],
+        "exit": 1
+      },
+      "release_verification": {
+        "owner_pid": 3312199,
+        "owner_exited": true,
+        "children_reaped": true,
+        "lease_active": false,
+        "nonblocking_exclusive_probe": "PASS",
+        "wasm_checks": 289,
+        "failure": "native embedded JIT check cannot locate bundled TinyCC beside relocated preserved compiler"
+      },
+      "records": {
+        "large.stdout": {
+          "file": "constructor-repair02-large.stdout",
+          "sha256": "e6bab3bec99baba5d2ee7e355ad18a1b025b8016ee5fda211464a5fe1c677420"
+        },
+        "large.stderr": {
+          "file": "constructor-repair02-large.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "large.exit": {
+          "file": "constructor-repair02-large.exit",
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        },
+        "wasm.stdout": {
+          "file": "constructor-repair02-wasm.stdout",
+          "sha256": "c3d8c5fd4f8c179ff09fd78085ec753fef643f5f0174b0ed9f24a7d885dab51f"
+        },
+        "wasm.stderr": {
+          "file": "constructor-repair02-wasm.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "wasm.exit": {
+          "file": "constructor-repair02-wasm.exit",
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        },
+        "native.stdout": {
+          "file": "constructor-repair02-native.stdout",
+          "sha256": "ce1bd3544ee1590457e347b84516ef8904f96ad611f63c751ce143c3ec964754"
+        },
+        "native.stderr": {
+          "file": "constructor-repair02-native.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "native.exit": {
+          "file": "constructor-repair02-native.exit",
+          "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+        }
+      }
+    },
+    {
+      "stage": "constructor-repair03",
+      "raw_directory": "/tmp/goose-wasm-variable-arrays-20261107/constructor-repair03",
+      "lease": {
+        "owner": "Goose variable-array Release validation",
+        "pid": 3343609,
+        "active": false,
+        "children_reaped": true,
+        "commands": [
+          {
+            "name": "native-jit-runtime",
+            "command": [
+              "env",
+              "GOOSE_TCCLIB=/home/dev/Projects/goose-wasm-backend/build/tcclib",
+              "python3",
+              "/tmp/goose-wasm-variable-arrays-20261107/constructor-repair03/native-jit.py"
+            ],
+            "exit": 0
+          },
+          {
+            "name": "compatibility",
+            "command": [
+              "python3",
+              "test/backend_shared.py",
+              "--reference",
+              "build/goose-inline-checkpoint",
+              "--exe",
+              "/tmp/goose-wasm-variable-arrays-20261107/constructor-repair/goose-tested",
+              "--out",
+              "/tmp/goose-wasm-variable-arrays-20261107/constructor-repair03/native-compatibility"
+            ],
+            "exit": 0
+          },
+          {
+            "name": "equivalence",
+            "command": [
+              "python3",
+              "/tmp/goose-wasm-variable-arrays-20261107/constructor-repair03/equivalence.py"
+            ],
+            "exit": 0
+          }
+        ],
+        "exit": 0
+      },
+      "release_verification": {
+        "owner_pid": 3343609,
+        "owner_exited": true,
+        "children_reaped": true,
+        "lease_active": false,
+        "exact_owned_processes": [],
+        "nonblocking_exclusive_probe": "PASS",
+        "source_manifest_matches": true,
+        "compiler_sha256": "ccb45b63e07c3dc3a80ef392e12db035453b6fd65cd7e7b4387efb5222ad464f",
+        "commands": [
+          {
+            "name": "native-jit-runtime",
+            "command": [
+              "env",
+              "GOOSE_TCCLIB=/home/dev/Projects/goose-wasm-backend/build/tcclib",
+              "python3",
+              "/tmp/goose-wasm-variable-arrays-20261107/constructor-repair03/native-jit.py"
+            ],
+            "exit": 0
+          },
+          {
+            "name": "compatibility",
+            "command": [
+              "python3",
+              "test/backend_shared.py",
+              "--reference",
+              "build/goose-inline-checkpoint",
+              "--exe",
+              "/tmp/goose-wasm-variable-arrays-20261107/constructor-repair/goose-tested",
+              "--out",
+              "/tmp/goose-wasm-variable-arrays-20261107/constructor-repair03/native-compatibility"
+            ],
+            "exit": 0
+          },
+          {
+            "name": "equivalence",
+            "command": [
+              "python3",
+              "/tmp/goose-wasm-variable-arrays-20261107/constructor-repair03/equivalence.py"
+            ],
+            "exit": 0
+          }
+        ]
+      },
+      "records": {
+        "native-jit-runtime.stdout": {
+          "file": "constructor-repair03-native-jit-runtime.stdout",
+          "sha256": "ea86d1d761e6262b932b24b33de57560fc5140e8c75c04de94710e943510af50"
+        },
+        "native-jit-runtime.stderr": {
+          "file": "constructor-repair03-native-jit-runtime.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "native-jit-runtime.exit": {
+          "file": "constructor-repair03-native-jit-runtime.exit",
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        },
+        "compatibility.stdout": {
+          "file": "constructor-repair03-compatibility.stdout",
+          "sha256": "20f36dd9c46cb8f0beff01a79bd88b8d681ca89abc0dbed7f4858e6fcc21bfc8"
+        },
+        "compatibility.stderr": {
+          "file": "constructor-repair03-compatibility.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "compatibility.exit": {
+          "file": "constructor-repair03-compatibility.exit",
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        },
+        "equivalence.stdout": {
+          "file": "constructor-repair03-equivalence.stdout",
+          "sha256": "e9536d2bf255bd70b3303fa661b6ada0c237f874ea8ef6f02900cf787c876493"
+        },
+        "equivalence.stderr": {
+          "file": "constructor-repair03-equivalence.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "equivalence.exit": {
+          "file": "constructor-repair03-equivalence.exit",
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        }
+      }
+    }
+  ],
+  "interpretation": "289 Wasm checks passed; all native groups except relocated TinyCC setup passed in full run; that exact failed check passed with explicit existing bundle path; 52 exact comparisons and 62 unchanged prior modules passed in final continuation. No performance samples."
+}

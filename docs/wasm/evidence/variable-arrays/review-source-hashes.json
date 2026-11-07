@@ -1,0 +1,23 @@
+{
+  "docs/wasm/evidence/variable-arrays.md": "e0d238e8991daebeb16b437a8f7f474fa5cb9092f8e0ee2f800c56f170f81106",
+  "scripts/run_wasm.mjs": "b84fd6f65b321aa6149b5edd1a13246daba305a477d31e8698896fd6e6ad0409",
+  "src/ast.h": "c6ba4a65898724f407ab3b43a2c391e483fe86345d8c95bc2d567bf58703f73e",
+  "src/codegen.h": "c925e88bafaf152ea916ef2718a28f3943c6de73d87642b2b4fd9833e35da623",
+  "src/codegen_builtins.h": "b46bc52191bbbd7e52e237209f3dc840a37166f1b1a496ac23edbcd0cdd860fb",
+  "src/data_stacks.h": "e68d48103069c906451b5557a10398377d191469a131f7ce5d2886161fe6f264",
+  "src/value_layout.h": "d73b163354d5fe3b76494d97942c879cf39b70c8c371a7621454e2c06c838dc6",
+  "src/wasm_arrays.h": "f86701adc26a2e2090beac5d6e61bf522ce44dc5a98a20da9053be219bc79c50",
+  "src/wasm_binary.h": "9fa49debc8d8592d3e3a7d38142b736d6bbcfd920f2bdaca491b537400ff9ce2",
+  "src/wasm_codegen.h": "16448119bf90b43d510a336e2980fe01c0e6556c35b5461eeb496001cc9b6ba4",
+  "src/wasm_memory.h": "0569b4496f92b6de10d28da9f0ecad90a9cc66284e98131c2eeb43109206e64d",
+  "src/wasm_storage.h": "b7f483a6c7eac909cc2e8274337245ec12ddfdf2af3bb51ae456fe4a49363bbc",
+  "test/expected/wasm_variable_arrays.out": "427fa74c803e9c671ef44cf16b8f8679bc333452cf55617b2ed559aff0fd3c19",
+  "test/expected/wasm_variable_no_owner.out": "dc51b8c96c2d745df3bd5590d990230a482fd247123599548e0632fdbf97fc22",
+  "test/expected/wasm_variable_paths.out": "978f672affbace3bfe0f4ab7df029acb15d14a9f2fedf9de699edd9b78f49d16",
+  "test/wasm/wasm_variable_arrays.goose": "0df9e29a1ac3b7bc8db331741d1d4d377defa02c06b9d251ab4f1398b25279db",
+  "test/wasm/wasm_variable_no_owner.goose": "2d849a6b049d645de924561c9c1c31c7d098b71819f631cd25f75a9c608b91af",
+  "test/wasm/wasm_variable_paths.goose": "7690269baf3256a4f1f49e6ab6a8482113f13f7ca19e5c8be530db9972ebea7a",
+  "test/wasm_backend.py": "708957415ee1679e39aa1e407fee30dbb772e5a7a1635ed77d39656bf61351dc",
+  "test/wasm_multimemory.mjs": "0497f4e5df8ac49beb0c5dbc2f94652a556bc83526ea9a8a0dcd4cf5f9c34aed",
+  "test/wasmtime_host.py": "538242c0c19469a69b141467b7a333606240a385a899407ddd2e4b810b5801ef"
+}

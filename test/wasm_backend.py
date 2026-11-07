@@ -25,6 +25,33 @@ def run(command, *, ok=True, timeout=90):
     return result
 
 
+
+def function_local_counts(data):
+    def read(pos):
+        value = shift = 0
+        while True:
+            byte = data[pos]; pos += 1
+            value |= (byte & 127) << shift
+            if not byte & 128:
+                return value, pos
+            shift += 7
+    assert data[:8] == b'\0asm\x01\0\0\0'
+    cursor, totals = 8, []
+    while cursor < len(data):
+        ident = data[cursor]; length, cursor = read(cursor + 1); end = cursor + length
+        if ident == 10:
+            count, cursor = read(cursor)
+            for _ in range(count):
+                length, cursor = read(cursor); body_end = cursor + length
+                groups, cursor = read(cursor); total = 0
+                for _ in range(groups):
+                    amount, cursor = read(cursor); total += amount; cursor += 1
+                assert cursor <= body_end
+                totals.append(total); cursor = body_end
+        cursor = end
+    return totals
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--exe', type=Path, default=ROOT / 'build' / 'goose')
@@ -92,16 +119,18 @@ def main():
                                'wasm_inline_limited_path', 'wasm_inline_effect_path',
                                'wasm_inline_nested_path', 'wasm_inline_boundaries',
                                'wasm_inline_optional_references', 'wasm_array_equality',
-                               'wasm_inline_equality_modes', 'wasm_inline_deferred_rebind'):
+                               'wasm_inline_equality_modes', 'wasm_inline_deferred_rebind',
+                               'wasm_variable_arrays', 'wasm_variable_paths', 'wasm_variable_no_owner'):
                 if source.stem == 'wasm_inline_arrays':
                     assert wasm.stat().st_size < 32768, 'unused global capacity was serialized'
-                persistent = '1' if source.stem == 'wasm_multimemory' else '0'
+                persistent = '1' if source.stem in ('wasm_multimemory', 'wasm_variable_arrays') else '0'
                 mode = {'wasm_multimemory': 'growth', 'wasm_scoped_data_reuse': 'reuse',
                         'wasm_array_widths': 'typed-reuse', 'wasm_no_data_owner': 'no-data',
                         'wasm_inline_arrays': 'no-data', 'wasm_inline_reference_path': 'no-data',
                         'wasm_inline_limited_path': 'no-data', 'wasm_inline_effect_path': 'no-data',
                         'wasm_inline_nested_path': 'no-data', 'wasm_inline_boundaries': 'no-data',
-                        'wasm_inline_equality_modes': 'no-data'}.get(source.stem, '')
+                        'wasm_inline_equality_modes': 'no-data', 'wasm_variable_no_owner': 'no-data',
+                        'wasm_variable_paths': 'variable-reuse'}.get(source.stem, '')
                 resource = run([args.node, ROOT / 'test' / 'wasm_multimemory.mjs', wasm, persistent, mode])
                 assert resource.stdout == reference.stdout, 'completed owner-state check changed output'
                 count += 1
@@ -153,6 +182,31 @@ def main():
         run([args.validator, 'validate', limited])
         run([args.node, ROOT / 'test' / 'wasm_runtime.mjs', limited, 'growth-failure'])
         count += 1
+    # Constructor scratch must be bounded independently of literal length.
+    # The old emitter produced 56,015 locals and failed validation at 14,000
+    # elements. Also exercise one whole-reservation memory.grow for a payload.
+    for name, typ, length, mode in [('local-limit', 'u8[u16]', 14000, ''),
+                                    ('variable-growth', 'i64[]', 9000, 'variable-growth')]:
+        source = out / (name + '.goose')
+        values = ', '.join('1' if name == 'local-limit' else str(i) for i in range(length))
+        body = f'print(a.len, ",", a[{length - 1}]);'
+        source.write_text(f'fn main() {{ var a: {typ} = [{values}]; {body} }}\n')
+        expected = b'14000,1\n' if name == 'local-limit' else b'9000,8999\n'
+        for opt in (0, 2):
+            prefix = out / f'{name}-O{opt}'
+            c, native, wasm = prefix.with_suffix('.c'), prefix.with_suffix('.native'), prefix.with_suffix('.wasm')
+            run([exe, f'-O{opt}', '--standalone', '-o', c, source])
+            run([args.cc, '-O0', c, '-pthread', '-lm', '-ldl', '-o', native])
+            assert run([native]).stdout == expected
+            run([exe, f'-O{opt}', '--target', 'wasm', '-o', wasm, source])
+            assert max(function_local_counts(wasm.read_bytes())) <= 128, 'constructor scratch grew with literal length'
+            run([args.validator, 'validate', wasm])
+            actual = run([args.node, ROOT / 'test' / 'wasm_multimemory.mjs', wasm, '0', mode])
+            assert actual.stdout == expected
+            count += 1
+            if args.wasmtime_python:
+                assert run([args.wasmtime_python, ROOT / 'test' / 'wasmtime_host.py', wasm]).stdout == expected
+                count += 1
     # Deterministic values exercise arithmetic at each declared storage width,
     # independent of constant folding and of the receiving slot's width.
     randomizer = random.Random(20261106)
@@ -279,13 +333,14 @@ a.equal(new DataView(x.memory.buffer).getBigInt64(1,true),65n<<56n);"""
         ('array-index', 'var a: i64[>..] = [1]; print("bad=", a[failure_index]);', b'out of bounds'),
         ('empty-pop', 'var a: i64[>..<] = []; print("bad=", a.pop());', b'empty'),
         ('inline-index', 'var a: i64[2] = [1, 2]; print("bad=", a[failure_index]);', b'out of bounds'),
+        ('variable-index', 'var a: i64[] = [1]; print("bad=", a[failure_index]);', b'out of bounds'),
         ('limited-capacity', 'var a: u8[..1] = [1]; print("bad=", a.push(2));', b'capacity'),
         ('zero-capacity', 'var a: u8[..0] = []; print("bad=", a.push(1));', b'capacity'),
         ('limited-empty', 'var a: u8[..3] = []; print("bad=", a.pop());', b'empty'),
     ]
     for name, body, reason in failures:
         source = out / f'failure-{name}.goose'
-        globals = 'var failure_index: i64 = 2;\n' if name in ('array-index', 'inline-index') else ''
+        globals = 'var failure_index: i64 = 2;\n' if name in ('array-index', 'inline-index', 'variable-index') else ''
         source.write_text(globals + 'fn main() { ' + body + ' }\n')
         for opt in (0, 2):
             wasm = out / f'failure-{name}-O{opt}.wasm'

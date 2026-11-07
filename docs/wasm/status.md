@@ -57,6 +57,19 @@ validation, 52 exact comparisons and 56 byte-identical prior Wasm modules. A
 nested-type compile-limit regression also passes. An independent
 Astra source review found no confirmed defect. See [inline-array evidence](evidence/inline-arrays.md).
 
+The initial variable-array path now admits scalar/reference literals for
+`T[]` and fixed-width unsigned length prefixes. Packed values live in assigned
+data memories; owner references retain the packed memory/offset address.
+Indexing, iteration, length, equality, globals, aliases and reference calls work
+within this subset. Large literals use constant constructor scratch rather
+than one set of locals per element. Final validation passed 289 Wasm checks,
+all native groups across the full run and targeted setup correction, 52 exact
+comparisons and 62 byte-identical old modules. An independent Astra review
+found no confirmed production defect. See [variable-array evidence](evidence/variable-arrays.md).
+Strings, varints, fills, variable elements and general by-value destinations
+remain pending. These checks establish module/local-count changes, not a
+compiler CPU/RSS or guest throughput result.
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping

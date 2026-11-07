@@ -42,7 +42,10 @@ struct WasmCodeGen : ValueLayout {
     explicit WasmCodeGen(Ast &a) : ast(a), storage(a, *this) {}
     bool FatPointers() const { return storage.dataaddresses; }
     bool HeaderRef(TypeExpr *t) { return t->kind == TY_REF && IsResz(t->ref->sub); }
-    bool FrameRef(TypeExpr *t) { return t->kind == TY_REF && t->ref->sub->kind == TY_ARRAY; }
+    bool VariableArray(TypeExpr *t) { return t->kind == TY_ARRAY && t->arr->akind == A_VAR; }
+    bool FrameRef(TypeExpr *t) {
+        return t->kind == TY_REF && t->ref->sub->kind == TY_ARRAY && !VariableArray(t->ref->sub);
+    }
     bool InlineArray(TypeExpr *t) {
         return t->kind == TY_ARRAY && (t->arr->akind == A_FIXED ||
                (t->arr->akind == A_LIMITED && ArrSize(t->arr) >= 0));
@@ -78,8 +81,10 @@ struct WasmCodeGen : ValueLayout {
                 // also lie in any assigned data memory.
                 return FatPointers() && !FrameRef(t) ? WasmModule::I64 : WasmModule::I32;
             case TY_ARRAY: {
-                if (!IsResz(t) && !InlineArray(t))
+                if (!IsResz(t) && !InlineArray(t) && !VariableArray(t))
                     Fail(t->line, "this array layout needs the pending compound lowering");
+                if (VariableArray(t) && LenStore(t->arr) == IS_VARINT)
+                    Fail(t->line, "varint array prefixes need the pending encoding lowering");
                 auto element = t->arr->sub;
                 if (element->kind == TY_ARRAY || HeaderRef(element))
                     Fail(t->line, "compound array elements need the pending layout lowering");
@@ -89,13 +94,14 @@ struct WasmCodeGen : ValueLayout {
                     if ((uint64_t)ArrSize(t->arr) > (UINT32_MAX - prefix) / FixedSize(element))
                         Fail(t->line, "array layout exceeds memory32");
                 }
-                return WasmModule::I32; // Address of the authoritative owner header.
+                return VariableArray(t) ? WasmModule::I64 : WasmModule::I32;
             }
             default: Fail(t->line, "this value layout is not implemented (scalar backend)");
         }
     }
     uint32_t Size(TypeExpr *t) {
         Type(t);
+        if (VariableArray(t)) Fail(t->line, "variable array size needs the pending destination lowering");
         auto size = IsResz(t) ? 16 : FixedSize(t);
         if (size < 0 || size > UINT32_MAX) Fail(t->line, "value exceeds memory32");
         return (uint32_t)size;
@@ -235,19 +241,29 @@ struct WasmCodeGen : ValueLayout {
         else { code.Get(framebase); code.I32((int32_t)s.offset); code.Byte(0x6a); }
     }
     void Read(const Slot &s) {
-        if (s.memory) { Address(s); if (s.type->kind != TY_ARRAY) LoadFixed(s.type); }
+        if (s.memory) {
+            Address(s);
+            if (VariableArray(s.type)) code.Mem(0x29);
+            else if (s.type->kind != TY_ARRAY) LoadFixed(s.type);
+        }
         else code.Get(s.local);
+    }
+    void ReferenceAddress(const Slot &s) {
+        if (VariableArray(s.type)) Read(s);
+        else { Address(s); if (FatPointers() && s.type->kind != TY_ARRAY) code.Byte(0xad); }
     }
     void Write(const Slot &s) {
         if (s.memory) {
-            auto temp = Temp(s.type); code.Set(temp); Address(s); code.Get(temp); StoreFixed(s.type);
+            auto temp = Temp(s.type); code.Set(temp); Address(s); code.Get(temp);
+            if (VariableArray(s.type)) code.Mem(0x37);
+            else StoreFixed(s.type);
         } else code.Set(s.local);
     }
     void Bind(VarDef *v, optional<uint32_t> param = {}) {
         if (v->isglobal || slots.count(v)) return;
         auto t = Type(v->type);
         Slot s {v->type};
-        if (addressed.count(v) || v->type->kind == TY_ARRAY) {
+        if (!VariableArray(v->type) && (addressed.count(v) || v->type->kind == TY_ARRAY)) {
             s.memory = true;
             s.offset = framesize;
             auto bytes = std::max(1u, Size(v->type));
@@ -522,8 +538,21 @@ struct WasmCodeGen : ValueLayout {
     }
     void Gen(Node *n) {
         auto unary = Is<Unary>(n);
+        auto arrayaddress = Is<Ident>(n) || (unary && unary->op == T_BITAND);
+        if (n->exprtype && n->exprtype->kind == TY_ARRAY && !arrayaddress) {
+            auto borrowed = [&](TypeExpr *type) {
+                return type && type->kind == TY_REF && type->ref->sub->kind == TY_ARRAY &&
+                       TEq(type->ref->sub, n->exprtype);
+            };
+            if (auto index = Is<Index>(n)) arrayaddress = borrowed(ArrayElement(index->obj));
+            else if (auto call = Is<Call>(n)) {
+                auto &rets = call->spec ? call->spec->rets : call->rettypes;
+                arrayaddress = rets.size() == 1 && borrowed(rets[0]);
+            } else if (auto inlined = Is<InlineBlock>(n))
+                arrayaddress = inlined->spec->rets.size() == 1 && borrowed(inlined->spec->rets[0]);
+        }
         if (n->exprtype && n->exprtype->kind == TY_ARRAY && !Is<Ident>(n) &&
-            !(unary && unary->op == T_BITAND))
+            !arrayaddress)
             Fail(n->line, "array-valued temporary results need the pending destination lowering");
         if (auto v = Is<IntLit>(n)) { code.I64(v->val); return; }
         if (auto v = Is<FltLit>(n)) {
@@ -559,10 +588,10 @@ struct WasmCodeGen : ValueLayout {
                 if (!id || !id->vdef) Fail(n->line, "only scalar local/global addresses are implemented");
                 auto &s = Find(id->vdef);
                 if (s.type->kind == TY_REF) Read(s);
-                else { Address(s); if (FatPointers() && s.type->kind != TY_ARRAY) code.Byte(0xad); }
+                else ReferenceAddress(s);
                 if (n->exprtype->kind != TY_REF) {
                     auto pointertype = s.type->kind == TY_REF ? Type(s.type)
-                                      : s.type->kind == TY_ARRAY ? WasmModule::I32
+                                      : s.type->kind == TY_ARRAY ? Type(s.type)
                                       : FatPointers() ? WasmModule::I64 : WasmModule::I32;
                     CheckNull(n->line, pointertype); Load(Operand(v->child->exprtype));
                 }
@@ -589,7 +618,8 @@ struct WasmCodeGen : ValueLayout {
         }
         if (auto v = Is<Dot>(n); v && (v->member == B_LEN || v->member == B_CAP)) {
             auto header = ArrayHeader(v->obj); auto array = ArrayType(v->obj);
-            if (v->member == B_LEN) ArrayLength(header, array);
+            if (v->member == B_LEN) ArrayLength(header, array, ArrayMemory(v->obj));
+            else if (VariableArray(array)) Fail(v->line, "variable arrays have no static capacity");
             else code.I64(ArrSize(array->arr));
             return;
         }
@@ -685,11 +715,12 @@ struct WasmCodeGen : ValueLayout {
         if (op == T_DOTASSIGN) {
             if (t->kind != TY_REF) Fail(line, "only scalar reference rebinding is implemented");
             if (auto source = Is<Ident>(rhs); source && source->vdef && source->vdef->type->kind != TY_REF)
-                { Address(Find(source->vdef)); if (FatPointers() && source->vdef->type->kind != TY_ARRAY) code.Byte(0xad); }
+                ReferenceAddress(Find(source->vdef));
             else ReferenceValue(rhs, Type(t));
             Write(s);
             return;
         }
+        if (t->kind == TY_ARRAY) Fail(line, "whole-array assignment needs the pending destination lowering");
         int address = -1;
         if (pointee) {
             Read(s); CheckNull(line, Type(t)); address = (int)Local(Type(t)); code.Set(address);
@@ -840,7 +871,7 @@ struct WasmCodeGen : ValueLayout {
         startfn = module.AddFn("goose.start", {}, {});
         for (auto g : ast.globals) for (auto v : g->defs) {
             Type(v->type);
-            auto bytes = std::max(1u, Size(v->type));
+            auto bytes = VariableArray(v->type) ? 8u : std::max(1u, Size(v->type));
             auto offset = InlineArray(v->type) ? module.ZeroData(bytes) : module.Data(string(bytes, '\0'));
             globals[v] = {v->type, 0, offset, true, true};
         }
@@ -876,9 +907,10 @@ struct WasmCodeGen : ValueLayout {
     int ArrayMemory(Node *n);
     TypeExpr *ArrayType(Node *n);
     TypeExpr *ArrayElement(Node *n);
-    void ArrayLength(uint32_t header, TypeExpr *array);
-    void StoreArrayLength(TypeExpr *array);
+    void ArrayLength(uint32_t header, TypeExpr *array, int memory = -1);
+    void StoreArrayLength(TypeExpr *array, int memory = -1);
     void InitArray(VarDef *owner, const Slot &slot, Node *init);
+    void InitVariableArray(VarDef *owner, const Slot &slot, ArrayLit *literal);
     void PushArray(uint32_t header, TypeExpr *array, Node *value, TypeExpr *result, Line line, int memory);
     void ArrayBuiltin(Call *call, const vector<Node *> &arguments);
     void ArrayEquality(Binary *node);
