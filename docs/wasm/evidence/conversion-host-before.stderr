@@ -1,0 +1,30 @@
+Traceback (most recent call last):
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_backend.py", line 270, in <module>
+    main()
+    ~~~~^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_backend.py", line 193, in main
+    run([args.node, ROOT / 'test' / 'wasm_conversion.mjs', wasm])
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_backend.py", line 18, in run
+    raise AssertionError(f"command failed ({result.returncode}): {' '.join(map(str, command))}\n"
+                         f"stdout:\n{result.stdout.decode(errors='replace')}\n"
+                         f"stderr:\n{result.stderr.decode(errors='replace')}")
+AssertionError: command failed (1): node /home/dev/Projects/goose-wasm-backend/test/wasm_conversion.mjs /home/dev/Projects/goose-wasm-backend/build/gen/wasm/bounded-conversion-O0.wasm
+stdout:
+
+stderr:
+file:///home/dev/Projects/goose-wasm-backend/test/wasm_conversion.mjs:12
+            throw new Error('in-range conversion crossed the host boundary');
+                  ^
+
+Error: in-range conversion crossed the host boundary
+    at callbacks.goose.<computed> (file:///home/dev/Projects/goose-wasm-backend/test/wasm_conversion.mjs:12:19)
+    at main.0 (wasm://wasm/54deaeaa:wasm-function[11]:0x1d5)
+    at goose.start (wasm://wasm/54deaeaa:wasm-function[13]:0x255)
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_conversion.mjs:18:18
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.22.2
+

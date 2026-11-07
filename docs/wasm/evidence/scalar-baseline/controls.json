@@ -1,0 +1,29 @@
+{
+  "available_affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "chosen_affinity": [
+    0
+  ],
+  "compiler_sha256": "a14e44a14fe900a0a2fd2f282bafb85b43e5f61c83dcd2875195fc941446f8b6",
+  "compiler_source_commit": "f3d137b42275750419432eecef390e5f9c0180aa",
+  "cc": "cc (Debian 14.2.0-19) 14.2.0\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+  "kernel": "Linux t3 6.12.113+deb13-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.12.113-1 (2026-10-15) x86_64 GNU/Linux",
+  "cpu_model": "AMD Ryzen 7 8845HS w/ Radeon 780M Graphics",
+  "governor": "powersave"
+}

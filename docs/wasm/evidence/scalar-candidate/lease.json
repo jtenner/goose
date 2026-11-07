@@ -1,0 +1,16 @@
+{
+  "active": false,
+  "owner": "/root",
+  "owner_pid": 1894205,
+  "owner_pgid": 1894184,
+  "global_lock": "/home/dev/Projects/wago/.performance-measurement.lock",
+  "granted_by_thread": "c887636c-b20e-407a-9043-b16735e7c41c",
+  "scope": "New candidate comparison only; same integer loop and wrapping float-to-int; native preparation; two warmups and seven samples; Node initialization/run.",
+  "acquired_utc": "2026-11-06T23:50:21.422035+00:00",
+  "affinity": [
+    0
+  ],
+  "released_utc": "2026-11-06T23:50:21.826390+00:00",
+  "measurement_exit": 0,
+  "children_reaped": true
+}

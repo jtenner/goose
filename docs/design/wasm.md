@@ -1,5 +1,10 @@
 # Running Goose on WebAssembly
 
+> Historical C-port proposal. Current direct-backend work follows the
+> [native multi-memory plan](native-wasm.md). See the
+> [scalar checkpoint status](../wasm/status.md) for implemented support and
+> remaining work.
+
 <details>
 <summary>Table of contents</summary>
 

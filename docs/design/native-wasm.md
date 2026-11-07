@@ -174,3 +174,9 @@ Future EH emission must respect tag-section placement before globals, rather
 than order sections solely by their numeric IDs.
 
 Reference: [Starshine encoder](https://github.com/jtenner/starshine-mb/blob/b28144a7c50f1dc360825f7f68220022101b9921/src/binary/encode.mbt).
+
+## Current checkpoint
+
+The complete project is still unfinished. The tested scalar path, exact source
+and binary identities, independent review records, measured converter change,
+and remaining stages are recorded in [the status report](../wasm/status.md).

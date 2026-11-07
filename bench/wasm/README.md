@@ -2,8 +2,9 @@
 
 These workloads establish a first baseline. They do not compare an optimization
 with a previous Wasm backend. `scalar.goose` uses only core integer operations.
-`conversion.goose` exposes the initial host-call/BigInt cost of wrapping float
-conversion. There is no added guest heap allocation in the integer loop.
+`conversion.goose` compares the initial host-call/BigInt implementation with
+the shared in-range Wasm conversion helper and retained wrapping fallback.
+There is no added guest heap allocation in the integer loop.
 
 Run `measure.py` only in a coordinator-approved quiet window after all owned
 builds and tests finish. Its required lease JSON records `active: true` and
@@ -20,3 +21,5 @@ physical linear-memory commitment measurement is provided.
 
 Multi-memory dispatch, aggregate construction, nonlocal EH, and worker benchmarks
 remain part of stages C through G. No speed claim is made for those features.
+Recorded scalar results and raw evidence are in
+[the measurement report](../../docs/wasm/measurements.md).

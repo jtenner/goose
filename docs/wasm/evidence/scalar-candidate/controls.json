@@ -1,0 +1,31 @@
+{
+  "available_affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "chosen_affinity": [
+    0
+  ],
+  "compiler_sha256": "858f4092702b85300103afb4427b4d0f2a8be3701c7d0e83a8d91f1b2a3a0de6",
+  "compiler_build_base": "f3d137b42275750419432eecef390e5f9c0180aa",
+  "wasm_codegen_sha256": "53f28c7d32ce869e15ab83fd1075048f1b66d0a844b5f7e9e89174ff1de260e6",
+  "cc": "cc (Debian 14.2.0-19) 14.2.0\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+  "kernel": "Linux t3 6.12.113+deb13-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.12.113-1 (2026-10-15) x86_64 GNU/Linux",
+  "compiler_version": "goose v2026.3-322-gf3d137b4-dirty (runtime 5e6ab5bd0bf8)",
+  "cpu_model": "AMD Ryzen 7 8845HS w/ Radeon 780M Graphics",
+  "governor": "powersave"
+}

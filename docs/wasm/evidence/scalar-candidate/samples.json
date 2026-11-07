@@ -1,0 +1,277 @@
+{
+  "schema": 1,
+  "lease": {
+    "active": true,
+    "owner": "/root",
+    "owner_pid": 1894205,
+    "owner_pgid": 1894184,
+    "global_lock": "/home/dev/Projects/wago/.performance-measurement.lock",
+    "granted_by_thread": "c887636c-b20e-407a-9043-b16735e7c41c",
+    "scope": "New candidate comparison only; same integer loop and wrapping float-to-int; native preparation; two warmups and seven samples; Node initialization/run.",
+    "acquired_utc": "2026-11-06T23:50:21.422035+00:00",
+    "affinity": [
+      0
+    ]
+  },
+  "environment": {
+    "platform": "Linux-6.12.113+deb13-amd64-x86_64-with-glibc2.41",
+    "cpu_count": 16
+  },
+  "compiler": "/home/dev/Projects/goose-wasm-backend/build/goose",
+  "compiler_sha256": "858f4092702b85300103afb4427b4d0f2a8be3701c7d0e83a8d91f1b2a3a0de6",
+  "commit": "08acfd56e6cd9a8ad59eb81e5339c6bcdbcf1d04",
+  "workloads": {
+    "scalar": {
+      "source_sha256": "f79702354c9b54b1561b5249afd84f008cf74d2d112a8c632b6d015781f4902b",
+      "module_sha256": "18af94475590cc0243df0f69a9646920f6b9d22fcdd27aed558aef9af2d8e107",
+      "wasm_bytes": 741,
+      "goose_invocation_ms": 2.939562,
+      "native_process_rows": [
+        {
+          "sample": -2,
+          "warmup": true,
+          "process_ms": 3.745314
+        },
+        {
+          "sample": -1,
+          "warmup": true,
+          "process_ms": 3.596535
+        },
+        {
+          "sample": 0,
+          "warmup": false,
+          "process_ms": 3.546661
+        },
+        {
+          "sample": 1,
+          "warmup": false,
+          "process_ms": 3.551159
+        },
+        {
+          "sample": 2,
+          "warmup": false,
+          "process_ms": 3.562201
+        },
+        {
+          "sample": 3,
+          "warmup": false,
+          "process_ms": 3.590542
+        },
+        {
+          "sample": 4,
+          "warmup": false,
+          "process_ms": 3.884112
+        },
+        {
+          "sample": 5,
+          "warmup": false,
+          "process_ms": 3.753148
+        },
+        {
+          "sample": 6,
+          "warmup": false,
+          "process_ms": 3.712632
+        }
+      ],
+      "node": {
+        "answer": "5934796465805240622\n",
+        "node": "v24.22.2",
+        "v8": "13.6.233.17-node.63",
+        "max_rss_kib": 54848,
+        "rows": [
+          {
+            "sample": -2,
+            "warmup": true,
+            "compile_and_init_ms": 0.8237050000000004,
+            "run_ms": 2.6627420000000015,
+            "memory0_bytes": 65536
+          },
+          {
+            "sample": -1,
+            "warmup": true,
+            "compile_and_init_ms": 0.06177599999999828,
+            "run_ms": 2.161702000000002,
+            "memory0_bytes": 65536
+          },
+          {
+            "sample": 0,
+            "warmup": false,
+            "compile_and_init_ms": 0.04069600000000051,
+            "run_ms": 2.034013999999999,
+            "memory0_bytes": 65536
+          },
+          {
+            "sample": 1,
+            "warmup": false,
+            "compile_and_init_ms": 0.048770999999998565,
+            "run_ms": 2.3571100000000023,
+            "memory0_bytes": 65536
+          },
+          {
+            "sample": 2,
+            "warmup": false,
+            "compile_and_init_ms": 0.03152899999999903,
+            "run_ms": 2.0686190000000018,
+            "memory0_bytes": 65536
+          },
+          {
+            "sample": 3,
+            "warmup": false,
+            "compile_and_init_ms": 0.03830200000000161,
+            "run_ms": 2.0206289999999996,
+            "memory0_bytes": 65536
+          },
+          {
+            "sample": 4,
+            "warmup": false,
+            "compile_and_init_ms": 0.02971600000000052,
+            "run_ms": 2.0125340000000023,
+            "memory0_bytes": 65536
+          },
+          {
+            "sample": 5,
+            "warmup": false,
+            "compile_and_init_ms": 0.023133000000001402,
+            "run_ms": 2.0689499999999974,
+            "memory0_bytes": 65536
+          },
+          {
+            "sample": 6,
+            "warmup": false,
+            "compile_and_init_ms": 0.03965499999999622,
+            "run_ms": 2.0488420000000005,
+            "memory0_bytes": 65536
+          }
+        ]
+      },
+      "node_run_median_ms": 2.0488420000000005,
+      "native_process_median_ms": 3.590542
+    },
+    "conversion": {
+      "source_sha256": "7994c39155fd1ff982bc7d028160f231da16fa2dc65e662f1dfcd558f7b15164",
+      "module_sha256": "c58ab6fb660aa3cbd94efb6c445ba9a07195b5db50bdf0562f114567978f8854",
+      "wasm_bytes": 815,
+      "goose_invocation_ms": 3.092911,
+      "native_process_rows": [
+        {
+          "sample": -2,
+          "warmup": true,
+          "process_ms": 2.041168
+        },
+        {
+          "sample": -1,
+          "warmup": true,
+          "process_ms": 1.928306
+        },
+        {
+          "sample": 0,
+          "warmup": false,
+          "process_ms": 1.087539
+        },
+        {
+          "sample": 1,
+          "warmup": false,
+          "process_ms": 2.212549
+        },
+        {
+          "sample": 2,
+          "warmup": false,
+          "process_ms": 1.933395
+        },
+        {
+          "sample": 3,
+          "warmup": false,
+          "process_ms": 1.84543
+        },
+        {
+          "sample": 4,
+          "warmup": false,
+          "process_ms": 2.248004
+        },
+        {
+          "sample": 5,
+          "warmup": false,
+          "process_ms": 1.851372
+        },
+        {
+          "sample": 6,
+          "warmup": false,
+          "process_ms": 1.857543
+        }
+      ],
+      "node": {
+        "answer": "9999900000\n",
+        "node": "v24.22.2",
+        "v8": "13.6.233.17-node.63",
+        "max_rss_kib": 54740,
+        "rows": [
+          {
+            "sample": -2,
+            "warmup": true,
+            "compile_and_init_ms": 0.2594169999999991,
+            "run_ms": 1.4576530000000023,
+            "memory0_bytes": 65536
+          },
+          {
+            "sample": -1,
+            "warmup": true,
+            "compile_and_init_ms": 0.04667699999999897,
+            "run_ms": 0.25728300000000104,
+            "memory0_bytes": 65536
+          },
+          {
+            "sample": 0,
+            "warmup": false,
+            "compile_and_init_ms": 0.02894500000000022,
+            "run_ms": 0.27077799999999996,
+            "memory0_bytes": 65536
+          },
+          {
+            "sample": 1,
+            "warmup": false,
+            "compile_and_init_ms": 0.03790100000000152,
+            "run_ms": 0.2511410000000005,
+            "memory0_bytes": 65536
+          },
+          {
+            "sample": 2,
+            "warmup": false,
+            "compile_and_init_ms": 0.02457599999999971,
+            "run_ms": 0.33048000000000144,
+            "memory0_bytes": 65536
+          },
+          {
+            "sample": 3,
+            "warmup": false,
+            "compile_and_init_ms": 0.03649799999999814,
+            "run_ms": 0.26390500000000117,
+            "memory0_bytes": 65536
+          },
+          {
+            "sample": 4,
+            "warmup": false,
+            "compile_and_init_ms": 0.03459499999999949,
+            "run_ms": 0.2561300000000024,
+            "memory0_bytes": 65536
+          },
+          {
+            "sample": 5,
+            "warmup": false,
+            "compile_and_init_ms": 0.024014999999998565,
+            "run_ms": 0.3042010000000026,
+            "memory0_bytes": 65536
+          },
+          {
+            "sample": 6,
+            "warmup": false,
+            "compile_and_init_ms": 0.03498599999999996,
+            "run_ms": 0.2976979999999969,
+            "memory0_bytes": 65536
+          }
+        ]
+      },
+      "node_run_median_ms": 0.27077799999999996,
+      "native_process_median_ms": 1.857543
+    }
+  }
+}
