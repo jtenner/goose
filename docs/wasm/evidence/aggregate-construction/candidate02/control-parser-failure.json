@@ -1,0 +1,6 @@
+{
+  "classification": "test parser assumption, not compiler defect",
+  "reason": "main has a fill-loop stride and a later array assertion stride; global unique-match requirement was too strict",
+  "completed": "36 native-reused both-engine cases plus six O0 owner checkpoints and healthy O0 complete image",
+  "repair": "require a unique stride only in the prefix before the fill copy; mutate first match only"
+}

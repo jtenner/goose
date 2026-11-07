@@ -1,0 +1,8 @@
+{
+ "data_fields": "struct S { n:i64=7 }\nstruct H { rows:S[2] }\nrecursive fn replace(dst:H&) { dst=H{rows:[S{n:9};2]}; }\nfn main(){var a:H[]=[H{rows:default<S[2]>()},H{rows:[S{n:8};2]}];assert(a[0].rows[1].n==7);assert(a[1].rows[0].n==8);replace(a[0]);assert(a[0].rows[1].n==9);assert(a[1].rows[0].n==8);print(\"data_fields\");}\n",
+ "nested_fill": "var calls:i64=0;recursive fn tick()->i64{calls++;return calls;}\nstruct S{n:i64}\nstruct I{rows:S[2]}\nstruct H{groups:I[2]}\nfn main(){var h:H=H{groups:[I{rows:[S{n:tick()};2]};2]};assert(calls==1);assert(h.groups[1].rows[0].n==1);assert(h.groups[0].rows[1].n==1);print(\"nested_fill\");}\n",
+ "default_growth": "recursive fn big()->i64{var a:u8[70000]=[7;70000];assert(a[69999]==7);return a[69999];}\nstruct S{n:i64=big()}\nfn main(){var a:S[2]=default<S[2]>();assert(a[0].n==7);assert(a[1].n==7);print(\"default_growth\");}\n",
+ "fill_exit": "struct S{n:i64}\nfn main(){var visits:i64=0;for i in 4{var a:S[2]=[S{n:{if i==1{continue;}if i==3{break;}i+1}};2];assert(a[0].n==i+1);assert(a[1].n==i+1);visits++;print(\"step\");}assert(visits==2);print(\"fill_exit\");}\n",
+ "zero_exit": "struct S{n:i64}\nrecursive fn run()->i64{var a:S[0]=[S{n:{return 7;8}};0];return 0;}\nfn main(){assert(run()==7);print(\"zero_exit\");}\n",
+ "zero_default": "var calls:i64=0;recursive fn tick()->i64{calls++;return calls;}\nstruct S{n:i64=tick()}\nfn main(){var a:S[0]=default<S[0]>();assert(a.len==0);assert(calls==0);print(\"zero_default\");}\n"
+}

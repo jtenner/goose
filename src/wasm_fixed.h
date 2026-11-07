@@ -410,12 +410,64 @@ inline void WasmCodeGen::ConstructFields(FreshFixedDestination destination, Stru
     }
 }
 
+inline void WasmCodeGen::ConstructRepeatedAggregate(FreshFixedDestination destination, Node *value,
+                                                     uint64_t count, bool each) {
+    auto line = destination.initialization->line;
+    CheckFreshDestination(destination, line);
+    auto array = destination.place.type;
+    if (!InlineArray(array) || !Nominal(array->arr->sub))
+        Fail(line, "repeated aggregate construction needs a fixed array destination");
+    auto element = array->arr->sub;
+    auto stride = RequireFixed(element, line);
+    if (!stride) Fail(line, "zero-stride aggregate elements need the pending layout lowering");
+    auto capacity = (uint64_t)ArrSize(array->arr);
+    auto prefix = array->arr->akind == A_LIMITED ? (uint32_t)IntSize(LenStore(array->arr)) : 0u;
+    if (count > capacity || (array->arr->akind == A_FIXED && count != capacity) ||
+        prefix > destination.image || count > (destination.image - prefix) / stride)
+        Fail(line, "aggregate fill exceeds its checked array extent");
+    if (prefix) InitArrayCount(FreshArrayPlace(destination, line), count);
+    if (each && !count) return;
+    if (!value) Fail(line, "aggregate construction needs its checked element initializer");
+    auto base = Local(WasmModule::I64), position = Local(WasmModule::I64);
+    auto address = Local(WasmModule::I64);
+    EmitPackedAddress(destination.place, line); code.Set(base);
+    auto copy = [&](const FixedPlace &item) {
+        code.Get(base); code.Get(position); code.I64(stride); code.Byte(0x7e); code.Byte(0x7c);
+        if (prefix) { code.I64(prefix); code.Byte(0x7c); }
+        code.Set(address);
+        // The complete fresh owner and count bound prove this element span.
+        CopyBytes({element, address, 0, destination.place.memory, true, true},
+                  item, stride, line, true);
+    };
+    auto loop = [&](auto body) {
+        code.I64(0); code.Set(position);
+        auto done = Open(), head = Open(0x03);
+        code.Get(position); code.I64((int64_t)count); code.Byte(0x5a); Branch(done, true);
+        body();
+        code.Get(position); code.I64(1); code.Byte(0x7c); code.Set(position);
+        Branch(head); Close(); Close();
+    };
+    if (each) {
+        loop([&] { WithFixedTemporary(element, value, copy); });
+    } else {
+        // Even an empty fill evaluates and captures its value once.
+        WithFixedTemporary(element, value, [&](const FixedPlace &item) {
+            if (count) loop([&] { copy(item); });
+        });
+    }
+}
+
 inline void WasmCodeGen::ConstructAggregateArray(FreshFixedDestination destination, ArrayLit *literal) {
     auto array = destination.place.type;
     if (!InlineArray(array) || !Nominal(array->arr->sub))
         Fail(literal->line, "aggregate array construction needs a fixed Memory 0 destination");
-    if (literal->fillval)
-        Fail(literal->line, "aggregate array fills need the pending snapshot lowering");
+    if (literal->fillval) {
+        auto count = Is<IntLit>(literal->fillcount);
+        if (!count || count->val < 0)
+            Fail(literal->line, "array fill needs a nonnegative constant count");
+        ConstructRepeatedAggregate(destination, literal->fillval, (uint64_t)count->val, false);
+        return;
+    }
     if (literal->capexpr)
         Fail(literal->line, "aggregate capacity constructors need the pending destination lowering");
     auto element = array->arr->sub;
@@ -497,8 +549,10 @@ inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *sourc
         if (call->builtin != B_DEFAULT) break;
         if (Nominal(type) && call->defaultinit) { source = call->defaultinit; continue; }
         if (InlineArray(type)) {
-            if (Nominal(type->arr->sub))
-                Fail(source->line, "aggregate array defaults need the pending destination lowering");
+            if (Nominal(type->arr->sub)) {
+                auto count = type->arr->akind == A_FIXED ? (uint64_t)ArrSize(type->arr) : 0;
+                ConstructRepeatedAggregate(fresh, call->defaultinit, count, true); return;
+            }
             if (type->arr->akind == A_FIXED) zero(bytes);
             else {
                 auto place = FreshArrayPlace(fresh, source->line);

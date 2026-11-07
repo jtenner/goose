@@ -1,0 +1,6 @@
+{
+ "prefix16":"struct S{n:i64}\nfn main(){var a:S[..300]=[S{n:7};2];assert(a.len==2);assert(a[1].n==7);print(\"prefix16\");}\n",
+ "prefix32":"struct S{n:i64}\nfn main(){var a:S[..70000]=[S{n:7};2];assert(a.len==2);assert(a[1].n==7);print(\"prefix32\");}\n",
+ "nested_defaults":"var calls:i64=0;recursive fn tick()->i64{calls++;print(\"eval\");return calls;}\nstruct S{n:i64=tick()}\nstruct I{rows:S[2]=default<S[2]>()}\nfn main(){var a:I[2]=default<I[2]>();assert(calls==4);assert(a[0].rows[0].n==1);assert(a[0].rows[1].n==2);assert(a[1].rows[0].n==3);assert(a[1].rows[1].n==4);print(\"nested_defaults\");}\n",
+ "defer_exit":"struct S{n:i64}\nrecursive fn run()->i64{var a:S[0]=[S{n:{defer{var bytes:u8[70000]=[7;70000];assert(bytes[69999]==7);}return 7;8}};0];return 0;}\nfn main(){assert(run()==7);print(\"defer_exit\");}\n"
+}

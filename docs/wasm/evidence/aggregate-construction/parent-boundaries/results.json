@@ -1,0 +1,58 @@
+[
+  {
+    "case": "prefix16",
+    "opt": 0,
+    "source_sha256": "a4354cb34c04bdf7fed25bdc6ae319d2426d83ab11d05256017f1716915011ca",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix16.goose:2: error: wasm target: aggregate array fills need the pending snapshot lowering\n"
+  },
+  {
+    "case": "prefix16",
+    "opt": 2,
+    "source_sha256": "a4354cb34c04bdf7fed25bdc6ae319d2426d83ab11d05256017f1716915011ca",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix16.goose:2: error: wasm target: aggregate array fills need the pending snapshot lowering\n"
+  },
+  {
+    "case": "prefix32",
+    "opt": 0,
+    "source_sha256": "90e7481a71f903faa2548e14a0bc266d09c7cae83d607bed1f21df1f694bcb2d",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix32.goose:2: error: wasm target: aggregate array fills need the pending snapshot lowering\n"
+  },
+  {
+    "case": "prefix32",
+    "opt": 2,
+    "source_sha256": "90e7481a71f903faa2548e14a0bc266d09c7cae83d607bed1f21df1f694bcb2d",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix32.goose:2: error: wasm target: aggregate array fills need the pending snapshot lowering\n"
+  },
+  {
+    "case": "nested_defaults",
+    "opt": 0,
+    "source_sha256": "9f957d7892b3198495d132f0f9e6e1583c19b9f0d302db833874e9337886a175",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/nested_defaults.goose:4: error: wasm target: aggregate array defaults need the pending destination lowering\n"
+  },
+  {
+    "case": "nested_defaults",
+    "opt": 2,
+    "source_sha256": "9f957d7892b3198495d132f0f9e6e1583c19b9f0d302db833874e9337886a175",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/nested_defaults.goose:4: error: wasm target: aggregate array defaults need the pending destination lowering\n"
+  },
+  {
+    "case": "defer_exit",
+    "opt": 0,
+    "source_sha256": "51fd36e26ad4cc6b0cf7ed11657d7a485fdcbfa6ed0c921a569984d3aa84cd05",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/defer_exit.goose:2: error: wasm target: aggregate array fills need the pending snapshot lowering\n"
+  },
+  {
+    "case": "defer_exit",
+    "opt": 2,
+    "source_sha256": "51fd36e26ad4cc6b0cf7ed11657d7a485fdcbfa6ed0c921a569984d3aa84cd05",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/defer_exit.goose:2: error: wasm target: aggregate array fills need the pending snapshot lowering\n"
+  }
+]

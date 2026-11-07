@@ -1,0 +1,362 @@
+[
+  {
+    "name": "prefix16-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-constructor-assignment-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix16-O0.c",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix16.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "prefix16-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix16-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix16-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "prefix16-O0-native",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix16-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "prefix16-O0-before",
+    "args": [
+      "/tmp/goose-wasm-constructor-assignment-20261107/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix16-O0.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix16.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "prefix16-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-constructor-assignment-20261107/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix16-O2.c",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix16.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "prefix16-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix16-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix16-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "prefix16-O2-native",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix16-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "prefix16-O2-before",
+    "args": [
+      "/tmp/goose-wasm-constructor-assignment-20261107/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix16-O2.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix16.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "prefix32-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-constructor-assignment-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix32-O0.c",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix32.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "prefix32-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix32-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix32-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "prefix32-O0-native",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix32-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "prefix32-O0-before",
+    "args": [
+      "/tmp/goose-wasm-constructor-assignment-20261107/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix32-O0.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix32.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "prefix32-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-constructor-assignment-20261107/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix32-O2.c",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix32.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "prefix32-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix32-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix32-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "prefix32-O2-native",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix32-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "prefix32-O2-before",
+    "args": [
+      "/tmp/goose-wasm-constructor-assignment-20261107/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix32-O2.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/prefix32.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "nested_defaults-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-constructor-assignment-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/nested_defaults-O0.c",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/nested_defaults.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested_defaults-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/nested_defaults-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/nested_defaults-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested_defaults-O0-native",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/nested_defaults-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested_defaults-O0-before",
+    "args": [
+      "/tmp/goose-wasm-constructor-assignment-20261107/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/nested_defaults-O0.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/nested_defaults.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "nested_defaults-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-constructor-assignment-20261107/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/nested_defaults-O2.c",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/nested_defaults.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested_defaults-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/nested_defaults-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/nested_defaults-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested_defaults-O2-native",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/nested_defaults-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested_defaults-O2-before",
+    "args": [
+      "/tmp/goose-wasm-constructor-assignment-20261107/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/nested_defaults-O2.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/nested_defaults.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "defer_exit-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-constructor-assignment-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/defer_exit-O0.c",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/defer_exit.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "defer_exit-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/defer_exit-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/defer_exit-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "defer_exit-O0-native",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/defer_exit-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "defer_exit-O0-before",
+    "args": [
+      "/tmp/goose-wasm-constructor-assignment-20261107/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/defer_exit-O0.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/defer_exit.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "defer_exit-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-constructor-assignment-20261107/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/defer_exit-O2.c",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/defer_exit.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "defer_exit-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/defer_exit-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/defer_exit-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "defer_exit-O2-native",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/defer_exit-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "defer_exit-O2-before",
+    "args": [
+      "/tmp/goose-wasm-constructor-assignment-20261107/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/defer_exit-O2.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-boundaries/defer_exit.goose"
+    ],
+    "exit": 1
+  }
+]

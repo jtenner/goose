@@ -1,0 +1,14 @@
+[
+  {
+    "name": "recursive_data-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-constructor-assignment-20261107/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-recursion/recursive_data-O0.c",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-recursion/recursive_data.goose"
+    ],
+    "exit": 1
+  }
+]

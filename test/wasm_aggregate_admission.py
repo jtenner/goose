@@ -81,11 +81,13 @@ def check_admission(run, exe, cc, out, node='node', validator='wasm-tools', wasm
             reference = run([binary])
             module.unlink(missing_ok=True)
             result = run([exe, f'-O{opt}', '--target', 'wasm', '-o', module, path], ok=False)
-            if name in ('field-iteration', 'assign'):
+            if name in ('field-iteration', 'assign', 'default', 'limited-default', 'fill', 'zero-fill'):
                 assert not result.returncode and not result.stderr
                 run([validator, 'validate', module])
                 assert run([node, root / 'scripts/run_wasm.mjs', module]).stdout == reference.stdout
-                assert reference.stdout == (b'1\n' if name == 'field-iteration' else b'2\n')
+                assert reference.stdout == {'field-iteration': b'1\n', 'assign': b'2\n',
+                                            'default': b'7\n', 'limited-default': b'0\n',
+                                            'fill': b'9\n', 'zero-fill': b'0\n'}[name]
                 if wasmtime_python:
                     assert run([wasmtime_python, root / 'test/wasmtime_host.py', module]).stdout == reference.stdout
                 count += 1

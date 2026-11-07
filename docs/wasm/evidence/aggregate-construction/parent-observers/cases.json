@@ -1,0 +1,6 @@
+{
+ "live_fill":"var calls:i64=0;recursive fn tick()->i64{calls++;print(\"eval\");return calls;}\nstruct S{n:i64}\nfn main(){var a:S[3]=[S{n:tick()};3];assert(calls==1);assert(a[2].n==1);print(\"live_fill\");}\n",
+ "live_default":"var calls:i64=0;recursive fn tick()->i64{calls++;print(\"eval\");return calls;}\nstruct S{n:i64=tick()}\nfn main(){var a:S[3]=default<S[3]>();assert(calls==3);assert(a[2].n==3);print(\"live_default\");}\n",
+ "live_zero":"var calls:i64=0;recursive fn tick()->i64{calls++;print(\"eval\");return calls;}\nstruct S{n:i64}\nfn main(){var a:S[0]=[S{n:tick()};0];assert(calls==1);assert(a.len==0);print(\"live_zero\");}\n",
+ "image":"struct Cell{tag:u8,n:u16}\nstruct H{left:u8,rows:Cell[..3],right:u16}\nvar before:u16=39030;\nvar holder:H=H{left:129,rows:[],right:58099};\nvar after:u32=878082192;\nrecursive fn value()->u16{print(\"eval\");return 17767;}\nfn main(){print(\"seed\");holder=H{left:17,rows:[Cell{tag:34,n:value()};2],right:31355};print(\"filled\");assert(holder.rows.len==2);assert(holder.rows[1].n==17767);assert(holder.left==17);assert(holder.right==31355);assert(before==39030);assert(after==878082192);}\n"
+}

@@ -1223,6 +1223,8 @@ struct WasmCodeGen : ValueLayout {
     void ConstructFields(FreshFixedDestination destination, StructLit *literal, const FixedFields &fields,
                          uint32_t prefix, Line line);
     void ConstructAggregateArray(FreshFixedDestination destination, ArrayLit *literal);
+    void ConstructRepeatedAggregate(FreshFixedDestination destination, Node *value,
+                                    uint64_t count, bool each);
     void CopyFixed(FreshFixedDestination destination, FixedPlace source, Line line);
     TypeExpr *FreshRootType(const FreshFixedDestination &destination);
     bool IsFreshWholeOwner(const FreshFixedDestination &destination);

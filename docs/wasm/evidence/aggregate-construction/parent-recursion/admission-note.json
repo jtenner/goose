@@ -1,0 +1,5 @@
+{
+  "classification": "invalid native fixture, not a Wasm compiler defect",
+  "reason": "The language forbids a nonfixed local across its recursive cycle (section 7.8).",
+  "coverage_claim": "None. Replaced by separately recorded valid calls at different live data-stack depths."
+}

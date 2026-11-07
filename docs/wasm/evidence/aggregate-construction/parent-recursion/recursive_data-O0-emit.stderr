@@ -1,0 +1,5 @@
+/tmp/goose-wasm-aggregate-construction-20261107/parent-recursion/recursive_data.goose:3: error: walk calls into its recursive cycle while non-fixed-size local a (declared at /tmp/goose-wasm-aggregate-construction-20261107/parent-recursion/recursive_data.goose:3) is in scope (§7.8): end its scope before the call
+recursive fn walk(depth:i64)->i64{var a:H[]=[H{rows:[S{n:depth};2]}];assert(a[0].rows[1].n==depth);if depth>0{assert(walk(depth-1)==depth-1);assert(a[0].rows[0].n==depth);}return a[0].rows[1].n;}
+                                                                                                                     ^
+  in fn walk(i64) instantiated from /tmp/goose-wasm-aggregate-construction-20261107/parent-recursion/recursive_data.goose:4
+  in fn main() instantiated from /tmp/goose-wasm-aggregate-construction-20261107/parent-recursion/recursive_data.goose:4

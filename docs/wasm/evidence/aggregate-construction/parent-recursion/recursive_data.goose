@@ -1,0 +1,4 @@
+struct S{n:i64}
+struct H{rows:S[2]}
+recursive fn walk(depth:i64)->i64{var a:H[]=[H{rows:[S{n:depth};2]}];assert(a[0].rows[1].n==depth);if depth>0{assert(walk(depth-1)==depth-1);assert(a[0].rows[0].n==depth);}return a[0].rows[1].n;}
+fn main(){assert(walk(3)==3);print("recursive_data");}

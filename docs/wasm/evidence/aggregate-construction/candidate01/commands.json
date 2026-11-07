@@ -1,0 +1,1010 @@
+[
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/default-O0.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-first/default.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/default-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/default-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/default-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/default-O2.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-first/default.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/default-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/default-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/default-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/limited_default-O0.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-first/limited_default.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/limited_default-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/limited_default-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/limited_default-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/limited_default-O2.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-first/limited_default.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/limited_default-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/limited_default-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/limited_default-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/fill-O0.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-first/fill.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/fill-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/fill-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/fill-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/fill-O2.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-first/fill.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/fill-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/fill-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/fill-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_fill-O0.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-first/zero_fill.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_fill-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_fill-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_fill-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_fill-O2.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-first/zero_fill.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_fill-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_fill-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_fill-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/limited_fill-O0.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-first/limited_fill.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/limited_fill-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/limited_fill-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/limited_fill-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/limited_fill-O2.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-first/limited_fill.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/limited_fill-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/limited_fill-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/limited_fill-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/refs-O0.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-first/refs.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/refs-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/refs-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/refs-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/refs-O2.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-first/refs.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/refs-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/refs-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/refs-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/nested-O0.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-first/nested.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/nested-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/nested-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/nested-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/nested-O2.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-first/nested.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/nested-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/nested-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/nested-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/enums-O0.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-first/enums.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/enums-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/enums-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/enums-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/enums-O2.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-first/enums.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/enums-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/enums-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/enums-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/data_fields-O0.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-extra/data_fields.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/data_fields-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/data_fields-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/data_fields-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/data_fields-O2.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-extra/data_fields.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/data_fields-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/data_fields-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/data_fields-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/nested_fill-O0.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-extra/nested_fill.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/nested_fill-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/nested_fill-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/nested_fill-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/nested_fill-O2.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-extra/nested_fill.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/nested_fill-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/nested_fill-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/nested_fill-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/default_growth-O0.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-extra/default_growth.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/default_growth-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/default_growth-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/default_growth-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/default_growth-O2.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-extra/default_growth.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/default_growth-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/default_growth-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/default_growth-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/fill_exit-O0.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-extra/fill_exit.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/fill_exit-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/fill_exit-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/fill_exit-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/fill_exit-O2.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-extra/fill_exit.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/fill_exit-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/fill_exit-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/fill_exit-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_exit-O0.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-extra/zero_exit.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_exit-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_exit-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_exit-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_exit-O2.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-extra/zero_exit.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_exit-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_exit-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_exit-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_default-O0.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-extra/zero_default.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_default-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_default-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_default-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_default-O2.wasm",
+      "/tmp/goose-wasm-aggregate-construction-20261107/parent-extra/zero_default.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_default-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_default-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-aggregate-construction-20261107/candidate01/zero_default-O2.wasm"
+    ],
+    "exit": 0
+  }
+]

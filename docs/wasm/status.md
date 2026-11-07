@@ -254,8 +254,16 @@ target; ordered cleanup handles return, break, continue and inner defers. Empty
 values, nested assignments, scalar/nominal array element exits and dynamic memory
 targets have native-first and both-engine correctness checks. See
 [constructor assignment evidence](evidence/constructor-assignment.md).
-Whole-array assignment, aggregate array fills/defaults and general by-value
-calls/results remain compilation gaps.
+Whole-array assignment and general by-value calls/results remain compilation
+gaps. Aggregate array fills/defaults were still guarded at that checkpoint.
+
+Fixed and limited arrays of positive fixed aggregates now support fill-once
+construction and per-element defaults. Nested fields, dynamic fresh data spans,
+zero-count effects, all usable length-prefix widths and exit cleanup have native
+and both-engine evidence. The correctness-only suite passes 1,824 groups; native
+regressions and 52 exact comparisons pass, and 360 unchanged parent module pairs
+are identical. See [aggregate construction evidence](evidence/aggregate-construction.md).
+Data-array fills, zero-stride elements and layout adaptation remain guarded.
 
 ## Host contract
 

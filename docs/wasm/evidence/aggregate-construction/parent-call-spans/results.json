@@ -1,0 +1,16 @@
+[
+  {
+    "case": "call_spans",
+    "opt": 0,
+    "source_sha256": "49598016b938df67b236edafd2e5715a73bd14a41b101cf54a558787f41bf0c0",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-aggregate-construction-20261107/parent-call-spans/call_spans.goose:4: error: wasm target: aggregate array fills need the pending snapshot lowering\n"
+  },
+  {
+    "case": "call_spans",
+    "opt": 2,
+    "source_sha256": "49598016b938df67b236edafd2e5715a73bd14a41b101cf54a558787f41bf0c0",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-aggregate-construction-20261107/parent-call-spans/call_spans.goose:4: error: wasm target: aggregate array fills need the pending snapshot lowering\n"
+  }
+]
