@@ -38,7 +38,12 @@ def main():
     out = ROOT / 'build' / 'gen' / 'wasm'
     out.mkdir(parents=True, exist_ok=True)
     count = 0
-    for source in sorted((ROOT / 'test' / 'wasm').glob('*.goose')):
+    sources = sorted((ROOT / 'test' / 'wasm').glob('*.goose'))
+    sources.extend(ROOT / 'test' / 'typing' / f'{name}.goose' for name in (
+        'global_optional_flow', 'optional_loop_callee_assignments',
+        'optional_while_condition_calls', 'u64_cmp_readonly_refs',
+    ))
+    for source in sources:
         expected = (ROOT / 'test' / 'expected' / (source.stem + '.out')).read_bytes()
         for opt in (0, 2):
             prefix = out / f'{source.stem}-O{opt}'
