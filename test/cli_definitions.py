@@ -133,7 +133,11 @@ with tempfile.TemporaryDirectory(prefix="goose-definitions-") as directory:
     for internal in ("GS_DEBUG", "GS_STACK_RESERVE", "GS_SEPARATE_RUNTIME", "GS_NEED_THREADS"):
         source.write_text('fn main() { print(build::' + internal + '); }\n')
         invoke(["check", "--debug", "--stack-reserve", "64K", source], ok=False, contains=internal)
-        invoke(["check", "--debug", "--stack-reserve", "64K", "-d" + internal + "=7", source])
+        source.write_text('fn main() { const if build::' + internal +
+                          ' == 7 {} else { wrong_definition(); } }\n')
+        definition = "-d" + internal + "=7"
+        invoke(["check", "--debug", "--stack-reserve", "64K", definition, source])
+        invoke(["check", definition, "--debug", "--stack-reserve", "64K", source])
     # Goose keywords and function-like macros remain C-only inputs.
     source.write_text('fn main() {}\n')
     for definition in ("if=true", "F(x)=((x)+1)", "X=1+2", "EMPTY="):

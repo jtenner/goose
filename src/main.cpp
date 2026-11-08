@@ -703,6 +703,7 @@ R"(  --stats               Print what the compile did: the declarations parsed,
                         error at its import, which goose fetch resolves.
   -D NAME[=VALUE]        C macro and, for literals, typed build::NAME.
                         Also accepts -DNAME[=VALUE] and -dNAME[=VALUE].
+                        The -d argument must be attached.
   --strict-worker-native Require audited worker-callable externs in worker graphs.
   --stdlib dir          The standard library's directory (or GOOSE_STDLIB);
                         found from where goose is by default.
