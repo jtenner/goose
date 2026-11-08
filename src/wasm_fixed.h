@@ -89,7 +89,7 @@ inline void WasmCodeGen::CheckFreshDestination(const FreshFixedDestination &fres
         fresh.image > fresh.ownerBytes - fresh.rootOffset || RequireFixed(place.type, line) != fresh.image)
         Fail(line, "fixed construction needs its complete fresh owner span");
     if (fresh.origin == FreshFixedOrigin::IncomingResult) {
-        if (!current || current->rets.size() != 1 || !Nominal(current->rets[0]) ||
+        if (!current || current->rets.size() != 1 || !FixedResult(current->rets[0]) ||
             fresh.root || fresh.temporary || fresh.initialization != current->body ||
             fresh.ownerBytes != std::max(1u, RequireFixed(current->rets[0], line)) ||
             place.memory != 0 || place.packed || place.address != FixedResultParameter(current) ||
@@ -164,7 +164,7 @@ inline void WasmCodeGen::FixedCallArguments(Call *call, const vector<Node *> &ar
 }
 
 inline uint32_t WasmCodeGen::FixedResultParameter(FnSpec *function) {
-    if (!function || function->rets.size() != 1 || !Nominal(function->rets[0]))
+    if (!function || function->rets.size() != 1 || !FixedResult(function->rets[0]))
         Fail(function ? function->sf->line : Line {}, "fixed result needs its checked function signature");
     return (uint32_t)function->params.size() + (NeedsBase(function) ? 1u : 0u);
 }
@@ -195,7 +195,7 @@ inline void WasmCodeGen::BlockInto(Block *body, FreshFixedDestination destinatio
 inline void WasmCodeGen::CallInto(FreshFixedDestination destination, Node *expression) {
     CheckFreshDestination(destination, expression->line);
     auto type = ActualType(expression);
-    if (!Nominal(type) || !TEq(type, destination.place.type))
+    if (!FixedResult(type) || !TEq(type, destination.place.type))
         Fail(expression->line, "aggregate result adaptation needs the pending destination lowering");
     RequireCallValue(type, true, expression->line);
     if (destination.place.memory != 0 || destination.place.packed) {
@@ -426,8 +426,8 @@ inline void WasmCodeGen::AssignFixed(FixedPlace destination, Node *source, TType
     auto call = Is<Call>(source);
     if (Is<StructLit>(source) || (dot && dot->variantconst) || (call && call->builtin == B_DEFAULT) ||
         (array && Is<ArrayLit>(source)) ||
-        (!array && (Is<Block>(source) || Is<IfExpr>(source))) ||
-        (((call && call->builtin < 0) || Is<InlineBlock>(source)) && Nominal(ActualType(source)))) {
+        (Is<Block>(source) || Is<IfExpr>(source)) ||
+        (((call && call->builtin < 0) || Is<InlineBlock>(source)) && FixedResult(ActualType(source)))) {
         WithFixedTemporary(destination.type, source, [&](const FixedPlace &value) {
             CopyBytes(destination, value, RequireFixed(destination.type, line), line, true);
         });
@@ -703,10 +703,10 @@ inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *sourc
         Fail(source->line, "this default needs the pending destination lowering");
     }
     auto resultCall = Is<Call>(source);
-    if (((resultCall && resultCall->builtin < 0) || Is<InlineBlock>(source)) && Nominal(ActualType(source))) {
+    if (((resultCall && resultCall->builtin < 0) || Is<InlineBlock>(source)) && FixedResult(ActualType(source))) {
         CallInto(fresh, source); return;
     }
-    if (Nominal(type)) {
+    if (FixedResult(type)) {
         if (auto block = Is<Block>(source)) { BlockInto(block, fresh); return; }
         if (auto branch = Is<IfExpr>(source)) {
             if (!branch->elseb) Fail(source->line, "fixed conditional construction needs its checked else branch");

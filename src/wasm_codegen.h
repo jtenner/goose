@@ -124,8 +124,9 @@ struct WasmCodeGen : ValueLayout {
         return (uint32_t)bytes;
     }
     bool FixedParameter(TypeExpr *t) { return storage.FixedParameter(t); }
+    bool FixedResult(TypeExpr *t) { return FixedParameter(t); }
     void RequireCallValue(TypeExpr *t, bool result, Line line) {
-        if (Nominal(t) || (!result && FixedParameter(t))) {
+        if (FixedParameter(t)) {
             if (!RequireFixed(t, line))
                 Fail(line, result ? "zero-sized aggregate results need the pending call lowering"
                                   : "zero-sized aggregate parameters need the pending call lowering");
@@ -748,7 +749,7 @@ struct WasmCodeGen : ValueLayout {
                 default: Fail(c->line, cat("builtin ", builtindefs[c->builtin].name, " is not implemented"));
             }
         }
-        if (Nominal(ActualType(c)))
+        if (FixedResult(ActualType(c)))
             Fail(c->line, "aggregate call results need a checked destination");
         if (c->fvbody) {
             BindCallParameters(c);
@@ -918,7 +919,7 @@ struct WasmCodeGen : ValueLayout {
             for (auto p : v->spec->params) RequireCallValue(p->type, false, n->line);
             for (auto r : v->spec->rets) RequireCallValue(r, true, n->line);
             auto ret = v->spec->rets.empty() ? nullptr : v->spec->rets[0];
-            if (Nominal(ret)) Fail(n->line, "aggregate inline results need a checked destination");
+            if (FixedResult(ret)) Fail(n->line, "aggregate inline results need a checked destination");
             auto result = ret ? (int)Temp(ret) : -1;
             auto label = Open();
             targets.push_back({Target::Inline, v->sf, scopes.size(), label, -1, result, ret});
@@ -1086,7 +1087,7 @@ struct WasmCodeGen : ValueLayout {
         auto call = Is<Call>(n);
         if (call || Is<InlineBlock>(n)) {
             auto actual = ActualType(n);
-            if (Nominal(actual) && (!call || call->builtin < 0)) {
+            if (FixedResult(actual) && (!call || call->builtin < 0)) {
                 WithFixedTemporary(actual, n, [&](const FixedPlace &) {}); return;
             }
             if (Nominal(n->exprtype) && actual && actual->kind == TY_REF) {
@@ -1157,7 +1158,7 @@ struct WasmCodeGen : ValueLayout {
             }
         }
         auto ret = sp->rets.empty() ? nullptr : sp->rets[0];
-        auto fixed = Nominal(ret);
+        auto fixed = FixedResult(ret);
         auto result = ret && !fixed ? (int)Temp(ret) : -1;
         FreshFixedDestination destination {};
         if (fixed) {
@@ -1213,10 +1214,10 @@ struct WasmCodeGen : ValueLayout {
             }
             for (auto r : sp->rets) {
                 RequireCallValue(r, true, r->line);
-                if (!Nominal(r)) rets.push_back(Type(r));
+                if (!FixedResult(r)) rets.push_back(Type(r));
             }
             if (NeedsBase(sp)) args.push_back(WasmModule::I32);
-            if (!sp->rets.empty() && Nominal(sp->rets[0])) args.push_back(WasmModule::I32);
+            if (!sp->rets.empty() && FixedResult(sp->rets[0])) args.push_back(WasmModule::I32);
             functions[sp] = module.AddFn(cat(sp->sf->qname, ".", sp->id), args, rets);
         }
         initfn = module.AddFn("goose.init", {}, {});

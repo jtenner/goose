@@ -1,0 +1,3310 @@
+[
+  {
+    "name": "command-0",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/wasm_array_result_owner-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_result_owner.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-1",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/wasm_array_result_owner-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_result_owner.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-2",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-array-results-20261108/controls02/wasm_array_result_owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-3",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-owner-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-4",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-5",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-owner-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-owner-O0.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-6",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-short-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-short-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-7",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-short-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-8",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-short-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-9",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-long-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-long-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-10",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-long-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-11",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-long-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-12",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-omitted-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-omitted-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-13",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-omitted-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-14",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-omitted-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-15",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-callee-destination-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-callee-destination-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-16",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-callee-destination-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-17",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-callee-destination-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-18",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-early-target-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-early-target-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-19",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-early-target-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-20",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-early-target-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-21",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-missing-restore-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-missing-restore-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-22",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-missing-restore-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-23",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-missing-restore-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-24",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-array-results-20261108/controls02/wasm_array_result_owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-25",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-owner-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-26",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-27",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-owner-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-owner-O2.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-28",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-short-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-short-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-29",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-short-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-30",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-short-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-31",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-long-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-long-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-32",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-long-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-33",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-long-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-34",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-omitted-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-omitted-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-35",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-omitted-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-36",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-omitted-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-37",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-callee-destination-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-callee-destination-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-38",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-callee-destination-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-39",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-callee-destination-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-40",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-early-target-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-early-target-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-41",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-early-target-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-42",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-early-target-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-43",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-missing-restore-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-missing-restore-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-44",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-missing-restore-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-45",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-missing-restore-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-46",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-empty-guard-O0.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-empty-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-47",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-empty-guard-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-empty-guard-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-48",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-empty-guard-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-49",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-empty-guard-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-empty-guard.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-50",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-empty-guard-O2.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-empty-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-51",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-empty-guard-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-empty-guard-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-52",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-empty-guard-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-53",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-empty-guard-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-empty-guard.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-54",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-adaptation-guard-O0.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-adaptation-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-55",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-adaptation-guard-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-adaptation-guard-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-56",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-adaptation-guard-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-57",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-adaptation-guard-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-adaptation-guard.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-58",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-adaptation-guard-O2.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-adaptation-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-59",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-adaptation-guard-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-adaptation-guard-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-60",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-adaptation-guard-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-61",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-adaptation-guard-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-adaptation-guard.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-62",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-nonfixed-guard-O0.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-nonfixed-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-63",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-nonfixed-guard-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-nonfixed-guard-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-64",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-nonfixed-guard-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-65",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-nonfixed-guard-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-nonfixed-guard.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-66",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-nonfixed-guard-O2.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-nonfixed-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-67",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-nonfixed-guard-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-nonfixed-guard-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-68",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-nonfixed-guard-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-69",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-nonfixed-guard-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-nonfixed-guard.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-70",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-failure-O0.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-failure.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-71",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-failure-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-failure-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-72",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-failure-O0.native"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-73",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-failure-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-failure.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-74",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-failure-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-75",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-failure-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-observed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-76",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-observed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-77",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_constructor_assignment_failure.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-observed-O0.wasm",
+      "division"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-78",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-failure-O2.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-failure.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-79",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-failure-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-failure-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-80",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-failure-O2.native"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-81",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-failure-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-failure.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-82",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-failure-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-83",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-failure-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-observed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-84",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-observed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-85",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_constructor_assignment_failure.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-division-observed-O2.wasm",
+      "division"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-86",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-failure-O0.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-failure.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-87",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-failure-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-failure-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-88",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-failure-O0.native"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-89",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-failure-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-failure.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-90",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-failure-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-91",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-failure-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-observed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-92",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-observed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-93",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_constructor_assignment_failure.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-observed-O0.wasm",
+      "bounds"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-94",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-failure-O2.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-failure.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-95",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-failure-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-failure-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-96",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-failure-O2.native"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-97",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-failure-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-failure.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-98",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-failure-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-99",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-failure-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-observed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-100",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-observed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-101",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_constructor_assignment_failure.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/array-result-bounds-observed-O2.wasm",
+      "bounds"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-102",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-default-O0.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-default.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-103",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-default-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-default-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-104",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-default-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-105",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-default-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-default.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-106",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-default-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-107",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-default-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-108",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-default-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-109",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-default-O2.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-default.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-110",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-default-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-default-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-111",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-default-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-112",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-default-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-default.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-113",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-default-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-114",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-default-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-115",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-default-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-116",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-limited-default-O0.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-limited-default.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-117",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-limited-default-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-limited-default-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-118",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-limited-default-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-119",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-limited-default-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-limited-default.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-120",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-limited-default-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-121",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-limited-default-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-122",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-limited-default-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-123",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-limited-default-O2.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-limited-default.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-124",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-limited-default-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-limited-default-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-125",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-limited-default-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-126",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-limited-default-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-limited-default.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-127",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-limited-default-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-128",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-limited-default-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-129",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-limited-default-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-130",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-fill-O0.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-fill.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-131",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-fill-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-fill-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-132",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-fill-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-133",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-fill-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-fill.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-134",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-fill-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-135",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-fill-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-136",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-fill-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-137",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-fill-O2.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-fill.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-138",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-fill-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-fill-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-139",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-fill-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-140",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-fill-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-fill.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-141",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-fill-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-142",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-fill-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-143",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-fill-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-144",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-zero-fill-O0.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-zero-fill.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-145",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-zero-fill-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-zero-fill-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-146",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-zero-fill-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-147",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-zero-fill-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-zero-fill.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-148",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-zero-fill-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-149",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-zero-fill-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-150",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-zero-fill-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-151",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-zero-fill-O2.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-zero-fill.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-152",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-zero-fill-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-zero-fill-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-153",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-zero-fill-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-154",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-zero-fill-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-zero-fill.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-155",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-zero-fill-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-156",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-zero-fill-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-157",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-zero-fill-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-158",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-push-O0.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-push.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-159",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-push-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-push-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-160",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-push-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-161",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-push-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-push.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-162",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-push-O2.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-push.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-163",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-push-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-push-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-164",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-push-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-165",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-push-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-push.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-166",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-pop-O0.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-pop.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-167",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-pop-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-pop-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-168",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-pop-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-169",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-pop-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-pop.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-170",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-pop-O2.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-pop.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-171",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-pop-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-pop-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-172",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-pop-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-173",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-pop-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-pop.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-174",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-discard-pop-O0.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-discard-pop.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-175",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-discard-pop-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-discard-pop-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-176",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-discard-pop-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-177",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-discard-pop-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-discard-pop.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-178",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-discard-pop-O2.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-discard-pop.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-179",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-discard-pop-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-discard-pop-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-180",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-discard-pop-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-181",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-discard-pop-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-discard-pop.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-182",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-equality-O0.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-equality.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-183",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-equality-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-equality-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-184",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-equality-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-185",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-equality-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-equality.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-186",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-equality-O2.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-equality.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-187",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-equality-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-equality-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-188",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-equality-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-189",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-equality-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-equality.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-190",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-assign-O0.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-191",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-assign-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-assign-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-192",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-assign-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-193",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-assign-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-194",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-195",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-196",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-197",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-assign-O2.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-198",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-assign-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-assign-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-199",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-assign-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-200",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-assign-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-201",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-202",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-203",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-204",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-adaptation-O0.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-adaptation.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-205",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-adaptation-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-adaptation-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-206",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-adaptation-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-207",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-adaptation-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-adaptation.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-208",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-adaptation-O2.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-adaptation.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-209",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-adaptation-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-adaptation-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-210",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-adaptation-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-211",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-adaptation-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-adaptation.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-212",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-data-varint-O0.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-data-varint.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-213",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-data-varint-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-data-varint-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-214",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-data-varint-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-215",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-data-varint-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-data-varint.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-216",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-data-varint-O2.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-data-varint.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-217",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-data-varint-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-data-varint-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-218",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-data-varint-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-219",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-data-varint-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-data-varint.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-220",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-nested-O0.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-nested.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-221",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-nested-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-nested-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-222",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-nested-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-223",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-nested-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-nested.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-224",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-nested-O2.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-nested.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-225",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-nested-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-nested-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-226",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-nested-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-227",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-nested-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-nested.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-228",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-field-iteration-O0.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-field-iteration.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-229",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-field-iteration-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-field-iteration-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-230",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-field-iteration-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-231",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-field-iteration-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-field-iteration.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-232",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-field-iteration-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-233",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-field-iteration-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-234",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-field-iteration-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-235",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-field-iteration-O2.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-field-iteration.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-236",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-field-iteration-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-field-iteration-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-237",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-field-iteration-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-238",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-field-iteration-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-field-iteration.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-239",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-field-iteration-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-240",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-field-iteration-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-241",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-field-iteration-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-242",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-argument-O0.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-243",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-argument-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-argument-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-244",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-argument-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-245",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-argument-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-246",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-247",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-248",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-249",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-argument-O2.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-250",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-argument-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-argument-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-251",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-argument-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-252",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-argument-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-253",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-254",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-255",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-256",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-inline-argument-O0.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-inline-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-257",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-inline-argument-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-inline-argument-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-258",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-inline-argument-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-259",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-inline-argument-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-inline-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-260",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-inline-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-261",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-inline-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-262",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-inline-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-263",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-inline-argument-O2.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-inline-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-264",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-inline-argument-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-inline-argument-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-265",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-inline-argument-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-266",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-inline-argument-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-inline-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-267",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-inline-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-268",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-inline-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-269",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-inline-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-270",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-result-O0.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-271",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-result-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-result-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-272",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-result-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-273",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-result-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-274",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-result-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-275",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-result-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-276",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-result-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-277",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-result-O2.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-278",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-result-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-result-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-279",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-result-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-280",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-result-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-281",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-result-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-282",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-result-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-283",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-result-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-284",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-callback-argument-O0.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-callback-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-285",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-callback-argument-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-callback-argument-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-286",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-callback-argument-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-287",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-callback-argument-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-callback-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-288",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-callback-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-289",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-callback-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-290",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-callback-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-291",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-callback-argument-O2.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-callback-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-292",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-callback-argument-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-callback-argument-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-293",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-callback-argument-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-294",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-callback-argument-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-callback-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-295",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-callback-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-296",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-callback-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-297",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-callback-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-298",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-array-assign-O0.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-array-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-299",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-array-assign-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-array-assign-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-300",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-array-assign-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-301",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-array-assign-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-array-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-302",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-array-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-303",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-array-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-304",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-array-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-305",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-array-assign-O2.c",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-array-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-306",
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-array-assign-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-array-assign-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-307",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-array-assign-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-308",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-array-assign-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-array-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-309",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-array-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-310",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-array-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-311",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-results-20261108/controls02/aggregate-admission-array-assign-O2.wasm"
+    ],
+    "exit": 0
+  }
+]

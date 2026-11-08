@@ -676,6 +676,12 @@ inline void WasmCodeGen::InitAggregateDataArray(VarDef *owner, const Slot &slot,
 
 inline void WasmCodeGen::InitArray(VarDef *owner, const Slot &slot, Node *init, VarDecl *declaration) {
     if (owner->reusable) Fail(owner->line, "pool owners need the pending descriptor lowering");
+    auto resultCall = Is<Call>(init);
+    if (InlineArray(owner->type) &&
+        ((((resultCall && resultCall->builtin < 0) || Is<InlineBlock>(init)) && FixedResult(ActualType(init))) ||
+         Is<Block>(init) || Is<IfExpr>(init))) {
+        ConstructFixed(FreshOwner(owner, declaration), init); return;
+    }
     if (auto call = Is<Call>(init); call && call->builtin == B_DEFAULT && InlineArray(owner->type)) {
         ConstructFixed(FreshOwner(owner, declaration), init); return;
     }

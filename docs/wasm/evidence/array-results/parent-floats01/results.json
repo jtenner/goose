@@ -1,0 +1,16 @@
+[
+  {
+    "case": "floats",
+    "opt": 0,
+    "source_sha256": "94cd940b2fed78890ab7b2d3ec0f8bf1048b5a06f3b3ff260209d32df826cebf",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-floats01/floats.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "floats",
+    "opt": 2,
+    "source_sha256": "94cd940b2fed78890ab7b2d3ec0f8bf1048b5a06f3b3ff260209d32df826cebf",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-floats01/floats.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  }
+]

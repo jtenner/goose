@@ -1,0 +1,212 @@
+[
+  {
+    "case": "direct",
+    "opt": 0,
+    "source_sha256": "3375d7cb995e48e4b1babbb7e432a5c3fa7d815c8450907f34a60a0eddfb925f",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/direct.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "direct",
+    "opt": 2,
+    "source_sha256": "3375d7cb995e48e4b1babbb7e432a5c3fa7d815c8450907f34a60a0eddfb925f",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/direct.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "inline",
+    "opt": 0,
+    "source_sha256": "94f2109a10c07e87b2f31ec1277ee374fbc0c8d1426ea671465a9838e1b71e1f",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/inline.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "inline",
+    "opt": 2,
+    "source_sha256": "94f2109a10c07e87b2f31ec1277ee374fbc0c8d1426ea671465a9838e1b71e1f",
+    "native": "PASS",
+    "prior_guard": ""
+  },
+  {
+    "case": "callback",
+    "opt": 0,
+    "source_sha256": "5a3583e08fcd5e05d7212a3cfb65c03b6bc1466baf945aaed7c0a310cd7a6954",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/callback.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  },
+  {
+    "case": "callback",
+    "opt": 2,
+    "source_sha256": "5a3583e08fcd5e05d7212a3cfb65c03b6bc1466baf945aaed7c0a310cd7a6954",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/callback.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  },
+  {
+    "case": "limited",
+    "opt": 0,
+    "source_sha256": "6b6199e92b72d964fd6cd89e55119ab6da6cb33ee0b298ca485450a2e46dd178",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/limited.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "limited",
+    "opt": 2,
+    "source_sha256": "6b6199e92b72d964fd6cd89e55119ab6da6cb33ee0b298ca485450a2e46dd178",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/limited.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "defer",
+    "opt": 0,
+    "source_sha256": "a8b1220ec7cca285497f953e6a23ce5c4018b63f346724311f4b3b08c53872c2",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/defer.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "defer",
+    "opt": 2,
+    "source_sha256": "a8b1220ec7cca285497f953e6a23ce5c4018b63f346724311f4b3b08c53872c2",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/defer.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "forward",
+    "opt": 0,
+    "source_sha256": "070ce2f02dc353c79ae14a9cf54a5099946a9c048856e7c4745e6b9622a6b20d",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/forward.goose:2: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "forward",
+    "opt": 2,
+    "source_sha256": "070ce2f02dc353c79ae14a9cf54a5099946a9c048856e7c4745e6b9622a6b20d",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/forward.goose:2: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "global",
+    "opt": 0,
+    "source_sha256": "1fbf75825e01b3a1c2ae044048b31a3b9230f3d1b4fcbdd2ac88035a7b87f54b",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/global.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "global",
+    "opt": 2,
+    "source_sha256": "1fbf75825e01b3a1c2ae044048b31a3b9230f3d1b4fcbdd2ac88035a7b87f54b",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/global.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "discard",
+    "opt": 0,
+    "source_sha256": "a04ca63242373859cbdd6dba790026d1fade01e88a4ac4636feb5914137b2ddb",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/discard.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "discard",
+    "opt": 2,
+    "source_sha256": "a04ca63242373859cbdd6dba790026d1fade01e88a4ac4636feb5914137b2ddb",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/discard.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "argument",
+    "opt": 0,
+    "source_sha256": "74b69f329ec8cb62999edba810bde50c66c89977d650cd9fdd0e93dcaa611daf",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/argument.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "argument",
+    "opt": 2,
+    "source_sha256": "74b69f329ec8cb62999edba810bde50c66c89977d650cd9fdd0e93dcaa611daf",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/argument.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "data",
+    "opt": 0,
+    "source_sha256": "3f983bc0422d78148c300c046a37167dc3cdc828859439b4087192f92fb4afaa",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/data.goose:2: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "data",
+    "opt": 2,
+    "source_sha256": "3f983bc0422d78148c300c046a37167dc3cdc828859439b4087192f92fb4afaa",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/data.goose:2: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "refs",
+    "opt": 0,
+    "source_sha256": "441d397f53b79598f5d1faf81f4a7153af498b1a14252dacc115fec1601d1b2d",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/refs.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "refs",
+    "opt": 2,
+    "source_sha256": "441d397f53b79598f5d1faf81f4a7153af498b1a14252dacc115fec1601d1b2d",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/refs.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "recursion",
+    "opt": 0,
+    "source_sha256": "45176d029e532fbcdc7b16f0e300b2448b1588685d547474ed7c74371ad18fee",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/recursion.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "recursion",
+    "opt": 2,
+    "source_sha256": "45176d029e532fbcdc7b16f0e300b2448b1588685d547474ed7c74371ad18fee",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/recursion.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "growth",
+    "opt": 0,
+    "source_sha256": "6c0bcfaaa756f2931940e03746febf6550941910169b6ae19ab0b2bbc0ec03cf",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/growth.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "growth",
+    "opt": 2,
+    "source_sha256": "6c0bcfaaa756f2931940e03746febf6550941910169b6ae19ab0b2bbc0ec03cf",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/growth.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "conditional",
+    "opt": 0,
+    "source_sha256": "365212bcaab36cde123ab7a4424048190ea751b45f604274b88d95738f5d8250",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/conditional.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "conditional",
+    "opt": 2,
+    "source_sha256": "365212bcaab36cde123ab7a4424048190ea751b45f604274b88d95738f5d8250",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/conditional.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "block",
+    "opt": 0,
+    "source_sha256": "d43de029b61071c481d3dbeeee69fa5e3395fc71cc4243e34e5fa5d8798729b3",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/block.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  },
+  {
+    "case": "block",
+    "opt": 2,
+    "source_sha256": "d43de029b61071c481d3dbeeee69fa5e3395fc71cc4243e34e5fa5d8798729b3",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-results-20261108/parent-first01/block.goose:1: error: wasm target: array results need the pending destination lowering\n"
+  }
+]

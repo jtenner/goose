@@ -301,6 +301,12 @@ preserve order, value isolation, length headers and inactive capacity.
 Nonfixed array values, zero-image parameters and array results remain separate.
 See [array argument evidence](evidence/array-arguments.md).
 
+Positive fixed and statically limited arrays now return through checked
+destinations, including fresh declarations, exact assignments and data fields.
+Result images are captured before defers and cleanup. Array references keep
+their existing ABI. Nonfixed results, adaptations and unnamed temporary
+consumers remain separate. See [array result evidence](evidence/array-results.md).
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping

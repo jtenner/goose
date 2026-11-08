@@ -1,0 +1,17 @@
+{
+  "direct": "recursive fn make(n:i64)->i64[2]{return[n,n+1];}\nfn main(){var a:i64[2]=make(7);assert(a[0]==7);assert(a[1]==8);print(\"direct\");}\n",
+  "inline": "inline fn make(n:i64)->i64[2]{[n,n+1]}\nfn main(){var a:i64[2]=make(7);assert(a[1]==8);print(\"inline\");}\n",
+  "callback": "fn apply<F>(n:i64)->i64{var a:i64[2]=F(n);a[1]}\nfn main(){assert(apply(7){n=>[n,n+1]}==8);print(\"callback\");}\n",
+  "limited": "recursive fn make(n:i64)->i64[..4]{return[n,n+1];}\nfn main(){var a:i64[..4]=make(7);assert(a.len==2);assert(a[1]==8);a.push(9);assert(a.len==3);print(\"limited\");}\n",
+  "defer": "recursive fn make()->i64[2]{var a:i64[2]=[3,4];defer{a[1]=9;}return a;}\nfn main(){var a:i64[2]=make();assert(a[1]==4);print(\"defer\");}\n",
+  "forward": "recursive fn make(n:i64)->i64[2]{[n,n+1]}\nrecursive fn forward(n:i64)->i64[2]{return make(n);}\nfn main(){var a:i64[2]=forward(7);assert(a[1]==8);print(\"forward\");}\n",
+  "global": "recursive fn make(n:i64)->i64[2]{[n,n+1]}\nvar a:i64[2]=make(7);\nfn main(){assert(a[1]==8);print(\"global\");}\n",
+  "discard": "var calls:i64=0;recursive fn make()->i64[2]{calls++;defer{calls+=10;}return[3,4];}\nfn main(){make();assert(calls==11);print(\"discard\");}\n",
+  "argument": "recursive fn make(n:i64)->i64[2]{[n,n+1]}\nrecursive fn read(a:i64[2])->i64{return a[1];}\nfn main(){assert(read(make(7))==8);print(\"argument\");}\n",
+  "data": "struct H{items:i64[2]}\nrecursive fn make(n:i64)->i64[2]{[n,n+1]}\nfn main(){var rows:H[]=[H{items:make(7)}];assert(rows[0].items[1]==8);rows[0].items=make(9);assert(rows[0].items[0]==9);print(\"data\");}\n",
+  "refs": "recursive fn make(p:i64&)->i64&[2]{return[p,p];}\nfn main(){var data:i64[]=[7];var a:i64&[2]=make(data[0]);a[1]++;assert(data[0]==8);assert(a[0]==8);print(\"refs\");}\n",
+  "recursion": "recursive fn make(n:i64)->i64[2]{if n==0{return[1,2];}var a:i64[2]=make(n-1);return[a[0]+n,a[1]+n];}\nfn main(){var a:i64[2]=make(9);assert(a[0]==46);assert(a[1]==47);print(\"recursion\");}\n",
+  "growth": "recursive fn make()->u8[70000]{var a:u8[70000]=default<u8[70000]>();a[69999]=11;return a;}\nfn main(){var a:u8[70000]=make();assert(a[0]==0);assert(a[69999]==11);print(\"growth\");}\n",
+  "conditional": "recursive fn make(n:i64)->i64[2]{return if n>0{[n,n+1]}else{[0,1]};}\nfn main(){var a:i64[2]=make(7);var b:i64[2]=make(0);assert(a[1]==8);assert(b[1]==1);print(\"conditional\");}\n",
+  "block": "recursive fn make(n:i64)->i64[2]{return{let m=n+1;[m,m+1]};}\nfn main(){var a:i64[2]=make(7);assert(a[1]==9);print(\"block\");}\n"
+}

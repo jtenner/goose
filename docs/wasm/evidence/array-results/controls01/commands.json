@@ -1,0 +1,454 @@
+[
+  {
+    "name": "command-0",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls01/wasm_array_result_owner-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_result_owner.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-1",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls01/wasm_array_result_owner-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_result_owner.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-2",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-array-results-20261108/controls01/wasm_array_result_owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-3",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-owner-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-4",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-5",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-owner-O0.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-owner-O0.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-6",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-short-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-short-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-7",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-short-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-8",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-short-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-9",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-long-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-long-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-10",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-long-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-11",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-long-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-12",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-omitted-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-omitted-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-13",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-omitted-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-14",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-omitted-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-15",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-callee-destination-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-callee-destination-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-16",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-callee-destination-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-17",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-callee-destination-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-18",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-early-target-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-early-target-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-19",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-early-target-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-20",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-early-target-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-21",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-missing-restore-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-missing-restore-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-22",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-missing-restore-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-23",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-missing-restore-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-24",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-array-results-20261108/controls01/wasm_array_result_owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-25",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-owner-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-26",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-27",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-owner-O2.wasm",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-owner-O2.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-28",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-short-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-short-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-29",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-short-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-30",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-short-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-31",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-long-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-long-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-32",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-long-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-33",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-long-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-34",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-omitted-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-omitted-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-35",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-omitted-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-36",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-omitted-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-37",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-callee-destination-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-callee-destination-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-38",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-callee-destination-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-39",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-callee-destination-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-40",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-early-target-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-early-target-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-41",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-early-target-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-42",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-early-target-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-43",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-missing-restore-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-missing-restore-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-44",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-missing-restore-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-45",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_result_owner.mjs",
+      "/tmp/goose-wasm-array-results-20261108/controls01/array-result-missing-restore-O2.wasm"
+    ],
+    "exit": 1
+  }
+]

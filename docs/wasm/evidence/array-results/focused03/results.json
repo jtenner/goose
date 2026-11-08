@@ -1,0 +1,26 @@
+[
+  {
+    "source": "test/wasm/wasm_array_result_reference_control.goose",
+    "source_sha256": "6b2c78b062e43ae375d78e79893fbec3ec9643a51678af87ee0c559f95c205c3",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_result_reference_control.goose",
+    "source_sha256": "6b2c78b062e43ae375d78e79893fbec3ec9643a51678af87ee0c559f95c205c3",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_result_data_control.goose",
+    "source_sha256": "a69fc0f4b728d0ecaa8c2b2a4b497290993b350a48492fc45656e42537733ac4",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_result_data_control.goose",
+    "source_sha256": "a69fc0f4b728d0ecaa8c2b2a4b497290993b350a48492fc45656e42537733ac4",
+    "opt": 2,
+    "status": "PASS"
+  }
+]

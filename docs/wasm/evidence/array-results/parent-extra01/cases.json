@@ -1,0 +1,10 @@
+{
+  "inline_early": "var calls:i64=0;inline fn make(early:bool)->i64[2]{defer{calls++;}if early{return[3,4];}return[7,8];}\nfn main(){var a:i64[2]=make(true);var b:i64[2]=make(false);assert(a[1]==4);assert(b[1]==8);assert(calls==2);print(\"inline_early\");}\n",
+  "declared_control": "var choice:bool=true;recursive fn select()->bool{choice=!choice;return choice;}\nfn main(){var a:i64[2]=if select(){[3,4]}else{[7,8]};var b:i64[2]=if select(){[3,4]}else{[7,8]};assert(a[0]==7);assert(b[0]==3);print(\"declared_control\");}\n",
+  "assigned_control": "var choice:bool=true;recursive fn select()->bool{choice=!choice;return choice;}\nfn main(){var a:i64[2]=[1,2];a=if select(){[3,4]}else{[7,8]};assert(a[0]==7);a={let n=a[0];[n+1,n+2]};assert(a[0]==8);assert(a[1]==9);print(\"assigned_control\");}\n",
+  "block_argument": "recursive fn read(a:i64[2])->i64{return a[1];}\nfn main(){assert(read({let n:i64=7;[n,n+1]})==8);print(\"block_argument\");}\n",
+  "dynamic_base": "recursive fn make(n:i64)->i64[2]{var data:i64[]=[n];return[data[0],data[0]+1];}\nrecursive fn nested(n:i64)->i64[2]{var live:i64[]=[9];var a:i64[2]=make(n);assert(live[0]==9);return a;}\nfn main(){var a:i64[2]=make(3);var b:i64[2]=nested(7);assert(a[1]==4);assert(b[1]==8);print(\"dynamic_base\");}\n",
+  "mixed": "struct S{n:i64}\nrecursive fn make(s:S,a:i64[2])->i64[2]{return[s.n+a[0],s.n+a[1]];}\nfn main(){var s:S=S{n:5};var a:i64[2]=[3,4];var b:i64[2]=make(s,a);assert(b[0]==8);assert(b[1]==9);print(\"mixed\");}\n",
+  "nominal_elements": "struct S{n:i64}\nrecursive fn make(n:i64)->S[2]{return[S{n:n},S{n:n+1}];}\nfn main(){var a:S[2]=make(7);assert(a[1].n==8);print(\"nominal_elements\");}\n",
+  "empty_limited": "recursive fn make()->u8[..0]{return default<u8[..0]>();}\nfn main(){var a:u8[..0]=make();assert(a.len==0);print(\"empty_limited\");}\n"
+}
