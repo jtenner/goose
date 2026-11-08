@@ -1,0 +1,38 @@
+[
+  {
+    "case": "element",
+    "opt": 0,
+    "reason": "compound array elements need the pending layout lowering",
+    "status": "PASS"
+  },
+  {
+    "case": "element",
+    "opt": 2,
+    "reason": "compound array elements need the pending layout lowering",
+    "status": "PASS"
+  },
+  {
+    "case": "zero",
+    "opt": 0,
+    "reason": "zero-sized aggregate results need the pending call lowering",
+    "status": "PASS"
+  },
+  {
+    "case": "zero",
+    "opt": 2,
+    "reason": "zero-sized aggregate results need the pending call lowering",
+    "status": "PASS"
+  },
+  {
+    "case": "array",
+    "opt": 0,
+    "reason": "compound array elements need the pending layout lowering",
+    "status": "PASS"
+  },
+  {
+    "case": "array",
+    "opt": 2,
+    "reason": "compound array elements need the pending layout lowering",
+    "status": "PASS"
+  }
+]

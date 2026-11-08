@@ -1,0 +1,1 @@
+recursive fn make()->i64[2]{return [7,-8];}fn main(){var i=0;while i<4{print("head");let b:i64[..3]=-make();i++;if i<4{continue;}assert(b.len==2);assert(b[0] == -7);assert(b[1]==8);}print("loop_exit");}

@@ -1,0 +1,17 @@
+from pathlib import Path
+import json
+p=Path(__file__).parent
+cases={
+ 'declaration':'fn main(){var a:i64[2]=[7,-8];let b:i64[..3]=-a;assert(b.len==2);assert(b[0] == -7);assert(b[1]==8);print("declaration");}',
+ 'assignment':'fn main(){var a:i64[2]=[7,-8];var b:i64[..3]=[1,2,3];b=-a;assert(b.len==2);assert(b[0] == -7);assert(b[1]==8);print("assignment");}',
+ 'argument':'recursive fn take(b:i64[..3]){assert(b.len==2);assert(b[0] == -7);assert(b[1]==8);}fn main(){var a:i64[2]=[7,-8];take(-a);print("argument");}',
+ 'result':'recursive fn result(a:i64[2])->i64[..3]{return -a;}fn main(){let b=result([7,-8]);assert(b.len==2);assert(b[0] == -7);assert(b[1]==8);print("result");}',
+ 'field':'struct Box{a:i64[..3]}fn main(){var a:i64[2]=[7,-8];let b=Box{-a};assert(b.a.len==2);assert(b.a[0] == -7);assert(b.a[1]==8);print("field");}',
+ 'element':'fn main(){var a:i64[2]=[7,-8];let b:i64[..3][1]=[-a];assert(b[0].len==2);assert(b[0][0] == -7);assert(b[0][1]==8);print("element");}',
+ 'zero':'var calls:i64=0;recursive fn empty()->i64[0]{calls++;return [];}fn main(){let b:i64[..3]=-empty();assert(calls==1);assert(b.len==0);print("zero");}',
+ 'float':'fn main(){var a:f64[2]=[1.25,-2.5];let b:f64[..3]=-a;assert(b.len==2);assert(b[0] == -1.25);assert(b[1]==2.5);print("float");}',
+ 'nested':'struct V{x:i64,y:f32}fn main(){var a:V[2]=[V{1,1.25},V{2,-2.5}];let b:V[..3]=-a;assert(b.len==2);assert(b[0].x == -1);assert(b[1].x == -2);assert(b[0].y == -1.25);assert(b[1].y==2.5);print("nested");}',
+ 'array':'fn main(){var a:i32[2][2]=[[1,2],[3,4]];let b:i32[2][..3]=-a;assert(b.len==2);assert(b[0][1] == -2);assert(b[1][0] == -3);print("array");}'
+}
+(p/'cases.json').write_text(json.dumps(cases,indent=2)+'\n')
+for n,s in cases.items():(p/'parent01'/(n+'.goose')).write_text(s+'\n')

@@ -1,0 +1,19 @@
+{
+  "declaration": "fn main(){var a:i64[2]=[7,-8];let b:i64[..3]=-a;assert(b.len==2);assert(b[0] == -7);assert(b[1]==8);print(\"declaration\");}",
+  "assignment": "fn main(){var a:i64[2]=[7,-8];var b:i64[..3]=[1,2,3];b=-a;assert(b.len==2);assert(b[0] == -7);assert(b[1]==8);print(\"assignment\");}",
+  "argument": "recursive fn take(b:i64[..3]){assert(b.len==2);assert(b[0] == -7);assert(b[1]==8);}fn main(){var a:i64[2]=[7,-8];take(-a);print(\"argument\");}",
+  "result": "recursive fn result(a:i64[2])->i64[..3]{return -a;}fn main(){let b=result([7,-8]);assert(b.len==2);assert(b[0] == -7);assert(b[1]==8);print(\"result\");}",
+  "field": "struct Box{a:i64[..3]}fn main(){var a:i64[2]=[7,-8];let b=Box{-a};assert(b.a.len==2);assert(b.a[0] == -7);assert(b.a[1]==8);print(\"field\");}",
+  "float": "fn main(){var a:f64[2]=[1.25,-2.5];let b:f64[..3]=-a;assert(b.len==2);assert(b[0] == -1.25);assert(b[1]==2.5);print(\"float\");}",
+  "nested": "struct V{x:f32,y:f32}fn main(){var a:V[2]=[V{1,1.25},V{2,-2.5}];let b:V[..3]=-a;assert(b.len==2);assert(b[0].x == -1);assert(b[1].x == -2);assert(b[0].y == -1.25);assert(b[1].y==2.5);print(\"nested\");}",
+  "zero_local": "fn main(){var a:i64[0]=[];let b:i64[..3]=-a;assert(b.len==0);print(\"zero_local\");}",
+  "widths": "fn main(){var a:i8[2]=[-128,127];let b:i8[..2]=-a;assert(b.len==2);assert(b[0] == -128);assert(b[1] == -127);var c:i16[2]=[-32768,32767];let d:i16[..3]=-c;assert(d.len==2);assert(d[0] == -32768);assert(d[1] == -32767);var e:i32[2]=[-2147483648,2147483647];let f:i32[..2]=-e;assert(f.len==2);assert(f[0] == -2147483648);assert(f[1] == -2147483647);var g:i64[2]=[-9223372036854775808,9223372036854775807];let h:i64[..3]=-g;assert(h.len==2);assert(h[0] == -9223372036854775808);assert(h[1] == -9223372036854775807);print(\"widths\");}",
+  "borrowed": "recursive fn read(a:const i64[2]&)->i64[..3]{return -a;}fn main(){var a:i64[2]=[7,-8];let b=read(a);assert(b.len==2);assert(b[0] == -7);assert(b[1]==8);assert(a[0]==7);print(\"borrowed\");}",
+  "call_defer": "var source:i64[2]=[7,-8];recursive fn make()->i64[2]{defer source[0]=99;return source;}fn main(){let b:i64[..3]=-make();assert(b.len==2);assert(b[0] == -7);assert(b[1]==8);assert(source[0]==99);print(\"call_defer\");}",
+  "later_argument": "var source:i64[2]=[7,-8];recursive fn later()->i64{source[0]=99;return 0;}recursive fn take(b:i64[..3],n:i64){assert(n==0);assert(b.len==2);assert(b[0] == -7);assert(b[1]==8);}fn main(){take(-source,later());assert(source[0]==99);print(\"later_argument\");}",
+  "data": "struct H{a:i64[..3]}fn main(){var a:i64[2]=[7,-8];var rows:H[]=[H{-a}];assert(rows[0].a.len==2);assert(rows[0].a[0] == -7);assert(rows[0].a[1]==8);assert(a[0]==7);print(\"data\");}",
+  "loop_exit": "recursive fn make()->i64[2]{return [7,-8];}fn main(){var i=0;while i<4{print(\"head\");let b:i64[..3]=-make();i++;if i<4{continue;}assert(b.len==2);assert(b[0] == -7);assert(b[1]==8);}print(\"loop_exit\");}",
+  "global": "var a:i64[2]=[7,-8];var b:i64[..3]=-a;fn main(){assert(b.len==2);assert(b[0] == -7);assert(b[1]==8);assert(a[0]==7);print(\"global\");}",
+  "owner": "struct S{a:f32,pad 2,b:f64}\nvar source:S[2]=[S{a:1.25,b:45.125},S{a:-2.5,b:-37.25}];\nrecursive fn prepare(s:S[2]&){s[0].a=1.25;s[1].b = -37.25;print(\"before\");}\nfn main(){prepare(source);var result:S[..3]=-source;print(\"after=\",result.len,\",\",result[0].a==result[0].a,\",\",result[0].b==result[0].b);}",
+  "data_owner": "struct S{a:f32,pad 2,b:f64}\nvar source:S[2]=[S{a:1.25,b:45.125},S{a:-2.5,b:-37.25}];\nrecursive fn prepare(s:S[2]&){s[0].a=1.25;s[1].b = -37.25;print(\"before\");}\nstruct H{result:S[..3]}fn main(){prepare(source);var rows:H[]=[H{-source}];print(\"after=\",rows[0].result.len,\",\",rows[0].result[0].a==rows[0].result[0].a,\",\",rows[0].result[0].b==rows[0].result[0].b);}"
+}

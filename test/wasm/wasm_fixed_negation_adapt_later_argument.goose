@@ -1,0 +1,1 @@
+var source:i64[2]=[7,-8];recursive fn later()->i64{source[0]=99;return 0;}recursive fn take(b:i64[..3],n:i64){assert(n==0);assert(b.len==2);assert(b[0] == -7);assert(b[1]==8);}fn main(){take(-source,later());assert(source[0]==99);print("later_argument");}

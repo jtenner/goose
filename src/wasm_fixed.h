@@ -851,11 +851,26 @@ inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *sourc
         Fail(source->line, "this default needs the pending destination lowering");
     }
     if (auto unary = Is<Unary>(source); unary && unary->op == T_MINUS && FixedResult(ActualType(source))) {
-        if (!TEq(type, ActualType(source)))
-            Fail(source->line, "fixed negation adaptation needs the pending destination lowering");
         WithReadPlace(unary->child, [&](FixedPlace operand) {
             while (operand.type->kind == TY_REF) operand = DereferencePlace(operand, source->line);
-            NegateFixedInto(destination, operand, source->line);
+            if (TEq(type, operand.type)) {
+                NegateFixedInto(destination, operand, source->line);
+                return;
+            }
+            if (!InlineArray(type) || type->arr->akind != A_LIMITED ||
+                operand.type->kind != TY_ARRAY || operand.type->arr->akind != A_FIXED ||
+                !TEq(type->arr->sub, operand.type->arr->sub))
+                Fail(source->line, "fixed negation adaptation needs a matching fixed-array source");
+            auto count = ArrSize(operand.type->arr);
+            if (count < 0 || count > ArrSize(type->arr))
+                Fail(source->line, "fixed negation exceeds its checked limited capacity");
+            auto prefix = (uint32_t)IntSize(LenStore(type->arr));
+            // Only the live source image is arithmetic output. The checked
+            // child excludes the count header and the unused capacity.
+            auto payload = FixedChild(fresh, operand.type, prefix, source->line);
+            CheckFreshDestination(payload, source->line);
+            NegateFixedInto(payload.place, operand, source->line);
+            InitArrayCount(FreshArrayPlace(fresh, source->line), (uint64_t)count);
         });
         return;
     }

@@ -1,0 +1,1 @@
+var source:i64[2]=[7,-8];recursive fn make()->i64[2]{defer source[0]=99;return source;}fn main(){let b:i64[..3]=-make();assert(b.len==2);assert(b[0] == -7);assert(b[1]==8);assert(source[0]==99);print("call_defer");}

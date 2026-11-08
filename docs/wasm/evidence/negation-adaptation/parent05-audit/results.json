@@ -1,0 +1,92 @@
+[
+  {
+    "case": "declaration",
+    "source": "/tmp/goose-wasm-negation-adaptation-20261108/parent01/declaration.goose",
+    "source_sha256": "b324e815b73327d4fe027a95cc4a05e0771ed4726ea38caad713c761d1a2511a",
+    "native": "PASS",
+    "wasm_expected": "fixed negation needs an exact source layout",
+    "scope": "negation adaptation",
+    "reused": "/tmp/goose-wasm-negation-adaptation-20261108/parent01"
+  },
+  {
+    "case": "assignment",
+    "source": "/tmp/goose-wasm-negation-adaptation-20261108/parent01/assignment.goose",
+    "source_sha256": "28ed2e55c8f1c26cae5272db5ddd5ad3df3baf4c6c03ac4ed9f54018f7ccd271",
+    "native": "PASS",
+    "wasm_expected": "fixed negation needs an exact source layout",
+    "scope": "negation adaptation",
+    "reused": "/tmp/goose-wasm-negation-adaptation-20261108/parent01"
+  },
+  {
+    "case": "argument",
+    "source": "/tmp/goose-wasm-negation-adaptation-20261108/parent01/argument.goose",
+    "source_sha256": "da0233e18c1d1704c6996f7b16b1fc4c1f872a98e8242203aa1498e662c3a236",
+    "native": "PASS",
+    "wasm_expected": "fixed negation needs an exact source layout",
+    "scope": "negation adaptation",
+    "reused": "/tmp/goose-wasm-negation-adaptation-20261108/parent01"
+  },
+  {
+    "case": "result",
+    "source": "/tmp/goose-wasm-negation-adaptation-20261108/parent01/result.goose",
+    "source_sha256": "7d91c06ee2ced7eca02dfb9f67428e6607e0f3696e9f12d9f40a8190054772a2",
+    "native": "PASS",
+    "wasm_expected": "fixed negation needs an exact source layout",
+    "scope": "negation adaptation",
+    "reused": "/tmp/goose-wasm-negation-adaptation-20261108/parent01"
+  },
+  {
+    "case": "field",
+    "source": "/tmp/goose-wasm-negation-adaptation-20261108/parent01/field.goose",
+    "source_sha256": "3bce893a048a3ca3563b3903b563d1ce686c32fa8dd83034edb4dc2951bdf4b1",
+    "native": "PASS",
+    "wasm_expected": "fixed negation needs an exact source layout",
+    "scope": "negation adaptation",
+    "reused": "/tmp/goose-wasm-negation-adaptation-20261108/parent01"
+  },
+  {
+    "case": "element",
+    "source": "/tmp/goose-wasm-negation-adaptation-20261108/parent01/element.goose",
+    "source_sha256": "82d500934f235394167995c9203e3e63138df845350680249186d6e1090b8f6f",
+    "native": "PASS",
+    "wasm_expected": "compound array elements need the pending layout lowering",
+    "scope": "separate existing guard",
+    "reused": "/tmp/goose-wasm-negation-adaptation-20261108/parent01"
+  },
+  {
+    "case": "zero",
+    "source": "/tmp/goose-wasm-negation-adaptation-20261108/parent01/zero.goose",
+    "source_sha256": "e36f6d7363b58f054b9edbc89b3aef406560060d0b6b2af444a5a2d80bb61e6d",
+    "native": "PASS",
+    "wasm_expected": "zero-sized aggregate results need the pending call lowering",
+    "scope": "separate existing guard",
+    "reused": "/tmp/goose-wasm-negation-adaptation-20261108/parent01"
+  },
+  {
+    "case": "float",
+    "source": "/tmp/goose-wasm-negation-adaptation-20261108/parent01/float.goose",
+    "source_sha256": "5bc7e4d4486d0c53edc97083abacc619fff914b97976bebcb68d587aa1ca111e",
+    "native": "PASS",
+    "wasm_expected": "fixed negation needs an exact source layout",
+    "scope": "negation adaptation",
+    "reused": "/tmp/goose-wasm-negation-adaptation-20261108/parent01"
+  },
+  {
+    "case": "nested",
+    "source": "/tmp/goose-wasm-negation-adaptation-20261108/parent04/nested.goose",
+    "source_sha256": "789ddc3254fc724df4ec4856213fc50f1ff27052829131c9c397fe30be746d44",
+    "native": "PASS",
+    "wasm_expected": "fixed negation needs an exact source layout",
+    "scope": "negation adaptation",
+    "reused": "/tmp/goose-wasm-negation-adaptation-20261108/parent04"
+  },
+  {
+    "case": "array",
+    "source": "/tmp/goose-wasm-negation-adaptation-20261108/parent04/array.goose",
+    "source_sha256": "b5a3c3dac71974c5f1005e4d5eaeba302f64a93529e30dc20adfac1cb730f8de",
+    "native": "PASS",
+    "wasm_expected": "compound array elements need the pending layout lowering",
+    "scope": "separate existing guard",
+    "reused": "/tmp/goose-wasm-negation-adaptation-20261108/parent04"
+  }
+]

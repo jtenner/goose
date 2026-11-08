@@ -1,0 +1,1 @@
+struct H{source:i64[2],result:i64[..3]}fn main(){var rows:H[]=[H{source:[7,-8],result:[1,2,3]}];rows[0].result=-rows[0].source;assert(rows[0].result.len==2);assert(rows[0].result[0] == -7);assert(rows[0].result[1]==8);assert(rows[0].source[0]==7);assert(rows[0].source[1] == -8);print("field_assignment_data");}

@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-negation-adaptation-20261108/parent04/checks.py", line 22, in <module>
+    a=run(name+'-wasm',[exe,'-O0','--target','wasm','-o',wasm,f]);assert a.returncode!=0 and b'fixed negation' in a.stderr and not wasm.exists(),(name,a)
+                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('array', CompletedProcess(args=['/tmp/goose-native-math-adaptation-20261108/build01/goose-tested', '-O0', '--target', 'wasm', '-o', '/tmp/goose-wasm-negation-adaptation-20261108/parent04/array.wasm', '/tmp/goose-wasm-negation-adaptation-20261108/parent04/array.goose'], returncode=1, stdout=b'', stderr=b'/tmp/goose-wasm-negation-adaptation-20261108/parent04/array.goose:1: error: wasm target: compound array elements need the pending layout lowering\n'))

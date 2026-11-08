@@ -324,14 +324,21 @@ element equality stay guarded. See
 Unary minus now constructs fixed numeric structs and arrays through checked
 destinations. It reads operands without mutation, skips padding during arithmetic, supports
 nested numeric fields and packed data destinations, and retains temporary
-operands through field reads. Assignment keeps its complete-RHS protection. Layout changes and
-general aggregate binary arithmetic remain separate. See
+operands through field reads. Assignment keeps its complete-RHS protection.
+More general layout changes and aggregate binary arithmetic remain separate. See
 [fixed negation evidence](evidence/fixed-negation.md).
 
 A native-first adaptation check also found and repaired a C backend error.
 Fixed array arithmetic now uses the operand count before the existing adapter
-constructs a limited, variable or growing receiver. Wasm layout-changing
-arithmetic remains separate. See [native arithmetic adaptation evidence](evidence/native-math-adaptation.md).
+constructs a limited, variable or growing receiver. That native repair did not
+provide a Wasm adapter. See [native arithmetic adaptation evidence](evidence/native-math-adaptation.md).
+
+Fixed-array negation now also constructs same-element static limited receivers.
+The existing fresh-owner proof bounds the payload after its count prefix; only
+live numeric leaves and the source count are written. Incoming results, nested
+data fields and protected assignments use the same path. General binary math,
+compound array elements and zero-sized call results remain separate. See
+[negation adaptation evidence](evidence/negation-adaptation.md).
 
 ## Host contract
 

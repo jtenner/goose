@@ -1,0 +1,3 @@
+# Read-only native Codex bug search
+
+No confirmed defect found in new ConstructFixed negation adaptation. Count/capacity, prefix width, complete child span, memory identity, zero image and operand lifetime were inspected. Suggested count-width transitions, incoming results, data children, padding, inactive capacity, exits and aliases were covered. Protected assignment retains its complete-RHS image copy, so inactive bytes may differ from a direct native limited-array copy. Spec9.4 permits changed stale limited-array references of the correct type. No unchanged-byte claim applies to inactive assignment slots. No worker writes, builds, tests or timings.

@@ -1,0 +1,1 @@
+var source:i32[2]=[19088743,-19088743];recursive fn prepare(s:i32[2]&){s[0]=19088743;s[1] = -19088743;print("before");}fn main(){prepare(source);var result:i32[..256]=-source;print("after=",result.len,",",result[0],",",result[1]);}

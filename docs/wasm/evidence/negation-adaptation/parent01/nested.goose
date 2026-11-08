@@ -1,0 +1,1 @@
+struct V{x:i64,y:f32}fn main(){var a:V[2]=[V{1,1.25},V{2,-2.5}];let b:V[..3]=-a;assert(b.len==2);assert(b[0].x == -1);assert(b[1].x == -2);assert(b[0].y == -1.25);assert(b[1].y==2.5);print("nested");}

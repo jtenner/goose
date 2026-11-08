@@ -229,7 +229,10 @@ def main():
                 assert checked.stdout == reference.stdout and not checked.stderr
                 count += 1
             if source.stem.startswith('wasm_fixed_negation_'):
-                mode = '' if source.stem in ('wasm_fixed_negation_data', 'wasm_fixed_negation_data_owner', 'wasm_fixed_negation_field') else 'no-data'
+                mode = '' if source.stem in ('wasm_fixed_negation_data', 'wasm_fixed_negation_data_owner', 'wasm_fixed_negation_field',
+                                                             'wasm_fixed_negation_adapt_data', 'wasm_fixed_negation_adapt_data_owner',
+                                                             'wasm_fixed_negation_adapt_function_data',
+                                                             'wasm_fixed_negation_adapt_field_assignment_data') else 'no-data'
                 checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
                 assert checked.stdout == reference.stdout and not checked.stderr
                 count += 1
@@ -395,6 +398,10 @@ def main():
     from wasm_fixed_negation_checks import check_images as check_fixed_negation_images, check_loop as check_fixed_negation_loop
     count += check_fixed_negation_images(run, args.node, args.validator, out)
     count += check_fixed_negation_loop(run, args.node, args.validator, out)
+    from wasm_negation_adaptation_checks import check_images as check_negation_adaptation_images, check_prefixes as check_negation_adaptation_prefixes, check_loop as check_negation_adaptation_loop
+    count += check_negation_adaptation_images(run, args.node, args.validator, out)
+    count += check_negation_adaptation_prefixes(run, args.node, args.validator, out)
+    count += check_negation_adaptation_loop(run, args.node, args.validator, out)
     from wasm_temporary_equality_checks import check_images as check_temporary_equality_images, check_guards as check_temporary_equality_guards
     count += check_temporary_equality_images(run, args.node, args.validator, out)
     count += check_temporary_equality_guards(run, exe, args.cc, out)

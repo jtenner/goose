@@ -1,0 +1,30 @@
+[
+  {
+    "case": "function_data",
+    "opt": 0,
+    "source_sha256": "355acf577cbdeae45c343ee2c204c17c9df95c32920048303af43de148c3c58a",
+    "wasm_sha256": "862d54a4a0bab3cbc0b4520129adde046def867b63784c8487c2bf4aec926c87",
+    "status": "PASS"
+  },
+  {
+    "case": "function_data",
+    "opt": 2,
+    "source_sha256": "355acf577cbdeae45c343ee2c204c17c9df95c32920048303af43de148c3c58a",
+    "wasm_sha256": "862d54a4a0bab3cbc0b4520129adde046def867b63784c8487c2bf4aec926c87",
+    "status": "PASS"
+  },
+  {
+    "case": "field_assignment_data",
+    "opt": 0,
+    "source_sha256": "1069e79f7110a7329b5207b1f423ec6325255805f99a6d5b9acd29629e5a5ea7",
+    "wasm_sha256": "e93a4c6693105c164ec04ca587fd35afdf31121b870822921901a23a591cc0dc",
+    "status": "PASS"
+  },
+  {
+    "case": "field_assignment_data",
+    "opt": 2,
+    "source_sha256": "1069e79f7110a7329b5207b1f423ec6325255805f99a6d5b9acd29629e5a5ea7",
+    "wasm_sha256": "e93a4c6693105c164ec04ca587fd35afdf31121b870822921901a23a591cc0dc",
+    "status": "PASS"
+  }
+]
