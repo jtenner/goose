@@ -1,0 +1,134 @@
+[
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/admission01/aggregate-admission-array-assign-O0.c",
+      "/tmp/goose-wasm-array-assignment-20261107/admission01/aggregate-admission-array-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-assignment-20261107/admission01/aggregate-admission-array-assign-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/admission01/aggregate-admission-array-assign-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/admission01/aggregate-admission-array-assign-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/admission01/aggregate-admission-array-assign-O0.wasm",
+      "/tmp/goose-wasm-array-assignment-20261107/admission01/aggregate-admission-array-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-assignment-20261107/admission01/aggregate-admission-array-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-assignment-20261107/admission01/aggregate-admission-array-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-assignment-20261107/admission01/aggregate-admission-array-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/admission01/aggregate-admission-array-assign-O2.c",
+      "/tmp/goose-wasm-array-assignment-20261107/admission01/aggregate-admission-array-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-array-assignment-20261107/admission01/aggregate-admission-array-assign-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/admission01/aggregate-admission-array-assign-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/admission01/aggregate-admission-array-assign-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/admission01/aggregate-admission-array-assign-O2.wasm",
+      "/tmp/goose-wasm-array-assignment-20261107/admission01/aggregate-admission-array-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-assignment-20261107/admission01/aggregate-admission-array-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-assignment-20261107/admission01/aggregate-admission-array-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-assignment-20261107/admission01/aggregate-admission-array-assign-O2.wasm"
+    ],
+    "exit": 0
+  }
+]

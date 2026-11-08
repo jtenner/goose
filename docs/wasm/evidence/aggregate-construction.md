@@ -58,3 +58,8 @@ runtime or physical-memory measurements.
 Data-array fills, zero-stride aggregate elements, whole-array assignment,
 layout adaptation, push/pop and general aggregate arguments/results remain
 separate compilation work.
+
+A later conversion regression found that a fixed default built into a wider
+limited destination lost its source count. This checkpoint's exact-layout
+checks did not cover that conversion. The failure and repair are recorded in
+[array assignment and default-count evidence](array-assignment.md).

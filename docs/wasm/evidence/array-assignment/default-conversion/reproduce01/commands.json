@@ -1,0 +1,380 @@
+[
+  {
+    "name": "scalar-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/scalar-O0.c",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/scalar.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "scalar-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/scalar-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/scalar-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "scalar-O0-native",
+    "args": [
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/scalar-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "scalar-O0-wasm",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/scalar-O0.wasm",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/scalar.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "scalar-O0-validate",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/scalar-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "scalar-O0-node",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/scalar-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "scalar-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/scalar-O2.c",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/scalar.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "scalar-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/scalar-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/scalar-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "scalar-O2-native",
+    "args": [
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/scalar-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "scalar-O2-wasm",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/scalar-O2.wasm",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/scalar.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "scalar-O2-validate",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/scalar-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "scalar-O2-node",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/scalar-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nominal-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/nominal-O0.c",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/nominal.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nominal-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/nominal-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/nominal-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nominal-O0-native",
+    "args": [
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/nominal-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nominal-O0-wasm",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/nominal-O0.wasm",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/nominal.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nominal-O0-validate",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/nominal-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nominal-O0-node",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/nominal-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nominal-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/nominal-O2.c",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/nominal.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nominal-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/nominal-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/nominal-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nominal-O2-native",
+    "args": [
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/nominal-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nominal-O2-wasm",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/nominal-O2.wasm",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/nominal.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nominal-O2-validate",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/nominal-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nominal-O2-node",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/nominal-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "field-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/field-O0.c",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/field.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "field-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/field-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/field-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "field-O0-native",
+    "args": [
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/field-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "field-O0-wasm",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/field-O0.wasm",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/field.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "field-O0-validate",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/field-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "field-O0-node",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/field-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "field-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/field-O2.c",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/field.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "field-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/field-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/field-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "field-O2-native",
+    "args": [
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/field-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "field-O2-wasm",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/field-O2.wasm",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/field.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "field-O2-validate",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/field-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "field-O2-node",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-default-adaptation-20261108/reproduce01/field-O2.wasm"
+    ],
+    "exit": 0
+  }
+]

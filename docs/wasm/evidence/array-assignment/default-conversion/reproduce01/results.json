@@ -1,0 +1,62 @@
+[
+  {
+    "case": "scalar",
+    "opt": 0,
+    "native_stdout": "2\n",
+    "wasm_compile_exit": 0,
+    "wasm_error": "",
+    "candidate_exit": 0,
+    "candidate_stdout": "0\n",
+    "candidate_stderr": ""
+  },
+  {
+    "case": "scalar",
+    "opt": 2,
+    "native_stdout": "2\n",
+    "wasm_compile_exit": 0,
+    "wasm_error": "",
+    "candidate_exit": 0,
+    "candidate_stdout": "0\n",
+    "candidate_stderr": ""
+  },
+  {
+    "case": "nominal",
+    "opt": 0,
+    "native_stdout": "2\n",
+    "wasm_compile_exit": 0,
+    "wasm_error": "",
+    "candidate_exit": 0,
+    "candidate_stdout": "0\n",
+    "candidate_stderr": ""
+  },
+  {
+    "case": "nominal",
+    "opt": 2,
+    "native_stdout": "2\n",
+    "wasm_compile_exit": 0,
+    "wasm_error": "",
+    "candidate_exit": 0,
+    "candidate_stdout": "0\n",
+    "candidate_stderr": ""
+  },
+  {
+    "case": "field",
+    "opt": 0,
+    "native_stdout": "2\n",
+    "wasm_compile_exit": 0,
+    "wasm_error": "",
+    "candidate_exit": 0,
+    "candidate_stdout": "0\n",
+    "candidate_stderr": ""
+  },
+  {
+    "case": "field",
+    "opt": 2,
+    "native_stdout": "2\n",
+    "wasm_compile_exit": 0,
+    "wasm_error": "",
+    "candidate_exit": 0,
+    "candidate_stdout": "0\n",
+    "candidate_stderr": ""
+  }
+]

@@ -1,0 +1,25 @@
+[
+  {
+    "name": "native-emit",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/view-policy/view.c",
+      "/tmp/goose-wasm-array-assignment-20261107/view-policy/view.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "candidate",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/view-policy/view.wasm",
+      "/tmp/goose-wasm-array-assignment-20261107/view-policy/view.goose"
+    ],
+    "exit": 1
+  }
+]

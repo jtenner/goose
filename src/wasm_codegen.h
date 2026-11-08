@@ -991,11 +991,14 @@ struct WasmCodeGen : ValueLayout {
             Write(s);
             return;
         }
-        if (t->kind == TY_ARRAY) Fail(line, "whole-array assignment needs the pending destination lowering");
+        if (t->kind == TY_ARRAY) {
+            if (!InlineArray(t)) Fail(line, "whole-array assignment needs the pending destination lowering");
+            AssignFixed(OwnerPlace(id->vdef), rhs, op, line); return;
+        }
         if (Nominal(t)) { AssignFixed(OwnerPlace(id->vdef), rhs, op, line); return; }
         int address = -1;
         if (pointee) {
-            if (t->kind == TY_REF && Nominal(t->ref->sub)) {
+            if (t->kind == TY_REF && (Nominal(t->ref->sub) || InlineArray(t->ref->sub))) {
                 Read(s); auto destination = PointeePlace(t, line);
                 AssignFixed(destination, rhs, op, line); return;
             }

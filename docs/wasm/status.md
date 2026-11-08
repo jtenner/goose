@@ -265,6 +265,14 @@ regressions and 52 exact comparisons pass, and 360 unchanged parent module pairs
 are identical. See [aggregate construction evidence](evidence/aggregate-construction.md).
 Data-array fills, zero-stride elements and layout adaptation remain guarded.
 
+Exact stored-image assignment now covers fixed and statically limited arrays
+at local, field, index and reference destinations. The shared copy checks
+retain source order, complete length/capacity images and memory identities.
+A separate failing-first default regression preserves a fixed source count
+when it is constructed in a wider limited destination. Fresh array assignment
+values, different stored-layout assignment and general aggregate calls/results
+remain guarded. See [array assignment evidence](evidence/array-assignment.md).
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping

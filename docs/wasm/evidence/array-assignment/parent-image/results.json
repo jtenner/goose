@@ -1,0 +1,16 @@
+[
+  {
+    "case": "image",
+    "opt": 0,
+    "source_sha256": "c69123fbf1b100cf7b4040d22493e0689ae6d0957eed5075ced71310a349a3ae",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-array-assignment-20261107/parent-image/image.goose:2: error: wasm target: whole-aggregate assignment needs the pending destination lowering\n"
+  },
+  {
+    "case": "image",
+    "opt": 2,
+    "source_sha256": "c69123fbf1b100cf7b4040d22493e0689ae6d0957eed5075ced71310a349a3ae",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-array-assignment-20261107/parent-image/image.goose:2: error: wasm target: whole-aggregate assignment needs the pending destination lowering\n"
+  }
+]

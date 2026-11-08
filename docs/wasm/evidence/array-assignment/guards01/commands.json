@@ -1,0 +1,256 @@
+[
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-literal-guard-O0.c",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-literal-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-literal-guard-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-literal-guard-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-literal-guard-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-literal-guard-O0.wasm",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-literal-guard.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-literal-guard-O2.c",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-literal-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-literal-guard-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-literal-guard-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-literal-guard-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-literal-guard-O2.wasm",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-literal-guard.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-default-guard-O0.c",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-default-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-default-guard-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-default-guard-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-default-guard-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-default-guard-O0.wasm",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-default-guard.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-default-guard-O2.c",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-default-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-default-guard-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-default-guard-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-default-guard-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-default-guard-O2.wasm",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-default-guard.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-adaptation-guard-O0.c",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-adaptation-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-adaptation-guard-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-adaptation-guard-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-adaptation-guard-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-adaptation-guard-O0.wasm",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-adaptation-guard.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-adaptation-guard-O2.c",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-adaptation-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-adaptation-guard-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-adaptation-guard-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-adaptation-guard-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-adaptation-guard-O2.wasm",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-adaptation-guard.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/goose-tested",
+      "--check",
+      "/tmp/goose-wasm-array-assignment-20261107/guards01/array-assignment-frozen-data-policy.goose"
+    ],
+    "exit": 1
+  }
+]

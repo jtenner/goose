@@ -1,0 +1,10 @@
+{
+  "classification": "invalid native assignment fixture; language policy, not a backend failure",
+  "reason": "Nonfixed u8[] values are frozen at construction.",
+  "coverage": "Separate frontend --check assertion; excluded from native-valid backend guard cases.",
+  "passed_before_stop": {
+    "positive_both_engine_cases": 28,
+    "complete_image_control_groups": 10,
+    "opaque_reference_groups": 36
+  }
+}

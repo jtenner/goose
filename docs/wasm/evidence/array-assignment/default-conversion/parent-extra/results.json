@@ -1,0 +1,100 @@
+[
+  {
+    "case": "effects",
+    "opt": 0,
+    "source_sha256": "3160ebf700b620580514da08db4e008210a084575454aa5be3edef1ab2711a17",
+    "native": "PASS",
+    "wasm_before": "specific count assertion failed"
+  },
+  {
+    "case": "effects",
+    "opt": 2,
+    "source_sha256": "3160ebf700b620580514da08db4e008210a084575454aa5be3edef1ab2711a17",
+    "native": "PASS",
+    "wasm_before": "specific count assertion failed"
+  },
+  {
+    "case": "data",
+    "opt": 0,
+    "source_sha256": "8cbd2a7f67b277861e233a6b3217af7db04d65614baac3a946a4ef1d0c5a0a13",
+    "native": "PASS",
+    "wasm_before": "specific count assertion failed"
+  },
+  {
+    "case": "data",
+    "opt": 2,
+    "source_sha256": "8cbd2a7f67b277861e233a6b3217af7db04d65614baac3a946a4ef1d0c5a0a13",
+    "native": "PASS",
+    "wasm_before": "specific count assertion failed"
+  },
+  {
+    "case": "prefix16",
+    "opt": 0,
+    "source_sha256": "c4022c9d5033214b4c87053dfcc19e27803094cce7dc58f81ab3823da4844f55",
+    "native": "PASS",
+    "wasm_before": "specific count assertion failed"
+  },
+  {
+    "case": "prefix16",
+    "opt": 2,
+    "source_sha256": "c4022c9d5033214b4c87053dfcc19e27803094cce7dc58f81ab3823da4844f55",
+    "native": "PASS",
+    "wasm_before": "specific count assertion failed"
+  },
+  {
+    "case": "prefix32",
+    "opt": 0,
+    "source_sha256": "377cf8a55b86793f9600edc102b855ac97ba74bf374e258effb39a8decbdf6a2",
+    "native": "PASS",
+    "wasm_before": "specific count assertion failed"
+  },
+  {
+    "case": "prefix32",
+    "opt": 2,
+    "source_sha256": "377cf8a55b86793f9600edc102b855ac97ba74bf374e258effb39a8decbdf6a2",
+    "native": "PASS",
+    "wasm_before": "specific count assertion failed"
+  },
+  {
+    "case": "zero",
+    "opt": 0,
+    "source_sha256": "55bc917bb4d295c6d7e14d6edd28cefb82a02f51292c47516b5c0769617061fd",
+    "native": "PASS",
+    "wasm_before": "PASS"
+  },
+  {
+    "case": "zero",
+    "opt": 2,
+    "source_sha256": "55bc917bb4d295c6d7e14d6edd28cefb82a02f51292c47516b5c0769617061fd",
+    "native": "PASS",
+    "wasm_before": "PASS"
+  },
+  {
+    "case": "old_target",
+    "opt": 0,
+    "source_sha256": "cb04ae687ee4b9761ca90b1fc4f06d1b418c5ce5d44ba16db4044f86b6b18345",
+    "native": "PASS",
+    "wasm_before": "specific count assertion failed"
+  },
+  {
+    "case": "old_target",
+    "opt": 2,
+    "source_sha256": "cb04ae687ee4b9761ca90b1fc4f06d1b418c5ce5d44ba16db4044f86b6b18345",
+    "native": "PASS",
+    "wasm_before": "specific count assertion failed"
+  },
+  {
+    "case": "optional",
+    "opt": 0,
+    "source_sha256": "126b15b176ac4d3546379a52e973814e69c528f6b53e9afce534c4af3f3e1883",
+    "native": "PASS",
+    "wasm_before": "specific count assertion failed"
+  },
+  {
+    "case": "optional",
+    "opt": 2,
+    "source_sha256": "126b15b176ac4d3546379a52e973814e69c528f6b53e9afce534c4af3f3e1883",
+    "native": "PASS",
+    "wasm_before": "specific count assertion failed"
+  }
+]

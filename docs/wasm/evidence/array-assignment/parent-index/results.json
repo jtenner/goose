@@ -1,0 +1,16 @@
+[
+  {
+    "case": "index_order",
+    "opt": 0,
+    "source_sha256": "5dc300e9fc5da167666599d01c6a240fda01a1a58bcc0f81e96434f5acbe2ea2",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-array-assignment-20261107/parent-index/index_order.goose:4: error: wasm target: whole-array assignment needs the pending destination lowering\n"
+  },
+  {
+    "case": "index_order",
+    "opt": 2,
+    "source_sha256": "5dc300e9fc5da167666599d01c6a240fda01a1a58bcc0f81e96434f5acbe2ea2",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-array-assignment-20261107/parent-index/index_order.goose:4: error: wasm target: whole-array assignment needs the pending destination lowering\n"
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "purpose": "correctness only",
+  "compiler_sha256": "d4b2e61478cc8aa18a460e38161384d182d27bae507cce66148fc7e71bad1126",
+  "unchanged_input_files": 4534,
+  "wasm_checks": 1961,
+  "memory_matrix_cases": 40,
+  "exact_comparisons": 52,
+  "unchanged_source_module_pairs": 406,
+  "native_baseline": "all groups passed",
+  "timing_jobs": 0,
+  "measurement_lease_used": false
+}

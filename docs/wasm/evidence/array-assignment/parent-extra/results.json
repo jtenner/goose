@@ -1,0 +1,72 @@
+[
+  {
+    "case": "order",
+    "opt": 0,
+    "source_sha256": "2cc9eabd4a819434743b19ebd2db30db2c9f7649cdd83bd83b959410cac05a14",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-array-assignment-20261107/parent-extra/order.goose:5: error: wasm target: whole-aggregate assignment needs the pending destination lowering\n"
+  },
+  {
+    "case": "order",
+    "opt": 2,
+    "source_sha256": "2cc9eabd4a819434743b19ebd2db30db2c9f7649cdd83bd83b959410cac05a14",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-array-assignment-20261107/parent-extra/order.goose:5: error: wasm target: whole-aggregate assignment needs the pending destination lowering\n"
+  },
+  {
+    "case": "fat_order",
+    "opt": 0,
+    "source_sha256": "d843e486b8cb47b0048119ab1674b59163bfbabd1f1e531f7029fb73f9ca6d3b",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-array-assignment-20261107/parent-extra/fat_order.goose:5: error: wasm target: whole-aggregate assignment needs the pending destination lowering\n"
+  },
+  {
+    "case": "fat_order",
+    "opt": 2,
+    "source_sha256": "d843e486b8cb47b0048119ab1674b59163bfbabd1f1e531f7029fb73f9ca6d3b",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-array-assignment-20261107/parent-extra/fat_order.goose:5: error: wasm target: whole-aggregate assignment needs the pending destination lowering\n"
+  },
+  {
+    "case": "fat_refs",
+    "opt": 0,
+    "source_sha256": "cdea86d76a2ede4af563b6f3724309b0382450c9a8cdcd5a9d807a061ead94ca",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-array-assignment-20261107/parent-extra/fat_refs.goose:3: error: wasm target: whole-array assignment needs the pending destination lowering\n"
+  },
+  {
+    "case": "fat_refs",
+    "opt": 2,
+    "source_sha256": "cdea86d76a2ede4af563b6f3724309b0382450c9a8cdcd5a9d807a061ead94ca",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-array-assignment-20261107/parent-extra/fat_refs.goose:3: error: wasm target: whole-array assignment needs the pending destination lowering\n"
+  },
+  {
+    "case": "nominal_refs",
+    "opt": 0,
+    "source_sha256": "259775f31b33a5b6e457e6a51b9d91dccb3b5d8456ed252b48f6926a5515896c",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-array-assignment-20261107/parent-extra/nominal_refs.goose:2: error: wasm target: whole-array assignment needs the pending destination lowering\n"
+  },
+  {
+    "case": "nominal_refs",
+    "opt": 2,
+    "source_sha256": "259775f31b33a5b6e457e6a51b9d91dccb3b5d8456ed252b48f6926a5515896c",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-array-assignment-20261107/parent-extra/nominal_refs.goose:2: error: wasm target: whole-array assignment needs the pending destination lowering\n"
+  },
+  {
+    "case": "empty_effect",
+    "opt": 0,
+    "source_sha256": "c58682186f1c1cf9e71d558c3526187a433fa2281272c56a902404809727d3ec",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-array-assignment-20261107/parent-extra/empty_effect.goose:3: error: wasm target: whole-array assignment needs the pending destination lowering\n"
+  },
+  {
+    "case": "empty_effect",
+    "opt": 2,
+    "source_sha256": "c58682186f1c1cf9e71d558c3526187a433fa2281272c56a902404809727d3ec",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-array-assignment-20261107/parent-extra/empty_effect.goose:3: error: wasm target: whole-array assignment needs the pending destination lowering\n"
+  }
+]

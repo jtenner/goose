@@ -1,0 +1,542 @@
+[
+  {
+    "name": "fixed-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/fixed-O0.c",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/fixed.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fixed-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/fixed-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/fixed-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fixed-O0-native",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/fixed-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fixed-O0-before",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/fixed-O0.wasm",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/fixed.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "fixed-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/fixed-O2.c",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/fixed.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fixed-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/fixed-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/fixed-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fixed-O2-native",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/fixed-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "fixed-O2-before",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/fixed-O2.wasm",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/fixed.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "limited-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/limited-O0.c",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/limited.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "limited-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/limited-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/limited-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "limited-O0-native",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/limited-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "limited-O0-before",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/limited-O0.wasm",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/limited.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "limited-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/limited-O2.c",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/limited.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "limited-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/limited-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/limited-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "limited-O2-native",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/limited-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "limited-O2-before",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/limited-O2.wasm",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/limited.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "refs-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/refs-O0.c",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/refs.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/refs-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/refs-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs-O0-native",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/refs-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs-O0-before",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/refs-O0.wasm",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/refs.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "refs-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/refs-O2.c",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/refs.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/refs-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/refs-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs-O2-native",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/refs-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "refs-O2-before",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/refs-O2.wasm",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/refs.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "data-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/data-O0.c",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/data.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "data-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/data-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/data-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "data-O0-native",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/data-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "data-O0-before",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/data-O0.wasm",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/data.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "data-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/data-O2.c",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/data.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "data-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/data-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/data-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "data-O2-native",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/data-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "data-O2-before",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/data-O2.wasm",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/data.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "nominal-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/nominal-O0.c",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/nominal.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nominal-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/nominal-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/nominal-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nominal-O0-native",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/nominal-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nominal-O0-before",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/nominal-O0.wasm",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/nominal.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "nominal-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/nominal-O2.c",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/nominal.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nominal-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/nominal-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/nominal-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nominal-O2-native",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/nominal-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nominal-O2-before",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/nominal-O2.wasm",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/nominal.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "empty-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/empty-O0.c",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/empty.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "empty-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/empty-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/empty-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "empty-O0-native",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/empty-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "empty-O0-before",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/empty-O0.wasm",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/empty.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "empty-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/empty-O2.c",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/empty.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "empty-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/empty-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/empty-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "empty-O2-native",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/empty-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "empty-O2-before",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/empty-O2.wasm",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-first/empty.goose"
+    ],
+    "exit": 1
+  }
+]

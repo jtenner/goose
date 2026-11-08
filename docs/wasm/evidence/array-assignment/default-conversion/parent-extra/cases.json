@@ -1,0 +1,9 @@
+{
+ "effects":"var calls:i64=0;recursive fn tick()->i64{calls++;return calls;}\nstruct S{n:i64=tick()}\nfn main(){var a:S[..3]=default<S[2]>();assert(a.len==2);assert(calls==2);assert(a[0].n==1);assert(a[1].n==2);print(\"effects\");}\n",
+ "data":"struct S{n:i64=7}\nstruct H{rows:S[..3]}\nfn main(){var a:H[]=[H{rows:default<S[2]>()}];assert(a[0].rows.len==2);assert(a[0].rows[1].n==7);print(\"data\");}\n",
+ "prefix16":"struct S{n:i64=7}\nfn main(){var a:S[..300]=default<S[2]>();assert(a.len==2);assert(a[1].n==7);print(\"prefix16\");}\n",
+ "prefix32":"fn main(){var a:u16[..70000]=default<u16[2]>();assert(a.len==2);assert(a[1]==0);print(\"prefix32\");}\n",
+ "zero":"var calls:i64=0;recursive fn tick()->i64{calls++;return calls;}\nstruct S{n:i64=tick()}\nfn main(){var a:S[..3]=default<S[0]>();var b:S[..4]=default<S[..2]>();assert(a.len==0);assert(b.len==0);assert(calls==0);print(\"zero\");}\n",
+ "old_target":"struct S{n:i64=observe()}\nstruct H{rows:S[..3]}\nvar target:H=H{rows:[S{n:9}]};\nrecursive fn observe()->i64{return target.rows.len;}\nfn main(){target=H{rows:default<S[2]>()};assert(target.rows.len==2);assert(target.rows[0].n==1);assert(target.rows[1].n==1);print(\"old_target\");}\n",
+ "optional":"fn main(){var a:i64&?[..3]=default<i64&?[2]>();assert(a.len==2);assert(!a[0]);assert(!a[1]);print(\"optional\");}\n"
+}

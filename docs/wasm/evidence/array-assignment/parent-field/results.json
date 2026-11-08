@@ -1,0 +1,16 @@
+[
+  {
+    "case": "field_carry",
+    "opt": 0,
+    "source_sha256": "6e537fdbf713a4425a6f40ad3ff1b95df309d069e8fff10040a67743de1e2a62",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-array-assignment-20261107/parent-field/field_carry.goose:2: error: wasm target: whole-aggregate assignment needs the pending destination lowering\n"
+  },
+  {
+    "case": "field_carry",
+    "opt": 2,
+    "source_sha256": "6e537fdbf713a4425a6f40ad3ff1b95df309d069e8fff10040a67743de1e2a62",
+    "native": "PASS",
+    "wasm_before": "/tmp/goose-wasm-array-assignment-20261107/parent-field/field_carry.goose:2: error: wasm target: whole-aggregate assignment needs the pending destination lowering\n"
+  }
+]

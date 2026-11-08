@@ -1,0 +1,92 @@
+[
+  {
+    "name": "index_order-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-index/index_order-O0.c",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-index/index_order.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "index_order-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-index/index_order-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-index/index_order-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "index_order-O0-native",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/parent-index/index_order-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "index_order-O0-before",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-index/index_order-O0.wasm",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-index/index_order.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "index_order-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-index/index_order-O2.c",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-index/index_order.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "index_order-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-index/index_order-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-index/index_order-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "index_order-O2-native",
+    "args": [
+      "/tmp/goose-wasm-array-assignment-20261107/parent-index/index_order-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "index_order-O2-before",
+    "args": [
+      "/tmp/goose-wasm-aggregate-construction-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-index/index_order-O2.wasm",
+      "/tmp/goose-wasm-array-assignment-20261107/parent-index/index_order.goose"
+    ],
+    "exit": 1
+  }
+]

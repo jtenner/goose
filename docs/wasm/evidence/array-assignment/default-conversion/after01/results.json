@@ -1,0 +1,202 @@
+[
+  {
+    "case": "reproduce01/field",
+    "opt": 0,
+    "source_sha256": "c6da0c4d96a6bdda8d1fd5e0ff4e6d5bc18a86199dcf93b328191c58c7d14a20",
+    "hosts": [
+      "Node",
+      "Wasmtime"
+    ],
+    "status": "PASS"
+  },
+  {
+    "case": "reproduce01/field",
+    "opt": 2,
+    "source_sha256": "c6da0c4d96a6bdda8d1fd5e0ff4e6d5bc18a86199dcf93b328191c58c7d14a20",
+    "hosts": [
+      "Node",
+      "Wasmtime"
+    ],
+    "status": "PASS"
+  },
+  {
+    "case": "reproduce01/nominal",
+    "opt": 0,
+    "source_sha256": "8ff39959a192bc0de068c1ea5aa43078dc3e17b13ca965b9f02d11ce5c1d4459",
+    "hosts": [
+      "Node",
+      "Wasmtime"
+    ],
+    "status": "PASS"
+  },
+  {
+    "case": "reproduce01/nominal",
+    "opt": 2,
+    "source_sha256": "8ff39959a192bc0de068c1ea5aa43078dc3e17b13ca965b9f02d11ce5c1d4459",
+    "hosts": [
+      "Node",
+      "Wasmtime"
+    ],
+    "status": "PASS"
+  },
+  {
+    "case": "reproduce01/scalar",
+    "opt": 0,
+    "source_sha256": "ce2075da83e2c53ae7a67f44e8473ffa9c63842a57615761806a5be60b94b527",
+    "hosts": [
+      "Node",
+      "Wasmtime"
+    ],
+    "status": "PASS"
+  },
+  {
+    "case": "reproduce01/scalar",
+    "opt": 2,
+    "source_sha256": "ce2075da83e2c53ae7a67f44e8473ffa9c63842a57615761806a5be60b94b527",
+    "hosts": [
+      "Node",
+      "Wasmtime"
+    ],
+    "status": "PASS"
+  },
+  {
+    "case": "parent-extra/data",
+    "opt": 0,
+    "source_sha256": "8cbd2a7f67b277861e233a6b3217af7db04d65614baac3a946a4ef1d0c5a0a13",
+    "hosts": [
+      "Node",
+      "Wasmtime"
+    ],
+    "status": "PASS"
+  },
+  {
+    "case": "parent-extra/data",
+    "opt": 2,
+    "source_sha256": "8cbd2a7f67b277861e233a6b3217af7db04d65614baac3a946a4ef1d0c5a0a13",
+    "hosts": [
+      "Node",
+      "Wasmtime"
+    ],
+    "status": "PASS"
+  },
+  {
+    "case": "parent-extra/effects",
+    "opt": 0,
+    "source_sha256": "3160ebf700b620580514da08db4e008210a084575454aa5be3edef1ab2711a17",
+    "hosts": [
+      "Node",
+      "Wasmtime"
+    ],
+    "status": "PASS"
+  },
+  {
+    "case": "parent-extra/effects",
+    "opt": 2,
+    "source_sha256": "3160ebf700b620580514da08db4e008210a084575454aa5be3edef1ab2711a17",
+    "hosts": [
+      "Node",
+      "Wasmtime"
+    ],
+    "status": "PASS"
+  },
+  {
+    "case": "parent-extra/old_target",
+    "opt": 0,
+    "source_sha256": "cb04ae687ee4b9761ca90b1fc4f06d1b418c5ce5d44ba16db4044f86b6b18345",
+    "hosts": [
+      "Node",
+      "Wasmtime"
+    ],
+    "status": "PASS"
+  },
+  {
+    "case": "parent-extra/old_target",
+    "opt": 2,
+    "source_sha256": "cb04ae687ee4b9761ca90b1fc4f06d1b418c5ce5d44ba16db4044f86b6b18345",
+    "hosts": [
+      "Node",
+      "Wasmtime"
+    ],
+    "status": "PASS"
+  },
+  {
+    "case": "parent-extra/optional",
+    "opt": 0,
+    "source_sha256": "126b15b176ac4d3546379a52e973814e69c528f6b53e9afce534c4af3f3e1883",
+    "hosts": [
+      "Node",
+      "Wasmtime"
+    ],
+    "status": "PASS"
+  },
+  {
+    "case": "parent-extra/optional",
+    "opt": 2,
+    "source_sha256": "126b15b176ac4d3546379a52e973814e69c528f6b53e9afce534c4af3f3e1883",
+    "hosts": [
+      "Node",
+      "Wasmtime"
+    ],
+    "status": "PASS"
+  },
+  {
+    "case": "parent-extra/prefix16",
+    "opt": 0,
+    "source_sha256": "c4022c9d5033214b4c87053dfcc19e27803094cce7dc58f81ab3823da4844f55",
+    "hosts": [
+      "Node",
+      "Wasmtime"
+    ],
+    "status": "PASS"
+  },
+  {
+    "case": "parent-extra/prefix16",
+    "opt": 2,
+    "source_sha256": "c4022c9d5033214b4c87053dfcc19e27803094cce7dc58f81ab3823da4844f55",
+    "hosts": [
+      "Node",
+      "Wasmtime"
+    ],
+    "status": "PASS"
+  },
+  {
+    "case": "parent-extra/prefix32",
+    "opt": 0,
+    "source_sha256": "377cf8a55b86793f9600edc102b855ac97ba74bf374e258effb39a8decbdf6a2",
+    "hosts": [
+      "Node",
+      "Wasmtime"
+    ],
+    "status": "PASS"
+  },
+  {
+    "case": "parent-extra/prefix32",
+    "opt": 2,
+    "source_sha256": "377cf8a55b86793f9600edc102b855ac97ba74bf374e258effb39a8decbdf6a2",
+    "hosts": [
+      "Node",
+      "Wasmtime"
+    ],
+    "status": "PASS"
+  },
+  {
+    "case": "parent-extra/zero",
+    "opt": 0,
+    "source_sha256": "55bc917bb4d295c6d7e14d6edd28cefb82a02f51292c47516b5c0769617061fd",
+    "hosts": [
+      "Node",
+      "Wasmtime"
+    ],
+    "status": "PASS"
+  },
+  {
+    "case": "parent-extra/zero",
+    "opt": 2,
+    "source_sha256": "55bc917bb4d295c6d7e14d6edd28cefb82a02f51292c47516b5c0769617061fd",
+    "hosts": [
+      "Node",
+      "Wasmtime"
+    ],
+    "status": "PASS"
+  }
+]

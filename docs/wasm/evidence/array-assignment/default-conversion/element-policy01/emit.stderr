@@ -1,0 +1,4 @@
+/tmp/goose-wasm-default-adaptation-20261108/element-policy01/case.goose:1: error: expected a value of type u16[..3], got u8[2]
+fn main(){var a:u16[..3]=default<u8[2]>();assert(a.len==2);assert(a[1]==0);print("element");}
+                         ^~~~~~~~~~~~~~~~
+  in fn main() instantiated from /tmp/goose-wasm-default-adaptation-20261108/element-policy01/case.goose:1

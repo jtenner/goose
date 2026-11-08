@@ -288,8 +288,12 @@ inline WasmCodeGen::FixedPlace WasmCodeGen::FieldPlace(Dot *field) {
 }
 
 inline void WasmCodeGen::AssignFixed(FixedPlace destination, Node *source, TType op, Line line) {
-    if (op != T_ASSIGN || !source || !Nominal(destination.type))
-        Fail(line, "whole-aggregate assignment needs an exact fixed value");
+    auto array = InlineArray(destination.type);
+    auto fail = [&](const char *reason) {
+        Fail(line, cat(array ? "whole-array assignment " : "whole-aggregate assignment ", reason));
+    };
+    if (op != T_ASSIGN || !source || (!Nominal(destination.type) && !array))
+        fail("needs an exact fixed value");
     while (auto call = Is<Call>(source)) {
         if (call->builtin != B_COPY) break;
         source = call->ValueArgNodes().at(0);
@@ -297,10 +301,10 @@ inline void WasmCodeGen::AssignFixed(FixedPlace destination, Node *source, TType
     auto from = ActualType(source);
     while (from && from->kind == TY_REF) from = from->ref->sub;
     if (!from || !TEq(destination.type, from))
-        Fail(line, "whole-aggregate assignment adaptation needs the pending destination lowering");
+        fail("adaptation needs the pending destination lowering");
     auto dot = Is<Dot>(source);
     auto call = Is<Call>(source);
-    if (Is<StructLit>(source) || (dot && dot->variantconst) || (call && call->builtin == B_DEFAULT)) {
+    if (!array && (Is<StructLit>(source) || (dot && dot->variantconst) || (call && call->builtin == B_DEFAULT))) {
         WithFixedTemporary(destination.type, source, [&](const FixedPlace &value) {
             CopyBytes(destination, value, RequireFixed(destination.type, line), line, true);
         });
@@ -310,10 +314,10 @@ inline void WasmCodeGen::AssignFixed(FixedPlace destination, Node *source, TType
                        (Is<Unary>(source) && Is<Unary>(source)->op == T_BITAND) ||
                        ((Is<Call>(source) || Is<InlineBlock>(source)) && ActualType(source)->kind == TY_REF);
     if (!addressable)
-        Fail(line, "whole-aggregate assignment from a temporary needs the pending destination lowering");
+        fail("from a temporary needs the pending destination lowering");
     auto selected = ResolvePlace(source);
     if (!TEq(destination.type, selected.type))
-        Fail(line, "whole-aggregate assignment has an inconsistent source layout");
+        fail("has an inconsistent source layout");
     CopyBytes(destination, selected, RequireFixed(destination.type, line), line, true);
 }
 
@@ -328,7 +332,7 @@ inline void WasmCodeGen::AssignField(Dot *field, Node *rhs, TType op, bool point
         StorePlace(place); return;
     }
     if (pointee && place.type->kind == TY_REF) place = DereferencePlace(place, line);
-    if (Nominal(place.type)) { AssignFixed(place, rhs, op, line); return; }
+    if (Nominal(place.type) || InlineArray(place.type)) { AssignFixed(place, rhs, op, line); return; }
     if (Aggregate(place.type)) Fail(line, "whole-aggregate assignment needs the pending destination lowering");
     StoreAddress(place);
     if (op != T_ASSIGN) ReadPlace(place);
@@ -549,11 +553,24 @@ inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *sourc
         if (call->builtin != B_DEFAULT) break;
         if (Nominal(type) && call->defaultinit) { source = call->defaultinit; continue; }
         if (InlineArray(type)) {
+            auto declared = ActualType(call);
+            if (!declared || !InlineArray(declared) || !TEq(type->arr->sub, declared->arr->sub))
+                Fail(source->line, "array default element adaptation needs the pending destination lowering");
+            RequireFixed(declared, source->line);
+            auto count = declared->arr->akind == A_FIXED ? (uint64_t)ArrSize(declared->arr) : 0;
+            auto capacity = (uint64_t)ArrSize(type->arr);
+            if (count > capacity || (type->arr->akind == A_FIXED && count != capacity))
+                Fail(source->line, "array default does not fit its checked destination");
             if (Nominal(type->arr->sub)) {
-                auto count = type->arr->akind == A_FIXED ? (uint64_t)ArrSize(type->arr) : 0;
                 ConstructRepeatedAggregate(fresh, call->defaultinit, count, true); return;
             }
-            if (type->arr->akind == A_FIXED) zero(bytes);
+            if (!TEq(type, declared)) {
+                // A default fixed source keeps its count when built into a
+                // wider limited image; defaulting the target would lose it.
+                zero(bytes);
+                if (type->arr->akind == A_LIMITED)
+                    InitArrayCount(FreshArrayPlace(fresh, source->line), count);
+            } else if (type->arr->akind == A_FIXED) zero(bytes);
             else {
                 auto place = FreshArrayPlace(fresh, source->line);
                 PrepareArrayLengthStore(place); code.I64(0); StoreArrayLength(place);
