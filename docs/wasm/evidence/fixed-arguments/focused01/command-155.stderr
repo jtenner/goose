@@ -1,0 +1,3 @@
+/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_reference_source.goose:2: warning: redundant &: value binds by reference here without it (§4.1)
+var value:S=S{n:7};recursive fn source()->S&{return &value;}
+                                                    ^~~~~~

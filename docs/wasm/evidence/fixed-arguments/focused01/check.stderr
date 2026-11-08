@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-fixed-arguments-20261107/focused01/checks.py", line 20, in <module>
+    a=run(['node',r/'test/wasm_multimemory.mjs',module,'0',mode]);assert a.stdout==expected and not a.stderr
+  File "/tmp/goose-wasm-fixed-arguments-20261107/focused01/checks.py", line 10, in run
+    if ok:assert not a.returncode,(name,args,a.stderr)
+                 ^^^^^^^^^^^^^^^^
+AssertionError: ('command-164', ['node', '/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs', '/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_refs-O0.wasm', '0', 'no-data'], b"node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: array interfaces added an unused data memory\n\n2 !== 1\n\n    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs:28:43\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: 2,\n  expected: 1,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.22.2\n")

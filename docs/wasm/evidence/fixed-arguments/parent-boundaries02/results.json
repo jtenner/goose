@@ -1,0 +1,16 @@
+[
+  {
+    "case": "dynamic_base",
+    "opt": 0,
+    "source_sha256": "dc69ccda49cf6696624e1a1adbe55bad21bef6492d2ad7618805ec7e201f8105",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-arguments-20261107/parent-boundaries02/dynamic_base.goose:2: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  },
+  {
+    "case": "dynamic_base",
+    "opt": 2,
+    "source_sha256": "dc69ccda49cf6696624e1a1adbe55bad21bef6492d2ad7618805ec7e201f8105",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-arguments-20261107/parent-boundaries02/dynamic_base.goose:2: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  }
+]

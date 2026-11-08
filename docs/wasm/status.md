@@ -280,6 +280,14 @@ baseline and 52 exact comparisons; 448 unchanged parent modules are identical.
 General aggregate calls/results and stored-layout adaptation remain guarded.
 See [array constructor assignment](evidence/array-constructor-assignment.md).
 
+Positive fixed structs, enums and variants now work as by-value arguments to
+ordinary, inline and function-value calls. Real parameter owners and ordered
+value snapshots preserve independence, shallow references and cleanup. The
+2,279-group full run, final module-equivalence/control checks, supplemental
+mixed-scalar checks, native baseline and 52 exact comparisons pass. Fixed
+aggregate results and by-value arrays remain guarded. See
+[fixed argument evidence](evidence/fixed-arguments.md).
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping

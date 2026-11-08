@@ -1,0 +1,44 @@
+[
+  {
+    "case": "data_callback",
+    "opt": 0,
+    "source_sha256": "e502924df85e648788fa9d89a750020802305c0f858261d5227dc5eea4cbbf53",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-arguments-20261107/parent-calls02/data_callback.goose:2: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  },
+  {
+    "case": "data_callback",
+    "opt": 2,
+    "source_sha256": "e502924df85e648788fa9d89a750020802305c0f858261d5227dc5eea4cbbf53",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-arguments-20261107/parent-calls02/data_callback.goose:2: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  },
+  {
+    "case": "inline_order",
+    "opt": 0,
+    "source_sha256": "b442b511e677b5f11237e7b70a6796454d1ad4dd535116f8ec4fba7f25862902",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-arguments-20261107/parent-calls02/inline_order.goose:3: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  },
+  {
+    "case": "inline_order",
+    "opt": 2,
+    "source_sha256": "b442b511e677b5f11237e7b70a6796454d1ad4dd535116f8ec4fba7f25862902",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-arguments-20261107/parent-calls02/inline_order.goose:3: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  },
+  {
+    "case": "reverse_order",
+    "opt": 0,
+    "source_sha256": "5ec8078d184cd4c91fe969ad195a56811eaf0449de7e04e6d1edf54b6209e090",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-arguments-20261107/parent-calls02/reverse_order.goose:2: warning: redundant &: original binds by reference here without it (\u00a74.1)\nvar value:i64=7;var original:S=S{n:1};recursive fn mutate()->S&{value=12;return &original;}\n                                                                                ^~~~~~~~~\n/tmp/goose-wasm-fixed-arguments-20261107/parent-calls02/reverse_order.goose:3: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  },
+  {
+    "case": "reverse_order",
+    "opt": 2,
+    "source_sha256": "5ec8078d184cd4c91fe969ad195a56811eaf0449de7e04e6d1edf54b6209e090",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-arguments-20261107/parent-calls02/reverse_order.goose:2: warning: redundant &: original binds by reference here without it (\u00a74.1)\nvar value:i64=7;var original:S=S{n:1};recursive fn mutate()->S&{value=12;return &original;}\n                                                                                ^~~~~~~~~\n/tmp/goose-wasm-fixed-arguments-20261107/parent-calls02/reverse_order.goose:3: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  }
+]

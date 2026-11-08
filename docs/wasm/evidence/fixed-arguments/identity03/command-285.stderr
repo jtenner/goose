@@ -1,0 +1,6 @@
+/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_mixed.goose:7: warning: redundant `as f32`: 16777217.0 is an f32 here
+                          Numbers { flag: false, small: 16777217.0 as f32, wide: -value, special: 0.0 / 0.0, bits: [false, true] }];
+                                                        ^~~~~~~~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_mixed.goose:20: warning: redundant `as f32`: 1.25 is an f32 here
+    var template: Numbers = Numbers { flag: true, small: 1.25 as f32, wide: -2.5, special: 0.0 / 0.0, bits: [false, true] };
+                                                         ^~~~~~~~~~~

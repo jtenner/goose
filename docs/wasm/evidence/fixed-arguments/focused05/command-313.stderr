@@ -1,0 +1,27 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+256 !== 1
+
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_fixed_argument_dynamic.mjs:16:16
+    at print_end_v1 (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:105:13)
+    at read.1 (wasm://wasm/9ef49dee:wasm-function[12]:0x3fc)
+    at main.0 (wasm://wasm/9ef49dee:wasm-function[11]:0x268)
+    at goose.start (wasm://wasm/9ef49dee:wasm-function[14]:0x46a)
+    at Object.run (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:133:34)
+    at runCompleted (file:///home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs:10:13)
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_fixed_argument_dynamic.mjs:27:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 256,
+  expected: 1,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.2

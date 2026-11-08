@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-fixed-arguments-20261107/parent-extra01/checks.py", line 13, in <module>
+    a=run(stem+'-'+label,args);assert not a.returncode,(name,label,a.stderr)
+                                      ^^^^^^^^^^^^^^^^
+AssertionError: ('reference_result', 'emit', b'/tmp/goose-wasm-fixed-arguments-20261107/parent-extra01/reference_result.goose:3: error: expected \';\' in variable declaration, found \'&=\'\nfn main(){var data:i64[]=[7];var s:S=S{link:data[0]};var link:i64&=get(s);link=9;assert(data[0]==9);assert(link .== &data[0]);print("reference_result");}\n                                                                 ^~\n')

@@ -1,0 +1,10 @@
+{
+  "status": "preserved test observer failure",
+  "functional_case_pairs": 50,
+  "cause": "data stack initial top is one; observer read reserved byte zero as array prefix",
+  "saved_module_globals": {
+    "1": 1,
+    "2": 1
+  },
+  "compiler_sha256": "d326e110878fa8da7a37913068927882d9cb83d4daa15523533dcb194378fdbb"
+}

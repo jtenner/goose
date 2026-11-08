@@ -1,0 +1,38 @@
+[
+  {
+    "source": "test/wasm/wasm_fixed_argument_data_callback.goose",
+    "source_sha256": "e502924df85e648788fa9d89a750020802305c0f858261d5227dc5eea4cbbf53",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_argument_data_callback.goose",
+    "source_sha256": "e502924df85e648788fa9d89a750020802305c0f858261d5227dc5eea4cbbf53",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_argument_inline_order.goose",
+    "source_sha256": "b442b511e677b5f11237e7b70a6796454d1ad4dd535116f8ec4fba7f25862902",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_argument_inline_order.goose",
+    "source_sha256": "b442b511e677b5f11237e7b70a6796454d1ad4dd535116f8ec4fba7f25862902",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_argument_reverse_order.goose",
+    "source_sha256": "5ec8078d184cd4c91fe969ad195a56811eaf0449de7e04e6d1edf54b6209e090",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_argument_reverse_order.goose",
+    "source_sha256": "5ec8078d184cd4c91fe969ad195a56811eaf0449de7e04e6d1edf54b6209e090",
+    "opt": 2,
+    "status": "PASS"
+  }
+]

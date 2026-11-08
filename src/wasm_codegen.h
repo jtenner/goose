@@ -123,6 +123,11 @@ struct WasmCodeGen : ValueLayout {
         return (uint32_t)bytes;
     }
     void RequireCallValue(TypeExpr *t, bool result, Line line) {
+        if (!result && Nominal(t)) {
+            if (!RequireFixed(t, line))
+                Fail(line, "zero-sized aggregate parameters need the pending call lowering");
+            return;
+        }
         if (t->kind == TY_ARRAY)
             Fail(line, result ? "array results need the pending destination lowering"
                               : "by-value arrays need the pending destination lowering");
@@ -746,7 +751,11 @@ struct WasmCodeGen : ValueLayout {
             auto args = c->ValueArgNodes();
             if (args.size() != c->fvparams.size()) Fail(c->line, "function-value parameter mismatch");
             for (size_t i = 0; i < args.size(); i++) {
-                Gen(args[i]); Convert(args[i]->exprtype, c->fvparams[i]->type); Write(Find(c->fvparams[i]));
+                if (Nominal(c->fvparams[i]->type))
+                    ConstructFixed(FreshCallParameter(c, i), args[i]);
+                else {
+                    Gen(args[i]); Convert(args[i]->exprtype, c->fvparams[i]->type); Write(Find(c->fvparams[i]));
+                }
             }
             auto wanted = resulttype ? resulttype : c->exprtype;
             BlockValue(c->fvbody, !Void(wanted), wanted); return;
@@ -756,6 +765,17 @@ struct WasmCodeGen : ValueLayout {
         if (it == functions.end()) Fail(c->line, "missing direct function specialization");
         auto args = c->ValueArgNodes();
         if (args.size() != c->spec->params.size()) Fail(c->line, "call parameter mismatch");
+        if (any_of(c->spec->params.begin(), c->spec->params.end(),
+                   [&](VarDef *parameter) { return Nominal(parameter->type); })) {
+            auto result = c->spec->rets.empty() ? NoLocal : Temp(c->spec->rets[0]);
+            vector<uint32_t> values(args.size(), NoLocal);
+            FixedCallArguments(c, args, values, 0, result);
+            if (result != NoLocal) {
+                code.Get(result);
+                Convert(c->spec->rets[0], resulttype ? resulttype : c->exprtype);
+            }
+            return;
+        }
         for (size_t i = 0; i < args.size(); i++) {
             Gen(args[i]); Convert(args[i]->exprtype, c->spec->params[i]->type);
         }
@@ -1036,7 +1056,7 @@ struct WasmCodeGen : ValueLayout {
                     InitArray(v->defs[i], s, v->inits[i], v); continue;
                 }
                 if (Nominal(s.type)) {
-                    if (v->inline_arg) Fail(n->line, "by-value aggregates need the pending destination lowering");
+                    if (v->inline_arg) RequireCallValue(s.type, false, n->line);
                     ConstructFixed(FreshOwner(v->defs[i], v), v->inits[i]); continue;
                 }
                 Gen(v->inits[i]); Convert(v->inits[i]->exprtype, s.type); Write(s);
@@ -1119,7 +1139,16 @@ struct WasmCodeGen : ValueLayout {
             code.I32((int32_t)framesize); code.Call(reservefn); code.Set(framebase);
             for (size_t i = 0; i < sp->params.size(); i++) {
                 auto &s = Find(sp->params[i]);
-                if (s.memory) { Address(s); code.Get((uint32_t)i); StoreFixed(s.type); }
+                if (Nominal(s.type)) {
+                    auto plan = storage.fixedvalues.find(sp->params[i]);
+                    if (plan == storage.fixedvalues.end() ||
+                        plan->second.origin != WasmStoragePlan::FixedOrigin::Parameter ||
+                        plan->second.function != sp || !plan->second.argument || !plan->second.initialized)
+                        Fail(sp->params[i]->line, "aggregate parameter needs its planned function owner");
+                    CopyBytes(OwnerPlace(sp->params[i]),
+                              {s.type, (uint32_t)i, 0, 0, false, true},
+                              plan->second.image, sp->params[i]->line, true);
+                } else if (s.memory) { Address(s); code.Get((uint32_t)i); StoreFixed(s.type); }
             }
         }
         auto ret = sp->rets.empty() ? nullptr : sp->rets[0];
@@ -1164,7 +1193,7 @@ struct WasmCodeGen : ValueLayout {
             vector<uint8_t> args, rets;
             for (auto p : sp->params) {
                 RequireCallValue(p->type, false, p->line);
-                args.push_back(Type(p->type));
+                args.push_back(Nominal(p->type) ? WasmModule::I32 : Type(p->type));
             }
             for (auto r : sp->rets) {
                 RequireCallValue(r, true, r->line);
@@ -1213,6 +1242,9 @@ struct WasmCodeGen : ValueLayout {
     TypeExpr *ActualType(Node *n);
     FixedPlace OwnerPlace(VarDef *owner);
     FreshFixedDestination FreshOwner(VarDef *owner, Node *initialization);
+    FreshFixedDestination FreshCallParameter(Call *call, size_t position);
+    void FixedCallArguments(Call *call, const vector<Node *> &arguments,
+                            vector<uint32_t> &values, size_t position, uint32_t result);
     FreshDataArrayDestination ReserveFreshDataArray(VarDef *owner, const Slot &slot,
                                                   VarDecl *initialization, uint32_t count,
                                                   uint32_t literalCount = NoLocal);

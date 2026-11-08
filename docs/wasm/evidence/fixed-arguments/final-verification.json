@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "purpose": "correctness only",
+  "compiler_sha256": "4cf1b2d137582fd664f91d8bec99983514860d60d91a28851d2629b9935b01b0",
+  "source_files": 73,
+  "unchanged_final_validation_inputs": 4620,
+  "full_wasm_run": {
+    "checks": 2279,
+    "path": "full-correctness01",
+    "compiler_sha256": "d326e110878fa8da7a37913068927882d9cb83d4daa15523533dcb194378fdbb"
+  },
+  "indexed_owner_refinement": {
+    "regenerated_identical_fixture_modules": 528,
+    "final_private_control_groups": 24,
+    "same_guest_code_evidence": "identity03/results.json"
+  },
+  "warning_only_changes": {
+    "source_files": 2,
+    "identical_recompiled_module_pairs": 4,
+    "evidence": "warning-markers02/results.json"
+  },
+  "additional_mixed_scalar_case_pairs": 2,
+  "native_first_cases": 52,
+  "fixture_families": 26,
+  "native_baseline": {
+    "status": "all groups passed",
+    "frontend": 2040,
+    "generated_c": 996,
+    "tinycc": 1168
+  },
+  "exact_comparisons": 52,
+  "unchanged_parent_module_pairs": 478,
+  "memory_matrix_cases": 40,
+  "timing_jobs": 0,
+  "measurement_lease_used": false
+}

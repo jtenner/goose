@@ -1,0 +1,5 @@
+struct S{mark:u8,n:i64}
+var source:S=S{mark:90,n:72623859790382856};
+recursive fn later()->i64{print("arg-live");source.n=12;return 0;}
+recursive fn consume(p:S,x:i64)->i64{print("callee-live");defer{p.n=9;print("callee-defer");}assert(p.mark==90);assert(p.n==72623859790382856);return p.n+x;}
+fn main(){let result=consume(source,later());assert(result==72623859790382856);assert(source.n==12);print("done");}

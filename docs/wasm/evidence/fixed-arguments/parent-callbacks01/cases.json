@@ -1,0 +1,4 @@
+{
+  "repeated_callback": "struct S{n:i64}\nfn twice<F>(s:S&)->i64{F(copy(s))+F(copy(s))}\nfn main(){var s:S=S{n:1};assert(twice(s){p=>{p.n++;p.n}}==4);assert(s.n==1);print(\"repeated_callback\");}\n",
+  "callback_order": "struct S{n:i64}\nvar original:S=S{n:7};recursive fn later()->i64{original.n=12;return 0;}\nfn apply<F>()->i64{F(copy(original),later())}\nfn main(){assert(apply(){p,x=>p.n+x}==7);assert(original.n==12);print(\"callback_order\");}\n"
+}

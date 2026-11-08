@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-fixed-arguments-20261107/parent-boundaries01/checks.py", line 13, in <module>
+    a=run(stem+'-'+label,args);assert not a.returncode,(name,label,a.stderr)
+                                      ^^^^^^^^^^^^^^^^
+AssertionError: ('always_return', 'emit', b'/tmp/goose-wasm-fixed-arguments-20261107/parent-boundaries01/always_return.goose:4: error: no matching overload for call to use\n  candidate use at /tmp/goose-wasm-fixed-arguments-20261107/parent-boundaries01/always_return.goose:3: argument 2: cannot pass void as i64\nrecursive fn run()->i64{return use(S{n:effect()},{return 7;8});}\n                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n  in fn run() instantiated from /tmp/goose-wasm-fixed-arguments-20261107/parent-boundaries01/always_return.goose:5\n  in fn main() instantiated from /tmp/goose-wasm-fixed-arguments-20261107/parent-boundaries01/always_return.goose:5\n')

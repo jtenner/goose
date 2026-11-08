@@ -4,11 +4,11 @@ from pathlib import Path
 CASES = {'argument': ('enum E { A { x: i64 }, B }\n'
               'recursive fn read(e: E) -> i64 { match e { A p => p.x, B => 0 } }\n'
               'fn main() { var e: E = E.A { x: 1 }; print(read(e)); }\n',
-              'by-value aggregates'),
+              'value-producing matches'),
  'inline-argument': ('enum E { A { x: i64 }, B }\n'
                      'inline fn read(e: E) -> i64 { match e { A p => p.x, B => 0 } }\n'
                      'fn main() { var e: E = E.A { x: 1 }; print(read(e)); }\n',
-                     'by-value aggregates'),
+                     'value-producing matches'),
  'result': ('enum E { A { x: i64 }, B }\n'
             'recursive fn make(n: i64) -> E { E.A { x: n } }\n'
             'fn main() { var e: E = make(1); match e { A p => print(p.x), B => print(0) } }\n',

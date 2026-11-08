@@ -1,0 +1,4 @@
+/tmp/goose-wasm-fixed-arguments-20261107/parent-calls02/reverse_order.goose:2: warning: redundant &: original binds by reference here without it (§4.1)
+var value:i64=7;var original:S=S{n:1};recursive fn mutate()->S&{value=12;return &original;}
+                                                                                ^~~~~~~~~
+/tmp/goose-wasm-fixed-arguments-20261107/parent-calls02/reverse_order.goose:3: error: wasm target: by-value aggregates need the pending destination lowering

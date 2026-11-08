@@ -1,0 +1,5 @@
+{
+  "void": "struct S{n:i64}\nrecursive fn set(p:S,out:i64&){p.n=9;out=p.n;}\nfn main(){var s:S=S{n:2};var out:i64=0;set(s,out);assert(out==9);assert(s.n==2);print(\"void\");}\n",
+  "always_return": "struct S{n:i64}\nrecursive fn effect()->i64{print(\"effect\");return 1;}\nrecursive fn use(p:S,x:i64)->i64{return p.n+x;}\nrecursive fn run()->i64{return use(S{n:effect()},{return 7;8});}\nfn main(){assert(run()==7);print(\"always_return\");}\n",
+  "dynamic_base": "struct S{n:i64}\nrecursive fn read(p:S)->i64{var a:i64[]=[p.n];print(\"inside\");return a[0];}\nfn main(){var s:S=S{n:1};assert(read(s)==1);{var live:i64[]=[9];assert(read(s)==1);assert(live[0]==9);}print(\"dynamic_base\");}\n"
+}

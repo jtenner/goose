@@ -1,0 +1,136 @@
+[
+  {
+    "name": "command-0",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-fixed-arguments-20261107/dynamic02/wasm_fixed_argument_dynamic_base-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-1",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-arguments-20261107/dynamic02/fixed-argument-dynamic-owner-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/dynamic02/fixed-argument-dynamic-owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-2",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/dynamic02/fixed-argument-dynamic-owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-3",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_argument_dynamic.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/dynamic02/fixed-argument-dynamic-owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-4",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-arguments-20261107/dynamic02/fixed-argument-dynamic-wrong-base-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/dynamic02/fixed-argument-dynamic-wrong-base-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-5",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/dynamic02/fixed-argument-dynamic-wrong-base-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-6",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_argument_dynamic.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/dynamic02/fixed-argument-dynamic-wrong-base-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-7",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-fixed-arguments-20261107/dynamic02/wasm_fixed_argument_dynamic_base-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-8",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-arguments-20261107/dynamic02/fixed-argument-dynamic-owner-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/dynamic02/fixed-argument-dynamic-owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-9",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/dynamic02/fixed-argument-dynamic-owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-10",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_argument_dynamic.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/dynamic02/fixed-argument-dynamic-owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-11",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-arguments-20261107/dynamic02/fixed-argument-dynamic-wrong-base-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/dynamic02/fixed-argument-dynamic-wrong-base-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-12",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/dynamic02/fixed-argument-dynamic-wrong-base-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-13",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_argument_dynamic.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/dynamic02/fixed-argument-dynamic-wrong-base-O2.wasm"
+    ],
+    "exit": 1
+  }
+]

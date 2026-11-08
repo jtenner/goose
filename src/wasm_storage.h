@@ -12,11 +12,12 @@ struct WasmStoragePlan {
     unordered_map<VarDef *, uint32_t> owners;
     unordered_map<Call *, int> calltops;
     vector<VarDef *> globals;
-    enum class FixedOrigin { Declaration, MatchCopy, IterationCopy };
+    enum class FixedOrigin { Declaration, MatchCopy, IterationCopy, Parameter, CallbackParameter };
     struct FixedOwner {
         uint32_t bytes = 0, image = 0;
         Node *initialization = nullptr;
         FixedOrigin origin = FixedOrigin::Declaration;
+        FnSpec *function = nullptr;
         bool argument = false, initialized = false;
     };
     unordered_map<VarDef *, FixedOwner> fixedvalues;
@@ -133,7 +134,9 @@ struct WasmStoragePlan {
         }
         if (auto c = Is<Call>(n)) {
             if (c->defaultinit) { Walk(c->defaultinit, function, next); return; }
+            size_t argumentCount = 0;
             for (auto argument : c->ValueArgNodes()) {
+                argumentCount++;
                 if (c->builtin == B_PRINT) {
                     auto t = argument->exprtype;
                     while (t && t->kind == TY_REF) t = t->ref->sub;
@@ -142,7 +145,21 @@ struct WasmStoragePlan {
                 }
                 Walk(argument, function, next);
             }
-            if (c->fvbody) { Walk(c->fvbody, function, next); return; }
+            if (c->fvbody) {
+                for (size_t i = 0; i < c->fvparams.size(); i++) {
+                    auto parameter = c->fvparams[i];
+                    if (!WasmValueSupport::Nominal(parameter->type)) continue;
+                    NoteType(parameter->type);
+                    FixedOwner fixed;
+                    fixed.initialization = c;
+                    fixed.origin = FixedOrigin::CallbackParameter;
+                    fixed.function = function;
+                    fixed.argument = true;
+                    fixed.initialized = i < argumentCount;
+                    fixedvalues[parameter] = fixed;
+                }
+                Walk(c->fvbody, function, next); return;
+            }
             if (c->builtin < 0 && c->spec) {
                 calltops[c] = next;
                 counts.calls[function].push_back({c->spec, next, c->line});
@@ -156,7 +173,16 @@ struct WasmStoragePlan {
         vector<FnSpec *> functions;
         for (auto sp : ast.fnspecs) if (sp->live) {
             functions.push_back(sp);
-            for (auto p : sp->params) NoteType(p->type);
+            for (auto p : sp->params) {
+                NoteType(p->type);
+                if (WasmValueSupport::Nominal(p->type)) {
+                    FixedOwner fixed;
+                    fixed.origin = FixedOrigin::Parameter;
+                    fixed.function = sp;
+                    fixed.argument = fixed.initialized = true;
+                    fixedvalues[p] = fixed;
+                }
+            }
             for (auto t : sp->rets) NoteType(t);
             int next = 0;
             Walk(sp->body, sp, next);
@@ -166,10 +192,16 @@ struct WasmStoragePlan {
             Walk(declaration, nullptr, next);
         }
         for (auto &[owner, plan] : fixedvalues) {
-            if (plan.argument) fail(owner->line, "by-value aggregates need the pending destination lowering");
+            if (plan.argument && plan.origin == FixedOrigin::Declaration) {
+                auto declaration = Is<VarDecl>(plan.initialization);
+                if (!declaration || !declaration->inline_arg)
+                    fail(owner->line, "aggregate argument needs its checked inline declaration");
+            }
             if (!plan.initialized) fail(owner->line, "uninitialized aggregate declarations need the pending destination lowering");
             if (owner->reusable) fail(owner->line, "pool owners need the pending descriptor lowering");
             plan.image = fixedsize(owner->type, owner->line);
+            if (plan.argument && !plan.image)
+                fail(owner->line, "zero-sized aggregate parameters need the pending call lowering");
             plan.bytes = std::max(1u, plan.image);
         }
         counts.Bound(functions, [&](FnSpec *caller, const auto &edge) {

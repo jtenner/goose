@@ -1,0 +1,3 @@
+/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_data_aggregate_cleanup.goose:38: warning: redundant `as u16`: 7 fits u16 here
+    var rows: Partial[] = [Partial { cells: [if early { return 5; } else { 7 as u16 }, 8] }];
+                                                                           ^~~~~~~~

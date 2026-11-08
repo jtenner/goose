@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-fixed-arguments-20261107/obsolete-admission01/checks.py", line 13, in <module>
+    try:check()
+        ~~~~~^^
+  File "/tmp/goose-wasm-fixed-arguments-20261107/obsolete-admission01/checks.py", line 12, in <lambda>
+    for name,check in [('struct',lambda:wasm_struct_admission.check_admission(run,exe,'node','wasm-tools','/tmp/goose-wasm-runtime-env/bin/python',p)),('enum',lambda:wasm_enum_admission.check_admission(run,exe,'cc',p,'node','wasm-tools','/tmp/goose-wasm-runtime-env/bin/python'))]:
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_struct_admission.py", line 99, in check_admission
+    assert result.returncode and reason.encode() in result.stderr, (name, opt, result.stderr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('argument', 0, b'')

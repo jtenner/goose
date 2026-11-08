@@ -39,8 +39,10 @@ inline WasmCodeGen::FreshFixedDestination WasmCodeGen::FreshOwner(VarDef *owner,
     auto image = RequireFixed(owner->type, owner->line);
     if (Nominal(owner->type)) {
         auto it = storage.fixedvalues.find(owner);
+        auto declaration = Is<VarDecl>(initialization);
+        auto argument = declaration && declaration->inline_arg;
         if (it == storage.fixedvalues.end() || it->second.initialization != initialization ||
-            it->second.argument || !it->second.initialized || it->second.image != image)
+            it->second.argument != argument || !it->second.initialized || it->second.image != image)
             Fail(owner->line, "fixed construction needs its planned fresh owner");
     } else {
         auto declaration = Is<VarDecl>(initialization);
@@ -50,6 +52,22 @@ inline WasmCodeGen::FreshFixedDestination WasmCodeGen::FreshOwner(VarDef *owner,
     }
     return {OwnerPlace(owner), owner, 0, image, FreshFixedOrigin::PlannedFrame,
             initialization, std::max(1u, image)};
+}
+
+inline WasmCodeGen::FreshFixedDestination WasmCodeGen::FreshCallParameter(Call *call, size_t position) {
+    if (!call->fvbody || position >= call->fvparams.size())
+        Fail(call->line, "aggregate callback parameter needs its checked call index");
+    auto owner = call->fvparams[position];
+    auto plan = storage.fixedvalues.find(owner);
+    auto image = RequireFixed(owner->type, call->line);
+    if (!Nominal(owner->type) || !image ||
+        plan == storage.fixedvalues.end() ||
+        plan->second.origin != WasmStoragePlan::FixedOrigin::CallbackParameter ||
+        plan->second.function != current || plan->second.initialization != call ||
+        !plan->second.argument || !plan->second.initialized || plan->second.image != image)
+        Fail(call->line, "aggregate callback parameter needs its planned call owner");
+    return {OwnerPlace(owner), owner, 0, image, FreshFixedOrigin::PlannedFrame, call,
+            std::max(1u, image)};
 }
 
 inline TypeExpr *WasmCodeGen::FreshRootType(const FreshFixedDestination &destination) {
@@ -108,6 +126,30 @@ inline void WasmCodeGen::WithFixedTemporary(TypeExpr *type, Node *expression, Co
     ConstructFixed(fresh, expression);
     consume(fresh.place);
     Cleanup(scope); scopes.pop_back();
+}
+
+inline void WasmCodeGen::FixedCallArguments(Call *call, const vector<Node *> &arguments,
+                                           vector<uint32_t> &values, size_t position, uint32_t result) {
+    if (position == arguments.size()) {
+        for (auto value : values) code.Get(value);
+        if (NeedsBase(call->spec)) StackIndex((uint32_t)storage.calltops.at(call));
+        code.Call(functions.at(call->spec));
+        if (result != NoLocal) code.Set(result);
+        return;
+    }
+    auto expression = arguments[position];
+    if (ExitingFixedInitializer(expression)) return;
+    auto type = call->spec->params[position]->type;
+    if (Nominal(type)) {
+        WithFixedTemporary(type, expression, [&](const FixedPlace &value) {
+            values[position] = value.address;
+            FixedCallArguments(call, arguments, values, position + 1, result);
+        });
+    } else {
+        Gen(expression); Convert(expression->exprtype, type);
+        values[position] = Temp(type); code.Set(values[position]);
+        FixedCallArguments(call, arguments, values, position + 1, result);
+    }
 }
 
 inline WasmCodeGen::FreshFixedDestination WasmCodeGen::FreshDataElement(

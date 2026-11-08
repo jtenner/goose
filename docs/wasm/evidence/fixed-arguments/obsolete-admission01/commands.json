@@ -1,0 +1,67 @@
+[
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/obsolete-admission01/struct-admission-argument-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/obsolete-admission01/struct-admission-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/obsolete-admission01/struct-admission-argument-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/obsolete-admission01/struct-admission-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/obsolete-admission01/enum-admission-argument-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/obsolete-admission01/enum-admission-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/obsolete-admission01/enum-admission-argument-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/obsolete-admission01/enum-admission-argument-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/obsolete-admission01/enum-admission-argument-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/obsolete-admission01/enum-admission-argument-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/obsolete-admission01/enum-admission-argument.goose"
+    ],
+    "exit": 1
+  }
+]

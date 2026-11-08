@@ -1,0 +1,10 @@
+{
+  "data_field": "struct S{n:i64}\nstruct H{s:S}\nrecursive fn read(p:S)->i64{p.n++;return p.n;}\nfn main(){var rows:H[]=[H{s:S{n:7}}];assert(read(rows[0].s)==8);assert(rows[0].s.n==7);print(\"data_field\");}\n",
+  "reference_source": "struct S{n:i64}\nvar value:S=S{n:7};recursive fn source()->S&{return &value;}\nrecursive fn read(p:S)->i64{p.n++;return p.n;}\nfn main(){assert(read(copy(source()))==8);assert(value.n==7);print(\"reference_source\");}\n",
+  "global_init": "struct S{n:i64}\nrecursive fn read(p:S)->i64{return p.n;}\nvar result:i64=read(S{n:7});\nfn main(){assert(result==7);print(\"global_init\");}\n",
+  "later_return": "struct S{n:i64}\nvar value:S=S{n:1};recursive fn use(p:S,x:i64)->i64{return p.n+x;}\nrecursive fn run(early:bool)->i64{return use(value,{if early{return 7;}3});}\nfn main(){assert(run(true)==7);assert(run(false)==4);assert(value.n==1);print(\"later_return\");}\n",
+  "callee_defer": "struct S{n:i64}\nrecursive fn read(p:S)->i64{defer{p.n=9;assert(p.n==9);}return p.n;}\nfn main(){var s:S=S{n:2};assert(read(s)==2);assert(s.n==2);print(\"callee_defer\");}\n",
+  "nested_array": "struct S{mark:u8,values:u16[..3]}\nrecursive fn read(p:S)->i64{p.values[0]=9;return p.mark+p.values[0]+p.values.len;}\nfn main(){var s:S=S{mark:7,values:[1,2]};assert(read(s)==18);assert(s.values[0]==1);assert(s.values.len==2);print(\"nested_array\");}\n",
+  "large": "struct S{bytes:u8[70000],n:i64}\nrecursive fn read(p:S)->i64{p.bytes[69999]=11;return p.n+p.bytes[69999];}\nfn main(){var s:S=S{bytes:default<u8[70000]>(),n:7};assert(read(s)==18);assert(s.bytes[69999]==0);print(\"large\");}\n",
+  "reference_result": "struct S{link:i64&}\nrecursive fn get(p:S)->i64&{return p.link;}\nfn main(){var data:i64[]=[7];var s:S=S{link:data[0]};var link:i64&=get(s);link=9;assert(data[0]==9);assert(link .== &data[0]);print(\"reference_result\");}\n"
+}

@@ -1,0 +1,5 @@
+{
+  "data_callback": "struct S{n:i64}\nfn apply<F>(s:S&)->i64{F(copy(s))}\nfn main(){var rows:S[]=[S{n:1}];assert(apply(rows[0]){p=>{p.n=9;p.n}}==9);assert(rows[0].n==1);print(\"data_callback\");}\n",
+  "inline_order": "struct S{n:i64}\nvar original:S=S{n:7};recursive fn later()->i64{original.n=12;return 0;}\ninline fn read(p:S,x:i64)->i64{let saved=p.n;p.n=9;return saved+x;}\nfn main(){assert(read(original,later())==7);assert(original.n==12);print(\"inline_order\");}\n",
+  "reverse_order": "struct S{n:i64}\nvar value:i64=7;var original:S=S{n:1};recursive fn mutate()->S&{value=12;return &original;}\nrecursive fn read(x:i64,p:S)->i64{return x+p.n;}\nfn main(){assert(read(value,copy(mutate()))==8);assert(value==12);print(\"reverse_order\");}\n"
+}

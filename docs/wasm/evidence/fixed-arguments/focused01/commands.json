@@ -1,0 +1,1718 @@
+[
+  {
+    "name": "command-0",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callback-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_callback.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-1",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callback-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-2",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callback-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callback-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-3",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callback-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-4",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callback-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-5",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callback-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_callback.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-6",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callback-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-7",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callback-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callback-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-8",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callback-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-9",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callback-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-10",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callee_defer-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_callee_defer.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-11",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callee_defer-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-12",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callee_defer-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callee_defer-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-13",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callee_defer-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-14",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callee_defer-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-15",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callee_defer-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_callee_defer.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-16",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callee_defer-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-17",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callee_defer-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callee_defer-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-18",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callee_defer-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-19",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_callee_defer-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-20",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_data_field-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_data_field.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-21",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_data_field-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-22",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_data_field-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_data_field-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-23",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_data_field-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-24",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_data_field-O0.wasm",
+      "0",
+      ""
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-25",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_data_field-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_data_field.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-26",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_data_field-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-27",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_data_field-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_data_field-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-28",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_data_field-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-29",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_data_field-O2.wasm",
+      "0",
+      ""
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-30",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_direct-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_direct.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-31",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_direct-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-32",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_direct-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_direct-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-33",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_direct-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-34",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_direct-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-35",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_direct-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_direct.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-36",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_direct-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-37",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_direct-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_direct-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-38",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_direct-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-39",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_direct-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-40",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_enum-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_enum.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-41",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_enum-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-42",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_enum-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_enum-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-43",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_enum-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-44",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_enum-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-45",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_enum-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_enum.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-46",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_enum-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-47",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_enum-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_enum-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-48",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_enum-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-49",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_enum-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-50",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_global_init-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_global_init.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-51",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_global_init-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-52",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_global_init-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_global_init-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-53",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_global_init-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-54",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_global_init-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-55",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_global_init-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_global_init.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-56",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_global_init-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-57",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_global_init-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_global_init-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-58",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_global_init-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-59",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_global_init-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-60",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_inline-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_inline.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-61",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_inline-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-62",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_inline-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_inline-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-63",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_inline-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-64",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_inline-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-65",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_inline-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_inline.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-66",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_inline-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-67",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_inline-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_inline-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-68",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_inline-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-69",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_inline-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-70",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_isolation-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_isolation.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-71",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_isolation-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-72",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_isolation-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_isolation-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-73",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_isolation-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-74",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_isolation-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-75",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_isolation-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_isolation.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-76",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_isolation-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-77",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_isolation-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_isolation-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-78",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_isolation-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-79",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_isolation-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-80",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_large-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_large.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-81",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_large-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-82",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_large-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_large-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-83",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_large-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-84",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_large-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-85",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_large-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_large.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-86",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_large-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-87",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_large-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_large-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-88",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_large-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-89",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_large-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-90",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_later_return-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_later_return.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-91",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_later_return-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-92",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_later_return-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_later_return-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-93",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_later_return-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-94",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_later_return-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-95",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_later_return-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_later_return.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-96",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_later_return-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-97",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_later_return-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_later_return-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-98",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_later_return-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-99",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_later_return-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-100",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_nested_array-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_nested_array.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-101",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_nested_array-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-102",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_nested_array-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_nested_array-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-103",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_nested_array-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-104",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_nested_array-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-105",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_nested_array-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_nested_array.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-106",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_nested_array-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-107",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_nested_array-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_nested_array-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-108",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_nested_array-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-109",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_nested_array-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-110",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_order-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_order.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-111",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_order-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-112",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_order-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_order-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-113",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_order-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-114",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_order-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-115",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_order-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_order.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-116",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_order-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-117",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_order-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_order-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-118",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_order-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-119",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_order-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-120",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_owner-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_owner.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-121",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-122",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_owner-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_owner-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-123",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-124",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_owner-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-125",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_owner-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_owner.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-126",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-127",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_owner-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_owner-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-128",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-129",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_owner-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-130",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_recursion-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_recursion.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-131",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_recursion-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-132",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_recursion-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_recursion-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-133",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_recursion-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-134",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_recursion-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-135",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_recursion-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_recursion.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-136",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_recursion-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-137",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_recursion-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_recursion-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-138",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_recursion-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-139",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_recursion-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-140",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_result-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_reference_result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-141",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_result-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-142",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_result-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_result-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-143",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_result-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-144",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_result-O0.wasm",
+      "0",
+      ""
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-145",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_result-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_reference_result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-146",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_result-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-147",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_result-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_result-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-148",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_result-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-149",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_result-O2.wasm",
+      "0",
+      ""
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-150",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_source-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_reference_source.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-151",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_source-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-152",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_source-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_source-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-153",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_source-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-154",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_source-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-155",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_source-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_reference_source.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-156",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_source-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-157",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_source-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_source-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-158",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_source-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-159",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_reference_source-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-160",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_refs-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_argument_refs.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-161",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_refs-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-162",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_refs-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_refs-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-163",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_refs-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-164",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/focused01/wasm_fixed_argument_refs-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 1
+  }
+]

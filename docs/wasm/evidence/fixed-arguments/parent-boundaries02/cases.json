@@ -1,0 +1,3 @@
+{
+  "dynamic_base": "struct S{n:i64}\nrecursive fn read(p:S)->i64{var a:i64[]=[p.n];print(\"inside\");return a[0];}\nfn main(){var s:S=S{n:1};assert(read(s)==1);{var live:i64[]=[9];assert(read(s)==1);assert(live[0]==9);}print(\"dynamic_base\");}\n"
+}

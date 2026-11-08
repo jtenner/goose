@@ -1,0 +1,30 @@
+[
+  {
+    "case": "repeated_callback",
+    "opt": 0,
+    "source_sha256": "ec90a3278f651a06e1a18aec0b1794ba4a2e8fecda224e8eba6c436927d84b7d",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-arguments-20261107/parent-callbacks01/repeated_callback.goose:2: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  },
+  {
+    "case": "repeated_callback",
+    "opt": 2,
+    "source_sha256": "ec90a3278f651a06e1a18aec0b1794ba4a2e8fecda224e8eba6c436927d84b7d",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-arguments-20261107/parent-callbacks01/repeated_callback.goose:2: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  },
+  {
+    "case": "callback_order",
+    "opt": 0,
+    "source_sha256": "27f975e7c479bc952fcea1e32e34d7930b7dfc5a2a4510bbe4bda93888085ba9",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-arguments-20261107/parent-callbacks01/callback_order.goose:3: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  },
+  {
+    "case": "callback_order",
+    "opt": 2,
+    "source_sha256": "27f975e7c479bc952fcea1e32e34d7930b7dfc5a2a4510bbe4bda93888085ba9",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-arguments-20261107/parent-callbacks01/callback_order.goose:3: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  }
+]

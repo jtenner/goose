@@ -1,0 +1,2368 @@
+[
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-argument-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-argument-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-argument-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-argument-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-argument-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-argument-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-argument-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-argument-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-result-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-result-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-result.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-result-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-result-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-result.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-result-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-result-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-result.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-result-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-result-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-result-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-result-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-inline-result-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-assign-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-assign-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-assign-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-assign-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-assign-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-assign-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-assign-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-assign-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-element-assign-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-element-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-element-assign-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-element-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-element-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-element-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-element-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-element-assign-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-element-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-element-assign-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-element-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-element-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-element-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-element-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-value-equality-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-value-equality.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-value-equality-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-value-equality.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-value-equality-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-value-equality.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-value-equality-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-value-equality.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-print-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-print.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-print-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-print.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-print-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-print.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-print-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-print.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-for-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-for.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-for-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-for.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-for-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-for-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-for-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-for-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-for.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-for-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-for.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-for-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-for-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-for-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-wide-count-elements-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-wide-count-elements.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-wide-count-elements-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-wide-count-elements.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-wide-count-elements-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-wide-count-elements.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-wide-count-elements-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-wide-count-elements.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-variable-field-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-variable-field.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-variable-field-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-variable-field.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-variable-field-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-variable-field.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-variable-field-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-variable-field.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-uninitialized-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-uninitialized.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-uninitialized-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-uninitialized.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-uninitialized-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-uninitialized.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-uninitialized-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-uninitialized.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-temporary-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-temporary.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-temporary-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-temporary.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-temporary-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-temporary.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-temporary-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-temporary.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-function-value-argument-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-function-value-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-function-value-argument-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-function-value-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-function-value-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-function-value-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-function-value-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-function-value-argument-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-function-value-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-function-value-argument-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-function-value-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-function-value-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-function-value-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-function-value-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-function-value-result-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-function-value-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-function-value-result-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-function-value-result.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-function-value-result-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-function-value-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-function-value-result-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-function-value-result.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-adaptation-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-adaptation.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-adaptation-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-adaptation.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-adaptation-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-adaptation.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-adaptation-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-admission-field-adaptation.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-limit-product-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-limit-product.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-limit-product-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-limit-product.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-limit-layout-sum-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-limit-layout-sum.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-limit-layout-sum-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-limit-layout-sum.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-limit-frame-sum-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-limit-frame-sum.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-limit-frame-sum-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/struct-limit-frame-sum.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-argument-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-argument-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-argument-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-argument-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-argument-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-argument.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-argument-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-argument-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-argument-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-argument-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-argument-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-argument.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-inline-argument-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-inline-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-inline-argument-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-inline-argument-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-inline-argument-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-inline-argument-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-inline-argument.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-inline-argument-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-inline-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-inline-argument-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-inline-argument-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-inline-argument-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-inline-argument-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-inline-argument.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-result-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-result-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-result-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-result-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-result-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-result.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-result-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-result-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-result-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-result-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-result-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-result.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-assign-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-assign-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-assign-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-assign-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-assign-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-assign-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-assign-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-assign-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-assign-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-assign-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-print-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-print.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-print-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-print-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-print-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-print-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-print.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-print-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-print.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-print-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-print-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-print-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-print-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-print.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-value-equality-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-value-equality.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-value-equality-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-value-equality-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-value-equality-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-value-equality-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-value-equality.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-value-equality-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-value-equality.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-value-equality-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-value-equality-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-value-equality-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-value-equality-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-value-equality.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-wide-count-elements-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-wide-count-elements.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-wide-count-elements-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-wide-count-elements-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-wide-count-elements-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-wide-count-elements-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-wide-count-elements.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-wide-count-elements-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-wide-count-elements.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-wide-count-elements-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-wide-count-elements-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-wide-count-elements-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-wide-count-elements-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-wide-count-elements.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-adaptation-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-adaptation.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-adaptation-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-adaptation-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-adaptation-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-adaptation-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-adaptation.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-adaptation-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-adaptation.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-adaptation-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-adaptation-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-adaptation-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-adaptation-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-adaptation.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-match-value-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-match-value.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-match-value-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-match-value-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-match-value-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-match-value-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-match-value.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-match-value-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-match-value.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-match-value-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-match-value-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-match-value-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-match-value-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-match-value.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-variable-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-variable.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-variable-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-variable-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-variable-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-variable-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-variable.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-variable-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-variable.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-variable-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-variable-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-variable-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-variable-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-variable.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-element-assign-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-element-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-element-assign-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-element-assign-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-element-assign-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-element-assign-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-element-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-element-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-element-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-element-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-element-assign-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-element-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-element-assign-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-element-assign-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-element-assign-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-element-assign-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-element-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-element-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-element-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-element-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-uninitialized-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-uninitialized.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-uninitialized-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-uninitialized-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-uninitialized-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-uninitialized-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-uninitialized.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-uninitialized-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-uninitialized.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "cc",
+      "-O0",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-uninitialized-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-uninitialized-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-uninitialized-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-uninitialized-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-admission-uninitialized.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-limit-tag-sum-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-limit-tag-sum.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-limit-tag-sum-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-limit-tag-sum.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-limit-frame-sum-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-limit-frame-sum.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-limit-frame-sum-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/admission01/enum-limit-frame-sum.goose"
+    ],
+    "exit": 1
+  }
+]

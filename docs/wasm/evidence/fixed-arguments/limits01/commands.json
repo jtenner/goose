@@ -1,0 +1,236 @@
+[
+  {
+    "name": "command-0",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/wasm_fixed_argument_isolation-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-1",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/wasm_fixed_argument_isolation-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-2",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-aliased-parameters-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-aliased-parameters-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-3",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-aliased-parameters-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-4",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-aliased-parameters-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-5",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/wasm_fixed_argument_isolation-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-6",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/wasm_fixed_argument_isolation-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-7",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-aliased-parameters-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-aliased-parameters-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-8",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-aliased-parameters-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-9",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-aliased-parameters-O2.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-10",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-empty-guard-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-empty-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-11",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-empty-guard-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-empty-guard-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-12",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-empty-guard-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-13",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-empty-guard-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-empty-guard.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-14",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-empty-guard-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-empty-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-15",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-empty-guard-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-empty-guard-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-16",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-empty-guard-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-17",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-empty-guard-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-empty-guard.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-18",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-frame-sum-guard-O0.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-frame-sum-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-19",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-frame-sum-guard-O0.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-frame-sum-guard.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-20",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-frame-sum-guard-O2.c",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-frame-sum-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-21",
+    "args": [
+      "/tmp/goose-wasm-fixed-arguments-20261107/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-frame-sum-guard-O2.wasm",
+      "/tmp/goose-wasm-fixed-arguments-20261107/limits01/fixed-argument-frame-sum-guard.goose"
+    ],
+    "exit": 1
+  }
+]
