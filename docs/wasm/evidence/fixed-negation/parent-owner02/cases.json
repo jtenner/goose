@@ -1,0 +1,4 @@
+{
+  "owner": "struct S{a:f32,pad 2,b:f64}\nvar source:S=S{a:1.25,b:45.125};\nrecursive fn observe(s:S&){print(\"after=\",s.a==s.a,\",\",s.b==s.b);}\nrecursive fn prepare(s:S&){s.a=1.25;s.b=45.125;print(\"before\");}\nfn main(){prepare(source);var result:S=-source;observe(result);}\n",
+  "data_owner": "struct S{a:f32,pad 2,b:f64}\nvar source:S=S{a:1.25,b:45.125};\nrecursive fn prepare(s:S&){s.a=1.25;s.b=45.125;print(\"before\");}\nfn main(){prepare(source);var rows:S[]=[-source];print(\"after=\",rows[0].a==rows[0].a,\",\",rows[0].b==rows[0].b);}\n"
+}

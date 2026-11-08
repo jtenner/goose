@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-fixed-negation-20261108/image01/checks.py", line 16, in <module>
+    print('PASS',check_images(run,'node','wasm-tools',p),'fixed negation image checks and controls')
+                 ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_negation_checks.py", line 28, in check_images
+    wrong_offset, n = re.subn(r'\bf64.store( 1)? offset=6\b', r'f64.store\1 offset=7', body); assert n == 1
+                                                                                                     ^^^^^^
+AssertionError

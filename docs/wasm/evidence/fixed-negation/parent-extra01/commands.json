@@ -1,0 +1,1352 @@
+[
+  {
+    "name": "widths-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/widths-O0.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/widths.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "widths-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/widths-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/widths-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "widths-O0-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/widths-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "widths-O0-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/widths-O0.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/widths.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "widths-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/widths-O2.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/widths.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "widths-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/widths-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/widths-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "widths-O2-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/widths-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "widths-O2-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/widths-O2.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/widths.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "nested-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/nested-O0.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/nested.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/nested-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/nested-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-O0-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/nested-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-O0-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/nested-O0.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/nested.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "nested-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/nested-O2.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/nested.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/nested-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/nested-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-O2-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/nested-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested-O2-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/nested-O2.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/nested.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "data-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/data-O0.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/data.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "data-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/data-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/data-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "data-O0-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/data-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "data-O0-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/data-O0.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/data.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "data-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/data-O2.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/data.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "data-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/data-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/data-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "data-O2-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/data-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "data-O2-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/data-O2.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/data.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "projected-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/projected-O0.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/projected.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "projected-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/projected-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/projected-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "projected-O0-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/projected-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "projected-O0-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/projected-O0.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/projected.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "projected-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/projected-O2.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/projected.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "projected-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/projected-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/projected-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "projected-O2-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/projected-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "projected-O2-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/projected-O2.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/projected.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "argument_result-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/argument_result-O0.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/argument_result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "argument_result-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/argument_result-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/argument_result-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "argument_result-O0-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/argument_result-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "argument_result-O0-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/argument_result-O0.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/argument_result.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "argument_result-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/argument_result-O2.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/argument_result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "argument_result-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/argument_result-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/argument_result-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "argument_result-O2-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/argument_result-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "argument_result-O2-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/argument_result-O2.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/argument_result.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "inline_callback-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/inline_callback-O0.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/inline_callback.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "inline_callback-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/inline_callback-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/inline_callback-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "inline_callback-O0-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/inline_callback-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "inline_callback-O0-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/inline_callback-O0.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/inline_callback.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "inline_callback-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/inline_callback-O2.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/inline_callback.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "inline_callback-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/inline_callback-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/inline_callback-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "inline_callback-O2-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/inline_callback-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "inline_callback-O2-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/inline_callback-O2.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/inline_callback.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "recursion-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/recursion-O0.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/recursion.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "recursion-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/recursion-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/recursion-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "recursion-O0-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/recursion-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "recursion-O0-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/recursion-O0.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/recursion.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "recursion-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/recursion-O2.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/recursion.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "recursion-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/recursion-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/recursion-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "recursion-O2-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/recursion-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "recursion-O2-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/recursion-O2.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/recursion.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "defer-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/defer-O0.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/defer.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "defer-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/defer-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/defer-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "defer-O0-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/defer-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "defer-O0-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/defer-O0.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/defer.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "defer-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/defer-O2.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/defer.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "defer-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/defer-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/defer-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "defer-O2-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/defer-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "defer-O2-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/defer-O2.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/defer.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "global-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/global-O0.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/global.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "global-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/global-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/global-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "global-O0-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/global-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "global-O0-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/global-O0.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/global.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "global-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/global-O2.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/global.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "global-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/global-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/global-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "global-O2-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/global-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "global-O2-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/global-O2.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/global.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "double-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/double-O0.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/double.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "double-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/double-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/double-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "double-O0-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/double-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "double-O0-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/double-O0.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/double.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "double-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/double-O2.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/double.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "double-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/double-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/double-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "double-O2-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/double-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "double-O2-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/double-O2.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/double.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "early-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/early-O0.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/early.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "early-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/early-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/early-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "early-O0-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/early-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "early-O0-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/early-O0.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/early.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "early-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/early-O2.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/early.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "early-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/early-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/early-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "early-O2-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/early-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "early-O2-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/early-O2.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/early.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "loop_exit-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/loop_exit-O0.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/loop_exit.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "loop_exit-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/loop_exit-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/loop_exit-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "loop_exit-O0-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/loop_exit-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "loop_exit-O0-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/loop_exit-O0.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/loop_exit.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "loop_exit-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/loop_exit-O2.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/loop_exit.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "loop_exit-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/loop_exit-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/loop_exit-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "loop_exit-O2-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/loop_exit-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "loop_exit-O2-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/loop_exit-O2.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/loop_exit.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "index_effect-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/index_effect-O0.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/index_effect.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "index_effect-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/index_effect-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/index_effect-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "index_effect-O0-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/index_effect-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "index_effect-O0-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/index_effect-O0.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/index_effect.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "index_effect-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/index_effect-O2.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/index_effect.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "index_effect-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/index_effect-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/index_effect-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "index_effect-O2-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/index_effect-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "index_effect-O2-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/index_effect-O2.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/index_effect.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "zero-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/zero-O0.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/zero.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "zero-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/zero-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/zero-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "zero-O0-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/zero-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "zero-O0-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/zero-O0.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/zero.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "zero-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/zero-O2.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/zero.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "zero-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/zero-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/zero-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "zero-O2-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/zero-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "zero-O2-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/zero-O2.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/zero.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "readonly_fields-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/readonly_fields-O0.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/readonly_fields.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "readonly_fields-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/readonly_fields-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/readonly_fields-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "readonly_fields-O0-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/readonly_fields-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "readonly_fields-O0-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/readonly_fields-O0.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/readonly_fields.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "readonly_fields-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/readonly_fields-O2.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/readonly_fields.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "readonly_fields-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/readonly_fields-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/readonly_fields-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "readonly_fields-O2-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/readonly_fields-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "readonly_fields-O2-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/readonly_fields-O2.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-extra01/readonly_fields.goose"
+    ],
+    "exit": 1
+  }
+]

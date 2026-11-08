@@ -1,0 +1,4 @@
+{
+  "literal_default": "struct S{a:i16=3,b:i64=-4}\nstruct F{x:f32,y:f64}\nfn main(){var a:S=-(S{a:7,b:-8});assert(a.a == -7);assert(a.b==8);var b:S=-default<S>();assert(b.a == -3);assert(b.b==4);var c:i64[2]=-([1,-2]);assert(c[0] == -1);assert(c[1]==2);var f:F=-default<F>();assert(1.0/f.x<0.0);assert(1.0/f.y<0.0);print(\"literal_default\");}\n",
+  "field": "struct S{n:i64}\nstruct H{s:S,items:i64[2]}\nfn main(){var s:S=S{n:3};var a:i64[2]=[7,-8];var h:H=H{s:-s,items:-a};assert(h.s.n == -3);assert(h.items[1]==8);var rows:H[]=[H{s:-s,items:-a}];assert(rows[0].s.n == -3);assert(rows[0].items[0] == -7);assert(rows[0].items[1]==8);assert(s.n==3);assert(a[0]==7);print(\"field\");}\n"
+}

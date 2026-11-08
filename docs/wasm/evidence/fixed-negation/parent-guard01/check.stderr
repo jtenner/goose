@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-fixed-negation-20261108/parent-guard01/checks.py", line 13, in <module>
+    a=run(stem+'-'+label,args);assert not a.returncode,(name,label,a.stderr)
+                                      ^^^^^^^^^^^^^^^^
+AssertionError: ('adaptation', 'native', b'goose runtime error: assert failed (/tmp/goose-wasm-fixed-negation-20261108/parent-guard01/adaptation.goose:1)\n')

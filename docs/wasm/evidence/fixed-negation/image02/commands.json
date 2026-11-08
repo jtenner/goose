@@ -1,0 +1,578 @@
+[
+  {
+    "name": "command-0",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/wasm_fixed_negation_owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-1",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-healthy-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-healthy-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-2",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-healthy-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-3",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_negation_owner.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-healthy-O0.wasm",
+      "frame"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-4",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-missing-negation-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-missing-negation-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-5",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-missing-negation-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-6",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_negation_owner.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-missing-negation-O0.wasm",
+      "frame"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-7",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-wrong-op-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-wrong-op-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-8",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-wrong-op-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-9",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_negation_owner.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-wrong-op-O0.wasm",
+      "frame"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-10",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-wrong-offset-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-wrong-offset-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-11",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-wrong-offset-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-12",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_negation_owner.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-wrong-offset-O0.wasm",
+      "frame"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-13",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/wasm_fixed_negation_data_owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-14",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-healthy-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-healthy-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-15",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-healthy-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-16",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_negation_owner.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-healthy-O0.wasm",
+      "data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-17",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-missing-negation-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-missing-negation-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-18",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-missing-negation-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-19",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_negation_owner.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-missing-negation-O0.wasm",
+      "data"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-20",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-op-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-op-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-21",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-op-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-22",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_negation_owner.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-op-O0.wasm",
+      "data"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-23",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-offset-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-offset-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-24",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-offset-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-25",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_negation_owner.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-offset-O0.wasm",
+      "data"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-26",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-memory-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-memory-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-27",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-memory-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-28",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_negation_owner.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-memory-O0.wasm",
+      "data"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-29",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/wasm_fixed_negation_owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-30",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-healthy-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-healthy-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-31",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-healthy-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-32",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_negation_owner.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-healthy-O2.wasm",
+      "frame"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-33",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-missing-negation-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-missing-negation-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-34",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-missing-negation-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-35",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_negation_owner.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-missing-negation-O2.wasm",
+      "frame"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-36",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-wrong-op-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-wrong-op-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-37",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-wrong-op-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-38",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_negation_owner.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-wrong-op-O2.wasm",
+      "frame"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-39",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-wrong-offset-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-wrong-offset-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-40",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-wrong-offset-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-41",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_negation_owner.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-owner-wrong-offset-O2.wasm",
+      "frame"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-42",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/wasm_fixed_negation_data_owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-43",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-healthy-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-healthy-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-44",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-healthy-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-45",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_negation_owner.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-healthy-O2.wasm",
+      "data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-46",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-missing-negation-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-missing-negation-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-47",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-missing-negation-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-48",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_negation_owner.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-missing-negation-O2.wasm",
+      "data"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-49",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-op-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-op-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-50",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-op-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-51",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_negation_owner.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-op-O2.wasm",
+      "data"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-52",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-offset-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-offset-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-53",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-offset-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-54",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_negation_owner.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-offset-O2.wasm",
+      "data"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-55",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-memory-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-memory-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-56",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-memory-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-57",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_negation_owner.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/image02/fixed-negation-data_owner-wrong-memory-O2.wasm",
+      "data"
+    ],
+    "exit": 1
+  }
+]

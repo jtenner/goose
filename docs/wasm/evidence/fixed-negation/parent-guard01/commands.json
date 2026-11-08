@@ -1,0 +1,34 @@
+[
+  {
+    "name": "adaptation-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-guard01/adaptation-O0.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-guard01/adaptation.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "adaptation-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-guard01/adaptation-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-guard01/adaptation-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "adaptation-O0-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-guard01/adaptation-O0.native"
+    ],
+    "exit": 1
+  }
+]

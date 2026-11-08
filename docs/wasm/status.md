@@ -321,6 +321,13 @@ boolean before cleanup. Explicit slices, nonfixed comparison views and nominal
 element equality stay guarded. See
 [temporary array equality](evidence/temporary-array-equality.md).
 
+Unary minus now constructs fixed numeric structs and arrays through checked
+destinations. It reads operands without mutation, skips padding during arithmetic, supports
+nested numeric fields and packed data destinations, and retains temporary
+operands through field reads. Assignment keeps its complete-RHS protection. Layout changes and
+general aggregate binary arithmetic remain separate. See
+[fixed negation evidence](evidence/fixed-negation.md).
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping

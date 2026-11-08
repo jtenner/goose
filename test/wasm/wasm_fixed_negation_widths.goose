@@ -1,0 +1,2 @@
+struct S{a:i8,b:i16,c:i32,d:i64}
+fn main(){var s:S=S{a:-128,b:-32768,c:-2147483648,d:-9223372036854775808};var t:S=-s;assert(t.a == -128);assert(t.b == -32768);assert(t.c == -2147483648);assert(t.d == -9223372036854775808);s=S{a:127,b:32767,c:2147483647,d:9223372036854775807};t=-s;assert(t.a == -127);assert(t.b == -32767);assert(t.c == -2147483647);assert(t.d == -9223372036854775807);print("widths");}

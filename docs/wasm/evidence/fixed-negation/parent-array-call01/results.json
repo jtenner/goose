@@ -1,0 +1,16 @@
+[
+  {
+    "case": "array_call",
+    "opt": 0,
+    "source_sha256": "3a3bf9dd422ab032eb518139fd7038ec70c94c57f21746e70506f1edb1d99898",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-negation-20261108/parent-array-call01/array_call.goose:4: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  },
+  {
+    "case": "array_call",
+    "opt": 2,
+    "source_sha256": "3a3bf9dd422ab032eb518139fd7038ec70c94c57f21746e70506f1edb1d99898",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-negation-20261108/parent-array-call01/array_call.goose:4: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  }
+]

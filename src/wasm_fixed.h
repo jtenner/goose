@@ -416,7 +416,9 @@ inline bool WasmCodeGen::HasFixedTemporary(Node *n) {
     if (auto index = Is<Index>(n)) return HasFixedTemporary(index->obj);
     auto call = Is<Call>(n);
     auto variant = Is<Dot>(n);
+    auto unary = Is<Unary>(n);
     auto producer = (call && (call->builtin < 0 || call->builtin == B_DEFAULT || call->builtin == B_COPY)) ||
+                    (unary && unary->op == T_MINUS) ||
                     Is<InlineBlock>(n) || Is<StructLit>(n) || Is<ArrayLit>(n) || Is<Block>(n) || Is<IfExpr>(n) ||
                     (variant && variant->variantconst);
     return producer && FixedResult(ActualType(n));
@@ -513,6 +515,7 @@ inline void WasmCodeGen::AssignFixed(FixedPlace destination, Node *source, TType
     auto call = Is<Call>(source);
     if (Is<StructLit>(source) || (dot && dot->variantconst) || (call && call->builtin == B_DEFAULT) ||
         (array && Is<ArrayLit>(source)) ||
+        (Is<Unary>(source) && Is<Unary>(source)->op == T_MINUS && FixedResult(ActualType(source))) ||
         (Is<Block>(source) || Is<IfExpr>(source)) ||
         (((call && call->builtin < 0) || Is<InlineBlock>(source)) && FixedResult(ActualType(source)))) {
         WithFixedTemporary(destination.type, source, [&](const FixedPlace &value) {
@@ -748,6 +751,61 @@ inline bool WasmCodeGen::ExitingFixedInitializer(Node *source) {
     Gen(source); code.Byte(0x00); return true;
 }
 
+// The caller owns a checked fresh complete destination. Array loop bounds
+// and shared field offsets retain that image proof for every scalar leaf.
+inline void WasmCodeGen::NegateFixedInto(FixedPlace destination, FixedPlace source, Line line) {
+    auto type = destination.type;
+    if (!TEq(type, source.type)) Fail(line, "fixed negation needs an exact source layout");
+    if (!RequireFixed(type, line)) return;
+    if (type->kind == TY_STRUCT) {
+        auto fields = FieldsOf(type, line);
+        for (size_t i = 0; i < fields.types.size(); i++) if (auto field = fields.types[i]) {
+            auto offset = (uint64_t)fields.layout.offs[i];
+            if (offset > UINT32_MAX - destination.offset || offset > UINT32_MAX - source.offset)
+                Fail(line, "fixed negation field offset exceeds memory32");
+            auto to = destination, from = source;
+            to.type = from.type = field;
+            to.offset += (uint32_t)offset; from.offset += (uint32_t)offset;
+            NegateFixedInto(to, from, line);
+        }
+        return;
+    }
+    if (type->kind == TY_ARRAY) {
+        if (type->arr->akind != A_FIXED)
+            Fail(line, "fixed negation needs fixed-length array elements");
+        auto count = ArrSize(type->arr);
+        if (count < 0) Fail(line, "fixed negation needs a resolved array count");
+        if (!count) return;
+        auto to = ArrayFromPlace(destination, line), from = ArrayFromPlace(source, line);
+        ArrayView toview {to}, fromview {from};
+        auto position = Local(WasmModule::I64);
+        code.I64(0); code.Set(position);
+        auto done = Open(), head = Open(0x03);
+        code.Get(position); code.I64(count); code.Byte(0x5a); Branch(done, true);
+        ElementOffset(toview, position, line);
+        auto element = CaptureElementPlace({type->arr->sub, to.elementMemory, true});
+        ElementOffset(fromview, position, line);
+        auto operand = CaptureElementPlace({type->arr->sub, from.elementMemory, true});
+        NegateFixedInto(element, operand, line);
+        code.Get(position); code.I64(1); code.Byte(0x7c); code.Set(position);
+        Branch(head); Close(); Close();
+        return;
+    }
+    if (type->kind == TY_INT) {
+        if (IsUnsigned(type->intstorage) || type->intstorage == IS_VARINT || type->ix)
+            Fail(line, "fixed negation needs ordinary signed integer leaves");
+        StoreAddress(destination); code.I64(0); ReadPlace(source); code.Byte(0x7d); Normalize(type);
+        StorePlace(destination);
+        return;
+    }
+    if (type->kind == TY_FLT) {
+        StoreAddress(destination); ReadPlace(source);
+        code.Byte(type->fltstorage == FS_F32 ? 0x8c : 0x9a); StorePlace(destination);
+        return;
+    }
+    Fail(line, "fixed negation needs numeric struct or fixed-array leaves");
+}
+
 inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *source) {
     auto destination = fresh.place;
     CheckFreshDestination(fresh, source->line);
@@ -791,6 +849,15 @@ inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *sourc
             return;
         }
         Fail(source->line, "this default needs the pending destination lowering");
+    }
+    if (auto unary = Is<Unary>(source); unary && unary->op == T_MINUS && FixedResult(ActualType(source))) {
+        if (!TEq(type, ActualType(source)))
+            Fail(source->line, "fixed negation adaptation needs the pending destination lowering");
+        WithReadPlace(unary->child, [&](FixedPlace operand) {
+            while (operand.type->kind == TY_REF) operand = DereferencePlace(operand, source->line);
+            NegateFixedInto(destination, operand, source->line);
+        });
+        return;
     }
     auto resultCall = Is<Call>(source);
     if (((resultCall && resultCall->builtin < 0) || Is<InlineBlock>(source)) && FixedResult(ActualType(source))) {

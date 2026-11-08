@@ -1309,6 +1309,7 @@ struct WasmCodeGen : ValueLayout {
     void StorePlace(const FixedPlace &place);
     void StoreAddress(const FixedPlace &place);
     void ConstructFixed(FreshFixedDestination destination, Node *source);
+    void NegateFixedInto(FixedPlace destination, FixedPlace source, Line line);
     bool ExitingFixedInitializer(Node *source);
     void AssignField(Dot *field, Node *rhs, TType op, bool pointee, Line line);
     bool FieldPath(Node *n);

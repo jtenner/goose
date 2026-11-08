@@ -1,0 +1,106 @@
+[
+  {
+    "name": "command-0",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/focused-array-call01/wasm_fixed_negation_array_call-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_negation_array_call.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-1",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/focused-array-call01/wasm_fixed_negation_array_call-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-2",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/focused-array-call01/wasm_fixed_negation_array_call-O0.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/focused-array-call01/wasm_fixed_negation_array_call-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-3",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-negation-20261108/focused-array-call01/wasm_fixed_negation_array_call-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-4",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/focused-array-call01/wasm_fixed_negation_array_call-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-5",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/focused-array-call01/wasm_fixed_negation_array_call-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_negation_array_call.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-6",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/focused-array-call01/wasm_fixed_negation_array_call-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-7",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/focused-array-call01/wasm_fixed_negation_array_call-O2.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/focused-array-call01/wasm_fixed_negation_array_call-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-8",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-negation-20261108/focused-array-call01/wasm_fixed_negation_array_call-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-9",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/focused-array-call01/wasm_fixed_negation_array_call-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  }
+]

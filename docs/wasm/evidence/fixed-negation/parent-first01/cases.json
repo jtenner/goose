@@ -1,0 +1,7 @@
+{
+  "array": "fn main(){var a:i64[2]=[7,-8];var b:i64[2]=-a;assert(b[0]==-7);assert(b[1]==8);assert(a[0]==7);print(\"array\");}\n",
+  "struct": "struct S{a:i8,b:i64,c:i16[2]}\nfn main(){var a:S=S{a:1,b:2,c:[-3,4]};var b:S=-a;assert(b.a == -1);assert(b.b == -2);assert(b.c[0]==3);assert(b.c[1] == -4);assert(a.a==1);print(\"struct\");}\n",
+  "float": "struct S{a:f32,b:f64}\nfn main(){var s:S=S{a:0.0,b:-0.0};var t:S=-s;assert(1.0/t.a<0.0);assert(1.0/t.b>0.0);print(\"float\");}\n",
+  "result": "struct S{n:i64}\nrecursive fn make()->S{return S{n:7};}\nfn main(){var s:S=-make();assert(s.n == -7);print(\"result\");}\n",
+  "assign": "fn main(){var a:i64[2]=[7,-8];a=-a;assert(a[0] == -7);assert(a[1]==8);print(\"assign\");}\n"
+}

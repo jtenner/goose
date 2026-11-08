@@ -1,0 +1,92 @@
+[
+  {
+    "name": "array_call-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-array-call01/array_call-O0.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-array-call01/array_call.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "array_call-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-array-call01/array_call-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-array-call01/array_call-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "array_call-O0-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-array-call01/array_call-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "array_call-O0-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-array-call01/array_call-O0.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-array-call01/array_call.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "array_call-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-array-call01/array_call-O2.c",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-array-call01/array_call.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "array_call-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-array-call01/array_call-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-array-call01/array_call-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "array_call-O2-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-array-call01/array_call-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "array_call-O2-before",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-array-call01/array_call-O2.wasm",
+      "/tmp/goose-wasm-fixed-negation-20261108/parent-array-call01/array_call.goose"
+    ],
+    "exit": 1
+  }
+]

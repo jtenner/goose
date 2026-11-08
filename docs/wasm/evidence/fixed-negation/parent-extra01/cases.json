@@ -1,0 +1,17 @@
+{
+  "widths": "struct S{a:i8,b:i16,c:i32,d:i64}\nfn main(){var s:S=S{a:-128,b:-32768,c:-2147483648,d:-9223372036854775808};var t:S=-s;assert(t.a == -128);assert(t.b == -32768);assert(t.c == -2147483648);assert(t.d == -9223372036854775808);s=S{a:127,b:32767,c:2147483647,d:9223372036854775807};t=-s;assert(t.a == -127);assert(t.b == -32767);assert(t.c == -2147483647);assert(t.d == -9223372036854775807);print(\"widths\");}\n",
+  "nested": "struct S{x:i16,y:i16[2]}\nstruct H{head:i8,items:S[2]}\nfn main(){var h:H=H{head:1,items:[S{x:2,y:[3,-4]},S{x:-5,y:[6,7]}]};var n:H=-h;assert(n.head == -1);assert(n.items[0].x == -2);assert(n.items[0].y[1]==4);assert(n.items[1].x==5);assert(n.items[1].y[0] == -6);assert(h.items[1].y[0]==6);print(\"nested\");}\n",
+  "data": "struct S{x:i8,y:i64,z:i16[2]}\nrecursive fn neg(p:S&)->S{return -p;}\nfn main(){var rows:S[]=[S{x:1,y:2,z:[3,-4]},S{x:-5,y:6,z:[7,8]}];var s:S=neg(rows[1]);assert(s.x==5);assert(s.y == -6);assert(s.z[0] == -7);var out:S[]=[-rows[0],-s];assert(out[0].x == -1);assert(out[0].z[1]==4);assert(out[1].x == -5);assert(out[1].z[1]==8);assert(rows[0].x==1);print(\"data\");}\n",
+  "projected": "struct S{n:i64,items:i64[2]}\nrecursive fn make()->S{return S{n:7,items:[8,-9]};}\nfn main(){assert((-make()).n == -7);assert((-make()).items[1]==9);print(\"projected\");}\n",
+  "argument_result": "struct S{x:i64,y:i64}\nrecursive fn sum(s:S)->i64{return s.x+s.y;}\nrecursive fn neg(s:S&)->S{return -s;}\nfn main(){var s:S=S{x:7,y:8};assert(sum(-s) == -15);var n:S=neg(s);assert(n.x == -7);assert(s.x==7);print(\"argument_result\");}\n",
+  "inline_callback": "struct S{n:i64}\ninline fn make(n:i64)->S{if n==0{return S{n:3};}return S{n:n};}\nfn apply<F>(n:i64)->S{-F(n)}\nfn main(){var a:S=-make(0);assert(a.n == -3);var b:S=apply(7){n=>S{n:n}};assert(b.n == -7);print(\"inline_callback\");}\n",
+  "recursion": "struct S{x:i64,y:i64}\nrecursive fn make(n:i64)->S{if n==0{return S{x:1,y:2};}return -make(n-1);}\nfn main(){var a:S=make(4);var b:S=make(3);assert(a.x==1);assert(b.y == -2);print(\"recursion\");}\n",
+  "defer": "struct S{n:i64}\nvar calls:i64=0;recursive fn make()->S{var s:S=S{n:7};defer{s.n=99;calls++;}return s;}\nfn main(){var s:S=-make();assert(s.n == -7);assert(calls==1);print(\"defer\");}\n",
+  "global": "struct S{n:i64}\nrecursive fn make()->S{return S{n:7};}\nvar value:S=-make();\nfn main(){assert(value.n == -7);print(\"global\");}\n",
+  "double": "struct S{n:i64}\nrecursive fn make()->S{return S{n:7};}\nfn main(){var s:S=-(-make());assert(s.n==7);print(\"double\");}\n",
+  "early": "struct S{n:i64}\nrecursive fn run(early:bool)->S{var s:S=-({if early{return S{n:7};}S{n:7}});return s;}\nfn main(){var a:S=run(true);var b:S=run(false);assert(a.n==7);assert(b.n == -7);print(\"early\");}\n",
+  "loop_exit": "fn main(){var visits:i64=0;var total:i64=0;for i in 4{print(\"head\");visits++;var a:i64[2]=-({if i==0{continue;}if i==3{break;}[7,8]});total+=a[0];}assert(visits==4);assert(total == -14);print(\"loop_exit\");}\n",
+  "index_effect": "var values:i64[2]=[7,-8];recursive fn index()->i64{values[1]=99;return 1;}\nfn main(){assert((-values)[index()]==8);assert(values[1]==99);print(\"index_effect\");}\n",
+  "zero": "fn main(){var a:i64[0]=default<i64[0]>();var b:i64[0]=-a;assert(b.len==0);print(\"zero\");}\n",
+  "readonly_fields": "struct S{let a:i16,const b:i64}\nfn main(){var a:S=S{a:7,b:-8};var b:S=-a;assert(b.a == -7);assert(b.b==8);print(\"readonly_fields\");}\n"
+}

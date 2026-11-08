@@ -1,0 +1,30 @@
+[
+  {
+    "case": "owner",
+    "opt": 0,
+    "source_sha256": "dad9aed8620f1ca5e0538294829798cd489f920a13f8427b1028da859f644646",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-negation-20261108/parent-owner02/owner.goose:5: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  },
+  {
+    "case": "owner",
+    "opt": 2,
+    "source_sha256": "dad9aed8620f1ca5e0538294829798cd489f920a13f8427b1028da859f644646",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-negation-20261108/parent-owner02/owner.goose:5: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  },
+  {
+    "case": "data_owner",
+    "opt": 0,
+    "source_sha256": "9f23de4172c17103e22f3bf2671865b7aa0e604953696d1d18232f22e2534435",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-negation-20261108/parent-owner02/data_owner.goose:4: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  },
+  {
+    "case": "data_owner",
+    "opt": 2,
+    "source_sha256": "9f23de4172c17103e22f3bf2671865b7aa0e604953696d1d18232f22e2534435",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-negation-20261108/parent-owner02/data_owner.goose:4: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  }
+]

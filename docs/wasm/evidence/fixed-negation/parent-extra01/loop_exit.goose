@@ -1,0 +1,1 @@
+fn main(){var visits:i64=0;var total:i64=0;for i in 4{print("head");visits++;var a:i64[2]=-({if i==0{continue;}if i==3{break;}[7,8]});total+=a[0];}assert(visits==4);assert(total == -14);print("loop_exit");}

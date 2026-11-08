@@ -1,0 +1,136 @@
+[
+  {
+    "name": "command-0",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-fixed-negation-20261108/loop01/wasm_fixed_negation_loop_exit-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-1",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-negation-20261108/loop01/fixed-negation-loop-healthy-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/loop01/fixed-negation-loop-healthy-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-2",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/loop01/fixed-negation-loop-healthy-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-3",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_negation_loop.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/loop01/fixed-negation-loop-healthy-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-4",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-negation-20261108/loop01/fixed-negation-loop-missing-continue-restore-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/loop01/fixed-negation-loop-missing-continue-restore-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-5",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/loop01/fixed-negation-loop-missing-continue-restore-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-6",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_negation_loop.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/loop01/fixed-negation-loop-missing-continue-restore-O0.wasm"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-7",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-fixed-negation-20261108/loop01/wasm_fixed_negation_loop_exit-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-8",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-negation-20261108/loop01/fixed-negation-loop-healthy-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/loop01/fixed-negation-loop-healthy-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-9",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/loop01/fixed-negation-loop-healthy-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-10",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_negation_loop.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/loop01/fixed-negation-loop-healthy-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-11",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-negation-20261108/loop01/fixed-negation-loop-missing-continue-restore-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-negation-20261108/loop01/fixed-negation-loop-missing-continue-restore-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-12",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-negation-20261108/loop01/fixed-negation-loop-missing-continue-restore-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-13",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_negation_loop.mjs",
+      "/tmp/goose-wasm-fixed-negation-20261108/loop01/fixed-negation-loop-missing-continue-restore-O2.wasm"
+    ],
+    "exit": 1
+  }
+]
