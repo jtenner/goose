@@ -1,0 +1,6 @@
+{
+  "owner": "recursive fn make()->i64[2]{return[7,8];}\nrecursive fn touch(a:i64[2]&)->i64{a[0]-=98;return a[0];}\nrecursive fn index()->i64{var scratch:i64[2]=[99,100];print(\"index-live\");return touch(scratch);}\nfn main(){print(\"before\");assert(make()[index()]==8);print(\"after\");}\n",
+  "loop_exit": "recursive fn make()->i64[2]{return[7,8];}\nfn main(){var visits:i64=0;var total:i64=0;for i in 4{visits++;total+=make()[{if i==0{continue;}if i==3{break;}1}];}assert(visits==4);assert(total==16);print(\"loop_exit\");}\n",
+  "assign_projection": "struct S{n:i64}\nstruct H{s:S,a:i64[2]}\nrecursive fn make(n:i64)->H{return H{s:S{n:n},a:[n,n+1]};}\nfn main(){var s:S=S{n:0};var a:i64[2]=[0,0];s=make(7).s;a=make(8).a;assert(s.n==7);assert(a[0]==8);assert(a[1]==9);print(\"assign_projection\");}\n",
+  "cap": "recursive fn make()->i64[..4]{return[7,8];}\nfn main(){assert(make().cap==4);print(\"cap\");}\n"
+}

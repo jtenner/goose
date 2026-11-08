@@ -1,0 +1,52 @@
+{
+  "status": "PASS",
+  "purpose": "correctness only",
+  "source_parent": "28fc70af256fab83ac630ee9bd27045972d839b9",
+  "compiler_sha256": "7df8dad28b11cc4a37367bd0ec7c9a5ed880bb773625388fa1c2d8150569b8ac",
+  "source_files": 78,
+  "validation_inputs": 4835,
+  "selected_checks": [
+    "build04/build",
+    "full-correctness02/check",
+    "native01/check",
+    "compatibility01/check",
+    "identity01/check",
+    "controls-final03/check",
+    "admission02/check"
+  ],
+  "full_stdout": "wasm backend: 2989 checks passed",
+  "full_memory_matrix_cases": 40,
+  "native_groups": {
+    "lexer and shader compiler": "5",
+    "parse, roundtrip and typecheck": "2246",
+    "optimizer, stack report and C shapes": "23",
+    "bounds-check annotations": "68",
+    "generated C, built and run at -O0 and -O2": "1099",
+    "dump-runtime programs": "8",
+    "GS_DEBUG programs": "210",
+    "compiler roots, runtime lifecycle and clang": "24",
+    "driver, diagnostics and language server": "55",
+    "native builds, packages and runtime I/O": "14",
+    "goose_in_goose bootstrap": "21",
+    "JIT (TinyCC) runs": "1271",
+    "parse errors (errors/)": "80",
+    "typecheck errors (errors_tc/ and native modules' rejection tests)": "1946",
+    "recovery (errors_tc/recovery/)": "16",
+    "long call chains and guard runs": "6",
+    "language reference examples (docs/reference.md)": "1",
+    "samples": "52"
+  },
+  "exact_comparisons": 52,
+  "unchanged_parent_modules": 688,
+  "focused_case_optimization_pairs": 48,
+  "live_image_checks_and_controls": 8,
+  "native_valid_address_guards": 4,
+  "preserved_failed_helpers": [
+    "focused-extra01",
+    "parent-more01",
+    "focused-final01",
+    "controls-final02",
+    "full-correctness01"
+  ],
+  "fixed_reference_compilation_failure": "reference-failing01"
+}

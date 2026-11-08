@@ -1,0 +1,100 @@
+[
+  {
+    "case": "inline_field",
+    "opt": 0,
+    "source_sha256": "4fdd2f2aa753ae429a894fe575d82ba8291d38b903d2795ad3b5d38a2d177354",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-extra01/inline_field.goose:3: error: wasm target: aggregate results need the pending destination lowering\n"
+  },
+  {
+    "case": "inline_field",
+    "opt": 2,
+    "source_sha256": "4fdd2f2aa753ae429a894fe575d82ba8291d38b903d2795ad3b5d38a2d177354",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-extra01/inline_field.goose:3: error: wasm target: aggregate results need the pending destination lowering\n"
+  },
+  {
+    "case": "callback_field",
+    "opt": 0,
+    "source_sha256": "da22cfe425c4dcf7cc4d43c7467a7ac9a7ba0d3557d81f1d24881f074d9930aa",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-extra01/callback_field.goose:2: error: wasm target: aggregate results need the pending destination lowering\n"
+  },
+  {
+    "case": "callback_field",
+    "opt": 2,
+    "source_sha256": "da22cfe425c4dcf7cc4d43c7467a7ac9a7ba0d3557d81f1d24881f074d9930aa",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-extra01/callback_field.goose:2: error: wasm target: aggregate results need the pending destination lowering\n"
+  },
+  {
+    "case": "callback_index",
+    "opt": 0,
+    "source_sha256": "c8e10487a878f4c96ded7de7e81fa4451779b81e880b6217e2ba44c9aba48c31",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-extra01/callback_index.goose:2: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  },
+  {
+    "case": "callback_index",
+    "opt": 2,
+    "source_sha256": "c8e10487a878f4c96ded7de7e81fa4451779b81e880b6217e2ba44c9aba48c31",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-extra01/callback_index.goose:2: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  },
+  {
+    "case": "once_loop",
+    "opt": 0,
+    "source_sha256": "56dc8ad91f5eff4efe14a05a6dfb96687a8c8bc9d7ad5928bfeac3df3c006b01",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-extra01/once_loop.goose:3: error: wasm target: aggregate results need the pending destination lowering\n"
+  },
+  {
+    "case": "once_loop",
+    "opt": 2,
+    "source_sha256": "56dc8ad91f5eff4efe14a05a6dfb96687a8c8bc9d7ad5928bfeac3df3c006b01",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-extra01/once_loop.goose:3: error: wasm target: aggregate results need the pending destination lowering\n"
+  },
+  {
+    "case": "early_index",
+    "opt": 0,
+    "source_sha256": "cf3bdb339571922549225eb2350d48400f95787ff34e33ed4f709c16c7fa8a63",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-extra01/early_index.goose:2: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  },
+  {
+    "case": "early_index",
+    "opt": 2,
+    "source_sha256": "cf3bdb339571922549225eb2350d48400f95787ff34e33ed4f709c16c7fa8a63",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-extra01/early_index.goose:2: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  },
+  {
+    "case": "copy_fields",
+    "opt": 0,
+    "source_sha256": "1cbc1a443bdeb05588821bb3db3f3c95ea05356ff08a5f3ec09d22bf7830bfd0",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-extra01/copy_fields.goose:4: error: wasm target: aggregate results need the pending destination lowering\n"
+  },
+  {
+    "case": "copy_fields",
+    "opt": 2,
+    "source_sha256": "1cbc1a443bdeb05588821bb3db3f3c95ea05356ff08a5f3ec09d22bf7830bfd0",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-extra01/copy_fields.goose:4: error: wasm target: aggregate results need the pending destination lowering\n"
+  },
+  {
+    "case": "global",
+    "opt": 0,
+    "source_sha256": "2aa722d5d5eb8d3df7ceaac8dd2d6776973e6fb81581632d215fe53e303b45c5",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-extra01/global.goose:3: error: wasm target: aggregate results need the pending destination lowering\n"
+  },
+  {
+    "case": "global",
+    "opt": 2,
+    "source_sha256": "2aa722d5d5eb8d3df7ceaac8dd2d6776973e6fb81581632d215fe53e303b45c5",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-extra01/global.goose:3: error: wasm target: aggregate results need the pending destination lowering\n"
+  }
+]

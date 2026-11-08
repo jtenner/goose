@@ -138,7 +138,7 @@ def main():
             if source.stem.startswith((
                     'wasm_inline_ref_abi_', 'wasm_data_aggregate_', 'wasm_constructor_assignment_',
                     'wasm_aggregate_construction_', 'wasm_array_assignment_', 'wasm_default_conversion_',
-                    'wasm_array_constructor_', 'wasm_fixed_argument_', 'wasm_fixed_result_', 'wasm_array_argument_', 'wasm_array_result_')):
+                    'wasm_array_constructor_', 'wasm_fixed_argument_', 'wasm_fixed_result_', 'wasm_array_argument_', 'wasm_array_result_', 'wasm_temporary_read_')):
                 actual = run([args.node, ROOT / 'test' / 'wasm_reference_abi.mjs', wasm,
                               out / f'{source.stem}-O{opt}-instance'])
             else:
@@ -225,6 +225,11 @@ def main():
                 mode = ('no-data' if source.stem in ('wasm_field_iteration_fixed', 'wasm_field_iteration_root',
                                                     'wasm_field_iteration_refs', 'wasm_field_iteration_zero',
                                                     'wasm_field_iteration_call', 'wasm_field_iteration_variant') else '')
+                checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
+                assert checked.stdout == reference.stdout and not checked.stderr
+                count += 1
+            if source.stem.startswith('wasm_temporary_read_'):
+                mode = '' if source.stem in ('wasm_temporary_read_mixed_fields', 'wasm_temporary_read_ref_compare', 'wasm_temporary_read_array_ref_identity') else 'no-data'
                 checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
                 assert checked.stdout == reference.stdout and not checked.stderr
                 count += 1
@@ -377,6 +382,9 @@ def main():
     count += check_fixed_argument_aliases(run, args.node, args.validator, out)
     count += check_fixed_argument_guards(run, exe, args.cc, out)
     count += check_fixed_argument_dynamic(run, args.node, args.validator, out)
+    from wasm_temporary_read_checks import check_images as check_temporary_read_images, check_guards as check_temporary_read_guards
+    count += check_temporary_read_images(run, args.node, args.validator, out)
+    count += check_temporary_read_guards(run, exe, args.cc, out)
     from wasm_array_result_checks import check_images as check_array_result_images, check_guards as check_array_result_guards, check_failures as check_array_result_failures, check_data as check_array_result_data
     count += check_array_result_images(run, args.node, args.validator, out)
     count += check_array_result_guards(run, exe, args.cc, out)

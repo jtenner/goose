@@ -679,7 +679,8 @@ inline void WasmCodeGen::InitArray(VarDef *owner, const Slot &slot, Node *init, 
     auto resultCall = Is<Call>(init);
     if (InlineArray(owner->type) &&
         ((((resultCall && resultCall->builtin < 0) || Is<InlineBlock>(init)) && FixedResult(ActualType(init))) ||
-         Is<Block>(init) || Is<IfExpr>(init))) {
+         Is<Block>(init) || Is<IfExpr>(init) ||
+         ((Is<Dot>(init) || Is<Index>(init)) && HasFixedTemporary(init)))) {
         ConstructFixed(FreshOwner(owner, declaration), init); return;
     }
     if (auto call = Is<Call>(init); call && call->builtin == B_DEFAULT && InlineArray(owner->type)) {
@@ -822,7 +823,10 @@ inline void WasmCodeGen::ElementOffset(const ArrayView &view, uint32_t index, Li
 }
 
 inline WasmCodeGen::ElementPlace WasmCodeGen::ElementAddress(Index *index) {
-    auto place = ResolveArray(index->obj);
+    return ElementAddress(index, ResolveArray(index->obj));
+}
+
+inline WasmCodeGen::ElementPlace WasmCodeGen::ElementAddress(Index *index, const ArrayPlace &place) {
     // Capture before index statements; the current admitted bases are stable.
     auto length = Local(WasmModule::I64), position = Local(WasmModule::I64);
     auto prefix = place.layout.varint ? Local(WasmModule::I32) : NoLocal;

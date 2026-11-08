@@ -1,0 +1,62 @@
+[
+  {
+    "source": "test/wasm/wasm_temporary_read_array_index.goose",
+    "source_sha256": "6227087253efd077e618caf042006185e66c289091d806f8e12322a354940078",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_temporary_read_array_index.goose",
+    "source_sha256": "6227087253efd077e618caf042006185e66c289091d806f8e12322a354940078",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_temporary_read_array_len.goose",
+    "source_sha256": "8b272a13d39bc0ab184f35050b4bec9d40336fb71fa3a6bbc3853a938cd02aad",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_temporary_read_array_len.goose",
+    "source_sha256": "8b272a13d39bc0ab184f35050b4bec9d40336fb71fa3a6bbc3853a938cd02aad",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_temporary_read_array_nominal_field.goose",
+    "source_sha256": "5e73345832e7e8ec6b83053724b3d2b59b638192881133571e574ce91fe74341",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_temporary_read_array_nominal_field.goose",
+    "source_sha256": "5e73345832e7e8ec6b83053724b3d2b59b638192881133571e574ce91fe74341",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_temporary_read_field_array_index.goose",
+    "source_sha256": "c68e169f297eeee309cf31f984a950bea437bf17b48a107c6a08218703a89cfe",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_temporary_read_field_array_index.goose",
+    "source_sha256": "c68e169f297eeee309cf31f984a950bea437bf17b48a107c6a08218703a89cfe",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_temporary_read_struct_field.goose",
+    "source_sha256": "bd1a82d1105b9ed4486029c438785b46969280229eba26c96adce88089d6e10e",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_temporary_read_struct_field.goose",
+    "source_sha256": "bd1a82d1105b9ed4486029c438785b46969280229eba26c96adce88089d6e10e",
+    "opt": 2,
+    "status": "PASS"
+  }
+]

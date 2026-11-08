@@ -1,0 +1,4 @@
+{
+  "ref_compare": "struct S{link:i64&}\nrecursive fn make(p:i64&)->S{return S{link:p};}\nfn main(){var a:i64[]=[7];assert(make(a[0]).link .== &a[0]);print(\"ref_compare\");}\n",
+  "ref_null": "struct S{link:i64&?}\nrecursive fn make(p:i64&?)->S{return S{link:p};}\nfn main(){assert(make(null).link==null);print(\"ref_null\");}\n"
+}

@@ -1,0 +1,4 @@
+{
+  "nested_ref": "struct H{items:i64[2]}\nstruct S{link:H&}\nrecursive fn make(p:H&)->S{return S{link:p};}\nrecursive fn index()->i64{var scratch:i64[2]=[98,100];return scratch[0]-97;}\nfn main(){var h:H=H{items:[7,8]};assert(make(h).link.items[index()]==8);var a:i64[2]=make(h).link.items;assert(a[0]==7);assert(a[1]==8);print(\"nested_ref\");}\n",
+  "array_ref_identity": "recursive fn make(p:i64&)->i64&[2]{return[p,p];}\nfn main(){var a:i64[]=[7];assert(make(a[0])[1] .== &a[0]);print(\"array_ref_identity\");}\n"
+}

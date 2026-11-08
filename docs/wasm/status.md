@@ -307,6 +307,13 @@ Result images are captured before defers and cleanup. Array references keep
 their existing ABI. Nonfixed results, adaptations and unnamed temporary
 consumers remain separate. See [array result evidence](evidence/array-results.md).
 
+Scalar fields, indexed elements, length and capacity now read from scoped fixed
+temporaries. Nested projections can copy fixed fields and elements into checked
+destinations. Effectful indices run while the temporary is live; selected scalar
+and contained-reference values are captured before cleanup. References into
+temporary storage remain guarded. See
+[temporary read evidence](evidence/temporary-reads.md).
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping

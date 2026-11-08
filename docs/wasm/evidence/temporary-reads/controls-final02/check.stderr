@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-fixed-temporary-reads-20261108/controls-final02/checks.py", line 12, in <module>
+    print('PASS',check_guards(run,exe,'cc',p),'native-valid temporary address guards')
+                 ~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_temporary_read_checks.py", line 64, in check_guards
+    assert result.returncode == 1 and b'aggregate results need the pending destination lowering' in result.stderr
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

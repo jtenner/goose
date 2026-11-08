@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-more01/checks.py", line 14, in <module>
+    if label=='native':assert a.stdout==(name+'\n').encode() and not a.stderr,a
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: CompletedProcess(args=['/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-more01/owner-O0.native'], returncode=0, stdout=b'before\nindex-live\nafter\n', stderr=b'')

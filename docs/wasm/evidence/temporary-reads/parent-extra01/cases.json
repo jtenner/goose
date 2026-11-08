@@ -1,0 +1,9 @@
+{
+  "inline_field": "struct S{n:i64}\ninline fn make(n:i64)->S{if n==0{return S{n:3};}return S{n:n};}\nfn main(){assert(make(0).n==3);assert(make(7).n==7);print(\"inline_field\");}\n",
+  "callback_field": "struct S{n:i64}\nfn apply<F>(n:i64)->i64{F(n).n}\nfn main(){assert(apply(7){n=>S{n:n}}==7);print(\"callback_field\");}\n",
+  "callback_index": "recursive fn index()->i64{var scratch:i64[2]=[99,100];return scratch[0]-98;}\nfn apply<F>(n:i64)->i64{F(n)[index()]}\nfn main(){assert(apply(7){n=>[n,n+1]}==8);print(\"callback_index\");}\n",
+  "once_loop": "struct S{n:i64}\nvar calls:i64=0;recursive fn make(n:i64)->S{calls++;return S{n:n};}\nfn main(){var sum:i64=0;for i in 4{sum+=make(i).n;}assert(sum==6);assert(calls==4);print(\"once_loop\");}\n",
+  "early_index": "recursive fn make()->i64[2]{return[7,8];}\nrecursive fn run(early:bool)->i64{return make()[{if early{return 7;}1}];}\nfn main(){assert(run(true)==7);assert(run(false)==8);print(\"early_index\");}\n",
+  "copy_fields": "struct S{n:i64}\nstruct H{s:S,items:i64[2]}\nrecursive fn make()->H{return H{s:S{n:7},items:[7,8]};}\nfn main(){var s:S=make().s;var a:i64[2]=make().items;assert(s.n==7);assert(a[1]==8);print(\"copy_fields\");}\n",
+  "global": "struct S{n:i64}\nrecursive fn make()->S{return S{n:7};}\nvar n:i64=make().n;\nfn main(){assert(n==7);print(\"global\");}\n"
+}

@@ -1,0 +1,6 @@
+{
+  "literal_roots": "struct S{n:i64}\nvar calls:i64=0;recursive fn tick()->i64{calls++;return 7;}\nfn main(){assert((S{n:tick()}).n==7);assert(([tick(),8])[1]==8);assert(default<i64[2]>().len==2);assert(calls==2);print(\"literal_roots\");}\n",
+  "block_roots": "struct S{n:i64}\nvar calls:i64=0;recursive fn tick()->i64{calls++;return 7;}\nrecursive fn choice(flag:bool)->bool{return flag;}\nfn main(){assert(({let n=tick();S{n:n}}).n==7);assert((if choice(true){S{n:tick()}}else{S{n:9}}).n==7);assert(({let n=tick();[n,n+1]})[1]==8);assert(calls==3);print(\"block_roots\");}\n",
+  "mixed_fields": "struct S{f:f32,d:f64,b:bool,link:i64&}\nvar calls:i64=0;recursive fn make(p:i64&)->S{calls++;return S{f:1.25,d:-0.0,b:true,link:p};}\nrecursive fn read(p:i64&)->i64{return p;}\nfn main(){var data:i64[]=[7];assert(make(data[0]).f==1.25);assert(1.0/make(data[0]).d<0.0);assert(make(data[0]).b);assert(read(make(data[0]).link)==7);assert(calls==4);print(\"mixed_fields\");}\n",
+  "borrow_guard": "struct S{n:i64}\nrecursive fn make()->S{return S{n:7};}\nrecursive fn read(p:i64&)->i64{return p;}\nfn main(){assert(read(make().n)==7);print(\"borrow_guard\");}\n"
+}

@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-final01/checks.py", line 22, in <module>
+    images=check_images(run,'node','wasm-tools',p);guards=check_guards(run,exe,'cc',p)
+                                                          ~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_temporary_read_checks.py", line 64, in check_guards
+    assert result.returncode == 1 and b'references into fixed temporaries need the pending lifetime lowering' in result.stderr
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

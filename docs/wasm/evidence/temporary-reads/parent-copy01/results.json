@@ -1,0 +1,16 @@
+[
+  {
+    "case": "copy_root",
+    "opt": 0,
+    "source_sha256": "e9852bfa57a82078d20dec90bfe6ec453e38f10592cf4c4f6cfab36b4486ae3f",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-copy01/copy_root.goose:4: error: wasm target: aggregate results need the pending destination lowering\n"
+  },
+  {
+    "case": "copy_root",
+    "opt": 2,
+    "source_sha256": "e9852bfa57a82078d20dec90bfe6ec453e38f10592cf4c4f6cfab36b4486ae3f",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-copy01/copy_root.goose:4: error: wasm target: aggregate results need the pending destination lowering\n"
+  }
+]

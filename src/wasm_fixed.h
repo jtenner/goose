@@ -398,13 +398,100 @@ inline WasmCodeGen::FixedPlace WasmCodeGen::ResolvePlace(Node *n) {
 }
 
 inline WasmCodeGen::FixedPlace WasmCodeGen::FieldPlace(Dot *field) {
-    auto object = ResolvePlace(field->obj);
+    return FieldPlace(field, ResolvePlace(field->obj));
+}
+
+inline WasmCodeGen::FixedPlace WasmCodeGen::FieldPlace(Dot *field, FixedPlace object) {
+    while (object.type->kind == TY_REF) object = DereferencePlace(object, field->line);
     auto [type, offset] = StoredField(object.type, field->fieldidx, field->line);
     if (field->accessorowner && !TEq(field->accessorowner, object.type))
         Fail(field->line, "field adaptation needs the pending layout lowering");
     if ((uint64_t)offset > UINT32_MAX - object.offset) Fail(field->line, "field offset exceeds memory32");
     object.offset += (uint32_t)offset; object.type = type;
     return object;
+}
+
+inline bool WasmCodeGen::HasFixedTemporary(Node *n) {
+    if (auto field = Is<Dot>(n); field && field->IsField()) return HasFixedTemporary(field->obj);
+    if (auto index = Is<Index>(n)) return HasFixedTemporary(index->obj);
+    auto call = Is<Call>(n);
+    auto variant = Is<Dot>(n);
+    auto producer = (call && (call->builtin < 0 || call->builtin == B_DEFAULT || call->builtin == B_COPY)) ||
+                    Is<InlineBlock>(n) || Is<StructLit>(n) || Is<ArrayLit>(n) || Is<Block>(n) || Is<IfExpr>(n) ||
+                    (variant && variant->variantconst);
+    return producer && FixedResult(ActualType(n));
+}
+
+template<class Consume>
+inline void WasmCodeGen::WithReadPlace(Node *n, Consume consume) {
+    WithReadPlace(n, &consume, [](void *context, const FixedPlace &place) {
+        (*static_cast<Consume *>(context))(place);
+    });
+}
+
+inline void WasmCodeGen::WithReadPlace(Node *n, void *context, FixedReadConsumer consume) {
+    // The contexts live on the compiler stack. Recursion uses one callback
+    // type, without allocating a std::function or recursively expanding lambda types.
+    if (auto field = Is<Dot>(n); field && field->IsField()) {
+        struct Step { WasmCodeGen *gen; Dot *field; void *context; FixedReadConsumer consume; };
+        Step step {this, field, context, consume};
+        WithReadPlace(field->obj, &step, [](void *context, const FixedPlace &object) {
+            auto &step = *static_cast<Step *>(context);
+            auto place = step.gen->FieldPlace(step.field, object);
+            step.consume(step.context, place);
+        });
+        return;
+    }
+    if (auto index = Is<Index>(n)) {
+        struct Step { WasmCodeGen *gen; Index *index; void *context; FixedReadConsumer consume; };
+        Step step {this, index, context, consume};
+        WithReadPlace(index->obj, &step, [](void *context, const FixedPlace &object) {
+            auto &step = *static_cast<Step *>(context);
+            auto place = object;
+            while (place.type->kind == TY_REF) place = step.gen->DereferencePlace(place, step.index->line);
+            if (!step.gen->TEq(place.type, step.gen->ArrayType(step.index->obj)))
+                step.gen->Fail(step.index->line, "temporary array adaptation needs the pending layout lowering");
+            auto array = step.gen->ArrayFromPlace(place, step.index->line);
+            auto element = step.gen->ElementAddress(step.index, array);
+            auto selected = step.gen->CaptureElementPlace(element);
+            step.consume(step.context, selected);
+        });
+        return;
+    }
+    if (HasFixedTemporary(n)) {
+        WithFixedTemporary(ActualType(n), n, [&](const FixedPlace &place) { consume(context, place); });
+        return;
+    }
+    auto place = ResolvePlace(n);
+    consume(context, place);
+}
+
+inline bool WasmCodeGen::ReadFixedTemporary(Node *n, TypeExpr *resulttype) {
+    auto field = Is<Dot>(n);
+    auto length = field && (field->member == B_LEN || field->member == B_CAP);
+    if (!Is<Index>(n) && !(field && (field->IsField() || length))) return false;
+    auto source = length ? field->obj : n;
+    auto wanted = resulttype ? resulttype : n->exprtype;
+    if (Aggregate(wanted) || !HasFixedTemporary(source)) return false;
+    auto actual = ActualType(n);
+    if (!length && wanted->kind == TY_REF && TEq(wanted->ref->sub, actual))
+        Fail(n->line, "references into fixed temporaries need the pending lifetime lowering");
+    auto value = Temp(wanted);
+    WithReadPlace(source, [&](const FixedPlace &selected) {
+        if (length) {
+            auto place = selected;
+            while (place.type->kind == TY_REF) place = DereferencePlace(place, n->line);
+            auto array = ArrayFromPlace(place, n->line);
+            if (field->member == B_LEN) ArrayLength(array);
+            else if (VariableArray(array.layout.type)) Fail(n->line, "variable arrays have no static capacity");
+            else ArrayCapacity(array);
+        } else {
+            ReadPlace(selected); Convert(selected.type, wanted);
+        }
+        code.Set(value);
+    });
+    code.Get(value);
+    return true;
 }
 
 inline void WasmCodeGen::AssignFixed(FixedPlace destination, Node *source, TType op, Line line) {
@@ -438,10 +525,13 @@ inline void WasmCodeGen::AssignFixed(FixedPlace destination, Node *source, TType
                        ((Is<Call>(source) || Is<InlineBlock>(source)) && ActualType(source)->kind == TY_REF);
     if (!addressable)
         fail("from a temporary needs the pending destination lowering");
-    auto selected = ResolvePlace(source);
-    if (!TEq(destination.type, selected.type))
-        fail("has an inconsistent source layout");
-    CopyBytes(destination, selected, RequireFixed(destination.type, line), line, true);
+    auto copy = [&](FixedPlace selected) {
+        while (selected.type->kind == TY_REF) selected = DereferencePlace(selected, line);
+        if (!TEq(destination.type, selected.type)) fail("has an inconsistent source layout");
+        CopyBytes(destination, selected, RequireFixed(destination.type, line), line, true);
+    };
+    if (HasFixedTemporary(source)) WithReadPlace(source, copy);
+    else copy(ResolvePlace(source));
 }
 
 inline void WasmCodeGen::AssignField(Dot *field, Node *rhs, TType op, bool pointee, Line line) {
@@ -774,7 +864,12 @@ inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *sourc
             return;
         }
     }
-    CopyFixed(fresh, ResolvePlace(source), source->line);
+    if (HasFixedTemporary(source)) {
+        WithReadPlace(source, [&](FixedPlace selected) {
+            while (selected.type->kind == TY_REF) selected = DereferencePlace(selected, source->line);
+            CopyFixed(fresh, selected, source->line);
+        });
+    } else CopyFixed(fresh, ResolvePlace(source), source->line);
 }
 
 inline void WasmCodeGen::EnumMatchStatement(MatchExpr *match) {

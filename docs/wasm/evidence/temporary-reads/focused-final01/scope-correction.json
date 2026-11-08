@@ -1,0 +1,10 @@
+{
+  "status": "PARTIAL_WITH_PRESERVED_HELPER_FAILURE",
+  "positive_case_optimization_pairs": 48,
+  "both_engines": "PASS",
+  "completion_and_restored_tops": "PASS",
+  "live_image_checks_and_valid_controls": 8,
+  "failure": "Address guard expected the newer read-path diagnostic. Actual implicit borrow takes existing Unary address path. Final helper requires exact field/element diagnostics.",
+  "completed_guard_checks": "controls-final03",
+  "no_compiler_change_for_guard_fix": true
+}

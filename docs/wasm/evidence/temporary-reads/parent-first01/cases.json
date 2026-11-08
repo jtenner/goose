@@ -1,0 +1,7 @@
+{
+  "array_index": "recursive fn make()->i64[2]{return[7,8];}\nrecursive fn index()->i64{var scratch:i64[2]=[99,100];return scratch[0]-98;}\nfn main(){assert(make()[index()]==8);print(\"array_index\");}\n",
+  "array_len": "var calls:i64=0;recursive fn make()->i64[..4]{calls++;return[7,8];}\nfn main(){assert(make().len==2);assert(calls==1);print(\"array_len\");}\n",
+  "struct_field": "struct S{n:i64}\nrecursive fn make()->S{return S{n:7};}\nfn main(){assert(make().n==7);print(\"struct_field\");}\n",
+  "array_nominal_field": "struct S{n:i64}\nrecursive fn make()->S[2]{return[S{n:7},S{n:8}];}\nrecursive fn index()->i64{var scratch:i64[2]=[99,100];return scratch[0]-98;}\nfn main(){assert(make()[index()].n==8);print(\"array_nominal_field\");}\n",
+  "field_array_index": "struct H{items:i64[2]}\nrecursive fn make()->H{return H{items:[7,8]};}\nrecursive fn index()->i64{var scratch:i64[2]=[99,100];return scratch[0]-98;}\nfn main(){assert(make().items[index()]==8);print(\"field_array_index\");}\n"
+}

@@ -1,0 +1,34 @@
+[
+  {
+    "name": "owner-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-more01/owner-O0.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-more01/owner.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "owner-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-more01/owner-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-more01/owner-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "owner-O0-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-more01/owner-O0.native"
+    ],
+    "exit": 0
+  }
+]

@@ -1,0 +1,27 @@
+from pathlib import Path
+import subprocess,json,sys,hashlib
+r=Path('/home/dev/Projects/goose-wasm-backend');p=Path(__file__).parent;exe=p.parent/'build02/goose-tested';commands=[]
+sys.path.insert(0,str(r/'test'))
+
+def run(args,ok=True):
+ args=list(map(str,args));name='command-'+str(len(commands));a=subprocess.run(args,cwd=r,capture_output=True,timeout=120)
+ for ext,data in [('stdout',a.stdout),('stderr',a.stderr),('exit',(str(a.returncode)+'\n').encode())]:(p/(name+'.'+ext)).write_bytes(data)
+ commands.append({'name':name,'args':args,'exit':a.returncode});(p/'commands.json').write_text(json.dumps(commands,indent=2)+'\n')
+ if ok:assert not a.returncode,(name,args,a.stderr)
+ return a
+rows=[]
+for name in json.loads((p.parent/'parent-extra01/cases.json').read_text()):
+ source=p.parent/'parent-extra01'/(name+'.goose')
+ expected=(name+'\n').encode()
+ for opt in [0,2]:
+  module=p/(source.stem+f'-O{opt}.wasm');compiled=run([exe,f'-O{opt}','--target','wasm','-o',module,source],ok=False)
+  if compiled.returncode:
+   assert compiled.returncode==1 and b'wasm target:' in compiled.stderr and not module.exists()
+   rows.append({'source':str(source),'opt':opt,'status':'pending','stderr':compiled.stderr.decode()});(p/'results.json').write_text(json.dumps(rows,indent=2)+'\n');continue
+  run(['wasm-tools','validate',module])
+  for args in [['node',r/'test/wasm_reference_abi.mjs',module,p/(source.stem+f'-O{opt}-instance')],['/tmp/goose-wasm-runtime-env/bin/python',r/'test/wasmtime_host.py',module]]:
+   a=run(args);assert a.stdout==expected and not a.stderr,(source,opt,a)
+  mode='' if source.stem.endswith(('_data','_refs','_dynamic_base')) else 'no-data'
+  a=run(['node',r/'test/wasm_multimemory.mjs',module,'0',mode]);assert a.stdout==expected and not a.stderr
+  rows.append({'source':str(source),'source_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'opt':opt,'status':'PASS'});(p/'results.json').write_text(json.dumps(rows,indent=2)+'\n')
+print('PASS',len(rows),'result case/optimization pairs in both hosts')

@@ -557,6 +557,9 @@ struct WasmCodeGen : ValueLayout {
         // Identity and null tests still read the stored reference itself.
         if (auto id = Is<Ident>(n); id && id->vdef && id->vdef->type->kind == TY_REF) {
             Read(Find(id->vdef));
+        } else if (auto actual = ActualType(n); actual && actual->kind == TY_REF &&
+                   ReadFixedTemporary(n, actual)) {
+            // Keep the temporary owner until its stored reference has been read.
         } else if (auto field = Is<Dot>(n); field && field->IsField() && ActualType(n)->kind == TY_REF) {
             ReadPlace(FieldPlace(field));
         } else if (auto index = Is<Index>(n); index && ActualType(n)->kind == TY_REF) {
@@ -780,6 +783,7 @@ struct WasmCodeGen : ValueLayout {
         if (!c->spec->rets.empty()) Convert(c->spec->rets[0], resulttype ? resulttype : c->exprtype);
     }
     void Gen(Node *n, TypeExpr *resulttype = nullptr) {
+        if (ReadFixedTemporary(n, resulttype)) return;
         if (!resulttype && Nominal(n->exprtype))
             Fail(n->line, "aggregate values need the pending destination lowering");
         auto unary = Is<Unary>(n);
@@ -1258,6 +1262,11 @@ struct WasmCodeGen : ValueLayout {
     }
 
     TypeExpr *ActualType(Node *n);
+    using FixedReadConsumer = void (*)(void *, const FixedPlace &);
+    bool HasFixedTemporary(Node *n);
+    void WithReadPlace(Node *n, void *context, FixedReadConsumer consume);
+    template<class Consume> void WithReadPlace(Node *n, Consume consume);
+    bool ReadFixedTemporary(Node *n, TypeExpr *resulttype);
     FixedPlace OwnerPlace(VarDef *owner);
     FreshFixedDestination FreshOwner(VarDef *owner, Node *initialization);
     FreshFixedDestination FreshCallParameter(Call *call, size_t position);
@@ -1292,6 +1301,7 @@ struct WasmCodeGen : ValueLayout {
     void EnumMatchStatement(MatchExpr *match);
     FixedPlace ResolvePlace(Node *n);
     FixedPlace FieldPlace(Dot *field);
+    FixedPlace FieldPlace(Dot *field, FixedPlace object);
     FixedPlace PointeePlace(TypeExpr *reference, Line line);
     FixedPlace DereferencePlace(FixedPlace place, Line line);
     void PlaceAddress(const FixedPlace &place, uint8_t representation, Line line);
@@ -1352,6 +1362,7 @@ struct WasmCodeGen : ValueLayout {
     void ArrayBuiltin(Call *call, const vector<Node *> &arguments, TypeExpr *resulttype = nullptr);
     void ArrayEquality(Binary *node);
     ElementPlace ElementAddress(Index *index);
+    ElementPlace ElementAddress(Index *index, const ArrayPlace &place);
     FixedPlace CaptureElementPlace(const ElementPlace &element);
     void ElementOffset(const ArrayView &view, uint32_t index, Line line, PushScratch *scratch = nullptr);
     void LoadElement(const ElementPlace &element);

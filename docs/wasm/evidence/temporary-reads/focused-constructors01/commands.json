@@ -1,0 +1,418 @@
+[
+  {
+    "name": "command-0",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build03/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/literal_roots-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-constructors01/literal_roots.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-1",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/literal_roots-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-2",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/literal_roots-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/literal_roots-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-3",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/literal_roots-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-4",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/literal_roots-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-5",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build03/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/literal_roots-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-constructors01/literal_roots.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-6",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/literal_roots-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-7",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/literal_roots-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/literal_roots-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-8",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/literal_roots-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-9",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/literal_roots-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-10",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build03/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/block_roots-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-constructors01/block_roots.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-11",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/block_roots-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-12",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/block_roots-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/block_roots-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-13",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/block_roots-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-14",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/block_roots-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-15",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build03/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/block_roots-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-constructors01/block_roots.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-16",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/block_roots-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-17",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/block_roots-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/block_roots-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-18",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/block_roots-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-19",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/block_roots-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-20",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build03/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/mixed_fields-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-constructors01/mixed_fields.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-21",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/mixed_fields-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-22",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/mixed_fields-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/mixed_fields-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-23",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/mixed_fields-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-24",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/mixed_fields-O0.wasm",
+      "0",
+      ""
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-25",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build03/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/mixed_fields-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-constructors01/mixed_fields.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-26",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/mixed_fields-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-27",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/mixed_fields-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/mixed_fields-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-28",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/mixed_fields-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-29",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/mixed_fields-O2.wasm",
+      "0",
+      ""
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-30",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build03/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/copy_root-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-copy01/copy_root.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-31",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/copy_root-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-32",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/copy_root-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/copy_root-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-33",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/copy_root-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-34",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/copy_root-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-35",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build03/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/copy_root-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-copy01/copy_root.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-36",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/copy_root-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-37",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/copy_root-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/copy_root-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-38",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/copy_root-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-39",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/focused-constructors01/copy_root-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  }
+]

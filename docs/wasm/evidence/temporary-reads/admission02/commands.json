@@ -1,0 +1,1524 @@
+[
+  {
+    "name": "command-0",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-argument-O0.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-1",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-argument-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-2",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-3",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-4",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-5",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-argument-O2.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-6",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-argument-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-7",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-8",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-9",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-10",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-argument-O0.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-11",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-argument-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-12",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-13",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-14",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-15",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-argument-O2.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-16",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-argument-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-17",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-18",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-19",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-20",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-result-O0.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-21",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-result-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-22",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-result-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-23",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-result-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-24",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-result-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-25",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-result-O2.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-26",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-result-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-27",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-result-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-28",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-result-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-29",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-result-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-30",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-result-O0.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-31",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-result-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-32",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-result-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-33",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-result-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-34",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-result-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-35",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-result-O2.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-36",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-result-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-37",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-result-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-38",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-result-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-39",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-inline-result-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-40",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-assign-O0.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-41",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-assign-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-42",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-43",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-44",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-45",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-assign-O2.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-46",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-assign-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-47",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-48",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-49",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-50",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-assign-O0.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-51",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-assign-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-52",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-53",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-54",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-55",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-assign-O2.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-56",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-assign-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-57",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-58",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-59",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-60",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-element-assign-O0.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-element-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-61",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-element-assign-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-element-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-62",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-element-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-63",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-element-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-64",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-element-assign-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-65",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-element-assign-O2.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-element-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-66",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-element-assign-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-element-assign.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-67",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-element-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-68",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-element-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-69",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-element-assign-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-70",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-value-equality-O0.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-value-equality.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-71",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-value-equality-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-value-equality.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-72",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-value-equality-O2.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-value-equality.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-73",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-value-equality-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-value-equality.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-74",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-print-O0.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-print.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-75",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-print-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-print.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-76",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-print-O2.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-print.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-77",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-print-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-print.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-78",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-for-O0.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-for.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-79",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-for-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-for.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-80",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-for-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-81",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-for-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-82",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-for-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-83",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-for-O2.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-for.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-84",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-for-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-for.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-85",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-for-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-86",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-for-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-87",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-for-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-88",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-wide-count-elements-O0.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-wide-count-elements.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-89",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-wide-count-elements-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-wide-count-elements.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-90",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-wide-count-elements-O2.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-wide-count-elements.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-91",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-wide-count-elements-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-wide-count-elements.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-92",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-variable-field-O0.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-variable-field.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-93",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-variable-field-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-variable-field.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-94",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-variable-field-O2.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-variable-field.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-95",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-variable-field-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-variable-field.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-96",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-uninitialized-O0.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-uninitialized.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-97",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-uninitialized-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-uninitialized.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-98",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-uninitialized-O2.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-uninitialized.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-99",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-uninitialized-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-uninitialized.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-100",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-temporary-O0.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-temporary.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-101",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-temporary-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-temporary.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-102",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-temporary-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-103",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-temporary-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-104",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-temporary-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-105",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-temporary-O2.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-temporary.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-106",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-temporary-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-temporary.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-107",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-temporary-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-108",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-temporary-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-109",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-temporary-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-110",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-argument-O0.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-111",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-argument-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-112",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-113",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-114",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-argument-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-115",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-argument-O2.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-116",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-argument-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-argument.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-117",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-118",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-119",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-argument-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-120",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-result-O0.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-121",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-result-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-122",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-result-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-123",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-result-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-124",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-result-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-125",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-result-O2.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-126",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-result-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-result.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-127",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-result-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-128",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-result-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-129",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-function-value-result-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-130",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-adaptation-O0.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-adaptation.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-131",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-adaptation-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-adaptation.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-132",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-adaptation-O2.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-adaptation.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-133",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-adaptation-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-admission-field-adaptation.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-134",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-limit-product-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-limit-product.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-135",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-limit-product-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-limit-product.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-136",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-limit-layout-sum-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-limit-layout-sum.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-137",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-limit-layout-sum-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-limit-layout-sum.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-138",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-limit-frame-sum-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-limit-frame-sum.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-139",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-limit-frame-sum-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/admission02/struct-limit-frame-sum.goose"
+    ],
+    "exit": 1
+  }
+]

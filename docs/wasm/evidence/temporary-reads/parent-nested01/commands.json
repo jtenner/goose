@@ -1,0 +1,182 @@
+[
+  {
+    "name": "nested_ref-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/nested_ref-O0.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/nested_ref.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested_ref-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/nested_ref-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/nested_ref-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested_ref-O0-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/nested_ref-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested_ref-O0-before",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/nested_ref-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/nested_ref.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "nested_ref-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/nested_ref-O2.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/nested_ref.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested_ref-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/nested_ref-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/nested_ref-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested_ref-O2-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/nested_ref-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "nested_ref-O2-before",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/nested_ref-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/nested_ref.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "array_ref_identity-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/array_ref_identity-O0.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/array_ref_identity.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "array_ref_identity-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/array_ref_identity-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/array_ref_identity-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "array_ref_identity-O0-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/array_ref_identity-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "array_ref_identity-O0-before",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/array_ref_identity-O0.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/array_ref_identity.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "array_ref_identity-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/array_ref_identity-O2.c",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/array_ref_identity.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "array_ref_identity-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/array_ref_identity-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/array_ref_identity-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "array_ref_identity-O2-native",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/array_ref_identity-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "array_ref_identity-O2-before",
+    "args": [
+      "/tmp/goose-wasm-array-results-20261108/build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/array_ref_identity-O2.wasm",
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/parent-nested01/array_ref_identity.goose"
+    ],
+    "exit": 1
+  }
+]
