@@ -1,0 +1,12 @@
+{
+  "copy": "fn main(){var a:i64[2]=[7,-8];var c:i64[]=a;assert(c.len==2&&c[0]==7&&c[1] == -8);c[0]=99;assert(a[0]==7&&c[0]==99);print(\"copy\");}",
+  "call": "recursive fn make()->i64[2]{return[7,-8];}fn main(){var c:i64[>..]=make();assert(c.len==2&&c[0]==7&&c[1] == -8);print(\"call\");}",
+  "default": "fn main(){var c:i64[..]=default<i64[2]>();assert(c.len==2&&c.cap==2&&c[0]==0&&c[1]==0);print(\"default\");}",
+  "reference": "var calls:i64=0;recursive fn source(a:i64[2]&)->i64[2]&{calls++;return a;}fn main(){var a:i64[2]=[7,-8];var c:i64[]=source(a);c[0]=99;assert(calls==1&&a[0]==7&&c[0]==99&&c[1] == -8);print(\"reference\");}",
+  "field": "struct H{a:i64[2]}fn main(){var h=H{[7,-8]};var c:i64[]=h.a;c[1]=99;assert(h.a[1] == -8&&c[0]==7&&c[1]==99);print(\"field\");}",
+  "field_data": "struct H{a:i64[2]}fn main(){var rows:H[]=[H{[7,-8]}];var c:i64[>..<]=rows[0].a;c[1]=99;assert(rows[0].a[1] == -8&&c[0]==7&&c[1]==99);print(\"field_data\");}",
+  "reference_elements": "fn main(){var x:i64=7;var y:i64=20;var a:i64&[2]=[x,x];var c:i64&[]=a;c[0].=y;assert(c[0]==20&&a[0]==7);c[1]=9;assert(x==9&&a[1]==9);print(\"reference_elements\");}",
+  "struct_rows": "struct S{x:i64,y:i64&}fn main(){var x:i64=7;var a:S[2]=[S{1,x},S{2,x}];var c:S[]=a;c[0].x=99;c[1].y=9;assert(a[0].x==1&&x==9&&c[0].x==99);print(\"struct_rows\");}",
+  "zero_call": "recursive fn make()->i64[0]{return default<i64[0]>();}fn main(){var c:i64[]=make();assert(c.len==0);print(\"zero_call\");}",
+  "global": "var a:i64[2]=[7,-8];var c:i64[]=a;fn main(){assert(c.len==2&&c[0]==7&&c[1] == -8);c[0]=99;assert(a[0]==7);print(\"global\");}"
+}

@@ -791,9 +791,10 @@ struct WasmCodeGen : ValueLayout {
         auto unary = Is<Unary>(n);
         auto arrayaddress = Is<Ident>(n) || (unary && unary->op == T_BITAND);
         if (n->exprtype && n->exprtype->kind == TY_ARRAY && !arrayaddress) {
-            auto borrowed = [&](TypeExpr *type) {
+            auto borrowed = [&](TypeExpr *type, bool explicitReference = false) {
                 return type && type->kind == TY_REF && type->ref->sub->kind == TY_ARRAY &&
-                       TEq(type->ref->sub, n->exprtype);
+                       (TEq(type->ref->sub, n->exprtype) ||
+                        (explicitReference && resulttype && TEq(type, resulttype)));
             };
             if (auto index = Is<Index>(n)) arrayaddress = borrowed(ArrayElement(index->obj));
             else if (auto field = Is<Dot>(n); field && field->IsField()) {
@@ -803,9 +804,9 @@ struct WasmCodeGen : ValueLayout {
             }
             else if (auto call = Is<Call>(n)) {
                 auto &rets = call->spec ? call->spec->rets : call->rettypes;
-                arrayaddress = rets.size() == 1 && borrowed(rets[0]);
+                arrayaddress = rets.size() == 1 && borrowed(rets[0], true);
             } else if (auto inlined = Is<InlineBlock>(n))
-                arrayaddress = inlined->spec->rets.size() == 1 && borrowed(inlined->spec->rets[0]);
+                arrayaddress = inlined->spec->rets.size() == 1 && borrowed(inlined->spec->rets[0], true);
         }
         if (n->exprtype && n->exprtype->kind == TY_ARRAY && !Is<Ident>(n) &&
             !arrayaddress)
@@ -1361,6 +1362,7 @@ struct WasmCodeGen : ValueLayout {
     void EmitArrayReference(const ArrayPlace &place, TypeExpr *reference, Line line);
     void InitArray(VarDef *owner, const Slot &slot, Node *init, VarDecl *declaration);
     void InitArrayCopy(VarDef *owner, const Slot &slot, Node *source);
+    bool InitFixedArrayValue(VarDef *owner, const Slot &slot, Node *source);
     void CopyBytes(const FixedPlace &destination, const FixedPlace &source, uint32_t bytes,
                    Line line, bool immediate = false);
     void ZeroFixed(const FixedPlace &destination, uint32_t bytes, Line line);

@@ -1,0 +1,33 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: fixed array conversion namespace tops differ
++ actual - expected
+
+  [
++   57,
++   1
+-   37,
+-   21
+  ]
+
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_fixed_array_conversion_namespaces.mjs:11:12
+    at print_end_v1 (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:105:13)
+    at build.3 (wasm://wasm/e5d1820e:wasm-function[14]:0x780)
+    at parent.2 (wasm://wasm/e5d1820e:wasm-function[13]:0x605)
+    at main.0 (wasm://wasm/e5d1820e:wasm-function[11]:0x27c)
+    at goose.start (wasm://wasm/e5d1820e:wasm-function[16]:0x868)
+    at Object.run (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:133:34)
+    at runCompleted (file:///home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs:10:13)
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_fixed_array_conversion_namespaces.mjs:17:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [ 57, 1 ],
+  expected: [ 37, 21 ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.2

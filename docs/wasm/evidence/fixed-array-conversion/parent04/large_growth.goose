@@ -1,0 +1,1 @@
+fn main(){var a:i64[16384]=[7;16384];var b:i64[16384]=[3;16384];var c:i64[>..<]=a+b;assert(c.len==16384&&c[0]==10&&c[16383]==10);c[0]=99;c.push(9);assert(a[0]==7&&c.pop()==9&&c.len==16384);print("large_growth");}

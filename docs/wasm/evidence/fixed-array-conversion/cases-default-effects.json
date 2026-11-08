@@ -1,0 +1,3 @@
+{
+  "default_effects": "var calls:i64=0;recursive fn tick()->i64{calls++;return calls;}struct S{n:i64=tick()}fn main(){var c:S[]=default<S[3]>();assert(calls==3&&c.len==3&&c[0].n==1&&c[1].n==2&&c[2].n==3);var z:S[]=default<S[0]>();assert(calls==3&&z.len==0);print(\"default_effects\");}"
+}

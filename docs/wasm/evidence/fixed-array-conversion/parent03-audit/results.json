@@ -1,0 +1,62 @@
+[
+  {
+    "case": "variable_binary",
+    "source_sha256": "7cc040cb94de985fe5cec46edd181e7b8721d45310f2480f55e0f949b9f05db6",
+    "wasm_reason": "/tmp/goose-wasm-array-math-destinations-20261108/parent01/variable_binary.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n",
+    "native_reused": "/tmp/goose-wasm-array-math-destinations-20261108/parent01/variable_binary-native.json"
+  },
+  {
+    "case": "variable_negation",
+    "source_sha256": "b100eef17bcc80ee06c3821cb6cb5e06dbb70d61d4d252fe652480b29f99abe8",
+    "wasm_reason": "/tmp/goose-wasm-array-math-destinations-20261108/parent01/variable_negation.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n",
+    "native_reused": "/tmp/goose-wasm-array-math-destinations-20261108/parent01/variable_negation-native.json"
+  },
+  {
+    "case": "grow_only_binary",
+    "source_sha256": "42720839062eba0ffe7d311ce4dd297e2e6535ea812a9f7b5946da67801cb9d4",
+    "wasm_reason": "/tmp/goose-wasm-array-math-destinations-20261108/parent01/grow_only_binary.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n",
+    "native_reused": "/tmp/goose-wasm-array-math-destinations-20261108/parent01/grow_only_binary-native.json"
+  },
+  {
+    "case": "grow_only_negation",
+    "source_sha256": "795571783f1bc78f00c1158457dc3478be041b1c9907418248158fc8ce100c06",
+    "wasm_reason": "/tmp/goose-wasm-array-math-destinations-20261108/parent01/grow_only_negation.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n",
+    "native_reused": "/tmp/goose-wasm-array-math-destinations-20261108/parent01/grow_only_negation-native.json"
+  },
+  {
+    "case": "grow_shrink_binary",
+    "source_sha256": "ef0eab5fbca42f11d7c3a90b8aa7d845476408b7bd945b875593800c5b06a3be",
+    "wasm_reason": "/tmp/goose-wasm-array-math-destinations-20261108/parent01/grow_shrink_binary.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n",
+    "native_reused": "/tmp/goose-wasm-array-math-destinations-20261108/parent01/grow_shrink_binary-native.json"
+  },
+  {
+    "case": "grow_shrink_negation",
+    "source_sha256": "9e890fa76cb374a50d9a94c3a664d76fe8ff376d208518100515c0d630d49bad",
+    "wasm_reason": "/tmp/goose-wasm-array-math-destinations-20261108/parent01/grow_shrink_negation.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n",
+    "native_reused": "/tmp/goose-wasm-array-math-destinations-20261108/parent01/grow_shrink_negation-native.json"
+  },
+  {
+    "case": "runtime_limited_binary",
+    "source_sha256": "6ccc2f66c401a3739b9c348d7aab48454879af22764fcaac9026534b1d0dbd93",
+    "wasm_reason": "/tmp/goose-wasm-array-math-destinations-20261108/parent01/runtime_limited_binary.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n",
+    "native_reused": "/tmp/goose-wasm-array-math-destinations-20261108/parent01/runtime_limited_binary-native.json"
+  },
+  {
+    "case": "runtime_limited_negation",
+    "source_sha256": "1ffb1357ba5dddf596f7a54be597949d6f9fbb63b4c58664509baf78e4ed0f64",
+    "wasm_reason": "/tmp/goose-wasm-array-math-destinations-20261108/parent01/runtime_limited_negation.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n",
+    "native_reused": "/tmp/goose-wasm-array-math-destinations-20261108/parent01/runtime_limited_negation-native.json"
+  },
+  {
+    "case": "varint_binary",
+    "source_sha256": "e77e896b71127469f22f66fe7b6fa4d1b2a40cb6b9caa00775bf2edef44bb2d8",
+    "wasm_reason": "/tmp/goose-wasm-array-math-destinations-20261108/parent01/varint_binary.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n",
+    "native_reused": "/tmp/goose-wasm-array-math-destinations-20261108/parent01/varint_binary-native.json"
+  },
+  {
+    "case": "varint_negation",
+    "source_sha256": "5ddba2e1ba0f8ad93a97c7dd33707d72951f0654ee7a3eea84d54409cca821b5",
+    "wasm_reason": "/tmp/goose-wasm-array-math-destinations-20261108/parent01/varint_negation.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n",
+    "native_reused": "/tmp/goose-wasm-array-math-destinations-20261108/parent01/varint_negation-native.json"
+  }
+]

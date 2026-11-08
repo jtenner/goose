@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-array-math-destinations-20261108/image01/checks.py", line 15, in <module>
+    n=check(run,'node','wasm-tools',p/'artifacts');records.append({'name':name,'checks':n});(p/'results.json').write_text(json.dumps(records,indent=2)+'\n');print('PASS',name,n,flush=True)
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_array_conversion_checks.py", line 126, in check_namespaces
+    a, z = function_span(text, 'build'); body = text[a:z]
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_checks.py", line 10, in function_span
+    assert len(matches)==1,(prefix,'function not unique')
+           ^^^^^^^^^^^^^^^
+AssertionError: ('build', 'function not unique')

@@ -1,0 +1,1 @@
+recursive fn choose(flag:bool)->i64{var a:i64[2]=[7,8];var c:i64[]=a*(if flag{return 55;}else{2});assert(c[0]==14&&c[1]==16);return c[0]+c[1];}fn main(){assert(choose(true)==55&&choose(false)==30);print("early_return");}

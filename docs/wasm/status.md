@@ -363,6 +363,14 @@ The frontend still rejects zero-size fields and elements. Exact owner/image
 checks and valid damaged-module controls cover the zero-payload ABI. See
 [zero-payload call evidence](evidence/zero-payload-calls.md).
 
+Fixed array values now construct variable, growable, runtime-limited and
+LEB-prefixed receivers with matching element layouts. Stored values use their
+read place; computed values use one checked temporary before the payload copy.
+The receiver's planned data memory, prefix, declaration cleanup and global
+lifetime are preserved. Native, Node, Wasmtime and full memory-image controls
+cover the conversions. See
+[fixed array conversion evidence](evidence/fixed-array-conversion.md).
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping

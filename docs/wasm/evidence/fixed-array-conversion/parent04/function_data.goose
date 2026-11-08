@@ -1,0 +1,1 @@
+struct H{a:i64[2]}recursive fn build(a:const i64[2]&,b:const i64[2]&)->i64{var c:i64[]=a+b;return c[0]+c[1];}recursive fn parent()->i64{var held:H[]=[H{[20,30]},H{[1,2]}];let n=build(held[0].a,held[1].a);assert(held[0].a[0]==20&&held[1].a[1]==2);return n;}fn main(){var a:i64[2]=[7,-8];var b:i64[2]=[3,4];assert(build(a,b)==6&&parent()==53);print("function_data");}

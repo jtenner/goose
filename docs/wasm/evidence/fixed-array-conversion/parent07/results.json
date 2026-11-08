@@ -1,0 +1,16 @@
+[
+  {
+    "case": "inline_reference",
+    "source_sha256": "ce0e33d87e41fcb07064aa4a9e8f843e1694a5535131b226689a15b4fd6f737a",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-array-math-destinations-20261108/parent07/inline_reference.goose:1: error: wasm target: array adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "copy_reference",
+    "source_sha256": "e30a04936621332d0241ac3aafbb74275b15ec6815d5fae02c7352f4483870a4",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-array-math-destinations-20261108/parent07/copy_reference.goose:1: error: wasm target: array adaptation needs the pending destination lowering\n"
+  }
+]

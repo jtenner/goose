@@ -276,6 +276,83 @@ inline void WasmCodeGen::ZeroFixed(const FixedPlace &destination, uint32_t bytes
     else code.Call(memories->Fill());
 }
 
+inline bool WasmCodeGen::InitFixedArrayValue(VarDef *owner, const Slot &slot, Node *source) {
+    auto array = owner->type;
+    if (InlineArray(array) || (!DataArray(array) && !IsResz(array))) return false;
+    while (auto call = Is<Call>(source)) {
+        if (call->builtin != B_COPY) break;
+        source = call->ValueArgNodes().at(0);
+    }
+    // Direct literals already construct the receiving layout without a value copy.
+    if (Is<ArrayLit>(source) || Is<StrLit>(source)) return false;
+    auto underlying = [&](Node *node) {
+        auto type = ActualType(node);
+        while (type->kind == TY_REF) type = type->ref->sub;
+        return type;
+    };
+    auto binary = Is<Binary>(source);
+    if (binary && binary->op != T_PLUS && binary->op != T_MINUS && binary->op != T_MUL &&
+        binary->op != T_DIV && binary->op != T_MOD) binary = nullptr;
+    auto unary = Is<Unary>(source);
+    if (unary && unary->op != T_MINUS) unary = nullptr;
+    auto from = unary ? underlying(unary->child) : binary ? underlying(binary->left) : underlying(source);
+    if (binary && from->kind != TY_ARRAY && from->kind != TY_STRUCT) from = underlying(binary->right);
+    if (from->kind != TY_ARRAY || from->arr->akind != A_FIXED) return false;
+    if (!TEq(array->arr->sub, from->arr->sub))
+        Fail(source->line, "fixed array construction needs matching element layouts");
+    auto payload = RequireFixed(from, source->line);
+    auto count = ArrSize(from->arr);
+    if (count < 0) Fail(source->line, "fixed array construction needs its resolved count");
+    auto prefix = DataArray(array) ? DataPrefix(array, (uint64_t)count) : 0u;
+    if (payload > UINT32_MAX - prefix) Fail(source->line, "array allocation exceeds memory32");
+    if (prefix && prefix < 8 && (uint64_t)count > ((1ull << (prefix * 8)) - 1))
+        Fail(source->line, "array length exceeds its stored prefix");
+    auto ownerScope = scopes.size();
+    if (!owner->isglobal) {
+        if (!ownerScope) Fail(source->line, "fixed array construction needs its declaration scope");
+        ownerScope--;
+    }
+    auto copy = [&](FixedPlace value) {
+        while (value.type->kind == TY_REF) value = DereferencePlace(value, source->line);
+        if (!TEq(from, value.type)) Fail(source->line, "fixed array source has an inconsistent layout");
+        auto memory = ArrayAllocationMemory(owner, &slot, nullptr, source->line);
+        auto identity = Local(WasmModule::I32), saved = Local(WasmModule::I32), base = Local(WasmModule::I64);
+        if (memory >= 0) code.I32(memory); else StackIndex(storage.owners.at(owner) + 1);
+        code.Set(identity);
+        if (memory < 0) code.Get(identity);
+        code.I32((int32_t)(prefix + payload));
+        code.Call(memory >= 0 ? memories->Reserve((uint32_t)memory) : memories->ReserveDynamic());
+        code.Set(saved);
+        if (!owner->isglobal)
+            scopes[ownerScope].push_back({nullptr, memory >= 0 ? (uint32_t)memory : identity, saved, memory < 0});
+        code.Get(identity); code.Byte(0xad); code.I64(32); code.Byte(0x86);
+        code.Get(saved); code.Byte(0xad); code.Byte(0x84); code.Set(base);
+        if (DataArray(array)) {
+            code.Get(base); Write(slot);
+            InitArrayCount(ArrayOwner(owner, {array, base, 0, memory, true, true}, source->line), (uint64_t)count);
+        } else {
+            auto place = FrameArrayOwner(owner, slot, source->line);
+            PrepareArrayFieldStore(place, 0); code.Get(base); StoreArrayField(place, 0);
+            PrepareArrayLengthStore(place); code.I64(count); StoreArrayLength(place);
+        }
+        if (prefix) { code.Get(base); code.I64(prefix); code.Byte(0x7c); code.Set(base); }
+        CopyBytes({array->arr->sub, base, 0, memory, true, true}, value, payload, source->line, true);
+    };
+    if (binary || unary) {
+        WithFixedValue(from, source, [&](FreshFixedDestination fresh) {
+            if (binary) ConstructFixedBinary(fresh, binary);
+            else {
+                auto checked = FixedMathDestination(fresh, from, source->line);
+                WithReadPlace(unary->child, [&](FixedPlace operand) {
+                    while (operand.type->kind == TY_REF) operand = DereferencePlace(operand, source->line);
+                    NegateFixedInto(checked.place, operand, source->line);
+                });
+            }
+        }, copy);
+    } else WithReadPlace(source, copy);
+    return true;
+}
+
 inline void WasmCodeGen::InitArrayCopy(VarDef *owner, const Slot &slot, Node *source) {
     auto array = owner->type;
     // Check the storage type, not exprtype: the checker can adapt exprtype
@@ -688,6 +765,7 @@ inline void WasmCodeGen::InitArray(VarDef *owner, const Slot &slot, Node *init, 
     if (auto call = Is<Call>(init); call && call->builtin == B_DEFAULT && InlineArray(owner->type)) {
         ConstructFixed(FreshOwner(owner, declaration), init); return;
     }
+    if (InitFixedArrayValue(owner, slot, init)) return;
     while (auto call = Is<Call>(init)) {
         if (call->defaultinit) init = call->defaultinit;
         else if (call->builtin == B_COPY) init = call->ValueArgNodes().at(0);

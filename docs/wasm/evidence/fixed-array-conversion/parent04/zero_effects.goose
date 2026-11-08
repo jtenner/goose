@@ -1,0 +1,1 @@
+var calls:i64=0;recursive fn scale()->i64{calls++;return 2;}fn main(){var a:i64[0]=[];var v:i64[]=a*scale();var g:i64[>..]=a*scale();var s:i64[>..<]=a*scale();var l:i64[..]=a*scale();var p:i64[varint]=a*scale();assert(calls==5&&v.len==0&&g.len==0&&s.len==0&&l.len==0&&l.cap==0&&p.len==0);g.push(7);s.push(8);assert(g[0]==7&&s.pop()==8);print("zero_effects");}

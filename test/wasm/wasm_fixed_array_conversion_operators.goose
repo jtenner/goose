@@ -1,0 +1,1 @@
+fn main(){var a:i64[2]=[7,-8];var b:i64[2]=[3,4];var sum:i64[]=a+b;var diff:i64[]=a-b;var product:i64[]=a*b;var quotient:i64[]=a/b;var remainder:i64[]=a%b;assert(sum[0]==10&&sum[1] == -4);assert(diff[0]==4&&diff[1] == -12);assert(product[0]==21&&product[1] == -32);assert(quotient[0]==2&&quotient[1] == -2);assert(remainder[0]==1&&remainder[1]==0);print("operators");}

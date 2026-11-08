@@ -1,0 +1,9 @@
+[
+  {
+    "case": "namespaces",
+    "source_sha256": "95e36c696aeff292b13e562da6621d476925b1617fc7a0c55270edea0ad58139",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-array-math-destinations-20261108/parent06/namespaces.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  }
+]

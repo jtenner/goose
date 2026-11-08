@@ -1,0 +1,1 @@
+struct S{a:f32,pad 2,b:f64}recursive fn prepare(a:S[2]&,b:S[2]&){a[0].a=1.25;a[0].b=45.125;a[1].a=2.0;a[1].b=3.5;b[0].a = -2.5;b[0].b = -37.25;b[1].a=3.0;b[1].b = -2.25;print("before");}fn main(){var a:S[2]=default<S[2]>();var b:S[2]=default<S[2]>();prepare(a,b);var c:S[]=a+b;print("after");assert(c.len==2&&c[0].a == -1.25&&c[0].b==7.875&&c[1].a==5.0&&c[1].b==1.25);}

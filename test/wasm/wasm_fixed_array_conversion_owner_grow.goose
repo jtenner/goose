@@ -1,0 +1,1 @@
+recursive fn prepare(a:i64[2]&,b:i64[2]&){a[0]=7;a[1] = -8;b[0]=3;b[1]=4;print("before");}fn main(){var a:i64[2]=[0,0];var b:i64[2]=[0,0];prepare(a,b);var c:i64[>..<]=a+b;print("after");assert(c.len==2&&c[0]==10&&c[1] == -4);assert(a[0]==7&&a[1] == -8&&b[0]==3&&b[1]==4);}

@@ -1,0 +1,58 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: fixed array prefix data image differs
++ actual - expected
+
+  Buffer(65536) [Uint8Array] [
+    0,
++   1,
+-   0,
+    197,
+    90,
+    90,
+    90,
+    90,
+
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_fixed_array_conversion_prefix.mjs:31:16
+    at print_end_v1 (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:105:13)
+    at main.0 (wasm://wasm/77f0e932:wasm-function[11]:0x29b)
+    at goose.start (wasm://wasm/77f0e932:wasm-function[13]:0x2cd)
+    at Object.run (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:133:34)
+    at runCompleted (file:///home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs:10:13)
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_fixed_array_conversion_prefix.mjs:36:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: Buffer(65536) [Uint8Array] [
+     0,  1, 197, 90, 90, 90, 90, 90, 90, 90, 90, 90,
+    90, 90,  90, 90, 90, 90, 90, 90, 90, 90, 90, 90,
+    90, 90,  90, 90, 90, 90, 90, 90, 90, 90, 90, 90,
+    90, 90,  90, 90, 90, 90, 90, 90, 90, 90, 90, 90,
+    90, 90,  90, 90, 90, 90, 90, 90, 90, 90, 90, 90,
+    90, 90,  90, 90, 90, 90, 90, 90, 90, 90, 90, 90,
+    90, 90,  90, 90, 90, 90, 90, 90, 90, 90, 90, 90,
+    90, 90,  90, 90, 90, 90, 90, 90, 90, 90, 90, 90,
+    90, 90,  90, 90,
+    ... 65436 more items
+  ],
+  expected: Buffer(65536) [Uint8Array] [
+     0,  0, 197, 90, 90, 90, 90, 90, 90, 90, 90, 90,
+    90, 90,  90, 90, 90, 90, 90, 90, 90, 90, 90, 90,
+    90, 90,  90, 90, 90, 90, 90, 90, 90, 90, 90, 90,
+    90, 90,  90, 90, 90, 90, 90, 90, 90, 90, 90, 90,
+    90, 90,  90, 90, 90, 90, 90, 90, 90, 90, 90, 90,
+    90, 90,  90, 90, 90, 90, 90, 90, 90, 90, 90, 90,
+    90, 90,  90, 90, 90, 90, 90, 90, 90, 90, 90, 90,
+    90, 90,  90, 90, 90, 90, 90, 90, 90, 90, 90, 90,
+    90, 90,  90, 90,
+    ... 65436 more items
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.2

@@ -1,0 +1,1 @@
+var scalar:i64=3;var source:i64[2]=[7,8];var calls:i64=0;recursive fn values()->i64[2]{scalar=99;return[3,6];}recursive fn scale()->i64{calls++;source[0]=99;return 2;}fn main(){var a:i64[>..]=scalar*values();var b:i64[]=source*scale();assert(a[0]==9&&a[1]==18&&scalar==99);assert(b[0]==14&&b[1]==16&&source[0]==99&&calls==1);print("scalar_order");}

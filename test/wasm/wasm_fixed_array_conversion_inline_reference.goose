@@ -1,0 +1,1 @@
+var calls:i64=0;fn source(a:i64[2]&)->i64[2]&{calls++;return a;}fn main(){var a:i64[2]=[7,-8];var c:i64[]=source(a);c[0]=99;assert(calls==1&&a[0]==7&&c[0]==99&&c[1] == -8);print("inline_reference");}

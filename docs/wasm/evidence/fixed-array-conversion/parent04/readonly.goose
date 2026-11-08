@@ -1,0 +1,1 @@
+recursive fn source(a:const i64[2]&)->const i64[2]&{return a;}fn main(){let a:const i64[2]=[7,-8];var c:i64[]=a;var d:i64[]=source(a);c[0]=99;d[1]=20;assert(a[0]==7&&a[1] == -8&&c[0]==99&&d[0]==7&&d[1]==20);print("readonly");}
