@@ -28,6 +28,25 @@ inline TypeExpr *WasmCodeGen::ActualType(Node *n) {
     return n->exprtype;
 }
 
+inline bool WasmCodeGen::FindFixedArraySource(Node *n, TypeExpr *&common) {
+    if (!n || !n->exprtype) return false;
+    // These value exits need their own construction protocol.
+    if (Is<EarlyBlock>(n) || Is<LoopExpr>(n) || Is<MatchExpr>(n)) return false;
+    if (Void(n->exprtype)) return true;
+    if (auto call = Is<Call>(n); call && call->builtin == B_COPY)
+        return FindFixedArraySource(call->ValueArgNodes().at(0), common);
+    if (auto block = Is<Block>(n))
+        return block->tail && FindFixedArraySource(block->tail, common);
+    if (auto branch = Is<IfExpr>(n))
+        return FindFixedArraySource(branch->thenb, common) &&
+               FindFixedArraySource(branch->elseb, common);
+    auto type = ActualType(n);
+    while (type && type->kind == TY_REF) type = type->ref->sub;
+    if (!type || !InlineArray(type) || (common && !TEq(common, type))) return false;
+    common = type;
+    return true;
+}
+
 inline WasmCodeGen::FixedPlace WasmCodeGen::OwnerPlace(VarDef *owner) {
     auto &slot = Find(owner);
     if (!slot.memory) Fail(owner->line, "fixed owner is missing planned storage");

@@ -1,0 +1,10 @@
+In function ‘gs_memcpy’,
+    inlined from ‘main_g’ at /tmp/goose-wasm-array-expression-source-20261108/focused02/wasm_array_expression_source_limited_defer_refs-O2.c:5220:9,
+    inlined from ‘main’ at /tmp/goose-wasm-array-expression-source-20261108/focused02/wasm_array_expression_source_limited_defer_refs-O2.c:5278:5:
+/tmp/goose-wasm-array-expression-source-20261108/focused02/wasm_array_expression_source_limited_defer_refs-O2.c:483:5: warning: ‘memcpy’ reading between 257 and 2040 bytes from a region of size 24 [-Wstringop-overread]
+  483 |     memcpy(dst, src, n);
+      |     ^~~~~~~~~~~~~~~~~~~
+/tmp/goose-wasm-array-expression-source-20261108/focused02/wasm_array_expression_source_limited_defer_refs-O2.c: In function ‘main’:
+/tmp/goose-wasm-array-expression-source-20261108/focused02/wasm_array_expression_source_limited_defer_refs-O2.c:3584:21: note: at offset 17 into source object ‘gs_globals_main’ of size 41
+ 3584 | static gs_globals_t gs_globals_main;
+      |                     ^~~~~~~~~~~~~~~

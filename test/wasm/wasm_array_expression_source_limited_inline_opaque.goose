@@ -1,0 +1,1 @@
+var source:u8[..3]=[7,8];recursive fn read(a:bool&)->bool{return a;}inline fn pick(yes:bool)->i64{var b:u8[]=({if yes{return 42 from pick;}source});return b[1];}fn main(){var yes=true;var no=false;assert(pick(read(yes))==42);print("true");assert(pick(read(no))==8);print("false");print("opaque");}

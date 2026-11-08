@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-array-expression-source-20261108/image01/checks.py", line 13, in <module>
+    print('PASS',check_defer(run,'node','wasm-tools',out)+check_inline(run,'node','wasm-tools',p.parent/'focused02')+check_guards(run,p.parent/'build01/goose-tested','cc',out),'image/control/guard checks')
+                                                          ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_array_expression_checks.py", line 55, in check_inline
+    assert result.returncode == 1 and b'expression inline live frame top differs' in result.stderr, result.stderr
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: b"node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n754 !== 752\n\n    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_array_expression_inline.mjs:32:8\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: 754,\n  expected: 752,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.22.2\n"

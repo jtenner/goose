@@ -1,0 +1,1 @@
+struct S{n:i64}var first=S{1};var second=S{2};var source:S&[2]=[first,second];fn main(){var b:S&[]=({defer source[0] .= second;source});assert(b.len==2&&b[0] .== &first&&source[0] .== &second&&b[1] .== &second);print("defer_refs");}

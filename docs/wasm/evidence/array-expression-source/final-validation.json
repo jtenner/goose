@@ -1,0 +1,62 @@
+{
+  "status": "PASS",
+  "purpose": "correctness only",
+  "source_parent": "c423808c123e8b4b89d82f2640838ac86fe2f21c",
+  "compiler_sha256": "f1f5b1d4f36560e6c51cb8b10832282a77c63b09f2fe3c515f28260d682628e6",
+  "assertion_compiler_sha256": "24bfcf76d410e4ca032c9b827826bd35d904dd203d4dc00875282bcd9ce24dae",
+  "assertion_pairs_and_release_byte_identities": 60,
+  "source_files": 85,
+  "validation_inputs": 5658,
+  "changed_source": [
+    "src/wasm_arrays.h",
+    "src/wasm_codegen.h",
+    "src/wasm_fixed.h"
+  ],
+  "selected_checks": [
+    "build01/check",
+    "focused01/check",
+    "focused02/check",
+    "image02/check",
+    "assert-build01/check",
+    "assertions01/check",
+    "parent-proof01/check",
+    "full-correctness01/check",
+    "native01/check",
+    "exact01/check",
+    "identity01/check"
+  ],
+  "native_valid_parent_failures": 26,
+  "parent_supported_regressions": 4,
+  "positive_families": 30,
+  "positive_optimization_pairs": 60,
+  "observer_and_control_checks": 40,
+  "wasm_checks": 5833,
+  "unchanged_parent_modules": 1440,
+  "native_groups": {
+    "lexer and shader compiler": "5",
+    "parse, roundtrip and typecheck": "3016",
+    "optimizer, stack report and C shapes": "23",
+    "bounds-check annotations": "68",
+    "generated C, built and run at -O0 and -O2": "1484",
+    "dump-runtime programs": "8",
+    "GS_DEBUG programs": "213",
+    "compiler roots, runtime lifecycle and clang": "24",
+    "driver, diagnostics and language server": "55",
+    "native builds, packages and runtime I/O": "14",
+    "goose_in_goose bootstrap": "21",
+    "JIT (TinyCC) runs": "1659",
+    "parse errors (errors/)": "80",
+    "typecheck errors (errors_tc/ and native modules' rejection tests)": "1946",
+    "recovery (errors_tc/recovery/)": "16",
+    "long call chains and guard runs": "6",
+    "language reference examples (docs/reference.md)": "1",
+    "samples": "52"
+  },
+  "exact_comparisons": 52,
+  "preserved_helper_failure": "damaged cleanup failed completed stack check instead of live stack check; explicit assertion messages added",
+  "known_remaining_probe_failures": [
+    "mixed fixed source layouts",
+    "different nonfixed source prefixes"
+  ],
+  "no_performance_measurements": true
+}

@@ -1,0 +1,7 @@
+/tmp/goose-wasm-array-expression-source-20261108/parent01/limited_reference_block.goose:1: warning: redundant &: the construct's value is a copy of source either way (§4.1); a reference-typed binding binds source without it
+var source:u8[..3]=[7,8];fn main(){var b:u8[]=copy(({defer source[0]=99;&source}));assert(b.len==2&&b[0]==99&&source[0]==99);print("limited_reference_block");}
+                                                                        ^~~~~~~
+/tmp/goose-wasm-array-expression-source-20261108/parent01/limited_reference_block.goose:1: error: copy of a temporary: the value is fresh already
+var source:u8[..3]=[7,8];fn main(){var b:u8[]=copy(({defer source[0]=99;&source}));assert(b.len==2&&b[0]==99&&source[0]==99);print("limited_reference_block");}
+                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  in fn main() instantiated from /tmp/goose-wasm-array-expression-source-20261108/parent01/limited_reference_block.goose:1

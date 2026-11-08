@@ -1269,6 +1269,7 @@ struct WasmCodeGen : ValueLayout {
     }
 
     TypeExpr *ActualType(Node *n);
+    bool FindFixedArraySource(Node *n, TypeExpr *&common);
     using FixedReadConsumer = void (*)(void *, const FixedPlace &);
     bool HasFixedTemporary(Node *n);
     Binary *FixedBinary(Node *n);

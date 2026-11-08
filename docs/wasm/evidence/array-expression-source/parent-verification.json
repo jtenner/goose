@@ -1,0 +1,225 @@
+{
+  "status": "PASS",
+  "families": [
+    {
+      "case": "fixed_block",
+      "phase": "parent01",
+      "source_sha256": "dc82dfd228ca70259d31d3daea20698ccc8269b53de2151bd6cb68444505998d",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "fixed_nested",
+      "phase": "parent01",
+      "source_sha256": "145fe91b3deeefbb91a75539ef5112b16977d811aa9dd6d9651b873261825285",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "fixed_conditional",
+      "phase": "parent01",
+      "source_sha256": "6c394dce3fc2af9c0cc5eaa6f166068a379cb3c6f0d3b7ad5399896128a3a378",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "fixed_elseif",
+      "phase": "parent01",
+      "source_sha256": "08e4b87a5790abdee9e43dc125c45e6384dbd2da464f03e2fcabfff5bc184d79",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "fixed_call_leaf",
+      "phase": "parent01",
+      "source_sha256": "b095a430a5c26b76b340b336cea18820ff461182908861b73f9c7c9d87dd5fef",
+      "parent_wasm_exit": 0,
+      "status": "native PASS"
+    },
+    {
+      "case": "fixed_defer",
+      "phase": "parent01",
+      "source_sha256": "5aa704552ffa1b2d1bacf82131427ddc6df8e822ea5fd928962d02bac226902d",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "fixed_early_return",
+      "phase": "parent01",
+      "source_sha256": "a354d196ff215121b48a09b5a3400c42e0deddd4df9ed11dce7066295fe89d2d",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "fixed_void_branch",
+      "phase": "parent01",
+      "source_sha256": "384aa6c1e0302c744e39b2ee10be035512b9276ddce042d25658aab054aac779",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "fixed_inline_return",
+      "phase": "parent01",
+      "source_sha256": "f1e113aac362f20ee6f390dde124cc5e0ab575ef3236960bba83c7c291827c11",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "limited_block",
+      "phase": "parent01",
+      "source_sha256": "f9758765b49d6d2761e707e8d372c13fb3757dd193cb0a9f6d98a7a580bf8742",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "limited_nested",
+      "phase": "parent01",
+      "source_sha256": "73c8fbcb2de82bef9deec9ac7e33d002f7b1f0ea165356ac320b0735eb3996a5",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "limited_conditional",
+      "phase": "parent01",
+      "source_sha256": "4ec5f2c07e6046df9b537cc974afd08baf4842474a870f5e6d73fab259c071cb",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "limited_elseif",
+      "phase": "parent01",
+      "source_sha256": "97094b809ad1156c042bfb8b608d25b1e3cb61acc78949d8c049cc697b14a403",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "limited_call_leaf",
+      "phase": "parent01",
+      "source_sha256": "645ff41e593e7830e10736a80a4dceae148aa111ab6e9829587f85c5f9bc049e",
+      "parent_wasm_exit": 0,
+      "status": "native PASS"
+    },
+    {
+      "case": "limited_defer",
+      "phase": "parent01",
+      "source_sha256": "f217d57c14161b2abad42092d68aeaec6ff72d625b4475d342cfaa9ac75ba6ab",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "limited_early_return",
+      "phase": "parent01",
+      "source_sha256": "f391b81f1f9dbffa43cd986c8cc56d0ebcdb4455aa93af783610f0aa4ed56e68",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "limited_void_branch",
+      "phase": "parent01",
+      "source_sha256": "ab28b06a023e3de1daa0be5d7cc64ffaeb18a604afd0ad6594196dded7f6c043",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "limited_inline_return",
+      "phase": "parent01",
+      "source_sha256": "6f7f7fb4e1333d9093a200e1da58c0c2a27082bc198458ba649d8f64a0c9b07f",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "fixed_reference_binding",
+      "phase": "parent02",
+      "source_sha256": "d1b97c313c464a52e674275e6f5a9699fff7bd957a3e2680096120e205ca6f21",
+      "parent_wasm_exit": 0,
+      "status": "native PASS"
+    },
+    {
+      "case": "fixed_global",
+      "phase": "parent02",
+      "source_sha256": "36597f9c5a7ec2c7c61c21a737ad7131cddc0f734436438e6395e81aa03c648a",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "limited_reference_binding",
+      "phase": "parent02",
+      "source_sha256": "41094255da293d042b5791bdbc50e409063b20f9c5ddbcb1f2736a97a9c062fb",
+      "parent_wasm_exit": 0,
+      "status": "native PASS"
+    },
+    {
+      "case": "limited_global",
+      "phase": "parent02",
+      "source_sha256": "f701c820a703347f36655dcaa658af9c39dde9886a012a0ded196fffb79cb333",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "fixed_grow",
+      "phase": "parent02",
+      "source_sha256": "57342127eb7c8e870f849c4b57a766ed961f90390985fc3cc9252bf582862faa",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "limited_runtime",
+      "phase": "parent02",
+      "source_sha256": "4b5d787ca9659464549f5306c5d58d14cf3f2b8cafea764b0f9cc7668ffe150d",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "fixed_varint",
+      "phase": "parent02",
+      "source_sha256": "90d8ad91f1bbb0493c6ae4d4396830e20fc8c5a0b980b70590e2aea291848278",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "limited_varint",
+      "phase": "parent02",
+      "source_sha256": "66907f02756c918dd92310173ef06855cea321f6bf662e8b92d826feda70d51e",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "fixed_inline_opaque",
+      "phase": "parent03",
+      "source_sha256": "c56636dca11937afdefb9cac97068a2be9b08ab3064e6df6e3530f2dadc1443b",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "fixed_defer_refs",
+      "phase": "parent03",
+      "source_sha256": "e6ceaadb01ee44f6e24e71c8b4fc419e42789a72587a02ab96d00d3671807675",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "limited_inline_opaque",
+      "phase": "parent03",
+      "source_sha256": "0fe8f1808877e2b84d442dca6f30364a8d0b09228a49bdf33ca0d1c069949f64",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    },
+    {
+      "case": "limited_defer_refs",
+      "phase": "parent03",
+      "source_sha256": "c1f3b5a270b5b26a623aa25f0d1c33b0f9426bd93db4308b1fdf175b4c9a81b4",
+      "parent_wasm_exit": 1,
+      "status": "native PASS"
+    }
+  ],
+  "native_valid_parent_failures": 26,
+  "parent_supported_regressions": 4,
+  "invalid_probes_preserved": [
+    "fixed_reference_block",
+    "limited_reference_block"
+  ],
+  "mixed_layout_parent_rejections": [
+    "mixed_fixed",
+    "mixed_limited"
+  ]
+}

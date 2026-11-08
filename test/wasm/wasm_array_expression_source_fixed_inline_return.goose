@@ -1,0 +1,1 @@
+var source:u8[2]=[7,8];inline fn pick(yes:bool)->i64{var b:u8[]=({if yes{return 42 from pick;}source});return b[1];}fn main(){assert(pick(true)==42);print("true");assert(pick(false)==8);print("false");print("fixed_inline_return");}

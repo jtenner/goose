@@ -1,0 +1,1 @@
+recursive fn probe(yes:bool){var a:u8[2]=[7,8];var c:u8[2]=[9,10];var b:u8[]=if yes{a}else{c};if yes{assert(b.len==2&&b[1]==8);}else{assert(b.len==2&&b[0]==9);}}fn main(){probe(true);probe(false);print("fixed_conditional");}

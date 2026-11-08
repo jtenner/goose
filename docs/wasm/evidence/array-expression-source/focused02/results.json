@@ -1,0 +1,58 @@
+[
+  {
+    "case": "wasm_array_expression_source_fixed_defer_refs",
+    "opt": 0,
+    "source_sha256": "e6ceaadb01ee44f6e24e71c8b4fc419e42789a72587a02ab96d00d3671807675",
+    "wasm_sha256": "2c866a661be3b1203d3222116ff023ca1be2f5e4737d336e1cbd68dffc9a22c8",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_array_expression_source_fixed_defer_refs",
+    "opt": 2,
+    "source_sha256": "e6ceaadb01ee44f6e24e71c8b4fc419e42789a72587a02ab96d00d3671807675",
+    "wasm_sha256": "2c866a661be3b1203d3222116ff023ca1be2f5e4737d336e1cbd68dffc9a22c8",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_array_expression_source_fixed_inline_opaque",
+    "opt": 0,
+    "source_sha256": "c56636dca11937afdefb9cac97068a2be9b08ab3064e6df6e3530f2dadc1443b",
+    "wasm_sha256": "28903b5413e1d9f15d9330866f35b521fe0841f8c2dbf1a9a644667d0350bb03",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_array_expression_source_fixed_inline_opaque",
+    "opt": 2,
+    "source_sha256": "c56636dca11937afdefb9cac97068a2be9b08ab3064e6df6e3530f2dadc1443b",
+    "wasm_sha256": "636ab86a6cef148508e3b908691a88192ab0b6cf18ac0eea569859da6fa2186e",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_array_expression_source_limited_defer_refs",
+    "opt": 0,
+    "source_sha256": "c1f3b5a270b5b26a623aa25f0d1c33b0f9426bd93db4308b1fdf175b4c9a81b4",
+    "wasm_sha256": "6828c93dfdc4db2db1a3992464f9fb695f91fe03becc8d3ee5a8ab4d0c0e78de",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_array_expression_source_limited_defer_refs",
+    "opt": 2,
+    "source_sha256": "c1f3b5a270b5b26a623aa25f0d1c33b0f9426bd93db4308b1fdf175b4c9a81b4",
+    "wasm_sha256": "6828c93dfdc4db2db1a3992464f9fb695f91fe03becc8d3ee5a8ab4d0c0e78de",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_array_expression_source_limited_inline_opaque",
+    "opt": 0,
+    "source_sha256": "0fe8f1808877e2b84d442dca6f30364a8d0b09228a49bdf33ca0d1c069949f64",
+    "wasm_sha256": "0d1d424aabaa21c3909a6fc3186643de480709853ad0cad87fdeb8b3805ad84a",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_array_expression_source_limited_inline_opaque",
+    "opt": 2,
+    "source_sha256": "0fe8f1808877e2b84d442dca6f30364a8d0b09228a49bdf33ca0d1c069949f64",
+    "wasm_sha256": "653fe0090e93f5904d77ddf7ea384729a0840ad09d70b5c6dfb3ba4313579834",
+    "status": "PASS"
+  }
+]

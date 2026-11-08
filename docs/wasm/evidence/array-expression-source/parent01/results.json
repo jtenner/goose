@@ -1,0 +1,156 @@
+[
+  {
+    "case": "fixed_block",
+    "source_sha256": "dc82dfd228ca70259d31d3daea20698ccc8269b53de2151bd6cb68444505998d",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "fixed_nested",
+    "source_sha256": "145fe91b3deeefbb91a75539ef5112b16977d811aa9dd6d9651b873261825285",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "fixed_conditional",
+    "source_sha256": "6c394dce3fc2af9c0cc5eaa6f166068a379cb3c6f0d3b7ad5399896128a3a378",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "fixed_elseif",
+    "source_sha256": "08e4b87a5790abdee9e43dc125c45e6384dbd2da464f03e2fcabfff5bc184d79",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "fixed_call_leaf",
+    "source_sha256": "b095a430a5c26b76b340b336cea18820ff461182908861b73f9c7c9d87dd5fef",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 0
+  },
+  {
+    "case": "fixed_defer",
+    "source_sha256": "5aa704552ffa1b2d1bacf82131427ddc6df8e822ea5fd928962d02bac226902d",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "fixed_early_return",
+    "source_sha256": "a354d196ff215121b48a09b5a3400c42e0deddd4df9ed11dce7066295fe89d2d",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "fixed_void_branch",
+    "source_sha256": "384aa6c1e0302c744e39b2ee10be035512b9276ddce042d25658aab054aac779",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "fixed_inline_return",
+    "source_sha256": "f1e113aac362f20ee6f390dde124cc5e0ab575ef3236960bba83c7c291827c11",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "fixed_reference_block",
+    "source_sha256": "c66856382b1f300de5f119fa0118ee6c1fa27986564645607583c626f4dffd15",
+    "emit_exit": 1
+  },
+  {
+    "case": "limited_block",
+    "source_sha256": "f9758765b49d6d2761e707e8d372c13fb3757dd193cb0a9f6d98a7a580bf8742",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "limited_nested",
+    "source_sha256": "73c8fbcb2de82bef9deec9ac7e33d002f7b1f0ea165356ac320b0735eb3996a5",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "limited_conditional",
+    "source_sha256": "4ec5f2c07e6046df9b537cc974afd08baf4842474a870f5e6d73fab259c071cb",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "limited_elseif",
+    "source_sha256": "97094b809ad1156c042bfb8b608d25b1e3cb61acc78949d8c049cc697b14a403",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "limited_call_leaf",
+    "source_sha256": "645ff41e593e7830e10736a80a4dceae148aa111ab6e9829587f85c5f9bc049e",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 0
+  },
+  {
+    "case": "limited_defer",
+    "source_sha256": "f217d57c14161b2abad42092d68aeaec6ff72d625b4475d342cfaa9ac75ba6ab",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "limited_early_return",
+    "source_sha256": "f391b81f1f9dbffa43cd986c8cc56d0ebcdb4455aa93af783610f0aa4ed56e68",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "limited_void_branch",
+    "source_sha256": "ab28b06a023e3de1daa0be5d7cc64ffaeb18a604afd0ad6594196dded7f6c043",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "limited_inline_return",
+    "source_sha256": "6f7f7fb4e1333d9093a200e1da58c0c2a27082bc198458ba649d8f64a0c9b07f",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "limited_reference_block",
+    "source_sha256": "b36fa485a7589500c2c7c57bd47ef5c5fb827bb9f9a85b039d1add4148639d21",
+    "emit_exit": 1
+  }
+]

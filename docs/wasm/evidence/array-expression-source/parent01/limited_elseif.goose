@@ -1,0 +1,1 @@
+recursive fn probe(which:i64){var a:u8[..3]=[7,8];var c:u8[..3]=[9];var d:u8[..3]=[];var b:u8[]=if which==0{a}else if which==1{c}else{d};if which==0{assert(b.len==2&&b[1]==8);}else if which==1{assert(b.len==1&&b[0]==9);}else{assert(b.len==0);}}fn main(){probe(0);probe(1);probe(2);print("limited_elseif");}

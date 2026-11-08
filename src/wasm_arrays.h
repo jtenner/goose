@@ -297,7 +297,13 @@ inline bool WasmCodeGen::InitFixedArrayValue(VarDef *owner, const Slot &slot, No
     if (unary && unary->op != T_MINUS) unary = nullptr;
     auto from = unary ? underlying(unary->child) : binary ? underlying(binary->left) : underlying(source);
     if (binary && from->kind != TY_ARRAY && from->kind != TY_STRUCT) from = underlying(binary->right);
-    if (from->kind != TY_ARRAY || from->arr->akind != A_FIXED) return false;
+    bool materialize = false;
+    if ((Is<Block>(source) || Is<IfExpr>(source)) && (!from || !InlineArray(from))) {
+        from = nullptr;
+        if (!FindFixedArraySource(source, from) || !from) return false;
+        materialize = true;
+    }
+    if (!from || from->kind != TY_ARRAY || from->arr->akind != A_FIXED) return false;
     if (!TEq(array->arr->sub, from->arr->sub))
         Fail(source->line, "fixed array construction needs matching element layouts");
     auto payload = RequireFixed(from, source->line);
@@ -338,16 +344,16 @@ inline bool WasmCodeGen::InitFixedArrayValue(VarDef *owner, const Slot &slot, No
         if (prefix) { code.Get(base); code.I64(prefix); code.Byte(0x7c); code.Set(base); }
         CopyBytes({array->arr->sub, base, 0, memory, true, true}, value, payload, source->line, true);
     };
-    if (binary || unary) {
+    if (binary || unary || materialize) {
         WithFixedValue(from, source, [&](FreshFixedDestination fresh) {
             if (binary) ConstructFixedBinary(fresh, binary);
-            else {
+            else if (unary) {
                 auto checked = FixedMathDestination(fresh, from, source->line);
                 WithReadPlace(unary->child, [&](FixedPlace operand) {
                     while (operand.type->kind == TY_REF) operand = DereferencePlace(operand, source->line);
                     NegateFixedInto(checked.place, operand, source->line);
                 });
-            }
+            } else ConstructFixed(fresh, source);
         }, copy);
     } else WithReadPlace(source, copy);
     return true;
@@ -362,6 +368,12 @@ inline bool WasmCodeGen::InitLimitedArrayValue(VarDef *owner, const Slot &slot, 
     }
     auto from = ActualType(source);
     while (from && from->kind == TY_REF) from = from->ref->sub;
+    bool materialize = false;
+    if ((Is<Block>(source) || Is<IfExpr>(source)) && (!from || !InlineArray(from))) {
+        from = nullptr;
+        if (!FindFixedArraySource(source, from) || !from) return false;
+        materialize = true;
+    }
     if (!from || !InlineArray(from) || from->arr->akind != A_LIMITED) return false;
     if (!TEq(array->arr->sub, from->arr->sub))
         Fail(source->line, "limited array construction needs matching element layouts");
@@ -375,7 +387,7 @@ inline bool WasmCodeGen::InitLimitedArrayValue(VarDef *owner, const Slot &slot, 
         if (!ownerScope) Fail(source->line, "limited array construction needs its declaration scope");
         ownerScope--;
     }
-    WithReadPlace(source, [&](FixedPlace value) {
+    auto copy = [&](FixedPlace value) {
         while (value.type->kind == TY_REF) value = DereferencePlace(value, source->line);
         if (!TEq(from, value.type)) Fail(source->line, "limited array source has an inconsistent layout");
         auto count = Local(WasmModule::I64), prefix = Local(WasmModule::I32);
@@ -449,7 +461,10 @@ inline bool WasmCodeGen::InitLimitedArrayValue(VarDef *owner, const Slot &slot, 
             Fail(source->line, "limited array source offset exceeds memory32");
         value.offset += sourcePrefix; value.type = from->arr->sub;
         CopyBytes({array->arr->sub, base, 0, memory, true, true}, value, payload, source->line);
-    });
+    };
+    if (materialize)
+        WithFixedValue(from, source, [&](FreshFixedDestination fresh) { ConstructFixed(fresh, source); }, copy);
+    else WithReadPlace(source, copy);
     return true;
 }
 
