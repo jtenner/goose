@@ -1,0 +1,28 @@
+{
+  "families": 19,
+  "rows": 38,
+  "case_names": [
+    "left_result",
+    "right_result",
+    "both_result",
+    "literal_result",
+    "mutation",
+    "limited",
+    "bool",
+    "float",
+    "refs",
+    "optional_refs",
+    "inline",
+    "callback",
+    "global",
+    "early",
+    "loop_exit",
+    "projected",
+    "mutation_ref",
+    "zero",
+    "owner"
+  ],
+  "status": "PASS",
+  "invalid_first_extra_fixture_preserved": "parent-extra01/early.goose",
+  "corrected_remaining": "parent-extra02"
+}

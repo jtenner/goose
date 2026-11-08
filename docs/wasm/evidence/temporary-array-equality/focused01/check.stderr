@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-temporary-array-equality-20261108/focused01/checks.py", line 15, in <module>
+    module=p/(source.stem+f'-O{opt}.wasm');run([exe,f'-O{opt}','--target','wasm','-o',module,source]);run(['wasm-tools','validate',module])
+                                           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/goose-wasm-temporary-array-equality-20261108/focused01/checks.py", line 9, in run
+    if ok:assert not a.returncode,(name,args,a.stderr)
+                 ^^^^^^^^^^^^^^^^
+AssertionError: ('command-220', ['/tmp/goose-wasm-temporary-array-equality-20261108/build01/goose-tested', '-O0', '--target', 'wasm', '-o', '/tmp/goose-wasm-temporary-array-equality-20261108/focused01/wasm_temporary_equality_zero_effect-O0.wasm', '/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_temporary_equality_zero_effect.goose'], b'/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_temporary_equality_zero_effect.goose:2: error: wasm target: this expression is not implemented (scalar backend)\n')

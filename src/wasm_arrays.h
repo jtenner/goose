@@ -913,34 +913,87 @@ inline void WasmCodeGen::ArrayBuiltin(Call *call, const vector<Node *> &argument
 }
 
 inline void WasmCodeGen::ArrayEquality(Binary *node) {
-    if (ArrayPathHasStatements(node->right))
-        Fail(node->line, "effectful array comparison needs the pending destination lowering");
-    auto lefttype = ArrayType(node->left), righttype = ArrayType(node->right);
+    Node *leftnode = node->left, *rightnode = node->right;
+    auto leftslice = Is<SliceExpr>(leftnode), rightslice = Is<SliceExpr>(rightnode);
+    auto view = leftslice || rightslice;
+    if (view) {
+        if (!leftslice || !rightslice || !leftslice->cmpview || !rightslice->cmpview ||
+            leftslice->lo || leftslice->hi || rightslice->lo || rightslice->hi ||
+            leftslice->lo_from_end || leftslice->hi_from_end ||
+            rightslice->lo_from_end || rightslice->hi_from_end)
+            Fail(node->line, "slice equality needs the pending view lowering");
+        leftnode = leftslice->obj; rightnode = rightslice->obj;
+    }
+    auto scoped = view || HasFixedTemporary(leftnode) || HasFixedTemporary(rightnode) ||
+                  ArrayPathHasStatements(rightnode);
+    auto lefttype = ArrayType(leftnode), righttype = ArrayType(rightnode);
+    if (view && (!InlineArray(lefttype) || !InlineArray(righttype)))
+        Fail(node->line, "comparison views need the pending nonfixed owner lowering");
     if (Nominal(lefttype->arr->sub) || Nominal(righttype->arr->sub))
         Fail(node->line, "aggregate array equality needs the pending value lowering");
     auto element = lefttype->arr->sub;
-    auto left = ResolveArray(node->left); auto length = Local(WasmModule::I64);
+    auto compare = [&](const ArrayView &leftview, const ArrayView &rightview, uint32_t length) {
+        auto result = Local(WasmModule::I32), position = Local(WasmModule::I64);
+        code.I32(0); code.Set(result);
+        code.Get(length); ViewLength(rightview); code.Byte(0x51); Open(0x04);
+        code.I32(1); code.Set(result); code.I64(0); code.Set(position);
+        auto done = Open(), head = Open(0x03);
+        code.Get(position); code.Get(length); code.Byte(0x5a); Branch(done, true);
+        ElementOffset(leftview, position, node->line); LoadElement({element, leftview.place.elementMemory});
+        ElementOffset(rightview, position, node->line); LoadElement({rightview.place.layout.element, rightview.place.elementMemory});
+        auto type = Type(element);
+        code.Byte(type == WasmModule::F32 ? 0x5b : type == WasmModule::F64 ? 0x61 :
+                  type == WasmModule::I32 ? 0x46 : 0x51);
+        code.Byte(0x45); Open(0x04);
+        code.I32(0); code.Set(result); Branch(done); Close();
+        code.Get(position); code.I64(1); code.Byte(0x7c); code.Set(position);
+        Branch(head); Close(); Close(); Close();
+        code.Get(result);
+        if (node->op == T_NEQ) code.Byte(0x45);
+    };
+    if (scoped) {
+        if (!InlineArray(lefttype))
+            Fail(node->line, "effectful array comparison needs the pending destination lowering");
+        auto result = Local(WasmModule::I32);
+        auto evaluateRight = [&](const ArrayPlace &left) {
+            auto length = Local(WasmModule::I64);
+            auto leftprefix = VarintPrefix(lefttype) ? Local(WasmModule::I32) : NoLocal;
+            auto rightprefix = VarintPrefix(righttype) ? Local(WasmModule::I32) : NoLocal;
+            auto leftview = CaptureArrayView(left, length, leftprefix);
+            auto finish = [&](const ArrayPlace &right) {
+                compare(leftview, {right, NoLocal, rightprefix}, length);
+                code.Set(result);
+            };
+            if (HasFixedTemporary(rightnode)) {
+                WithReadPlace(rightnode, [&](FixedPlace selected) {
+                    while (selected.type->kind == TY_REF) selected = DereferencePlace(selected, node->line);
+                    finish(ArrayFromPlace(selected, node->line));
+                });
+            } else finish(ResolveArray(rightnode));
+        };
+        if (view) {
+            // Frontend comparison slices retain a view, including temporary owners.
+            if (HasFixedTemporary(leftnode)) {
+                WithReadPlace(leftnode, [&](FixedPlace selected) {
+                    while (selected.type->kind == TY_REF) selected = DereferencePlace(selected, node->line);
+                    evaluateRight(ArrayFromPlace(selected, node->line));
+                });
+            } else evaluateRight(ResolveArray(leftnode));
+        } else {
+            // Same-type array equality captures a value before the right operand.
+            WithFixedTemporary(lefttype, leftnode, [&](const FixedPlace &image) {
+                evaluateRight(ArrayFromPlace(image, node->line));
+            });
+        }
+        code.Get(result);
+        return;
+    }
+    auto left = ResolveArray(leftnode); auto length = Local(WasmModule::I64);
     auto leftprefix = VarintPrefix(lefttype) ? Local(WasmModule::I32) : NoLocal;
     auto rightprefix = VarintPrefix(righttype) ? Local(WasmModule::I32) : NoLocal;
     auto leftview = CaptureArrayView(left, length, leftprefix);
-    auto right = ResolveArray(node->right); ArrayView rightview {right, NoLocal, rightprefix};
-    auto result = Local(WasmModule::I32), position = Local(WasmModule::I64);
-    code.I32(0); code.Set(result);
-    code.Get(length); ViewLength(rightview); code.Byte(0x51); Open(0x04);
-    code.I32(1); code.Set(result); code.I64(0); code.Set(position);
-    auto done = Open(), head = Open(0x03);
-    code.Get(position); code.Get(length); code.Byte(0x5a); Branch(done, true);
-    ElementOffset(leftview, position, node->line); LoadElement({element, left.elementMemory});
-    ElementOffset(rightview, position, node->line); LoadElement({right.layout.element, right.elementMemory});
-    auto type = Type(element);
-    code.Byte(type == WasmModule::F32 ? 0x5b : type == WasmModule::F64 ? 0x61 :
-              type == WasmModule::I32 ? 0x46 : 0x51);
-    code.Byte(0x45); Open(0x04);
-    code.I32(0); code.Set(result); Branch(done); Close();
-    code.Get(position); code.I64(1); code.Byte(0x7c); code.Set(position);
-    Branch(head); Close(); Close(); Close();
-    code.Get(result);
-    if (node->op == T_NEQ) code.Byte(0x45);
+    auto right = ResolveArray(rightnode); ArrayView rightview {right, NoLocal, rightprefix};
+    compare(leftview, rightview, length);
 }
 
 inline bool WasmCodeGen::ArrayPathHasStatements(Node *n) {

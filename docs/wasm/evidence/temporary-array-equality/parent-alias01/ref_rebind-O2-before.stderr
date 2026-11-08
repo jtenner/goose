@@ -1,0 +1,13 @@
+/tmp/goose-wasm-temporary-array-equality-20261108/parent-alias01/ref_rebind.goose:1: warning: redundant &: x binds by reference here without it (§4.1)
+var x:i64=7;var y:i64=9;var refs:i64&[2]=[&x,&x];
+                                          ^~
+/tmp/goose-wasm-temporary-array-equality-20261108/parent-alias01/ref_rebind.goose:1: warning: redundant &: x binds by reference here without it (§4.1)
+var x:i64=7;var y:i64=9;var refs:i64&[2]=[&x,&x];
+                                             ^~
+/tmp/goose-wasm-temporary-array-equality-20261108/parent-alias01/ref_rebind.goose:2: warning: redundant &: x binds by reference here without it (§4.1)
+recursive fn change()->i64&[2]{refs[0].=y;return[&x,&x];}
+                                                 ^~
+/tmp/goose-wasm-temporary-array-equality-20261108/parent-alias01/ref_rebind.goose:2: warning: redundant &: x binds by reference here without it (§4.1)
+recursive fn change()->i64&[2]{refs[0].=y;return[&x,&x];}
+                                                    ^~
+/tmp/goose-wasm-temporary-array-equality-20261108/parent-alias01/ref_rebind.goose:3: error: wasm target: effectful array comparison needs the pending destination lowering

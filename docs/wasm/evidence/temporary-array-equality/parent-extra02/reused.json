@@ -1,0 +1,118 @@
+{
+  "passed_parent_rows": [
+    {
+      "case": "limited",
+      "opt": 0,
+      "source_sha256": "86b5377db598a5a3f46c10355954b7c7555804894f6ac4b76a4c75968f3e4d0c",
+      "native": "PASS",
+      "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-extra01/limited.goose:2: error: wasm target: effectful array comparison needs the pending destination lowering\n"
+    },
+    {
+      "case": "limited",
+      "opt": 2,
+      "source_sha256": "86b5377db598a5a3f46c10355954b7c7555804894f6ac4b76a4c75968f3e4d0c",
+      "native": "PASS",
+      "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-extra01/limited.goose:2: error: wasm target: effectful array comparison needs the pending destination lowering\n"
+    },
+    {
+      "case": "bool",
+      "opt": 0,
+      "source_sha256": "0cfd129176bd6f69c3f8a9ef9057f9c5ce6a1a82194f1d15174d0d677b23effe",
+      "native": "PASS",
+      "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-extra01/bool.goose:2: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+    },
+    {
+      "case": "bool",
+      "opt": 2,
+      "source_sha256": "0cfd129176bd6f69c3f8a9ef9057f9c5ce6a1a82194f1d15174d0d677b23effe",
+      "native": "PASS",
+      "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-extra01/bool.goose:2: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+    },
+    {
+      "case": "float",
+      "opt": 0,
+      "source_sha256": "c813935d8e136dddd25c3fc324c3d25b88b6991cbd5f6b09e0738f6d0961a46c",
+      "native": "PASS",
+      "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-extra01/float.goose:3: error: wasm target: effectful array comparison needs the pending destination lowering\n"
+    },
+    {
+      "case": "float",
+      "opt": 2,
+      "source_sha256": "c813935d8e136dddd25c3fc324c3d25b88b6991cbd5f6b09e0738f6d0961a46c",
+      "native": "PASS",
+      "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-extra01/float.goose:3: error: wasm target: effectful array comparison needs the pending destination lowering\n"
+    },
+    {
+      "case": "refs",
+      "opt": 0,
+      "source_sha256": "31172af3dfed54ae5cfd47ce47b89ce4cc3b13df1b6b511ce1e861e06a21fb8d",
+      "native": "PASS",
+      "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-extra01/refs.goose:2: error: wasm target: effectful array comparison needs the pending destination lowering\n"
+    },
+    {
+      "case": "refs",
+      "opt": 2,
+      "source_sha256": "31172af3dfed54ae5cfd47ce47b89ce4cc3b13df1b6b511ce1e861e06a21fb8d",
+      "native": "PASS",
+      "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-extra01/refs.goose:2: error: wasm target: effectful array comparison needs the pending destination lowering\n"
+    },
+    {
+      "case": "optional_refs",
+      "opt": 0,
+      "source_sha256": "bc79c05199230596961f2c82364eb1aeb163737e7813d79bb96a1390618f127b",
+      "native": "PASS",
+      "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-extra01/optional_refs.goose:2: error: wasm target: effectful array comparison needs the pending destination lowering\n"
+    },
+    {
+      "case": "optional_refs",
+      "opt": 2,
+      "source_sha256": "bc79c05199230596961f2c82364eb1aeb163737e7813d79bb96a1390618f127b",
+      "native": "PASS",
+      "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-extra01/optional_refs.goose:2: error: wasm target: effectful array comparison needs the pending destination lowering\n"
+    },
+    {
+      "case": "inline",
+      "opt": 0,
+      "source_sha256": "e8d62555118ab8a3d44af5cf647147b651411d43c567504aca591343489305f6",
+      "native": "PASS",
+      "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-extra01/inline.goose:2: error: wasm target: effectful array comparison needs the pending destination lowering\n"
+    },
+    {
+      "case": "inline",
+      "opt": 2,
+      "source_sha256": "e8d62555118ab8a3d44af5cf647147b651411d43c567504aca591343489305f6",
+      "native": "PASS",
+      "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-extra01/inline.goose:2: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+    },
+    {
+      "case": "callback",
+      "opt": 0,
+      "source_sha256": "98824a4e080636872c13d3374fe70e2d936cb08f9648d33676f361ac374fc456",
+      "native": "PASS",
+      "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-extra01/callback.goose:1: error: wasm target: effectful array comparison needs the pending destination lowering\n"
+    },
+    {
+      "case": "callback",
+      "opt": 2,
+      "source_sha256": "98824a4e080636872c13d3374fe70e2d936cb08f9648d33676f361ac374fc456",
+      "native": "PASS",
+      "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-extra01/callback.goose:1: error: wasm target: effectful array comparison needs the pending destination lowering\n"
+    },
+    {
+      "case": "global",
+      "opt": 0,
+      "source_sha256": "86b604d45acb6c887c2562ff2136478a78bba0afcdaf9cc0db3ab3e68ec9510c",
+      "native": "PASS",
+      "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-extra01/global.goose:2: error: wasm target: effectful array comparison needs the pending destination lowering\n"
+    },
+    {
+      "case": "global",
+      "opt": 2,
+      "source_sha256": "86b604d45acb6c887c2562ff2136478a78bba0afcdaf9cc0db3ab3e68ec9510c",
+      "native": "PASS",
+      "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-extra01/global.goose:2: error: wasm target: effectful array comparison needs the pending destination lowering\n"
+    }
+  ],
+  "cases_json_sha256": "721586d08fe3bc2ba475003abe8afb54eb3928923d75d2b92d650eb2325984fc",
+  "raw": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-extra01"
+}

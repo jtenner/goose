@@ -1,0 +1,5 @@
+{
+  "different_lengths": "var calls:i64=0;recursive fn two()->i64[2]{calls++;return[7,8];}\nrecursive fn three()->i64[3]{calls++;return[7,8,9];}\nfn main(){assert(two()!=three());assert(calls==2);print(\"different_lengths\");}\n",
+  "different_capacities": "recursive fn first()->u16[..3]{return[7,8];}\nrecursive fn second()->u16[..4]{return[7,8];}\nfn main(){assert(first()==second());print(\"different_capacities\");}\n",
+  "view_mutation": "var values:i64[2]=[7,8];recursive fn right()->i64[..3]{values[0]=9;return[9,8];}\nfn main(){assert(values==right());assert(values[0]==9);print(\"view_mutation\");}\n"
+}

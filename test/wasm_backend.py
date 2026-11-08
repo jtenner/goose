@@ -138,7 +138,7 @@ def main():
             if source.stem.startswith((
                     'wasm_inline_ref_abi_', 'wasm_data_aggregate_', 'wasm_constructor_assignment_',
                     'wasm_aggregate_construction_', 'wasm_array_assignment_', 'wasm_default_conversion_',
-                    'wasm_array_constructor_', 'wasm_fixed_argument_', 'wasm_fixed_result_', 'wasm_array_argument_', 'wasm_array_result_', 'wasm_temporary_read_')):
+                    'wasm_array_constructor_', 'wasm_fixed_argument_', 'wasm_fixed_result_', 'wasm_array_argument_', 'wasm_array_result_', 'wasm_temporary_read_', 'wasm_temporary_equality_')):
                 actual = run([args.node, ROOT / 'test' / 'wasm_reference_abi.mjs', wasm,
                               out / f'{source.stem}-O{opt}-instance'])
             else:
@@ -225,6 +225,11 @@ def main():
                 mode = ('no-data' if source.stem in ('wasm_field_iteration_fixed', 'wasm_field_iteration_root',
                                                     'wasm_field_iteration_refs', 'wasm_field_iteration_zero',
                                                     'wasm_field_iteration_call', 'wasm_field_iteration_variant') else '')
+                checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
+                assert checked.stdout == reference.stdout and not checked.stderr
+                count += 1
+            if source.stem.startswith('wasm_temporary_equality_'):
+                mode = '' if source.stem == 'wasm_temporary_equality_refs' else 'no-data'
                 checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
                 assert checked.stdout == reference.stdout and not checked.stderr
                 count += 1
@@ -382,6 +387,9 @@ def main():
     count += check_fixed_argument_aliases(run, args.node, args.validator, out)
     count += check_fixed_argument_guards(run, exe, args.cc, out)
     count += check_fixed_argument_dynamic(run, args.node, args.validator, out)
+    from wasm_temporary_equality_checks import check_images as check_temporary_equality_images, check_guards as check_temporary_equality_guards
+    count += check_temporary_equality_images(run, args.node, args.validator, out)
+    count += check_temporary_equality_guards(run, exe, args.cc, out)
     from wasm_temporary_read_checks import check_images as check_temporary_read_images, check_guards as check_temporary_read_guards
     count += check_temporary_read_images(run, args.node, args.validator, out)
     count += check_temporary_read_guards(run, exe, args.cc, out)
@@ -703,8 +711,8 @@ a.equal(new DataView(x.memory.buffer).getBigInt64(1,true),65n<<56n);"""
             assert result.returncode and b'wasm target:' in result.stderr and b'destination' in result.stderr
             assert not wasm.exists(), 'unsupported array result left a partial module'
             count += 1
-    # Effects that require a fixed-array operand snapshot and unary array
-    # temporaries remain explicit destination errors, not pointer operations.
+    # Fixed-array equality captures the left value before RHS effects.
+    # Unary array temporaries retain the destination guard.
     pending_ops = [
         ('effectful-equality', 'fn change(a: i64[2]&, b: i64[2]&) -> i64[2]& { a[0] = 9; return b; }\n'
          'fn main() { var a: i64[2] = [1, 2]; var b: i64[2] = [1, 2]; print(a == change(a, b)); print(a[0]); }\n', b'true\n9\n'),
@@ -719,8 +727,17 @@ a.equal(new DataView(x.memory.buffer).getBigInt64(1,true),65n<<56n);"""
             run([args.cc, '-O2', c, '-pthread', '-lm', '-ldl', '-o', native])
             assert run([native]).stdout == expected
             wasm.unlink(missing_ok=True)
-            failure = run([exe, f'-O{opt}', '--target', 'wasm', '-o', wasm, source], ok=False)
-            assert failure.returncode and b'destination' in failure.stderr and not wasm.exists()
+            result = run([exe, f'-O{opt}', '--target', 'wasm', '-o', wasm, source], ok=False)
+            if name == 'effectful-equality':
+                assert result.returncode == 0 and not result.stderr
+                run([args.validator, 'validate', wasm])
+                assert run([args.node, ROOT / 'scripts/run_wasm.mjs', wasm]).stdout == expected
+                if args.wasmtime_python:
+                    assert run([args.wasmtime_python, ROOT / 'test/wasmtime_host.py', wasm]).stdout == expected
+                restored = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', 'no-data'])
+                assert restored.stdout == expected and not restored.stderr
+            else:
+                assert result.returncode and b'destination' in result.stderr and not wasm.exists()
             count += 1
     # The explicit backend limit must reject a valid program before writing
     # any output. Keep every owner live to avoid testing dead-code removal.

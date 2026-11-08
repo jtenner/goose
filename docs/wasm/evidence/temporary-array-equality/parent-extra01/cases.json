@@ -1,0 +1,15 @@
+{
+  "limited": "recursive fn make(n:i64)->u16[..4]{if n==0{return[];}if n==1{return[7];}return[7,8];}\nfn main(){assert(make(0)==make(0));assert(make(1)!=make(2));assert(make(2)==make(2));print(\"limited\");}\n",
+  "bool": "recursive fn make(n:bool)->bool[2]{return[n,false];}\nfn main(){assert(make(true)==[true,false]);assert(make(false)!=make(true));print(\"bool\");}\n",
+  "float": "recursive fn make(n:f64)->f64[2]{return[n,1.25];}\nrecursive fn single(n:f32)->f32[2]{return[n,1.25];}\nfn main(){assert(make(-0.0)==make(0.0));assert(single(-0.0)==single(0.0));var zero:f64=0.0;assert(make(zero/zero)!=make(zero/zero));print(\"float\");}\n",
+  "refs": "recursive fn make(p:i64&)->i64&[2]{return[p,p];}\nfn main(){var a:i64[]=[7];var b:i64[]=[7];assert(make(a[0])==make(a[0]));assert(make(a[0])!=make(b[0]));print(\"refs\");}\n",
+  "optional_refs": "recursive fn make(p:i64&?)->i64&?[2]{return[p,null];}\nfn main(){var a:i64=7;assert(make(null)==make(null));assert(make(a)!=make(null));print(\"optional_refs\");}\n",
+  "inline": "inline fn make(n:i64)->i64[2]{if n==0{return[7,8];}return[n,n+1];}\nfn main(){assert(make(0)==make(7));print(\"inline\");}\n",
+  "callback": "fn apply<F>(n:i64)->bool{F(n)==F(n)}\nfn main(){assert(apply(7){n=>[n,n+1]});print(\"callback\");}\n",
+  "global": "recursive fn make()->i64[2]{return[7,8];}\nvar equal:bool=make()==make();\nfn main(){assert(equal);print(\"global\");}\n",
+  "early": "recursive fn make()->i64[2]{return[7,8];}\nrecursive fn run(early:bool)->bool{return make()=={if early{return true;}[7,8]};}\nfn main(){assert(run(true));assert(run(false));print(\"early\");}\n",
+  "loop_exit": "recursive fn make()->i64[2]{return[7,8];}\nfn main(){var visits:i64=0;var hits:i64=0;for i in 4{visits++;if make()=={if i==0{continue;}if i==3{break;}[7,8]}{hits++;}}assert(visits==4);assert(hits==2);print(\"loop_exit\");}\n",
+  "projected": "struct H{items:i64[2]}\nrecursive fn make()->H{return H{items:[7,8]};}\nfn main(){var a:i64[2]=[7,8];assert(make().items==a);assert(a==make().items);print(\"projected\");}\n",
+  "mutation_ref": "var a:i64[2]=[7,8];\nrecursive fn change()->i64[2]&{a[0]=9;return a;}\nfn main(){assert(!(a==change()));assert(a[0]==9);print(\"mutation_ref\");}\n",
+  "zero": "fn main(){assert(default<i64[0]>()==default<i64[0]>());print(\"zero\");}\n"
+}

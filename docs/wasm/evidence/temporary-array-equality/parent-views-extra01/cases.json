@@ -1,0 +1,7 @@
+{
+  "view_length": "var values:i64[..4]=[7,8];recursive fn right()->i64[..3]{values.push(9);values[0]=9;return[9,8];}\nfn main(){assert(values==right());assert(values.len==3);print(\"view_length\");}\n",
+  "view_rebind": "var a:i64[2]=[7,8];var b:i64[2]=[9,10];var p:i64[2]& = a;\nrecursive fn right()->i64[..3]{p .= b;return[7,8];}\nfn main(){assert(p==right());assert(p .== &b);print(\"view_rebind\");}\n",
+  "view_projected": "struct H{items:i64[2]}\nrecursive fn left()->H{return H{items:[7,8]};}\nrecursive fn value(a:i64[2]&)->i64{return a[1]-92;}\nrecursive fn right()->i64[..3]{var scratch:i64[2]=[99,100];return[7,value(scratch)];}\nfn main(){assert(left().items==right());print(\"view_projected\");}\n",
+  "view_early": "recursive fn left()->i64[2]{return[7,8];}\nrecursive fn right()->i64[..3]{return[7,8];}\nrecursive fn run(early:bool)->bool{return left()==({if early{return true;}right()});}\nfn main(){assert(run(true));assert(run(false));print(\"view_early\");}\n",
+  "view_reverse": "recursive fn fixed()->i64[2]{return[7,8];}\nrecursive fn limited()->i64[..3]{return[7,8];}\nfn main(){assert(limited()==fixed());assert(!(limited()!=fixed()));print(\"view_reverse\");}\n"
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "case": "owner",
+    "opt": 0,
+    "source_sha256": "a4c7ecc5817f0bd51d8f11a6e7696c4a730b191a8ac365a8e02f9b01104b875d",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-owner01/owner.goose:3: error: wasm target: effectful array comparison needs the pending destination lowering\n"
+  },
+  {
+    "case": "owner",
+    "opt": 2,
+    "source_sha256": "a4c7ecc5817f0bd51d8f11a6e7696c4a730b191a8ac365a8e02f9b01104b875d",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-owner01/owner.goose:3: error: wasm target: effectful array comparison needs the pending destination lowering\n"
+  }
+]

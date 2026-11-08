@@ -1,0 +1,7 @@
+{
+  "early": "recursive fn make()->i64[2]{return[7,8];}\nrecursive fn run(early:bool)->bool{return make()==({if early{return true;}[7,8]});}\nfn main(){assert(run(true));assert(run(false));print(\"early\");}\n",
+  "loop_exit": "recursive fn make()->i64[2]{return[7,8];}\nfn main(){var visits:i64=0;var hits:i64=0;for i in 4{visits++;if make()==({if i==0{continue;}if i==3{break;}[7,8]}){hits++;}}assert(visits==4);assert(hits==2);print(\"loop_exit\");}\n",
+  "projected": "struct H{items:i64[2]}\nrecursive fn make()->H{return H{items:[7,8]};}\nfn main(){var a:i64[2]=[7,8];assert(make().items==a);assert(a==make().items);print(\"projected\");}\n",
+  "mutation_ref": "var a:i64[2]=[7,8];\nrecursive fn change()->i64[2]&{a[0]=9;return a;}\nfn main(){assert(!(a==change()));assert(a[0]==9);print(\"mutation_ref\");}\n",
+  "zero": "fn main(){assert(default<i64[0]>()==default<i64[0]>());print(\"zero\");}\n"
+}

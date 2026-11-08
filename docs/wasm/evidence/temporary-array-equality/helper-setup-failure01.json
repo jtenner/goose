@@ -1,0 +1,8 @@
+{
+  "status": "SETUP_FAILURE",
+  "step": "focused helper preparation",
+  "error": "ValueError: substring not found",
+  "cause": "prefix replacement changed the imported-checks marker before truncation",
+  "candidate_tests_started": false,
+  "compiler_build_unaffected": true
+}

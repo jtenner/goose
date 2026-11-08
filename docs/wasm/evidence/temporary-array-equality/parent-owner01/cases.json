@@ -1,0 +1,3 @@
+{
+  "owner": "var values:i64[2]=[7,8];\nrecursive fn change()->i64[2]{values[0]=9;print(\"right-live\");return[7,8];}\nfn main(){print(\"before\");assert(values==change());assert(values[0]==9);print(\"after\");}\n"
+}

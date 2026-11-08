@@ -1,0 +1,452 @@
+[
+  {
+    "name": "view_length-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_length-O0.c",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_length.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_length-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_length-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_length-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_length-O0-native",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_length-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_length-O0-before",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_length-O0.wasm",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_length.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "view_length-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_length-O2.c",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_length.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_length-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_length-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_length-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_length-O2-native",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_length-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_length-O2-before",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_length-O2.wasm",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_length.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "view_rebind-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_rebind-O0.c",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_rebind.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_rebind-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_rebind-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_rebind-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_rebind-O0-native",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_rebind-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_rebind-O0-before",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_rebind-O0.wasm",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_rebind.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "view_rebind-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_rebind-O2.c",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_rebind.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_rebind-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_rebind-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_rebind-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_rebind-O2-native",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_rebind-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_rebind-O2-before",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_rebind-O2.wasm",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_rebind.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "view_projected-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_projected-O0.c",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_projected.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_projected-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_projected-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_projected-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_projected-O0-native",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_projected-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_projected-O0-before",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_projected-O0.wasm",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_projected.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "view_projected-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_projected-O2.c",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_projected.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_projected-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_projected-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_projected-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_projected-O2-native",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_projected-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_projected-O2-before",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_projected-O2.wasm",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_projected.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "view_early-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_early-O0.c",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_early.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_early-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_early-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_early-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_early-O0-native",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_early-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_early-O0-before",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_early-O0.wasm",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_early.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "view_early-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_early-O2.c",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_early.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_early-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_early-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_early-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_early-O2-native",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_early-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_early-O2-before",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_early-O2.wasm",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_early.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "view_reverse-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_reverse-O0.c",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_reverse.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_reverse-O0-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_reverse-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_reverse-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_reverse-O0-native",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_reverse-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_reverse-O0-before",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_reverse-O0.wasm",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_reverse.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "view_reverse-O2-emit",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_reverse-O2.c",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_reverse.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_reverse-O2-cc",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_reverse-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_reverse-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_reverse-O2-native",
+    "args": [
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_reverse-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "view_reverse-O2-before",
+    "args": [
+      "/tmp/goose-wasm-fixed-temporary-reads-20261108/build04/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_reverse-O2.wasm",
+      "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views-extra01/view_reverse.goose"
+    ],
+    "exit": 1
+  }
+]

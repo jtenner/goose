@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-temporary-array-equality-20261108/parent-extra01/checks.py", line 13, in <module>
+    a=run(stem+'-'+label,args);assert not a.returncode,(name,label,a.stderr)
+                                      ^^^^^^^^^^^^^^^^
+AssertionError: ('early', 'emit', b"/tmp/goose-wasm-temporary-array-equality-20261108/parent-extra01/early.goose:2: error: expression expected, found '{'\nrecursive fn run(early:bool)->bool{return make()=={if early{return true;}[7,8]};}\n                                                  ^\n")

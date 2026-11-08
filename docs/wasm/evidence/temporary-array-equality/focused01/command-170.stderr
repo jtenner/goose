@@ -1,0 +1,12 @@
+/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_temporary_equality_ref_rebind.goose:1: warning: redundant &: x binds by reference here without it (§4.1)
+var x:i64=7;var y:i64=9;var refs:i64&[2]=[&x,&x];
+                                          ^~
+/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_temporary_equality_ref_rebind.goose:1: warning: redundant &: x binds by reference here without it (§4.1)
+var x:i64=7;var y:i64=9;var refs:i64&[2]=[&x,&x];
+                                             ^~
+/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_temporary_equality_ref_rebind.goose:2: warning: redundant &: x binds by reference here without it (§4.1)
+recursive fn change()->i64&[2]{refs[0].=y;return[&x,&x];}
+                                                 ^~
+/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_temporary_equality_ref_rebind.goose:2: warning: redundant &: x binds by reference here without it (§4.1)
+recursive fn change()->i64&[2]{refs[0].=y;return[&x,&x];}
+                                                    ^~

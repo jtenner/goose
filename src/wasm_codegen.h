@@ -598,7 +598,7 @@ struct WasmCodeGen : ValueLayout {
         if (Nominal(t) && !(n->left->exprtype->kind == TY_REF &&
                                       n->left->exprtype->ref->optional))
             Fail(n->line, "aggregate value operators need the pending destination lowering");
-        if (t->kind == TY_ARRAY && !(n->left->exprtype->kind == TY_REF &&
+        if ((t->kind == TY_ARRAY || t->kind == TY_SLICE) && !(n->left->exprtype->kind == TY_REF &&
                                     n->left->exprtype->ref->optional)) {
             if (op == T_EQ || op == T_NEQ) { ArrayEquality(n); return; }
             Fail(n->line, "array value operators need the pending compound lowering");

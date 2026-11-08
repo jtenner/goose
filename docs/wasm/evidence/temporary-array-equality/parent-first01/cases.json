@@ -1,0 +1,7 @@
+{
+  "left_result": "recursive fn make()->i64[2]{return[7,8];}\nfn main(){var a:i64[2]=[7,8];assert(make()==a);assert(!(make()!=a));print(\"left_result\");}\n",
+  "right_result": "recursive fn make()->i64[2]{return[7,8];}\nfn main(){var a:i64[2]=[7,8];assert(a==make());assert(!(a!=make()));print(\"right_result\");}\n",
+  "both_result": "recursive fn make(n:i64)->i64[2]{return[n,n+1];}\nfn main(){assert(make(7)==make(7));assert(make(7)!=make(8));print(\"both_result\");}\n",
+  "literal_result": "recursive fn make()->i64[2]{return[7,8];}\nfn main(){assert(make()==[7,8]);assert([7,8]==make());assert(([7,8])==([7,8]));print(\"literal_result\");}\n",
+  "mutation": "var a:i64[2]=[7,8];\nrecursive fn change()->i64[2]{a[0]=9;return[7,8];}\nfn main(){print(a==change());print(a[0]);}\n"
+}

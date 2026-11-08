@@ -314,6 +314,13 @@ and contained-reference values are captured before cleanup. References into
 temporary storage remain guarded. See
 [temporary read evidence](evidence/temporary-reads.md).
 
+Fixed-array equality now handles temporary operands and RHS effects. Same-type
+operands capture the left value; frontend whole comparison views retain the
+left address and length. Both paths retain temporary owners and capture the
+boolean before cleanup. Explicit slices, nonfixed comparison views and nominal
+element equality stay guarded. See
+[temporary array equality](evidence/temporary-array-equality.md).
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping

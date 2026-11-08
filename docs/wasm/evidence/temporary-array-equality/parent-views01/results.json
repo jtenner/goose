@@ -1,0 +1,44 @@
+[
+  {
+    "case": "different_lengths",
+    "opt": 0,
+    "source_sha256": "da9d38b4c8135846747b9135985e99d726a8b2eb932a942fe8ee6d13da6ca5bc",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views01/different_lengths.goose:3: error: wasm target: this expression is not implemented (scalar backend)\n"
+  },
+  {
+    "case": "different_lengths",
+    "opt": 2,
+    "source_sha256": "da9d38b4c8135846747b9135985e99d726a8b2eb932a942fe8ee6d13da6ca5bc",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views01/different_lengths.goose:3: error: wasm target: this expression is not implemented (scalar backend)\n"
+  },
+  {
+    "case": "different_capacities",
+    "opt": 0,
+    "source_sha256": "c35cf237557a3f453b7253c1ef2e5cdbe4cf9fd8d3088e5fbc9400412d0b9e61",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views01/different_capacities.goose:3: error: wasm target: this expression is not implemented (scalar backend)\n"
+  },
+  {
+    "case": "different_capacities",
+    "opt": 2,
+    "source_sha256": "c35cf237557a3f453b7253c1ef2e5cdbe4cf9fd8d3088e5fbc9400412d0b9e61",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views01/different_capacities.goose:3: error: wasm target: this expression is not implemented (scalar backend)\n"
+  },
+  {
+    "case": "view_mutation",
+    "opt": 0,
+    "source_sha256": "9cb2cc52d0fe883942973f5f28fea79ef8c5bc48a625f1f76cd261acce23ec8e",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views01/view_mutation.goose:2: error: wasm target: this expression is not implemented (scalar backend)\n"
+  },
+  {
+    "case": "view_mutation",
+    "opt": 2,
+    "source_sha256": "9cb2cc52d0fe883942973f5f28fea79ef8c5bc48a625f1f76cd261acce23ec8e",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-views01/view_mutation.goose:2: error: wasm target: this expression is not implemented (scalar backend)\n"
+  }
+]

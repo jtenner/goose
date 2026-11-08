@@ -1,0 +1,58 @@
+[
+  {
+    "case": "ref_rebind",
+    "opt": 0,
+    "source_sha256": "3e798f73d9ed9ff583469091d1a11fafce012c3ae4e75c96efe9a1a57b97de83",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-alias01/ref_rebind.goose:1: warning: redundant &: x binds by reference here without it (\u00a74.1)\nvar x:i64=7;var y:i64=9;var refs:i64&[2]=[&x,&x];\n                                          ^~\n/tmp/goose-wasm-temporary-array-equality-20261108/parent-alias01/ref_rebind.goose:1: warning: redundant &: x binds by reference here without it (\u00a74.1)\nvar x:i64=7;var y:i64=9;var refs:i64&[2]=[&x,&x];\n                                             ^~\n/tmp/goose-wasm-temporary-array-equality-20261108/parent-alias01/ref_rebind.goose:2: warning: redundant &: x binds by reference here without it (\u00a74.1)\nrecursive fn change()->i64&[2]{refs[0].=y;return[&x,&x];}\n                                                 ^~\n/tmp/goose-wasm-temporary-array-equality-20261108/parent-alias01/ref_rebind.goose:2: warning: redundant &: x binds by reference here without it (\u00a74.1)\nrecursive fn change()->i64&[2]{refs[0].=y;return[&x,&x];}\n                                                    ^~\n/tmp/goose-wasm-temporary-array-equality-20261108/parent-alias01/ref_rebind.goose:3: error: wasm target: effectful array comparison needs the pending destination lowering\n"
+  },
+  {
+    "case": "ref_rebind",
+    "opt": 2,
+    "source_sha256": "3e798f73d9ed9ff583469091d1a11fafce012c3ae4e75c96efe9a1a57b97de83",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-alias01/ref_rebind.goose:1: warning: redundant &: x binds by reference here without it (\u00a74.1)\nvar x:i64=7;var y:i64=9;var refs:i64&[2]=[&x,&x];\n                                          ^~\n/tmp/goose-wasm-temporary-array-equality-20261108/parent-alias01/ref_rebind.goose:1: warning: redundant &: x binds by reference here without it (\u00a74.1)\nvar x:i64=7;var y:i64=9;var refs:i64&[2]=[&x,&x];\n                                             ^~\n/tmp/goose-wasm-temporary-array-equality-20261108/parent-alias01/ref_rebind.goose:2: warning: redundant &: x binds by reference here without it (\u00a74.1)\nrecursive fn change()->i64&[2]{refs[0].=y;return[&x,&x];}\n                                                 ^~\n/tmp/goose-wasm-temporary-array-equality-20261108/parent-alias01/ref_rebind.goose:2: warning: redundant &: x binds by reference here without it (\u00a74.1)\nrecursive fn change()->i64&[2]{refs[0].=y;return[&x,&x];}\n                                                    ^~\n/tmp/goose-wasm-temporary-array-equality-20261108/parent-alias01/ref_rebind.goose:3: error: wasm target: effectful array comparison needs the pending destination lowering\n"
+  },
+  {
+    "case": "borrowed_left",
+    "opt": 0,
+    "source_sha256": "a8ed6af6ef8b4b18fe6bf1d62bb0582ca40918dc9254d9656e7667d2d22f3830",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-alias01/borrowed_left.goose:4: error: wasm target: effectful array comparison needs the pending destination lowering\n"
+  },
+  {
+    "case": "borrowed_left",
+    "opt": 2,
+    "source_sha256": "a8ed6af6ef8b4b18fe6bf1d62bb0582ca40918dc9254d9656e7667d2d22f3830",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-alias01/borrowed_left.goose:4: error: wasm target: effectful array comparison needs the pending destination lowering\n"
+  },
+  {
+    "case": "short_circuit",
+    "opt": 0,
+    "source_sha256": "b20d0f676935878737beda2dbb7db58f5067b69e7b17dbf9ce91ece2948a8344",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-alias01/short_circuit.goose:2: error: wasm target: effectful array comparison needs the pending destination lowering\n"
+  },
+  {
+    "case": "short_circuit",
+    "opt": 2,
+    "source_sha256": "b20d0f676935878737beda2dbb7db58f5067b69e7b17dbf9ce91ece2948a8344",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-alias01/short_circuit.goose:2: error: wasm target: effectful array comparison needs the pending destination lowering\n"
+  },
+  {
+    "case": "zero_effect",
+    "opt": 0,
+    "source_sha256": "8d5e3542a1cda5d425393ac31049caffbb5cd09509acd5dc63667aa5ce7e2f70",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-alias01/zero_effect.goose:2: error: wasm target: this expression is not implemented (scalar backend)\n"
+  },
+  {
+    "case": "zero_effect",
+    "opt": 2,
+    "source_sha256": "8d5e3542a1cda5d425393ac31049caffbb5cd09509acd5dc63667aa5ce7e2f70",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-temporary-array-equality-20261108/parent-alias01/zero_effect.goose:2: error: wasm target: this expression is not implemented (scalar backend)\n"
+  }
+]
