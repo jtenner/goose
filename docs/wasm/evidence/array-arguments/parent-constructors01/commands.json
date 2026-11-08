@@ -1,0 +1,14 @@
+[
+  {
+    "name": "string-O0-emit",
+    "args": [
+      "/tmp/goose-wasm-fixed-results-20261108/build03/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-arguments-20261108/parent-constructors01/string-O0.c",
+      "/tmp/goose-wasm-array-arguments-20261108/parent-constructors01/string.goose"
+    ],
+    "exit": 1
+  }
+]

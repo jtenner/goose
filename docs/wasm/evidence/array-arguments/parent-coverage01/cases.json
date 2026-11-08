@@ -1,0 +1,6 @@
+{
+  "inline_exit": "var value:i64[2]=[3,4];inline fn use(a:i64[2],n:i64)->i64{return a[0]+n;}\nrecursive fn run(early:bool)->i64{return use(value,{if early{return 7;}3});}\nfn main(){assert(run(true)==7);assert(run(false)==6);assert(value[0]==3);print(\"inline_exit\");}\n",
+  "callback_exit": "var value:i64[2]=[3,4];recursive fn run<F>(early:bool)->i64{F(copy(value),{if early{return 7;}3})}\nfn main(){assert(run(true){a,n=>a[0]+n}==7);assert(run(false){a,n=>a[0]+n}==6);assert(value[0]==3);print(\"callback_exit\");}\n",
+  "dynamic_source": "struct H{items:i64[2]}\nrecursive fn read(a:i64[2])->i64{a[0]=99;return a[1];}\nrecursive fn walk(rows:H[]&)->i64{return read(rows[0].items);}\nfn main(){var first:H[]=[H{items:[3,4]}];var second:H[]=[H{items:[7,8]}];assert(walk(first)==4);assert(walk(second)==8);assert(first[0].items[0]==3);assert(second[0].items[0]==7);print(\"dynamic_source\");}\n",
+  "packed_refs": "recursive fn change(a:i64&[2]){assert(a[0] .!= a[1]);a[1]+=1;}\nfn main(){var first:i64[]=[3];var second:i64[]=[4];var refs:i64&[2]=[&first[0],&second[0]];change(refs);assert(first[0]==3);assert(second[0]==5);print(\"packed_refs\");}\n"
+}

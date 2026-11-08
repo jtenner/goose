@@ -295,6 +295,12 @@ conditional producers use the same path. Arrays, named/multiple results,
 zero-image result transport and nonfixed layouts remain separate. See
 [fixed result evidence](evidence/fixed-results.md).
 
+Fixed and statically limited arrays now pass by value through direct, inline
+and function-value calls. Complete snapshots and distinct parameter owners
+preserve order, value isolation, length headers and inactive capacity.
+Nonfixed array values, zero-image parameters and array results remain separate.
+See [array argument evidence](evidence/array-arguments.md).
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping

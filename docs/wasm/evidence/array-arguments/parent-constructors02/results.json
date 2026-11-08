@@ -1,0 +1,30 @@
+[
+  {
+    "case": "string",
+    "opt": 0,
+    "source_sha256": "c69979d5253f824bed7e4d55facecf17e9a18839ae0e9732775ff833c98609c8",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-arguments-20261108/parent-constructors02/string.goose:1: error: wasm target: by-value arrays need the pending destination lowering\n"
+  },
+  {
+    "case": "string",
+    "opt": 2,
+    "source_sha256": "c69979d5253f824bed7e4d55facecf17e9a18839ae0e9732775ff833c98609c8",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-arguments-20261108/parent-constructors02/string.goose:1: error: wasm target: by-value arrays need the pending destination lowering\n"
+  },
+  {
+    "case": "fill",
+    "opt": 0,
+    "source_sha256": "d7c8e4ab1b8a7437ae372a9feaf121b53aa488aecc170f035a46c54b20cd6577",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-arguments-20261108/parent-constructors02/fill.goose:1: error: wasm target: by-value arrays need the pending destination lowering\n"
+  },
+  {
+    "case": "fill",
+    "opt": 2,
+    "source_sha256": "d7c8e4ab1b8a7437ae372a9feaf121b53aa488aecc170f035a46c54b20cd6577",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-arguments-20261108/parent-constructors02/fill.goose:1: error: wasm target: by-value arrays need the pending destination lowering\n"
+  }
+]

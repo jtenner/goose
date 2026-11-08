@@ -1,0 +1,278 @@
+[
+  {
+    "source": "test/wasm/wasm_array_argument_callback.goose",
+    "source_sha256": "34d628bd16af82ed6bad59c06c4a9065a651cedff7f8c941ae56b84ef81ec82f",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_callback.goose",
+    "source_sha256": "34d628bd16af82ed6bad59c06c4a9065a651cedff7f8c941ae56b84ef81ec82f",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_callback_order.goose",
+    "source_sha256": "862458fbd687c5d74ddb8f3d34f2e2c53e5ef016b57ce0373ab8d3111a63dd70",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_callback_order.goose",
+    "source_sha256": "862458fbd687c5d74ddb8f3d34f2e2c53e5ef016b57ce0373ab8d3111a63dd70",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_data.goose",
+    "source_sha256": "d33a0e8760ccd9d1a0da44c840b615c07f297e70f504e9a8a6788f4f9b45ee9e",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_data.goose",
+    "source_sha256": "d33a0e8760ccd9d1a0da44c840b615c07f297e70f504e9a8a6788f4f9b45ee9e",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_default.goose",
+    "source_sha256": "432bec26f368c6bb7a83368fc9c92b49fb101ce213feda17c0c6ccef6956e171",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_default.goose",
+    "source_sha256": "432bec26f368c6bb7a83368fc9c92b49fb101ce213feda17c0c6ccef6956e171",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_direct.goose",
+    "source_sha256": "cff331f1da6cb0a63a66d70faab8fd61b5a7ba8a336a98268016f88b563d5f3a",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_direct.goose",
+    "source_sha256": "cff331f1da6cb0a63a66d70faab8fd61b5a7ba8a336a98268016f88b563d5f3a",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_dynamic_base.goose",
+    "source_sha256": "83f3beee8684486145401161d2115a6bcb0eb74d3635f77d444d4a08dede363b",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_dynamic_base.goose",
+    "source_sha256": "83f3beee8684486145401161d2115a6bcb0eb74d3635f77d444d4a08dede363b",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_fill.goose",
+    "source_sha256": "d7c8e4ab1b8a7437ae372a9feaf121b53aa488aecc170f035a46c54b20cd6577",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_fill.goose",
+    "source_sha256": "d7c8e4ab1b8a7437ae372a9feaf121b53aa488aecc170f035a46c54b20cd6577",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_global.goose",
+    "source_sha256": "4ff98297b4cb56201d89924043f075a69bc8ada874e6a2a0a273a4f07d11b84e",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_global.goose",
+    "source_sha256": "4ff98297b4cb56201d89924043f075a69bc8ada874e6a2a0a273a4f07d11b84e",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_inline.goose",
+    "source_sha256": "4b5a9887e828d40e7c924ff159375a090375e1405ecb64824233ef3aacb8f774",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_inline.goose",
+    "source_sha256": "4b5a9887e828d40e7c924ff159375a090375e1405ecb64824233ef3aacb8f774",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_inline_order.goose",
+    "source_sha256": "e510b0c3e2cb516b679fc168b46e8ae9af43988bf4c7783af5ef4b3b4f760f00",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_inline_order.goose",
+    "source_sha256": "e510b0c3e2cb516b679fc168b46e8ae9af43988bf4c7783af5ef4b3b4f760f00",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_isolation.goose",
+    "source_sha256": "6c61d778d52c0d005a70079eccb5626bb0bc007d861ed81f9e1c3b13a167cb33",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_isolation.goose",
+    "source_sha256": "6c61d778d52c0d005a70079eccb5626bb0bc007d861ed81f9e1c3b13a167cb33",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_large.goose",
+    "source_sha256": "7dab6a0c7fddf473cc8d284a1896cb7a485473a8184b51ce2561603328e3043b",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_large.goose",
+    "source_sha256": "7dab6a0c7fddf473cc8d284a1896cb7a485473a8184b51ce2561603328e3043b",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_later_return.goose",
+    "source_sha256": "5e5736bd8c0c7a2dd3d9336bbf559f79130df5f8974f6692a422b4a957508e53",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_later_return.goose",
+    "source_sha256": "5e5736bd8c0c7a2dd3d9336bbf559f79130df5f8974f6692a422b4a957508e53",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_limited.goose",
+    "source_sha256": "ba277346b3ccbeafe949a1dd3c5b81b44d28ac2e176b2717bdce82e86141a97c",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_limited.goose",
+    "source_sha256": "ba277346b3ccbeafe949a1dd3c5b81b44d28ac2e176b2717bdce82e86141a97c",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_literal.goose",
+    "source_sha256": "3ff2e56988867f41563cc449ddbb98303574c9c9457328294193fdc07a920638",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_literal.goose",
+    "source_sha256": "3ff2e56988867f41563cc449ddbb98303574c9c9457328294193fdc07a920638",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_mixed.goose",
+    "source_sha256": "36e48812db2e2a4e472893e1200dbbb65adc88e1f476e097923c2522a157044a",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_mixed.goose",
+    "source_sha256": "36e48812db2e2a4e472893e1200dbbb65adc88e1f476e097923c2522a157044a",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_nominal.goose",
+    "source_sha256": "b3f772493cad7b547f96578c3e30ad3c506cb4fd9914d25c1925ab35b11b47f2",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_nominal.goose",
+    "source_sha256": "b3f772493cad7b547f96578c3e30ad3c506cb4fd9914d25c1925ab35b11b47f2",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_nominal_result.goose",
+    "source_sha256": "8be6db4a45645db4802bf46dc2c5f1eecc493293a5be63f13882ab8951c2ff8c",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_nominal_result.goose",
+    "source_sha256": "8be6db4a45645db4802bf46dc2c5f1eecc493293a5be63f13882ab8951c2ff8c",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_order.goose",
+    "source_sha256": "afe68523cddd2249746cb1070d74f9a7188454e23961306488b80c5bbc9681bf",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_order.goose",
+    "source_sha256": "afe68523cddd2249746cb1070d74f9a7188454e23961306488b80c5bbc9681bf",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_owner.goose",
+    "source_sha256": "1aef8ca64577c5b0f163787ca6d6fa3c996ca9f41722d7ff66da28fc600aee6a",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_owner.goose",
+    "source_sha256": "1aef8ca64577c5b0f163787ca6d6fa3c996ca9f41722d7ff66da28fc600aee6a",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_recursion.goose",
+    "source_sha256": "748a65cdaa602036afa427457c82083343ee5ede3a15e5b6e9791332d58eb1aa",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_recursion.goose",
+    "source_sha256": "748a65cdaa602036afa427457c82083343ee5ede3a15e5b6e9791332d58eb1aa",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_refs.goose",
+    "source_sha256": "e5d0bf79085a3fd7a43f0e7423ff115c39f660edcef48bcee6392682d36d6888",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_refs.goose",
+    "source_sha256": "e5d0bf79085a3fd7a43f0e7423ff115c39f660edcef48bcee6392682d36d6888",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_string.goose",
+    "source_sha256": "c69979d5253f824bed7e4d55facecf17e9a18839ae0e9732775ff833c98609c8",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_argument_string.goose",
+    "source_sha256": "c69979d5253f824bed7e4d55facecf17e9a18839ae0e9732775ff833c98609c8",
+    "opt": 2,
+    "status": "PASS"
+  }
+]

@@ -138,7 +138,7 @@ def main():
             if source.stem.startswith((
                     'wasm_inline_ref_abi_', 'wasm_data_aggregate_', 'wasm_constructor_assignment_',
                     'wasm_aggregate_construction_', 'wasm_array_assignment_', 'wasm_default_conversion_',
-                    'wasm_array_constructor_', 'wasm_fixed_argument_', 'wasm_fixed_result_')):
+                    'wasm_array_constructor_', 'wasm_fixed_argument_', 'wasm_fixed_result_', 'wasm_array_argument_')):
                 actual = run([args.node, ROOT / 'test' / 'wasm_reference_abi.mjs', wasm,
                               out / f'{source.stem}-O{opt}-instance'])
             else:
@@ -225,6 +225,12 @@ def main():
                 mode = ('no-data' if source.stem in ('wasm_field_iteration_fixed', 'wasm_field_iteration_root',
                                                     'wasm_field_iteration_refs', 'wasm_field_iteration_zero',
                                                     'wasm_field_iteration_call', 'wasm_field_iteration_variant') else '')
+                checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
+                assert checked.stdout == reference.stdout and not checked.stderr
+                count += 1
+            if source.stem.startswith('wasm_array_argument_'):
+                mode = '' if source.stem in ('wasm_array_argument_data', 'wasm_array_argument_dynamic_base',
+                                                   'wasm_array_argument_dynamic_source', 'wasm_array_argument_packed_refs') else 'no-data'
                 checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
                 assert checked.stdout == reference.stdout and not checked.stderr
                 count += 1
@@ -365,6 +371,10 @@ def main():
     count += check_fixed_argument_aliases(run, args.node, args.validator, out)
     count += check_fixed_argument_guards(run, exe, args.cc, out)
     count += check_fixed_argument_dynamic(run, args.node, args.validator, out)
+    from wasm_array_argument_checks import check_images as check_array_argument_images, check_aliases as check_array_argument_aliases, check_guards as check_array_argument_guards
+    count += check_array_argument_images(run, args.node, args.validator, out)
+    count += check_array_argument_aliases(run, args.node, args.validator, out)
+    count += check_array_argument_guards(run, exe, args.cc, out)
     from wasm_fixed_result_checks import check_images as check_fixed_result_images, check_guards as check_fixed_result_guards, check_failure as check_fixed_result_failure, check_target_failure as check_fixed_result_target_failure, check_nonlocal_guard as check_fixed_result_nonlocal_guard
     count += check_fixed_result_images(run, args.node, args.validator, out)
     count += check_fixed_result_guards(run, exe, args.cc, out)
@@ -626,7 +636,7 @@ a.equal(new DataView(x.memory.buffer).getBigInt64(1,true),65n<<56n);"""
                 count += 1
             count += 1
     # The checker can adapt an expression's type without changing its storage.
-    # Copies must reject unequal layouts and inlined by-value argument bindings.
+    # Copies must reject unequal layouts; fixed inline parameters use checked owners.
     for name, text in COPY_ADMISSION_CASES.items():
         source = out / f'copy-admission-{name}.goose'
         source.write_text(text + '\n')
@@ -639,6 +649,14 @@ a.equal(new DataView(x.memory.buffer).getBigInt64(1,true),65n<<56n);"""
             assert run([native]).stdout == expected, (name, 'invalid native admission oracle')
             wasm.unlink(missing_ok=True)
             result = run([exe, f'-O{opt}', '--target', 'wasm', '-o', wasm, source], ok=False)
+            if name == 'inline-fixed-argument':
+                assert result.returncode == 0 and not result.stderr
+                run([args.validator, 'validate', wasm])
+                assert run([args.node, ROOT / 'scripts/run_wasm.mjs', wasm]).stdout == expected
+                if args.wasmtime_python:
+                    assert run([args.wasmtime_python, ROOT / 'test/wasmtime_host.py', wasm]).stdout == expected
+                count += 1
+                continue
             assert result.returncode and copy_admission_reason(name) in result.stderr, (name, opt, result.stderr)
             assert not wasm.exists(), (name, opt, 'rejected copy left a partial module')
             count += 1

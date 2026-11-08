@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-array-arguments-20261108/parent-first02/checks.py", line 13, in <module>
+    a=run(stem+'-'+label,args);assert not a.returncode,(name,label,a.stderr)
+                                      ^^^^^^^^^^^^^^^^
+AssertionError: ('limited', 'emit', b'/tmp/goose-wasm-array-arguments-20261108/parent-first02/limited.goose:1: error: unknown function: length\nrecursive fn read(a:i64[..3])->i64{assert(length(a)==2);return a[0]+a[1];}\n                                          ^~~~~~~~~\n  in fn read(i64[..3]) instantiated from /tmp/goose-wasm-array-arguments-20261108/parent-first02/limited.goose:2\n  in fn main() instantiated from /tmp/goose-wasm-array-arguments-20261108/parent-first02/limited.goose:2\n')

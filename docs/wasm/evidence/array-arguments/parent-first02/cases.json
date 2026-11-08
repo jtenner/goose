@@ -1,0 +1,10 @@
+{
+  "direct": "recursive fn read(a:i64[2])->i64{return a[0]+a[1];}\nfn main(){var a:i64[2]=[3,4];assert(read(a)==7);print(\"direct\");}\n",
+  "inline": "inline fn read(a:i64[2])->i64{return a[0]+a[1];}\nfn main(){var a:i64[2]=[3,4];assert(read(a)==7);print(\"inline\");}\n",
+  "callback": "fn apply<F>()->i64{F([3,4])}\nfn main(){var n:i64=apply(){p=>p[0]+p[1]};assert(n==7);print(\"callback\");}\n",
+  "limited": "recursive fn read(a:i64[..3])->i64{assert(length(a)==2);return a[0]+a[1];}\nfn main(){var a:i64[..3]=[3,4];assert(read(a)==7);print(\"limited\");}\n",
+  "isolation": "recursive fn read(a:i64[2],b:i64[2],original:i64[2]&)->i64{assert(&a .!= &b);assert(&a .!= original);a[0]=9;assert(b[0]==3);assert(original[0]==3);return a[0];}\nfn main(){var a:i64[2]=[3,4];assert(read(a,a,a)==9);assert(a[0]==3);print(\"isolation\");}\n",
+  "refs": "recursive fn change(a:i64&[2]){a[1]+=1;}\nfn main(){var a:i64=3;var b:i64=4;var refs:i64&[2]=[&a,&b];change(refs);assert(a==3);assert(b==5);print(\"refs\");}\n",
+  "empty": "recursive fn read(a:i64[0])->i64{return length(a);}\nfn main(){var a:i64[0]=[];assert(read(a)==0);print(\"empty\");}\n",
+  "nominal": "struct S{n:i64}\nrecursive fn read(a:S[2])->i64{return a[0].n+a[1].n;}\nfn main(){var a:S[2]=[S{n:3},S{n:4}];assert(read(a)==7);print(\"nominal\");}\n"
+}

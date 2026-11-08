@@ -1,0 +1,7 @@
+/tmp/goose-wasm-array-arguments-20261108/parent-first03/refs.goose:2: warning: redundant &: a binds by reference here without it (§4.1)
+fn main(){var a:i64=3;var b:i64=4;var refs:i64&[2]=[&a,&b];change(refs);assert(a==3);assert(b==5);print("refs");}
+                                                    ^~
+/tmp/goose-wasm-array-arguments-20261108/parent-first03/refs.goose:2: warning: redundant &: b binds by reference here without it (§4.1)
+fn main(){var a:i64=3;var b:i64=4;var refs:i64&[2]=[&a,&b];change(refs);assert(a==3);assert(b==5);print("refs");}
+                                                       ^~
+/tmp/goose-wasm-array-arguments-20261108/parent-first03/refs.goose:1: error: wasm target: by-value arrays need the pending destination lowering

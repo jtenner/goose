@@ -37,7 +37,7 @@ inline WasmCodeGen::FixedPlace WasmCodeGen::OwnerPlace(VarDef *owner) {
 
 inline WasmCodeGen::FreshFixedDestination WasmCodeGen::FreshOwner(VarDef *owner, Node *initialization) {
     auto image = RequireFixed(owner->type, owner->line);
-    if (Nominal(owner->type)) {
+    if (Nominal(owner->type) || storage.fixedvalues.count(owner)) {
         auto it = storage.fixedvalues.find(owner);
         auto declaration = Is<VarDecl>(initialization);
         auto argument = declaration && declaration->inline_arg;
@@ -60,7 +60,7 @@ inline WasmCodeGen::FreshFixedDestination WasmCodeGen::FreshCallParameter(Call *
     auto owner = call->fvparams[position];
     auto plan = storage.fixedvalues.find(owner);
     auto image = RequireFixed(owner->type, call->line);
-    if (!Nominal(owner->type) || !image ||
+    if (!FixedParameter(owner->type) || !image ||
         plan == storage.fixedvalues.end() ||
         plan->second.origin != WasmStoragePlan::FixedOrigin::CallbackParameter ||
         plan->second.function != current || plan->second.initialization != call ||
@@ -151,7 +151,7 @@ inline void WasmCodeGen::FixedCallArguments(Call *call, const vector<Node *> &ar
     auto expression = arguments[position];
     if (ExitingFixedInitializer(expression)) return;
     auto type = call->spec->params[position]->type;
-    if (Nominal(type)) {
+    if (FixedParameter(type)) {
         WithFixedTemporary(type, expression, [&](const FixedPlace &value) {
             values[position] = value.address;
             FixedCallArguments(call, arguments, values, position + 1, result, destination);
@@ -176,7 +176,7 @@ inline void WasmCodeGen::BindCallParameters(Call *call) {
     if (arguments.size() != call->fvparams.size()) Fail(call->line, "function-value parameter mismatch");
     for (size_t i = 0; i < arguments.size(); i++) {
         auto parameter = call->fvparams[i];
-        if (Nominal(parameter->type)) ConstructFixed(FreshCallParameter(call, i), arguments[i]);
+        if (FixedParameter(parameter->type)) ConstructFixed(FreshCallParameter(call, i), arguments[i]);
         else {
             Gen(arguments[i]); Convert(arguments[i]->exprtype, parameter->type); Write(Find(parameter));
         }

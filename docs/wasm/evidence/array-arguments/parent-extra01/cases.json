@@ -1,0 +1,13 @@
+{
+  "order": "var value:i64[2]=[3,4];recursive fn later()->i64{value[0]=9;return 0;}\nrecursive fn read(a:i64[2],x:i64)->i64{return a[0]+x;}\nfn main(){assert(read(value,later())==3);assert(value[0]==9);print(\"order\");}\n",
+  "inline_order": "var value:i64[2]=[3,4];recursive fn later()->i64{value[0]=9;return 0;}\ninline fn read(a:i64[2],x:i64)->i64{return a[0]+x;}\nfn main(){assert(read(value,later())==3);assert(value[0]==9);print(\"inline_order\");}\n",
+  "callback_order": "var value:i64[2]=[3,4];recursive fn later()->i64{value[0]=9;return 0;}\nfn apply<F>()->i64{F(copy(value),later())}\nfn main(){assert(apply(){a,x=>a[0]+x}==3);assert(value[0]==9);print(\"callback_order\");}\n",
+  "literal": "recursive fn read(a:i64[2])->i64{return a[1];}\nfn main(){assert(read([3,4])==4);print(\"literal\");}\n",
+  "default": "recursive fn read(a:i64[2])->i64{return a[1];}\nfn main(){assert(read(default<i64[2]>())==0);print(\"default\");}\n",
+  "data": "struct H{items:i64[2]}\nrecursive fn read(a:i64[2])->i64{a[0]=9;return a[1];}\nfn main(){var rows:H[]=[H{items:[3,4]}];assert(read(rows[0].items)==4);assert(rows[0].items[0]==3);print(\"data\");}\n",
+  "global": "var original:i64[2]=[3,4];recursive fn read(a:i64[2])->i64{return a[1];}\nvar result:i64=read(original);\nfn main(){assert(result==4);print(\"global\");}\n",
+  "recursion": "recursive fn fold(a:i64[2],n:i64)->i64{if n==0{return a[0];}a[0]+=n;let saved=a[0];var result:i64=fold(a,n-1);assert(a[0]==saved);return result;}\nfn main(){var a:i64[2]=[3,4];assert(fold(a,3)==9);assert(a[0]==3);print(\"recursion\");}\n",
+  "nominal_result": "struct S{n:i64}\nrecursive fn make(a:i64[2])->S{return S{n:a[0]+a[1]};}\nfn main(){var a:i64[2]=[3,4];var s:S=make(a);assert(s.n==7);print(\"nominal_result\");}\n",
+  "later_return": "var value:i64[2]=[3,4];recursive fn use(a:i64[2],n:i64)->i64{return a[0]+n;}\nrecursive fn run(early:bool)->i64{return use(value,{if early{return 7;}3});}\nfn main(){assert(run(true)==7);assert(run(false)==6);assert(value[0]==3);print(\"later_return\");}\n",
+  "large": "recursive fn read(a:u8[70000])->i64{return a[69999];}\nfn main(){var a:u8[70000]=default<u8[70000]>();a[69999]=11;assert(read(a)==11);print(\"large\");}\n"
+}

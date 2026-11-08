@@ -1,0 +1,26 @@
+[
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-results-20261108/build03/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-arguments-20261108/obsolete-admission01/inline-fixed-O0.wasm",
+      "/tmp/goose-wasm-array-arguments-20261108/obsolete-admission01/inline-fixed.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "args": [
+      "/tmp/goose-wasm-fixed-results-20261108/build03/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-arguments-20261108/obsolete-admission01/inline-fixed-O2.wasm",
+      "/tmp/goose-wasm-array-arguments-20261108/obsolete-admission01/inline-fixed.goose"
+    ],
+    "exit": 1
+  }
+]

@@ -1,0 +1,30 @@
+[
+  {
+    "case": "dynamic_base",
+    "opt": 0,
+    "source_sha256": "83f3beee8684486145401161d2115a6bcb0eb74d3635f77d444d4a08dede363b",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-arguments-20261108/parent-mixed01/dynamic_base.goose:2: error: wasm target: by-value arrays need the pending destination lowering\n"
+  },
+  {
+    "case": "dynamic_base",
+    "opt": 2,
+    "source_sha256": "83f3beee8684486145401161d2115a6bcb0eb74d3635f77d444d4a08dede363b",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-arguments-20261108/parent-mixed01/dynamic_base.goose:2: error: wasm target: by-value arrays need the pending destination lowering\n"
+  },
+  {
+    "case": "mixed",
+    "opt": 0,
+    "source_sha256": "36e48812db2e2a4e472893e1200dbbb65adc88e1f476e097923c2522a157044a",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-arguments-20261108/parent-mixed01/mixed.goose:1: warning: redundant `as f64`: an f32 converts to f64 implicitly here\nrecursive fn mixed(a:f32[2],b:f64[2],c:bool[2],x:i64)->f64{assert(a[1]==2.0);assert(b[0]==1.5);assert(c[0]);assert(!c[1]);c[0]=false;return(a[0] as f64)+b[1]+(x as f64);}\n                                                                                                                                            ^~~~~~~~~~~\n/tmp/goose-wasm-array-arguments-20261108/parent-mixed01/mixed.goose:1: warning: redundant `as f64`: an i64 converts to f64 implicitly here\nrecursive fn mixed(a:f32[2],b:f64[2],c:bool[2],x:i64)->f64{assert(a[1]==2.0);assert(b[0]==1.5);assert(c[0]);assert(!c[1]);c[0]=false;return(a[0] as f64)+b[1]+(x as f64);}\n                                                                                                                                                               ^~~~~~~~\n/tmp/goose-wasm-array-arguments-20261108/parent-mixed01/mixed.goose:1: error: wasm target: by-value arrays need the pending destination lowering\n"
+  },
+  {
+    "case": "mixed",
+    "opt": 2,
+    "source_sha256": "36e48812db2e2a4e472893e1200dbbb65adc88e1f476e097923c2522a157044a",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-arguments-20261108/parent-mixed01/mixed.goose:1: warning: redundant `as f64`: an f32 converts to f64 implicitly here\nrecursive fn mixed(a:f32[2],b:f64[2],c:bool[2],x:i64)->f64{assert(a[1]==2.0);assert(b[0]==1.5);assert(c[0]);assert(!c[1]);c[0]=false;return(a[0] as f64)+b[1]+(x as f64);}\n                                                                                                                                            ^~~~~~~~~~~\n/tmp/goose-wasm-array-arguments-20261108/parent-mixed01/mixed.goose:1: warning: redundant `as f64`: an i64 converts to f64 implicitly here\nrecursive fn mixed(a:f32[2],b:f64[2],c:bool[2],x:i64)->f64{assert(a[1]==2.0);assert(b[0]==1.5);assert(c[0]);assert(!c[1]);c[0]=false;return(a[0] as f64)+b[1]+(x as f64);}\n                                                                                                                                                               ^~~~~~~~\n/tmp/goose-wasm-array-arguments-20261108/parent-mixed01/mixed.goose:1: error: wasm target: by-value arrays need the pending destination lowering\n"
+  }
+]

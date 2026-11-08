@@ -61,6 +61,12 @@ struct WasmStoragePlan {
                (t->arr->akind == A_LIMITED && layout.ArrSize(t->arr) < 0));
     }
 
+    bool FixedParameter(TypeExpr *t) {
+        return WasmValueSupport::Nominal(t) || (t && t->kind == TY_ARRAY &&
+               (t->arr->akind == A_FIXED ||
+                (t->arr->akind == A_LIMITED && layout.ArrSize(t->arr) >= 0)));
+    }
+
     void Walk(Node *n, FnSpec *function, int &next) {
         if (!n || Is<FnDecl>(n)) return;
         NoteType(n->exprtype);
@@ -85,7 +91,7 @@ struct WasmStoragePlan {
             for (size_t i = 0; i < v->defs.size(); i++) {
                 auto d = v->defs[i];
                 NoteType(d->type);
-                if (WasmValueSupport::Nominal(d->type)) {
+                if (WasmValueSupport::Nominal(d->type) || (v->inline_arg && FixedParameter(d->type))) {
                     auto &fixed = fixedvalues[d];
                     fixed.initialization = v;
                     fixed.argument = v->inline_arg;
@@ -148,7 +154,7 @@ struct WasmStoragePlan {
             if (c->fvbody) {
                 for (size_t i = 0; i < c->fvparams.size(); i++) {
                     auto parameter = c->fvparams[i];
-                    if (!WasmValueSupport::Nominal(parameter->type)) continue;
+                    if (!FixedParameter(parameter->type)) continue;
                     NoteType(parameter->type);
                     FixedOwner fixed;
                     fixed.initialization = c;
@@ -175,7 +181,7 @@ struct WasmStoragePlan {
             functions.push_back(sp);
             for (auto p : sp->params) {
                 NoteType(p->type);
-                if (WasmValueSupport::Nominal(p->type)) {
+                if (FixedParameter(p->type)) {
                     FixedOwner fixed;
                     fixed.origin = FixedOrigin::Parameter;
                     fixed.function = sp;

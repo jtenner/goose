@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-array-arguments-20261108/parent-constructors01/checks.py", line 13, in <module>
+    a=run(stem+'-'+label,args);assert not a.returncode,(name,label,a.stderr)
+                                      ^^^^^^^^^^^^^^^^
+AssertionError: ('string', 'emit', b'/tmp/goose-wasm-array-arguments-20261108/parent-constructors01/string.goose:2: error: no matching overload for call to read\n  candidate read at /tmp/goose-wasm-array-arguments-20261108/parent-constructors01/string.goose:1: argument 1: cannot pass const u8[:] as u8[2]\nfn main(){assert(read("AZ")==90);print("string");}\n                 ^~~~~~~~~~\n  in fn main() instantiated from /tmp/goose-wasm-array-arguments-20261108/parent-constructors01/string.goose:2\n')

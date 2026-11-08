@@ -123,8 +123,9 @@ struct WasmCodeGen : ValueLayout {
             Fail(line, "fixed aggregate layout exceeds memory32");
         return (uint32_t)bytes;
     }
+    bool FixedParameter(TypeExpr *t) { return storage.FixedParameter(t); }
     void RequireCallValue(TypeExpr *t, bool result, Line line) {
-        if (Nominal(t)) {
+        if (Nominal(t) || (!result && FixedParameter(t))) {
             if (!RequireFixed(t, line))
                 Fail(line, result ? "zero-sized aggregate results need the pending call lowering"
                                   : "zero-sized aggregate parameters need the pending call lowering");
@@ -760,7 +761,7 @@ struct WasmCodeGen : ValueLayout {
         auto args = c->ValueArgNodes();
         if (args.size() != c->spec->params.size()) Fail(c->line, "call parameter mismatch");
         if (any_of(c->spec->params.begin(), c->spec->params.end(),
-                   [&](VarDef *parameter) { return Nominal(parameter->type); })) {
+                   [&](VarDef *parameter) { return FixedParameter(parameter->type); })) {
             auto result = c->spec->rets.empty() ? NoLocal : Temp(c->spec->rets[0]);
             vector<uint32_t> values(args.size(), NoLocal);
             FixedCallArguments(c, args, values, 0, result);
@@ -1049,8 +1050,10 @@ struct WasmCodeGen : ValueLayout {
                     continue;
                 }
                 if (s.type->kind == TY_ARRAY) {
-                    if (v->inline_arg)
-                        Fail(n->line, "by-value arrays need the pending destination lowering");
+                    if (v->inline_arg) {
+                        RequireCallValue(s.type, false, n->line);
+                        ConstructFixed(FreshOwner(v->defs[i], v), v->inits[i]); continue;
+                    }
                     InitArray(v->defs[i], s, v->inits[i], v); continue;
                 }
                 if (Nominal(s.type)) {
@@ -1141,7 +1144,7 @@ struct WasmCodeGen : ValueLayout {
             code.I32((int32_t)framesize); code.Call(reservefn); code.Set(framebase);
             for (size_t i = 0; i < sp->params.size(); i++) {
                 auto &s = Find(sp->params[i]);
-                if (Nominal(s.type)) {
+                if (FixedParameter(s.type)) {
                     auto plan = storage.fixedvalues.find(sp->params[i]);
                     if (plan == storage.fixedvalues.end() ||
                         plan->second.origin != WasmStoragePlan::FixedOrigin::Parameter ||
@@ -1206,7 +1209,7 @@ struct WasmCodeGen : ValueLayout {
             vector<uint8_t> args, rets;
             for (auto p : sp->params) {
                 RequireCallValue(p->type, false, p->line);
-                args.push_back(Nominal(p->type) ? WasmModule::I32 : Type(p->type));
+                args.push_back(FixedParameter(p->type) ? WasmModule::I32 : Type(p->type));
             }
             for (auto r : sp->rets) {
                 RequireCallValue(r, true, r->line);

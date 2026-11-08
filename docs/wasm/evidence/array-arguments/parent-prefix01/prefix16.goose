@@ -1,0 +1,2 @@
+recursive fn read(a:u8[..300])->i64{assert(a.len==2);a.push(9);assert(a.len==3);return a[2];}
+fn main(){var a:u8[..300]=[3,4];assert(read(a)==9);assert(a.len==2);print("prefix16");}
