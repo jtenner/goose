@@ -1274,6 +1274,8 @@ struct WasmCodeGen : ValueLayout {
     Binary *FixedBinary(Node *n);
     bool FixedOperandEffects(Node *n, int &budget);
     bool CanCopyFixedArray(TypeExpr *to, TypeExpr *from);
+    bool CanCopyLimitedArray(TypeExpr *to, TypeExpr *from);
+    void CopyLimitedArray(FixedPlace destination, FixedPlace source, Line line);
     FreshFixedDestination FixedMathDestination(FreshFixedDestination fresh, TypeExpr *type, Line line);
     void BinaryFixedInto(FixedPlace destination, FixedMathOperand left, FixedMathOperand right,
                          TType op, Line line);

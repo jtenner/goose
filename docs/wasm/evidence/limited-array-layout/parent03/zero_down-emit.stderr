@@ -1,0 +1,4 @@
+/tmp/goose-wasm-limited-array-layout-20261108/parent03/zero_down.goose:1: error: variable a may be used before it is assigned
+fn main(){var a:u8[..256];var b:u8[..0]=a;assert(b.len==0);print("zero_down");}
+                                        ^
+  in fn main() instantiated from /tmp/goose-wasm-limited-array-layout-20261108/parent03/zero_down.goose:1

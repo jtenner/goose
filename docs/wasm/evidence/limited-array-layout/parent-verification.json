@@ -1,0 +1,266 @@
+{
+  "status": "PASS",
+  "families": [
+    {
+      "case": "stored",
+      "phase": "parent01",
+      "source_sha256": "76e9d3ce6115394fbc7fb625fc3f5f1200cbb7d06c6c3cf8ec9e1d219d404603",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "call",
+      "phase": "parent01",
+      "source_sha256": "0b68cb44c45e74cae993a264cdd352895e0dbf92cd8579f0330a390ca42d726f",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "shrink",
+      "phase": "parent01",
+      "source_sha256": "a30fa9248934c809cc6cf41f9c6fac74d16acb121a236d8c4679d5442bb0ebb7",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "field",
+      "phase": "parent01",
+      "source_sha256": "1c5eaf1d17e5e3ef3c8ffa5815eeeaa4f53930af8feb34e30babaf83fadfb769",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "data_field",
+      "phase": "parent01",
+      "source_sha256": "42c2f245dece41bba3e13d780e7eca6f2e9f2ab5702b7f975424d4a3b7aa0de5",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "reference",
+      "phase": "parent02",
+      "source_sha256": "16e499b6c215d6befc01ea466dadef74320e39db28f06ad5eefb68884ac7e7ab",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "assign_widen",
+      "phase": "parent02",
+      "source_sha256": "36e56ae8d3bdb3dc72e2fa75ffcaf60681e1c269db3229fc12569bb6284f1a41",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "assign_shrink",
+      "phase": "parent02",
+      "source_sha256": "a505fdaee65bc912fea2613364c66cbcc08eb86d9242601c22ba4ccc04cb06cb",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "assign_field",
+      "phase": "parent02",
+      "source_sha256": "95eb3b7b136fa6fb27b87e07386cda7b227d219a195544bd24131c8038783016",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "prefix32down",
+      "phase": "parent03",
+      "source_sha256": "ce521c8543e4d698cf7dfab4bb3c26f3747425eaa3c2d03aceca4054578f84f6",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "prefix32up",
+      "phase": "parent03",
+      "source_sha256": "6ac58595d8e9bb8101a1f70171a361b582c8e24b20f14a95608123cc862751b7",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "exact_shrink",
+      "phase": "parent03",
+      "source_sha256": "a23f45f144942f843ce62b072b63b176d21bdac3f505996e8bd4d5b057184a5a",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "return",
+      "phase": "parent03",
+      "source_sha256": "eb55b65be44345957c7235156094bc54318435d8b9cacf7e0225ccab6e70b4f7",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "parameter",
+      "phase": "parent03",
+      "source_sha256": "1bf0e9a75661c814cf461d8dfe6f08a593aeac32a7802da7a7cc1f467f119706",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "inline",
+      "phase": "parent03",
+      "source_sha256": "e6ac87570217bc886fbde137adb336976d7d6a8d36423175faba2dd507e16cc3",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "callback",
+      "phase": "parent03",
+      "source_sha256": "0eddd2926f7c857acf2471c88c9b68130deb4534ae6d5dd431a3c544ece46813",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "callback_parameter",
+      "phase": "parent03",
+      "source_sha256": "1c9b82a7d05545ca13cb5739bbf19b5a6e066e4a3cc3547c7a8f8c669bdc4cbe",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "snapshot",
+      "phase": "parent03",
+      "source_sha256": "2354b0ac2bc4a7633e0c78530f4b8cb8e0cf186863c73e14e43c47543348a5d6",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "source_effect",
+      "phase": "parent03",
+      "source_sha256": "1557a4ca3ae7ec58294d92d6a6f4fe1b85ef325cbc4b041f4a40cd669c982b3c",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "padded",
+      "phase": "parent03",
+      "source_sha256": "9fac6fe04d86a4c5c117c2df850b498e76e404ecb7620e59a72bfc4490561080",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "ref_elements",
+      "phase": "parent03",
+      "source_sha256": "8e3720856dc9a0e4f92b047a282014bf5593f2a6176e78d152d98da13c2eb852",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "call_field",
+      "phase": "parent03",
+      "source_sha256": "cb2ff42e8ddb8668446d4b61bd47b9c332c2ce59658c26fc5f17a955f079b6b1",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "order",
+      "phase": "parent03",
+      "source_sha256": "a8db2a92f9b0f48bd049375ef00e7f68f3ad0563eec3c62c7715d0e25c26e023",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "fat_order",
+      "phase": "parent03",
+      "source_sha256": "73fc78a53c015d7bb586474d81e19955023b2aec30e12548fc302f14c8b0f3cc",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "dynamic_data",
+      "phase": "parent03",
+      "source_sha256": "ea729a59274350e9cc5a89103706895d60dbe6f9cd848c1f289522afa500ec30",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "owner",
+      "phase": "parent03",
+      "source_sha256": "ea0eaa70fd5388253e94d7c069d095b47ea41396030ba51aae890ac885e6b9ba",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "owner_data",
+      "phase": "parent03",
+      "source_sha256": "2dc4e6798eb43014e5f8516084308870435ea201ece78bb440873f3bdead48ea",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "zero_up",
+      "phase": "parent04",
+      "source_sha256": "12e7c10ccc6e06d3a9e40bc2ba43a6e814be32e3928dfda2b444cd605f545d31",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "zero_down",
+      "phase": "parent04",
+      "source_sha256": "08e730a6584c431df1b2cb15ad37b609e3e74524df086f15d8901461966d6c98",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "wide16",
+      "phase": "parent05",
+      "source_sha256": "ff5c347af8dd1ced20bb18fc35e7c40a1779d0d88b72f35b8148a6deed8a9aef",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "wide32",
+      "phase": "parent05",
+      "source_sha256": "d14abf534251989a0eab0825231659f8cdf027a76ea0ea44ffa1ad8298f6deef",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    },
+    {
+      "case": "owner_wide",
+      "phase": "parent06",
+      "source_sha256": "f1458ce66681c8cc96a24fe84a77afdb60336f6f952be67fcfd63574f049286a",
+      "parent_native": "PASS",
+      "parent_wasm": "rejected adaptation"
+    }
+  ],
+  "invalid_fixtures_preserved": [
+    {
+      "phase": "parent01",
+      "case": "reference",
+      "reason": "/tmp/goose-wasm-limited-array-layout-20261108/parent01/reference.goose:1: error: expected ';' in variable declaration, found '&='\nfn main(){var a:u8[..3]=[7,8];var r:u8[..3]&=a;var b:u8[..256]=copy(r);assert(b.len==2&&b[1]==8);print(\"reference\");}\n                                           ^~\n"
+    },
+    {
+      "phase": "parent03",
+      "case": "wide16",
+      "reason": "/tmp/goose-wasm-limited-array-layout-20261108/parent03/wide16.goose:1: error: expected identifier in for binding, found '('\nfn main(){var a:u8[..256];for(i in 0..256){a.push(i as u8);}var b:u8[..512]=a;assert(b.len==256&&b[255]==255);print(\"wide16\");}\n                             ^\n"
+    },
+    {
+      "phase": "parent03",
+      "case": "wide32",
+      "reason": "/tmp/goose-wasm-limited-array-layout-20261108/parent03/wide32.goose:1: error: expected identifier in for binding, found '('\nfn main(){var a:u8[..65536];for(i in 0..65536){a.push(i as u8);}var b:u8[..65537]=a;assert(b.len==65536&&b[65535]==255);print(\"wide32\");}\n                               ^\n"
+    },
+    {
+      "phase": "parent03",
+      "case": "zero_up",
+      "reason": "/tmp/goose-wasm-limited-array-layout-20261108/parent03/zero_up.goose:1: error: variable a may be used before it is assigned\nfn main(){var a:u8[..0];var b:u8[..256]=a;assert(b.len==0);b.push(7);assert(b[0]==7);print(\"zero_up\");}\n                                        ^\n  in fn main() instantiated from /tmp/goose-wasm-limited-array-layout-20261108/parent03/zero_up.goose:1\n"
+    },
+    {
+      "phase": "parent03",
+      "case": "zero_down",
+      "reason": "/tmp/goose-wasm-limited-array-layout-20261108/parent03/zero_down.goose:1: error: variable a may be used before it is assigned\nfn main(){var a:u8[..256];var b:u8[..0]=a;assert(b.len==0);print(\"zero_down\");}\n                                        ^\n  in fn main() instantiated from /tmp/goose-wasm-limited-array-layout-20261108/parent03/zero_down.goose:1\n"
+    },
+    {
+      "phase": "parent04",
+      "case": "wide16",
+      "reason": "/tmp/goose-wasm-limited-array-layout-20261108/parent04/wide16.goose:1: error: expected identifier in for binding, found '('\nfn main(){var a:u8[..256]=[];for(i in 0..256){a.push(i as u8);}var b:u8[..512]=a;assert(b.len==256&&b[255]==255);print(\"wide16\");}\n                                ^\n"
+    },
+    {
+      "phase": "parent04",
+      "case": "wide32",
+      "reason": "/tmp/goose-wasm-limited-array-layout-20261108/parent04/wide32.goose:1: error: expected identifier in for binding, found '('\nfn main(){var a:u8[..65536]=[];for(i in 0..65536){a.push(i as u8);}var b:u8[..65537]=a;assert(b.len==65536&&b[65535]==255);print(\"wide32\");}\n                                  ^\n"
+    }
+  ]
+}

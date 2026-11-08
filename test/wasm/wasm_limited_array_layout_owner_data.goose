@@ -1,0 +1,1 @@
+struct A{before:u8,xs:u8[..3],after:u16}struct B{before:u8,xs:u8[..256],after:u16}recursive fn prepare(a:const u8[..3]&)->const u8[..3]&{print("before");return a;}fn main(){var source:A[]=[A{9,[7,8],60000}];var target:B[]=[B{7,prepare(source[0].xs),65000}];print("after");assert(target[0].xs.len==2&&target[0].xs[1]==8&&target[0].after==65000);}

@@ -1,0 +1,166 @@
+[
+  {
+    "case": "wide16",
+    "source_sha256": "f53724f634af39523bb53ec40f789206aebffa6e2ff53fd33ffa733d20f989aa",
+    "emit_exit": 1
+  },
+  {
+    "case": "wide32",
+    "source_sha256": "ea3f1cbb643c937324405ee2e9fef69528ea5693a9b6dbdb66bc8819af637f85",
+    "emit_exit": 1
+  },
+  {
+    "case": "prefix32down",
+    "source_sha256": "ce521c8543e4d698cf7dfab4bb3c26f3747425eaa3c2d03aceca4054578f84f6",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "prefix32up",
+    "source_sha256": "6ac58595d8e9bb8101a1f70171a361b582c8e24b20f14a95608123cc862751b7",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "zero_up",
+    "source_sha256": "30471058a1f9093949081ec19fca32e4ce25fb51d51d8021537f2f1a2f9c8dc6",
+    "emit_exit": 1
+  },
+  {
+    "case": "zero_down",
+    "source_sha256": "196f55aaa6773690eda5a6dd2092d743538d212e2e4edf074662b5ad18a7b033",
+    "emit_exit": 1
+  },
+  {
+    "case": "exact_shrink",
+    "source_sha256": "a23f45f144942f843ce62b072b63b176d21bdac3f505996e8bd4d5b057184a5a",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "return",
+    "source_sha256": "eb55b65be44345957c7235156094bc54318435d8b9cacf7e0225ccab6e70b4f7",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "parameter",
+    "source_sha256": "1bf0e9a75661c814cf461d8dfe6f08a593aeac32a7802da7a7cc1f467f119706",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "inline",
+    "source_sha256": "e6ac87570217bc886fbde137adb336976d7d6a8d36423175faba2dd507e16cc3",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "callback",
+    "source_sha256": "0eddd2926f7c857acf2471c88c9b68130deb4534ae6d5dd431a3c544ece46813",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "callback_parameter",
+    "source_sha256": "1c9b82a7d05545ca13cb5739bbf19b5a6e066e4a3cc3547c7a8f8c669bdc4cbe",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "snapshot",
+    "source_sha256": "2354b0ac2bc4a7633e0c78530f4b8cb8e0cf186863c73e14e43c47543348a5d6",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "source_effect",
+    "source_sha256": "1557a4ca3ae7ec58294d92d6a6f4fe1b85ef325cbc4b041f4a40cd669c982b3c",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "padded",
+    "source_sha256": "9fac6fe04d86a4c5c117c2df850b498e76e404ecb7620e59a72bfc4490561080",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "ref_elements",
+    "source_sha256": "8e3720856dc9a0e4f92b047a282014bf5593f2a6176e78d152d98da13c2eb852",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "call_field",
+    "source_sha256": "cb2ff42e8ddb8668446d4b61bd47b9c332c2ce59658c26fc5f17a955f079b6b1",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "order",
+    "source_sha256": "a8db2a92f9b0f48bd049375ef00e7f68f3ad0563eec3c62c7715d0e25c26e023",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "fat_order",
+    "source_sha256": "73fc78a53c015d7bb586474d81e19955023b2aec30e12548fc302f14c8b0f3cc",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "dynamic_data",
+    "source_sha256": "ea729a59274350e9cc5a89103706895d60dbe6f9cd848c1f289522afa500ec30",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "owner",
+    "source_sha256": "ea0eaa70fd5388253e94d7c069d095b47ea41396030ba51aae890ac885e6b9ba",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "owner_data",
+    "source_sha256": "2dc4e6798eb43014e5f8516084308870435ea201ece78bb440873f3bdead48ea",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  }
+]

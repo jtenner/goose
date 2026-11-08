@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_backend.py", line 890, in <module>
+    main()
+    ~~~~^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_backend.py", line 247, in main
+    checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_backend.py", line 17, in run
+    result = subprocess.run([str(c) for c in command], cwd=ROOT, capture_output=True, timeout=timeout)
+  File "/usr/lib/python3.13/subprocess.py", line 556, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/subprocess.py", line 1222, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+                     ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/subprocess.py", line 2128, in _communicate
+    ready = selector.select(timeout)
+  File "/usr/lib/python3.13/selectors.py", line 398, in select
+    fd_event_list = self._selector.poll(timeout)
+KeyboardInterrupt

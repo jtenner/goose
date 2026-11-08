@@ -138,7 +138,7 @@ def main():
             if source.stem.startswith((
                     'wasm_inline_ref_abi_', 'wasm_data_aggregate_', 'wasm_constructor_assignment_',
                     'wasm_aggregate_construction_', 'wasm_array_assignment_', 'wasm_default_conversion_',
-                    'wasm_array_constructor_', 'wasm_fixed_argument_', 'wasm_fixed_result_', 'wasm_array_argument_', 'wasm_array_result_', 'wasm_temporary_read_', 'wasm_temporary_equality_', 'wasm_fixed_negation_', 'wasm_fixed_binary_', 'wasm_compound_math_', 'wasm_negation_discard_', 'wasm_zero_call_', 'wasm_fixed_array_conversion_', 'wasm_fixed_array_layout_', 'wasm_fixed_array_assignment_layout_')):
+                    'wasm_array_constructor_', 'wasm_fixed_argument_', 'wasm_fixed_result_', 'wasm_array_argument_', 'wasm_array_result_', 'wasm_temporary_read_', 'wasm_temporary_equality_', 'wasm_fixed_negation_', 'wasm_fixed_binary_', 'wasm_compound_math_', 'wasm_negation_discard_', 'wasm_zero_call_', 'wasm_fixed_array_conversion_', 'wasm_fixed_array_layout_', 'wasm_fixed_array_assignment_layout_', 'wasm_limited_array_layout_')):
                 actual = run([args.node, ROOT / 'test' / 'wasm_reference_abi.mjs', wasm,
                               out / f'{source.stem}-O{opt}-instance'])
             else:
@@ -238,6 +238,12 @@ def main():
                                             'wasm_fixed_array_layout_wide_data_owner',
                                             'wasm_fixed_array_layout_source_data',
                                             'wasm_fixed_array_layout_field_ref') else 'no-data'
+                checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
+                assert checked.stdout == reference.stdout and not checked.stderr
+                count += 1
+            if source.stem.startswith('wasm_limited_array_layout_'):
+                mode = '' if source.stem.rsplit('_layout_', 1)[1] in (
+                    'data_field', 'assign_field', 'ref_elements', 'fat_order', 'dynamic_data', 'owner_data') else 'no-data'
                 checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
                 assert checked.stdout == reference.stdout and not checked.stderr
                 count += 1
@@ -444,6 +450,10 @@ def main():
     from wasm_fixed_array_layout_checks import check_owners as check_layout_owners, check_data as check_layout_data
     count += check_layout_owners(run, args.node, args.validator, out)
     count += check_layout_data(run, args.node, args.validator, out)
+    from wasm_limited_array_checks import check_images as check_limited_array_images, check_failures as check_limited_array_failures, check_wide as check_limited_array_wide
+    count += check_limited_array_images(run, args.node, args.validator, out)
+    count += check_limited_array_failures(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out)
+    count += check_limited_array_wide(run, args.node, args.validator, out)
     from wasm_fixed_array_assignment_checks import check_owners as check_fixed_array_assignment_owners, check_data as check_fixed_array_assignment_data, check_wide as check_fixed_array_assignment_wide, check_failures as check_fixed_array_assignment_failures
     count += check_fixed_array_assignment_owners(run, args.node, args.validator, out)
     count += check_fixed_array_assignment_data(run, args.node, args.validator, out)
@@ -754,7 +764,7 @@ a.equal(new DataView(x.memory.buffer).getBigInt64(1,true),65n<<56n);"""
             wasm.unlink(missing_ok=True)
             result = run([exe, f'-O{opt}', '--target', 'wasm', '-o', wasm, source], ok=False)
             if name in ('inline-fixed-argument', 'fixed-limited', 'ref-fixed-limited',
-                        'call-layout', 'inline-call-layout', 'indexed-layout'):
+                        'call-layout', 'inline-call-layout', 'indexed-layout', 'limited-capacity', 'ref-limited-capacity'):
                 assert result.returncode == 0 and not result.stderr
                 run([args.validator, 'validate', wasm])
                 assert run([args.node, ROOT / 'scripts/run_wasm.mjs', wasm]).stdout == expected

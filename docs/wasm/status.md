@@ -385,6 +385,15 @@ Full images and valid damaged modules cover empty results, wider prefixes,
 reference rebinding, data memories and RHS failure protection. See
 [fixed array assignment layout evidence](evidence/fixed-array-assignment-layout.md).
 
+Static limited-array values can now initialize or replace a limited array with
+a different capacity and the same element type. The adapter reads the live
+count once, checks a smaller destination before any conversion write, copies
+only active elements between the two payload offsets, and writes the receiving
+count last. Calls, parameters, results, callbacks, reference fields and dynamic
+data memories use the same conversion. Full-image observers cover padding,
+spare capacity, length-width changes and failed assignment effects. See the
+[limited array layout evidence](evidence/limited-array-layout.md).
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping
@@ -466,7 +475,8 @@ BigInt operation for other values.
   worker instances, global snapshots, typed queues, and worker lifecycle.
 - G: implement bounded function/loop memory specialization, dispatch and growth
   hoisting, header/top-load elimination, full differential coverage, and the
-  complete dispatch/layout/EH/worker benchmark matrix.
+  remaining dispatch/layout/EH/worker correctness matrix. Performance measurements
+  are outside the current owner directive and do not block compilation work.
 
 Multiple results, captured out-of-line locals, index/bound types, general
 compound values, native interfaces, and remaining nonlocal calls currently

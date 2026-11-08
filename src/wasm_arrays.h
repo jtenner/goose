@@ -773,7 +773,7 @@ inline void WasmCodeGen::InitArray(VarDef *owner, const Slot &slot, Node *init, 
     }
     auto from = ActualType(init);
     while (from && from->kind == TY_REF) from = from->ref->sub;
-    if (CanCopyFixedArray(owner->type, from)) {
+    if (CanCopyFixedArray(owner->type, from) || CanCopyLimitedArray(owner->type, from)) {
         ConstructFixed(FreshOwner(owner, declaration), init); return;
     }
     if (support.DataNominalArray(owner->type)) {

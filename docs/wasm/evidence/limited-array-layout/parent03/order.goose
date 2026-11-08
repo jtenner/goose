@@ -1,0 +1,1 @@
+struct H{xs:u16[..256]}struct C{target:H&}var source:u16[..3]=[77,88];recursive fn get(c:C&,next:H&)->u16[..3]&{c.target .= next;return source;}fn main(){var first=H{[1,2,9]};var second=H{[3,4,8]};var c=C{first};c.target.xs=get(c,second);assert(first.xs.len==2&&first.xs[0]==77&&second.xs.len==3&&second.xs[0]==3&&c.target .== &second);print("order");}

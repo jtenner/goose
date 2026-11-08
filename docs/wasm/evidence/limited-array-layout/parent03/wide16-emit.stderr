@@ -1,0 +1,3 @@
+/tmp/goose-wasm-limited-array-layout-20261108/parent03/wide16.goose:1: error: expected identifier in for binding, found '('
+fn main(){var a:u8[..256];for(i in 0..256){a.push(i as u8);}var b:u8[..512]=a;assert(b.len==256&&b[255]==255);print("wide16");}
+                             ^

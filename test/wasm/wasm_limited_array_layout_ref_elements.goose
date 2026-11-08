@@ -1,0 +1,1 @@
+struct S{n:i64}recursive fn make(a:S&,b:S&)->S&[..3]{return[a,b];}fn main(){var rows:S[]=[S{7},S{8}];var b:S&[..5]=make(rows[0],rows[1]);b[0].n=99;assert(b.len==2&&rows[0].n==99&&b[1].n==8);print("ref_elements");}

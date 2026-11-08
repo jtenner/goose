@@ -1,0 +1,21 @@
+In function ‘gs_memcpy’,
+    inlined from ‘main_g.constprop’ at /tmp/goose-wasm-limited-array-layout-20261108/focused02/wasm_limited_array_layout_order-O2.c:5253:5:
+/tmp/goose-wasm-limited-array-layout-20261108/focused02/wasm_limited_array_layout_order-O2.c:431:28: warning: ‘__builtin_memcpy’ reading between 16 and 240 bytes from a region of size 6 [-Wstringop-overread]
+  431 | #define GS_MEMCPY(d, s, n) memcpy((d), (s), (n))
+      |                            ^~~~~~~~~~~~~~~~~~~~~
+/tmp/goose-wasm-limited-array-layout-20261108/focused02/wasm_limited_array_layout_order-O2.c:479:49: note: in expansion of macro ‘GS_MEMCPY’
+  479 |         for (size_t i = 0; i + 16 < n; i += 16) GS_MEMCPY(d + i, s + i, 16);
+      |                                                 ^~~~~~~~~
+/tmp/goose-wasm-limited-array-layout-20261108/focused02/wasm_limited_array_layout_order-O2.c: In function ‘main_g.constprop’:
+/tmp/goose-wasm-limited-array-layout-20261108/focused02/wasm_limited_array_layout_order-O2.c:3591:21: note: at offset 1 into source object ‘gs_globals_main’ of size 7
+ 3591 | static gs_globals_t gs_globals_main;
+      |                     ^~~~~~~~~~~~~~~
+In function ‘gs_memcpy’,
+    inlined from ‘main_g.constprop’ at /tmp/goose-wasm-limited-array-layout-20261108/focused02/wasm_limited_array_layout_order-O2.c:5253:5:
+/tmp/goose-wasm-limited-array-layout-20261108/focused02/wasm_limited_array_layout_order-O2.c:483:5: warning: ‘memcpy’ reading between 257 and 510 bytes from a region of size 6 [-Wstringop-overread]
+  483 |     memcpy(dst, src, n);
+      |     ^~~~~~~~~~~~~~~~~~~
+/tmp/goose-wasm-limited-array-layout-20261108/focused02/wasm_limited_array_layout_order-O2.c: In function ‘main_g.constprop’:
+/tmp/goose-wasm-limited-array-layout-20261108/focused02/wasm_limited_array_layout_order-O2.c:3591:21: note: at offset 1 into source object ‘gs_globals_main’ of size 7
+ 3591 | static gs_globals_t gs_globals_main;
+      |                     ^~~~~~~~~~~~~~~

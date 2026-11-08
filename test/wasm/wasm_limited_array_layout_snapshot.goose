@@ -1,0 +1,1 @@
+recursive fn take(a:u8[..256],n:i64)->i64{return a.len+n;}recursive fn change(a:u8[..3]&)->i64{a.push(9);return 10;}fn main(){var a:u8[..3]=[7,8];assert(take(a,change(a))==12&&a.len==3);print("snapshot");}

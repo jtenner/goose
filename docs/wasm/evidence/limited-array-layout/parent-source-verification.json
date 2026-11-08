@@ -1,0 +1,19 @@
+{
+  "source_commit": "671f86b2406eaf9e32f9e08e99d3404d032dc1a9",
+  "compiler_sha256": "87cb4cc568e3e114c4f0aa0fbc468dabf55c36649a7a844e3ba899ab274778eb",
+  "source_hashes_match_commit": 85,
+  "additional_runtime_source_hashes": {
+    "src/runtime/goose.h": "51234daf2f8fb52d4a18158175ed517ab5bfeeb5473c5448babf19f94ffbeccf",
+    "src/runtime/jit_c.h": "14cf5d4369d13a4d937ba5666460a22f301774a785ef519b1bb271e38ffb844c",
+    "src/runtime/runtime.h": "5e744690e69fd4b365adbe24b1eea86cefd0d1789b38216c1d7c62e117021521",
+    "src/runtime/runtime_ext.h": "d6aab1cd0e61f83f0349c23fed8353abef419f13f8339f7cf91600cbf46d01c7",
+    "src/runtime/runtime_impl.h": "f95d3d3360614853e4abdbd39a45cfcbbd1aad0136eeffb8c02af371f7676680",
+    "src/runtime/runtime_os.h": "c4b3096efb759528fcc9cbbbce38ff5128c7776b43613299852bd3f1a21ba8e5",
+    "src/runtime/runtime_threads.h": "f7540e51cedccf3c6302531541a035ebbf3c68a047ba04b2a66ba3ada5e620e7"
+  },
+  "changed_candidate_source": [
+    "src/wasm_arrays.h",
+    "src/wasm_codegen.h",
+    "src/wasm_fixed.h"
+  ]
+}

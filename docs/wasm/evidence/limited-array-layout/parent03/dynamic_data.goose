@@ -1,0 +1,1 @@
+struct A{xs:u8[..3]}struct B{xs:u8[..256]}recursive fn test(a:A&){var b:B[]=[B{a.xs}];assert(b[0].xs.len==2&&b[0].xs[1]==8);b[0].xs=a.xs;assert(b[0].xs[0]==7);}fn main(){var a=A{[7,8]};test(a);var rows:A[]=[a];test(rows[0]);print("dynamic_data");}

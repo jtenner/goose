@@ -1,0 +1,28 @@
+[
+  {
+    "case": "wide16",
+    "source_sha256": "a7bc3525f1af822b7d22e39d16a692801bbc416c8e9ddf90e30c87e5f2d897a1",
+    "emit_exit": 1
+  },
+  {
+    "case": "wide32",
+    "source_sha256": "f271c4962d9a35b64cbd1cf218b7e53ff0ad2dea1bded38cfa3b242cb2bbf21f",
+    "emit_exit": 1
+  },
+  {
+    "case": "zero_up",
+    "source_sha256": "12e7c10ccc6e06d3a9e40bc2ba43a6e814be32e3928dfda2b444cd605f545d31",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "zero_down",
+    "source_sha256": "08e730a6584c431df1b2cb15ad37b609e3e74524df086f15d8901461966d6c98",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  }
+]

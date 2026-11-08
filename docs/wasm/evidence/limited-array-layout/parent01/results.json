@@ -1,0 +1,53 @@
+[
+  {
+    "case": "stored",
+    "source_sha256": "76e9d3ce6115394fbc7fb625fc3f5f1200cbb7d06c6c3cf8ec9e1d219d404603",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1,
+    "wasm_reason": "/tmp/goose-wasm-limited-array-layout-20261108/parent01/stored.goose:1: error: wasm target: array adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "reference",
+    "source_sha256": "646e26a98f2c458b76c0dabd2156581aa7053312e51b92be61be51e767843c97",
+    "emit_exit": 1,
+    "native_reason": "/tmp/goose-wasm-limited-array-layout-20261108/parent01/reference.goose:1: error: expected ';' in variable declaration, found '&='\nfn main(){var a:u8[..3]=[7,8];var r:u8[..3]&=a;var b:u8[..256]=copy(r);assert(b.len==2&&b[1]==8);print(\"reference\");}\n                                           ^~\n"
+  },
+  {
+    "case": "call",
+    "source_sha256": "0b68cb44c45e74cae993a264cdd352895e0dbf92cd8579f0330a390ca42d726f",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1,
+    "wasm_reason": "/tmp/goose-wasm-limited-array-layout-20261108/parent01/call.goose:1: error: wasm target: aggregate result adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "shrink",
+    "source_sha256": "a30fa9248934c809cc6cf41f9c6fac74d16acb121a236d8c4679d5442bb0ebb7",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1,
+    "wasm_reason": "/tmp/goose-wasm-limited-array-layout-20261108/parent01/shrink.goose:1: error: wasm target: array adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "field",
+    "source_sha256": "1c5eaf1d17e5e3ef3c8ffa5815eeeaa4f53930af8feb34e30babaf83fadfb769",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1,
+    "wasm_reason": "/tmp/goose-wasm-limited-array-layout-20261108/parent01/field.goose:1: error: wasm target: aggregate adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "data_field",
+    "source_sha256": "42c2f245dece41bba3e13d780e7eca6f2e9f2ab5702b7f975424d4a3b7aa0de5",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1,
+    "wasm_reason": "/tmp/goose-wasm-limited-array-layout-20261108/parent01/data_field.goose:1: error: wasm target: aggregate adaptation needs the pending destination lowering\n"
+  }
+]

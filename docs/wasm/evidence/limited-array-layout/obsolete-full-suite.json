@@ -1,0 +1,20 @@
+{
+  "reason": "new exact-message regression fails; partial suite is obsolete and is not validation",
+  "process": {
+    "pid": 2869837,
+    "args": [
+      "python3",
+      "test/wasm_backend.py",
+      "--correctness-only",
+      "--exe",
+      "/tmp/goose-wasm-limited-array-layout-20261108/build01/goose-tested",
+      "--out",
+      "/tmp/goose-wasm-limited-array-layout-20261108/full-correctness01/artifacts",
+      "--wasmtime-python",
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "--shader-library",
+      "/home/dev/Projects/goose-wasm-backend/build/libgoose_shaderc.a"
+    ]
+  },
+  "signal": "SIGINT"
+}

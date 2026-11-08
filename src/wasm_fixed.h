@@ -206,11 +206,42 @@ inline bool WasmCodeGen::CanCopyFixedArray(TypeExpr *to, TypeExpr *from) {
            ArrSize(from->arr) <= ArrSize(to->arr);
 }
 
+inline bool WasmCodeGen::CanCopyLimitedArray(TypeExpr *to, TypeExpr *from) {
+    return to && from && InlineArray(to) && InlineArray(from) &&
+           to->arr->akind == A_LIMITED && from->arr->akind == A_LIMITED &&
+           ArrSize(to->arr) >= 0 && ArrSize(from->arr) >= 0 &&
+           !TEq(to, from) && TEq(to->arr->sub, from->arr->sub);
+}
+
+inline void WasmCodeGen::CopyLimitedArray(FixedPlace destination, FixedPlace source, Line line) {
+    if (!CanCopyLimitedArray(destination.type, source.type))
+        Fail(line, "limited array copy needs matching element layouts");
+    RequireFixed(destination.type, line); RequireFixed(source.type, line);
+    auto to = ArrayFromPlace(destination, line), from = ArrayFromPlace(source, line);
+    auto toPrefix = (uint32_t)IntSize(LenStore(destination.type->arr));
+    auto fromPrefix = (uint32_t)IntSize(LenStore(source.type->arr));
+    if (toPrefix > UINT32_MAX - destination.offset || fromPrefix > UINT32_MAX - source.offset)
+        Fail(line, "limited array payload offset exceeds memory32");
+    auto count = Local(WasmModule::I64), bytes = Local(WasmModule::I32);
+    ArrayLength(from); code.Set(count);
+    // A valid source length cannot exceed its static capacity.
+    if (from.layout.capacity > to.layout.capacity) {
+        code.Get(count); code.I64(to.layout.capacity); code.Byte(0x56);
+        Open(0x04); Trap(10, line); Close();
+    }
+    code.Get(count); code.I64(Size(from.layout.element)); code.Byte(0x7e); code.Byte(0xa7); code.Set(bytes);
+    destination.offset += toPrefix; destination.type = to.layout.element;
+    source.offset += fromPrefix; source.type = from.layout.element;
+    CopyBytes(destination, source, bytes, line);
+    PrepareArrayLengthStore(to); code.Get(count); StoreArrayLength(to);
+}
+
 inline void WasmCodeGen::CallInto(FreshFixedDestination destination, Node *expression) {
     CheckFreshDestination(destination, expression->line);
     auto type = ActualType(expression);
     if (!FixedResult(type) ||
-        (!TEq(type, destination.place.type) && !CanCopyFixedArray(destination.place.type, type)))
+        (!TEq(type, destination.place.type) && !CanCopyFixedArray(destination.place.type, type) &&
+         !CanCopyLimitedArray(destination.place.type, type)))
         Fail(expression->line, "aggregate result adaptation needs the pending destination lowering");
     RequireCallValue(type, true, expression->line);
     if (!TEq(type, destination.place.type) || destination.place.memory != 0 || destination.place.packed) {
@@ -570,6 +601,14 @@ inline void WasmCodeGen::AssignFixed(FixedPlace destination, Node *source, TType
     }
     auto from = ActualType(source);
     while (from && from->kind == TY_REF) from = from->ref->sub;
+    if (CanCopyLimitedArray(destination.type, from)) {
+        WithReadPlace(source, [&](FixedPlace value) {
+            while (value.type->kind == TY_REF) value = DereferencePlace(value, line);
+            if (!TEq(from, value.type)) fail("has an inconsistent source layout");
+            CopyLimitedArray(destination, value, line);
+        });
+        return;
+    }
     if (CanCopyFixedArray(destination.type, from)) {
         RequireFixed(destination.type, line);
         auto bytes = RequireFixed(from, line);
@@ -801,6 +840,9 @@ inline void WasmCodeGen::ConstructAggregateArray(FreshFixedDestination destinati
 inline void WasmCodeGen::CopyFixed(FreshFixedDestination destination, FixedPlace source, Line line) {
     CheckFreshDestination(destination, line);
     if (!TEq(destination.place.type, source.type)) {
+        if (CanCopyLimitedArray(destination.place.type, source.type)) {
+            CopyLimitedArray(destination.place, source, line); return;
+        }
         if (!CanCopyFixedArray(destination.place.type, source.type))
             Fail(line, "aggregate adaptation needs the pending destination lowering");
         auto payload = FixedMathDestination(destination, source.type, line);
@@ -1128,7 +1170,7 @@ inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *sourc
     }
     auto from = ActualType(source);
     while (from && from->kind == TY_REF) from = from->ref->sub;
-    if (!from || (!TEq(type, from) && !CanCopyFixedArray(type, from)))
+    if (!from || (!TEq(type, from) && !CanCopyFixedArray(type, from) && !CanCopyLimitedArray(type, from)))
         Fail(source->line, "aggregate adaptation needs the pending destination lowering");
     if (fresh.origin == FreshFixedOrigin::ReservedDataElement && Nominal(type)) {
         if (auto id = Is<Ident>(source); id && id->vdef && TEq(type, id->vdef->type)) {
