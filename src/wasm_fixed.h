@@ -93,7 +93,8 @@ inline void WasmCodeGen::CheckFreshDestination(const FreshFixedDestination &fres
 template<class Consume>
 inline void WasmCodeGen::WithFixedTemporary(TypeExpr *type, Node *expression, Consume consume) {
     assert(expression);
-    if (!Nominal(type)) Fail(expression->line, "fixed temporary needs a nominal value");
+    if (!Nominal(type) && !InlineArray(type))
+        Fail(expression->line, "fixed temporary needs a fixed stored value");
     auto image = RequireFixed(type, expression->line);
     auto bytes = std::max(1u, image);
     auto scope = scopes.size(); scopes.emplace_back();
@@ -304,7 +305,8 @@ inline void WasmCodeGen::AssignFixed(FixedPlace destination, Node *source, TType
         fail("adaptation needs the pending destination lowering");
     auto dot = Is<Dot>(source);
     auto call = Is<Call>(source);
-    if (!array && (Is<StructLit>(source) || (dot && dot->variantconst) || (call && call->builtin == B_DEFAULT))) {
+    if (Is<StructLit>(source) || (dot && dot->variantconst) || (call && call->builtin == B_DEFAULT) ||
+        (array && Is<ArrayLit>(source))) {
         WithFixedTemporary(destination.type, source, [&](const FixedPlace &value) {
             CopyBytes(destination, value, RequireFixed(destination.type, line), line, true);
         });

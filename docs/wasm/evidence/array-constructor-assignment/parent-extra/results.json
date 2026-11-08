@@ -1,0 +1,16 @@
+[
+  {
+    "case": "early",
+    "opt": 0,
+    "source_sha256": "51e363cf8bb625bbc3f9a49dad28ecb2468bab3bcdcaddca121f25ceb93cad5b",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-constructors-20261108/parent-extra/early.goose:1: error: wasm target: whole-array assignment from a temporary needs the pending destination lowering\n"
+  },
+  {
+    "case": "early",
+    "opt": 2,
+    "source_sha256": "51e363cf8bb625bbc3f9a49dad28ecb2468bab3bcdcaddca121f25ceb93cad5b",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-constructors-20261108/parent-extra/early.goose:1: error: wasm target: whole-array assignment from a temporary needs the pending destination lowering\n"
+  }
+]

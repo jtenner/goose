@@ -1,0 +1,1 @@
+var target:i64[2]=[1,2];recursive fn inner()->i64{target=[{print("nested-live");3},4];print("nested-done");return target[0];}fn main(){target=[9,inner()];assert(target[0]==9);assert(target[1]==3);print("nested_owner");}

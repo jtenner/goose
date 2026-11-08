@@ -77,3 +77,7 @@ Selected records are retained in the
 under /tmp/goose-wasm-array-assignment-20261107 and
 /tmp/goose-wasm-default-adaptation-20261108. All work is correctness-only.
 No timing, measurement lease or performance acceptance gate is used.
+
+Fresh exact-type array literals, fills and defaults are added in the later
+[array constructor assignment step](array-constructor-assignment.md). The
+stored-layout adaptation and general call/result limits remain.

@@ -87,9 +87,9 @@ def check_references(run, node, validator, wasmtime_python, out):
 def check_guards(run, exe, cc, node, out):
     cases = [
         ('literal', 'fn main(){var a:u8[2]=[1,2];a=[3,4];print(a[0]);}\n',
-         b'3\n', b'whole-array assignment from a temporary needs the pending destination lowering'),
+         b'3\n', None),
         ('default', 'struct S{n:i64=7}\nfn main(){var a:S[1]=[S{n:1}];a=default<S[1]>();print(a[0].n);}\n',
-         b'7\n', b'whole-array assignment from a temporary needs the pending destination lowering'),
+         b'7\n', None),
         ('adaptation', 'fn main(){var a:u8[..3]=[1];var b:u8[2]=[2,3];a=b;print(a.len);}\n',
          b'2\n', b'whole-array assignment adaptation needs the pending destination lowering'),
     ]
@@ -103,7 +103,12 @@ def check_guards(run, exe, cc, node, out):
             run([cc, c, '-pthread', '-lm', '-ldl', '-o', native])
             reference = run([native]); assert reference.stdout == expected and not reference.stderr
             module.unlink(missing_ok=True)
-            result = run([exe, f'-O{opt}', '--target', 'wasm', '-o', module, source], ok=False)
+            result = run([exe, f'-O{opt}', '--target', 'wasm', '-o', module, source], ok=reason is None)
+            if reason is None:
+                actual = run([node, ROOT / 'scripts/run_wasm.mjs', module])
+                assert actual.stdout == expected and not actual.stderr
+                count += 1
+                continue
             assert result.returncode == 1 and re.findall(rb'wasm target: ([^\n]+)', result.stderr) == [reason], (name, result.stderr)
             assert not module.exists()
             count += 1

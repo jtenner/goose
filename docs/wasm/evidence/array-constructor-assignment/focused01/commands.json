@@ -1,0 +1,2507 @@
+[
+  {
+    "name": "command-0",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_default-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_default.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-1",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_default-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-2",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_default-O0.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_default-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-3",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_default-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-4",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_default-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-5",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_default-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_default.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-6",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_default-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-7",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_default-O2.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_default-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-8",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_default-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-9",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_default-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-10",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_early.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-11",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-12",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early-O0.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-13",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-14",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-15",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_early.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-16",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-17",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early-O2.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-18",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-19",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-20",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early_owner-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_early_owner.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-21",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early_owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-22",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early_owner-O0.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early_owner-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-23",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early_owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-24",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early_owner-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-25",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early_owner-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_early_owner.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-26",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early_owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-27",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early_owner-O2.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early_owner-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-28",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early_owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-29",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early_owner-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-30",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_default-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_empty_default.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-31",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_default-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-32",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_default-O0.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_default-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-33",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_default-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-34",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_default-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-35",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_default-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_empty_default.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-36",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_default-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-37",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_default-O2.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_default-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-38",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_default-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-39",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_default-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-40",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_effect-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_empty_effect.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-41",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_effect-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-42",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_effect-O0.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_effect-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-43",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_effect-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-44",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_effect-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-45",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_effect-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_empty_effect.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-46",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_effect-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-47",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_effect-O2.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_effect-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-48",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_effect-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-49",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_empty_effect-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-50",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_field-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_field.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-51",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_field-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-52",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_field-O0.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_field-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-53",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_field-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-54",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_field-O0.wasm",
+      "0",
+      ""
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-55",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_field-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_field.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-56",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_field-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-57",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_field-O2.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_field-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-58",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_field-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-59",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_field-O2.wasm",
+      "0",
+      ""
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-60",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_fill-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_fill.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-61",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_fill-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-62",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_fill-O0.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_fill-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-63",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_fill-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-64",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_fill-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-65",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_fill-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_fill.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-66",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_fill-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-67",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_fill-O2.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_fill-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-68",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_fill-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-69",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_fill-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-70",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_limited-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_limited.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-71",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_limited-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-72",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_limited-O0.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_limited-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-73",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_limited-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-74",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_limited-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-75",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_limited-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_limited.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-76",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_limited-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-77",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_limited-O2.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_limited-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-78",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_limited-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-79",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_limited-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-80",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_literal-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_literal.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-81",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_literal-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-82",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_literal-O0.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_literal-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-83",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_literal-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-84",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_literal-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-85",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_literal-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_literal.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-86",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_literal-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-87",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_literal-O2.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_literal-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-88",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_literal-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-89",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_literal-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-90",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_loop-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_loop.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-91",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_loop-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-92",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_loop-O0.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_loop-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-93",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_loop-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-94",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_loop-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-95",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_loop-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_loop.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-96",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_loop-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-97",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_loop-O2.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_loop-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-98",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_loop-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-99",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_loop-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-100",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_nested.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-101",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-102",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested-O0.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-103",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-104",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-105",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_nested.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-106",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-107",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested-O2.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-108",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-109",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-110",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_owner-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_nested_owner.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-111",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-112",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_owner-O0.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_owner-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-113",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-114",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_owner-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-115",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_owner-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_nested_owner.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-116",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-117",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_owner-O2.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_owner-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-118",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-119",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_owner-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-120",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_replacement-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_nested_replacement.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-121",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_replacement-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-122",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_replacement-O0.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_replacement-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-123",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_replacement-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-124",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_replacement-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-125",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_replacement-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_nested_replacement.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-126",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_replacement-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-127",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_replacement-O2.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_replacement-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-128",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_replacement-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-129",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_replacement-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-130",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_old_target-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_old_target.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-131",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_old_target-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-132",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_old_target-O0.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_old_target-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-133",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_old_target-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-134",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_old_target-O0.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-135",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_old_target-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_old_target.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-136",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_old_target-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-137",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_old_target-O2.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_old_target-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-138",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_old_target-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-139",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_old_target-O2.wasm",
+      "0",
+      "no-data"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-140",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_refs-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_refs.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-141",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_refs-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-142",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_refs-O0.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_refs-O0-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-143",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_refs-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-144",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_refs-O0.wasm",
+      "0",
+      ""
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-145",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_refs-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_constructor_refs.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-146",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_refs-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-147",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_refs-O2.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_refs-O2-instance"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-148",
+    "args": [
+      "/tmp/goose-wasm-runtime-env/bin/python",
+      "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_refs-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-149",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_refs-O2.wasm",
+      "0",
+      ""
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-150",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_loop-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-151",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-loop-owner-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-loop-owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-152",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-loop-owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-153",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_constructor_owner.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-loop-owner-O0.wasm",
+      "loop"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-154",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-loop-missing-restore-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-loop-missing-restore-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-155",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-loop-missing-restore-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-156",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_constructor_owner.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-loop-missing-restore-O0.wasm",
+      "loop"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-157",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early_owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-158",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-early_owner-owner-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-early_owner-owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-159",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-early_owner-owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-160",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_constructor_owner.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-early_owner-owner-O0.wasm",
+      "early_owner"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-161",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-162",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-nested_owner-owner-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-nested_owner-owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-163",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-nested_owner-owner-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-164",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_constructor_owner.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-nested_owner-owner-O0.wasm",
+      "nested_owner"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-165",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_loop-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-166",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-loop-owner-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-loop-owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-167",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-loop-owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-168",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_constructor_owner.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-loop-owner-O2.wasm",
+      "loop"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-169",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-loop-missing-restore-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-loop-missing-restore-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-170",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-loop-missing-restore-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-171",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_constructor_owner.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-loop-missing-restore-O2.wasm",
+      "loop"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-172",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_early_owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-173",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-early_owner-owner-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-early_owner-owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-174",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-early_owner-owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-175",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_constructor_owner.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-early_owner-owner-O2.wasm",
+      "early_owner"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-176",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/wasm_array_constructor_nested_owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-177",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-nested_owner-owner-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-nested_owner-owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-178",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-nested_owner-owner-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-179",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_array_constructor_owner.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-nested_owner-owner-O2.wasm",
+      "nested_owner"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-180",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure-O0.c",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-181",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-182",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure-O0.native"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-183",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure-O0.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-184",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-185",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure-observed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-186",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure-observed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-187",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_constructor_assignment_failure.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure-observed-O0.wasm",
+      ""
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-188",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure-O2.c",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-189",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-190",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure-O2.native"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-191",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure-O2.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-192",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-193",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure-observed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-194",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure-observed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-195",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_constructor_assignment_failure.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-failure-observed-O2.wasm",
+      ""
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-196",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target-O0.c",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-197",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-198",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target-O0.native"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-199",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target-O0.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-200",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-201",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target-observed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-202",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target-observed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-203",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_constructor_assignment_failure.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target-observed-O0.wasm",
+      "bounds"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-204",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target-O2.c",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-205",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-206",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target-O2.native"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-207",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target-O2.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-208",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-209",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target-observed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-210",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target-observed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-211",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_constructor_assignment_failure.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-constructor-target-observed-O2.wasm",
+      "bounds"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-212",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-literal-guard-O0.c",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-literal-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-213",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-literal-guard-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-literal-guard-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-214",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-literal-guard-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-215",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-literal-guard-O0.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-literal-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-216",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-literal-guard-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-217",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-literal-guard-O2.c",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-literal-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-218",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-literal-guard-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-literal-guard-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-219",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-literal-guard-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-220",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-literal-guard-O2.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-literal-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-221",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-literal-guard-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-222",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-default-guard-O0.c",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-default-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-223",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-default-guard-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-default-guard-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-224",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-default-guard-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-225",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-default-guard-O0.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-default-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-226",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-default-guard-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-227",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-default-guard-O2.c",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-default-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-228",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-default-guard-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-default-guard-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-229",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-default-guard-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-230",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-default-guard-O2.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-default-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-231",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-default-guard-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-232",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-adaptation-guard-O0.c",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-adaptation-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-233",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-adaptation-guard-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-adaptation-guard-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-234",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-adaptation-guard-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-235",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-adaptation-guard-O0.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-adaptation-guard.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-236",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-adaptation-guard-O2.c",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-adaptation-guard.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-237",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-adaptation-guard-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-adaptation-guard-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-238",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-adaptation-guard-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-239",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-adaptation-guard-O2.wasm",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-adaptation-guard.goose"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-240",
+    "args": [
+      "/tmp/goose-wasm-array-constructors-20261108/goose-tested",
+      "--check",
+      "/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-frozen-data-policy.goose"
+    ],
+    "exit": 1
+  }
+]

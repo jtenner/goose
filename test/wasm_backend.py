@@ -135,7 +135,7 @@ def main():
             run([exe, f'-O{opt}', '--target', 'wasm', '-o', wasm, source])
             assert wasm.read_bytes()[:8] == b'\0asm\x01\0\0\0', 'invalid binary magic/version'
             run([args.validator, 'validate', wasm])
-            if source.stem.startswith(('wasm_inline_ref_abi_', 'wasm_data_aggregate_', 'wasm_constructor_assignment_', 'wasm_aggregate_construction_', 'wasm_array_assignment_', 'wasm_default_conversion_')):
+            if source.stem.startswith(('wasm_inline_ref_abi_', 'wasm_data_aggregate_', 'wasm_constructor_assignment_', 'wasm_aggregate_construction_', 'wasm_array_assignment_', 'wasm_default_conversion_', 'wasm_array_constructor_')):
                 actual = run([args.node, ROOT / 'test' / 'wasm_reference_abi.mjs', wasm,
                               out / f'{source.stem}-O{opt}-instance'])
             else:
@@ -222,6 +222,11 @@ def main():
                 mode = ('no-data' if source.stem in ('wasm_field_iteration_fixed', 'wasm_field_iteration_root',
                                                     'wasm_field_iteration_refs', 'wasm_field_iteration_zero',
                                                     'wasm_field_iteration_call', 'wasm_field_iteration_variant') else '')
+                checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
+                assert checked.stdout == reference.stdout and not checked.stderr
+                count += 1
+            if source.stem.startswith('wasm_array_constructor_'):
+                mode = '' if source.stem in ('wasm_array_constructor_field', 'wasm_array_constructor_refs') else 'no-data'
                 checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
                 assert checked.stdout == reference.stdout and not checked.stderr
                 count += 1
@@ -335,6 +340,9 @@ def main():
     count += check_array_assignment_images(run, args.node, args.validator, out)
     count += check_array_assignment_references(run, args.node, args.validator, args.wasmtime_python, out)
     count += check_array_assignment_guards(run, exe, args.cc, args.node, out)
+    from wasm_array_constructor_checks import check_owners as check_array_constructor_owners, check_failures as check_array_constructor_failures
+    count += check_array_constructor_owners(run, args.node, args.validator, out)
+    count += check_array_constructor_failures(run, exe, args.cc, args.node, args.validator, out)
     count += check_data_iteration_footprint(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out,
                                           correctness_only=args.correctness_only)
     growth_source = out / 'frame-growth.goose'

@@ -273,6 +273,13 @@ when it is constructed in a wider limited destination. Fresh array assignment
 values, different stored-layout assignment and general aggregate calls/results
 remain guarded. See [array assignment evidence](evidence/array-assignment.md).
 
+Exact fixed-array literals, fills and defaults now also work as assignment
+values. They use the existing checked temporary owner and copy only after
+construction succeeds. The suite passes 2,105 correctness groups, the native
+baseline and 52 exact comparisons; 448 unchanged parent modules are identical.
+General aggregate calls/results and stored-layout adaptation remain guarded.
+See [array constructor assignment](evidence/array-constructor-assignment.md).
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping

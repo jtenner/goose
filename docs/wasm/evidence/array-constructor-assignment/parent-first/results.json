@@ -1,0 +1,44 @@
+[
+  {
+    "case": "literal",
+    "opt": 0,
+    "source_sha256": "cd92225e548085655d424acc4cc495da2849b57aaa7ea65c6e37de88ca0fcf2e",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-constructors-20261108/parent-first/literal.goose:1: error: wasm target: whole-array assignment from a temporary needs the pending destination lowering\n"
+  },
+  {
+    "case": "literal",
+    "opt": 2,
+    "source_sha256": "cd92225e548085655d424acc4cc495da2849b57aaa7ea65c6e37de88ca0fcf2e",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-constructors-20261108/parent-first/literal.goose:1: error: wasm target: whole-array assignment from a temporary needs the pending destination lowering\n"
+  },
+  {
+    "case": "limited",
+    "opt": 0,
+    "source_sha256": "054f032bfa25d2e4e002265aa1d37249fbdadab4a9061576e5670104397a527f",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-constructors-20261108/parent-first/limited.goose:1: error: wasm target: whole-array assignment from a temporary needs the pending destination lowering\n"
+  },
+  {
+    "case": "limited",
+    "opt": 2,
+    "source_sha256": "054f032bfa25d2e4e002265aa1d37249fbdadab4a9061576e5670104397a527f",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-constructors-20261108/parent-first/limited.goose:1: error: wasm target: whole-array assignment from a temporary needs the pending destination lowering\n"
+  },
+  {
+    "case": "default",
+    "opt": 0,
+    "source_sha256": "b536840f173c6416376bf37ee6c020fc5f50eda0bd8e928a45379ec12f077a24",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-constructors-20261108/parent-first/default.goose:2: error: wasm target: whole-array assignment from a temporary needs the pending destination lowering\n"
+  },
+  {
+    "case": "default",
+    "opt": 2,
+    "source_sha256": "b536840f173c6416376bf37ee6c020fc5f50eda0bd8e928a45379ec12f077a24",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-constructors-20261108/parent-first/default.goose:2: error: wasm target: whole-array assignment from a temporary needs the pending destination lowering\n"
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "case": "loop",
+    "opt": 0,
+    "source_sha256": "c0ccd6ff87373a76c986ccfe8bc44ea45275f17c3bd72470b5b55c8e57c920a4",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-constructors-20261108/parent-owners/loop.goose:1: error: wasm target: whole-array assignment from a temporary needs the pending destination lowering\n"
+  },
+  {
+    "case": "loop",
+    "opt": 2,
+    "source_sha256": "c0ccd6ff87373a76c986ccfe8bc44ea45275f17c3bd72470b5b55c8e57c920a4",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-constructors-20261108/parent-owners/loop.goose:1: error: wasm target: whole-array assignment from a temporary needs the pending destination lowering\n"
+  },
+  {
+    "case": "early_owner",
+    "opt": 0,
+    "source_sha256": "8d33924367d252b1eef075ad0a96af95e0f1b582c5d69c673ba6432cce319946",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-constructors-20261108/parent-owners/early_owner.goose:1: error: wasm target: whole-array assignment from a temporary needs the pending destination lowering\n"
+  },
+  {
+    "case": "early_owner",
+    "opt": 2,
+    "source_sha256": "8d33924367d252b1eef075ad0a96af95e0f1b582c5d69c673ba6432cce319946",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-constructors-20261108/parent-owners/early_owner.goose:1: error: wasm target: whole-array assignment from a temporary needs the pending destination lowering\n"
+  },
+  {
+    "case": "nested_owner",
+    "opt": 0,
+    "source_sha256": "5b9dac204e7551eae6833c8d8889bf7408946e4c42beebecf50524b9c8f23de9",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-constructors-20261108/parent-owners/nested_owner.goose:1: error: wasm target: whole-array assignment from a temporary needs the pending destination lowering\n"
+  },
+  {
+    "case": "nested_owner",
+    "opt": 2,
+    "source_sha256": "5b9dac204e7551eae6833c8d8889bf7408946e4c42beebecf50524b9c8f23de9",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-array-constructors-20261108/parent-owners/nested_owner.goose:1: error: wasm target: whole-array assignment from a temporary needs the pending destination lowering\n"
+  }
+]

@@ -1,0 +1,4 @@
+/tmp/goose-wasm-array-constructors-20261108/parent-first/fill.goose:2: error: unknown function: fill
+fn main(){var a:S[2]=[S{n:1},S{n:2}];a=fill(S{n:9},2);assert(a[0].n==9);assert(a[1].n==9);print("fill");}
+                                       ^~~~~~~~~~~~~~
+  in fn main() instantiated from /tmp/goose-wasm-array-constructors-20261108/parent-first/fill.goose:2

@@ -1,0 +1,4 @@
+/tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-frozen-data-policy.goose:1: error: a value of type u8[] is frozen at construction (§4.4); rebuild its container instead
+fn main(){var a:u8[]=[1];var b:u8[]=[2];a=b;print(a[0]);}
+                                        ^~~~
+  in fn main() instantiated from /tmp/goose-wasm-array-constructors-20261108/focused01/array-assignment-frozen-data-policy.goose:1

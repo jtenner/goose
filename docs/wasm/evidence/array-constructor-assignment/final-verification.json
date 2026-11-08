@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "purpose": "correctness only",
+  "compiler_sha256": "757018b1b3bb91fecd9e35cd59b0870bd72756ef06360e5aa074f352a25194aa",
+  "source_files": 73,
+  "unchanged_validation_inputs": 4565,
+  "wasm_checks": 2105,
+  "memory_matrix_cases": 40,
+  "native_baseline": {
+    "status": "all groups passed",
+    "frontend": 1988,
+    "generated_c": 970,
+    "tinycc": 1142
+  },
+  "exact_comparisons": 52,
+  "unchanged_source_module_pairs": 448,
+  "native_first_cases": 30,
+  "focused_groups": {
+    "runtime": 30,
+    "owners": 8,
+    "failure_images": 4,
+    "assignment_policy": 7
+  },
+  "timing_jobs": 0,
+  "measurement_lease_used": false
+}

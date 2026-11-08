@@ -1,0 +1,10 @@
+{
+  "literal": "fn main(){var a:u8[2]=[1,2];a=[3,4];assert(a[0]==3);assert(a[1]==4);print(\"literal\");}\n",
+  "limited": "fn main(){var a:u16[..3]=[1];a=[2,3];assert(a.len==2);assert(a[1]==3);print(\"limited\");}\n",
+  "default": "struct S{n:i64=7}\nfn main(){var a:S[1]=[S{n:1}];a=default<S[1]>();assert(a[0].n==7);print(\"default\");}\n",
+  "fill": "struct S{n:i64}\nfn main(){var a:S[2]=[S{n:1},S{n:2}];a=fill(S{n:9},2);assert(a[0].n==9);assert(a[1].n==9);print(\"fill\");}\n",
+  "field": "struct H{a:u16[2]}\nfn main(){var h:H[]=[H{a:[1,2]}];h[0].a=[3,4];assert(h[0].a[0]==3);assert(h[0].a[1]==4);print(\"field\");}\n",
+  "old_target": "var a:i64[2]=[1,2];recursive fn read_old()->i64{return a[0];}\nfn main(){a=[9,read_old()];assert(a[0]==9);assert(a[1]==1);print(\"old_target\");}\n",
+  "empty_effect": "var calls:i64=0;recursive fn tick()->i64{calls++;return calls;}\nfn main(){var a:i64[0]=[];a=fill(tick(),0);assert(calls==1);print(\"empty_effect\");}\n",
+  "nested": "struct S{n:i64=7}\nstruct H{a:S[1]}\nfn main(){var h:H=H{a:[S{n:1}]};h.a=[S{n:9}];assert(h.a[0].n==9);print(\"nested\");}\n"
+}

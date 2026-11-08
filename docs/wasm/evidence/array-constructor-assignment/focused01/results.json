@@ -1,0 +1,182 @@
+[
+  {
+    "source": "test/wasm/wasm_array_constructor_default.goose",
+    "source_sha256": "b536840f173c6416376bf37ee6c020fc5f50eda0bd8e928a45379ec12f077a24",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_default.goose",
+    "source_sha256": "b536840f173c6416376bf37ee6c020fc5f50eda0bd8e928a45379ec12f077a24",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_early.goose",
+    "source_sha256": "51e363cf8bb625bbc3f9a49dad28ecb2468bab3bcdcaddca121f25ceb93cad5b",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_early.goose",
+    "source_sha256": "51e363cf8bb625bbc3f9a49dad28ecb2468bab3bcdcaddca121f25ceb93cad5b",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_early_owner.goose",
+    "source_sha256": "8d33924367d252b1eef075ad0a96af95e0f1b582c5d69c673ba6432cce319946",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_early_owner.goose",
+    "source_sha256": "8d33924367d252b1eef075ad0a96af95e0f1b582c5d69c673ba6432cce319946",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_empty_default.goose",
+    "source_sha256": "5d624f56d43c44c1135fe2df40cc1b6483b33ea5f288dcdb5e809f8659127676",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_empty_default.goose",
+    "source_sha256": "5d624f56d43c44c1135fe2df40cc1b6483b33ea5f288dcdb5e809f8659127676",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_empty_effect.goose",
+    "source_sha256": "10a52d007965048d27571ccbe380aca002cb59cad6b1e51546e5df944ee6855e",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_empty_effect.goose",
+    "source_sha256": "10a52d007965048d27571ccbe380aca002cb59cad6b1e51546e5df944ee6855e",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_field.goose",
+    "source_sha256": "005df8ebe3efa39ffdeb0c7292ac8108104aa2cc745c1ee96c5ee0c40f7213f0",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_field.goose",
+    "source_sha256": "005df8ebe3efa39ffdeb0c7292ac8108104aa2cc745c1ee96c5ee0c40f7213f0",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_fill.goose",
+    "source_sha256": "0316b2c524ed8c9b57fefdca634bc8bacf35c3781e76aadecd6ecb19adc08cd2",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_fill.goose",
+    "source_sha256": "0316b2c524ed8c9b57fefdca634bc8bacf35c3781e76aadecd6ecb19adc08cd2",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_limited.goose",
+    "source_sha256": "054f032bfa25d2e4e002265aa1d37249fbdadab4a9061576e5670104397a527f",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_limited.goose",
+    "source_sha256": "054f032bfa25d2e4e002265aa1d37249fbdadab4a9061576e5670104397a527f",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_literal.goose",
+    "source_sha256": "cd92225e548085655d424acc4cc495da2849b57aaa7ea65c6e37de88ca0fcf2e",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_literal.goose",
+    "source_sha256": "cd92225e548085655d424acc4cc495da2849b57aaa7ea65c6e37de88ca0fcf2e",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_loop.goose",
+    "source_sha256": "c0ccd6ff87373a76c986ccfe8bc44ea45275f17c3bd72470b5b55c8e57c920a4",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_loop.goose",
+    "source_sha256": "c0ccd6ff87373a76c986ccfe8bc44ea45275f17c3bd72470b5b55c8e57c920a4",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_nested.goose",
+    "source_sha256": "c3d291385b6329ef4d89e1649f86a4b2e796c8adb288ae80de635a48859374e9",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_nested.goose",
+    "source_sha256": "c3d291385b6329ef4d89e1649f86a4b2e796c8adb288ae80de635a48859374e9",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_nested_owner.goose",
+    "source_sha256": "5b9dac204e7551eae6833c8d8889bf7408946e4c42beebecf50524b9c8f23de9",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_nested_owner.goose",
+    "source_sha256": "5b9dac204e7551eae6833c8d8889bf7408946e4c42beebecf50524b9c8f23de9",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_nested_replacement.goose",
+    "source_sha256": "6da5a6bd6a8279f8ccfa347afae342c21719997b766d440b6ea6db96be11db6c",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_nested_replacement.goose",
+    "source_sha256": "6da5a6bd6a8279f8ccfa347afae342c21719997b766d440b6ea6db96be11db6c",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_old_target.goose",
+    "source_sha256": "7310f127801c941b4066a702b2eed465b8ca410d879059a98c0d51840b9d0eba",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_old_target.goose",
+    "source_sha256": "7310f127801c941b4066a702b2eed465b8ca410d879059a98c0d51840b9d0eba",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_refs.goose",
+    "source_sha256": "7347cd901c57fbbb647dcdcba6596c77c791270e3632e8812290bfc33f08bcb7",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_array_constructor_refs.goose",
+    "source_sha256": "7347cd901c57fbbb647dcdcba6596c77c791270e3632e8812290bfc33f08bcb7",
+    "opt": 2,
+    "status": "PASS"
+  }
+]
