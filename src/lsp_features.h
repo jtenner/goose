@@ -449,7 +449,7 @@ inline HoverText HoverIdent(const Located &loc, const Occurrence &occ) {
         string literal;
         value->Dump(literal, 0);
         h.header = cat("const ", id->name, ": ", type, " = ", literal);
-        h.doc = "Compiler-provided --define value. Read-only; no source declaration.";
+        h.doc = "Compiler-provided -D/-d value. Read-only; no source declaration.";
         return h;
     }
     if (auto v = PatternVariantOf(an, occ)) {

@@ -66,7 +66,7 @@ available for legacy rows; native rows build through the native command.
 The suite's size values are checked against the two source maps in
 `test/bench_migration.py`. Ordinary sum/tree `main` wrappers remain for legacy
 runs and print both values in the original order. They require an explicit
-quoted definition, for example `--define 'BENCH_SIZE="small"'`. The native
+quoted definition, for example `-D 'BENCH_SIZE="small"'`. The native
 command supplies that definition itself. Goose files are no longer rewritten
 for these entries; legacy and JIT suite paths use the same source with a size
 definition. Other Goose files retain their old rewrite path.

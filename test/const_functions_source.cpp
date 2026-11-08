@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
                         ";}\nconst X:u64=helper(build::INPUT);\nfn main(){}\n");
         { ofstream f(path); f << text; }
         Ast ast;
-        AddBuildDefinitions(ast, {cat("INPUT=", input)});
+        AddDefines(ast, {cat("INPUT=", input)});
         ParseProgram(ast, path, {argv[1]}, DirOf(argv[0]));
         ResolveTypeNames(ast);
         if (!ast.errors.empty()) return 3;

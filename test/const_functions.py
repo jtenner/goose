@@ -67,7 +67,7 @@ fn main(){
 }
 ''')
             for opt in ['0', '2']:
-                definitions = ['--define', f'E={str(edges).lower()}', '--define', f'P={str(paths).lower()}']
+                definitions = ['-D', f'E={str(edges).lower()}', '-D', f'P={str(paths).lower()}']
                 invoke(['check', *definitions, source])
                 c = root/'need.c'
                 invoke([f'-O{opt}', *definitions, '-o', c, source])
@@ -174,7 +174,7 @@ fn main(){
         body='!x' if flipped else 'x'
         for flag in [True,False]:
             source.write_text(f'const fn pick(x:bool)->bool{{return {body};}} const X:bool=pick(build::FLAG);fn main(){{const if X {{print(1);}} else {{print(0);}}}}')
-            defs=['--define',f'FLAG={str(flag).lower()}']
+            defs=['-D',f'FLAG={str(flag).lower()}']
             invoke(['check',*defs,source])
             native=root/'edited-native'
             invoke(['build',*defs,source,'-o',native])
@@ -186,8 +186,8 @@ fn main(){
     check(simple+'const X:u64=f(~0);fn main(){const if X==18446744073709551615 {} else {missing();}}')
     check('const fn f(x:bool)->bool{return if x {false} else {true};} const X:bool=f(false);fn main(){const if X {} else {missing();}}')
     source.write_text(simple+'const X:u64=f(build::N);fn main(){}')
-    invoke(['check','--define','N=-1',source],False,'must fit u64')
-    invoke(['check','--define','N=18446744073709551615',source])
+    invoke(['check','-D','N=-1',source],False,'must fit u64')
+    invoke(['check','-D','N=18446744073709551615',source])
     for malformed in ['const fn f(x:u64){return x;}',
                       'const fn f(x:u64)->u64{return;}',
                       'const fn f(x:u64)->u64{const if true {return x;}}']:
@@ -203,7 +203,7 @@ const RESULT:bool=pick(build::FLAG);
 fn main(){const if RESULT==build::FLAG {} else {missing();}}
 '''
         source.write_text(text)
-        client=Client(str(EXE),root,['--define',f'FLAG={str(flag).lower()}'])
+        client=Client(str(EXE),root,['-D',f'FLAG={str(flag).lower()}'])
         uri=source.as_uri()
         try:
             client.request('initialize',{'processId':None,'rootUri':root.as_uri(),'capabilities':{},

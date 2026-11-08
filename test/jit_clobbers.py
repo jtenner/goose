@@ -13,8 +13,8 @@ with tempfile.TemporaryDirectory(prefix="goose-clobber-") as directory:
     for level in ("-O0", "-O2"):
         for checks in (False, True):
             for assertions in (False, True):
-                flags = [level, "--define", "CHECK_REGISTER_CLOBBERS=" + str(checks).lower(),
-                         "--define", "ENABLE_JIT_ASSERTIONS=" + str(assertions).lower()]
+                flags = [level, "-D", "CHECK_REGISTER_CLOBBERS=" + str(checks).lower(),
+                         "-D", "ENABLE_JIT_ASSERTIONS=" + str(assertions).lower()]
                 generated = root / "clobber.c"
                 run([EXE, "--standalone", *flags, SOURCE, "-o", generated])
                 c = generated.read_text()

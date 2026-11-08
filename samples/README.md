@@ -188,7 +188,7 @@ that one asset file.
 - [Parallel Wasm compiler](parallel_wasm/README.md): a mapped, validated Wasm
   subset, Relaxed atomic job claims, disjoint native x86-64 emission,
   Release/Acquire status and contained worker cleanup. Native build only.
-- [Conditional clobber checks](jit_clobbers/README.md): native `--define` and
+- [Conditional clobber checks](jit_clobbers/README.md): native `-D` and
   `const if` remove register ownership fields, initializers and validation.
 
 Their dedicated acceptance scripts exercise configurations and failure

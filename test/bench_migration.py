@@ -155,7 +155,7 @@ class MigrationChecks(unittest.TestCase):
                 self.assertEqual(values, b['sizes'])
                 self.assertEqual(harness.goose_source(g['file'], b['sizes'][0], 'unused'), source)
                 self.assertEqual(harness.size_flags(g['file'], b['sizes'][0]),
-                                 ['--define', 'BENCH_SIZE="small"'])
+                                 ['-D', 'BENCH_SIZE="small"'])
                 self.assertNotIn('BENCH_N', text)
 
     def test_recorded_legacy_outputs(self):

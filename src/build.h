@@ -43,7 +43,21 @@ inline string ProgramBuildDir(const string &rootfile, vector<string> definitions
     #endif
     auto dir = cat(GooseHome(), "/build/prog/", PathStem(rootfile), "-", Hex8(abs));
     if (!definitions.empty()) {
-        sort(definitions.begin(), definitions.end());
+        // Distinct names commute. Repeated C-only macros retain their order.
+        auto distinct = [&] {
+            set<string_view> names;
+            auto letter = [](char c) { return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '_'; };
+            for (auto &d : definitions) {
+                auto name = string_view(d).substr(0, d.find('='));
+                if (name.empty() || !letter(name[0]) ||
+                    any_of(name.begin() + 1, name.end(), [&](char c) {
+                        return !letter(c) && !(c >= '0' && c <= '9');
+                    }) || d.find_first_of("\r\n") != string::npos || !names.insert(name).second)
+                    return false;
+            }
+            return true;
+        }();
+        if (distinct) sort(definitions.begin(), definitions.end());
         string key;
         for (auto &definition : definitions) Append(key, definition.size(), ":", definition);
         Append(dir, "/defines-", Hex8(key));

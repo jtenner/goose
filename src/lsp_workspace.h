@@ -48,7 +48,7 @@ struct Workspace {
     Transport &rpc;
     string exe;
     vector<string> stdlibdirs;
-    vector<string> builddefines;
+    vector<string> defines;
     bool strict_worker_native = false;
     map<string, Document> open;     // By PathKey.
     vector<unique_ptr<Root>> roots;
@@ -307,7 +307,7 @@ struct Workspace {
                 // The parser and the checker go on past the errors they
                 // recover from, which the sink collects; the passes after
                 // the check want a program without any.
-                AddBuildDefinitions(ast, builddefines);
+                AddDefines(ast, defines);
                 ParseProgram(ast, r.path, stdlibdirs, DirOf(exe), sources);
                 ResolveTypeNames(ast);
                 an->parsed = true;

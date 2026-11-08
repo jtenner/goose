@@ -160,7 +160,7 @@ with tempfile.TemporaryDirectory(prefix='goose-const-if-') as directory:
     source, cfile = root / 'main.goose', root / 'main.c'
     for level in ('-O0', '-O2'):
         for debug in ('false', 'true', 'false'):
-            definitions = ['--define', 'DEBUG=' + debug, '--define', 'COUNT=2']
+            definitions = ['-D', 'DEBUG=' + debug, '-D', 'COUNT=2']
             cases = [(CORE, ('debug' if debug == 'true' else 'release') + '\n5\n9\nyes\nno\n' +
                       ('3\n3\nordinary\n' if debug == 'true' else '4\n4\nnormal\n'))]
             if not CORE_ONLY:
@@ -250,7 +250,7 @@ with tempfile.TemporaryDirectory(prefix='goose-const-if-') as directory:
         source.write_text(body + ' fn outer()->i64{const if build::CALL {stop();} 0} fn main(){print(outer());}')
         for level in ('-O0', '-O2'):
             for call in ('false', 'true'):
-                result = invoke(['run', level, '--define', 'CALL=' + call, source])
+                result = invoke(['run', level, '-D', 'CALL=' + call, source])
                 assert result.stdout == ('7\n' if call == 'true' else '0\n'), result.stdout
     # Standalone checks without a caller must never poison later exported
     # call roots, including a chain of helpers and constructor fragments.
@@ -294,7 +294,7 @@ with tempfile.TemporaryDirectory(prefix='goose-const-if-') as directory:
                 "else { print(1); } }\n")
     source.write_text(text)
     uri = source.as_uri()
-    client = Client(str(EXE), root, ['--define', 'DEBUG=false'])
+    client = Client(str(EXE), root, ['-D', 'DEBUG=false'])
     try:
         client.request('initialize', {'processId': None, 'rootUri': root.as_uri(), 'capabilities': {},
                                      'initializationOptions': {'entryFiles': [str(source)]}})

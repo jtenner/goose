@@ -62,7 +62,7 @@ def check(exe=None):
         for debug in ('true','false'):
             for level in (0,2):
                 c=p/'contract.c';exeout=p/'contract'
-                run([exe,f'-O{level}','--define',f'DEBUG={debug}','--standalone','-o',c,s])
+                run([exe,f'-O{level}','-D',f'DEBUG={debug}','--standalone','-o',c,s])
                 assert 'missing_g' not in c.read_text();checks+=1
                 for cc in (os.environ.get('CC','gcc'),os.environ.get('CLANG','clang')):
                     run([cc,f'-O{level}','-fsanitize=undefined','-fno-sanitize-recover=all',c,'-lm','-ldl','-pthread','-o',exeout])

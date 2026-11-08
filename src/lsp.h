@@ -247,7 +247,7 @@ struct Server {
 // `goose lsp [--stdlib dir]`, or `goose lsp --probe`.
 inline int RunLsp(const string &exe, const vector<string> &args) {
     string stdlib;
-    vector<string> builddefines;
+    vector<string> defines;
     bool strict_worker_native = false;
     for (size_t i = 0; i < args.size(); i++) {
         if (args[i] == "--probe") {
@@ -262,14 +262,22 @@ inline int RunLsp(const string &exe, const vector<string> &args) {
             strict_worker_native = true;
             continue;
         }
-        if (args[i] == "--define" && i + 1 < args.size()) {
-            builddefines.push_back(args[++i]);
+        if (args[i] == "-d") {
+            fprintf(stderr, "-d requires an attached define: -dNAME=VALUE\n");
+            return 1;
+        }
+        if (args[i] == "-D" && i + 1 < args.size()) {
+            defines.push_back(args[++i]);
+            continue;
+        }
+        if ((args[i].rfind("-D", 0) == 0 || args[i].rfind("-d", 0) == 0) && args[i].size() > 2) {
+            defines.push_back(args[i].substr(2));
             continue;
         }
         // The one transport there is, which clients (vscode-languageclient
         // among them) name when they start a server on stdio.
         if (args[i] == "--stdio") continue;
-        fprintf(stderr, "goose lsp takes --probe, --stdio or --stdlib dir, not %s\n", args[i].c_str());
+        fprintf(stderr, "unknown option: %s (goose lsp takes --probe, --stdio, --stdlib dir or -D/-d defines)\n", args[i].c_str());
         return 1;
     }
     SetBinaryStdio();
@@ -280,13 +288,13 @@ inline int RunLsp(const string &exe, const vector<string> &args) {
     // Validate before the protocol loop, then give every fresh analysis its own symbols.
     try {
         Ast config;
-        AddBuildDefinitions(config, builddefines);
+        AddDefines(config, defines);
     } catch (CompileError &e) {
         fprintf(stderr, "%s\n", e.msg.c_str());
         return 1;
     }
     server.ws.strict_worker_native = strict_worker_native;
-    server.ws.builddefines = std::move(builddefines);
+    server.ws.defines = std::move(defines);
     auto code = server.Run();
     // The reader thread is still blocked in fgetc on stdin, holding the
     // stream's lock, which glibc's exit waits for while it closes the

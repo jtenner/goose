@@ -95,7 +95,7 @@ def run_native(executable, source, output, *, key, size, types, cc, samples=7,
     if temperature == 'off':
         argv += ['--temperature', 'off']
     for definition in definitions:
-        argv += ['--define', definition]
+        argv += ['-D', definition]
     argv += list(native_flags)
     if dry_run:
         return argv

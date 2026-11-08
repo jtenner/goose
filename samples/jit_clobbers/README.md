@@ -1,8 +1,8 @@
 # Conditional register ownership checks
 
 ```sh
-goose build --define CHECK_REGISTER_CLOBBERS=true \
-  --define ENABLE_JIT_ASSERTIONS=true samples/jit_clobbers/main.goose -o /tmp/clobbers
+goose build -D CHECK_REGISTER_CLOBBERS=true \
+  -D ENABLE_JIT_ASSERTIONS=true samples/jit_clobbers/main.goose -o /tmp/clobbers
 /tmp/clobbers
 /tmp/clobbers clobber   # fails: overwrites a register with a live owner
 /tmp/clobbers assertion # fails: separately configured JIT assertion

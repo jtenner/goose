@@ -48,7 +48,7 @@ def flags(values):
     for name, value in values.items():
         if value is not None:
             literal = json.dumps(value) if isinstance(value, (str, bool)) else str(value)
-            args += ['--define', name + '=' + literal]
+            args += ['-D', name + '=' + literal]
     return args
 
 

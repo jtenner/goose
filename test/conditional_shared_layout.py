@@ -16,7 +16,7 @@ SOURCE = ROOT / "test/memory/conditional_shared_layout/main.goose"
 
 
 def definitions(debug):
-    return ["--define", "DEBUG=" + str(debug).lower()]
+    return ["-D", "DEBUG=" + str(debug).lower()]
 
 
 def negative_checks(goose, root):

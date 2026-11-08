@@ -29,7 +29,7 @@ clean upstream worktree to keep source-inspection checks independent of edits.
 
 Native definitions acceptance tests were committed before implementation;
 the unmodified compiler rejected the first invocation with `unknown option:
---define`. Run the focused tests with
+-D`. Run the focused tests with
 `python3 test/cli_definitions.py build/goose`.
 
 ## Initial integrated extension validation (historical)

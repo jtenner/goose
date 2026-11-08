@@ -6,7 +6,7 @@
 #include "flat_map.h"
 #include "lexer.h"
 #include "ast.h"
-#include "build_definitions.h"
+#include "defines.h"
 #include "dump.h"
 #include "clone.h"
 #include "parser.h"
@@ -209,10 +209,13 @@ void ParseProgram(Ast &ast, const string &rootpath, const vector<string> &stdlib
     auto rootdir = DirOf(rootpath);
     ast.packages.push_back(Package { PathStem(rootpath), rootdir, false });
     auto loadsidecar = [&](Package &pkg, bool isprogram) {
-        if (!ast.record_bench_inputs) { LoadSidecar(pkg, isprogram); return; }
-        ast.bench_inputs.push_back({cat(pkg.root, pkg.name, ".build"), {}});
-        LoadSidecar(pkg, isprogram, &ast.bench_inputs.back().second);
-        if (!pkg.hassidecar) ast.bench_inputs.pop_back();
+        if (!ast.record_bench_inputs) LoadSidecar(pkg, isprogram);
+        else {
+            ast.bench_inputs.push_back({cat(pkg.root, pkg.name, ".build"), {}});
+            LoadSidecar(pkg, isprogram, &ast.bench_inputs.back().second);
+            if (!pkg.hassidecar) ast.bench_inputs.pop_back();
+        }
+        AddDefines(ast, pkg.cdefines);
     };
     loadsidecar(ast.packages[0], true);
     auto stdlibpkg = [&](const string &dir) {
@@ -519,17 +522,18 @@ void ParseProgram(Ast &ast, const string &rootpath, const vector<string> &stdlib
 
 // Parses a program's dump as a program of its own and requires that dumping
 // that gives back the same text: what `goose --dump` of the dump written to a
-// file would print. `path` is where the dump's diagnostics say they are.
-void CheckRoundtrip(const string &dumped, const string &path,
+// file would print. `path` labels dump errors; `rootpath` keeps the original
+// package root and sidecar configuration.
+void CheckRoundtrip(const string &dumped, const string &path, const string &rootpath,
                     const vector<string> &stdlibdirs, const string &exedir,
-                    const vector<string> &builddefines) {
+                    const vector<string> &defines) {
     Ast again;
-    AddBuildDefinitions(again, builddefines);
+    AddDefines(again, defines);
     try {
-        ParseProgram(again, path, stdlibdirs, exedir,
-                     [&](const string &p) -> const string * { return p == path ? &dumped : nullptr; });
+        ParseProgram(again, rootpath, stdlibdirs, exedir,
+                     [&](const string &p) -> const string * { return p == rootpath ? &dumped : nullptr; });
     } catch (CompileError &e) {
-        throw CompileError { cat("the dump does not parse again:\n", e.msg) };
+        throw CompileError { cat("the dump ", path, " does not parse again:\n", e.msg) };
     }
     string redumped;
     again.Dump(redumped);
@@ -697,8 +701,8 @@ R"(  --stats               Print what the compile did: the declarations parsed,
                         the --stats lines on stderr.
   --offline             Fetch nothing: a package that is not fetched is an
                         error at its import, which goose fetch resolves.
-  -D NAME[=VALUE]       Define a C macro in the generated program (or -DNAME).
-  --define NAME=VALUE   Define a typed Goose constant build::NAME (repeatable).
+  -D NAME[=VALUE]        C macro and, for literals, typed build::NAME.
+                        Also accepts -DNAME[=VALUE] and -dNAME[=VALUE].
   --strict-worker-native Require audited worker-callable externs in worker graphs.
   --stdlib dir          The standard library's directory (or GOOSE_STDLIB);
                         found from where goose is by default.
@@ -741,7 +745,7 @@ Commands:
   help       Print this (or --help, -h); with a command, that command's help.
 
 Common options:
-  --define NAME=VALUE  Typed compile-time constant in namespace build.
+  -D NAME=VALUE, -dNAME=VALUE  C macro and literal constant in namespace build.
   -O0, -O1, -O2   Inlining level (default -O2).
   --debug         Overflow, range and tag checks that name the source line
                   they fail on.
@@ -1436,7 +1440,7 @@ int Main(int argc, char **argv, bool &measuring) {
     // The inlining at its highest. The C compiler optimizes whatever the
     // level, unless --debug (Builder::CFlags).
     auto optlevel = 2;
-    vector<string> cdefines, builddefines, progargs, includenames, files;
+    vector<string> cdefines, defines, progargs, includenames, files;
     for (int i = firstarg; i < argc; i++) {
         string arg = argv[i];
         // Everything past `--` belongs to the program being run, not here.
@@ -1491,13 +1495,6 @@ int Main(int argc, char **argv, bool &measuring) {
         }
         else if (arg == "--sizes" && verb == "bench" && i + 1 < argc) benchsize = argv[++i];
         else if (arg == "--dump") dump = true;
-        else if (arg == "--define") {
-            if (i + 1 == argc) {
-                fprintf(stderr, "--define requires NAME=VALUE\n");
-                return 1;
-            }
-            builddefines.push_back(argv[++i]);
-        }
         else if (arg == "--strict-worker-native") strict_worker_native = true;
         else if (arg == "--tokens") tokens = true;
         else if (arg == "--parse") parseonly = true;
@@ -1604,8 +1601,16 @@ int Main(int argc, char **argv, bool &measuring) {
         else if (arg == "--dump-docs") dumpdocs = true;
         // A -D lands in the generated C itself rather than on some backend's
         // command line, so a JIT run and a compiled one see the same source.
-        else if (arg == "-D" && i + 1 < argc) cdefines.push_back(argv[++i]);
-        else if (arg.rfind("-D", 0) == 0 && arg.size() > 2) cdefines.push_back(arg.substr(2));
+        else if (arg == "-d") {
+            fprintf(stderr, "-d requires an attached define: -dNAME=VALUE\n");
+            return 1;
+        }
+        else if ((arg == "-D" && i + 1 < argc) ||
+                 ((arg.rfind("-D", 0) == 0 || arg.rfind("-d", 0) == 0) && arg.size() > 2)) {
+            auto definition = arg == "-D" ? string(argv[++i]) : arg.substr(2);
+            cdefines.push_back(definition);
+            defines.push_back(std::move(definition));
+        }
         else if (!arg.empty() && arg[0] == '-') {
             fprintf(stderr, "unknown option: %s (goose --help lists them)\n", arg.c_str());
             return 1;
@@ -1811,6 +1816,7 @@ int Main(int argc, char **argv, bool &measuring) {
     // The program's Ast outlives the compile: a build and a JIT run read
     // its packages, for the native parts the program needs (native.h).
     unique_ptr<Ast> astp;
+    optional<FileLock> programlock;
     auto collectbenchinputs = [&] {
         if (!benchreport || !astp) return;
         for (auto &[path, bytes] : astp->sources) benchinputpaths.insert(AbsolutePath(path));
@@ -1850,10 +1856,24 @@ int Main(int argc, char **argv, bool &measuring) {
         auto &ast = *astp;
         ast.strict_worker_native = strict_worker_native;
         ast.record_bench_inputs = verb == "bench";
-        AddBuildDefinitions(ast, builddefines);
+        AddDefines(ast, defines);
         if (jsondiag) ast.sink = [&](const Diagnostic &d) { found.push_back(d); };
         auto stdlibdirs = StdlibDirs(stdlibdir, exe);
         ParseProgram(ast, filename, stdlibdirs, DirOf(exe));
+        if (verb == "build" || (verb == "bench" && !benchlist)) {
+            auto alldefines = defines;
+            for (auto &pkg : ast.packages)
+                alldefines.insert(alldefines.end(), pkg.cdefines.begin(), pkg.cdefines.end());
+            builddir = verb == "bench" ? cat(benchdir, "/", benchsize)
+                                       : ProgramBuildDir(filename, std::move(alldefines));
+            std::error_code ec;
+            filesystem::create_directories(filesystem::path(builddir), ec);
+            if (ec) throw CompileError { cat("cannot create the build directory ", builddir) };
+            if (verb == "build")
+                programlock.emplace(cat(builddir, "/program.lock"),
+                                    "waiting for another goose building this program");
+            outfile = cat(builddir, "/", PathStem(filename), ".c");
+        }
         collectbenchinputs();
         if (benchreport) {
             benchreport->json_path = benchjson;
@@ -1897,8 +1917,8 @@ int Main(int argc, char **argv, bool &measuring) {
         // After resolution, so that a program that does not resolve fails as
         // it would without --roundtrip.
         if (roundtrip) {
-            CheckRoundtrip(dumped, dumpfile.empty() ? cat(filename, ".dump") : dumpfile,
-                           stdlibdirs, DirOf(exe), builddefines);
+            CheckRoundtrip(dumped, dumpfile.empty() ? cat(filename, ".dump") : dumpfile, filename,
+                           stdlibdirs, DirOf(exe), defines);
             if (stats) fprintf(msgs, "roundtrip ok: %d bytes of dump\n", (int)dumped.size());
         }
         if (parseonly) return 0;
@@ -2138,15 +2158,6 @@ int Main(int argc, char **argv, bool &measuring) {
         }
         includes = includenames;
         if (verb == "build" || (verb == "bench" && !benchlist)) {
-            builddir = ProgramBuildDir(file, builddefines);
-            if (verb == "bench") builddir = cat(benchdir, "/", benchsize);
-            std::error_code ec;
-            filesystem::create_directories(filesystem::path(builddir), ec);
-            if (ec) {
-                fprintf(stderr, "cannot create the build directory %s\n", builddir.c_str());
-                return 1;
-            }
-            outfile = cat(builddir, "/", PathStem(file), ".c");
             // The C is written far from where the command was given, so a
             // header named relative to here is named relative to nowhere
             // else: absolute, and the C names it relative to itself.
@@ -2160,10 +2171,10 @@ int Main(int argc, char **argv, bool &measuring) {
         auto attempt = [&]() -> int {
             // Hold through writing C and linking. Even a directory-key collision
             // cannot let another configuration replace this build's input.
-            optional<FileLock> programlock;
-            if (verb == "build")
-                programlock.emplace(cat(builddir, "/program.lock"),
-                                    "waiting for another goose building this program");
+            struct UnlockProgram {
+                optional<FileLock> &lock;
+                ~UnlockProgram() { lock.reset(); }
+            } unlock { programlock };
             // The compile has a thread of its own. The program a JIT run
             // starts runs back on this one, the main thread, which a window
             // on macOS has to be made on, and whose stack the link reserves
@@ -2541,10 +2552,10 @@ int Main(int argc, char **argv, bool &measuring) {
             }
         }
         try {
-            auto definitions = builddefines;
+            auto definitions = defines;
             for (auto &size : benchsizes) {
-                builddefines = definitions;
-                builddefines.push_back(cat("BENCH_SIZE=\"", size, "\""));
+                defines = definitions;
+                defines.push_back(cat("BENCH_SIZE=\"", size, "\""));
                 benchsize = size;
                 if (run(files[0])) { code = 2; break; }
             }

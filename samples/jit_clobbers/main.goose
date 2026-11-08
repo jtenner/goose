@@ -1,4 +1,4 @@
-// Native --define configuration and actual register ownership validation.
+// Native -D configuration and actual register ownership validation.
 // See README.md in this directory. No C sidecar or application runtime helper.
 import std;
 import os;

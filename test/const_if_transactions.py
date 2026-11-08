@@ -75,7 +75,7 @@ def check_transactions(exe, root, core_only=False, fields_only=False, diagnostic
                         text = 'struct S{a:i64}\n' + text
                     for level in ('-O0', '-O2'):
                         for flag in ('false', 'true', 'false'):
-                            definitions = ['--define', 'CALL=' + flag]
+                            definitions = ['-D', 'CALL=' + flag]
                             source.write_text(text + '\nfn main(){}')
                             invoke(['check', level, *definitions, source])
                             source.write_text(text)
@@ -96,7 +96,7 @@ def check_transactions(exe, root, core_only=False, fields_only=False, diagnostic
         for text, main in adjacent:
             for level in ('-O0', '-O2'):
                 for flag in ('false', 'true', 'false'):
-                    definitions = ['--define', 'CALL=' + flag]
+                    definitions = ['-D', 'CALL=' + flag]
                     source.write_text(text + main)
                     invoke(['check', level, *definitions, source])
                     source.write_text(text)

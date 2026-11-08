@@ -135,10 +135,10 @@ def check_const_if_diagnostics(exe, base):
                 target.write_text(body, encoding="utf-8")
                 for level in ("-O0", "-O2"):
                     for value in ("1", '"not_bool"'):
-                        diagnostic(entry, target, condition, ["--define", "WIDE=" + value], level)
+                        diagnostic(entry, target, condition, ["-D", "WIDE=" + value], level)
                     for value in ("true", "false"):
                         p = run(["check", "--diagnostics", "json", level,
-                                 "--define", "WIDE=" + value, entry], 0)
+                                 "-D", "WIDE=" + value, entry], 0)
                         require(p.stdout.strip() == "[]", "boolean control was diagnosed", p.stdout)
 
         # An authored non-bool literal retains its own location and range.
@@ -158,7 +158,7 @@ def check_const_if_diagnostics(exe, base):
         second.write_text("// second source\nstruct Second {\n\n\n"
                           "    const if build::WIDE { a:u8, } else { b:u16, }\n}\n", encoding="utf-8")
         for level in ("-O0", "-O2"):
-            p = run(["check", "--diagnostics", "json", level, "--define", "WIDE=1", first], 1)
+            p = run(["check", "--diagnostics", "json", level, "-D", "WIDE=1", first], 1)
             diags = json.loads(p.stdout)
             require({(Path(d.get("file", "")).resolve(), d.get("line")) for d in diags} ==
                     {(first, 4), (second, 5)} and
@@ -179,9 +179,9 @@ def check_const_if_diagnostics(exe, base):
             source.write_text(TEMPLATES["function"].replace("CONDITION", condition), encoding="utf-8")
             for level in ("-O0", "-O2"):
                 if expected:
-                    diagnostic(source, source, condition, ["--define", definition], level)
+                    diagnostic(source, source, condition, ["-D", definition], level)
                 else:
-                    run(["check", level, "--define", definition, source], 0)
+                    run(["check", level, "-D", definition, source], 0)
     finally:
         (base / "commands.json").write_text(json.dumps(rows, indent=2) + "\n", encoding="utf-8")
     if failures:

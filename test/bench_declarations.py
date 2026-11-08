@@ -51,7 +51,7 @@ with tempfile.TemporaryDirectory(prefix="goose-bench-declarations-") as director
     invoke("bench", source, "--list", "--filter", "helper::other", ok=False, contains="unknown benchmark key")
     for sizes in ("", "small,small", "SMALL", "small,", ",small"):
         invoke("bench", source, "--list", "--sizes", sizes, ok=False)
-    invoke("bench", source, "--list", "--define", 'BENCH_SIZE="small"', ok=False, contains="duplicate")
+    invoke("bench", source, "--list", "-D", 'BENCH_SIZE="small"', ok=False, contains="duplicate")
     invoke("bench", source, "--samples", "4", ok=False, contains="samples >= 5")
     invoke("bench", source, "--list", "--jit", ok=False)
     invoke("check", source, "--roundtrip")
@@ -69,9 +69,9 @@ with tempfile.TemporaryDirectory(prefix="goose-bench-declarations-") as director
     source.write_text('bench "configured" fn configured() { if build::BENCH_SIZE == "small" { 1 } else { 2 } }\n')
     invoke("bench", source, "--list", "--sizes", "large,medium,small", contains="small")
     invoke("check", source, ok=False, contains="BENCH_SIZE")
-    invoke("check", source, "--define", 'BENCH_SIZE="medium"', "--roundtrip")
-    invoke("build", source, "--define", 'BENCH_SIZE="medium"', ok=False, contains="main")
-    invoke("run", source, "--define", 'BENCH_SIZE="medium"', ok=False, contains="main")
+    invoke("check", source, "-D", 'BENCH_SIZE="medium"', "--roundtrip")
+    invoke("build", source, "-D", 'BENCH_SIZE="medium"', ok=False, contains="main")
+    invoke("run", source, "-D", 'BENCH_SIZE="medium"', ok=False, contains="main")
     source.write_text('bench "\\x7f\\xc2\\x9b" fn controls() { 1 }\n')
     result = invoke("bench", source, "--list")
     assert result.bench_report['results'][0]['label'] == '\x7f\x9b'

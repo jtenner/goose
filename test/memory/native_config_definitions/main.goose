@@ -1,4 +1,4 @@
-// Explicit native --define inputs; run test/native_config_definitions.py.
+// Explicit native -D inputs; run test/native_config_definitions.py.
 // Nested outside the ordinary fixture glob. No application C helper.
 import std;
 import os;

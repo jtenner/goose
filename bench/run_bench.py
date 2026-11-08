@@ -484,7 +484,7 @@ class Harness:
         if file not in NATIVE_CASES:
             return []
         b = next(b for b in BENCHMARKS if any(g['file'] == file for g in b['goose']))
-        return ['--define', 'BENCH_SIZE=' + json.dumps(SIZE_NAMES[b['sizes'].index(n)])]
+        return ['-D', 'BENCH_SIZE=' + json.dumps(SIZE_NAMES[b['sizes'].index(n)])]
 
     def native_row(self, file, size, tag, tcname):
         if file == 'tree.goose' and self.args.isolation != 'process':

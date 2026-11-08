@@ -48,7 +48,7 @@ def check(exe=None):
             for debug in ('true','false') if 'build::DEBUG' in decl else ('true',):
                 for options in (['--check'],['--parse'],['-O0','-o',c],['-O2','-o',c]):
                     parse = options == ['--parse']
-                    out = run([exe,'--define',f'DEBUG={debug}',*options,source],parse)
+                    out = run([exe,'-D',f'DEBUG={debug}',*options,source],parse)
                     if not parse:
                         assert message in out, (decl,out)
                         assert out.count('error:') == 1, out

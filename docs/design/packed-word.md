@@ -471,7 +471,7 @@ C, binaries and assembly.
    let/const rejection; field address rejection through generic reference
    adaptation. Confirm whole-word copies stay independent. FFI roundtrip
    tests use exact supported backing signatures.
-4. **Conditional layouts.** Alternate `--define DEBUG=true/false` in fresh
+4. **Conditional layouts.** Alternate `-D DEBUG=true/false` in fresh
    processes and editor sessions. Verify same-width reserved alternatives,
    deliberately shifting offsets without else, nested conditions, active
    duplicates, excluded semantic errors, included errors, and excluded parse

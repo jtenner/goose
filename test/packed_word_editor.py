@@ -21,7 +21,7 @@ fn main(){var w=Header{..}; print(w.age);}
 '''
         source.write_text(text)
         for debug in ('true','false'):
-            client=Client(exe,p,args=('--define','DEBUG='+debug))
+            client=Client(exe,p,args=('-D','DEBUG='+debug))
             try:
                 client.request('initialize',{'processId':None,'rootUri':uri_of(p),'capabilities':{},'initializationOptions':{'entryFiles':[str(source)]}})
                 client.send('initialized',{},request=False)

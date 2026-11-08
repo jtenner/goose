@@ -17,7 +17,7 @@ values and local variables (including `let` variables and parameters) cannot
 be conditions. Lexical shadowing of a global is respected. Both operands of
 `&&` and `||` must be valid constant expressions, even if the result is already
 known. An undefined build definition is an error; use an explicit value such as
-`--define DEBUG=false`.
+`-D DEBUG=false`.
 
 ```
 fn trace<T>(value: T) {

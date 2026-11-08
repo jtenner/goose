@@ -154,7 +154,7 @@ def prepare(goose, cc, directory):
         for enabled in (False, True):
             suffix = opt[1:] + ("-checked" if enabled else "-unchecked")
             c_path = directory / ("goose-" + suffix + ".c")
-            command([goose, "--standalone", "-O2", "--define", "CHECK_REGISTER_CLOBBERS=" + str(enabled).lower(),
+            command([goose, "--standalone", "-O2", "-D", "CHECK_REGISTER_CLOBBERS=" + str(enabled).lower(),
                      HERE / "main.goose", "-o", c_path])
             for implementation in ("c_baseline", "goose_native"):
                 binary = directory / (implementation + "-" + suffix)
@@ -242,7 +242,7 @@ def main():
             fixture, paths, artifacts = prepare(ns.goose.resolve(), ns.cc, directory)
             if not ns.legacy_goose and 'mmap' in (ns.case or CASES):
                 command([ns.goose.resolve(), 'bench', HERE / 'mmap.goose', '--list',
-                         '--define', 'BENCH_FIXTURE=' + json.dumps(str(fixture))])
+                         '-D', 'BENCH_FIXTURE=' + json.dumps(str(fixture))])
             if goose_executable != fingerprint(ns.goose.resolve()) or compiler_executable != fingerprint(ns.cc):
                 raise RuntimeError("compiler executable changed during preparation")
             after = source_provenance()
