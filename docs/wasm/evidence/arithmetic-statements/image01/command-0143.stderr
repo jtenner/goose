@@ -1,0 +1,21 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: compound global data top differs
+
+38 !== 37
+
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_compound_math_global.mjs:13:8
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 38,
+  expected: 37,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.2

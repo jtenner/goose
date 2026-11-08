@@ -1,0 +1,1 @@
+var a:i64[600]=[7;600];var b:i64[600]=[3;600];recursive fn rhs()->i64[600]&{a+=b;return a;}fn main(){a+=rhs();assert(a[0]==17&&a[599]==17);for i in 100{a+=b;}assert(a[0]==317&&a[599]==317);print("repeat");}

@@ -1,0 +1,23 @@
+[
+  {
+    "case": "array",
+    "source_sha256": "00c462eb3d5634edcd367c7566bc034f0fe717e273cad4250b2ec0eb9157ac58",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-negation-discard-20261108/parent01/array.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  },
+  {
+    "case": "struct",
+    "source_sha256": "b6d4c4f1eb1ef4d9a20969da8af06d58ce419cd51e8626463027a17c4dcea583",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-negation-discard-20261108/parent01/struct.goose:1: error: wasm target: aggregate values need the pending destination lowering\n"
+  },
+  {
+    "case": "nested",
+    "source_sha256": "d947243ce193a0b482d2cf7a5623a32dd81e7d866b2c73b691830d12326ee6b9",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-negation-discard-20261108/parent01/nested.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  }
+]

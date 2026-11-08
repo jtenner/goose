@@ -1,0 +1,58 @@
+[
+  {
+    "case": "wasm_compound_math_widths",
+    "opt": 0,
+    "source_sha256": "73f6ca09906050b4b54083809b87e688f5badfcb5ff60cd8148a751989b34b66",
+    "wasm_sha256": "818479166d7b7d7130b68c49aac50e78176b794ed6d1472a07ab1c1378b76401",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_compound_math_widths",
+    "opt": 2,
+    "source_sha256": "73f6ca09906050b4b54083809b87e688f5badfcb5ff60cd8148a751989b34b66",
+    "wasm_sha256": "818479166d7b7d7130b68c49aac50e78176b794ed6d1472a07ab1c1378b76401",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_compound_math_function_data",
+    "opt": 0,
+    "source_sha256": "39f58ffae7557343f915e8e919d033e5a3888c41e9afe7ec36a7fa59c8048787",
+    "wasm_sha256": "198c730d86c32b885ed3b52889c1e6dc5d5d3cc66b99113687a27e4705f4a37d",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_compound_math_function_data",
+    "opt": 2,
+    "source_sha256": "39f58ffae7557343f915e8e919d033e5a3888c41e9afe7ec36a7fa59c8048787",
+    "wasm_sha256": "198c730d86c32b885ed3b52889c1e6dc5d5d3cc66b99113687a27e4705f4a37d",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_compound_math_float_scalar",
+    "opt": 0,
+    "source_sha256": "770c90f3370ca3ab891b4537e03734d58451794ed829024556132230875da5d4",
+    "wasm_sha256": "a354b331a2bc7abd328570d2073ba29fc2a03a70724d773f5aadf95c8e360a56",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_compound_math_float_scalar",
+    "opt": 2,
+    "source_sha256": "770c90f3370ca3ab891b4537e03734d58451794ed829024556132230875da5d4",
+    "wasm_sha256": "a354b331a2bc7abd328570d2073ba29fc2a03a70724d773f5aadf95c8e360a56",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_compound_math_nested_rows",
+    "opt": 0,
+    "source_sha256": "635057de9b918436c764b67d7bb3b68832091dc7d83085bba3208b3805f1649d",
+    "wasm_sha256": "27de2c31439fdafc98d12b232ceb5cf19f300e967e58ca7bf7b64b5e2618b00b",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_compound_math_nested_rows",
+    "opt": 2,
+    "source_sha256": "635057de9b918436c764b67d7bb3b68832091dc7d83085bba3208b3805f1649d",
+    "wasm_sha256": "27de2c31439fdafc98d12b232ceb5cf19f300e967e58ca7bf7b64b5e2618b00b",
+    "status": "PASS"
+  }
+]

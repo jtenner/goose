@@ -1,0 +1,1 @@
+fn main(){var a:i64[2]=[13,20];var b:i64[2]=[3,6];a+=b;assert(a[0]==16&&a[1]==26);a-=b;assert(a[0]==13&&a[1]==20);a*=b;assert(a[0]==39&&a[1]==120);a/=b;assert(a[0]==13&&a[1]==20);a%=b;assert(a[0]==1&&a[1]==2);print("array");}

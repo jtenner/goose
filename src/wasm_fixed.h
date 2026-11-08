@@ -520,12 +520,41 @@ inline bool WasmCodeGen::ReadFixedTemporary(Node *n, TypeExpr *resulttype) {
     return true;
 }
 
+inline void WasmCodeGen::CompoundFixed(FixedPlace destination, Node *source, TType op, Line line) {
+    auto type = destination.type;
+    if (!source || (op != T_PLUS && op != T_MINUS && op != T_MUL &&
+                    op != T_DIV && op != T_MOD) ||
+        (type->kind != TY_STRUCT && (type->kind != TY_ARRAY || type->arr->akind != A_FIXED)))
+        Fail(line, "compound arithmetic needs a numeric struct or fixed array");
+    auto finish = [&](FixedMathOperand left) {
+        auto from = ActualType(source);
+        while (from->kind == TY_REF) from = from->ref->sub;
+        if (from->kind == TY_INT || from->kind == TY_FLT) {
+            if (op != T_MUL && op != T_DIV)
+                Fail(line, "compound scalar arithmetic needs multiplication or division");
+            auto scalar = Operand(source->exprtype);
+            Gen(source, scalar); auto value = Temp(scalar); code.Set(value);
+            BinaryFixedInto(destination, left, FixedMathOperand {{scalar, NoLocal}, value}, op, line);
+        } else WithReadPlace(source, [&](FixedPlace right) {
+            while (right.type->kind == TY_REF) right = DereferencePlace(right, line);
+            if (!TEq(type, right.type)) Fail(line, "compound arithmetic needs matching operand layouts");
+            BinaryFixedInto(destination, left, FixedMathOperand {right}, op, line);
+        });
+    };
+    int budget = 64;
+    if (FixedOperandEffects(source, budget)) {
+        WithFixedValue(type, source, [&](FreshFixedDestination old) { CopyFixed(old, destination, line); },
+            [&](FixedPlace old) { finish(FixedMathOperand {old}); });
+    } else finish(FixedMathOperand {destination});
+}
+
 inline void WasmCodeGen::AssignFixed(FixedPlace destination, Node *source, TType op, Line line) {
     auto array = InlineArray(destination.type);
     auto fail = [&](const char *reason) {
         Fail(line, cat(array ? "whole-array assignment " : "whole-aggregate assignment ", reason));
     };
-    if (op != T_ASSIGN || !source || (!Nominal(destination.type) && !array))
+    if (op != T_ASSIGN) { CompoundFixed(destination, source, op, line); return; }
+    if (!source || (!Nominal(destination.type) && !array))
         fail("needs an exact fixed value");
     while (auto call = Is<Call>(source)) {
         if (call->builtin != B_COPY) break;

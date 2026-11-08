@@ -1,0 +1,30 @@
+[
+  {
+    "case": "widths",
+    "source_sha256": "73f6ca09906050b4b54083809b87e688f5badfcb5ff60cd8148a751989b34b66",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-compound-math-20261108/parent05/widths.goose:1: error: wasm target: whole-array assignment needs an exact fixed value\n"
+  },
+  {
+    "case": "function_data",
+    "source_sha256": "39f58ffae7557343f915e8e919d033e5a3888c41e9afe7ec36a7fa59c8048787",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-compound-math-20261108/parent05/function_data.goose:1: error: wasm target: whole-aggregate assignment needs an exact fixed value\n"
+  },
+  {
+    "case": "float_scalar",
+    "source_sha256": "770c90f3370ca3ab891b4537e03734d58451794ed829024556132230875da5d4",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-compound-math-20261108/parent05/float_scalar.goose:1: error: wasm target: whole-aggregate assignment needs an exact fixed value\n"
+  },
+  {
+    "case": "nested_rows",
+    "source_sha256": "635057de9b918436c764b67d7bb3b68832091dc7d83085bba3208b3805f1649d",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-compound-math-20261108/parent05/nested_rows.goose:1: error: wasm target: whole-array assignment needs an exact fixed value\n"
+  }
+]

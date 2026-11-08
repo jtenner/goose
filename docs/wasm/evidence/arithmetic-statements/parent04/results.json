@@ -1,0 +1,9 @@
+[
+  {
+    "case": "receiver",
+    "source_sha256": "ec2f9e33b31eabd3eef60de1d9a123c01406deb9fc63713c1328766f96d3425d",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-compound-math-20261108/parent04/receiver.goose:1: error: wasm target: whole-aggregate assignment needs an exact fixed value\n"
+  }
+]

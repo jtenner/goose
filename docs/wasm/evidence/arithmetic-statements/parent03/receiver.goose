@@ -1,0 +1,1 @@
+struct S{x:i64,y:i64}var source=S{7,-8};var calls:i64=0;recursive fn receiver()->S&{calls++;return source;}recursive fn rhs()->S&{source.x=99;return source;}fn main(){receiver().x+=3;assert(calls==1&&source.x==10);var holder=source;recursive fn select()->S&{calls++;return holder;}select()+=rhs();assert(calls==2&&holder.x==109&&holder.y == -16&&source.x==99);print("receiver");}

@@ -1,0 +1,4 @@
+        auto unary = Is<Unary>(n);
+        if (FixedBinary(n) || (unary && unary->op == T_MINUS && FixedResult(ActualType(n)))) {
+            WithFixedTemporary(ActualType(n), n, [&](const FixedPlace &) {}); return;
+        }

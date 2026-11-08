@@ -1091,7 +1091,8 @@ struct WasmCodeGen : ValueLayout {
         if (auto v = Is<ForLoop>(n)) { For(v); return; }
         if (auto match = Is<MatchExpr>(n)) { EnumMatchStatement(match); return; }
         if (Is<FnDecl>(n)) return;
-        if (FixedBinary(n)) {
+        auto unary = Is<Unary>(n);
+        if (FixedBinary(n) || (unary && unary->op == T_MINUS && FixedResult(ActualType(n)))) {
             WithFixedTemporary(ActualType(n), n, [&](const FixedPlace &) {}); return;
         }
         // Discard the declared reference result without reading its struct.
@@ -1313,6 +1314,7 @@ struct WasmCodeGen : ValueLayout {
     void WithFixedValue(TypeExpr *type, Node *expression, Construct construct, Consume consume);
     template<class Consume> void WithFixedTemporary(TypeExpr *type, Node *expression, Consume consume);
     void AssignFixed(FixedPlace destination, Node *source, TType op, Line line);
+    void CompoundFixed(FixedPlace destination, Node *source, TType op, Line line);
     void EnumMatchStatement(MatchExpr *match);
     FixedPlace ResolvePlace(Node *n);
     FixedPlace FieldPlace(Dot *field);

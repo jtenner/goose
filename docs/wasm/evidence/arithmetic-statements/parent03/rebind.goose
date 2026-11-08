@@ -1,0 +1,1 @@
+var a:i64[2]=[7,-8];var b:i64[2]=[40,50];var target .= a;recursive fn rhs()->i64[2]{target .= b;return [3,4];}fn main(){target+=rhs();assert(a[0]==10&&a[1] == -4&&b[0]==40&&b[1]==50);assert(target .== &b);print("rebind");}

@@ -1,0 +1,50 @@
+[
+  {
+    "case": "index_effect",
+    "source_sha256": "398d457beae894dce84e42578f73e5d97ad1ce915860344879ba953480974b15",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-compound-math-20261108/parent03/index_effect.goose:1: error: wasm target: whole-aggregate assignment needs an exact fixed value\n"
+  },
+  {
+    "case": "receiver",
+    "source_sha256": "99b9f0ed76d456bfc262cb3d5f8107e6b8830a102ef397065bb90dabc8e5eb60",
+    "native_emit_exit": 1,
+    "native_reason": "/tmp/goose-wasm-compound-math-20261108/parent03/receiver.goose:1: error: not an assignable location\nstruct S{x:i64,y:i64}var source=S{7,-8};var calls:i64=0;recursive fn receiver()->S&{calls++;return source;}recursive fn rhs()->S&{source.x=99;return source;}fn main(){receiver().x+=3;assert(calls==1&&source.x==10);var holder=source;recursive fn select()->S&{calls++;return holder;}select()+=rhs();assert(calls==2&&holder.x==109&&holder.y == -16&&source.x==99);print(\"receiver\");}\n                                                                                                                                                                                                                                                                                         ^~~~~~~~\n  in fn main() instantiated from /tmp/goose-wasm-compound-math-20261108/parent03/receiver.goose:1\n"
+  },
+  {
+    "case": "rebind",
+    "source_sha256": "0108399ad3ff696a389821f4eef83361a795f0df3c4d37d57329e39dcc2709fd",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-compound-math-20261108/parent03/rebind.goose:1: error: wasm target: whole-array assignment needs an exact fixed value\n"
+  },
+  {
+    "case": "repeat",
+    "source_sha256": "209e481b345f5299feda55494517729144bbc22a37e1831b24c4aeafc7aa4577",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-compound-math-20261108/parent03/repeat.goose:1: error: wasm target: whole-array assignment needs an exact fixed value\n"
+  },
+  {
+    "case": "early_return",
+    "source_sha256": "f580994feba391e16cd7363d28da8b1cedcb9f3291161c02c263adfcbc6b3092",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-compound-math-20261108/parent03/early_return.goose:1: error: wasm target: whole-array assignment needs an exact fixed value\n"
+  },
+  {
+    "case": "early_continue",
+    "source_sha256": "4e60ee3cf3c55151cb5cc162d631e54e1c221b2f52bb0f897ceb45cc4e776818",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-compound-math-20261108/parent03/early_continue.goose:1: error: wasm target: whole-array assignment needs an exact fixed value\n"
+  },
+  {
+    "case": "mixed",
+    "source_sha256": "2cad1a3d6c4f0bb628899f055c3db565ff11db61240ea93ebf33cd84da0d9315",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-compound-math-20261108/parent03/mixed.goose:1: error: wasm target: whole-aggregate assignment needs an exact fixed value\n"
+  }
+]

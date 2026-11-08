@@ -1,0 +1,1 @@
+struct S{x:i64,y:i64}var calls:i64=0;recursive fn index()->i64{calls++;return 0;}fn main(){var rows:S[]=[S{7,-8},S{40,50}];rows[index()]+=S{3,4};assert(calls==1&&rows[0].x==10&&rows[0].y == -4&&rows[1].x==40&&rows[1].y==50);print("data");}

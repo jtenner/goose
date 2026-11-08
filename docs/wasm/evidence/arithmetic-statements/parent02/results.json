@@ -1,0 +1,16 @@
+[
+  {
+    "case": "reference",
+    "source_sha256": "a82f2b031266bb1c1d8c5f4bdcd0a0b30d5a585cf61bb179bed14a442ef58aa7",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-compound-math-20261108/parent02/reference.goose:1: error: wasm target: whole-array assignment needs an exact fixed value\n"
+  },
+  {
+    "case": "unsigned",
+    "source_sha256": "eb513c6fc7981d66d9ed85b6de1c3518944f262f82ace2174f0a4b817294ca59",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-compound-math-20261108/parent02/unsigned.goose:1: error: wasm target: whole-array assignment needs an exact fixed value\n"
+  }
+]

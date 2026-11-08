@@ -1,0 +1,1 @@
+struct S{x:i64,y:i64}recursive fn update(a:S&,b:const S&){a+=b;}fn main(){var left=S{7,-8};var right=S{3,4};update(left,right);assert(left.x==10&&left.y == -4);var rows:S[]=[S{20,30},S{1,2}];update(rows[0],right);update(left,rows[1]);assert(left.x==11&&left.y == -2&&rows[0].x==23&&rows[0].y==34&&rows[1].x==1&&rows[1].y==2);print("function_data");}

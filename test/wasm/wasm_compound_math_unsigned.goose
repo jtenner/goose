@@ -1,0 +1,1 @@
+fn main(){var a:u64[2]=[18446744073709551615,12];var b:u64[2]=[2,5];a+=b;assert(a[0]==1&&a[1]==17);a*=b;assert(a[0]==2&&a[1]==85);a/=b;assert(a[0]==1&&a[1]==17);a%=b;assert(a[0]==1&&a[1]==2);print("unsigned");}

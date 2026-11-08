@@ -1,0 +1,1 @@
+var source:i64[2]=[7,-8];var calls:i64=0;recursive fn change()->i64[2]{calls++;source[0]=99;print("right");return[3,4];}fn main(){print("before");source+=change();print("after=",source[0],",",source[1],",",calls);}

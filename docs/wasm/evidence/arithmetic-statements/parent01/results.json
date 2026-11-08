@@ -1,0 +1,77 @@
+[
+  {
+    "case": "array",
+    "source_sha256": "70c0f72dad14ec87edf77b8818885bb2548710f56696d800a68298bd9c03a945",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-compound-math-20261108/parent01/array.goose:1: error: wasm target: whole-array assignment needs an exact fixed value\n"
+  },
+  {
+    "case": "scalar",
+    "source_sha256": "40acb7166dcb0690a946c3bf22469a2da370b8d6c3b1142d475bd75a3d2d8c61",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-compound-math-20261108/parent01/scalar.goose:1: error: wasm target: whole-aggregate assignment needs an exact fixed value\n"
+  },
+  {
+    "case": "effect",
+    "source_sha256": "b6e45f5178524db9e5d6cc771dfa257c2df1b0e32b5e59e717a8e20013a411f5",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-compound-math-20261108/parent01/effect.goose:1: error: wasm target: whole-array assignment needs an exact fixed value\n"
+  },
+  {
+    "case": "scalar_effect",
+    "source_sha256": "0081e77926ca64df97f0255f9b3545da1db9e97863559de4c136f64353d746ed",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-compound-math-20261108/parent01/scalar_effect.goose:1: error: wasm target: whole-array assignment needs an exact fixed value\n"
+  },
+  {
+    "case": "field",
+    "source_sha256": "92350db5be07320b45e5d75d021ed393b5cd484f7dda2775bd282d08045f9c1d",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-compound-math-20261108/parent01/field.goose:1: error: wasm target: whole-array assignment needs an exact fixed value\n"
+  },
+  {
+    "case": "data",
+    "source_sha256": "f8586857ddd73f48702fa146fb03340f12e32cb6aa9d8caaf2d269eccc244c36",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-compound-math-20261108/parent01/data.goose:1: error: wasm target: whole-aggregate assignment needs an exact fixed value\n"
+  },
+  {
+    "case": "reference",
+    "source_sha256": "4ffa05ea3df37229c427dfde970eabd3e2ff5eb1c8220c87d4905642d09546ad",
+    "native_emit_exit": 1,
+    "native_reason": "/tmp/goose-wasm-compound-math-20261108/parent01/reference.goose:1: error: expected ';' in variable declaration, found '&='\nfn main(){var a:i64[2]=[7,-8];var r:i64[2]&=a;r+=[3,4];assert(a[0]==10&&a[1] == -4);print(\"reference\");}\n                                          ^~\n"
+  },
+  {
+    "case": "float",
+    "source_sha256": "eae891ad92494bd4e91ef08cf5b28a4fb36e02fd77024b8ce56e1f937a4820b8",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-compound-math-20261108/parent01/float.goose:1: error: wasm target: whole-aggregate assignment needs an exact fixed value\n"
+  },
+  {
+    "case": "unsigned",
+    "source_sha256": "b2c8bdea9fae749c19270ecb22e29bc6a3d9e260d64011735f9829c692b1238c",
+    "native_emit_exit": 1,
+    "native_reason": "/tmp/goose-wasm-compound-math-20261108/parent01/unsigned.goose:1: error: operator += cannot be applied to u64[2] and i64[2]\nfn main(){var a:u64[2]=[18446744073709551615,12];a+=[2,5];assert(a[0]==1&&a[1]==17);a*=[2,5];assert(a[0]==2&&a[1]==85);a/=[2,5];assert(a[0]==1&&a[1]==17);a%=[2,5];assert(a[0]==1&&a[1]==2);print(\"unsigned\");}\n                                                 ^~~~~~~~~\n  in fn main() instantiated from /tmp/goose-wasm-compound-math-20261108/parent01/unsigned.goose:1\n"
+  },
+  {
+    "case": "zero",
+    "source_sha256": "0bbd1dbe9e5fb39dda71843e133558927f809cdcb58891abe5693fefed1e6929",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-compound-math-20261108/parent01/zero.goose:1: error: wasm target: whole-array assignment needs an exact fixed value\n"
+  },
+  {
+    "case": "large",
+    "source_sha256": "4e762de23c0d0cea2f88edb7113ebe02aa8000124e2d9f31d5f404b6bd1f6b66",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-compound-math-20261108/parent01/large.goose:1: error: wasm target: whole-array assignment needs an exact fixed value\n"
+  }
+]

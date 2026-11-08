@@ -1,0 +1,13 @@
+{
+  "array": "fn main(){var a:i64[2]=[13,20];var b:i64[2]=[3,6];a+=b;assert(a[0]==16&&a[1]==26);a-=b;assert(a[0]==13&&a[1]==20);a*=b;assert(a[0]==39&&a[1]==120);a/=b;assert(a[0]==13&&a[1]==20);a%=b;assert(a[0]==1&&a[1]==2);print(\"array\");}",
+  "scalar": "struct S{x:i64,y:i64}fn main(){var a=S{3,6};a*=a.x;assert(a.x==9&&a.y==18);a/=3;assert(a.x==3&&a.y==6);print(\"scalar\");}",
+  "effect": "var a:i64[2]=[7,-8];var calls:i64=0;recursive fn rhs()->i64[2]{calls++;a[0]=99;return [3,4];}fn main(){a+=rhs();assert(a[0]==10&&a[1] == -4&&calls==1);print(\"effect\");}",
+  "scalar_effect": "var a:i64[2]=[7,-8];var calls:i64=0;recursive fn rhs()->i64{calls++;a[0]=99;return 2;}fn main(){a*=rhs();assert(a[0]==14&&a[1] == -16&&calls==1);print(\"scalar_effect\");}",
+  "field": "struct H{v:i64[2]}fn main(){var h=H{[7,-8]};h.v+=[3,4];assert(h.v[0]==10&&h.v[1] == -4);print(\"field\");}",
+  "data": "struct S{x:i64,y:i64}var calls:i64=0;recursive fn index()->i64{calls++;return 0;}fn main(){var rows:S[]=[S{7,-8},S{40,50}];rows[index()]+=S{3,4};assert(calls==1&&rows[0].x==10&&rows[0].y == -4&&rows[1].x==40&&rows[1].y==50);print(\"data\");}",
+  "reference": "fn main(){var a:i64[2]=[7,-8];var r:i64[2]&=a;r+=[3,4];assert(a[0]==10&&a[1] == -4);print(\"reference\");}",
+  "float": "struct S{x:f32,pad 2,y:f64}fn main(){var a=S{1.25,45.125};a+=S{-2.5,-37.25};assert(a.x == -1.25&&a.y==7.875);a*=S{2.0,4.0};assert(a.x == -2.5&&a.y==31.5);print(\"float\");}",
+  "unsigned": "fn main(){var a:u64[2]=[18446744073709551615,12];a+=[2,5];assert(a[0]==1&&a[1]==17);a*=[2,5];assert(a[0]==2&&a[1]==85);a/=[2,5];assert(a[0]==1&&a[1]==17);a%=[2,5];assert(a[0]==1&&a[1]==2);print(\"unsigned\");}",
+  "zero": "var calls:i64=0;recursive fn scale()->i64{calls++;return 2;}fn main(){var a:i64[0]=[];a*=scale();assert(a.len==0&&calls==1);print(\"zero\");}",
+  "large": "fn main(){var a:i64[600]=[7;600];var b:i64[600]=[3;600];a[599]=9;b[599]=5;a+=b;for i in 599{assert(a[i]==10);}assert(a[599]==14);print(\"large\");}"
+}

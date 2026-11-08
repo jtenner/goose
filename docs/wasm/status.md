@@ -345,9 +345,16 @@ results, including scalar multiplication/division and static limited receivers.
 Effectful right operands use a bounded effects scan and one private left-value
 snapshot. Scalar values run once; early exits retain ordered cleanup. Native,
 Node, Wasmtime and complete memory-image checks cover operand effects, padding,
-FP bits, aliases, traps, calls and data destinations. Compound assignments and
-discarded aggregate negation remain separate compilation gaps. See
+FP bits, aliases, traps, calls and data destinations. See
 [fixed binary arithmetic evidence](evidence/fixed-binary-arithmetic.md).
+
+Fixed numeric compound assignments now use the captured destination, preserve
+old values before RHS effects, and write leaves in native order, including
+partial writes before an arithmetic trap. Discarded fixed unary minus uses the
+checked temporary cleanup path. Exact images, mutation controls, live loop tops,
+global-owner state and native failure-state observations cover these statement
+forms. Existing frontend limits remain in force. See
+[arithmetic statement evidence](evidence/arithmetic-statements.md).
 
 ## Host contract
 
