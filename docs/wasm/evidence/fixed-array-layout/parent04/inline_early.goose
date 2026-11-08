@@ -1,0 +1,1 @@
+var calls:i64=0;inline fn make(early:bool)->i64[2]{defer{calls++;}if early{return[7,-8];}return[1,2];}fn main(){var c:i64[..3]=make(true);var d:i64[..3]=make(false);assert(calls==2&&c.len==2&&d.len==2&&c[1] == -8&&d[1]==2);print("inline_early");}

@@ -138,7 +138,7 @@ def main():
             if source.stem.startswith((
                     'wasm_inline_ref_abi_', 'wasm_data_aggregate_', 'wasm_constructor_assignment_',
                     'wasm_aggregate_construction_', 'wasm_array_assignment_', 'wasm_default_conversion_',
-                    'wasm_array_constructor_', 'wasm_fixed_argument_', 'wasm_fixed_result_', 'wasm_array_argument_', 'wasm_array_result_', 'wasm_temporary_read_', 'wasm_temporary_equality_', 'wasm_fixed_negation_', 'wasm_fixed_binary_', 'wasm_compound_math_', 'wasm_negation_discard_', 'wasm_zero_call_', 'wasm_fixed_array_conversion_')):
+                    'wasm_array_constructor_', 'wasm_fixed_argument_', 'wasm_fixed_result_', 'wasm_array_argument_', 'wasm_array_result_', 'wasm_temporary_read_', 'wasm_temporary_equality_', 'wasm_fixed_negation_', 'wasm_fixed_binary_', 'wasm_compound_math_', 'wasm_negation_discard_', 'wasm_zero_call_', 'wasm_fixed_array_conversion_', 'wasm_fixed_array_layout_')):
                 actual = run([args.node, ROOT / 'test' / 'wasm_reference_abi.mjs', wasm,
                               out / f'{source.stem}-O{opt}-instance'])
             else:
@@ -231,6 +231,14 @@ def main():
             if source.stem.startswith('wasm_fixed_array_conversion_'):
                 persistent = '1' if source.stem == 'wasm_fixed_array_conversion_global' else '0'
                 checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, persistent])
+                assert checked.stdout == reference.stdout and not checked.stderr
+                count += 1
+            if source.stem.startswith('wasm_fixed_array_layout_'):
+                mode = '' if source.stem in ('wasm_fixed_array_layout_field_data',
+                                            'wasm_fixed_array_layout_wide_data_owner',
+                                            'wasm_fixed_array_layout_source_data',
+                                            'wasm_fixed_array_layout_field_ref') else 'no-data'
+                checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
                 assert checked.stdout == reference.stdout and not checked.stderr
                 count += 1
             if source.stem.startswith(('wasm_compound_math_', 'wasm_negation_discard_', 'wasm_zero_call_')):
@@ -427,6 +435,9 @@ def main():
     count += check_conversion_loop(run, args.node, args.validator, out)
     count += check_conversion_namespaces(run, args.node, args.validator, out)
     count += check_conversion_global(run, args.node, args.validator, out)
+    from wasm_fixed_array_layout_checks import check_owners as check_layout_owners, check_data as check_layout_data
+    count += check_layout_owners(run, args.node, args.validator, out)
+    count += check_layout_data(run, args.node, args.validator, out)
     from wasm_compound_math_checks import check_images as check_compound_images, check_snapshot as check_compound_snapshot, check_loops as check_compound_loops, check_global as check_compound_global, check_failures as check_compound_failures
     count += check_compound_images(run, args.node, args.validator, out)
     count += check_compound_snapshot(run, args.node, args.validator, out)
@@ -718,7 +729,7 @@ a.equal(new DataView(x.memory.buffer).getBigInt64(1,true),65n<<56n);"""
                 count += 1
             count += 1
     # The checker can adapt an expression's type without changing its storage.
-    # Copies must reject unequal layouts; fixed inline parameters use checked owners.
+    # Unequal layouts need an explicit adapter; fixed inline parameters use checked owners.
     for name, text in COPY_ADMISSION_CASES.items():
         source = out / f'copy-admission-{name}.goose'
         source.write_text(text + '\n')
@@ -731,7 +742,8 @@ a.equal(new DataView(x.memory.buffer).getBigInt64(1,true),65n<<56n);"""
             assert run([native]).stdout == expected, (name, 'invalid native admission oracle')
             wasm.unlink(missing_ok=True)
             result = run([exe, f'-O{opt}', '--target', 'wasm', '-o', wasm, source], ok=False)
-            if name == 'inline-fixed-argument':
+            if name in ('inline-fixed-argument', 'fixed-limited', 'ref-fixed-limited',
+                        'call-layout', 'inline-call-layout', 'indexed-layout'):
                 assert result.returncode == 0 and not result.stderr
                 run([args.validator, 'validate', wasm])
                 assert run([args.node, ROOT / 'scripts/run_wasm.mjs', wasm]).stdout == expected

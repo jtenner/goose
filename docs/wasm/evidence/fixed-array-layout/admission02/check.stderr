@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-fixed-result-layout-20261108/admission02/checks.py", line 20, in <module>
+    count+=aggregate.check_admission(run,exe,'cc','node','wasm-tools','/tmp/goose-wasm-runtime-env/bin/python',out)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_admission.py", line 75, in check_admission
+    path = out / ('aggregate-admission-' + name + '.goose'); path.write_text(source)
+           ~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TypeError: unsupported operand type(s) for /: 'str' and 'str'

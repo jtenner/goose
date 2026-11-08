@@ -371,6 +371,13 @@ lifetime are preserved. Native, Node, Wasmtime and full memory-image controls
 cover the conversions. See
 [fixed array conversion evidence](evidence/fixed-array-conversion.md).
 
+Fixed source arrays now construct static-limited receivers with matching
+element layouts and sufficient capacity. The checked payload copy preserves
+unused capacity; mismatched call results first land in an intrinsic temporary.
+The same fresh construction path covers fields, parameters, declared results
+and callbacks. Whole-array assignment is still separate. See
+[fixed array layout evidence](evidence/fixed-array-layout.md).
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping

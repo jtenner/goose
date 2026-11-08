@@ -1,0 +1,1 @@
+struct H{before:u8,values:i64[..256],after:u16}recursive fn prepare(a:i64[2]&){a[0]=7;a[1] = -8;print("before");}fn main(){var a:i64[2]=[0,0];prepare(a);var rows:H[]=[H{7,a,65000}];print("after");assert(rows[0].before==7&&rows[0].after==65000&&rows[0].values.len==2&&rows[0].values[0]==7&&rows[0].values[1] == -8);}

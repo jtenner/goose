@@ -771,6 +771,11 @@ inline void WasmCodeGen::InitArray(VarDef *owner, const Slot &slot, Node *init, 
         else if (call->builtin == B_COPY) init = call->ValueArgNodes().at(0);
         else break;
     }
+    auto from = ActualType(init);
+    while (from && from->kind == TY_REF) from = from->ref->sub;
+    if (CanCopyFixedArray(owner->type, from)) {
+        ConstructFixed(FreshOwner(owner, declaration), init); return;
+    }
     if (support.DataNominalArray(owner->type)) {
         InitAggregateDataArray(owner, slot, declaration, init); return;
     }

@@ -81,7 +81,7 @@ def check_admission(run, exe, cc, out, node='node', validator='wasm-tools', wasm
             reference = run([binary])
             module.unlink(missing_ok=True)
             result = run([exe, f'-O{opt}', '--target', 'wasm', '-o', module, path], ok=False)
-            if name in ('field-iteration', 'assign', 'default', 'limited-default', 'fill', 'zero-fill', 'array-assign', 'argument', 'inline-argument', 'callback-argument', 'result'):
+            if name in ('field-iteration', 'assign', 'default', 'limited-default', 'fill', 'zero-fill', 'array-assign', 'argument', 'inline-argument', 'callback-argument', 'result', 'adaptation'):
                 assert not result.returncode and not result.stderr
                 run([validator, 'validate', module])
                 assert run([node, root / 'scripts/run_wasm.mjs', module]).stdout == reference.stdout
@@ -90,7 +90,7 @@ def check_admission(run, exe, cc, out, node='node', validator='wasm-tools', wasm
                                             'fill': b'9\n', 'zero-fill': b'0\n',
                                             'array-assign': b'2\n', 'argument': b'1\n',
                                             'inline-argument': b'1\n', 'callback-argument': b'1\n',
-                                            'result': b'1\n'}[name]
+                                            'result': b'1\n', 'adaptation': b'1\n'}[name]
                 if wasmtime_python:
                     assert run([wasmtime_python, root / 'test/wasmtime_host.py', module]).stdout == reference.stdout
                 count += 1

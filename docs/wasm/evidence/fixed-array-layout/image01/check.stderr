@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-fixed-result-layout-20261108/image01/checks.py", line 15, in <module>
+    n=check(run,'node','wasm-tools',p/'artifacts');records.append({'name':name,'checks':n});(p/'results.json').write_text(json.dumps(records,indent=2)+'\n');print('PASS',name,n,flush=True)
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_array_layout_checks.py", line 27, in check_owners
+    result = observed('healthy', text)
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_array_layout_checks.py", line 26, in observed
+    return run(args + [module, mode], ok=ok)
+  File "/tmp/goose-wasm-fixed-result-layout-20261108/image01/checks.py", line 12, in run
+    if ok:assert not a.returncode,(args,a.stderr)
+                 ^^^^^^^^^^^^^^^^
+AssertionError: (['node', PosixPath('/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_array_layout_owner.mjs'), PosixPath('/tmp/goose-wasm-fixed-result-layout-20261108/image01/artifacts/fixed-layout-stored-healthy-O0.wasm'), 'stored'], b"file:///home/dev/Projects/goose-wasm-backend/test/wasm_fixed_array_layout_owner.mjs:16\n        const view = new Uint8Array(memory.buffer);\n                                           ^\n\nTypeError: Cannot read properties of undefined (reading 'buffer')\n    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_fixed_array_layout_owner.mjs:16:44\n    at print_end_v1 (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:105:13)\n    at prepare.1 (wasm://wasm/78bd4202:wasm-function[12]:0x406)\n    at main.0 (wasm://wasm/78bd4202:wasm-function[11]:0x1ef)\n    at goose.start (wasm://wasm/78bd4202:wasm-function[14]:0x413)\n    at Object.run (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:133:34)\n    at runCompleted (file:///home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs:10:13)\n    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_fixed_array_layout_owner.mjs:36:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n\nNode.js v24.22.2\n")

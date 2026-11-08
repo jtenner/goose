@@ -1,0 +1,1 @@
+var calls:i64=0;recursive fn make()->i64[0]{calls++;return[];}fn main(){var a:i64[0]=[];var c:i64[..0]=a;var d:i64[..1]=make();assert(c.len==0&&d.len==0&&calls==1);d.push(9);assert(d[0]==9);print("zero");}

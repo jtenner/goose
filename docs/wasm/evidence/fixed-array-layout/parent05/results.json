@@ -1,0 +1,9 @@
+[
+  {
+    "case": "field_ref",
+    "source_sha256": "1b4d9d450df7379dbb8b1aa51c41f48ff7865e9ff483358fcf95467398cf7e1f",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-result-layout-20261108/parent05/field_ref.goose:1: error: wasm target: array adaptation needs the pending destination lowering\n"
+  }
+]

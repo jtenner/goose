@@ -1,0 +1,135 @@
+[
+  {
+    "case": "capacity_equal",
+    "source_sha256": "0806a9cd0c04b90ce98908621bf67033eac08d41d0f87a2783b27d2619980395",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-result-layout-20261108/parent02/capacity_equal.goose:1: error: wasm target: array adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "zero",
+    "source_sha256": "cff84f246a83d944c7d41ba0004d46d82d83e22f400a070ec6e92a2db7431dea",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-result-layout-20261108/parent02/zero.goose:1: error: wasm target: array adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "zero_reference",
+    "source_sha256": "cddc3e7cf8bffe8f05da7af16fc09c6d89f28963a7eac031613200f4cbfa47d1",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-result-layout-20261108/parent02/zero_reference.goose:1: error: wasm target: array adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "field",
+    "source_sha256": "b6125a29d535a79506ff05a8a8a87a732473a268e2551adb93590317be781a71",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-result-layout-20261108/parent02/field.goose:1: error: wasm target: aggregate adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "field_call",
+    "source_sha256": "0e966eeb800702edcfa119851b02f4050ac6ce106119cf9f2024c56dfa878d1c",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-result-layout-20261108/parent02/field_call.goose:1: error: wasm target: aggregate result adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "field_data",
+    "source_sha256": "3f083525ba7a69d56f0e287233c4cbe79ac82c6dd410bd95f8643c93f6a7eafd",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-result-layout-20261108/parent02/field_data.goose:1: error: wasm target: aggregate adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "parameter_result",
+    "source_sha256": "45c2034a20659d3e2ab1d7da6c0d7df7b5777d72ba685e9be02c0d2a9c0f094e",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-result-layout-20261108/parent02/parameter_result.goose:1: error: wasm target: aggregate adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "callback",
+    "source_sha256": "2b57dafb04c1b770f5ffd9f55eb78377e42c98984b1518cc87d4040dd25a4318",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm": "already-supported"
+  },
+  {
+    "case": "callback_parameter",
+    "source_sha256": "e428d99a1febdc042a9abc463adb10ff6e8237e435a29cab0a6a2a42ee2dba7a",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-result-layout-20261108/parent02/callback_parameter.goose:1: error: wasm target: aggregate adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "later_effect",
+    "source_sha256": "0346be6efb6032c0223e0fdeae7265378a68d32c9aac991cbe52ec15eb0b617c",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-result-layout-20261108/parent02/later_effect.goose:1: error: wasm target: aggregate adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "defer",
+    "source_sha256": "c1c3f7bcfd2d133b63f5edcd546bf7287936f73df6426724cca780c873613084",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-result-layout-20261108/parent02/defer.goose:1: error: wasm target: aggregate result adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "early_return",
+    "source_sha256": "d1fe7c65ba685612324f25965d63017fa1e8e272103c5f5d628dc7d68aeb2705",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-result-layout-20261108/parent02/early_return.goose:1: error: wasm target: aggregate result adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "continue",
+    "source_sha256": "099cb0ac016bca506900b695b8dcf18ab768a3d984fddf30758dcec56a763fe6",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-result-layout-20261108/parent02/continue.goose:1: error: wasm target: aggregate result adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "readonly",
+    "source_sha256": "f446ba4a8a95627d13fffc718e0dad9a8ddd140273834f11704d583c28d94b5b",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-result-layout-20261108/parent02/readonly.goose:1: error: wasm target: array adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "reference_elements",
+    "source_sha256": "999309ed48ab7de9cb80e42efef81996e437355a5e870e24e0df4aa85e9d7cd0",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-result-layout-20261108/parent02/reference_elements.goose:1: error: wasm target: array adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "padded",
+    "source_sha256": "4b6673a80536ab5adb1b0f28d6226f678fd53152cba3f8d7410b440216b5b189",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-result-layout-20261108/parent02/padded.goose:1: error: wasm target: array adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "global",
+    "source_sha256": "9222dce3f7da01bea132e63c280e8994e67d173d964cc8da0bbfc87fb313afd7",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-result-layout-20261108/parent02/global.goose:1: error: wasm target: array adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "owner_stored",
+    "source_sha256": "2ed92772dddfdcee78c13b3d09b42f661ab6a6ae97704fb73ce81949f6efa837",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-result-layout-20261108/parent02/owner_stored.goose:1: error: wasm target: array adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "owner_call",
+    "source_sha256": "d2817fc81dc96d2193ce6ea5d4aaed774136ae8118ec7bcf39be32576ac437d7",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-result-layout-20261108/parent02/owner_call.goose:1: error: wasm target: aggregate result adaptation needs the pending destination lowering\n"
+  }
+]

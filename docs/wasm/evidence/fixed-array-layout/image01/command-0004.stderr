@@ -1,0 +1,17 @@
+file:///home/dev/Projects/goose-wasm-backend/test/wasm_fixed_array_layout_owner.mjs:16
+        const view = new Uint8Array(memory.buffer);
+                                           ^
+
+TypeError: Cannot read properties of undefined (reading 'buffer')
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_fixed_array_layout_owner.mjs:16:44
+    at print_end_v1 (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:105:13)
+    at prepare.1 (wasm://wasm/78bd4202:wasm-function[12]:0x406)
+    at main.0 (wasm://wasm/78bd4202:wasm-function[11]:0x1ef)
+    at goose.start (wasm://wasm/78bd4202:wasm-function[14]:0x413)
+    at Object.run (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:133:34)
+    at runCompleted (file:///home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs:10:13)
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_fixed_array_layout_owner.mjs:36:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+
+Node.js v24.22.2

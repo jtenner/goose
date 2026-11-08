@@ -1,0 +1,1 @@
+struct H{values:i64[..3]}recursive fn make()->i64[2]{return[7,-8];}fn main(){var a:i64[2]=[1,2];var rows:H[]=[H{a},H{make()}];assert(rows[0].values.len==2&&rows[0].values[1]==2&&rows[1].values.len==2&&rows[1].values[1] == -8);print("field_data");}

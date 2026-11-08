@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-fixed-result-layout-20261108/focused01/checks.py", line 21, in <module>
+    a=run(['node',r/'test/wasm_multimemory.mjs',wasm,'1' if name=='wasm_fixed_array_conversion_global' else '0']);assert a.stdout==expected and not a.stderr,(name,a)
+  File "/tmp/goose-wasm-fixed-result-layout-20261108/focused01/checks.py", line 9, in run
+    assert not a.returncode,(args,a.returncode,a.stderr)
+           ^^^^^^^^^^^^^^^^
+AssertionError: (['node', PosixPath('/home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs'), PosixPath('/tmp/goose-wasm-fixed-result-layout-20261108/focused01/wasm_fixed_array_layout_call-O0.wasm'), '0'], 1, b"node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(memories >= 2)\n\n    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_multimemory.mjs:29:6\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: false,\n  expected: true,\n  operator: '==',\n  diff: 'simple'\n}\n\nNode.js v24.22.2\n")

@@ -199,13 +199,21 @@ inline void WasmCodeGen::BlockInto(Block *body, FreshFixedDestination destinatio
     scopes.pop_back();
 }
 
+inline bool WasmCodeGen::CanCopyFixedArray(TypeExpr *to, TypeExpr *from) {
+    return InlineArray(to) && to->arr->akind == A_LIMITED &&
+           from && from->kind == TY_ARRAY && from->arr->akind == A_FIXED &&
+           TEq(to->arr->sub, from->arr->sub) && ArrSize(from->arr) >= 0 &&
+           ArrSize(from->arr) <= ArrSize(to->arr);
+}
+
 inline void WasmCodeGen::CallInto(FreshFixedDestination destination, Node *expression) {
     CheckFreshDestination(destination, expression->line);
     auto type = ActualType(expression);
-    if (!FixedResult(type) || !TEq(type, destination.place.type))
+    if (!FixedResult(type) ||
+        (!TEq(type, destination.place.type) && !CanCopyFixedArray(destination.place.type, type)))
         Fail(expression->line, "aggregate result adaptation needs the pending destination lowering");
     RequireCallValue(type, true, expression->line);
-    if (destination.place.memory != 0 || destination.place.packed) {
+    if (!TEq(type, destination.place.type) || destination.place.memory != 0 || destination.place.packed) {
         WithFixedTemporary(type, expression, [&](const FixedPlace &value) {
             CopyFixed(destination, value, expression->line);
         });
@@ -777,8 +785,14 @@ inline void WasmCodeGen::ConstructAggregateArray(FreshFixedDestination destinati
 
 inline void WasmCodeGen::CopyFixed(FreshFixedDestination destination, FixedPlace source, Line line) {
     CheckFreshDestination(destination, line);
-    if (!TEq(destination.place.type, source.type))
-        Fail(line, "aggregate adaptation needs the pending destination lowering");
+    if (!TEq(destination.place.type, source.type)) {
+        if (!CanCopyFixedArray(destination.place.type, source.type))
+            Fail(line, "aggregate adaptation needs the pending destination lowering");
+        auto payload = FixedMathDestination(destination, source.type, line);
+        CopyFixed(payload, source, line);
+        InitArrayCount(FreshArrayPlace(destination, line), (uint64_t)ArrSize(source.type->arr));
+        return;
+    }
     if (!destination.image) {
         // An empty standalone owner has an identity byte, but no payload image.
         if (IsFreshWholeOwner(destination)) {
@@ -1099,7 +1113,8 @@ inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *sourc
     }
     auto from = ActualType(source);
     while (from && from->kind == TY_REF) from = from->ref->sub;
-    if (!from || !TEq(type, from)) Fail(source->line, "aggregate adaptation needs the pending destination lowering");
+    if (!from || (!TEq(type, from) && !CanCopyFixedArray(type, from)))
+        Fail(source->line, "aggregate adaptation needs the pending destination lowering");
     if (fresh.origin == FreshFixedOrigin::ReservedDataElement && Nominal(type)) {
         if (auto id = Is<Ident>(source); id && id->vdef && TEq(type, id->vdef->type)) {
             auto &slot = Find(id->vdef);

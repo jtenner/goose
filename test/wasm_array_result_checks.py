@@ -82,7 +82,7 @@ def check_guards(run, exe, cc, out, node, validator, wasmtime_python):
             run([cc, c, '-pthread', '-lm', '-ldl', '-o', native])
             reference = run([native]); assert reference.stdout == expected and not reference.stderr
             module.unlink(missing_ok=True)
-            if name == 'empty':
+            if name in ('empty', 'adaptation'):
                 from wasm_zero_call_checks import check_completed
                 check_completed(run, exe, source, module, opt, reference.stdout, node, validator, wasmtime_python)
                 count += 1

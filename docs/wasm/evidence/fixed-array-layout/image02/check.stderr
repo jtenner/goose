@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-fixed-result-layout-20261108/image02/checks.py", line 15, in <module>
+    n=check(run,'node','wasm-tools',p/'artifacts');records.append({'name':name,'checks':n});(p/'results.json').write_text(json.dumps(records,indent=2)+'\n');print('PASS',name,n,flush=True)
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_array_layout_checks.py", line 41, in check_owners
+    assert result.returncode == 1 and reason in result.stderr, (mode, label, result.stderr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('stored', 'long', b'')

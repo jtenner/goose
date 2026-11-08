@@ -1,0 +1,1 @@
+var a:i64[2]=[7,-8];recursive fn later()->i64{a[0]=99;return 0;}recursive fn take(c:i64[..3],n:i64)->i64{assert(n==0&&c.len==2);return c[0];}fn main(){assert(take(a,later())==7&&a[0]==99);print("later_effect");}

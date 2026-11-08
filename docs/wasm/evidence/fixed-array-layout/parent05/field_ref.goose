@@ -1,0 +1,1 @@
+struct H{a:u8[3]&}fn main(){var a:u8[3]=[1,2,3];var h=H{a};var c:u8[..4]=h.a;var rows:H[]=[H{a}];var d:u8[..4]=rows[0].a;c[0]=99;d[1]=88;assert(c.len==3&&d.len==3&&c[0]==99&&d[1]==88&&a[0]==1&&a[1]==2);print("field_ref");}

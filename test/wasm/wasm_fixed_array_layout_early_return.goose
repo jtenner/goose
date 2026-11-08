@@ -1,0 +1,1 @@
+recursive fn make(early:bool)->i64[2]{if early{return[7,-8];}return[1,2];}recursive fn take(early:bool)->i64{var c:i64[..3]=make(early);return c[0];}fn main(){assert(take(true)==7&&take(false)==1);print("early_return");}

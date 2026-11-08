@@ -1,0 +1,23 @@
+[
+  {
+    "case": "recursion",
+    "source_sha256": "55a1f583a2890e7b7ff6c3efe8adf347e8fba63c54b86c46699cbcf351aee47e",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-result-layout-20261108/parent04/recursion.goose:1: error: wasm target: aggregate result adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "source_data",
+    "source_sha256": "e3b93684d3c27c21116ac15223fc41588e1592c0a1243c25c9125628944bc893",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-result-layout-20261108/parent04/source_data.goose:1: error: wasm target: array adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "inline_early",
+    "source_sha256": "9ff66a3daa62ea8ab2d7a3bcb76ba7cbe159abea16fe94eeb96637d3379dc09a",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-result-layout-20261108/parent04/inline_early.goose:1: error: wasm target: aggregate result adaptation needs the pending destination lowering\n"
+  }
+]

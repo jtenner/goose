@@ -1,0 +1,1 @@
+struct S{values:i64[2]}var calls:i64=0;recursive fn index()->i64{calls++;return 0;}fn main(){var rows:S[]=[S{[7,-8]}];var c:i64[..3]=copy(rows[index()].values);c[0]=99;assert(calls==1&&c.len==2&&c[0]==99&&rows[0].values[0]==7&&c[1] == -8);print("source_data");}
