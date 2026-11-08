@@ -1,0 +1,1 @@
+struct S{a:i64[2]}var calls:i64=0;recursive fn make()->S{calls++;return S{[7,-8]};}fn main(){var c:i64[..3]=[1,2,3];c=make().a;assert(calls==1&&c.len==2&&c[0]==7&&c[1] == -8);print("temporary_field");}

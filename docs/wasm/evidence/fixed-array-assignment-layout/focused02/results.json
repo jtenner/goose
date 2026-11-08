@@ -1,0 +1,16 @@
+[
+  {
+    "case": "wasm_fixed_array_assignment_layout_owner_wide",
+    "opt": 0,
+    "source_sha256": "dfaad8aee53b3f55a8119287d808cff8df86cc1455d62cdbf9ad7b33230fff41",
+    "wasm_sha256": "f83109a2cd348b6ae949161c924952b532dde3cb8cfc878d019a8deb95ae1647",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_fixed_array_assignment_layout_owner_wide",
+    "opt": 2,
+    "source_sha256": "dfaad8aee53b3f55a8119287d808cff8df86cc1455d62cdbf9ad7b33230fff41",
+    "wasm_sha256": "f83109a2cd348b6ae949161c924952b532dde3cb8cfc878d019a8deb95ae1647",
+    "status": "PASS"
+  }
+]

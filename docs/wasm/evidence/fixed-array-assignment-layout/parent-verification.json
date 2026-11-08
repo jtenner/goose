@@ -1,0 +1,152 @@
+{
+  "status": "PASS",
+  "families": [
+    {
+      "case": "stored",
+      "source_sha256": "541f8dbba72675603b87d348c973b1277856bdb1acbd2b67571cdb1840c80d44",
+      "parent_stage": "parent01",
+      "native": "PASS",
+      "parent_wasm": "specific rejection"
+    },
+    {
+      "case": "call",
+      "source_sha256": "3bedadb3232c2aeed40248713ad1e7b95d7b22f9ae07cde1ef8b229271b7ceeb",
+      "parent_stage": "parent01",
+      "native": "PASS",
+      "parent_wasm": "specific rejection"
+    },
+    {
+      "case": "reference",
+      "source_sha256": "f2e5c168d2a6f440228d7de891ac4485b77db369c47aae7ec47527f5b0b278a1",
+      "parent_stage": "parent01",
+      "native": "PASS",
+      "parent_wasm": "specific rejection"
+    },
+    {
+      "case": "data_field",
+      "source_sha256": "fd9c6f3dfb0ae8375fa9b97412c75fefeb42c4f932512347774b78cdd8eea206",
+      "parent_stage": "parent01",
+      "native": "PASS",
+      "parent_wasm": "specific rejection"
+    },
+    {
+      "case": "zero",
+      "source_sha256": "3b8a90375d155d98ec13838b36a9acaa67246051e0be0a38e63357ba938bebe8",
+      "parent_stage": "parent01",
+      "native": "PASS",
+      "parent_wasm": "specific rejection"
+    },
+    {
+      "case": "copy",
+      "source_sha256": "e166b210d2588db9ec5d703af6c6cc4fdb8f7d6e9bb13645c40ed8ed0445e0d5",
+      "parent_stage": "parent02",
+      "native": "PASS",
+      "parent_wasm": "specific rejection"
+    },
+    {
+      "case": "order",
+      "source_sha256": "8f72f935a959644713c875f63fc4cdddcda6e667536b919bc5cd139bac68e4bb",
+      "parent_stage": "parent02",
+      "native": "PASS",
+      "parent_wasm": "specific rejection"
+    },
+    {
+      "case": "fat_order",
+      "source_sha256": "689403ae91e534511cb9c263b3115ee1adba05dde1e749e911dde936e913cc03",
+      "parent_stage": "parent02",
+      "native": "PASS",
+      "parent_wasm": "specific rejection"
+    },
+    {
+      "case": "function_data",
+      "source_sha256": "8258721a6c0fd7c39ca97bcc116ae2027dc54e61ac959defabfb50f977c6ce9e",
+      "parent_stage": "parent02",
+      "native": "PASS",
+      "parent_wasm": "specific rejection"
+    },
+    {
+      "case": "temporary_field",
+      "source_sha256": "cce272c1e5decb1bd2fafb17f20fd2b9ef25126da100407198d72c654b84bc8c",
+      "parent_stage": "parent02",
+      "native": "PASS",
+      "parent_wasm": "specific rejection"
+    },
+    {
+      "case": "reference_elements",
+      "source_sha256": "e7f174d926b4885ac77caf2d118367e7b86ee9bcd779c457a09c15cc6f38796c",
+      "parent_stage": "parent02",
+      "native": "PASS",
+      "parent_wasm": "specific rejection"
+    },
+    {
+      "case": "padded",
+      "source_sha256": "9a987241531d5adf0bbb6dc5358a5dc68e73c6bb19715c2b95ae8e1a9caf42d9",
+      "parent_stage": "parent02",
+      "native": "PASS",
+      "parent_wasm": "specific rejection"
+    },
+    {
+      "case": "wide",
+      "source_sha256": "ff3f459909d117594b484c721d4f5cd0828d1b91c09dea184b489cc88ced1eac",
+      "parent_stage": "parent02",
+      "native": "PASS",
+      "parent_wasm": "specific rejection"
+    },
+    {
+      "case": "owner_stored",
+      "source_sha256": "201d44687b79a4f3fb79e157ad80a88e15c9d88ff35685ed0f065fc50d5c3f13",
+      "parent_stage": "parent02",
+      "native": "PASS",
+      "parent_wasm": "specific rejection"
+    },
+    {
+      "case": "owner_call",
+      "source_sha256": "a990cb1ae2bbc134b8453084dba581a772bf4ab745603c6956de7ffce9762f9f",
+      "parent_stage": "parent02",
+      "native": "PASS",
+      "parent_wasm": "specific rejection"
+    },
+    {
+      "case": "owner_zero",
+      "source_sha256": "14f0cc3a24120bb90088f8a882d817895d5fa9374bce3b5e96b487f9946104f4",
+      "parent_stage": "parent02",
+      "native": "PASS",
+      "parent_wasm": "specific rejection"
+    },
+    {
+      "case": "owner_data",
+      "source_sha256": "e46ba9f03a4a5a67c4dc5bd13cbce3227ba87f93bc2026ca79ee7572929d3172",
+      "parent_stage": "parent02",
+      "native": "PASS",
+      "parent_wasm": "specific rejection"
+    },
+    {
+      "case": "global",
+      "source_sha256": "e7f4ce9481bb902d175a77df95fc77a6dc829e39c37b5703938585dffa91ec40",
+      "parent_stage": "parent03",
+      "native": "PASS",
+      "parent_wasm": "specific rejection"
+    },
+    {
+      "case": "default",
+      "source_sha256": "bcff145172f240d8a275d62b7232a794a45b05707db034d3f4b13332b4a5658f",
+      "parent_stage": "parent03",
+      "native": "PASS",
+      "parent_wasm": "specific rejection"
+    },
+    {
+      "case": "default_effects",
+      "source_sha256": "c35cd65261af4c4022d8fbc45c6b00e591030dc0797755262c8f621945f952cf",
+      "parent_stage": "parent03",
+      "native": "PASS",
+      "parent_wasm": "specific rejection"
+    },
+    {
+      "case": "owner_wide",
+      "source_sha256": "dfaad8aee53b3f55a8119287d808cff8df86cc1455d62cdbf9ad7b33230fff41",
+      "parent_stage": "parent04",
+      "native": "PASS",
+      "parent_wasm": "specific rejection"
+    }
+  ]
+}

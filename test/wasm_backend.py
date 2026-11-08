@@ -138,7 +138,7 @@ def main():
             if source.stem.startswith((
                     'wasm_inline_ref_abi_', 'wasm_data_aggregate_', 'wasm_constructor_assignment_',
                     'wasm_aggregate_construction_', 'wasm_array_assignment_', 'wasm_default_conversion_',
-                    'wasm_array_constructor_', 'wasm_fixed_argument_', 'wasm_fixed_result_', 'wasm_array_argument_', 'wasm_array_result_', 'wasm_temporary_read_', 'wasm_temporary_equality_', 'wasm_fixed_negation_', 'wasm_fixed_binary_', 'wasm_compound_math_', 'wasm_negation_discard_', 'wasm_zero_call_', 'wasm_fixed_array_conversion_', 'wasm_fixed_array_layout_')):
+                    'wasm_array_constructor_', 'wasm_fixed_argument_', 'wasm_fixed_result_', 'wasm_array_argument_', 'wasm_array_result_', 'wasm_temporary_read_', 'wasm_temporary_equality_', 'wasm_fixed_negation_', 'wasm_fixed_binary_', 'wasm_compound_math_', 'wasm_negation_discard_', 'wasm_zero_call_', 'wasm_fixed_array_conversion_', 'wasm_fixed_array_layout_', 'wasm_fixed_array_assignment_layout_')):
                 actual = run([args.node, ROOT / 'test' / 'wasm_reference_abi.mjs', wasm,
                               out / f'{source.stem}-O{opt}-instance'])
             else:
@@ -238,6 +238,12 @@ def main():
                                             'wasm_fixed_array_layout_wide_data_owner',
                                             'wasm_fixed_array_layout_source_data',
                                             'wasm_fixed_array_layout_field_ref') else 'no-data'
+                checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
+                assert checked.stdout == reference.stdout and not checked.stderr
+                count += 1
+            if source.stem.startswith('wasm_fixed_array_assignment_layout_'):
+                mode = '' if source.stem.rsplit('_layout_', 1)[1] in (
+                    'data_field', 'fat_order', 'function_data', 'owner_data') else 'no-data'
                 checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
                 assert checked.stdout == reference.stdout and not checked.stderr
                 count += 1
@@ -438,6 +444,11 @@ def main():
     from wasm_fixed_array_layout_checks import check_owners as check_layout_owners, check_data as check_layout_data
     count += check_layout_owners(run, args.node, args.validator, out)
     count += check_layout_data(run, args.node, args.validator, out)
+    from wasm_fixed_array_assignment_checks import check_owners as check_fixed_array_assignment_owners, check_data as check_fixed_array_assignment_data, check_wide as check_fixed_array_assignment_wide, check_failures as check_fixed_array_assignment_failures
+    count += check_fixed_array_assignment_owners(run, args.node, args.validator, out)
+    count += check_fixed_array_assignment_data(run, args.node, args.validator, out)
+    count += check_fixed_array_assignment_wide(run, args.node, args.validator, out)
+    count += check_fixed_array_assignment_failures(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out)
     from wasm_compound_math_checks import check_images as check_compound_images, check_snapshot as check_compound_snapshot, check_loops as check_compound_loops, check_global as check_compound_global, check_failures as check_compound_failures
     count += check_compound_images(run, args.node, args.validator, out)
     count += check_compound_snapshot(run, args.node, args.validator, out)

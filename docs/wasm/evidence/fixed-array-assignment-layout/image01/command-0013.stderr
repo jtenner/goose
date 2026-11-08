@@ -1,0 +1,64 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: array assignment memory 0 image differs
++ actual - expected
+... Skipped lines
+
+  Buffer(65536) [Uint8Array] [
+    0,
+    0,
+    0,
+    0,
+...
+    255,
++   3,
+-   2,
+    7,
+    0,
+    0,
+    0,
+    0,
+
+    at checkImage (file:///home/dev/Projects/goose-wasm-backend/test/wasm_fixed_array_assignment_owner.mjs:13:12)
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_fixed_array_assignment_owner.mjs:42:9
+    at print_end_v1 (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:105:13)
+    at main.0 (wasm://wasm/bc7c0976:wasm-function[11]:0x39b)
+    at goose.start (wasm://wasm/bc7c0976:wasm-function[13]:0x482)
+    at Object.run (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:133:34)
+    at runCompleted (file:///home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs:10:13)
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_fixed_array_assignment_owner.mjs:47:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: Buffer(65536) [Uint8Array] [
+      0,   0,   0,   0,   0,   0,   0,   0,  47, 104, 111, 109,
+    101,  47, 100, 101, 118,  47,  80, 114, 111, 106, 101,  99,
+    116, 115,  47, 103, 111, 111, 115, 101,  45, 119,  97, 115,
+    109,  45,  98,  97,  99, 107, 101, 110, 100,  47, 116, 101,
+    115, 116,  47, 119,  97, 115, 109,  47, 119,  97, 115, 109,
+     95, 102, 105, 120, 101, 100,  95,  97, 114, 114,  97, 121,
+     95,  97, 115, 115, 105, 103, 110, 109, 101, 110, 116,  95,
+    108,  97, 121, 111, 117, 116,  95, 111, 119, 110, 101, 114,
+     95, 115, 116, 111,
+    ... 65436 more items
+  ],
+  expected: Buffer(65536) [Uint8Array] [
+      0,   0,   0,   0,   0,   0,   0,   0,  47, 104, 111, 109,
+    101,  47, 100, 101, 118,  47,  80, 114, 111, 106, 101,  99,
+    116, 115,  47, 103, 111, 111, 115, 101,  45, 119,  97, 115,
+    109,  45,  98,  97,  99, 107, 101, 110, 100,  47, 116, 101,
+    115, 116,  47, 119,  97, 115, 109,  47, 119,  97, 115, 109,
+     95, 102, 105, 120, 101, 100,  95,  97, 114, 114,  97, 121,
+     95,  97, 115, 115, 105, 103, 110, 109, 101, 110, 116,  95,
+    108,  97, 121, 111, 117, 116,  95, 111, 119, 110, 101, 114,
+     95, 115, 116, 111,
+    ... 65436 more items
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.2

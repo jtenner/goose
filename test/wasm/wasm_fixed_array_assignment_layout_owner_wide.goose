@@ -1,0 +1,1 @@
+fn main(){var big:u8[256]=[7;256];var small:u8[2]=[9,10];var target:u8[..256]=[1];print("before");target=big;print("wide");assert(target.len==256&&target[255]==7);target=small;print("after");assert(target.len==2&&target[0]==9&&target[1]==10&&big[0]==7&&small[1]==10);}

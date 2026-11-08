@@ -1,0 +1,1 @@
+struct H{values:i64[..3]}var calls:i64=0;recursive fn index()->i64{calls++;return 0;}fn main(){var a:i64[2]=[7,-8];var rows:H[]=[H{[1,2,3]}];rows[index()].values=a;assert(calls==1&&rows[0].values.len==2&&rows[0].values[1] == -8);print("data_field");}

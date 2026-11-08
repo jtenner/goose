@@ -91,7 +91,7 @@ def check_guards(run, exe, cc, node, out):
         ('default', 'struct S{n:i64=7}\nfn main(){var a:S[1]=[S{n:1}];a=default<S[1]>();print(a[0].n);}\n',
          b'7\n', None),
         ('adaptation', 'fn main(){var a:u8[..3]=[1];var b:u8[2]=[2,3];a=b;print(a.len);}\n',
-         b'2\n', b'whole-array assignment adaptation needs the pending destination lowering'),
+         b'2\n', None),
     ]
     count = 0
     for name, text, expected, reason in cases:

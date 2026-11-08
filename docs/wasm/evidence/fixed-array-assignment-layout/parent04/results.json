@@ -1,0 +1,9 @@
+[
+  {
+    "case": "owner_wide",
+    "source_sha256": "dfaad8aee53b3f55a8119287d808cff8df86cc1455d62cdbf9ad7b33230fff41",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-array-assignment-layout-20261108/parent04/owner_wide.goose:1: error: wasm target: whole-array assignment adaptation needs the pending destination lowering\n"
+  }
+]

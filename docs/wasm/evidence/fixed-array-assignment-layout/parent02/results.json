@@ -1,0 +1,86 @@
+[
+  {
+    "case": "copy",
+    "source_sha256": "e166b210d2588db9ec5d703af6c6cc4fdb8f7d6e9bb13645c40ed8ed0445e0d5",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-array-assignment-layout-20261108/parent02/copy.goose:1: error: wasm target: whole-array assignment adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "order",
+    "source_sha256": "8f72f935a959644713c875f63fc4cdddcda6e667536b919bc5cd139bac68e4bb",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-array-assignment-layout-20261108/parent02/order.goose:1: error: wasm target: whole-array assignment adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "fat_order",
+    "source_sha256": "689403ae91e534511cb9c263b3115ee1adba05dde1e749e911dde936e913cc03",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-array-assignment-layout-20261108/parent02/fat_order.goose:1: error: wasm target: whole-array assignment adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "function_data",
+    "source_sha256": "8258721a6c0fd7c39ca97bcc116ae2027dc54e61ac959defabfb50f977c6ce9e",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-array-assignment-layout-20261108/parent02/function_data.goose:1: error: wasm target: whole-array assignment adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "temporary_field",
+    "source_sha256": "cce272c1e5decb1bd2fafb17f20fd2b9ef25126da100407198d72c654b84bc8c",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-array-assignment-layout-20261108/parent02/temporary_field.goose:1: error: wasm target: whole-array assignment adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "reference_elements",
+    "source_sha256": "e7f174d926b4885ac77caf2d118367e7b86ee9bcd779c457a09c15cc6f38796c",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-array-assignment-layout-20261108/parent02/reference_elements.goose:1: error: wasm target: whole-array assignment adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "padded",
+    "source_sha256": "9a987241531d5adf0bbb6dc5358a5dc68e73c6bb19715c2b95ae8e1a9caf42d9",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-array-assignment-layout-20261108/parent02/padded.goose:1: error: wasm target: whole-array assignment adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "wide",
+    "source_sha256": "ff3f459909d117594b484c721d4f5cd0828d1b91c09dea184b489cc88ced1eac",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-array-assignment-layout-20261108/parent02/wide.goose:1: error: wasm target: whole-array assignment adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "owner_stored",
+    "source_sha256": "201d44687b79a4f3fb79e157ad80a88e15c9d88ff35685ed0f065fc50d5c3f13",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-array-assignment-layout-20261108/parent02/owner_stored.goose:1: error: wasm target: whole-array assignment adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "owner_call",
+    "source_sha256": "a990cb1ae2bbc134b8453084dba581a772bf4ab745603c6956de7ffce9762f9f",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-array-assignment-layout-20261108/parent02/owner_call.goose:1: error: wasm target: whole-array assignment adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "owner_zero",
+    "source_sha256": "14f0cc3a24120bb90088f8a882d817895d5fa9374bce3b5e96b487f9946104f4",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-array-assignment-layout-20261108/parent02/owner_zero.goose:1: error: wasm target: whole-array assignment adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "owner_data",
+    "source_sha256": "e46ba9f03a4a5a67c4dc5bd13cbce3227ba87f93bc2026ca79ee7572929d3172",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-array-assignment-layout-20261108/parent02/owner_data.goose:1: error: wasm target: whole-array assignment adaptation needs the pending destination lowering\n"
+  }
+]

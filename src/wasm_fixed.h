@@ -570,6 +570,21 @@ inline void WasmCodeGen::AssignFixed(FixedPlace destination, Node *source, TType
     }
     auto from = ActualType(source);
     while (from && from->kind == TY_REF) from = from->ref->sub;
+    if (CanCopyFixedArray(destination.type, from)) {
+        RequireFixed(destination.type, line);
+        auto bytes = RequireFixed(from, line);
+        auto prefix = (uint32_t)IntSize(LenStore(destination.type->arr));
+        if (prefix > UINT32_MAX - destination.offset) fail("offset exceeds memory32");
+        auto payload = destination;
+        payload.type = from; payload.offset += prefix;
+        WithReadPlace(source, [&](FixedPlace value) {
+            while (value.type->kind == TY_REF) value = DereferencePlace(value, line);
+            if (!TEq(from, value.type)) fail("has an inconsistent source layout");
+            CopyBytes(payload, value, bytes, line, true);
+            InitArrayCount(ArrayFromPlace(destination, line), (uint64_t)ArrSize(from->arr));
+        });
+        return;
+    }
     if (!from || !TEq(destination.type, from))
         fail("adaptation needs the pending destination lowering");
     auto dot = Is<Dot>(source);

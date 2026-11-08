@@ -1,0 +1,29 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: array assignment invalid target ran RHS
++ actual - expected
+
++ 'rhs\n'
+- 'before\n'
+
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_fixed_array_assignment_failure.mjs:9:12
+    at print_end_v1 (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:105:13)
+    at make.1 (wasm://wasm/d2096a52:wasm-function[12]:0x4ef)
+    at main.0 (wasm://wasm/d2096a52:wasm-function[11]:0x4a2)
+    at goose.start (wasm://wasm/d2096a52:wasm-function[14]:0x51f)
+    at Object.run (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:133:34)
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_fixed_array_assignment_failure.mjs:30:15
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'rhs\n',
+  expected: 'before\n',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.2

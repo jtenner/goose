@@ -1,0 +1,1 @@
+struct S{a:f32,pad 2,b:f64}fn main(){var source:S[2]=[S{1.5,2.25},S{3.5,4.75}];var c:S[..3]=[S{9.5,10.25},S{11.5,12.75},S{13.5,14.25}];c=source;c[0].a=20.5;assert(c.len==2&&c[0].a==20.5&&c[1].b==4.75&&source[0].a==1.5);print("padded");}

@@ -1,0 +1,1 @@
+var calls:i64=0;recursive fn source(a:i64[2]&)->i64[2]&{calls++;return a;}fn main(){var a:i64[2]=[7,-8];var c:i64[..3]=[1,2,3];c=source(a);assert(calls==1&&c.len==2&&c[0]==7&&c[1] == -8);print("reference");}

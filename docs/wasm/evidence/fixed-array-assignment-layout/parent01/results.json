@@ -1,0 +1,47 @@
+[
+  {
+    "case": "stored",
+    "source_sha256": "541f8dbba72675603b87d348c973b1277856bdb1acbd2b67571cdb1840c80d44",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1,
+    "wasm_reason": "/tmp/goose-wasm-fixed-array-assignment-layout-20261108/parent01/stored.goose:1: error: wasm target: whole-array assignment adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "call",
+    "source_sha256": "3bedadb3232c2aeed40248713ad1e7b95d7b22f9ae07cde1ef8b229271b7ceeb",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1,
+    "wasm_reason": "/tmp/goose-wasm-fixed-array-assignment-layout-20261108/parent01/call.goose:1: error: wasm target: whole-array assignment adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "reference",
+    "source_sha256": "f2e5c168d2a6f440228d7de891ac4485b77db369c47aae7ec47527f5b0b278a1",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1,
+    "wasm_reason": "/tmp/goose-wasm-fixed-array-assignment-layout-20261108/parent01/reference.goose:1: error: wasm target: whole-array assignment adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "data_field",
+    "source_sha256": "fd9c6f3dfb0ae8375fa9b97412c75fefeb42c4f932512347774b78cdd8eea206",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1,
+    "wasm_reason": "/tmp/goose-wasm-fixed-array-assignment-layout-20261108/parent01/data_field.goose:1: error: wasm target: whole-array assignment adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "zero",
+    "source_sha256": "3b8a90375d155d98ec13838b36a9acaa67246051e0be0a38e63357ba938bebe8",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1,
+    "wasm_reason": "/tmp/goose-wasm-fixed-array-assignment-layout-20261108/parent01/zero.goose:1: error: wasm target: whole-array assignment adaptation needs the pending destination lowering\n"
+  }
+]

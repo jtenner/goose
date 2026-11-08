@@ -1,0 +1,1 @@
+struct H{before:u8,values:i64[..256],after:u16}fn main(){var source:i64[2]=[7,-8];var rows:H[]=[H{7,[1,2,3],65000}];print("before");rows[0].values=source;print("after");assert(rows[0].values.len==2&&rows[0].values[0]==7&&rows[0].values[1] == -8&&rows[0].before==7&&rows[0].after==65000);}

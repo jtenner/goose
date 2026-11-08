@@ -375,8 +375,15 @@ Fixed source arrays now construct static-limited receivers with matching
 element layouts and sufficient capacity. The checked payload copy preserves
 unused capacity; mismatched call results first land in an intrinsic temporary.
 The same fresh construction path covers fields, parameters, declared results
-and callbacks. Whole-array assignment is still separate. See
+and callbacks. Whole-array assignment uses the separate path below. See
 [fixed array layout evidence](evidence/fixed-array-layout.md).
+
+Fixed sources now assign to existing static-limited receivers with matching
+elements and sufficient capacity. The captured target survives RHS effects;
+only active payload bytes and the count change. Unused capacity is retained.
+Full images and valid damaged modules cover empty results, wider prefixes,
+reference rebinding, data memories and RHS failure protection. See
+[fixed array assignment layout evidence](evidence/fixed-array-assignment-layout.md).
 
 ## Host contract
 

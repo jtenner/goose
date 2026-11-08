@@ -1,0 +1,23 @@
+[
+  {
+    "case": "global",
+    "source_sha256": "e7f4ce9481bb902d175a77df95fc77a6dc829e39c37b5703938585dffa91ec40",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-array-assignment-layout-20261108/parent03/global.goose:1: error: wasm target: whole-array assignment adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "default",
+    "source_sha256": "bcff145172f240d8a275d62b7232a794a45b05707db034d3f4b13332b4a5658f",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-array-assignment-layout-20261108/parent03/default.goose:1: error: wasm target: whole-array assignment adaptation needs the pending destination lowering\n"
+  },
+  {
+    "case": "default_effects",
+    "source_sha256": "c35cd65261af4c4022d8fbc45c6b00e591030dc0797755262c8f621945f952cf",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-array-assignment-layout-20261108/parent03/default_effects.goose:1: error: wasm target: whole-array assignment adaptation needs the pending destination lowering\n"
+  }
+]
