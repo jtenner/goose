@@ -1,0 +1,10 @@
+{
+  "result": "recursive fn make()->i64[0]{var x:i64[0]=[];return x;}fn main(){let x=make();assert(x.len==0);print(\"result\");}",
+  "parameter": "recursive fn take(x:i64[0])->i64{assert(x.len==0);return 55;}fn main(){var x:i64[0]=[];assert(take(x)==55);print(\"parameter\");}",
+  "forward": "recursive fn same(a:i64[0])->i64[0]{return a;}fn main(){var a:i64[0]=[];var b=same(a);b=same(b);same(b);assert(same(a).len==0);assert(&a .!= &b);print(\"forward\");}",
+  "field": "struct H{tag:u8,empty:i64[0]}recursive fn make()->i64[0]{var x:i64[0]=[];print(\"callee\");return x;}fn main(){print(\"before\");let h=H{90,make()};print(\"after\");assert(h.tag==90&&h.empty.len==0);}",
+  "middle_field": "struct H{left:i64,empty:i64[0],right:i64}recursive fn make()->i64[0]{var x:i64[0]=[];return x;}fn main(){let h=H{13,make(),17};assert(h.left==13&&h.right==17&&h.empty.len==0);print(\"middle_field\");}",
+  "inline": "fn same(a:i64[0])->i64[0]{return a;}fn main(){var x:i64[0]=[];let y=same(x);assert(y.len==0);print(\"inline\");}",
+  "callback": "fn apply<F>(a:i64[0])->i64[0]{return F(a);}fn main(){var x:i64[0]=[];let y=apply(x){a:i64[0]=>a};assert(y.len==0);print(\"callback\");}",
+  "order": "var calls:i64=0;recursive fn make()->i64[0]{calls++;return [];}recursive fn later()->i64{assert(calls==1);calls++;return 55;}recursive fn take(a:i64[0],n:i64)->i64{assert(a.len==0);return n;}fn main(){assert(take(make(),later())==55&&calls==2);print(\"order\");}"
+}

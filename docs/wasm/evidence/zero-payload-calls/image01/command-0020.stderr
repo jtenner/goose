@@ -1,0 +1,27 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: zero call live owner top differs
+
+275 !== 276
+
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_zero_call_owner.mjs:18:16
+    at print_end_v1 (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:105:13)
+    at same.1 (wasm://wasm/1f458a5a:wasm-function[12]:0x24d)
+    at main.0 (wasm://wasm/1f458a5a:wasm-function[11]:0x209)
+    at goose.start (wasm://wasm/1f458a5a:wasm-function[15]:0x29d)
+    at Object.run (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:133:34)
+    at runCompleted (file:///home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs:10:13)
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_zero_call_owner.mjs:30:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 275,
+  expected: 276,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.2

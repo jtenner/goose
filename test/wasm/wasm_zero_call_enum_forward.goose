@@ -1,0 +1,1 @@
+enum E{Empty,Value{n:i64}}var calls:i64=0;recursive fn same(a:E.Empty)->E.Empty{calls++;return a;}fn main(){var a:E.Empty=default<E.Empty>();var b:E.Empty=same(a);assert(&a .!= &b);same(b);assert(calls==2);print("enum_forward");}

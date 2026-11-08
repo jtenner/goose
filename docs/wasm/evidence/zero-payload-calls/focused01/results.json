@@ -1,0 +1,170 @@
+[
+  {
+    "case": "wasm_zero_call_callback",
+    "opt": 0,
+    "source_sha256": "12cc58f2a42d9b41585c0a4950cc34d888e9a66d8b9f54c0cc609b7cf02aba1d",
+    "wasm_sha256": "6cdbb43615cad0998eafce57f8c22d114be34b6f11db62fe0570bfc7938ef31d",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_zero_call_callback",
+    "opt": 2,
+    "source_sha256": "12cc58f2a42d9b41585c0a4950cc34d888e9a66d8b9f54c0cc609b7cf02aba1d",
+    "wasm_sha256": "0883e716f2a28d50030bc3c9b75895fa043ef8291c2c3e1db5360ed46b1ee122",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_zero_call_enum_callback",
+    "opt": 0,
+    "source_sha256": "921262d003bba7476972e644b7d259664db99687bb89f8fdb317a06e5ecbf197",
+    "wasm_sha256": "3fbfc8abe13281133fa170f4488a127595f78099d108ec70420a01455073eca2",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_zero_call_enum_callback",
+    "opt": 2,
+    "source_sha256": "921262d003bba7476972e644b7d259664db99687bb89f8fdb317a06e5ecbf197",
+    "wasm_sha256": "88a6cf90d59b72d414517a93dda01470345978653ac43165f1efced13203763b",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_zero_call_enum_forward",
+    "opt": 0,
+    "source_sha256": "8bc3994005c4ddca17ccf654f6a1477deeb522ffc3210b96df10172d3ab9cae2",
+    "wasm_sha256": "0028e421c37d404eaf3e857a241802c1c1a30050951d1a4172600dbe03f353c3",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_zero_call_enum_forward",
+    "opt": 2,
+    "source_sha256": "8bc3994005c4ddca17ccf654f6a1477deeb522ffc3210b96df10172d3ab9cae2",
+    "wasm_sha256": "0028e421c37d404eaf3e857a241802c1c1a30050951d1a4172600dbe03f353c3",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_zero_call_enum_inline",
+    "opt": 0,
+    "source_sha256": "9c2f0716971ba52ae92e5340c38f2f02bd0483565d6cb1df810b99ad8c9b1287",
+    "wasm_sha256": "05c7a905b1e9fe4a64151b3217d7d923f3efcfcbff91d5105c00b5f95a854970",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_zero_call_enum_inline",
+    "opt": 2,
+    "source_sha256": "9c2f0716971ba52ae92e5340c38f2f02bd0483565d6cb1df810b99ad8c9b1287",
+    "wasm_sha256": "5f81014920eead4a9f72d1510952d92ab70be8c5b04d98e2dc57b7a9c22cccff",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_zero_call_enum_order",
+    "opt": 0,
+    "source_sha256": "21257fddf7bf265b418efe71513628f4d481a517db0d7cbdb69b258f06807197",
+    "wasm_sha256": "842ac4eb5cb2990f56e4b7c0a8edc1ef633bd3a8b8339316f4cb1fdac4bb3df4",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_zero_call_enum_order",
+    "opt": 2,
+    "source_sha256": "21257fddf7bf265b418efe71513628f4d481a517db0d7cbdb69b258f06807197",
+    "wasm_sha256": "842ac4eb5cb2990f56e4b7c0a8edc1ef633bd3a8b8339316f4cb1fdac4bb3df4",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_zero_call_enum_parameter",
+    "opt": 0,
+    "source_sha256": "c05b32c5fb6e25accc0793c11ef407dc101f4721c92f6e8f89459001eb19c249",
+    "wasm_sha256": "e84ea28eea57a4f582096a1dbb52a516599511178250f6ac5274d846297d06c6",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_zero_call_enum_parameter",
+    "opt": 2,
+    "source_sha256": "c05b32c5fb6e25accc0793c11ef407dc101f4721c92f6e8f89459001eb19c249",
+    "wasm_sha256": "e84ea28eea57a4f582096a1dbb52a516599511178250f6ac5274d846297d06c6",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_zero_call_enum_result",
+    "opt": 0,
+    "source_sha256": "919e09cf913042128c4420d78d43c80772a4a65c96e87f3db271d5a66f4f6697",
+    "wasm_sha256": "eabfe30a5ac81d59c93ca4ac2b9c60579e07213e9c7c620199b49d35bb45ac7b",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_zero_call_enum_result",
+    "opt": 2,
+    "source_sha256": "919e09cf913042128c4420d78d43c80772a4a65c96e87f3db271d5a66f4f6697",
+    "wasm_sha256": "eabfe30a5ac81d59c93ca4ac2b9c60579e07213e9c7c620199b49d35bb45ac7b",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_zero_call_forward",
+    "opt": 0,
+    "source_sha256": "e31d8c653094da81b37f0dda5316f2acbdf5aab30e43f9a5e6376a6e0ffbc931",
+    "wasm_sha256": "780fbeccca8a38da0ae2b5c382089462c63855bcbedc9fb857d7f379fe07c740",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_zero_call_forward",
+    "opt": 2,
+    "source_sha256": "e31d8c653094da81b37f0dda5316f2acbdf5aab30e43f9a5e6376a6e0ffbc931",
+    "wasm_sha256": "780fbeccca8a38da0ae2b5c382089462c63855bcbedc9fb857d7f379fe07c740",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_zero_call_inline",
+    "opt": 0,
+    "source_sha256": "0fd8ff0f84a24784e58b65e2a5288af3edc8a1375abe25f1bd8994bf669be609",
+    "wasm_sha256": "88a27dff329559296dbb2bfdc98a60df602aa9281c4a470d90ae9e70fb638c19",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_zero_call_inline",
+    "opt": 2,
+    "source_sha256": "0fd8ff0f84a24784e58b65e2a5288af3edc8a1375abe25f1bd8994bf669be609",
+    "wasm_sha256": "47bc06d4aea26ec53b040aba18ff6d811afe038d66ce857907e729e7f710531b",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_zero_call_order",
+    "opt": 0,
+    "source_sha256": "76463424e1154e4df28f628229857efe397b543f49e82b15eaf466cf6208752a",
+    "wasm_sha256": "2643ff1c6841914958b9e19c9eeb0235f2f573cf7455deb3aa523dceee824bbd",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_zero_call_order",
+    "opt": 2,
+    "source_sha256": "76463424e1154e4df28f628229857efe397b543f49e82b15eaf466cf6208752a",
+    "wasm_sha256": "2643ff1c6841914958b9e19c9eeb0235f2f573cf7455deb3aa523dceee824bbd",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_zero_call_parameter",
+    "opt": 0,
+    "source_sha256": "2aed814f629994f0a796cfa79f5ead4f40cfa5afe759d148a302c984db8a0bd9",
+    "wasm_sha256": "b21d74441ef263dc97b7a443e639b46a539e254430aa767e3f3d3c09866119dd",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_zero_call_parameter",
+    "opt": 2,
+    "source_sha256": "2aed814f629994f0a796cfa79f5ead4f40cfa5afe759d148a302c984db8a0bd9",
+    "wasm_sha256": "b21d74441ef263dc97b7a443e639b46a539e254430aa767e3f3d3c09866119dd",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_zero_call_result",
+    "opt": 0,
+    "source_sha256": "de4b3f69deec63cf69386739ed2193306dcbff403f47db77faebf1603baf8e3b",
+    "wasm_sha256": "a00ed378615d11eb23707927e99128646bffe7935743e7e1ca68af474255228f",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_zero_call_result",
+    "opt": 2,
+    "source_sha256": "de4b3f69deec63cf69386739ed2193306dcbff403f47db77faebf1603baf8e3b",
+    "wasm_sha256": "a00ed378615d11eb23707927e99128646bffe7935743e7e1ca68af474255228f",
+    "status": "PASS"
+  }
+]

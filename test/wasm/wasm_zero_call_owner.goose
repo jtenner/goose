@@ -1,0 +1,1 @@
+recursive fn same(x:i64[0])->i64[0]{print("inside");return x;}recursive fn observe(a:const i64[0]&,b:const i64[0]&){assert(a .!= b);print("after");}fn main(){var a:i64[0]=default<i64[0]>();print("before");let b:i64[0]=same(a);observe(a,b);}

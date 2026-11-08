@@ -60,7 +60,7 @@ def check_images(run, node, validator, out):
     return count
 
 
-def check_guards(run, exe, cc, out):
+def check_guards(run, exe, cc, out, node, validator, wasmtime_python):
     source = out / 'fixed-result-empty-guard.goose'
     source.write_text('enum E{Empty,Value{n:i64}}\n'
                       'recursive fn make()->E.Empty{return default<E.Empty>();}\n'
@@ -73,9 +73,8 @@ def check_guards(run, exe, cc, out):
         run([cc, c, '-pthread', '-lm', '-ldl', '-o', native])
         reference = run([native]); assert reference.stdout == b'empty_result\n' and not reference.stderr
         module.unlink(missing_ok=True)
-        result = run([exe, f'-O{opt}', '--target', 'wasm', '-o', module, source], ok=False)
-        assert result.returncode == 1 and b'zero-sized aggregate results need the pending call lowering' in result.stderr
-        assert not module.exists()
+        from wasm_zero_call_checks import check_completed
+        check_completed(run, exe, source, module, opt, reference.stdout, node, validator, wasmtime_python)
         count += 1
     return count
 

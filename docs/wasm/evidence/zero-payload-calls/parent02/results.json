@@ -1,0 +1,51 @@
+[
+  {
+    "case": "enum_result",
+    "source_sha256": "cc036a517545ecead5ee269aa2cf52486605ec7570ee9df24f17b329e6c900db",
+    "native_emit_exit": 1,
+    "native_reason": "/tmp/goose-wasm-zero-call-20261108/parent02/enum_result.goose:1: error: expected a value of type E.Empty, got E\nenum E{Empty,Value{n:i64}}recursive fn make()->E.Empty{var x:E.Empty=E.Empty;return x;}fn main(){let x:E.Empty=make();assert(x .== &x);print(\"enum_result\");}\n                                                                     ^~~~~~~\n  in fn make() instantiated from /tmp/goose-wasm-zero-call-20261108/parent02/enum_result.goose:1\n  in fn main() instantiated from /tmp/goose-wasm-zero-call-20261108/parent02/enum_result.goose:1\n"
+  },
+  {
+    "case": "enum_parameter",
+    "source_sha256": "af749752f0c728e34ba92996f11ba8aa268c8a287cde98d0aa81202998e66b70",
+    "native_emit_exit": 1,
+    "native_reason": "/tmp/goose-wasm-zero-call-20261108/parent02/enum_parameter.goose:1: error: expected a value of type E.Empty, got E\nenum E{Empty,Value{n:i64}}recursive fn take(x:E.Empty)->i64{assert(x .== &x);return 55;}fn main(){var x:E.Empty=E.Empty;assert(take(x)==55);print(\"enum_parameter\");}\n                                                                                                                ^~~~~~~\n  in fn main() instantiated from /tmp/goose-wasm-zero-call-20261108/parent02/enum_parameter.goose:1\n"
+  },
+  {
+    "case": "enum_forward",
+    "source_sha256": "8bc3994005c4ddca17ccf654f6a1477deeb522ffc3210b96df10172d3ab9cae2",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-zero-call-20261108/parent02/enum_forward.goose:1: error: wasm target: zero-sized aggregate parameters need the pending call lowering\n"
+  },
+  {
+    "case": "enum_inline",
+    "source_sha256": "c7a724498745e4c36b6ace352dab1c4fed3a44b4a3b820fb873f17421073a5e0",
+    "native_emit_exit": 1,
+    "native_reason": "/tmp/goose-wasm-zero-call-20261108/parent02/enum_inline.goose:1: error: expected a value of type E.Empty, got E\nenum E{Empty,Value{n:i64}}fn same(a:E.Empty)->E.Empty{return a;}fn main(){var a:E.Empty=E.Empty;let b:E.Empty=same(a);assert(&a .!= &b);print(\"enum_inline\");}\n                                                                                        ^~~~~~~\n  in fn main() instantiated from /tmp/goose-wasm-zero-call-20261108/parent02/enum_inline.goose:1\n"
+  },
+  {
+    "case": "enum_callback",
+    "source_sha256": "4704c514fc77e6a3527642e119ef9d297ed625f0be23a283defc3a7f3128220f",
+    "native_emit_exit": 1,
+    "native_reason": "/tmp/goose-wasm-zero-call-20261108/parent02/enum_callback.goose:1: error: expected a value of type E.Empty, got E\nenum E{Empty,Value{n:i64}}fn apply<F>(a:E.Empty)->E.Empty{return F(a);}fn main(){var a:E.Empty=E.Empty;let b:E.Empty=apply(a){x:E.Empty=>x};assert(&a .!= &b);print(\"enum_callback\");}\n                                                                                               ^~~~~~~\n  in fn main() instantiated from /tmp/goose-wasm-zero-call-20261108/parent02/enum_callback.goose:1\n"
+  },
+  {
+    "case": "enum_order",
+    "source_sha256": "bd7ceefbcfe3174706da4d22b20298aeb69cafdc5432576fa5b6d5dc274d9cb4",
+    "native_emit_exit": 1,
+    "native_reason": "/tmp/goose-wasm-zero-call-20261108/parent02/enum_order.goose:1: error: expected a value of type E.Empty, got E\nenum E{Empty,Value{n:i64}}var calls:i64=0;recursive fn make()->E.Empty{calls++;return E.Empty;}recursive fn later()->i64{assert(calls==1);calls++;return 55;}recursive fn take(a:E.Empty,n:i64)->i64{assert(a .== &a);return n;}fn main(){assert(take(make(),later())==55&&calls==2);print(\"enum_order\");}\n                                                                                      ^~~~~~~\n  in fn make() instantiated from /tmp/goose-wasm-zero-call-20261108/parent02/enum_order.goose:1\n  in fn main() instantiated from /tmp/goose-wasm-zero-call-20261108/parent02/enum_order.goose:1\n"
+  },
+  {
+    "case": "enum_field",
+    "source_sha256": "8260b408c73bc0e0dc4228f54cf06beb8a7d8de43a70df4d4c5ef03812c95c1b",
+    "native_emit_exit": 1,
+    "native_reason": "/tmp/goose-wasm-zero-call-20261108/parent02/enum_field.goose:1: error: field empty of struct H cannot be a variant type with no fields: E.Empty (\u00a73.4)\nenum E{Empty,Value{n:i64}}struct H{tag:u8,empty:E.Empty}recursive fn make()->E.Empty{return E.Empty;}fn main(){let h=H{90,make()};assert(h.tag==90);print(\"enum_field\");}\n                          ^\n"
+  },
+  {
+    "case": "enum_middle_field",
+    "source_sha256": "29bd9aa7266e5ea44639e7d61059ea69a946017d407bb6ad2b87058ff5cf98a3",
+    "native_emit_exit": 1,
+    "native_reason": "/tmp/goose-wasm-zero-call-20261108/parent02/enum_middle_field.goose:1: error: field empty of struct H cannot be a variant type with no fields: E.Empty (\u00a73.4)\nenum E{Empty,Value{n:i64}}struct H{left:i64,empty:E.Empty,right:i64}recursive fn make()->E.Empty{return E.Empty;}fn main(){let h=H{13,make(),17};assert(h.left==13&&h.right==17);print(\"enum_middle_field\");}\n                          ^\n"
+  }
+]

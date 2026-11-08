@@ -1,0 +1,51 @@
+[
+  {
+    "case": "owner",
+    "source_sha256": "8d2b46f7558c7d0ac2084526287fdf0d9cf1e6a05348ba86d8b6fa2da60a7b57",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-zero-call-20261108/parent04/owner.goose:1: error: wasm target: zero-sized aggregate parameters need the pending call lowering\n"
+  },
+  {
+    "case": "enum_owner",
+    "source_sha256": "fd449b33adf951ceb681d448682581bbde195180195f6b4dbc8f5786f0fd1d19",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-zero-call-20261108/parent04/enum_owner.goose:1: error: wasm target: zero-sized aggregate parameters need the pending call lowering\n"
+  },
+  {
+    "case": "loop",
+    "source_sha256": "19f082065c1c2933e60b6aa9726accc8ab733b93f72d943ad56ce8efecd1a9d2",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-zero-call-20261108/parent04/loop.goose:1: error: wasm target: zero-sized aggregate parameters need the pending call lowering\n"
+  },
+  {
+    "case": "recursion",
+    "source_sha256": "e1279491b2438c65567bfa3f207acc5a9b4cadef8171804feda15d7d233403e1",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-zero-call-20261108/parent04/recursion.goose:1: error: wasm target: zero-sized aggregate parameters need the pending call lowering\n"
+  },
+  {
+    "case": "defer",
+    "source_sha256": "d59677987532ad7a8038f3db9a0bf5a2e9eef42255c396b1a546ed515a14c6dd",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-zero-call-20261108/parent04/defer.goose:1: error: wasm target: zero-sized aggregate results need the pending call lowering\n"
+  },
+  {
+    "case": "shared_data",
+    "source_sha256": "dd89ef3de47d77173760904db8e085b569b29fe4f4d4c28756d655b7d9293221",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-zero-call-20261108/parent04/shared_data.goose:1: error: wasm target: zero-sized aggregate parameters need the pending call lowering\n"
+  },
+  {
+    "case": "two_parameters",
+    "source_sha256": "3f52e649214eecf198f7189b4d515924bae1a5195193f253fc1191cc36d033e3",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-zero-call-20261108/parent04/two_parameters.goose:1: error: wasm target: zero-sized aggregate parameters need the pending call lowering\n"
+  }
+]

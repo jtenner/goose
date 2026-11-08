@@ -1,0 +1,9 @@
+{
+  "owner": "recursive fn same(x:i64[0])->i64[0]{print(\"inside\");return x;}recursive fn observe(a:const i64[0]&,b:const i64[0]&){assert(a .!= b);print(\"after\");}fn main(){var a:i64[0]=default<i64[0]>();print(\"before\");let b:i64[0]=same(a);observe(a,b);}",
+  "enum_owner": "enum E{Empty,Value{n:i64}}recursive fn same(x:E.Empty)->E.Empty{print(\"inside\");return x;}recursive fn observe(a:const E.Empty&,b:const E.Empty&){assert(a .!= b);print(\"after\");}fn main(){var a:E.Empty=default<E.Empty>();print(\"before\");let b:E.Empty=same(a);observe(a,b);}",
+  "loop": "recursive fn same(a:i64[0])->i64[0]{return a;}fn main(){var a:i64[0]=[];for i in 4{print(\"head\");same(a);}print(\"loop\");}",
+  "recursion": "var calls:i64=0;recursive fn bounce(a:i64[0],n:i64)->i64[0]{calls++;var local:i64[0]=[];assert(&a .!= &local);if n==0{return a;}return bounce(local,n-1);}fn main(){var a:i64[0]=[];let b=bounce(a,4);assert(&a .!= &b&&calls==5);print(\"recursion\");}",
+  "defer": "var calls:i64=0;recursive fn make()->i64[0]{var a:i64[0]=[];defer{calls++;print(\"defer\");}print(\"inside\");return a;}fn main(){let a=make();assert(a.len==0&&calls==1);print(\"defer_done\");}",
+  "shared_data": "var anchor:i64[]=[10,20];recursive fn same(a:i64[0])->i64[0]{return a;}fn main(){var a:i64[0]=[];let b=same(a);assert(&a .!= &b&&anchor.len==2&&anchor[0]==10&&anchor[1]==20);print(\"shared_data\");}",
+  "two_parameters": "enum E{Empty,Value{n:i64}}recursive fn arrays(a:i64[0],b:i64[0])->bool{return &a .!= &b;}recursive fn variants(a:E.Empty,b:E.Empty)->bool{return &a .!= &b;}fn main(){var a:i64[0]=[];var e:E.Empty=default<E.Empty>();assert(arrays(a,a)&&variants(e,e));print(\"two_parameters\");}"
+}

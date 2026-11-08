@@ -131,9 +131,7 @@ struct WasmCodeGen : ValueLayout {
     bool FixedResult(TypeExpr *t) { return FixedParameter(t); }
     void RequireCallValue(TypeExpr *t, bool result, Line line) {
         if (FixedParameter(t)) {
-            if (!RequireFixed(t, line))
-                Fail(line, result ? "zero-sized aggregate results need the pending call lowering"
-                                  : "zero-sized aggregate parameters need the pending call lowering");
+            RequireFixed(t, line);
             return;
         }
         if (t->kind == TY_ARRAY)

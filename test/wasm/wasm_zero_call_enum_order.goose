@@ -1,0 +1,1 @@
+enum E{Empty,Value{n:i64}}var calls:i64=0;recursive fn make()->E.Empty{calls++;return default<E.Empty>();}recursive fn later()->i64{assert(calls==1);calls++;return 55;}recursive fn take(a:E.Empty,n:i64)->i64{assert(a .== &a);return n;}fn main(){assert(take(make(),later())==55&&calls==2);print("enum_order");}

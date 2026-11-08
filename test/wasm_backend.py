@@ -138,7 +138,7 @@ def main():
             if source.stem.startswith((
                     'wasm_inline_ref_abi_', 'wasm_data_aggregate_', 'wasm_constructor_assignment_',
                     'wasm_aggregate_construction_', 'wasm_array_assignment_', 'wasm_default_conversion_',
-                    'wasm_array_constructor_', 'wasm_fixed_argument_', 'wasm_fixed_result_', 'wasm_array_argument_', 'wasm_array_result_', 'wasm_temporary_read_', 'wasm_temporary_equality_', 'wasm_fixed_negation_', 'wasm_fixed_binary_', 'wasm_compound_math_', 'wasm_negation_discard_')):
+                    'wasm_array_constructor_', 'wasm_fixed_argument_', 'wasm_fixed_result_', 'wasm_array_argument_', 'wasm_array_result_', 'wasm_temporary_read_', 'wasm_temporary_equality_', 'wasm_fixed_negation_', 'wasm_fixed_binary_', 'wasm_compound_math_', 'wasm_negation_discard_', 'wasm_zero_call_')):
                 actual = run([args.node, ROOT / 'test' / 'wasm_reference_abi.mjs', wasm,
                               out / f'{source.stem}-O{opt}-instance'])
             else:
@@ -228,9 +228,9 @@ def main():
                 checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
                 assert checked.stdout == reference.stdout and not checked.stderr
                 count += 1
-            if source.stem.startswith(('wasm_compound_math_', 'wasm_negation_discard_')):
-                mode = '' if source.stem in ('wasm_compound_math_data', 'wasm_compound_math_index_effect', 'wasm_compound_math_data_owner', 'wasm_compound_math_function_data') else 'no-data'
-                checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '1' if source.stem == 'wasm_compound_math_index_effect' else '0', mode])
+            if source.stem.startswith(('wasm_compound_math_', 'wasm_negation_discard_', 'wasm_zero_call_')):
+                mode = '' if source.stem in ('wasm_compound_math_data', 'wasm_compound_math_index_effect', 'wasm_compound_math_data_owner', 'wasm_compound_math_function_data', 'wasm_zero_call_shared_data') else 'no-data'
+                checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '1' if source.stem in ('wasm_compound_math_index_effect', 'wasm_zero_call_shared_data') else '0', mode])
                 assert checked.stdout == reference.stdout and not checked.stderr
                 count += 1
             if source.stem.startswith('wasm_fixed_binary_'):
@@ -405,11 +405,16 @@ def main():
     from wasm_fixed_argument_checks import check_images as check_fixed_argument_images, check_aliases as check_fixed_argument_aliases, check_guards as check_fixed_argument_guards, check_dynamic as check_fixed_argument_dynamic
     count += check_fixed_argument_images(run, args.node, args.validator, out)
     count += check_fixed_argument_aliases(run, args.node, args.validator, out)
-    count += check_fixed_argument_guards(run, exe, args.cc, out)
+    count += check_fixed_argument_guards(run, exe, args.cc, out, args.node, args.validator, args.wasmtime_python)
     count += check_fixed_argument_dynamic(run, args.node, args.validator, out)
     from wasm_fixed_negation_checks import check_images as check_fixed_negation_images, check_loop as check_fixed_negation_loop
     count += check_fixed_negation_images(run, args.node, args.validator, out)
     count += check_fixed_negation_loop(run, args.node, args.validator, out)
+    from wasm_zero_call_checks import check_images as check_zero_call_images, check_loop as check_zero_call_loop, check_shared as check_zero_call_shared, check_rejections as check_zero_call_rejections
+    count += check_zero_call_images(run, args.node, args.validator, out)
+    count += check_zero_call_loop(run, args.node, args.validator, out)
+    count += check_zero_call_shared(run, args.node, args.validator, out)
+    count += check_zero_call_rejections(run, exe, out)
     from wasm_compound_math_checks import check_images as check_compound_images, check_snapshot as check_compound_snapshot, check_loops as check_compound_loops, check_global as check_compound_global, check_failures as check_compound_failures
     count += check_compound_images(run, args.node, args.validator, out)
     count += check_compound_snapshot(run, args.node, args.validator, out)
@@ -433,16 +438,16 @@ def main():
     count += check_temporary_read_guards(run, exe, args.cc, out)
     from wasm_array_result_checks import check_images as check_array_result_images, check_guards as check_array_result_guards, check_failures as check_array_result_failures, check_data as check_array_result_data
     count += check_array_result_images(run, args.node, args.validator, out)
-    count += check_array_result_guards(run, exe, args.cc, out)
+    count += check_array_result_guards(run, exe, args.cc, out, args.node, args.validator, args.wasmtime_python)
     count += check_array_result_failures(run, exe, args.cc, args.node, args.validator, out)
     count += check_array_result_data(run, args.node, args.validator, out)
     from wasm_array_argument_checks import check_images as check_array_argument_images, check_aliases as check_array_argument_aliases, check_guards as check_array_argument_guards
     count += check_array_argument_images(run, args.node, args.validator, out)
     count += check_array_argument_aliases(run, args.node, args.validator, out)
-    count += check_array_argument_guards(run, exe, args.cc, out)
+    count += check_array_argument_guards(run, exe, args.cc, out, args.node, args.validator, args.wasmtime_python)
     from wasm_fixed_result_checks import check_images as check_fixed_result_images, check_guards as check_fixed_result_guards, check_failure as check_fixed_result_failure, check_target_failure as check_fixed_result_target_failure, check_nonlocal_guard as check_fixed_result_nonlocal_guard
     count += check_fixed_result_images(run, args.node, args.validator, out)
-    count += check_fixed_result_guards(run, exe, args.cc, out)
+    count += check_fixed_result_guards(run, exe, args.cc, out, args.node, args.validator, args.wasmtime_python)
     count += check_fixed_result_failure(run, exe, args.cc, args.node, args.validator, out)
     count += check_fixed_result_target_failure(run, exe, args.cc, args.node, args.validator, out)
     count += check_fixed_result_nonlocal_guard(run, exe, args.cc, out)

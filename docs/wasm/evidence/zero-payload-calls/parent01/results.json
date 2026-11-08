@@ -1,0 +1,56 @@
+[
+  {
+    "case": "result",
+    "source_sha256": "de4b3f69deec63cf69386739ed2193306dcbff403f47db77faebf1603baf8e3b",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-zero-call-20261108/parent01/result.goose:1: error: wasm target: zero-sized aggregate results need the pending call lowering\n"
+  },
+  {
+    "case": "parameter",
+    "source_sha256": "2aed814f629994f0a796cfa79f5ead4f40cfa5afe759d148a302c984db8a0bd9",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-zero-call-20261108/parent01/parameter.goose:1: error: wasm target: zero-sized aggregate parameters need the pending call lowering\n"
+  },
+  {
+    "case": "forward",
+    "source_sha256": "e31d8c653094da81b37f0dda5316f2acbdf5aab30e43f9a5e6376a6e0ffbc931",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-zero-call-20261108/parent01/forward.goose:1: error: wasm target: zero-sized aggregate parameters need the pending call lowering\n"
+  },
+  {
+    "case": "field",
+    "source_sha256": "74bc108784ce3d345d6aaaf91c34ab2c1c554bb917d52e1cb1d72c1ef37b7353",
+    "native_emit_exit": 1,
+    "native_reason": "/tmp/goose-wasm-zero-call-20261108/parent01/field.goose:1: error: field empty of struct H cannot be a zero-length array: i64[0] (\u00a73.4)\nstruct H{tag:u8,empty:i64[0]}recursive fn make()->i64[0]{var x:i64[0]=[];print(\"callee\");return x;}fn main(){print(\"before\");let h=H{90,make()};print(\"after\");assert(h.tag==90&&h.empty.len==0);}\n^\n"
+  },
+  {
+    "case": "middle_field",
+    "source_sha256": "9bb2f1740326626711c6d7b10874f0ae5aec7915690c1e49a8a41fe6ae0e0020",
+    "native_emit_exit": 1,
+    "native_reason": "/tmp/goose-wasm-zero-call-20261108/parent01/middle_field.goose:1: error: field empty of struct H cannot be a zero-length array: i64[0] (\u00a73.4)\nstruct H{left:i64,empty:i64[0],right:i64}recursive fn make()->i64[0]{var x:i64[0]=[];return x;}fn main(){let h=H{13,make(),17};assert(h.left==13&&h.right==17&&h.empty.len==0);print(\"middle_field\");}\n^\n"
+  },
+  {
+    "case": "inline",
+    "source_sha256": "0fd8ff0f84a24784e58b65e2a5288af3edc8a1375abe25f1bd8994bf669be609",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-zero-call-20261108/parent01/inline.goose:1: error: wasm target: zero-sized aggregate parameters need the pending call lowering\n"
+  },
+  {
+    "case": "callback",
+    "source_sha256": "12cc58f2a42d9b41585c0a4950cc34d888e9a66d8b9f54c0cc609b7cf02aba1d",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-zero-call-20261108/parent01/callback.goose:1: error: wasm target: zero-sized aggregate parameters need the pending call lowering\n"
+  },
+  {
+    "case": "order",
+    "source_sha256": "76463424e1154e4df28f628229857efe397b543f49e82b15eaf466cf6208752a",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-zero-call-20261108/parent01/order.goose:1: error: wasm target: zero-sized aggregate parameters need the pending call lowering\n"
+  }
+]

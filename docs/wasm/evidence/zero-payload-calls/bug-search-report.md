@@ -1,0 +1,3 @@
+# Zero-payload call source search
+
+Read-only native Codex searches traced fixed call-value guards, max(1,image) frame reservations, parameter copies, incoming results, callback plans and match binders. A speculative zero-byte subobject risk was checked against native/frontend validity before implementation. Array and empty-variant fields/elements are forbidden. No valid destination subobject was found, so no private hardening was added and no production field defect is claimed. Valid zero-byte call owners have the existing one-byte reservations. No worker edits, builds, guests or timing were run.

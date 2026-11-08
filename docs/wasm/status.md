@@ -356,6 +356,13 @@ global-owner state and native failure-state observations cover these statement
 forms. Existing frontend limits remain in force. See
 [arithmetic statement evidence](evidence/arithmetic-statements.md).
 
+Zero-payload fixed arrays and exact empty variants now work as by-value call
+arguments and results, including callbacks, forwarding and discarded results.
+The existing one-byte minimum owner reservations preserve identity and cleanup.
+The frontend still rejects zero-size fields and elements. Exact owner/image
+checks and valid damaged-module controls cover the zero-payload ABI. See
+[zero-payload call evidence](evidence/zero-payload-calls.md).
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping

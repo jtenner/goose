@@ -1,0 +1,1 @@
+enum E{A,B{},C{pad},D{pad 0},V{n:i64}}recursive fn same<T>(a:T)->T{return a;}fn main(){var a:E.A=default<E.A>();let aa=same(a);assert(&a .!= &aa);var b:E.B=default<E.B>();let bb=same(b);assert(&b .!= &bb);var c:E.C=default<E.C>();let cc=same(c);assert(&c .!= &cc);var d:E.D=default<E.D>();let dd=same(d);assert(&d .!= &dd);print("enum_shapes");}

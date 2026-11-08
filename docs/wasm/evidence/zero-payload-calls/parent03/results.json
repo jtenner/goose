@@ -1,0 +1,37 @@
+[
+  {
+    "case": "enum_result",
+    "source_sha256": "919e09cf913042128c4420d78d43c80772a4a65c96e87f3db271d5a66f4f6697",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-zero-call-20261108/parent03/enum_result.goose:1: error: wasm target: zero-sized aggregate results need the pending call lowering\n"
+  },
+  {
+    "case": "enum_parameter",
+    "source_sha256": "c05b32c5fb6e25accc0793c11ef407dc101f4721c92f6e8f89459001eb19c249",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-zero-call-20261108/parent03/enum_parameter.goose:1: error: wasm target: zero-sized aggregate parameters need the pending call lowering\n"
+  },
+  {
+    "case": "enum_inline",
+    "source_sha256": "9c2f0716971ba52ae92e5340c38f2f02bd0483565d6cb1df810b99ad8c9b1287",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-zero-call-20261108/parent03/enum_inline.goose:1: error: wasm target: zero-sized aggregate parameters need the pending call lowering\n"
+  },
+  {
+    "case": "enum_callback",
+    "source_sha256": "921262d003bba7476972e644b7d259664db99687bb89f8fdb317a06e5ecbf197",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-zero-call-20261108/parent03/enum_callback.goose:1: error: wasm target: zero-sized aggregate parameters need the pending call lowering\n"
+  },
+  {
+    "case": "enum_order",
+    "source_sha256": "21257fddf7bf265b418efe71513628f4d481a517db0d7cbdb69b258f06807197",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-zero-call-20261108/parent03/enum_order.goose:1: error: wasm target: zero-sized aggregate parameters need the pending call lowering\n"
+  }
+]

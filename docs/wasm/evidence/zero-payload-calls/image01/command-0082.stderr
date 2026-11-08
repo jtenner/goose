@@ -1,0 +1,3 @@
+/tmp/goose-wasm-zero-call-20261108/image01/artifacts/zero-call-rejection-variant-middle-field.goose:1: error: field empty of struct H cannot be a variant type with no fields: E.Empty (§3.4)
+enum E{Empty,Value{n:i64}}struct H{left:i64,empty:E.Empty,right:i64}fn main(){}
+                          ^

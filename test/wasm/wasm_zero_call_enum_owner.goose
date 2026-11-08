@@ -1,0 +1,1 @@
+enum E{Empty,Value{n:i64}}recursive fn same(x:E.Empty)->E.Empty{print("inside");return x;}recursive fn observe(a:const E.Empty&,b:const E.Empty&){assert(a .!= b);print("after");}fn main(){var a:E.Empty=default<E.Empty>();print("before");let b:E.Empty=same(a);observe(a,b);}

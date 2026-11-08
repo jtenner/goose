@@ -60,7 +60,7 @@ inline WasmCodeGen::FreshFixedDestination WasmCodeGen::FreshCallParameter(Call *
     auto owner = call->fvparams[position];
     auto plan = storage.fixedvalues.find(owner);
     auto image = RequireFixed(owner->type, call->line);
-    if (!FixedParameter(owner->type) || !image ||
+    if (!FixedParameter(owner->type) ||
         plan == storage.fixedvalues.end() ||
         plan->second.origin != WasmStoragePlan::FixedOrigin::CallbackParameter ||
         plan->second.function != current || plan->second.initialization != call ||

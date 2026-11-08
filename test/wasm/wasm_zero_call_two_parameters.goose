@@ -1,0 +1,1 @@
+enum E{Empty,Value{n:i64}}recursive fn arrays(a:i64[0],b:i64[0])->bool{return &a .!= &b;}recursive fn variants(a:E.Empty,b:E.Empty)->bool{return &a .!= &b;}fn main(){var a:i64[0]=[];var e:E.Empty=default<E.Empty>();assert(arrays(a,a)&&variants(e,e));print("two_parameters");}

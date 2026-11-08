@@ -77,12 +77,12 @@ def check_aliases(run, node, validator, out):
     return count
 
 
-def check_guards(run, exe, cc, out):
+def check_guards(run, exe, cc, out, node, validator, wasmtime_python):
     cases = [
         ('empty', 'enum E{Empty,Value{n:i64}}\n'
          'recursive fn take(x:E.Empty)->i64{print("inside");return 1;}\n'
          'fn main(){var x:E.Empty=default<E.Empty>();print(take(x));}\n',
-         b'zero-sized aggregate parameters need the pending call lowering', True),
+         None, True),
         ('frame-sum', 'struct Huge{bytes:u8[2147483648]}\n'
          'recursive fn take(a:Huge,b:Huge)->i64{return a.bytes[0]+b.bytes[0];}\n'
          'fn main(){var x:Huge=default<Huge>();print(take(x,x));}\n',
@@ -102,6 +102,11 @@ def check_guards(run, exe, cc, out):
             # Huge declarations are frontend/C-emission checks only.
             # Do not build or execute their native images or instantiate Wasm.
             module.unlink(missing_ok=True)
+            if name == 'empty':
+                from wasm_zero_call_checks import check_completed
+                check_completed(run, exe, source, module, opt, reference.stdout, node, validator, wasmtime_python)
+                count += 1
+                continue
             result = run([exe, f'-O{opt}', '--target', 'wasm', '-o', module, source], ok=False)
             assert result.returncode == 1 and reason in result.stderr and not module.exists(), (name, result.stderr)
             count += 1

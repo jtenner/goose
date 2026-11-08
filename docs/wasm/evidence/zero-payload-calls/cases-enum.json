@@ -1,0 +1,10 @@
+{
+  "enum_result": "enum E{Empty,Value{n:i64}}recursive fn make()->E.Empty{var x:E.Empty=E.Empty;return x;}fn main(){let x:E.Empty=make();assert(x .== &x);print(\"enum_result\");}",
+  "enum_parameter": "enum E{Empty,Value{n:i64}}recursive fn take(x:E.Empty)->i64{assert(x .== &x);return 55;}fn main(){var x:E.Empty=E.Empty;assert(take(x)==55);print(\"enum_parameter\");}",
+  "enum_forward": "enum E{Empty,Value{n:i64}}var calls:i64=0;recursive fn same(a:E.Empty)->E.Empty{calls++;return a;}fn main(){var a:E.Empty=default<E.Empty>();var b:E.Empty=same(a);assert(&a .!= &b);same(b);assert(calls==2);print(\"enum_forward\");}",
+  "enum_inline": "enum E{Empty,Value{n:i64}}fn same(a:E.Empty)->E.Empty{return a;}fn main(){var a:E.Empty=E.Empty;let b:E.Empty=same(a);assert(&a .!= &b);print(\"enum_inline\");}",
+  "enum_callback": "enum E{Empty,Value{n:i64}}fn apply<F>(a:E.Empty)->E.Empty{return F(a);}fn main(){var a:E.Empty=E.Empty;let b:E.Empty=apply(a){x:E.Empty=>x};assert(&a .!= &b);print(\"enum_callback\");}",
+  "enum_order": "enum E{Empty,Value{n:i64}}var calls:i64=0;recursive fn make()->E.Empty{calls++;return E.Empty;}recursive fn later()->i64{assert(calls==1);calls++;return 55;}recursive fn take(a:E.Empty,n:i64)->i64{assert(a .== &a);return n;}fn main(){assert(take(make(),later())==55&&calls==2);print(\"enum_order\");}",
+  "enum_field": "enum E{Empty,Value{n:i64}}struct H{tag:u8,empty:E.Empty}recursive fn make()->E.Empty{return E.Empty;}fn main(){let h=H{90,make()};assert(h.tag==90);print(\"enum_field\");}",
+  "enum_middle_field": "enum E{Empty,Value{n:i64}}struct H{left:i64,empty:E.Empty,right:i64}recursive fn make()->E.Empty{return E.Empty;}fn main(){let h=H{13,make(),17};assert(h.left==13&&h.right==17);print(\"enum_middle_field\");}"
+}

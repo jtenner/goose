@@ -1,0 +1,16 @@
+[
+  {
+    "case": "array_kinds",
+    "source_sha256": "274422bffddc2e72e074f464effd7c295086f71259a71a764223a73dceec4a08",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-zero-call-20261108/parent05/array_kinds.goose:1: error: wasm target: zero-sized aggregate parameters need the pending call lowering\n"
+  },
+  {
+    "case": "enum_shapes",
+    "source_sha256": "745d5e40324d987ff60f41de5bb7ca785c40ce31ae74c0cc808c71b3d2f24538",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-zero-call-20261108/parent05/enum_shapes.goose:1: error: wasm target: zero-sized aggregate parameters need the pending call lowering\n"
+  }
+]

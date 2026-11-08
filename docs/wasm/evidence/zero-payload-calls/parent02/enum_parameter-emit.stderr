@@ -1,0 +1,4 @@
+/tmp/goose-wasm-zero-call-20261108/parent02/enum_parameter.goose:1: error: expected a value of type E.Empty, got E
+enum E{Empty,Value{n:i64}}recursive fn take(x:E.Empty)->i64{assert(x .== &x);return 55;}fn main(){var x:E.Empty=E.Empty;assert(take(x)==55);print("enum_parameter");}
+                                                                                                                ^~~~~~~
+  in fn main() instantiated from /tmp/goose-wasm-zero-call-20261108/parent02/enum_parameter.goose:1

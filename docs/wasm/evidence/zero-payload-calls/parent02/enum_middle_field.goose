@@ -1,0 +1,1 @@
+enum E{Empty,Value{n:i64}}struct H{left:i64,empty:E.Empty,right:i64}recursive fn make()->E.Empty{return E.Empty;}fn main(){let h=H{13,make(),17};assert(h.left==13&&h.right==17);print("enum_middle_field");}

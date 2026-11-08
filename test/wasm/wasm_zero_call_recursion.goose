@@ -1,0 +1,1 @@
+var calls:i64=0;recursive fn bounce(a:i64[0],n:i64)->i64[0]{calls++;var local:i64[0]=[];assert(&a .!= &local);if n==0{return a;}return bounce(local,n-1);}fn main(){var a:i64[0]=[];let b=bounce(a,4);assert(&a .!= &b&&calls==5);print("recursion");}

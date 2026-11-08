@@ -60,11 +60,11 @@ def check_images(run, node, validator, out):
     return count
 
 
-def check_guards(run, exe, cc, out):
+def check_guards(run, exe, cc, out, node, validator, wasmtime_python):
     cases = [
         ('empty', 'recursive fn make()->u8[0]{print("inside");return default<u8[0]>();}\n'
          'fn main(){var a:u8[0]=make();print(a.len);}\n', b'inside\n0\n',
-         b'zero-sized aggregate results need the pending call lowering'),
+         None),
         ('adaptation', 'recursive fn make()->u8[2]{return[3,4];}\n'
          'fn main(){var a:u8[..3]=make();print(a.len);}\n', b'2\n',
          b'aggregate result adaptation needs the pending destination lowering'),
@@ -82,6 +82,11 @@ def check_guards(run, exe, cc, out):
             run([cc, c, '-pthread', '-lm', '-ldl', '-o', native])
             reference = run([native]); assert reference.stdout == expected and not reference.stderr
             module.unlink(missing_ok=True)
+            if name == 'empty':
+                from wasm_zero_call_checks import check_completed
+                check_completed(run, exe, source, module, opt, reference.stdout, node, validator, wasmtime_python)
+                count += 1
+                continue
             result = run([exe, f'-O{opt}', '--target', 'wasm', '-o', module, source], ok=False)
             assert result.returncode == 1 and reason in result.stderr, (name, result.stderr)
             assert not module.exists()

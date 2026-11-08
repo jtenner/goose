@@ -1,0 +1,5 @@
+/tmp/goose-wasm-zero-call-20261108/parent02/enum_result.goose:1: error: expected a value of type E.Empty, got E
+enum E{Empty,Value{n:i64}}recursive fn make()->E.Empty{var x:E.Empty=E.Empty;return x;}fn main(){let x:E.Empty=make();assert(x .== &x);print("enum_result");}
+                                                                     ^~~~~~~
+  in fn make() instantiated from /tmp/goose-wasm-zero-call-20261108/parent02/enum_result.goose:1
+  in fn main() instantiated from /tmp/goose-wasm-zero-call-20261108/parent02/enum_result.goose:1

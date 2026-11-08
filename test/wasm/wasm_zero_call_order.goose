@@ -1,0 +1,1 @@
+var calls:i64=0;recursive fn make()->i64[0]{calls++;return [];}recursive fn later()->i64{assert(calls==1);calls++;return 55;}recursive fn take(a:i64[0],n:i64)->i64{assert(a.len==0);return n;}fn main(){assert(take(make(),later())==55&&calls==2);print("order");}

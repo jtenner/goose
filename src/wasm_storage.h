@@ -206,8 +206,7 @@ struct WasmStoragePlan {
             if (!plan.initialized) fail(owner->line, "uninitialized aggregate declarations need the pending destination lowering");
             if (owner->reusable) fail(owner->line, "pool owners need the pending descriptor lowering");
             plan.image = fixedsize(owner->type, owner->line);
-            if (plan.argument && !plan.image)
-                fail(owner->line, "zero-sized aggregate parameters need the pending call lowering");
+
             plan.bytes = std::max(1u, plan.image);
         }
         counts.Bound(functions, [&](FnSpec *caller, const auto &edge) {

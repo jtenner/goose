@@ -1,0 +1,1 @@
+struct S{n:i64}recursive fn same<T>(a:T)->T{return a;}fn main(){var structs:S[0]=[];let a=same(structs);assert(&structs .!= &a&&a.len==0);var refs:i64&[0]=[];let b=same(refs);assert(&refs .!= &b&&b.len==0);print("array_kinds");}

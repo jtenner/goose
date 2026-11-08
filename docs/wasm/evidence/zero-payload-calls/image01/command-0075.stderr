@@ -1,0 +1,3 @@
+/tmp/goose-wasm-zero-call-20261108/image01/artifacts/zero-call-rejection-array-middle-field.goose:1: error: field empty of struct H cannot be a zero-length array: i64[0] (§3.4)
+struct H{left:i64,empty:i64[0],right:i64}fn main(){}
+^
