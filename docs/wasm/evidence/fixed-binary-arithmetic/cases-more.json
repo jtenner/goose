@@ -1,0 +1,18 @@
+{
+  "data": "struct S{x:i64,y:i64}fn main(){var a=S{7,-8};var b=S{3,4};var rows:S[]=[a+b,a-b];assert(rows[0].x==10&&rows[0].y == -4);assert(rows[1].x==4&&rows[1].y == -12);print(\"data\");}",
+  "projection": "fn main(){var a:i64[2]=[7,-8];var b:i64[2]=[3,4];let x=(a+b)[1];let n=(a+b).len;let k=(a+b).cap;assert(x == -4&&n==2&&k==2);print(\"projection\");}",
+  "equality": "fn main(){var a:i64[2]=[7,-8];var b:i64[2]=[3,4];assert((a+b)==[10,-4]);assert((a+b)!=[10,-4,1]);print(\"equality\");}",
+  "reference_left": "var source:i64[2]=[7,-8];var calls:i64=0;recursive fn read()->i64[2]&{calls++;return source;}recursive fn change()->i64[2]{source[0]=99;return [3,4];}fn main(){let c=read()+change();assert(c[0]==10&&c[1] == -4);assert(calls==1&&source[0]==99);print(\"reference_left\");}",
+  "reference_right": "var source:i64[2]=[7,-8];recursive fn change()->i64[2]&{source[0]=10;return source;}fn main(){let c=source+change();assert(c[0]==17&&c[1] == -16);assert(source[0]==10);print(\"reference_right\");}",
+  "index_effect": "struct S{x:i64,y:i64}var calls:i64=0;recursive fn next()->i64{calls++;return 0;}recursive fn change(rows:S[]&)->S{rows[0].x=99;return S{3,4};}fn main(){var rows:S[]=[S{7,-8}];let c=rows[next()]+change(rows);assert(c.x==10&&c.y == -4);assert(rows[0].x==99&&calls==1);print(\"index_effect\");}",
+  "scalar_alias": "struct S{x:i64,y:i64}fn main(){var a:i64[2]=[3,6];a=a*a[0];assert(a[0]==9&&a[1]==18);var s=S{3,6};s=s.x*s;assert(s.x==9&&s.y==18);print(\"scalar_alias\");}",
+  "mixed_float": "struct S{x:f32,pad 2,y:f64}fn main(){var a=S{1.5,-2.0};var b=S{0.5,2.0};let c=a+b;let d=a*b;assert(c.x==2.0&&c.y==0.0);assert(d.x==0.75&&d.y == -4.0);print(\"mixed_float\");}",
+  "float_broadcast": "struct S{x:f32,y:f32}fn main(){var a=S{1.25,2.5};let b=a*2.0;let c=10.0/a;assert(b.x==2.5&&b.y==5.0);assert(c.x==8.0&&c.y==4.0);print(\"float_broadcast\");}",
+  "large": "fn main(){var a:i64[600]=[7;600];var b:i64[600]=[3;600];a[599]=9;b[599]=5;let c=a+b;assert(c.len==600);for i in 599{assert(c[i]==10);}assert(c[599]==14);print(\"large\");}",
+  "zero_effect": "var left_calls:i64=0;var right_calls:i64=0;recursive fn scale()->i64{right_calls++;return 2;}fn main(){var a:i64[0]=[];let c:i64[0]=({left_calls++;a})*scale();assert(c.len==0);assert(left_calls==1&&right_calls==1);print(\"zero_effect\");}",
+  "discard": "var source:i64[2]=[7,-8];var calls:i64=0;recursive fn change()->i64[2]{calls++;source[0]=99;return [3,4];}fn main(){source+change();assert(calls==1&&source[0]==99);print(\"discard\");}",
+  "early_return": "recursive fn choose(flag:bool)->i64{var a:i64[2]=[7,8];let r:i64[2]=a*(if flag{return 55;}else{2});assert(r[0]==14&&r[1]==16);return r[0]+r[1];}fn main(){assert(choose(true)==55);assert(choose(false)==30);print(\"early_return\");}",
+  "early_continue": "fn main(){var a:i64[2]=[7,8];var i=0;while i<4{print(\"head\");let r:i64[2]=a*(if i<3{i++;continue;}else{2});assert(r[0]==14&&r[1]==16);i++;}print(\"early_continue\");}",
+  "mixed_int": "struct S{x:i8,pad 1,y:u32,z:i64[2]}fn main(){var a=S{127,4294967295,[7,-8]};var b=S{1,2,[3,4]};let c=a+b;assert(c.x == -128&&c.y==1);assert(c.z[0]==10&&c.z[1] == -4);print(\"mixed_int\");}",
+  "budget": "var source:i64[2]=[1,2];var calls:i64=0;recursive fn change()->i64[2]{calls++;source[0]=99;return [1,2];}fn main(){var b:i64[2]=[1,2];let c=source+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+(b+change()))))))))))))))))))))))))))))))))))))))));assert(c[0]==42&&c[1]==84);assert(calls==1&&source[0]==99);print(\"budget\");}"
+}

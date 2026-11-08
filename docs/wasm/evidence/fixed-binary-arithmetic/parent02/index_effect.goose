@@ -1,0 +1,1 @@
+struct S{x:i64,y:i64}var calls:i64=0;recursive fn next()->i64{calls++;return 0;}recursive fn change(rows:S[]&)->S{rows[0].x=99;return S{3,4};}fn main(){var rows:S[]=[S{7,-8}];let c=rows[next()]+change(rows);assert(c.x==10&&c.y == -4);assert(rows[0].x==99&&calls==1);print("index_effect");}

@@ -340,6 +340,15 @@ data fields and protected assignments use the same path. General binary math,
 compound array elements and zero-sized call results remain separate. See
 [negation adaptation evidence](evidence/negation-adaptation.md).
 
+Fixed numeric binary arithmetic now constructs checked struct and fixed-array
+results, including scalar multiplication/division and static limited receivers.
+Effectful right operands use a bounded effects scan and one private left-value
+snapshot. Scalar values run once; early exits retain ordered cleanup. Native,
+Node, Wasmtime and complete memory-image checks cover operand effects, padding,
+FP bits, aliases, traps, calls and data destinations. Compound assignments and
+discarded aggregate negation remain separate compilation gaps. See
+[fixed binary arithmetic evidence](evidence/fixed-binary-arithmetic.md).
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping

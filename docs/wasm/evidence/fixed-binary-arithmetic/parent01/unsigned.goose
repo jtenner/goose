@@ -1,0 +1,1 @@
+fn main(){var a:u64[2]=[18446744073709551615,12];var b:u64[2]=[2,5];let s=a+b;let p=a*b;let q=a/b;let r=a%b;assert(s[0]==1&&s[1]==17);assert(p[0]==18446744073709551614&&p[1]==60);assert(q[0]==9223372036854775807&&q[1]==2);assert(r[0]==1&&r[1]==2);print("unsigned");}

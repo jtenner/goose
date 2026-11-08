@@ -1,0 +1,1 @@
+struct S{n:f32,i:f32}fn main(){var z:f32=0.0;var a=S{z/z,1.0/z};var b=S{1.0,2.0};let c=a+b;let d=a/b;let e=a%b;assert(c.n!=c.n&&c.i==a.i);assert(d.n!=d.n&&d.i==a.i);assert(e.n!=e.n&&e.i!=e.i);var zero:f64=0.0;var x:f64[2]=[zero/zero,1.0/zero];var y:f64[2]=[1.0,2.0];let q=x/y;let rem=x%y;assert(q[0]!=q[0]&&q[1]==x[1]);assert(rem[0]!=rem[0]&&rem[1]!=rem[1]);print("ieee");}

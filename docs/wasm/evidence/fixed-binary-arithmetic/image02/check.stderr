@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-fixed-binary-math-20261108/image02/checks.py", line 16, in <module>
+    n=check_failures(run,p.parent/'build01/goose-tested','cc','node','wasm-tools',p/'artifacts');records.append({'name':'failures','checks':n});(p/'results.json').write_text(json.dumps(records,indent=2)+'\n');print('PASS failures',n,flush=True)
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_binary_checks.py", line 115, in check_failures
+    assert result.returncode != 0 and result.stdout == b'before\n' and reason in result.stderr, result.stderr
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: b'goose runtime error: integer overflow in division (/tmp/goose-wasm-fixed-binary-math-20261108/image02/artifacts/fixed-binary-failure-overflow.goose:2)\n'

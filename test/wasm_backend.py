@@ -138,7 +138,7 @@ def main():
             if source.stem.startswith((
                     'wasm_inline_ref_abi_', 'wasm_data_aggregate_', 'wasm_constructor_assignment_',
                     'wasm_aggregate_construction_', 'wasm_array_assignment_', 'wasm_default_conversion_',
-                    'wasm_array_constructor_', 'wasm_fixed_argument_', 'wasm_fixed_result_', 'wasm_array_argument_', 'wasm_array_result_', 'wasm_temporary_read_', 'wasm_temporary_equality_', 'wasm_fixed_negation_')):
+                    'wasm_array_constructor_', 'wasm_fixed_argument_', 'wasm_fixed_result_', 'wasm_array_argument_', 'wasm_array_result_', 'wasm_temporary_read_', 'wasm_temporary_equality_', 'wasm_fixed_negation_', 'wasm_fixed_binary_')):
                 actual = run([args.node, ROOT / 'test' / 'wasm_reference_abi.mjs', wasm,
                               out / f'{source.stem}-O{opt}-instance'])
             else:
@@ -225,6 +225,13 @@ def main():
                 mode = ('no-data' if source.stem in ('wasm_field_iteration_fixed', 'wasm_field_iteration_root',
                                                     'wasm_field_iteration_refs', 'wasm_field_iteration_zero',
                                                     'wasm_field_iteration_call', 'wasm_field_iteration_variant') else '')
+                checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
+                assert checked.stdout == reference.stdout and not checked.stderr
+                count += 1
+            if source.stem.startswith('wasm_fixed_binary_'):
+                mode = '' if source.stem in ('wasm_fixed_binary_data', 'wasm_fixed_binary_index_effect',
+                                            'wasm_fixed_binary_data_owner', 'wasm_fixed_binary_nested_destination',
+                                            'wasm_fixed_binary_function_data') else 'no-data'
                 checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm, '0', mode])
                 assert checked.stdout == reference.stdout and not checked.stderr
                 count += 1
@@ -398,6 +405,11 @@ def main():
     from wasm_fixed_negation_checks import check_images as check_fixed_negation_images, check_loop as check_fixed_negation_loop
     count += check_fixed_negation_images(run, args.node, args.validator, out)
     count += check_fixed_negation_loop(run, args.node, args.validator, out)
+    from wasm_fixed_binary_checks import check_images as check_fixed_binary_images, check_snapshot as check_fixed_binary_snapshot, check_loop as check_fixed_binary_loop, check_failures as check_fixed_binary_failures
+    count += check_fixed_binary_images(run, args.node, args.validator, out)
+    count += check_fixed_binary_snapshot(run, args.node, args.validator, out)
+    count += check_fixed_binary_loop(run, args.node, args.validator, out)
+    count += check_fixed_binary_failures(run, exe, args.cc, args.node, args.validator, out)
     from wasm_negation_adaptation_checks import check_images as check_negation_adaptation_images, check_prefixes as check_negation_adaptation_prefixes, check_loop as check_negation_adaptation_loop
     count += check_negation_adaptation_images(run, args.node, args.validator, out)
     count += check_negation_adaptation_prefixes(run, args.node, args.validator, out)

@@ -32,6 +32,10 @@ struct WasmCodeGen : ValueLayout {
         bool packed = false, bounded = false;
     };
     static constexpr uint32_t NoLocal = UINT32_MAX;
+    struct FixedMathOperand {
+        FixedPlace place;
+        uint32_t value = NoLocal; // A captured broadcast scalar, otherwise a stored aggregate.
+    };
     enum class ArrayImage { Inline, PrefixedData, GrowableHeader };
     enum class ArrayOrigin { PlannedOwner, ParentPlace, ReferenceABI, FreshDataElement };
     struct ArrayLayoutFacts {
@@ -1087,6 +1091,9 @@ struct WasmCodeGen : ValueLayout {
         if (auto v = Is<ForLoop>(n)) { For(v); return; }
         if (auto match = Is<MatchExpr>(n)) { EnumMatchStatement(match); return; }
         if (Is<FnDecl>(n)) return;
+        if (FixedBinary(n)) {
+            WithFixedTemporary(ActualType(n), n, [&](const FixedPlace &) {}); return;
+        }
         // Discard the declared reference result without reading its struct.
         auto call = Is<Call>(n);
         if (call || Is<InlineBlock>(n)) {
@@ -1264,6 +1271,12 @@ struct WasmCodeGen : ValueLayout {
     TypeExpr *ActualType(Node *n);
     using FixedReadConsumer = void (*)(void *, const FixedPlace &);
     bool HasFixedTemporary(Node *n);
+    Binary *FixedBinary(Node *n);
+    bool FixedOperandEffects(Node *n, int &budget);
+    FreshFixedDestination FixedMathDestination(FreshFixedDestination fresh, TypeExpr *type, Line line);
+    void BinaryFixedInto(FixedPlace destination, FixedMathOperand left, FixedMathOperand right,
+                         TType op, Line line);
+    void ConstructFixedBinary(FreshFixedDestination fresh, Binary *source);
     void WithReadPlace(Node *n, void *context, FixedReadConsumer consume);
     template<class Consume> void WithReadPlace(Node *n, Consume consume);
     bool ReadFixedTemporary(Node *n, TypeExpr *resulttype);
@@ -1296,6 +1309,8 @@ struct WasmCodeGen : ValueLayout {
     TypeExpr *FreshRootType(const FreshFixedDestination &destination);
     bool IsFreshWholeOwner(const FreshFixedDestination &destination);
     void CheckFreshDestination(const FreshFixedDestination &destination, Line line);
+    template<class Construct, class Consume>
+    void WithFixedValue(TypeExpr *type, Node *expression, Construct construct, Consume consume);
     template<class Consume> void WithFixedTemporary(TypeExpr *type, Node *expression, Consume consume);
     void AssignFixed(FixedPlace destination, Node *source, TType op, Line line);
     void EnumMatchStatement(MatchExpr *match);

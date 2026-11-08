@@ -1,0 +1,14 @@
+{
+  "array": "fn main(){var a:i64[2]=[7,-8];var b:i64[2]=[3,4];let c:i64[2]=a+b;assert(c[0]==10);assert(c[1] == -4);print(\"array\");}",
+  "operators": "fn main(){var a:i64[2]=[13,20];var b:i64[2]=[3,6];let s=a-b;let p=a*b;let q=a/b;let r=a%b;assert(s[0]==10&&s[1]==14);assert(p[0]==39&&p[1]==120);assert(q[0]==4&&q[1]==3);assert(r[0]==1&&r[1]==2);print(\"operators\");}",
+  "unsigned": "fn main(){var a:u64[2]=[18446744073709551615,12];var b:u64[2]=[2,5];let s=a+b;let p=a*b;let q=a/b;let r=a%b;assert(s[0]==1&&s[1]==17);assert(p[0]==18446744073709551614&&p[1]==60);assert(q[0]==9223372036854775807&&q[1]==2);assert(r[0]==1&&r[1]==2);print(\"unsigned\");}",
+  "struct": "struct S{x:i16,y:i64,pad 2,z:i16[2]}fn main(){var a=S{1,2,[3,4]};var b=S{5,6,[7,8]};let c=a+b;assert(c.x==6&&c.y==8);assert(c.z[0]==10&&c.z[1]==12);print(\"struct\");}",
+  "float": "struct S{x:f32,y:f32}fn main(){var a=S{1.5,-2.0};var b=S{0.5,2.0};let c=a+b;let d=a-b;let e=a*b;let f=a/b;let g=a%b;assert(c.x==2.0&&c.y==0.0);assert(d.x==1.0&&d.y == -4.0);assert(e.x==0.75&&e.y == -4.0);assert(f.x==3.0&&f.y == -1.0);assert(g.x==0.0&&g.y==0.0);print(\"float\");}",
+  "broadcast": "fn main(){var a:i64[2]=[3,6];let b=a*2;let c=2*a;let d=a/3;let e=24/a;assert(b[0]==6&&b[1]==12);assert(c[0]==6&&c[1]==12);assert(d[0]==1&&d[1]==2);assert(e[0]==8&&e[1]==4);print(\"broadcast\");}",
+  "adapt": "fn main(){var a:i64[2]=[7,-8];var b:i64[2]=[3,4];let c:i64[..3]=a+b;assert(c.len==2);assert(c[0]==10&&c[1] == -4);print(\"adapt\");}",
+  "left_effect": "var source:i64[2]=[7,-8];recursive fn change()->i64[2]{source[0]=99;return [3,4];}fn main(){let c=source+change();assert(c[0]==10&&c[1] == -4);assert(source[0]==99);print(\"left_effect\");}",
+  "right_scalar_effect": "var source:i64[2]=[7,8];var calls:i64=0;recursive fn scale()->i64{calls++;source[0]=99;return 2;}fn main(){let c=source*scale();assert(c[0]==14&&c[1]==16);assert(calls==1&&source[0]==99);print(\"right_scalar_effect\");}",
+  "left_scalar_effect": "var scalar:i64=3;recursive fn values()->i64[2]{scalar=99;return [3,6];}fn main(){let c=scalar*values();assert(c[0]==9&&c[1]==18);assert(scalar==99);print(\"left_scalar_effect\");}",
+  "call": "recursive fn add(a:i64[2],b:i64[2])->i64[2]{return a+b;}fn main(){let c=add([7,-8],[3,4]);assert(c[0]==10&&c[1] == -4);print(\"call\");}",
+  "alias": "fn main(){var a:i64[2]=[7,-8];a=a*a;assert(a[0]==49&&a[1]==64);print(\"alias\");}"
+}

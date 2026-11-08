@@ -1,0 +1,1 @@
+struct S{x:i64,y:i64}recursive fn run(a:const S&,b:const S&)->i64{var rows:S[]=[a+b];return rows[0].x+rows[0].y;}recursive fn parent()->i64{var held:S[]=[S{20,30},S{1,2}];let n=run(held[0],held[1]);assert(held[0].x==20&&held[0].y==30);assert(held[1].x==1&&held[1].y==2);return n;}fn main(){var a=S{7,-8};var b=S{3,4};assert(run(a,b)==6);assert(parent()==53);print("function_data");}

@@ -1,0 +1,9 @@
+[
+  {
+    "case": "projection",
+    "source_sha256": "814d907826f37ea72cec37382237a95c8f3756879f37c3377c00a3a5331d8d1c",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent03/projection.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  }
+]

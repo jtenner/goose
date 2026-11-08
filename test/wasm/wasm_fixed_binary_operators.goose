@@ -1,0 +1,1 @@
+fn main(){var a:i64[2]=[13,20];var b:i64[2]=[3,6];let s=a-b;let p=a*b;let q=a/b;let r=a%b;assert(s[0]==10&&s[1]==14);assert(p[0]==39&&p[1]==120);assert(q[0]==4&&q[1]==3);assert(r[0]==1&&r[1]==2);print("operators");}

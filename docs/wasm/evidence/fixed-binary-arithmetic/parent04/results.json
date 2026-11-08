@@ -1,0 +1,51 @@
+[
+  {
+    "case": "integer_edges",
+    "source_sha256": "e92104010e27b1cf76d2a73fbce60c35cf8b12529ab4b75e0aba7e6710039332",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent04/integer_edges.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  },
+  {
+    "case": "ieee",
+    "source_sha256": "fdb8a5ad8c7a9802e402bcc7f843be14bace25508a348780a9c66e06a961bcc7",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent04/ieee.goose:1: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  },
+  {
+    "case": "recursion",
+    "source_sha256": "b62e4301d5c7ab1e9cc376853f3449beb9234a2158ca1feb1e11f79a74c6cc05",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent04/recursion.goose:1: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  },
+  {
+    "case": "argument_result",
+    "source_sha256": "753d6e1cfa3b6e429a4899cddfe70d4ff0279e59d63b693fb69a57118121e768",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent04/argument_result.goose:1: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  },
+  {
+    "case": "nested_destination",
+    "source_sha256": "e8004b6cc91c210b7e328f1412f1d5cfff38af9faeab7cb5e13eb58000ca6cc3",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent04/nested_destination.goose:1: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  },
+  {
+    "case": "function_data",
+    "source_sha256": "f31bdfa779f32ac4726e610b8b18b3be519bc2916a5065cf8e4f5a5b905b4c85",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent04/function_data.goose:1: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  },
+  {
+    "case": "callback",
+    "source_sha256": "e7c0129fbc11bbb3694e203e3b28bad5169ccf95ae4bbbb59a1304c7236108f1",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent04/callback.goose:1: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  }
+]

@@ -681,6 +681,7 @@ inline void WasmCodeGen::InitArray(VarDef *owner, const Slot &slot, Node *init, 
         ((((resultCall && resultCall->builtin < 0) || Is<InlineBlock>(init)) && FixedResult(ActualType(init))) ||
          Is<Block>(init) || Is<IfExpr>(init) ||
          (Is<Unary>(init) && Is<Unary>(init)->op == T_MINUS && HasFixedTemporary(init)) ||
+         FixedBinary(init) ||
          ((Is<Dot>(init) || Is<Index>(init)) && HasFixedTemporary(init)))) {
         ConstructFixed(FreshOwner(owner, declaration), init); return;
     }

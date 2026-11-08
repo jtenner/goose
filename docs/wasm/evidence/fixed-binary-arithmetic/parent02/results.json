@@ -1,0 +1,113 @@
+[
+  {
+    "case": "data",
+    "source_sha256": "e24dd87c13ab97795181573a9b85f7a1fcb8d8426163c8f5112f47f3ebd236dc",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent02/data.goose:1: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  },
+  {
+    "case": "projection",
+    "source_sha256": "ed5052f8ee61bed2be78a72b74cd00ad0d58d90162020a4df4517332a6da13d4",
+    "native_emit_exit": 1,
+    "native_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent02/projection.goose:1: error: .cap is not available on i64[2]\nfn main(){var a:i64[2]=[7,-8];var b:i64[2]=[3,4];let x=(a+b)[1];let n=(a+b).len;let k=(a+b).cap;assert(x == -4&&n==2&&k==2);print(\"projection\");}\n                                                                                       ^~~~~~~~\n  in fn main() instantiated from /tmp/goose-wasm-fixed-binary-math-20261108/parent02/projection.goose:1\n"
+  },
+  {
+    "case": "equality",
+    "source_sha256": "2fe2beceb8a30688fa66fd83e18be11e8db02002948a9ace508dfb3043d6f8b6",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent02/equality.goose:1: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  },
+  {
+    "case": "reference_left",
+    "source_sha256": "4a57aefa02293822cb663ef396ab904bfe4d826ce122ddad657ad4c90a760ab2",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent02/reference_left.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  },
+  {
+    "case": "reference_right",
+    "source_sha256": "ae8153f3c34e4e1bf3bab78990eb4406c4fa1d5c0fbcf8fd9c3dedf4823d4f77",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent02/reference_right.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  },
+  {
+    "case": "index_effect",
+    "source_sha256": "249f0198f866a6029abae3abcb78c09c652cbb65ddcf4470a56c01bf541c85ab",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent02/index_effect.goose:1: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  },
+  {
+    "case": "scalar_alias",
+    "source_sha256": "edcde95b9b9537a9e35ae5f8278e35a1859fb23cf994c9dd709f5306df11bb59",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent02/scalar_alias.goose:1: error: wasm target: whole-array assignment from a temporary needs the pending destination lowering\n"
+  },
+  {
+    "case": "mixed_float",
+    "source_sha256": "d229e3581b73cde47d1212bcb37622eef4e2ed3ffcc197977d102f64e5ca5a4e",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent02/mixed_float.goose:1: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  },
+  {
+    "case": "float_broadcast",
+    "source_sha256": "ab305f57fc11ab860ff5b0cb385ed0be9126198cfbd53bf352edf1c6c4b3171a",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent02/float_broadcast.goose:1: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  },
+  {
+    "case": "large",
+    "source_sha256": "3ce87577fcb5089e26809b941c73f2b23e989e17cffff813e1416e5997672d50",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent02/large.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  },
+  {
+    "case": "zero_effect",
+    "source_sha256": "1ffb4c304df32eaaf34ebd254c93a18995b42749047e7bac0c451c242ef5c4f0",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent02/zero_effect.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  },
+  {
+    "case": "discard",
+    "source_sha256": "82cb8d52230ce5c553ed81d7fb920103c0d5777edbce96ed106f40af67ff01b6",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent02/discard.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  },
+  {
+    "case": "early_return",
+    "source_sha256": "e2fe1c2ad08d9f71814d00cdf9e8809d98ee108e5caf785e14bbbefedbe6294e",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent02/early_return.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  },
+  {
+    "case": "early_continue",
+    "source_sha256": "8afa59ede3a1866e049777ca2f6b84a1e98ee87f2948e21e4b622e59667084c5",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent02/early_continue.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  },
+  {
+    "case": "mixed_int",
+    "source_sha256": "701254c7871908aec9c70ca243e8b227a0a0aba5fdd94a5e91fb044b2c2a4984",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent02/mixed_int.goose:1: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  },
+  {
+    "case": "budget",
+    "source_sha256": "ccf6b1f21894c4b65ce50b708964dc12300423d91ccf1ff91a463773272d1a5a",
+    "native_emit_exit": 0,
+    "native": "PASS",
+    "wasm_reason": "/tmp/goose-wasm-fixed-binary-math-20261108/parent02/budget.goose:1: error: wasm target: array-valued temporary results need the pending destination lowering\n"
+  }
+]

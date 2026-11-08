@@ -1,0 +1,1 @@
+var source:i64[2]=[7,8];var calls:i64=0;recursive fn scale()->i64{calls++;source[0]=99;return 2;}fn main(){let c=source*scale();assert(c[0]==14&&c[1]==16);assert(calls==1&&source[0]==99);print("right_scalar_effect");}

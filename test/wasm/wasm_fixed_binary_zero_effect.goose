@@ -1,0 +1,1 @@
+var left_calls:i64=0;var right_calls:i64=0;recursive fn scale()->i64{right_calls++;return 2;}fn main(){var a:i64[0]=[];let c:i64[0]=({left_calls++;a})*scale();assert(c.len==0);assert(left_calls==1&&right_calls==1);print("zero_effect");}

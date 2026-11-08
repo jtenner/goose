@@ -117,8 +117,9 @@ inline void WasmCodeGen::CheckFreshDestination(const FreshFixedDestination &fres
     }
 }
 
-template<class Consume>
-inline void WasmCodeGen::WithFixedTemporary(TypeExpr *type, Node *expression, Consume consume) {
+template<class Construct, class Consume>
+inline void WasmCodeGen::WithFixedValue(TypeExpr *type, Node *expression,
+                                        Construct construct, Consume consume) {
     assert(expression);
     if (!Nominal(type) && !InlineArray(type))
         Fail(expression->line, "fixed temporary needs a fixed stored value");
@@ -132,9 +133,15 @@ inline void WasmCodeGen::WithFixedTemporary(TypeExpr *type, Node *expression, Co
     FixedTemporaryOwner owner {type, expression, base, image, bytes, scope};
     FreshFixedDestination fresh {{type, base, 0, 0, false, true}, nullptr, 0, image,
                                  FreshFixedOrigin::ReservedFrameTemporary, expression, bytes, &owner};
-    ConstructFixed(fresh, expression);
+    construct(fresh);
     consume(fresh.place);
     Cleanup(scope); scopes.pop_back();
+}
+
+template<class Consume>
+inline void WasmCodeGen::WithFixedTemporary(TypeExpr *type, Node *expression, Consume consume) {
+    WithFixedValue(type, expression,
+        [&](FreshFixedDestination fresh) { ConstructFixed(fresh, expression); }, consume);
 }
 
 inline void WasmCodeGen::FixedCallArguments(Call *call, const vector<Node *> &arguments,
@@ -411,6 +418,23 @@ inline WasmCodeGen::FixedPlace WasmCodeGen::FieldPlace(Dot *field, FixedPlace ob
     return object;
 }
 
+inline Binary *WasmCodeGen::FixedBinary(Node *n) {
+    auto b = Is<Binary>(n);
+    return b && (b->op == T_PLUS || b->op == T_MINUS || b->op == T_MUL ||
+                 b->op == T_DIV || b->op == T_MOD) && FixedResult(ActualType(n)) ? b : nullptr;
+}
+
+inline bool WasmCodeGen::FixedOperandEffects(Node *n, int &budget) {
+    if (!n) return false;
+    if (--budget < 0) return true;
+    if (Is<Call>(n) || Is<Block>(n) || Is<IfExpr>(n) || Is<MatchExpr>(n) ||
+        Is<EarlyBlock>(n) || Is<LoopExpr>(n) || Is<InlineBlock>(n) || Is<StrLit>(n) ||
+        Is<goose::Assign>(n) || Is<IncDec>(n) || Is<VarDecl>(n)) return true;
+    bool effects = false;
+    n->Children([&](Node *child) { if (!effects) effects = FixedOperandEffects(child, budget); });
+    return effects;
+}
+
 inline bool WasmCodeGen::HasFixedTemporary(Node *n) {
     if (auto field = Is<Dot>(n); field && field->IsField()) return HasFixedTemporary(field->obj);
     if (auto index = Is<Index>(n)) return HasFixedTemporary(index->obj);
@@ -418,7 +442,7 @@ inline bool WasmCodeGen::HasFixedTemporary(Node *n) {
     auto variant = Is<Dot>(n);
     auto unary = Is<Unary>(n);
     auto producer = (call && (call->builtin < 0 || call->builtin == B_DEFAULT || call->builtin == B_COPY)) ||
-                    (unary && unary->op == T_MINUS) ||
+                    (unary && unary->op == T_MINUS) || FixedBinary(n) ||
                     Is<InlineBlock>(n) || Is<StructLit>(n) || Is<ArrayLit>(n) || Is<Block>(n) || Is<IfExpr>(n) ||
                     (variant && variant->variantconst);
     return producer && FixedResult(ActualType(n));
@@ -516,6 +540,7 @@ inline void WasmCodeGen::AssignFixed(FixedPlace destination, Node *source, TType
     if (Is<StructLit>(source) || (dot && dot->variantconst) || (call && call->builtin == B_DEFAULT) ||
         (array && Is<ArrayLit>(source)) ||
         (Is<Unary>(source) && Is<Unary>(source)->op == T_MINUS && FixedResult(ActualType(source))) ||
+        FixedBinary(source) ||
         (Is<Block>(source) || Is<IfExpr>(source)) ||
         (((call && call->builtin < 0) || Is<InlineBlock>(source)) && FixedResult(ActualType(source)))) {
         WithFixedTemporary(destination.type, source, [&](const FixedPlace &value) {
@@ -806,6 +831,129 @@ inline void WasmCodeGen::NegateFixedInto(FixedPlace destination, FixedPlace sour
     Fail(line, "fixed negation needs numeric struct or fixed-array leaves");
 }
 
+// The arithmetic payload is either the complete fresh image or a checked
+// fixed-array child after a limited receiver's prefix.
+inline WasmCodeGen::FreshFixedDestination WasmCodeGen::FixedMathDestination(
+        FreshFixedDestination fresh, TypeExpr *type, Line line) {
+    CheckFreshDestination(fresh, line);
+    auto target = fresh.place.type;
+    if (TEq(target, type)) return fresh;
+    if (!InlineArray(target) || target->arr->akind != A_LIMITED ||
+        type->kind != TY_ARRAY || type->arr->akind != A_FIXED ||
+        !TEq(target->arr->sub, type->arr->sub))
+        Fail(line, "fixed arithmetic adaptation needs a matching fixed-array source");
+    auto count = ArrSize(type->arr);
+    if (count < 0 || count > ArrSize(target->arr))
+        Fail(line, "fixed arithmetic exceeds its checked limited capacity");
+    auto payload = FixedChild(fresh, type, (uint32_t)IntSize(LenStore(target->arr)), line);
+    CheckFreshDestination(payload, line);
+    return payload;
+}
+
+inline void WasmCodeGen::BinaryFixedInto(FixedPlace destination, FixedMathOperand left,
+                                          FixedMathOperand right, TType op, Line line) {
+    auto type = destination.type;
+    if ((left.value == NoLocal && !TEq(type, left.place.type)) ||
+        (right.value == NoLocal && !TEq(type, right.place.type)))
+        Fail(line, "fixed arithmetic needs matching operand layouts");
+    if (!RequireFixed(type, line)) return;
+    if (type->kind == TY_STRUCT) {
+        auto fields = FieldsOf(type, line);
+        for (size_t i = 0; i < fields.types.size(); i++) if (auto field = fields.types[i]) {
+            auto offset = (uint64_t)fields.layout.offs[i];
+            auto child = [&](FixedPlace place) {
+                if (offset > UINT32_MAX - place.offset) Fail(line, "fixed arithmetic field exceeds memory32");
+                place.type = field; place.offset += (uint32_t)offset; return place;
+            };
+            auto a = left, b = right;
+            if (a.value == NoLocal) a.place = child(a.place);
+            if (b.value == NoLocal) b.place = child(b.place);
+            BinaryFixedInto(child(destination), a, b, op, line);
+        }
+        return;
+    }
+    if (type->kind == TY_ARRAY) {
+        if (type->arr->akind != A_FIXED || ArrSize(type->arr) < 0)
+            Fail(line, "fixed arithmetic needs a resolved fixed-array count");
+        auto count = ArrSize(type->arr);
+        if (!count) return;
+        auto target = ArrayFromPlace(destination, line);
+        auto position = Local(WasmModule::I64);
+        code.I64(0); code.Set(position);
+        auto done = Open(), head = Open(0x03);
+        code.Get(position); code.I64(count); code.Byte(0x5a); Branch(done, true);
+        ElementOffset(ArrayView {target}, position, line);
+        auto element = CaptureElementPlace({type->arr->sub, target.elementMemory, true});
+        auto select = [&](FixedMathOperand operand) {
+            if (operand.value == NoLocal) {
+                auto source = ArrayFromPlace(operand.place, line);
+                ElementOffset(ArrayView {source}, position, line);
+                operand.place = CaptureElementPlace({type->arr->sub, source.elementMemory, true});
+            }
+            return operand;
+        };
+        auto a = select(left), b = select(right);
+        BinaryFixedInto(element, a, b, op, line);
+        code.Get(position); code.I64(1); code.Byte(0x7c); code.Set(position);
+        Branch(head); Close(); Close();
+        return;
+    }
+    if (type->kind != TY_INT && type->kind != TY_FLT)
+        Fail(line, "fixed arithmetic needs numeric leaves");
+    if (type->kind == TY_INT && (type->intstorage == IS_VARINT || type->ix))
+        Fail(line, "fixed arithmetic needs ordinary integer leaves");
+    auto value = [&](const FixedMathOperand &operand) {
+        if (operand.value == NoLocal) ReadPlace(operand.place);
+        else { code.Get(operand.value); Convert(operand.place.type, type); }
+    };
+    StoreAddress(destination); value(left); value(right);
+    Arithmetic(op, type, line); StorePlace(destination);
+}
+
+inline void WasmCodeGen::ConstructFixedBinary(FreshFixedDestination fresh, Binary *source) {
+    auto underlying = [&](Node *node) {
+        auto type = ActualType(node);
+        while (type->kind == TY_REF) type = type->ref->sub;
+        return type;
+    };
+    auto lt = underlying(source->left), rt = underlying(source->right);
+    auto aggregate = [](TypeExpr *type) { return type->kind == TY_STRUCT || type->kind == TY_ARRAY; };
+    auto type = aggregate(lt) ? lt : rt;
+    if (!aggregate(type) || (type->kind == TY_ARRAY && type->arr->akind != A_FIXED))
+        Fail(source->line, "fixed arithmetic needs a fixed struct or array");
+    auto payload = FixedMathDestination(fresh, type, source->line);
+    auto scalar = [&](Node *node) {
+        auto type = Operand(node->exprtype);
+        Gen(node, type); auto value = Temp(type); code.Set(value);
+        return FixedMathOperand {{type, NoLocal}, value};
+    };
+    auto stored = [&](FixedPlace place) {
+        while (place.type->kind == TY_REF) place = DereferencePlace(place, source->line);
+        if (!TEq(type, place.type)) Fail(source->line, "fixed arithmetic needs matching source layouts");
+        return FixedMathOperand {place};
+    };
+    auto finish = [&](FixedMathOperand left, FixedMathOperand right) {
+        BinaryFixedInto(payload.place, left, right, source->op, source->line);
+        if (!TEq(type, fresh.place.type))
+            InitArrayCount(FreshArrayPlace(fresh, source->line), (uint64_t)ArrSize(type->arr));
+    };
+    auto right = [&](FixedMathOperand left) {
+        if (!aggregate(rt)) { auto value = scalar(source->right); finish(left, value); }
+        else WithReadPlace(source->right, [&](FixedPlace place) { finish(left, stored(place)); });
+    };
+    if (!aggregate(lt)) { auto value = scalar(source->left); right(value); return; }
+    // Calls and control can change the left source. Limit the syntax scan;
+    // an unknown result conservatively requires one private value copy.
+    int budget = 64;
+    if (FixedOperandEffects(source->right, budget)) {
+        WithFixedValue(type, source->left, [&](FreshFixedDestination snapshot) {
+            WithReadPlace(source->left, [&](FixedPlace place) {
+                auto value = stored(place); CopyFixed(snapshot, value.place, source->line);
+            });
+        }, [&](FixedPlace value) { right(FixedMathOperand {value}); });
+    } else WithReadPlace(source->left, [&](FixedPlace place) { right(stored(place)); });
+}
+
 inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *source) {
     auto destination = fresh.place;
     CheckFreshDestination(fresh, source->line);
@@ -853,27 +1001,14 @@ inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *sourc
     if (auto unary = Is<Unary>(source); unary && unary->op == T_MINUS && FixedResult(ActualType(source))) {
         WithReadPlace(unary->child, [&](FixedPlace operand) {
             while (operand.type->kind == TY_REF) operand = DereferencePlace(operand, source->line);
-            if (TEq(type, operand.type)) {
-                NegateFixedInto(destination, operand, source->line);
-                return;
-            }
-            if (!InlineArray(type) || type->arr->akind != A_LIMITED ||
-                operand.type->kind != TY_ARRAY || operand.type->arr->akind != A_FIXED ||
-                !TEq(type->arr->sub, operand.type->arr->sub))
-                Fail(source->line, "fixed negation adaptation needs a matching fixed-array source");
-            auto count = ArrSize(operand.type->arr);
-            if (count < 0 || count > ArrSize(type->arr))
-                Fail(source->line, "fixed negation exceeds its checked limited capacity");
-            auto prefix = (uint32_t)IntSize(LenStore(type->arr));
-            // Only the live source image is arithmetic output. The checked
-            // child excludes the count header and the unused capacity.
-            auto payload = FixedChild(fresh, operand.type, prefix, source->line);
-            CheckFreshDestination(payload, source->line);
+            auto payload = FixedMathDestination(fresh, operand.type, source->line);
             NegateFixedInto(payload.place, operand, source->line);
-            InitArrayCount(FreshArrayPlace(fresh, source->line), (uint64_t)count);
+            if (!TEq(type, operand.type))
+                InitArrayCount(FreshArrayPlace(fresh, source->line), (uint64_t)ArrSize(operand.type->arr));
         });
         return;
     }
+    if (auto binary = FixedBinary(source)) { ConstructFixedBinary(fresh, binary); return; }
     auto resultCall = Is<Call>(source);
     if (((resultCall && resultCall->builtin < 0) || Is<InlineBlock>(source)) && FixedResult(ActualType(source))) {
         CallInto(fresh, source); return;

@@ -1,0 +1,1 @@
+var a:i64[2]=[7,-8];var b:i64[2]=[3,4];recursive fn later()->i64{a[0]=99;return 0;}recursive fn take(c:i64[..3],n:i64)->i64[..3]{assert(n==0&&c.len==2);assert(c[0]==10&&c[1] == -4);c[0]+=1;return c;}fn main(){let c=take(a+b,later());assert(c.len==2&&c[0]==11&&c[1] == -4);assert(a[0]==99);print("argument_result");}

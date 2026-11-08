@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-fixed-binary-math-20261108/image03/checks.py", line 29, in <module>
+    n=check_failures(run,p.parent/'build01/goose-tested','cc','node','wasm-tools',p/'artifacts')
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_fixed_binary_checks.py", line 114, in check_failures
+    result = run([native], ok=False)
+  File "/tmp/goose-wasm-fixed-binary-math-20261108/image03/checks.py", line 22, in run
+    assert artifact.read_bytes()==current.read_bytes()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

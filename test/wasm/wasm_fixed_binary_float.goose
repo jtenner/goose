@@ -1,0 +1,1 @@
+struct S{x:f32,y:f32}fn main(){var a=S{1.5,-2.0};var b=S{0.5,2.0};let c=a+b;let d=a-b;let e=a*b;let f=a/b;let g=a%b;assert(c.x==2.0&&c.y==0.0);assert(d.x==1.0&&d.y == -4.0);assert(e.x==0.75&&e.y == -4.0);assert(f.x==3.0&&f.y == -1.0);assert(g.x==0.0&&g.y==0.0);print("float");}
