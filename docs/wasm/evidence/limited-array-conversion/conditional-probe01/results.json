@@ -1,0 +1,10 @@
+{
+  "case": "dynamic conditional",
+  "source_sha256": "9c7dae9046b58fb6f7b352e0cf2dad0fcf0fb27605fda4bb86a5d2112177c5fd",
+  "classification": "native-valid pending general temporary-result lowering; no runtime miscompile",
+  "emit_exit": 0,
+  "cc_exit": 0,
+  "native_exit": 0,
+  "parent-wasm_exit": 1,
+  "candidate-wasm_exit": 1
+}

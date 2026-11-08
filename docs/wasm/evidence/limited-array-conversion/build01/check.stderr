@@ -1,0 +1,51 @@
+In file included from /home/dev/Projects/goose-wasm-backend/src/main.cpp:31:
+/home/dev/Projects/goose-wasm-backend/src/codegen.h: In constructor ‘goose::CodeGen::CodeGen(goose::Ast&, std::string_view, const std::vector<std::__cxx11::basic_string<char> >&, bool, bool, int64_t)’:
+/home/dev/Projects/goose-wasm-backend/src/codegen.h:1544:20: warning: unused variable ‘n’ [-Wunused-variable]
+ 1544 |             size_t n = 0;
+      |                    ^
+In file included from /home/dev/Projects/goose-wasm-backend/src/main.cpp:32:
+/home/dev/Projects/goose-wasm-backend/src/codegen_types.h: In member function ‘void goose::CodeGen::EmitDefaultInto(const std::string&, goose::TypeExpr*)’:
+/home/dev/Projects/goose-wasm-backend/src/codegen_types.h:1016:66: warning: unused parameter ‘t’ [-Wunused-parameter]
+ 1016 | inline void CodeGen::EmitDefaultInto(const string &lv, TypeExpr *t) {
+      |                                                        ~~~~~~~~~~^
+In file included from /home/dev/Projects/goose-wasm-backend/src/main.cpp:48:
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h: In member function ‘uint8_t goose::WasmCodeGen::Type(goose::TypeExpr*)’:
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h:224:51: warning: comparison of integer expressions of different signedness: ‘uint64_t’ {aka ‘long unsigned int’} and ‘long int’ [-Wsign-compare]
+  224 |                     if ((uint64_t)ArrSize(t->arr) > (UINT32_MAX - prefix) / FixedSize(element))
+      |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h: In member function ‘void goose::WasmCodeGen::Gen(goose::Node*, goose::TypeExpr*)’:
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h:872:66: warning: enumerated and non-enumerated type in conditional expression [-Wextra]
+  872 |                                       : s.type->kind == TY_ARRAY ? BorrowedArrayAddressType(s.type)
+      |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  873 |                                       : FatPointers() ? WasmModule::I64 : WasmModule::I32;
+      |                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h: In member function ‘std::string goose::WasmCodeGen::Run()’:
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h:1224:56: warning: enumerated and non-enumerated type in conditional expression [-Wextra]
+ 1224 |                 args.push_back(FixedParameter(p->type) ? WasmModule::I32 : Type(p->type));
+      |                                ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/dev/Projects/goose-wasm-backend/src/main.cpp:5:
+In member function ‘void goose::small_vector<T, N>::CopyInPlace(const goose::small_vector<T, N>&) [with T = goose::RootAlt; int N = 1]’,
+    inlined from ‘goose::small_vector<T, N>::small_vector(goose::small_vector<T, N>&&) [with T = goose::RootAlt; int N = 1]’ at /home/dev/Projects/goose-wasm-backend/src/small_vector.h:86:24,
+    inlined from ‘goose::Roots::Roots(goose::Roots&&)’ at /home/dev/Projects/goose-wasm-backend/src/ast.h:526:8,
+    inlined from ‘goose::Roots goose::TypeCheck::ReadBackRoot(goose::TypeExpr*, const goose::Roots&, bool, const ReadBack*, bool, bool)’ at /home/dev/Projects/goose-wasm-backend/src/typecheck_types.h:1425:16:
+/home/dev/Projects/goose-wasm-backend/src/small_vector.h:48:15: warning: ‘*(unsigned char (*)[32])((char*)&out + offsetof(goose::Roots, goose::Roots::alts.goose::small_vector<goose::RootAlt, 1>::<unnamed>))’ may be used uninitialized [-Wmaybe-uninitialized]
+   48 |         memcpy(inl, (const void *)o.data(), sizeof(inl));
+      |         ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/dev/Projects/goose-wasm-backend/src/main.cpp:16:
+/home/dev/Projects/goose-wasm-backend/src/typecheck_types.h: In member function ‘goose::Roots goose::TypeCheck::ReadBackRoot(goose::TypeExpr*, const goose::Roots&, bool, const ReadBack*, bool, bool)’:
+/home/dev/Projects/goose-wasm-backend/src/typecheck_types.h:1420:11: note: ‘out’ declared here
+ 1420 |     Roots out;
+      |           ^~~
+In member function ‘void goose::small_vector<T, N>::CopyInPlace(const goose::small_vector<T, N>&) [with T = goose::RootAlt; int N = 1]’,
+    inlined from ‘goose::small_vector<T, N>::small_vector(goose::small_vector<T, N>&&) [with T = goose::RootAlt; int N = 1]’ at /home/dev/Projects/goose-wasm-backend/src/small_vector.h:86:24,
+    inlined from ‘goose::Roots::Roots(goose::Roots&&)’ at /home/dev/Projects/goose-wasm-backend/src/ast.h:526:8,
+    inlined from ‘constexpr std::pair<_T1, _T2>::pair(_U1&&, _U2&&) [with _U1 = const goose::StoreEvent*; _U2 = goose::Roots; _T1 = const goose::StoreEvent*; _T2 = goose::Roots]’ at /usr/include/c++/14/bits/stl_pair.h:444:35,
+    inlined from ‘void goose::TypeCheck::ApplyCalleeStores(goose::FnSpec*, std::vector<goose::Val>&, goose::Node*, std::vector<int>*)’ at /home/dev/Projects/goose-wasm-backend/src/typecheck_builtins.h:2158:27:
+/home/dev/Projects/goose-wasm-backend/src/small_vector.h:48:15: warning: ‘*(unsigned char (*)[32])((char*)&<unnamed> + offsetof(goose::Roots, goose::Roots::alts.goose::small_vector<goose::RootAlt, 1>::<unnamed>))’ may be used uninitialized [-Wmaybe-uninitialized]
+   48 |         memcpy(inl, (const void *)o.data(), sizeof(inl));
+      |         ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/dev/Projects/goose-wasm-backend/src/main.cpp:21:
+/home/dev/Projects/goose-wasm-backend/src/typecheck_builtins.h: In member function ‘void goose::TypeCheck::ApplyCalleeStores(goose::FnSpec*, std::vector<goose::Val>&, goose::Node*, std::vector<int>*)’:
+/home/dev/Projects/goose-wasm-backend/src/typecheck_builtins.h:2158:41: note: ‘<anonymous>’ declared here
+ 2158 |             held.push_back({ &e, Roots {} });
+      |                                         ^

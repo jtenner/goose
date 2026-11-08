@@ -110,7 +110,8 @@ export function instantiate(bytes, write = b => fs.writeSync(1, b)) {
                 6: 'out of memory growing data storage', 7: 'invalid memory identity or watermark',
                 8: 'array index out of bounds', 9: 'pop from empty array', 10: 'array capacity exceeded',
                 11: 'memory32 address overflow', 12: 'array capacity out of range',
-                13: 'invalid variable-length array prefix', 14: 'invalid fixed enum tag' };
+                13: 'invalid variable-length array prefix', 14: 'invalid fixed enum tag',
+                15: 'array length exceeds stored prefix' };
             const source = read(offset, length).toString('utf8');
             throw new GooseFailure(`goose runtime error: ${messages[code] ?? 'unknown failure'}${source ? ` at ${source}:${line}` : ''}`);
         },

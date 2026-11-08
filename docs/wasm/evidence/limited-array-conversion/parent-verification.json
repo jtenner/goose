@@ -1,0 +1,337 @@
+{
+  "status": "PASS",
+  "families": [
+    {
+      "case": "variable_stored",
+      "phase": "parent01",
+      "source_sha256": "0e67b3346e1e1bdad3d2c692724baaa1dfcdbdbe54dbd9c056ee633e80f3796b",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "variable_reference",
+      "phase": "parent01",
+      "source_sha256": "a24220f8ebb988e38cd5c416d5500c03a9ed3e24c990732c981b38996fe7c38c",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "variable_call",
+      "phase": "parent01",
+      "source_sha256": "241f5d7ae3e357bd3bdd0dcf0efa5f6e9d43c3ad0793c265fdfa1728291f6587",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "u8_stored",
+      "phase": "parent01",
+      "source_sha256": "f955db1531ec32c472fdea951f0eca53b743174c085e6fe7941cdc3ae50909ae",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "u8_reference",
+      "phase": "parent01",
+      "source_sha256": "520a6ccadb421b02b811c00c3e422d939df6d6ba5e2c9705e06bca2959d9940c",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "u8_call",
+      "phase": "parent01",
+      "source_sha256": "f059132a9daa1e59e9b2caf536dc1171a1e31878deca3d2da335fc4bc79ed3ee",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "u16_stored",
+      "phase": "parent01",
+      "source_sha256": "7ab4ea0a89469198918c6ba5fec6cd88b6028b31efbf820a3f847a9b84880b97",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "u16_reference",
+      "phase": "parent01",
+      "source_sha256": "baaada84f56105cfcebe5a2cee44eaa0d08c5ca3ca23d0facb2944bad92b0604",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "u16_call",
+      "phase": "parent01",
+      "source_sha256": "3c29c70b28d11f39940c4a84e232638f02e96819e2164e54b152d782285cb9c0",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "u64_stored",
+      "phase": "parent01",
+      "source_sha256": "ac6cbd4b1083e532894f50995baecef34712d538ec89ce02b264bfd52b8a3de2",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "u64_reference",
+      "phase": "parent01",
+      "source_sha256": "e95a34dbfbca5b134d831396192f515894f3dfdbe4948b7b9af53b75fc1d2baf",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "u64_call",
+      "phase": "parent01",
+      "source_sha256": "e158aeeb4196fe197b624236c1175b42270439ead1014c4ac4e7f75b72edc1db",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "varint_stored",
+      "phase": "parent01",
+      "source_sha256": "8518c192b3351bd9bb04f3bc77c23d68896458a9d51512e9b9563f0efdc404b6",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "varint_reference",
+      "phase": "parent01",
+      "source_sha256": "e53af737b431fe30bb6d0f20264e24d71690091208b0205e812bb89ab205bcc0",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "varint_call",
+      "phase": "parent01",
+      "source_sha256": "3d5b4460ae2e9241baf724d324e49dab9d1f496c58a7f23851231ae406a9fcdc",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "runtime_stored",
+      "phase": "parent01",
+      "source_sha256": "9ffcc898c59ed1a9491dda5511dbb08d1653d7330aba07b86ad7a4d8eb1b3ca7",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "runtime_reference",
+      "phase": "parent01",
+      "source_sha256": "0d07ef6a1603f42af8333ce058d21e0aeb4b76ed9345abe08fd08dde6f29777d",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "runtime_call",
+      "phase": "parent01",
+      "source_sha256": "a3c99a8b584ae772c391e754c876e6ab758f92a54e8057bd5aff898235eed948",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "grow_stored",
+      "phase": "parent01",
+      "source_sha256": "a863b069372262879693fecb18e96c857534f35279c1957fb03e4c8eac544710",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "grow_reference",
+      "phase": "parent01",
+      "source_sha256": "55a149b8aa6c3b3ced5b319b01aed98ea822e67d6a18f90c98163e4f3a703899",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "grow_call",
+      "phase": "parent01",
+      "source_sha256": "272ae2f7e2e70200cce6fc573c91900fbded727f87d9537a482a63c3567ac917",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "shrink_stored",
+      "phase": "parent01",
+      "source_sha256": "b8a7bda992722383012f5eacb4a179cce8ac50c577f989c8e97bdfa90deee76c",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "shrink_reference",
+      "phase": "parent01",
+      "source_sha256": "5580b927ff77b80af625efbc4b2ba8907c0fbf2f5c56f6f5ee2c6b71b65863c1",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "shrink_call",
+      "phase": "parent01",
+      "source_sha256": "a7560a1687e4318b4442a75ef496d9ea1d702d2e88d7e5b84d332ac6fdd00373",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "effects",
+      "phase": "parent01",
+      "source_sha256": "8f89eedaab3c5cd6ff8535264a1e7a1b03e3e38eb4a070b72a16b339f5f4bd4a",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "defer_reference",
+      "phase": "parent01",
+      "source_sha256": "130501852d5622c1e6af9eb597f835e00f2c0215d576e2a7258bcc9b43c09466",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "defer_result",
+      "phase": "parent01",
+      "source_sha256": "ebadae35e053f58a3413288b87821fdd9a6285bca00a523bbcae3fcdef21ad96",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "data_field",
+      "phase": "parent01",
+      "source_sha256": "f78d1eb3d4ac0b84672e9bae357272bd14563e87cc93f46670e21901e43f6ebb",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "dynamic",
+      "phase": "parent01",
+      "source_sha256": "40e93b5950a035fd6b3f0dfce6c0082614a78a8f59df3ccda47eb612d3e2c49d",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "padded",
+      "phase": "parent01",
+      "source_sha256": "e8ae42f5a975c40b2fcbc133ed21f8e686160945032e716946647c989a061319",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "references",
+      "phase": "parent01",
+      "source_sha256": "16200cf51f9e57d7160a98ec170e45a593b96959deca82e7cea3da4c118fe6b9",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "global",
+      "phase": "parent01",
+      "source_sha256": "4fe2408ac2b12537da53a0a2781c97ef37768d29bbf785d40901b7cc1c753e93",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "loop",
+      "phase": "parent01",
+      "source_sha256": "4e647a8f276a9d63d3283b684b0f3df60912bc728b03208002d7ee3cfee8941a",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "temporary_field",
+      "phase": "parent01",
+      "source_sha256": "1217b2c20830218494ea60cdfee0123f91e0f04dc09abd832a2e0cd690eb6a77",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "empty_variable",
+      "phase": "parent01",
+      "source_sha256": "575cf78e4f4240a090ad791231eed431b4741f42b569e80b1e3c59c6893b32bd",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "empty_u8",
+      "phase": "parent01",
+      "source_sha256": "4cc5a722de1ea690d78880eb38192317b45854aab7a0f596551763588f3a3303",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "empty_u16",
+      "phase": "parent01",
+      "source_sha256": "79c90340f32f87b86e4fb7b19257ff10002965683a93178d9b18ac2f1cc38afb",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "empty_u64",
+      "phase": "parent01",
+      "source_sha256": "236e1252cad4732d30e71f03d354c096a29f350e357933345a34b6e9e822ffb1",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "empty_varint",
+      "phase": "parent01",
+      "source_sha256": "e1a9d19e834b9e6773d306dff40edea8733868c49aa81452321c0acbf11f1cb6",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "empty_runtime",
+      "phase": "parent01",
+      "source_sha256": "9757082437d9c211518b8d1ebff5f628751badef211409fb39a5ee0f74bbeccc",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "empty_grow",
+      "phase": "parent01",
+      "source_sha256": "ec0865fc5812e47c73a63f308d2b9c6478f7f9360f2b738dd472f98052225585",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "empty_shrink",
+      "phase": "parent01",
+      "source_sha256": "b62a6ad20f6249a8243cdc2cc5b06f220a547a65bf980eae5d9d10c8768ea434",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "varint_127",
+      "phase": "parent01",
+      "source_sha256": "04be24f22e41ab9548b4399a5d6685ff47efababbb5d2932261e440deba3e74f",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "varint_128",
+      "phase": "parent01",
+      "source_sha256": "c097d4ef815408b2aaa278ae5cf5bc102d6f8d3dd4ef2c002f8c9f1e784c0352",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "varint_16384",
+      "phase": "parent01",
+      "source_sha256": "1e99432e5a1cc794031f4bac5a8a1270347f8bb74fe3a4059a12e3b97cd105f4",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "varint_65536",
+      "phase": "parent01",
+      "source_sha256": "4a1f06f8bcd50331c3a812dacf9232faab57f2eaae7f5800a3bc25248f297864",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "runtime_256",
+      "phase": "parent02",
+      "source_sha256": "312d4501910cc2d7d4a6851d9b11552b6fdc33e506969a15ce7e28bd516090d3",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "runtime_65536",
+      "phase": "parent02",
+      "source_sha256": "6e515baf67d72331b1784a67a6f42514ab8c6cfb9d06a296f4db586fddc11ea3",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "u8_255",
+      "phase": "parent02",
+      "source_sha256": "7da4d57cc361f0843a604c91cf595e990661ee597a751164096f46b1846e30ed",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "zero_call_variable",
+      "phase": "parent02",
+      "source_sha256": "51037e4db72be8f02b6fbe9a0666c6a614f035c3f6344422e0bc92d61783a08a",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "zero_call_runtime",
+      "phase": "parent02",
+      "source_sha256": "e92b85fe1ca355170083c6b8dad4e27b5eecd7ce9ce06f6c4e6e0bed18b8afe3",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "early_return",
+      "phase": "parent02",
+      "source_sha256": "2dcbc6168c5626ceaf4b2ded0beb2808e10a2369f869dac08cedfdcbf2aa660f",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "owner_varint",
+      "phase": "parent02",
+      "source_sha256": "ac05c35812dff7220f649bc84d8aec4fc12b7bb8bed218c5a9ea52f5fdf86484",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "large_capacity_small",
+      "phase": "parent02",
+      "source_sha256": "8aa33c6ba51011d3f6043138fc17842b0106a969abfb7bf04e04f60e3e5a9123",
+      "status": "native PASS / parent Wasm rejected"
+    },
+    {
+      "case": "offset_data",
+      "phase": "parent03",
+      "source_sha256": "f7711d4f67f4361a27f4c8dd8a11b19a2fc27fdbbd768ac771cf0c5d20f15f73",
+      "status": "native PASS / parent Wasm rejected"
+    }
+  ],
+  "reused_original_parent_producers": 46,
+  "fresh_extra_parent_producers": 9
+}

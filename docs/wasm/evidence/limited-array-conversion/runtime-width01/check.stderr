@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-limited-array-conversion-20261108/runtime-width01/checks.py", line 13, in <module>
+    run([candidate,'--target','wasm','-o',p/'case.wasm',f]);run(['wasm-tools','validate',p/'case.wasm']);a=run(['node',r/'scripts/run_wasm.mjs',p/'case.wasm']);assert a.stdout==b'runtime256\n' and not a.stderr
+                                                                                                           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/goose-wasm-limited-array-conversion-20261108/runtime-width01/checks.py", line 9, in run
+    assert not ok or a.returncode==0,(args,a.returncode,a.stderr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (['node', '/home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs', '/tmp/goose-wasm-limited-array-conversion-20261108/runtime-width01/case.wasm'], 1, b'goose runtime error: array length exceeds stored prefix at /tmp/goose-wasm-limited-array-conversion-20261108/runtime-width01/case.goose:1\n')

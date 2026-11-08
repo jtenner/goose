@@ -1,0 +1,662 @@
+[
+  {
+    "case": "wasm_limited_array_conversion_data_field",
+    "opt": 0,
+    "sha256": "ebe5c3974441c8f7afd6743edb1639ce9c6b19d6d1eb1fbc2f40a9b529535dc2",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_data_field",
+    "opt": 2,
+    "sha256": "ebe5c3974441c8f7afd6743edb1639ce9c6b19d6d1eb1fbc2f40a9b529535dc2",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_defer_reference",
+    "opt": 0,
+    "sha256": "a4ebacd956cb4dd241720ac08554da4a0aaa8b16db3f7618efd3ad4a465860e4",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_defer_reference",
+    "opt": 2,
+    "sha256": "a4ebacd956cb4dd241720ac08554da4a0aaa8b16db3f7618efd3ad4a465860e4",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_defer_result",
+    "opt": 0,
+    "sha256": "b700aa527b91b1d265143869927b79c603416bf6505610cdc3e810b08a9fdbf8",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_defer_result",
+    "opt": 2,
+    "sha256": "b700aa527b91b1d265143869927b79c603416bf6505610cdc3e810b08a9fdbf8",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_dynamic",
+    "opt": 0,
+    "sha256": "a7d0708c4b8cee3b873c6b3e2a6265ac62a6f7c0735b40bc1005567d28efac81",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_dynamic",
+    "opt": 2,
+    "sha256": "a7d0708c4b8cee3b873c6b3e2a6265ac62a6f7c0735b40bc1005567d28efac81",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_early_return",
+    "opt": 0,
+    "sha256": "b69f64e0867886830fda805d5332297196e684de30e8b07c0146b68a73f7d0cd",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_early_return",
+    "opt": 2,
+    "sha256": "b69f64e0867886830fda805d5332297196e684de30e8b07c0146b68a73f7d0cd",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_effects",
+    "opt": 0,
+    "sha256": "c2dd40d2705630520cd8b38c32f43f11e6e85083e81c0ab9aa75d65b4c12456c",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_effects",
+    "opt": 2,
+    "sha256": "c2dd40d2705630520cd8b38c32f43f11e6e85083e81c0ab9aa75d65b4c12456c",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_empty_grow",
+    "opt": 0,
+    "sha256": "8a47dfff10792efb2a315e007567e8ab28c347dd89c3de72abdb0a9922343607",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_empty_grow",
+    "opt": 2,
+    "sha256": "8a47dfff10792efb2a315e007567e8ab28c347dd89c3de72abdb0a9922343607",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_empty_runtime",
+    "opt": 0,
+    "sha256": "d9b44446ca548b3d62abdfb73aa95ab4d899fdffbec90085cc00f4e88e6ab5cb",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_empty_runtime",
+    "opt": 2,
+    "sha256": "d9b44446ca548b3d62abdfb73aa95ab4d899fdffbec90085cc00f4e88e6ab5cb",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_empty_shrink",
+    "opt": 0,
+    "sha256": "ffa4f4c0bff218f83a5200e538ab011680a20b04315900533c13396db85c77c5",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_empty_shrink",
+    "opt": 2,
+    "sha256": "ffa4f4c0bff218f83a5200e538ab011680a20b04315900533c13396db85c77c5",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_empty_u16",
+    "opt": 0,
+    "sha256": "440a1176dd55aec5257c6940e57b2f26f97f9f50f2230457cfbfe2b7ff20f4dd",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_empty_u16",
+    "opt": 2,
+    "sha256": "440a1176dd55aec5257c6940e57b2f26f97f9f50f2230457cfbfe2b7ff20f4dd",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_empty_u64",
+    "opt": 0,
+    "sha256": "8b812d66961525648427fa4b26b85695fa28bc75b253665d3058fd49ac24521e",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_empty_u64",
+    "opt": 2,
+    "sha256": "8b812d66961525648427fa4b26b85695fa28bc75b253665d3058fd49ac24521e",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_empty_u8",
+    "opt": 0,
+    "sha256": "1d516dac8709655aac37f8b0b42a8a802dd0b34d49c7432cb8bf5b4e6cbae2ab",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_empty_u8",
+    "opt": 2,
+    "sha256": "1d516dac8709655aac37f8b0b42a8a802dd0b34d49c7432cb8bf5b4e6cbae2ab",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_empty_variable",
+    "opt": 0,
+    "sha256": "408b1540125810d448ac4101eccbc92c4a3fefd610abacc0dcc87f033ea18ad3",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_empty_variable",
+    "opt": 2,
+    "sha256": "408b1540125810d448ac4101eccbc92c4a3fefd610abacc0dcc87f033ea18ad3",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_empty_varint",
+    "opt": 0,
+    "sha256": "98ab0e28fb1039d8a4936986da51e287b24c0cf8a64974786c6d211b138b89ec",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_empty_varint",
+    "opt": 2,
+    "sha256": "98ab0e28fb1039d8a4936986da51e287b24c0cf8a64974786c6d211b138b89ec",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_global",
+    "opt": 0,
+    "sha256": "b8d6e28fcfe58b8619895f13a95f5b220a1c67141011a619f1fa93d917dcf96c",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_global",
+    "opt": 2,
+    "sha256": "b8d6e28fcfe58b8619895f13a95f5b220a1c67141011a619f1fa93d917dcf96c",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_grow_call",
+    "opt": 0,
+    "sha256": "9f355505aac8d8135922b495b9c53e87b7f02b062993190d1e8d1a3a8504a551",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_grow_call",
+    "opt": 2,
+    "sha256": "9f355505aac8d8135922b495b9c53e87b7f02b062993190d1e8d1a3a8504a551",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_grow_reference",
+    "opt": 0,
+    "sha256": "d7d2443906628932b624cb98173b0efded35f64b8d50a92eed816c36354a2eb2",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_grow_reference",
+    "opt": 2,
+    "sha256": "d7d2443906628932b624cb98173b0efded35f64b8d50a92eed816c36354a2eb2",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_grow_stored",
+    "opt": 0,
+    "sha256": "3f935f820b93b6036ee30cf59e898420fad2877600b9c6094d1ad76eb75846f0",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_grow_stored",
+    "opt": 2,
+    "sha256": "3f935f820b93b6036ee30cf59e898420fad2877600b9c6094d1ad76eb75846f0",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_large_capacity_small",
+    "opt": 0,
+    "sha256": "0a5d6de3226f5f20f8d594d08e23dc045421493d18097673c4e02ababf604aad",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_large_capacity_small",
+    "opt": 2,
+    "sha256": "0a5d6de3226f5f20f8d594d08e23dc045421493d18097673c4e02ababf604aad",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_loop",
+    "opt": 0,
+    "sha256": "7f5a80f8c87bc1bbcb57719a5d838edacd0e640d018300064a78a283d5ce7def",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_loop",
+    "opt": 2,
+    "sha256": "7f5a80f8c87bc1bbcb57719a5d838edacd0e640d018300064a78a283d5ce7def",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_offset_data",
+    "opt": 0,
+    "sha256": "8eb1a2b0812dc5e8fd274c75c84df52e3a01dc7c4a16e6a3fbe6fe7bf332cfd9",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_offset_data",
+    "opt": 2,
+    "sha256": "8eb1a2b0812dc5e8fd274c75c84df52e3a01dc7c4a16e6a3fbe6fe7bf332cfd9",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_owner_varint",
+    "opt": 0,
+    "sha256": "e17df1d3d43dcaa63c5a1adefa8d23c9e1b09cb099681f708373522646d7d068",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_owner_varint",
+    "opt": 2,
+    "sha256": "e17df1d3d43dcaa63c5a1adefa8d23c9e1b09cb099681f708373522646d7d068",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_padded",
+    "opt": 0,
+    "sha256": "4c2491f52e2d2ebfc1b9c660e721f54c8fc6235a947b974a22b28ffa393e5efb",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_padded",
+    "opt": 2,
+    "sha256": "4c2491f52e2d2ebfc1b9c660e721f54c8fc6235a947b974a22b28ffa393e5efb",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_references",
+    "opt": 0,
+    "sha256": "bf5d7c150525d35fbdcbdacfd44d03021000308d145babae97344e0b581c328f",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_references",
+    "opt": 2,
+    "sha256": "bf5d7c150525d35fbdcbdacfd44d03021000308d145babae97344e0b581c328f",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_runtime_256",
+    "opt": 0,
+    "sha256": "98d024d3269970bf9ddd764a9115d861a30d7c18cb5b64457ddf7cbbf3ce0705",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_runtime_256",
+    "opt": 2,
+    "sha256": "98d024d3269970bf9ddd764a9115d861a30d7c18cb5b64457ddf7cbbf3ce0705",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_runtime_65536",
+    "opt": 0,
+    "sha256": "08a8e26c6e1c1304603c8414aececc743441fa20701606c3e2e0beb7eed739a4",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_runtime_65536",
+    "opt": 2,
+    "sha256": "08a8e26c6e1c1304603c8414aececc743441fa20701606c3e2e0beb7eed739a4",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_runtime_call",
+    "opt": 0,
+    "sha256": "5b8f96a093a0b2630123126c155f6d232e8d5a1b06bc7201216f7b4f62784f15",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_runtime_call",
+    "opt": 2,
+    "sha256": "5b8f96a093a0b2630123126c155f6d232e8d5a1b06bc7201216f7b4f62784f15",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_runtime_reference",
+    "opt": 0,
+    "sha256": "817019aae21ff7b9af21e9020f5c88844280e7453ae79a06abc3bf00730f389d",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_runtime_reference",
+    "opt": 2,
+    "sha256": "817019aae21ff7b9af21e9020f5c88844280e7453ae79a06abc3bf00730f389d",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_runtime_stored",
+    "opt": 0,
+    "sha256": "5754f473286a44643e93cb1f9704bd0ab5c2875e4860144a89f36a619c37bff5",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_runtime_stored",
+    "opt": 2,
+    "sha256": "5754f473286a44643e93cb1f9704bd0ab5c2875e4860144a89f36a619c37bff5",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_shrink_call",
+    "opt": 0,
+    "sha256": "4812a59e82d5a0825f59a666dbbc5aeb2717c71cdd9570f49efd3de6e4591df7",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_shrink_call",
+    "opt": 2,
+    "sha256": "4812a59e82d5a0825f59a666dbbc5aeb2717c71cdd9570f49efd3de6e4591df7",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_shrink_reference",
+    "opt": 0,
+    "sha256": "3feaa98b41d585507c4eee6ba8c3c1717ea61a8c87e71ee8d6a7f0a4221b78d0",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_shrink_reference",
+    "opt": 2,
+    "sha256": "3feaa98b41d585507c4eee6ba8c3c1717ea61a8c87e71ee8d6a7f0a4221b78d0",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_shrink_stored",
+    "opt": 0,
+    "sha256": "66ee7e1e6da1eba01b129450e5349b9746d208edb268dd2afaeb610a53c8e17a",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_shrink_stored",
+    "opt": 2,
+    "sha256": "66ee7e1e6da1eba01b129450e5349b9746d208edb268dd2afaeb610a53c8e17a",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_temporary_field",
+    "opt": 0,
+    "sha256": "b33ee1d6a6b30a240257c66731c848965a915593dc863d29aa41178c1828600d",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_temporary_field",
+    "opt": 2,
+    "sha256": "b33ee1d6a6b30a240257c66731c848965a915593dc863d29aa41178c1828600d",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_u16_call",
+    "opt": 0,
+    "sha256": "242a1a398ddf7e1e525f65c9a2d702206ab670411da6cd83fa87b03577d2463d",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_u16_call",
+    "opt": 2,
+    "sha256": "242a1a398ddf7e1e525f65c9a2d702206ab670411da6cd83fa87b03577d2463d",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_u16_reference",
+    "opt": 0,
+    "sha256": "c3bae09a2a285f7d5e3bf2f1c4d8fd7ca8aa089784e3df2305f38fabc0b49d3f",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_u16_reference",
+    "opt": 2,
+    "sha256": "c3bae09a2a285f7d5e3bf2f1c4d8fd7ca8aa089784e3df2305f38fabc0b49d3f",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_u16_stored",
+    "opt": 0,
+    "sha256": "e847e1a44333f46fc7fe878f0d8dc1fd581a9cf41723e34bf96ca93e87b0391a",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_u16_stored",
+    "opt": 2,
+    "sha256": "e847e1a44333f46fc7fe878f0d8dc1fd581a9cf41723e34bf96ca93e87b0391a",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_u64_call",
+    "opt": 0,
+    "sha256": "ffe7631fbd29663bf52b1ac03b63affdbcf2e9622cd7d688fd0f92ca2da670cd",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_u64_call",
+    "opt": 2,
+    "sha256": "ffe7631fbd29663bf52b1ac03b63affdbcf2e9622cd7d688fd0f92ca2da670cd",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_u64_reference",
+    "opt": 0,
+    "sha256": "07815dc092a4ef4a618f6ad5579fd745f148248afc25fecd558993f0f3483481",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_u64_reference",
+    "opt": 2,
+    "sha256": "07815dc092a4ef4a618f6ad5579fd745f148248afc25fecd558993f0f3483481",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_u64_stored",
+    "opt": 0,
+    "sha256": "56a3107e9675a7b6e2bb02b1fbfb9ba5260df17d3a635110e95f76da275368cd",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_u64_stored",
+    "opt": 2,
+    "sha256": "56a3107e9675a7b6e2bb02b1fbfb9ba5260df17d3a635110e95f76da275368cd",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_u8_255",
+    "opt": 0,
+    "sha256": "5a52d7893c2abb51919c3aabbf285f7c6ca22c7c32473b584568eb0c5a1af16d",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_u8_255",
+    "opt": 2,
+    "sha256": "5a52d7893c2abb51919c3aabbf285f7c6ca22c7c32473b584568eb0c5a1af16d",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_u8_call",
+    "opt": 0,
+    "sha256": "c30cb0d2000701b89f51edc0fa1ab7738abd41cc03f1c344c9024bf9b8a18202",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_u8_call",
+    "opt": 2,
+    "sha256": "c30cb0d2000701b89f51edc0fa1ab7738abd41cc03f1c344c9024bf9b8a18202",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_u8_reference",
+    "opt": 0,
+    "sha256": "649e408e93204a35bc8673ab7a608d621a04dfb61caa6535a40938cd2243041d",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_u8_reference",
+    "opt": 2,
+    "sha256": "649e408e93204a35bc8673ab7a608d621a04dfb61caa6535a40938cd2243041d",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_u8_stored",
+    "opt": 0,
+    "sha256": "e3a10fe0934b27e415b7b239a66325f8c64e67736a92c2de3eff9a06399691a7",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_u8_stored",
+    "opt": 2,
+    "sha256": "e3a10fe0934b27e415b7b239a66325f8c64e67736a92c2de3eff9a06399691a7",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_variable_call",
+    "opt": 0,
+    "sha256": "5e470a9c9dc9a94f158bfa66a027bb96ce44c208120a95db7c0947d8d541aa12",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_variable_call",
+    "opt": 2,
+    "sha256": "5e470a9c9dc9a94f158bfa66a027bb96ce44c208120a95db7c0947d8d541aa12",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_variable_reference",
+    "opt": 0,
+    "sha256": "15427227fa301ed8f818cbf7fcbb1ccd0101671e53023d06fde9bd7f781f5d5c",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_variable_reference",
+    "opt": 2,
+    "sha256": "15427227fa301ed8f818cbf7fcbb1ccd0101671e53023d06fde9bd7f781f5d5c",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_variable_stored",
+    "opt": 0,
+    "sha256": "2e6b9875161c71ba3e430498075b21a464422fbe3dc7ed7121fda907a8751089",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_variable_stored",
+    "opt": 2,
+    "sha256": "2e6b9875161c71ba3e430498075b21a464422fbe3dc7ed7121fda907a8751089",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_varint_127",
+    "opt": 0,
+    "sha256": "1a8bbcce58dee619d34b7f9767a36971672460ec825b840fa520a7d301de62cf",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_varint_127",
+    "opt": 2,
+    "sha256": "1a8bbcce58dee619d34b7f9767a36971672460ec825b840fa520a7d301de62cf",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_varint_128",
+    "opt": 0,
+    "sha256": "9e2d75cbfdb0e710dd2bcf98aee230ae1eaed73ec25b07a3edc1c2429c6a6f18",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_varint_128",
+    "opt": 2,
+    "sha256": "9e2d75cbfdb0e710dd2bcf98aee230ae1eaed73ec25b07a3edc1c2429c6a6f18",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_varint_16384",
+    "opt": 0,
+    "sha256": "8ecf5b6919a2be36e0590ca81d818eb787ba3aab318d1119e3aef80d88d26109",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_varint_16384",
+    "opt": 2,
+    "sha256": "8ecf5b6919a2be36e0590ca81d818eb787ba3aab318d1119e3aef80d88d26109",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_varint_65536",
+    "opt": 0,
+    "sha256": "eb0b494ab874e497e63f7e08934ef91970b89da3473b8719a8af301f22d6717a",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_varint_65536",
+    "opt": 2,
+    "sha256": "eb0b494ab874e497e63f7e08934ef91970b89da3473b8719a8af301f22d6717a",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_varint_call",
+    "opt": 0,
+    "sha256": "6fbe94c95314fabaf42d2362def457fbb42389f2b095103170f3b8a84572a571",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_varint_call",
+    "opt": 2,
+    "sha256": "6fbe94c95314fabaf42d2362def457fbb42389f2b095103170f3b8a84572a571",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_varint_reference",
+    "opt": 0,
+    "sha256": "57f3af23acb492755e04d442c38a8a3c1aef0ccad4627caa3acfb90ed56d3a69",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_varint_reference",
+    "opt": 2,
+    "sha256": "57f3af23acb492755e04d442c38a8a3c1aef0ccad4627caa3acfb90ed56d3a69",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_varint_stored",
+    "opt": 0,
+    "sha256": "82f35dded8546dae3c99ee6092ce61d0e18c171ad03f5f2483c483285ba1a2bd",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_varint_stored",
+    "opt": 2,
+    "sha256": "82f35dded8546dae3c99ee6092ce61d0e18c171ad03f5f2483c483285ba1a2bd",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_zero_call_runtime",
+    "opt": 0,
+    "sha256": "e773820a56c339faf26bfdfd8267d7fbc9360a0c654fea710cc2ca04413466f9",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_zero_call_runtime",
+    "opt": 2,
+    "sha256": "e773820a56c339faf26bfdfd8267d7fbc9360a0c654fea710cc2ca04413466f9",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_zero_call_variable",
+    "opt": 0,
+    "sha256": "dc3a8c0708095d298af85a5177dd570f2bafd43a0c7a29878188b293af01e17a",
+    "status": "PASS byte-identical with assertions enabled"
+  },
+  {
+    "case": "wasm_limited_array_conversion_zero_call_variable",
+    "opt": 2,
+    "sha256": "dc3a8c0708095d298af85a5177dd570f2bafd43a0c7a29878188b293af01e17a",
+    "status": "PASS byte-identical with assertions enabled"
+  }
+]

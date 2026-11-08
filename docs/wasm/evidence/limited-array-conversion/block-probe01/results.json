@@ -1,0 +1,21 @@
+[
+  {
+    "case": "block",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "conditional",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 0,
+    "node_exit": 0
+  },
+  {
+    "case": "copy_block",
+    "emit_exit": 1
+  }
+]

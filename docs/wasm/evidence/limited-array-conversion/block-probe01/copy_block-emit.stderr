@@ -1,0 +1,4 @@
+/tmp/goose-wasm-limited-array-conversion-20261108/block-probe01/copy_block.goose:1: error: copy of a temporary: the value is fresh already
+fn main(){var b:u8[]=copy({var a:u8[..3]=[7,8];a});assert(b.len==2&&b[1]==8);print("ok");}
+                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  in fn main() instantiated from /tmp/goose-wasm-limited-array-conversion-20261108/block-probe01/copy_block.goose:1

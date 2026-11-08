@@ -1,0 +1,28 @@
+[  4%] Building C object CMakeFiles/goose_shaderc.dir/src/shaderc.c.o
+[  9%] Building C object CMakeFiles/libtcc.dir/third_party/tinycc/libtcc.c.o
+[ 13%] Linking C static library libtcc.a
+[ 13%] Built target libtcc
+[ 13%] Built target goose_version
+[ 18%] Building C object CMakeFiles/tcc_driver.dir/third_party/tinycc/tcc.c.o
+[ 22%] Linking C executable tcc/tcc
+[ 22%] Built target tcc_driver
+[ 27%] tcc lib/dsohandle.c
+[ 31%] tcc lib/libtcc1.c
+[ 36%] tcc lib/va_list.c
+[ 40%] tcc lib/stdatomic.c
+[ 45%] tcc lib/atomic.S
+[ 50%] tcc lib/builtin.c
+[ 54%] tcc lib/alloca.S
+[ 59%] tcc lib/alloca-bt.S
+[ 63%] tcc lib/runmain.c
+[ 68%] tcc -ar libtcc1.a
+[ 68%] Built target tcc_runtime
+[ 72%] Linking C static library libgoose_shaderc.a
+[ 72%] Built target goose_shaderc
+[ 81%] Building CXX object CMakeFiles/goose.dir/src/process.cpp.o
+[ 81%] Building CXX object CMakeFiles/goose.dir/src/main.cpp.o
+[ 86%] Building CXX object CMakeFiles/goose.dir/src/version.cpp.o
+[ 90%] Building CXX object CMakeFiles/goose.dir/src/progress.cpp.o
+[ 95%] Building C object CMakeFiles/goose.dir/src/jit_runtime.c.o
+[100%] Linking CXX executable goose
+[100%] Built target goose

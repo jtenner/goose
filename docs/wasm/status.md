@@ -394,6 +394,15 @@ data memories use the same conversion. Full-image observers cover padding,
 spare capacity, length-width changes and failed assignment effects. See the
 [limited array layout evidence](evidence/limited-array-layout.md).
 
+Static limited-array values now construct nonfixed receiving arrays with the
+same fixed element layout. Variable, growable, runtime-limited and LEB-prefixed
+receivers use the captured active count, checked prefix range and existing
+storage plan. Runtime capacity is the active count. Full images cover padding,
+source temporary lifetime, variable prefixes and failed range checks before
+allocation. Both host adapters report the specific stored-prefix error. See
+[limited array conversion evidence](evidence/limited-array-conversion.md).
+
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping

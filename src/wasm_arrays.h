@@ -353,6 +353,106 @@ inline bool WasmCodeGen::InitFixedArrayValue(VarDef *owner, const Slot &slot, No
     return true;
 }
 
+inline bool WasmCodeGen::InitLimitedArrayValue(VarDef *owner, const Slot &slot, Node *source) {
+    auto array = owner->type;
+    if (InlineArray(array) || (!DataArray(array) && !IsResz(array))) return false;
+    while (auto call = Is<Call>(source)) {
+        if (call->builtin != B_COPY) break;
+        source = call->ValueArgNodes().at(0);
+    }
+    auto from = ActualType(source);
+    while (from && from->kind == TY_REF) from = from->ref->sub;
+    if (!from || !InlineArray(from) || from->arr->akind != A_LIMITED) return false;
+    if (!TEq(array->arr->sub, from->arr->sub))
+        Fail(source->line, "limited array construction needs matching element layouts");
+    if (!storage.owners.count(owner))
+        Fail(source->line, "nonfixed array construction needs its planned owner");
+    RequireFixed(from, source->line);
+    auto stride = RequireFixed(from->arr->sub, source->line);
+    if (!stride) Fail(source->line, "limited array construction needs a positive element layout");
+    auto ownerScope = scopes.size();
+    if (!owner->isglobal) {
+        if (!ownerScope) Fail(source->line, "limited array construction needs its declaration scope");
+        ownerScope--;
+    }
+    WithReadPlace(source, [&](FixedPlace value) {
+        while (value.type->kind == TY_REF) value = DereferencePlace(value, source->line);
+        if (!TEq(from, value.type)) Fail(source->line, "limited array source has an inconsistent layout");
+        auto count = Local(WasmModule::I64), prefix = Local(WasmModule::I32);
+        ArrayLength(ArrayFromPlace(value, source->line)); code.Set(count);
+        auto varint = VarintPrefix(array);
+        auto remaining = varint ? Local(WasmModule::I64) : NoLocal;
+        if (varint) {
+            code.I32(1); code.Set(prefix); code.Get(count); code.Set(remaining);
+            auto done = Open(), head = Open(0x03);
+            code.Get(remaining); code.I64(128); code.Byte(0x54); Branch(done, true);
+            code.Get(remaining); code.I64(7); code.Byte(0x88); code.Set(remaining);
+            code.Get(prefix); code.I32(1); code.Byte(0x6a); code.Set(prefix);
+            Branch(head); Close(); Close();
+        } else {
+            code.I32(DataArray(array) ? (int32_t)DataPrefix(array) : 0); code.Set(prefix);
+            auto width = DataArray(array) ? IntSize(ArrayPrefix(array->arr).storage) : 8;
+            if (width < 8 && (uint64_t)ArrSize(from->arr) > ((1ull << (width * 8)) - 1)) {
+                code.Get(count); code.I64((int64_t)((1ull << (width * 8)) - 1)); code.Byte(0x56);
+                Open(0x04); Trap(15, source->line); Close();
+            }
+        }
+        auto payload = Local(WasmModule::I32), total = Local(WasmModule::I64), bytes = Local(WasmModule::I32);
+        // The fixed source span proves that count * stride fits memory32.
+        code.Get(count); code.I64(stride); code.Byte(0x7e); code.Byte(0xa7); code.Set(payload);
+        code.Get(payload); code.Byte(0xad); code.Get(prefix); code.Byte(0xad); code.Byte(0x7c); code.Tee(total);
+        code.I64(UINT32_MAX); code.Byte(0x56); Open(0x04); Trap(6, source->line); Close();
+        code.Get(total); code.Byte(0xa7); code.Set(bytes);
+        auto memory = ArrayAllocationMemory(owner, &slot, nullptr, source->line);
+        auto identity = Local(WasmModule::I32), saved = Local(WasmModule::I32), base = Local(WasmModule::I64);
+        if (memory >= 0) code.I32(memory); else StackIndex(storage.owners.at(owner) + 1);
+        code.Set(identity);
+        if (memory < 0) code.Get(identity);
+        code.Get(bytes); code.Call(memory >= 0 ? memories->Reserve((uint32_t)memory) : memories->ReserveDynamic());
+        code.Set(saved);
+        if (!owner->isglobal)
+            scopes[ownerScope].push_back({nullptr, memory >= 0 ? (uint32_t)memory : identity, saved, memory < 0});
+        code.Get(identity); code.Byte(0xad); code.I64(32); code.Byte(0x86);
+        code.Get(saved); code.Byte(0xad); code.Byte(0x84); code.Set(base);
+        if (DataArray(array)) {
+            code.Get(base); Write(slot);
+            auto place = ArrayOwner(owner, {array, base, 0, memory, true, true}, source->line);
+            if (varint) {
+                auto position = Local(WasmModule::I32), byte = Local(WasmModule::I64);
+                code.I32(0); code.Set(position); code.Get(count); code.Set(remaining);
+                auto done = Open(), head = Open(0x03);
+                code.Get(remaining); code.I64(127); code.Byte(0x83); code.Set(byte);
+                code.Get(remaining); code.I64(7); code.Byte(0x88); code.Set(remaining);
+                code.Get(base); code.Get(position); code.Byte(0xad); code.Byte(0x7c);
+                if (memory >= 0) code.Byte(0xa7);
+                code.Get(byte); code.I64(128); code.Byte(0x84); code.Get(byte);
+                code.Get(remaining); code.Byte(0x50); code.Byte(0x45); code.Byte(0x1b);
+                if (memory >= 0) code.Mem(0x3c, (uint32_t)memory);
+                else code.Call(memories->Access(0x3c));
+                code.Get(position); code.I32(1); code.Byte(0x6a); code.Set(position);
+                code.Get(remaining); code.Byte(0x50); Branch(done, true);
+                Branch(head); Close(); Close();
+            } else {
+                if (RuntimeLimited(array)) {
+                    PrepareArrayFieldStore(place, 0); code.Get(count); StoreArrayField(place, 0);
+                }
+                PrepareArrayLengthStore(place); code.Get(count); StoreArrayLength(place);
+            }
+            code.Get(base); code.Get(prefix); code.Byte(0xad); code.Byte(0x7c); code.Set(base);
+        } else {
+            auto place = FrameArrayOwner(owner, slot, source->line);
+            PrepareArrayFieldStore(place, 0); code.Get(base); StoreArrayField(place, 0);
+            PrepareArrayLengthStore(place); code.Get(count); StoreArrayLength(place);
+        }
+        auto sourcePrefix = (uint32_t)IntSize(LenStore(from->arr));
+        if (sourcePrefix > UINT32_MAX - value.offset)
+            Fail(source->line, "limited array source offset exceeds memory32");
+        value.offset += sourcePrefix; value.type = from->arr->sub;
+        CopyBytes({array->arr->sub, base, 0, memory, true, true}, value, payload, source->line);
+    });
+    return true;
+}
+
 inline void WasmCodeGen::InitArrayCopy(VarDef *owner, const Slot &slot, Node *source) {
     auto array = owner->type;
     // Check the storage type, not exprtype: the checker can adapt exprtype
@@ -766,6 +866,7 @@ inline void WasmCodeGen::InitArray(VarDef *owner, const Slot &slot, Node *init, 
         ConstructFixed(FreshOwner(owner, declaration), init); return;
     }
     if (InitFixedArrayValue(owner, slot, init)) return;
+    if (InitLimitedArrayValue(owner, slot, init)) return;
     while (auto call = Is<Call>(init)) {
         if (call->defaultinit) init = call->defaultinit;
         else if (call->builtin == B_COPY) init = call->ValueArgNodes().at(0);

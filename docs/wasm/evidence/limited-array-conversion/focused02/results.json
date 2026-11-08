@@ -1,0 +1,16 @@
+[
+  {
+    "case": "wasm_limited_array_conversion_offset_data",
+    "opt": 0,
+    "source_sha256": "f7711d4f67f4361a27f4c8dd8a11b19a2fc27fdbbd768ac771cf0c5d20f15f73",
+    "wasm_sha256": "8eb1a2b0812dc5e8fd274c75c84df52e3a01dc7c4a16e6a3fbe6fe7bf332cfd9",
+    "status": "PASS"
+  },
+  {
+    "case": "wasm_limited_array_conversion_offset_data",
+    "opt": 2,
+    "source_sha256": "f7711d4f67f4361a27f4c8dd8a11b19a2fc27fdbbd768ac771cf0c5d20f15f73",
+    "wasm_sha256": "8eb1a2b0812dc5e8fd274c75c84df52e3a01dc7c4a16e6a3fbe6fe7bf332cfd9",
+    "status": "PASS"
+  }
+]

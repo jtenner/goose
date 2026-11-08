@@ -1,0 +1,137 @@
+In file included from /home/dev/Projects/goose-wasm-backend/src/jit_runtime.c:19:
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_impl.h: In function ‘gs_end’:
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_impl.h:629:1: warning: ‘noreturn’ function does return
+  629 | }
+      | ^
+In file included from /home/dev/Projects/goose-wasm-backend/src/jit_runtime.c:21:
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_ext.h: At top level:
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_ext.h:314:17: warning: ‘gs_byte_swap64’ defined but not used [-Wunused-function]
+  314 | static uint64_t gs_byte_swap64(uint64_t x) {
+      |                 ^~~~~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_ext.h:305:17: warning: ‘gs_byte_swap32’ defined but not used [-Wunused-function]
+  305 | static uint32_t gs_byte_swap32(uint32_t x) {
+      |                 ^~~~~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_ext.h:296:17: warning: ‘gs_byte_swap16’ defined but not used [-Wunused-function]
+  296 | static uint16_t gs_byte_swap16(uint16_t x) {
+      |                 ^~~~~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_ext.h:288:17: warning: ‘gs_rotr64’ defined but not used [-Wunused-function]
+  288 | static uint64_t gs_rotr64(uint64_t x, int64_t n) {
+      |                 ^~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_ext.h:280:17: warning: ‘gs_rotr32’ defined but not used [-Wunused-function]
+  280 | static uint32_t gs_rotr32(uint32_t x, int64_t n) {
+      |                 ^~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_ext.h:272:17: warning: ‘gs_rotl64’ defined but not used [-Wunused-function]
+  272 | static uint64_t gs_rotl64(uint64_t x, int64_t n) {
+      |                 ^~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_ext.h:264:17: warning: ‘gs_rotl32’ defined but not used [-Wunused-function]
+  264 | static uint32_t gs_rotl32(uint32_t x, int64_t n) {
+      |                 ^~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_ext.h:242:16: warning: ‘gs_ctz’ defined but not used [-Wunused-function]
+  242 | static int64_t gs_ctz(uint64_t x) {
+      |                ^~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_ext.h:226:16: warning: ‘gs_clz’ defined but not used [-Wunused-function]
+  226 | static int64_t gs_clz(uint64_t x) {
+      |                ^~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_ext.h:212:16: warning: ‘gs_popcount’ defined but not used [-Wunused-function]
+  212 | static int64_t gs_popcount(uint64_t x) {
+      |                ^~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_ext.h:202:16: warning: ‘gs_find_pair’ defined but not used [-Wunused-function]
+  202 | static int64_t gs_find_pair(sl_u8 s, const void *a, int64_t d, const void *b) {
+      |                ^~~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_ext.h:201:16: warning: ‘gs_find_any’ defined but not used [-Wunused-function]
+  201 | static int64_t gs_find_any(sl_u8 s, const void *set) { return gs_scan_any(s.data, s.len, set); }
+      |                ^~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_ext.h:115:14: warning: ‘gs_mul_addf’ defined but not used [-Wunused-function]
+  115 | static float gs_mul_addf(float x, float y, float z) {
+      |              ^~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_ext.h:112:15: warning: ‘gs_mul_add’ defined but not used [-Wunused-function]
+  112 | static double gs_mul_add(double x, double y, double z) {
+      |               ^~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_ext.h:82:17: warning: ‘gs_f64_to_bits’ defined but not used [-Wunused-function]
+   82 | static uint64_t gs_f64_to_bits(double x) {
+      |                 ^~~~~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_ext.h:77:17: warning: ‘gs_f32_to_bits’ defined but not used [-Wunused-function]
+   77 | static uint32_t gs_f32_to_bits(float x) {
+      |                 ^~~~~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_ext.h:72:15: warning: ‘gs_f64_from_bits’ defined but not used [-Wunused-function]
+   72 | static double gs_f64_from_bits(uint64_t bits) {
+      |               ^~~~~~~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_ext.h:67:14: warning: ‘gs_f32_from_bits’ defined but not used [-Wunused-function]
+   67 | static float gs_f32_from_bits(uint32_t bits) {
+      |              ^~~~~~~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_ext.h:62:14: warning: ‘gs_sqrtf’ defined but not used [-Wunused-function]
+   62 | static float gs_sqrtf(float x) { return sqrtf(x); }
+      |              ^~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_ext.h:61:15: warning: ‘gs_sqrt’ defined but not used [-Wunused-function]
+   61 | static double gs_sqrt(double x) { return sqrt(x); }
+      |               ^~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_ext.h:40:16: warning: ‘gs_ffi_bytes’ defined but not used [-Wunused-function]
+   40 | static uint8_t gs_ffi_bytes(uint64_t p, int64_t n, gs_rref out) {
+      |                ^~~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_ext.h:34:16: warning: ‘gs_ffi_cstr’ defined but not used [-Wunused-function]
+   34 | static uint8_t gs_ffi_cstr(uint64_t p, gs_rref out) {
+      |                ^~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_impl.h:612:25: warning: ‘gs_park’ defined but not used [-Wunused-function]
+  612 | static GS_NORETURN void gs_park(void) {
+      |                         ^~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime_impl.h:608:12: warning: ‘gs_end_first’ defined but not used [-Wunused-function]
+  608 | static int gs_end_first(void) {
+      |            ^~~~~~~~~~~~
+In file included from /home/dev/Projects/goose-wasm-backend/src/jit_runtime.c:18:
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime.h:1212:12: warning: ‘gs_is_le’ defined but not used [-Wunused-function]
+ 1212 | static int gs_is_le(void) {
+      |            ^~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime.h:1191:16: warning: ‘gs_zig_check’ defined but not used [-Wunused-function]
+ 1191 | static int64_t gs_zig_check(const uint8_t *p, const uint8_t *end, int64_t *out) {
+      |                ^~~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime.h:1157:16: warning: ‘gs_zig_write’ defined but not used [-Wunused-function]
+ 1157 | static int64_t gs_zig_write(uint8_t *p, int64_t v) {
+      |                ^~~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime.h:1152:16: warning: ‘gs_zig_read’ defined but not used [-Wunused-function]
+ 1152 | static int64_t gs_zig_read(const uint8_t *p) {
+      |                ^~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime.h:1135:28: warning: ‘gs_uleb_size_slow’ defined but not used [-Wunused-function]
+ 1135 | static GS_NOINLINE int64_t gs_uleb_size_slow(const uint8_t *p) {
+      |                            ^~~~~~~~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime.h:1131:28: warning: ‘gs_uleb_read_slow’ defined but not used [-Wunused-function]
+ 1131 | static GS_NOINLINE int64_t gs_uleb_read_slow(const uint8_t *p) {
+      |                            ^~~~~~~~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime.h:846:16: warning: ‘gs_f2iwrap’ defined but not used [-Wunused-function]
+  846 | static int64_t gs_f2iwrap(double d) {
+      |                ^~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime.h:826:17: warning: ‘gs_divu32_q’ defined but not used [-Wunused-function]
+  826 | static uint32_t gs_divu32_q(uint32_t x, uint32_t magic, uint8_t more) {
+      |                 ^~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime.h:805:17: warning: ‘gs_divu32_gen’ defined but not used [-Wunused-function]
+  805 | static uint32_t gs_divu32_gen(uint32_t d, uint8_t *more) {
+      |                 ^~~~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime.h:788:17: warning: ‘gs_divu_q’ defined but not used [-Wunused-function]
+  788 | static uint64_t gs_divu_q(uint64_t x, uint64_t magic, uint8_t more) {
+      |                 ^~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime.h:762:17: warning: ‘gs_divu_gen’ defined but not used [-Wunused-function]
+  762 | static uint64_t gs_divu_gen(uint64_t d, uint8_t *more) {
+      |                 ^~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime.h:498:12: warning: ‘gs_memeq’ defined but not used [-Wunused-function]
+  498 | static int gs_memeq(const void *a, const void *b, size_t n) {
+      |            ^~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime.h:479:13: warning: ‘gs_memmove’ defined but not used [-Wunused-function]
+  479 | static void gs_memmove(void *dst, const void *src, size_t n) {
+      |             ^~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/runtime/runtime.h:439:17: warning: ‘gs_bytemask’ defined but not used [-Wunused-function]
+  439 | static uint64_t gs_bytemask(int64_t k) {
+      |                 ^~~~~~~~~~~
+In file included from /home/dev/Projects/goose-wasm-backend/src/main.cpp:48:
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h: In member function ‘uint8_t goose::WasmCodeGen::Type(goose::TypeExpr*)’:
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h:224:51: warning: comparison of integer expressions of different signedness: ‘uint64_t’ {aka ‘long unsigned int’} and ‘long int’ [-Wsign-compare]
+  224 |                     if ((uint64_t)ArrSize(t->arr) > (UINT32_MAX - prefix) / FixedSize(element))
+      |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h: In member function ‘void goose::WasmCodeGen::Gen(goose::Node*, goose::TypeExpr*)’:
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h:872:66: warning: enumerated and non-enumerated type in conditional expression [-Wextra]
+  872 |                                       : s.type->kind == TY_ARRAY ? BorrowedArrayAddressType(s.type)
+      |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  873 |                                       : FatPointers() ? WasmModule::I64 : WasmModule::I32;
+      |                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h: In member function ‘std::string goose::WasmCodeGen::Run()’:
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h:1224:56: warning: enumerated and non-enumerated type in conditional expression [-Wextra]
+ 1224 |                 args.push_back(FixedParameter(p->type) ? WasmModule::I32 : Type(p->type));
+      |                                ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

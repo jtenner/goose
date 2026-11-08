@@ -1,0 +1,1 @@
+struct S{before:u8,xs:u16[..3],after:u16}fn main(){var rows:S[]=[S{77,[700,800],65000}];var b:u16[u16]=rows[0].xs;assert(b.len==2&&b[0]==700&&b[1]==800&&rows[0].before==77&&rows[0].after==65000);print("offset_data");}

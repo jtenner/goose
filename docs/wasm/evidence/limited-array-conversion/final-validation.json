@@ -1,0 +1,63 @@
+{
+  "status": "PASS",
+  "purpose": "correctness only",
+  "source_parent": "ca0a5a7b5c0f105d742fa1cdc9e16c488a7b4da3",
+  "compiler_sha256": "5423e0e29e1c9f74f46ef45bbc7bc2a55f99508f446fc2d1fd87a35b4b6f7b37",
+  "assertion_compiler_sha256": "bd91aff7e0c0be81532016631e886fd0e35dc5d9840df0e196e59d9db397bb82",
+  "assertion_pairs_and_release_byte_identities": 110,
+  "source_files": 85,
+  "host_files": 2,
+  "validation_inputs": 5595,
+  "changed_source": [
+    "src/wasm_arrays.h",
+    "src/wasm_codegen.h"
+  ],
+  "selected_checks": [
+    "build02/check",
+    "runtime-width02/check",
+    "focused01/check",
+    "focused02/check",
+    "image01/check",
+    "assert-configure01/check",
+    "assert-build01/check",
+    "assertions01/check",
+    "parent-proof01/check",
+    "full-correctness01/check",
+    "native01/check",
+    "exact01/check",
+    "identity01/check"
+  ],
+  "native_valid_parent_failures": 55,
+  "positive_families": 55,
+  "positive_optimization_pairs": 110,
+  "observer_and_control_checks": 60,
+  "wasm_checks": 5613,
+  "unchanged_parent_modules": 1330,
+  "native_groups": {
+    "lexer and shader compiler": "5",
+    "parse, roundtrip and typecheck": "2956",
+    "optimizer, stack report and C shapes": "23",
+    "bounds-check annotations": "68",
+    "generated C, built and run at -O0 and -O2": "1454",
+    "dump-runtime programs": "8",
+    "GS_DEBUG programs": "213",
+    "compiler roots, runtime lifecycle and clang": "24",
+    "driver, diagnostics and language server": "55",
+    "native builds, packages and runtime I/O": "14",
+    "goose_in_goose bootstrap": "21",
+    "JIT (TinyCC) runs": "1629",
+    "parse errors (errors/)": "80",
+    "typecheck errors (errors_tc/ and native modules' rejection tests)": "1946",
+    "recovery (errors_tc/recovery/)": "16",
+    "long call chains and guard runs": "6",
+    "language reference examples (docs/reference.md)": "1",
+    "samples": "52"
+  },
+  "exact_comparisons": 52,
+  "preserved_prototype_failure": "LenStore called on runtime-limited destination, false 255 limit; exact 256 test fails before fix and passes after",
+  "known_remaining_probe_failures": [
+    "general block result conversion",
+    "non-inlined conditional result conversion"
+  ],
+  "no_performance_measurements": true
+}
