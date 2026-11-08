@@ -1,0 +1,1 @@
+struct S{n:i64}fn main(){var first=S{7};var second=S{8};var a:S&[u8]=[first,second];var b:S&[varint]=copy(a);assert(b.len==2&&b[0] .== &first&&b[1] .== &second);b[0].n=99;assert(first.n==99);print("refs");}

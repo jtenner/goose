@@ -1,0 +1,20 @@
+[
+  {
+    "case": "u8",
+    "amount": 256,
+    "source_sha256": "953a15f91607db5eb465fd547937b0f11f13719c64f94567a2b740d49c3d2f0a",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 1,
+    "wasm_exit": 1
+  },
+  {
+    "case": "u16",
+    "amount": 65536,
+    "source_sha256": "dd3f7da92b9f1b6cfe4edb429f3fb31148ecaa618ae60a3d44e9c72c3faf1985",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 1,
+    "wasm_exit": 1
+  }
+]

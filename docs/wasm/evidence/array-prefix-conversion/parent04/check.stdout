@@ -1,0 +1,18 @@
+[
+  {
+    "case": "empty_leb",
+    "source_sha256": "b103498d90a1b9f3468d5f563d9f297710143406dec398771016491a7b74db8c",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "indexed_ref",
+    "source_sha256": "364c864068c38339aeeae9ecfc89afb40ce64cf96144243b4e48dc17e158aae6",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  }
+]

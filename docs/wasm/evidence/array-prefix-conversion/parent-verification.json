@@ -1,0 +1,422 @@
+{
+  "status": "PASS",
+  "native_valid_parent_failures": 46,
+  "families": [
+    {
+      "case": "widen",
+      "source_sha256": "037829013758b315fdb2592fdf441496e2bae8f062ffcbf773300c6c6117e6c3",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent01"
+    },
+    {
+      "case": "leb_source",
+      "source_sha256": "c222ce5ef6f15079002f3039fd6964782e57c1cbc679d58c17e98ed6e5c87966",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent01"
+    },
+    {
+      "case": "leb_target",
+      "source_sha256": "7b8fc91edc18a309042a9f7dbe87f4e7718b2b47e50389dfcbdaee6b3e55a1ed",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent01"
+    },
+    {
+      "case": "data_reference_field",
+      "source_sha256": "54a3fa9d205bd2c58595636449a9159926d6c6783939ae936ffb4df4ffb2be7e",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent01"
+    },
+    {
+      "case": "reference",
+      "source_sha256": "9f6d40232ed324e23042ec769f0c35d9d1370ff7662d4f989e42c900e870d629",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent02"
+    },
+    {
+      "case": "u8_to_u16",
+      "source_sha256": "141351297ef18ebac74348c40679394b09d5baf011fe2d19024d3e941bda9c9b",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "u8_to_u32",
+      "source_sha256": "7c7c59edf559662165b983208021162283952c944312449e11c45348567d7667",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "u8_to_leb",
+      "source_sha256": "bcdeba49fd6222832fd67396c351b849d66516b4068849c937d13842188e4378",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "u8_to_grow",
+      "source_sha256": "0bbbaee4df9da8086933a629595541dcacfb77d437afcb48711e929500d03fd8",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "u8_to_runtime",
+      "source_sha256": "420ed20565386e932865b09994ef983fb154fab1e1c7bf6672b4df172014fd1f",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "u16_to_u8",
+      "source_sha256": "9bc43d123e59092f883b8f1c3098547d6e18ae3c4f9991d50940be91b77d9c1f",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "u16_to_u32",
+      "source_sha256": "0ec1d4c7a17b33b2a987efe3fc9ec83e2c6f6d5ecac6b2105d73d8fd1174208e",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "u16_to_leb",
+      "source_sha256": "96dc9618a38f1b65bd6afa83dabde4662101542871558acf16686f09d2f276f3",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "u16_to_grow",
+      "source_sha256": "93b581859c9f1456b2459f80839c3a4451b226e9bd9abfb6b5b212c1e6623d9d",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "u16_to_runtime",
+      "source_sha256": "ff0f40f379265a536f2929508185b356e47ddf4aa17a1777e2e7e903d468f90b",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "u32_to_u8",
+      "source_sha256": "442aa5d9d1aa61e9534b6f9e85413937f43d0a6c8cd658f348f9bef8c3c9071a",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "u32_to_u16",
+      "source_sha256": "81789bd406dbf5ec478c38d2425ff09163c9380bfe11afe144e29b9c07a7921e",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "u32_to_leb",
+      "source_sha256": "4a74668548bf4961c5c089563ff678b87dd6043f1bc0d4a5dbbada82cc5e72c8",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "u32_to_grow",
+      "source_sha256": "f353c321e5f40568f76c9f73d85904a9c24e3542d911f45e25c1ed5acbd949d4",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "u32_to_runtime",
+      "source_sha256": "eaee471ede4ccf9d64f933d1c296b2a02d80b00e61162d72c2497ff26691d08b",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "leb_to_u8",
+      "source_sha256": "4cc19d24a1ebeff760721404f389f92fd9460c82f83a9dd22e6f0c68fbe0a46e",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "leb_to_u16",
+      "source_sha256": "30bec354426b9cb1856d922f7bbc8446de7a7cc54fdd9be5b29afb176c6fc1a0",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "leb_to_u32",
+      "source_sha256": "36b52d175bb69450445fbe1f022f34a98f79e338cc15a593eba4328513a884f5",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "leb_to_grow",
+      "source_sha256": "9b112dec6736d6b485c56414e3cd9c81d631b84701deac60785ee219eed792cb",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "leb_to_runtime",
+      "source_sha256": "fdd1f2c0dc184f264c0c868adcb874c40c02079d20ede1f966bebd82d10af0e4",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "empty",
+      "source_sha256": "83df8bad32ee69366a602e0d46e62ae6cc2bf9fb91cf4a35ec80910a3ca9ed40",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "leb127",
+      "source_sha256": "8462f71403dc3c4373136722f7d5a556a10bf06347e7595260ab3ca70729a74b",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "leb128",
+      "source_sha256": "e2b2ac12a5450eba94c768726881fb3c21a9316f95cb2ba61dc6a3870e85bc4d",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "leb16384",
+      "source_sha256": "3adf42d241c5fcd1ba4f55c768598031af58314f2931058e5aca536fa9688ab6",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "u8_255",
+      "source_sha256": "d99bd621c13eef32eb313def664e0dfb00164a82a5d2854b77e98f144bbc360f",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "u16_256",
+      "source_sha256": "5e7a3bac1980ae628ceee3497315349ac53d361f87fe4e252a30416c6c6d951d",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "u16_65535",
+      "source_sha256": "acc264559b6a1975f00690afb3e6a44a495476d73ebfd69a8d7bd2827ac8e410",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "u32_65536",
+      "source_sha256": "6bc395ea4d2b9607ab91fa5ada9c2d3b1cd8c2a255326e7bc6af5585a5200580",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "refs",
+      "source_sha256": "0c2123d4b4bf0dd357e2ee398e34c3256ee4aa7a853152192d81ef1a70d482da",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "ref_call",
+      "source_sha256": "2394d9eb9f2bf055b9e15a18bfe96a44b6c48af3d833d31fb2b93ca2b8e25a2c",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "inline_ref_call",
+      "source_sha256": "afc6478c1da01829860dbb50388dedff472be56266a719d508f5c434c9216bf0",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "dynamic_memory",
+      "source_sha256": "489d2d692b4656081dbbb20d7706cd37b949a179e3cdad107a2cb481ebe22188",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "global",
+      "source_sha256": "8dd6b07a3f1fc1db104c10f74efca3a125727a4ac6d0f73640907edf31aa4dff",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "loop_cleanup",
+      "source_sha256": "2c7c729084386456bcfd9ebc7592dccf254e7e91477a323ed142de3755af9f4c",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent03"
+    },
+    {
+      "case": "empty_leb",
+      "source_sha256": "b103498d90a1b9f3468d5f563d9f297710143406dec398771016491a7b74db8c",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent04"
+    },
+    {
+      "case": "indexed_ref",
+      "source_sha256": "364c864068c38339aeeae9ecfc89afb40ce64cf96144243b4e48dc17e158aae6",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent04"
+    },
+    {
+      "case": "owner_width",
+      "source_sha256": "5187e4d4b54424b4da304c8b780f136da90095f3a5ef8cf5f61030f2143ead2b",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent06"
+    },
+    {
+      "case": "owner_leb_source",
+      "source_sha256": "6cbb223ca2d0166f5be18d9e569fd31b6491d4b9f5c23dcb3b32ddb92ca0f4ae",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent06"
+    },
+    {
+      "case": "owner_leb_target",
+      "source_sha256": "e3e0de61f1c2454eb3b3c6d8efec04d38aec4a32f48140d612c67ca1c2ee163a",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent06"
+    },
+    {
+      "case": "owner_empty",
+      "source_sha256": "9690feaf3bd8fffc0180c7719cf84dfc47c956aa74dc4492cd0dfb3206835494",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent06"
+    },
+    {
+      "case": "owner_overflow",
+      "source_sha256": "62cfc14d86e17ca94671b3dadf0de258fa3f0ce212f5c785288381000b11096b",
+      "emit_exit": 0,
+      "cc_exit": 0,
+      "native_exit": 0,
+      "wasm_exit": 1,
+      "phase": "parent07"
+    }
+  ],
+  "invalid_reference_syntax_preserved": "parent01/reference-emit.stderr",
+  "pending_aggregate_layout": "parent03/padded.goose"
+}

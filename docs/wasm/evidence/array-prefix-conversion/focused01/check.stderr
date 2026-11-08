@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-array-prefix-conversion-20261108/focused01/checks.py", line 18, in <module>
+    run([exe,f'-O{opt}','--target','wasm','-o',wasm,f]);run(['wasm-tools','validate',wasm])
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/goose-wasm-array-prefix-conversion-20261108/focused01/checks.py", line 9, in run
+    assert not a.returncode,(args,a.returncode,a.stderr)
+           ^^^^^^^^^^^^^^^^
+AssertionError: ([PosixPath('/tmp/goose-wasm-array-prefix-conversion-20261108/build01/goose-tested'), '-O0', '--target', 'wasm', '-o', PosixPath('/tmp/goose-wasm-array-prefix-conversion-20261108/focused01/wasm_array_prefix_conversion_padded-O0.wasm'), PosixPath('/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_prefix_conversion_padded.goose')], 1, b'/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_prefix_conversion_padded.goose:1: error: wasm target: compound array elements need the pending layout lowering\n')

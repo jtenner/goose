@@ -1,0 +1,1 @@
+recursive fn take(a:u8[u8]&){var b:u8[u16]=copy(a);assert(b.len==2&&b[0]==7&&b[1]==8);b[0]=99;assert(a[0]==7);}fn main(){var a:u8[u8]=[7,8];var c:u8[u8]=[7,8];take(a);take(c);print("dynamic_memory");}

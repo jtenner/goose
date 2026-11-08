@@ -1,0 +1,34 @@
+[
+  {
+    "case": "owner_width",
+    "source_sha256": "5187e4d4b54424b4da304c8b780f136da90095f3a5ef8cf5f61030f2143ead2b",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "owner_leb_source",
+    "source_sha256": "6cbb223ca2d0166f5be18d9e569fd31b6491d4b9f5c23dcb3b32ddb92ca0f4ae",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "owner_leb_target",
+    "source_sha256": "e3e0de61f1c2454eb3b3c6d8efec04d38aec4a32f48140d612c67ca1c2ee163a",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "owner_empty",
+    "source_sha256": "9690feaf3bd8fffc0180c7719cf84dfc47c956aa74dc4492cd0dfb3206835494",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  }
+]

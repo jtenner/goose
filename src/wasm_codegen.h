@@ -1367,7 +1367,7 @@ struct WasmCodeGen : ValueLayout {
     void InitArray(VarDef *owner, const Slot &slot, Node *init, VarDecl *declaration);
     void InitArrayCopy(VarDef *owner, const Slot &slot, Node *source);
     bool InitFixedArrayValue(VarDef *owner, const Slot &slot, Node *source);
-    bool InitLimitedArrayValue(VarDef *owner, const Slot &slot, Node *source);
+    bool InitCountedArrayValue(VarDef *owner, const Slot &slot, Node *source);
     void CopyBytes(const FixedPlace &destination, const FixedPlace &source, uint32_t bytes,
                    Line line, bool immediate = false);
     void ZeroFixed(const FixedPlace &destination, uint32_t bytes, Line line);

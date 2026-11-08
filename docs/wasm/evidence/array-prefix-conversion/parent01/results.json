@@ -1,0 +1,39 @@
+[
+  {
+    "case": "widen",
+    "source_sha256": "037829013758b315fdb2592fdf441496e2bae8f062ffcbf773300c6c6117e6c3",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "reference",
+    "source_sha256": "829202080652442c2a4412c1e16eab40a413e70ea3573b67424145ac89ba9f63",
+    "emit_exit": 1
+  },
+  {
+    "case": "leb_source",
+    "source_sha256": "c222ce5ef6f15079002f3039fd6964782e57c1cbc679d58c17e98ed6e5c87966",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "leb_target",
+    "source_sha256": "7b8fc91edc18a309042a9f7dbe87f4e7718b2b47e50389dfcbdaee6b3e55a1ed",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "data_reference_field",
+    "source_sha256": "54a3fa9d205bd2c58595636449a9159926d6c6783939ae936ffb4df4ffb2be7e",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  }
+]

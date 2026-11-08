@@ -1,0 +1,1 @@
+var calls:i64=0;recursive fn choose(a:u8[u8]&)->u8[u8]&{calls++;a[0]=31;return a;}fn main(){var a:u8[u8]=[7,8];var b:u8[u16]=copy(choose(a));assert(calls==1&&b.len==2&&b[0]==31&&b[1]==8);b[0]=99;assert(a[0]==31);print("ref_call");}

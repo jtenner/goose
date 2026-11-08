@@ -1,0 +1,1 @@
+var calls:i64=0;inline fn choose(a:u8[varint]&)->u8[varint]&{calls++;return a;}fn main(){var a:u8[varint]=[7,8];var b:u8[u16]=copy(choose(a));assert(calls==1&&b.len==2&&b[1]==8);print("inline_ref_call");}

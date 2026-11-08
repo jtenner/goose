@@ -1,0 +1,8 @@
+{
+  "status": "pending separate layout support",
+  "source": "/tmp/goose-wasm-array-prefix-conversion-20261108/parent03/padded.goose",
+  "native_valid": true,
+  "candidate_failure": "compound array elements need the pending layout lowering",
+  "candidate_record": "focused01/check.stderr",
+  "reason": "DataNominalArray admits u32 only; new unequal prefix constructor does not widen that gate"
+}
