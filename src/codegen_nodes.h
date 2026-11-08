@@ -757,7 +757,7 @@ inline void StructLit::CgAny(CodeGen &cg, const Dst &d) { cg.LeafAny(this, d); }
 inline void Unary::CgAny(CodeGen &cg, const Dst &d) {
     // An elementwise negation writes its members straight into a plain
     // destination, as Binary's does below.
-    if (d.k == DK_LVALUE && op == T_MINUS && exprtype &&
+    if (d.k == DK_LVALUE && op == T_MINUS && exprtype && cg.TEq(d.t, exprtype) &&
         (exprtype->kind == TY_STRUCT || exprtype->kind == TY_ARRAY)) {
         cg.GenElemwiseNegInto(exprtype, line, cg.GenVal(child), d.s);
         return;
@@ -768,7 +768,7 @@ inline void Binary::CgAny(CodeGen &cg, const Dst &d) {
     // An elementwise result (struct/fixed-array typed, §6.1) writes its
     // members straight into a plain destination — including one that aliases
     // an operand (see GenElemwiseInto).
-    if (d.k == DK_LVALUE && exprtype &&
+    if (d.k == DK_LVALUE && exprtype && cg.TEq(d.t, exprtype) &&
         (exprtype->kind == TY_STRUCT || exprtype->kind == TY_ARRAY)) {
         string l, r;
         cg.ElemwiseOperands(this, l, r);

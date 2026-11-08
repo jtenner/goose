@@ -1,0 +1,42 @@
+[
+  {
+    "case": "unary_decl",
+    "opt": 0,
+    "exit": 1,
+    "source_sha256": "7d1724036a2bedfb55282ec92633c8142b61d1a89481f3247b2d15769ae4053d",
+    "c_sha256": "12268705e6e9ec21f373ff2da0f39ba29889df855225f123103e9346b642f006",
+    "expected": "unary_decl\n",
+    "actual": "",
+    "reason": "goose runtime error: assert failed (/tmp/goose-native-math-adaptation-20261108/parent-first01/unary_decl.goose:1)\n"
+  },
+  {
+    "case": "unary_decl",
+    "opt": 2,
+    "exit": 1,
+    "source_sha256": "7d1724036a2bedfb55282ec92633c8142b61d1a89481f3247b2d15769ae4053d",
+    "c_sha256": "12268705e6e9ec21f373ff2da0f39ba29889df855225f123103e9346b642f006",
+    "expected": "unary_decl\n",
+    "actual": "",
+    "reason": "goose runtime error: assert failed (/tmp/goose-native-math-adaptation-20261108/parent-first01/unary_decl.goose:1)\n"
+  },
+  {
+    "case": "binary_decl",
+    "opt": 0,
+    "exit": 1,
+    "source_sha256": "a77384358450c0984dd64da5b6503126d4e35b436d0473f7c4a8354fae47c36b",
+    "c_sha256": "d37c88a4b8422ad1c8b11f1bf707c0666d93c473a1582a0aa7fee48fcc160d32",
+    "expected": "binary_decl\n",
+    "actual": "",
+    "reason": "goose runtime error: assert failed (/tmp/goose-native-math-adaptation-20261108/parent-first01/binary_decl.goose:1)\n"
+  },
+  {
+    "case": "binary_decl",
+    "opt": 2,
+    "exit": 1,
+    "source_sha256": "a77384358450c0984dd64da5b6503126d4e35b436d0473f7c4a8354fae47c36b",
+    "c_sha256": "d37c88a4b8422ad1c8b11f1bf707c0666d93c473a1582a0aa7fee48fcc160d32",
+    "expected": "binary_decl\n",
+    "actual": "",
+    "reason": "goose runtime error: assert failed (/tmp/goose-native-math-adaptation-20261108/parent-first01/binary_decl.goose:1)\n"
+  }
+]

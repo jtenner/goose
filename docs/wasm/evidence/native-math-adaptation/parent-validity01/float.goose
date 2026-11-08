@@ -1,0 +1,1 @@
+fn main(){var a:f64[2]=[1.25,-2.5];var b:f64[..4]=-a;assert(b.len==2);assert(b[0] == -1.25);assert(b[1]==2.5);var c:f64[..4]=a+a;assert(c.len==2);assert(c[0]==2.5);assert(c[1] == -5.0);print("float");}

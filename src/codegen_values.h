@@ -1720,6 +1720,20 @@ inline TypeExpr *CodeGen::OperandT(TypeExpr *t) {
     return t && IsPlainRef(t) ? t->ref->sub : t;
 }
 
+inline TypeExpr *CodeGen::MathType(Node *n) {
+    TypeExpr *t = nullptr;
+    if (auto u = Is<Unary>(n); u && u->op == T_MINUS) {
+        t = OperandT(u->child->exprtype);
+    } else if (auto b = Is<Binary>(n); b &&
+               (b->op == T_PLUS || b->op == T_MINUS || b->op == T_MUL ||
+                b->op == T_DIV || b->op == T_MOD)) {
+        t = OperandT(b->left->exprtype);
+        if (t && t->kind != TY_STRUCT && t->kind != TY_ARRAY)
+            t = OperandT(b->right->exprtype);
+    }
+    return t && (t->kind == TY_STRUCT || t->kind == TY_ARRAY) ? t : n->exprtype;
+}
+
 // GenX or GenPtr per the operand's rep; operators see spliced references
 // as their pointees.
 inline string CodeGen::GenVal(Node *n) {

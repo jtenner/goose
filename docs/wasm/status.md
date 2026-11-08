@@ -328,6 +328,11 @@ operands through field reads. Assignment keeps its complete-RHS protection. Layo
 general aggregate binary arithmetic remain separate. See
 [fixed negation evidence](evidence/fixed-negation.md).
 
+A native-first adaptation check also found and repaired a C backend error.
+Fixed array arithmetic now uses the operand count before the existing adapter
+constructs a limited, variable or growing receiver. Wasm layout-changing
+arithmetic remains separate. See [native arithmetic adaptation evidence](evidence/native-math-adaptation.md).
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping

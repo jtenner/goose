@@ -969,15 +969,35 @@ struct CodeGen : ValueLayout {
 
     // The three per-node passes dispatch virtually (ast.h); the bodies live
     // together in codegen_nodes.h, delegating into the machinery here.
+    TypeExpr *MathType(Node *n);
+    // A receiving array layout does not change the arithmetic's element
+    // count. Emit at the operand type, then use the usual destination
+    // adapter. Restore the checked tree even if emission throws.
+    struct MathScope {
+        Node *node;
+        TypeExpr *receiving;
+        MathScope(CodeGen &cg, Node *n) : node(n), receiving(n->exprtype) {
+            node->exprtype = cg.MathType(n);
+        }
+        ~MathScope() { node->exprtype = receiving; }
+    };
     string GenX(Node *n) {
         if (!substs.empty())
             if (auto s = substs.find(n); s != substs.end()) return s->second;
         auto it = fillvalues.find(n);
-        return it == fillvalues.end() ? n->CgX(*this) : LoadLoc(it->second, it->second.t, n->line);
+        if (it != fillvalues.end()) return LoadLoc(it->second, it->second.t, n->line);
+        MathScope math(*this, n);
+        auto x = n->CgX(*this);
+        return TEq(n->exprtype, math.receiving)
+                   ? x : LoadLoc(Loc { x, n->exprtype, true }, math.receiving, n->line);
     }
     void GenAny(Node *n, Dst d) {
         if (fillvalues.count(n)) LeafAny(n, d);
-        else n->CgAny(*this, d);
+        else {
+            MathScope math(*this, n);
+            if (!d.t) d.t = math.receiving;
+            n->CgAny(*this, d);
+        }
     }
     void GenStmt2(Node *n) { n->CgStmt(*this); }
 

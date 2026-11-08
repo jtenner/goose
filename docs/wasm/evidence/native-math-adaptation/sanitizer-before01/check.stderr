@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/tmp/goose-native-math-adaptation-20261108/sanitizer-before01/checks.py", line 12, in <module>
+    a=run(name+'-before',[exe]);assert a.returncode!=0 and b'out of bounds' in a.stderr,(name,a)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('unary_decl', CompletedProcess(args=['/tmp/goose-native-math-adaptation-20261108/sanitizer-before01/unary_decl.native'], returncode=1, stdout=b'', stderr=b'goose runtime error: assert failed (/tmp/goose-native-math-adaptation-20261108/parent-first01/unary_decl.goose:1)\n'))
