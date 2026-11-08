@@ -1,0 +1,62 @@
+[
+  {
+    "source": "/tmp/goose-wasm-fixed-results-20261108/parent-control01/block.goose",
+    "opt": 0,
+    "args": [
+      "/tmp/goose-wasm-fixed-results-20261108/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-results-20261108/structured-before01/block-O0.wasm",
+      "/tmp/goose-wasm-fixed-results-20261108/parent-control01/block.goose"
+    ],
+    "exit": 1,
+    "diagnostic": "/tmp/goose-wasm-fixed-results-20261108/parent-control01/block.goose:2: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  },
+  {
+    "source": "/tmp/goose-wasm-fixed-results-20261108/parent-control01/block.goose",
+    "opt": 2,
+    "args": [
+      "/tmp/goose-wasm-fixed-results-20261108/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-results-20261108/structured-before01/block-O2.wasm",
+      "/tmp/goose-wasm-fixed-results-20261108/parent-control01/block.goose"
+    ],
+    "exit": 1,
+    "diagnostic": "/tmp/goose-wasm-fixed-results-20261108/parent-control01/block.goose:2: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  },
+  {
+    "source": "/tmp/goose-wasm-fixed-results-20261108/parent-control01/if_tail.goose",
+    "opt": 0,
+    "args": [
+      "/tmp/goose-wasm-fixed-results-20261108/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-results-20261108/structured-before01/if_tail-O0.wasm",
+      "/tmp/goose-wasm-fixed-results-20261108/parent-control01/if_tail.goose"
+    ],
+    "exit": 1,
+    "diagnostic": "/tmp/goose-wasm-fixed-results-20261108/parent-control01/if_tail.goose:2: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  },
+  {
+    "source": "/tmp/goose-wasm-fixed-results-20261108/parent-control01/if_tail.goose",
+    "opt": 2,
+    "args": [
+      "/tmp/goose-wasm-fixed-results-20261108/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-results-20261108/structured-before01/if_tail-O2.wasm",
+      "/tmp/goose-wasm-fixed-results-20261108/parent-control01/if_tail.goose"
+    ],
+    "exit": 1,
+    "diagnostic": "/tmp/goose-wasm-fixed-results-20261108/parent-control01/if_tail.goose:2: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  }
+]

@@ -288,6 +288,13 @@ mixed-scalar checks, native baseline and 52 exact comparisons pass. Fixed
 aggregate results and by-value arrays remain guarded. See
 [fixed argument evidence](evidence/fixed-arguments.md).
 
+Positive fixed nominal results now use a checked caller destination in direct,
+inline and function-value calls. Results are copied before callee cleanup;
+assignments preserve the old target until success. Fixed nominal blocks and
+conditional producers use the same path. Arrays, named/multiple results,
+zero-image result transport and nonfixed layouts remain separate. See
+[fixed result evidence](evidence/fixed-results.md).
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping

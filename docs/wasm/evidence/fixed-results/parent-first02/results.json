@@ -1,0 +1,16 @@
+[
+  {
+    "case": "enum",
+    "opt": 0,
+    "source_sha256": "144288a801f64b59ac01894e458962cfdc83b2c68e2f6b8e466f3b401cd9ad87",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-results-20261108/parent-first02/enum.goose:2: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  },
+  {
+    "case": "enum",
+    "opt": 2,
+    "source_sha256": "144288a801f64b59ac01894e458962cfdc83b2c68e2f6b8e466f3b401cd9ad87",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-results-20261108/parent-first02/enum.goose:2: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  }
+]

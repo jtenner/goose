@@ -1,0 +1,8 @@
+{
+  "declared_control": "struct S{n:i64}\nvar yes:bool=true;fn main(){var s:S=if yes{S{n:7}}else{S{n:9}};assert(s.n==7);var b:S={var original:S=S{n:8};original};assert(b.n==8);print(\"declared_control\");}\n",
+  "assigned_control": "struct S{n:i64}\nvar target:S=S{n:1};var yes:bool=true;\nfn main(){target=if yes{S{n:target.n+1}}else{S{n:9}};assert(target.n==2);target={var old:i64=target.n;S{n:old+1}};assert(target.n==3);print(\"assigned_control\");}\n",
+  "block_argument": "struct S{n:i64}\nrecursive fn read(p:S)->i64{return p.n;}\nfn main(){assert(read({var s:S=S{n:7};defer{s.n=9;}s})==7);print(\"block_argument\");}\n",
+  "data": "struct S{n:i64}\nstruct H{s:S}\nrecursive fn make(n:i64)->S{return S{n:n};}\nfn main(){var rows:H[]=[H{s:make(7)}];assert(rows[0].s.n==7);rows[0].s=make(9);assert(rows[0].s.n==9);print(\"data\");}\n",
+  "refs": "struct S{link:i64&,n:i64}\nrecursive fn make(link:i64&,n:i64)->S{return S{link:link,n:n};}\nrecursive fn duplicate(p:S)->S{return p;}\nfn main(){var values:i64[]=[7];var s:S=duplicate(make(values[0],9));assert(s.n==9);s.link++;assert(values[0]==8);assert(s.link .== &values[0]);print(\"refs\");}\n",
+  "dynamic_base": "struct S{n:i64}\nrecursive fn make(n:i64)->S{var a:i64[]=[n];return S{n:a[0]};}\nfn main(){var a:S=make(7);assert(a.n==7);{var live:i64[]=[9];var b:S=make(8);assert(b.n==8);assert(live[0]==9);}print(\"dynamic_base\");}\n"
+}

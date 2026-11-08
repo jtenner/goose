@@ -1,0 +1,5 @@
+{
+  "growth": "struct S{bytes:u8[70000],n:i64}\nrecursive fn make(n:i64)->S{var saved:S=S{bytes:default<u8[70000]>(),n:n};saved.bytes[69999]=11;return saved;}\nfn main(){var s:S=make(7);assert(s.n==7);assert(s.bytes[0]==0);assert(s.bytes[69999]==11);print(\"growth\");}\n",
+  "nested_fields": "struct S{n:i64}\nstruct H{lead:u8,s:S,tail:u16}\nrecursive fn make(n:i64)->S{return S{n:n};}\nrecursive fn outer(n:i64)->H{return H{lead:90,s:make(n),tail:23};}\nfn main(){var h:H=outer(7);assert(h.lead==90);assert(h.s.n==7);assert(h.tail==23);print(\"nested_fields\");}\n",
+  "mixed_fields": "struct S{f:f32,d:f64,b:bool,link:f64&}\nrecursive fn make(link:f64&)->S{return S{f:1.25,d:2.5,b:true,link:link};}\nfn main(){var value:f64=7.0;var s:S=make(value);assert(s.f==1.25);assert(s.d==2.5);assert(s.b);s.link+=1.0;assert(value==8.0);print(\"mixed_fields\");}\n"
+}

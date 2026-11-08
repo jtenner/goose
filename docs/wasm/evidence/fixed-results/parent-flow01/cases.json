@@ -1,0 +1,5 @@
+{
+  "recursion": "struct S{n:i64}\nrecursive fn make(n:i64)->S{if n==0{return S{n:1};}var s:S=make(n-1);return S{n:s.n+n};}\nfn main(){var s:S=make(9);assert(s.n==46);print(\"recursion\");}\n",
+  "inline_early": "struct S{n:i64}\nvar calls:i64=0;\ninline fn make(early:bool)->S{defer{calls++;}if early{return S{n:7};}return S{n:9};}\nfn main(){var a:S=make(true);var b:S=make(false);assert(a.n==7);assert(b.n==9);assert(calls==2);print(\"inline_early\");}\n",
+  "callback_exit": "struct S{n:i64}\nvar calls:i64=0;\ninline fn invoke<F>(a:S)->S{defer{calls++;}return F(a);}\nrecursive fn make(early:bool)->S{return invoke(S{n:7}){p=>if early{return S{n:9};}S{n:p.n}};}\nfn main(){var a:S=make(true);var b:S=make(false);assert(a.n==9);assert(b.n==7);assert(calls==2);print(\"callback_exit\");}\n"
+}

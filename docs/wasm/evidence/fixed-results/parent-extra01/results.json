@@ -1,0 +1,86 @@
+[
+  {
+    "case": "declared_control",
+    "opt": 0,
+    "source_sha256": "45d548e5a1da8cb2349099233865c49aadbfa34a929ea57476b4cc76fdb72b08",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-results-20261108/parent-extra01/declared_control.goose:2: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  },
+  {
+    "case": "declared_control",
+    "opt": 2,
+    "source_sha256": "45d548e5a1da8cb2349099233865c49aadbfa34a929ea57476b4cc76fdb72b08",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-results-20261108/parent-extra01/declared_control.goose:2: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  },
+  {
+    "case": "assigned_control",
+    "opt": 0,
+    "source_sha256": "58f862c5f7c68738d081294cabbf1dcc2f5b0327e6df99186b8088a6b877cf2c",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-results-20261108/parent-extra01/assigned_control.goose:3: error: wasm target: whole-aggregate assignment from a temporary needs the pending destination lowering\n"
+  },
+  {
+    "case": "assigned_control",
+    "opt": 2,
+    "source_sha256": "58f862c5f7c68738d081294cabbf1dcc2f5b0327e6df99186b8088a6b877cf2c",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-results-20261108/parent-extra01/assigned_control.goose:3: error: wasm target: whole-aggregate assignment from a temporary needs the pending destination lowering\n"
+  },
+  {
+    "case": "block_argument",
+    "opt": 0,
+    "source_sha256": "c8280768300c139ca1187984b0583a1f70e7e823b6fc10baa8ef4f1d28a9b1d6",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-results-20261108/parent-extra01/block_argument.goose:3: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  },
+  {
+    "case": "block_argument",
+    "opt": 2,
+    "source_sha256": "c8280768300c139ca1187984b0583a1f70e7e823b6fc10baa8ef4f1d28a9b1d6",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-results-20261108/parent-extra01/block_argument.goose:3: error: wasm target: aggregate temporaries need the pending destination lowering\n"
+  },
+  {
+    "case": "data",
+    "opt": 0,
+    "source_sha256": "3726fa537488ffb7c74aa5ab2e8774d486f1f9560b030411483bd6e46f2b351a",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-results-20261108/parent-extra01/data.goose:3: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  },
+  {
+    "case": "data",
+    "opt": 2,
+    "source_sha256": "3726fa537488ffb7c74aa5ab2e8774d486f1f9560b030411483bd6e46f2b351a",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-results-20261108/parent-extra01/data.goose:3: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  },
+  {
+    "case": "refs",
+    "opt": 0,
+    "source_sha256": "4ee5d4152b63a36909ab3a365d5c78f39ce24a60f396840e50d455929ca4f9de",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-results-20261108/parent-extra01/refs.goose:2: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  },
+  {
+    "case": "refs",
+    "opt": 2,
+    "source_sha256": "4ee5d4152b63a36909ab3a365d5c78f39ce24a60f396840e50d455929ca4f9de",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-results-20261108/parent-extra01/refs.goose:2: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  },
+  {
+    "case": "dynamic_base",
+    "opt": 0,
+    "source_sha256": "b1000a6000cc1d844692f056296f1004d46f1a32506f1388cdbf7d4f0d100056",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-results-20261108/parent-extra01/dynamic_base.goose:2: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  },
+  {
+    "case": "dynamic_base",
+    "opt": 2,
+    "source_sha256": "b1000a6000cc1d844692f056296f1004d46f1a32506f1388cdbf7d4f0d100056",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-results-20261108/parent-extra01/dynamic_base.goose:2: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  }
+]

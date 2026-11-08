@@ -1,0 +1,44 @@
+[
+  {
+    "case": "recursion",
+    "opt": 0,
+    "source_sha256": "d326e1f2210116b6163f7ead27955d2144b743192d9dcd4602eb6a29cddacf1f",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-results-20261108/parent-flow01/recursion.goose:2: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  },
+  {
+    "case": "recursion",
+    "opt": 2,
+    "source_sha256": "d326e1f2210116b6163f7ead27955d2144b743192d9dcd4602eb6a29cddacf1f",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-results-20261108/parent-flow01/recursion.goose:2: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  },
+  {
+    "case": "inline_early",
+    "opt": 0,
+    "source_sha256": "077b900fd97d2295ca6eff61e37e0615e81d7b8a731398377ea363ebfa06ca91",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-results-20261108/parent-flow01/inline_early.goose:3: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  },
+  {
+    "case": "inline_early",
+    "opt": 2,
+    "source_sha256": "077b900fd97d2295ca6eff61e37e0615e81d7b8a731398377ea363ebfa06ca91",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-results-20261108/parent-flow01/inline_early.goose:4: error: wasm target: aggregate results need the pending destination lowering\n"
+  },
+  {
+    "case": "callback_exit",
+    "opt": 0,
+    "source_sha256": "fa2c09ed7c3d1cc7b46c5ae78d468744cd36bb33641e015e25e606c46b502d24",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-results-20261108/parent-flow01/callback_exit.goose:4: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  },
+  {
+    "case": "callback_exit",
+    "opt": 2,
+    "source_sha256": "fa2c09ed7c3d1cc7b46c5ae78d468744cd36bb33641e015e25e606c46b502d24",
+    "native": "PASS",
+    "prior_guard": "/tmp/goose-wasm-fixed-results-20261108/parent-flow01/callback_exit.goose:4: error: wasm target: by-value aggregates need the pending destination lowering\n"
+  }
+]

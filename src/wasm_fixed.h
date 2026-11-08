@@ -71,6 +71,8 @@ inline WasmCodeGen::FreshFixedDestination WasmCodeGen::FreshCallParameter(Call *
 }
 
 inline TypeExpr *WasmCodeGen::FreshRootType(const FreshFixedDestination &destination) {
+    if (destination.origin == FreshFixedOrigin::IncomingResult)
+        return current && current->rets.size() == 1 ? current->rets[0] : nullptr;
     if (destination.origin == FreshFixedOrigin::ReservedFrameTemporary)
         return destination.temporary ? destination.temporary->type : nullptr;
     return destination.root ? destination.root->type : nullptr;
@@ -86,7 +88,14 @@ inline void WasmCodeGen::CheckFreshDestination(const FreshFixedDestination &fres
     if (!fresh.initialization || !place.bounded || fresh.rootOffset > fresh.ownerBytes ||
         fresh.image > fresh.ownerBytes - fresh.rootOffset || RequireFixed(place.type, line) != fresh.image)
         Fail(line, "fixed construction needs its complete fresh owner span");
-    if (fresh.origin == FreshFixedOrigin::ReservedFrameTemporary) {
+    if (fresh.origin == FreshFixedOrigin::IncomingResult) {
+        if (!current || current->rets.size() != 1 || !Nominal(current->rets[0]) ||
+            fresh.root || fresh.temporary || fresh.initialization != current->body ||
+            fresh.ownerBytes != std::max(1u, RequireFixed(current->rets[0], line)) ||
+            place.memory != 0 || place.packed || place.address != FixedResultParameter(current) ||
+            place.offset != fresh.rootOffset)
+            Fail(line, "fixed result needs its checked incoming destination span");
+    } else if (fresh.origin == FreshFixedOrigin::ReservedFrameTemporary) {
         auto owner = fresh.temporary;
         if (!owner || fresh.root || !owner->type || owner->scope >= scopes.size() ||
             owner->expression != fresh.initialization || owner->bytes != fresh.ownerBytes ||
@@ -129,10 +138,12 @@ inline void WasmCodeGen::WithFixedTemporary(TypeExpr *type, Node *expression, Co
 }
 
 inline void WasmCodeGen::FixedCallArguments(Call *call, const vector<Node *> &arguments,
-                                           vector<uint32_t> &values, size_t position, uint32_t result) {
+                                           vector<uint32_t> &values, size_t position, uint32_t result,
+                                           uint32_t destination) {
     if (position == arguments.size()) {
         for (auto value : values) code.Get(value);
         if (NeedsBase(call->spec)) StackIndex((uint32_t)storage.calltops.at(call));
+        if (destination != NoLocal) code.Get(destination);
         code.Call(functions.at(call->spec));
         if (result != NoLocal) code.Set(result);
         return;
@@ -143,13 +154,79 @@ inline void WasmCodeGen::FixedCallArguments(Call *call, const vector<Node *> &ar
     if (Nominal(type)) {
         WithFixedTemporary(type, expression, [&](const FixedPlace &value) {
             values[position] = value.address;
-            FixedCallArguments(call, arguments, values, position + 1, result);
+            FixedCallArguments(call, arguments, values, position + 1, result, destination);
         });
     } else {
         Gen(expression); Convert(expression->exprtype, type);
         values[position] = Temp(type); code.Set(values[position]);
-        FixedCallArguments(call, arguments, values, position + 1, result);
+        FixedCallArguments(call, arguments, values, position + 1, result, destination);
     }
+}
+
+inline uint32_t WasmCodeGen::FixedResultParameter(FnSpec *function) {
+    if (!function || function->rets.size() != 1 || !Nominal(function->rets[0]))
+        Fail(function ? function->sf->line : Line {}, "fixed result needs its checked function signature");
+    return (uint32_t)function->params.size() + (NeedsBase(function) ? 1u : 0u);
+}
+
+inline void WasmCodeGen::BindCallParameters(Call *call) {
+    for (auto parameter : call->fvparams) RequireCallValue(parameter->type, false, call->line);
+    for (auto type : call->rettypes) RequireCallValue(type, true, call->line);
+    auto arguments = call->ValueArgNodes();
+    if (arguments.size() != call->fvparams.size()) Fail(call->line, "function-value parameter mismatch");
+    for (size_t i = 0; i < arguments.size(); i++) {
+        auto parameter = call->fvparams[i];
+        if (Nominal(parameter->type)) ConstructFixed(FreshCallParameter(call, i), arguments[i]);
+        else {
+            Gen(arguments[i]); Convert(arguments[i]->exprtype, parameter->type); Write(Find(parameter));
+        }
+    }
+}
+
+inline void WasmCodeGen::BlockInto(Block *body, FreshFixedDestination destination) {
+    CheckFreshDestination(destination, body->line);
+    scopes.emplace_back();
+    for (auto statement : body->stmts) Statement(statement);
+    if (body->tail) ConstructFixed(destination, body->tail);
+    Cleanup(scopes.size() - 1);
+    scopes.pop_back();
+}
+
+inline void WasmCodeGen::CallInto(FreshFixedDestination destination, Node *expression) {
+    CheckFreshDestination(destination, expression->line);
+    auto type = ActualType(expression);
+    if (!Nominal(type) || !TEq(type, destination.place.type))
+        Fail(expression->line, "aggregate result adaptation needs the pending destination lowering");
+    RequireCallValue(type, true, expression->line);
+    if (destination.place.memory != 0 || destination.place.packed) {
+        WithFixedTemporary(type, expression, [&](const FixedPlace &value) {
+            CopyFixed(destination, value, expression->line);
+        });
+        return;
+    }
+    if (auto inlined = Is<InlineBlock>(expression)) {
+        for (auto parameter : inlined->spec->params) RequireCallValue(parameter->type, false, expression->line);
+        for (auto result : inlined->spec->rets) RequireCallValue(result, true, expression->line);
+        auto end = Open();
+        targets.push_back({Target::Inline, inlined->sf, scopes.size(), end, -1, -1, type, &destination});
+        BlockInto(inlined->body, destination);
+        targets.pop_back(); Close(); return;
+    }
+    auto call = Is<Call>(expression);
+    if (!call || call->builtin >= 0)
+        Fail(expression->line, "aggregate result needs its checked call producer");
+    if (call->fvbody) {
+        BindCallParameters(call);
+        BlockInto(call->fvbody, destination); return;
+    }
+    if (!call->dispatch.empty()) Fail(call->line, "ADT dispatch is not implemented");
+    if (!call->spec || !functions.count(call->spec)) Fail(call->line, "missing direct function specialization");
+    auto arguments = call->ValueArgNodes();
+    if (arguments.size() != call->spec->params.size()) Fail(call->line, "call parameter mismatch");
+    auto address = Local(WasmModule::I32);
+    PlaceAddress(destination.place, WasmModule::I32, call->line); code.Set(address);
+    vector<uint32_t> values(arguments.size(), NoLocal);
+    FixedCallArguments(call, arguments, values, 0, NoLocal, address);
 }
 
 inline WasmCodeGen::FreshFixedDestination WasmCodeGen::FreshDataElement(
@@ -348,7 +425,9 @@ inline void WasmCodeGen::AssignFixed(FixedPlace destination, Node *source, TType
     auto dot = Is<Dot>(source);
     auto call = Is<Call>(source);
     if (Is<StructLit>(source) || (dot && dot->variantconst) || (call && call->builtin == B_DEFAULT) ||
-        (array && Is<ArrayLit>(source))) {
+        (array && Is<ArrayLit>(source)) ||
+        (!array && (Is<Block>(source) || Is<IfExpr>(source))) ||
+        (((call && call->builtin < 0) || Is<InlineBlock>(source)) && Nominal(ActualType(source)))) {
         WithFixedTemporary(destination.type, source, [&](const FixedPlace &value) {
             CopyBytes(destination, value, RequireFixed(destination.type, line), line, true);
         });
@@ -622,6 +701,20 @@ inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *sourc
             return;
         }
         Fail(source->line, "this default needs the pending destination lowering");
+    }
+    auto resultCall = Is<Call>(source);
+    if (((resultCall && resultCall->builtin < 0) || Is<InlineBlock>(source)) && Nominal(ActualType(source))) {
+        CallInto(fresh, source); return;
+    }
+    if (Nominal(type)) {
+        if (auto block = Is<Block>(source)) { BlockInto(block, fresh); return; }
+        if (auto branch = Is<IfExpr>(source)) {
+            if (!branch->elseb) Fail(source->line, "fixed conditional construction needs its checked else branch");
+            Condition(branch->cond); Open(0x04);
+            BlockInto(branch->thenb, fresh);
+            code.Byte(0x05); ConstructFixed(fresh, branch->elseb);
+            Close(); return;
+        }
     }
     auto tag = [&](EnumInst *instance, int variant) {
         auto field = destination;

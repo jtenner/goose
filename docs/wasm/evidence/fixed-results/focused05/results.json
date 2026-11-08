@@ -1,0 +1,278 @@
+[
+  {
+    "source": "test/wasm/wasm_fixed_result_argument.goose",
+    "source_sha256": "68520e270fe5ae71218a225953d49670107964a66180416549669ccb26d935b0",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_argument.goose",
+    "source_sha256": "68520e270fe5ae71218a225953d49670107964a66180416549669ccb26d935b0",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_assigned_control.goose",
+    "source_sha256": "58f862c5f7c68738d081294cabbf1dcc2f5b0327e6df99186b8088a6b877cf2c",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_assigned_control.goose",
+    "source_sha256": "58f862c5f7c68738d081294cabbf1dcc2f5b0327e6df99186b8088a6b877cf2c",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_block.goose",
+    "source_sha256": "af3bb1027054e3a5799baa3daceb126961bece5a3c0e9c85a81bd2f7fcb76c7f",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_block.goose",
+    "source_sha256": "af3bb1027054e3a5799baa3daceb126961bece5a3c0e9c85a81bd2f7fcb76c7f",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_block_argument.goose",
+    "source_sha256": "c8280768300c139ca1187984b0583a1f70e7e823b6fc10baa8ef4f1d28a9b1d6",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_block_argument.goose",
+    "source_sha256": "c8280768300c139ca1187984b0583a1f70e7e823b6fc10baa8ef4f1d28a9b1d6",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_callback.goose",
+    "source_sha256": "8b361c15f4afc5c777351e4482022bc889fff8ee74355c495924e677c8eb71fc",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_callback.goose",
+    "source_sha256": "8b361c15f4afc5c777351e4482022bc889fff8ee74355c495924e677c8eb71fc",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_data.goose",
+    "source_sha256": "3726fa537488ffb7c74aa5ab2e8774d486f1f9560b030411483bd6e46f2b351a",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_data.goose",
+    "source_sha256": "3726fa537488ffb7c74aa5ab2e8774d486f1f9560b030411483bd6e46f2b351a",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_declared_control.goose",
+    "source_sha256": "45d548e5a1da8cb2349099233865c49aadbfa34a929ea57476b4cc76fdb72b08",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_declared_control.goose",
+    "source_sha256": "45d548e5a1da8cb2349099233865c49aadbfa34a929ea57476b4cc76fdb72b08",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_defer.goose",
+    "source_sha256": "635339567664fe7934c53ad8043f8e2f2885783ad845bc43b9e283b9c6ffc84d",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_defer.goose",
+    "source_sha256": "635339567664fe7934c53ad8043f8e2f2885783ad845bc43b9e283b9c6ffc84d",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_direct.goose",
+    "source_sha256": "aed7e5b299e19e12ef058c56e7002fa8e48b2f4d214ed750fee69e939cbcdd01",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_direct.goose",
+    "source_sha256": "aed7e5b299e19e12ef058c56e7002fa8e48b2f4d214ed750fee69e939cbcdd01",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_discard.goose",
+    "source_sha256": "7ab4124c52da1807a3c8b45e79f132ad9f6b85e61ad6dfd9e0bb2573516bc38c",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_discard.goose",
+    "source_sha256": "7ab4124c52da1807a3c8b45e79f132ad9f6b85e61ad6dfd9e0bb2573516bc38c",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_dynamic_base.goose",
+    "source_sha256": "b1000a6000cc1d844692f056296f1004d46f1a32506f1388cdbf7d4f0d100056",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_dynamic_base.goose",
+    "source_sha256": "b1000a6000cc1d844692f056296f1004d46f1a32506f1388cdbf7d4f0d100056",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_enum.goose",
+    "source_sha256": "144288a801f64b59ac01894e458962cfdc83b2c68e2f6b8e466f3b401cd9ad87",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_enum.goose",
+    "source_sha256": "144288a801f64b59ac01894e458962cfdc83b2c68e2f6b8e466f3b401cd9ad87",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_forward.goose",
+    "source_sha256": "1ba2c2f7fa49189dd2df15b4d3775842107faddd768a6d76f3a6b2daf276f292",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_forward.goose",
+    "source_sha256": "1ba2c2f7fa49189dd2df15b4d3775842107faddd768a6d76f3a6b2daf276f292",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_global.goose",
+    "source_sha256": "36cded00ea5dc8ca69a3a8264e7773f51ab0e1caa61d5cc29e94688725201ac6",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_global.goose",
+    "source_sha256": "36cded00ea5dc8ca69a3a8264e7773f51ab0e1caa61d5cc29e94688725201ac6",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_growth.goose",
+    "source_sha256": "6e4f0974e508ad40cbc6334a8870ac7a8eda031e5e7fc4d6387dacb3dcb791a1",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_growth.goose",
+    "source_sha256": "6e4f0974e508ad40cbc6334a8870ac7a8eda031e5e7fc4d6387dacb3dcb791a1",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_if_tail.goose",
+    "source_sha256": "435fc96b3aadc1dc9d7a35ef56260f68a0ab9e90db69dd9455fab2fc0a03c037",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_if_tail.goose",
+    "source_sha256": "435fc96b3aadc1dc9d7a35ef56260f68a0ab9e90db69dd9455fab2fc0a03c037",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_inline.goose",
+    "source_sha256": "7e932a04e3745295a29d659845e089ed6b3b637287827c6449f910ab919d4ab2",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_inline.goose",
+    "source_sha256": "7e932a04e3745295a29d659845e089ed6b3b637287827c6449f910ab919d4ab2",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_inline_early.goose",
+    "source_sha256": "077b900fd97d2295ca6eff61e37e0615e81d7b8a731398377ea363ebfa06ca91",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_inline_early.goose",
+    "source_sha256": "077b900fd97d2295ca6eff61e37e0615e81d7b8a731398377ea363ebfa06ca91",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_mixed_fields.goose",
+    "source_sha256": "09f4c742fb7fa7ef176577f0d2f8e5f353fdbcc29188cd9604f2e57e9be241bb",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_mixed_fields.goose",
+    "source_sha256": "09f4c742fb7fa7ef176577f0d2f8e5f353fdbcc29188cd9604f2e57e9be241bb",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_nested_fields.goose",
+    "source_sha256": "9a7ab8d688d1a4dd9f1fdfd8e3ae8ca9106ad466ad2b087ddf0b4f6e28e36105",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_nested_fields.goose",
+    "source_sha256": "9a7ab8d688d1a4dd9f1fdfd8e3ae8ca9106ad466ad2b087ddf0b4f6e28e36105",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_owner.goose",
+    "source_sha256": "4f8b84213fd397b46fa09ed303cd4d1ab59a54a4220416b4114435e27dbf93e6",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_owner.goose",
+    "source_sha256": "4f8b84213fd397b46fa09ed303cd4d1ab59a54a4220416b4114435e27dbf93e6",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_recursion.goose",
+    "source_sha256": "d326e1f2210116b6163f7ead27955d2144b743192d9dcd4602eb6a29cddacf1f",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_recursion.goose",
+    "source_sha256": "d326e1f2210116b6163f7ead27955d2144b743192d9dcd4602eb6a29cddacf1f",
+    "opt": 2,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_refs.goose",
+    "source_sha256": "4ee5d4152b63a36909ab3a365d5c78f39ce24a60f396840e50d455929ca4f9de",
+    "opt": 0,
+    "status": "PASS"
+  },
+  {
+    "source": "test/wasm/wasm_fixed_result_refs.goose",
+    "source_sha256": "4ee5d4152b63a36909ab3a365d5c78f39ce24a60f396840e50d455929ca4f9de",
+    "opt": 2,
+    "status": "PASS"
+  }
+]

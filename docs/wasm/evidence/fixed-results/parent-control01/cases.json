@@ -1,0 +1,4 @@
+{
+  "if_tail": "struct S{n:i64}\nrecursive fn make(n:i64)->S{if n>0{S{n:n}}else{S{n:9}}}\nfn main(){var a:S=make(7);var b:S=make(0);assert(a.n==7);assert(b.n==9);print(\"if_tail\");}\n",
+  "block": "struct S{n:i64}\nrecursive fn make()->S{return{var s:S=S{n:7};s};}\nfn main(){var s:S=make();assert(s.n==7);print(\"block\");}\n"
+}

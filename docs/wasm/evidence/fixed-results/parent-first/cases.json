@@ -1,0 +1,11 @@
+{
+  "direct": "struct S{n:i64}\nrecursive fn make(n:i64)->S{return S{n:n};}\nfn main(){var s:S=make(7);assert(s.n==7);print(\"direct\");}\n",
+  "inline": "struct S{n:i64}\ninline fn make(n:i64)->S{S{n:n}}\nfn main(){var s:S=make(7);assert(s.n==7);print(\"inline\");}\n",
+  "callback": "struct S{n:i64}\nfn apply<F>(n:i64)->i64{var s:S=F(n);s.n}\nfn main(){assert(apply(7){n=>S{n:n}}==7);print(\"callback\");}\n",
+  "defer": "struct S{n:i64}\nrecursive fn make()->S{var s:S=S{n:7};defer{s.n=9;}return s;}\nfn main(){var s:S=make();assert(s.n==7);print(\"defer\");}\n",
+  "forward": "struct S{n:i64}\nrecursive fn make(n:i64)->S{S{n:n}}\nrecursive fn forward(n:i64)->S{return make(n);}\nfn main(){var s:S=forward(7);assert(s.n==7);print(\"forward\");}\n",
+  "global": "struct S{n:i64}\nrecursive fn make(n:i64)->S{S{n:n}}\nvar s:S=make(7);\nfn main(){assert(s.n==7);print(\"global\");}\n",
+  "discard": "struct S{n:i64}\nvar calls:i64=0;recursive fn make()->S{calls++;defer{calls++;}return S{n:7};}\nfn main(){make();assert(calls==2);print(\"discard\");}\n",
+  "argument": "struct S{n:i64}\nrecursive fn make()->S{S{n:7}}\nrecursive fn read(s:S)->i64{return s.n;}\nfn main(){assert(read(make())==7);print(\"argument\");}\n",
+  "enum": "enum E{A{n:i64},B}\nrecursive fn make(n:i64)->E{if n==0{return E.B;}return E.A{n:n};}\nfn main(){var a:E=make(7);var b:E=make(0);var sum:i64=0;match a{A p=>sum+=p.n,B=>assert(false)}match b{A p=>assert(false),B=>sum++;}assert(sum==8);print(\"enum\");}\n"
+}

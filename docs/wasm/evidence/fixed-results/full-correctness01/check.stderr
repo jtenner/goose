@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_backend.py", line 745, in <module>
+    if __name__ == '__main__':
+        ^^^^^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_backend.py", line 311, in main
+    count += check_aggregate_admission(run, exe, args.cc, out, args.node, args.validator, args.wasmtime_python)
+             ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_admission.py", line 97, in check_admission
+    assert any(reason.encode() in result.stderr for reason in reasons), (name, opt, result.stderr)
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('pop', 0, b'/tmp/goose-wasm-fixed-results-20261108/full-correctness01/artifacts/aggregate-admission-pop.goose:2: error: wasm target: aggregate result needs its checked call producer\n')

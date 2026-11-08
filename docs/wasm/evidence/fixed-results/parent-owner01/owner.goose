@@ -1,0 +1,5 @@
+struct S{mark:u8,n:i64}
+var target:S=S{mark:90,n:72623859790382856};
+recursive fn later()->i64{print("arg-live");return 0;}
+recursive fn make(p:S,trigger:i64)->S{assert(trigger==0);var saved:S=p;saved.n++;print("callee-live");defer{saved.n=9;print("defer");}return saved;}
+fn main(){print("before");target=make(target,later());assert(target.mark==90);assert(target.n==72623859790382857);print("after");}

@@ -1,0 +1,168 @@
+[
+  {
+    "name": "command-0",
+    "args": [
+      "/tmp/goose-wasm-fixed-results-20261108/build02/goose-tested",
+      "-O0",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure-O0.c",
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-1",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure-O0.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure-O0.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-2",
+    "args": [
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure-O0.native"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-3",
+    "args": [
+      "/tmp/goose-wasm-fixed-results-20261108/build02/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure-O0.wasm",
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-4",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-5",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure-O0.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure-observed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-6",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure-observed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-7",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_constructor_assignment_failure.mjs",
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure-observed-O0.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-8",
+    "args": [
+      "/tmp/goose-wasm-fixed-results-20261108/build02/goose-tested",
+      "-O2",
+      "--standalone",
+      "-o",
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure-O2.c",
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-9",
+    "args": [
+      "cc",
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure-O2.c",
+      "-pthread",
+      "-lm",
+      "-ldl",
+      "-o",
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure-O2.native"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-10",
+    "args": [
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure-O2.native"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "command-11",
+    "args": [
+      "/tmp/goose-wasm-fixed-results-20261108/build02/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure-O2.wasm",
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure.goose"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-12",
+    "args": [
+      "wasm-tools",
+      "print",
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-13",
+    "args": [
+      "wasm-tools",
+      "parse",
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure-O2.wat",
+      "-o",
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure-observed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-14",
+    "args": [
+      "wasm-tools",
+      "validate",
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure-observed-O2.wasm"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "command-15",
+    "args": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_constructor_assignment_failure.mjs",
+      "/tmp/goose-wasm-fixed-results-20261108/failure01/fixed-result-failure-observed-O2.wasm"
+    ],
+    "exit": 0
+  }
+]

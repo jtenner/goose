@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-fixed-results-20261108/focused04/checks.py", line 16, in <module>
+    module=p/(source.stem+f'-O{opt}.wasm');run([exe,f'-O{opt}','--target','wasm','-o',module,source]);run(['wasm-tools','validate',module])
+                                           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/goose-wasm-fixed-results-20261108/focused04/checks.py", line 10, in run
+    if ok:assert not a.returncode,(name,args,a.stderr)
+                 ^^^^^^^^^^^^^^^^
+AssertionError: ('command-50', ['/tmp/goose-wasm-fixed-results-20261108/build03/goose-tested', '-O0', '--target', 'wasm', '-o', '/tmp/goose-wasm-fixed-results-20261108/focused04/wasm_fixed_result_callback_exit-O0.wasm', '/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_result_callback_exit.goose'], b'/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_fixed_result_callback_exit.goose:4: error: wasm target: out-of-line captured locals are not implemented\n')

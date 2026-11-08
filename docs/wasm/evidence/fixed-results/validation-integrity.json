@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "source_files": 78,
+  "validation_inputs": 4668,
+  "compiler_sha256": "963c3aed896ee678920d69a3cfcee423f65910f114a25b5a5991a73eace618b9",
+  "native_groups": {
+    "lexer and shader compiler": "5",
+    "parse, roundtrip and typecheck": "2086",
+    "optimizer, stack report and C shapes": "23",
+    "bounds-check annotations": "68",
+    "generated C, built and run at -O0 and -O2": "1019",
+    "dump-runtime programs": "8",
+    "GS_DEBUG programs": "210",
+    "compiler roots, runtime lifecycle and clang": "24",
+    "driver, diagnostics and language server": "55",
+    "native builds, packages and runtime I/O": "14",
+    "goose_in_goose bootstrap": "21",
+    "JIT (TinyCC) runs": "1191",
+    "parse errors (errors/)": "80",
+    "typecheck errors (errors_tc/ and native modules' rejection tests)": "1946",
+    "recovery (errors_tc/recovery/)": "16",
+    "long call chains and guard runs": "6",
+    "language reference examples (docs/reference.md)": "1",
+    "samples": "52"
+  },
+  "exact_comparisons": 52,
+  "unchanged_parent_modules": 530,
+  "focused_result_case_optimization_pairs": 46,
+  "purpose": "correctness only"
+}

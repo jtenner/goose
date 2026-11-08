@@ -60,10 +60,11 @@ def check_admission(run, exe, cc, out, node='node', validator='wasm-tools', wasm
             reference = run([binary])
             module.unlink(missing_ok=True)
             result = run([exe, f'-O{opt}', '--target', 'wasm', '-o', module, path], ok=False)
-            if name in ('assign', 'element-assign'):
+            if name in ('assign', 'element-assign', 'result'):
                 assert not result.returncode and not result.stderr
                 run([validator, 'validate', module])
-                assert run([node, root / 'scripts/run_wasm.mjs', module]).stdout == reference.stdout == b'0\n'
+                expected = b'1\n' if name == 'result' else b'0\n'
+                assert run([node, root / 'scripts/run_wasm.mjs', module]).stdout == reference.stdout == expected
                 if wasmtime_python:
                     assert run([wasmtime_python, root / 'test/wasmtime_host.py', module]).stdout == reference.stdout
                 count += 1
