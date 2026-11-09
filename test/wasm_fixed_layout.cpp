@@ -127,9 +127,7 @@ int main() {
         unsupported.arr = &data; data.sub = &padded.type; data.akind = A_VAR; data.lenstorage = width;
         WasmValueSupport fixedPrefix(layout);
         auto reason = fixedPrefix.Check(&unsupported);
-        if (width == IS_VARINT)
-            assert(reason && string(reason) == "compound array elements need the pending layout lowering");
-        else assert(!reason && fixedPrefix.DataNominalArray(&unsupported));
+        assert(!reason && fixedPrefix.DataNominalArray(&unsupported));
     }
     TypeExpr aggregateGrow(TY_ARRAY, {}); TypeArray growData;
     aggregateGrow.arr = &growData; growData.sub = &padded.type; growData.akind = A_GROW;
@@ -139,7 +137,7 @@ int main() {
     zeroElements.arr = &zeroImage; zeroImage.sub = &tagOnly.variant; zeroImage.size = 2;
     WasmValueSupport zeroStride(layout);
     assert(zeroStride.Check(&zeroElements) && zeroStride.validated.empty());
-    for (auto width : {IS_U8, IS_U16, IS_U32, IS_U64}) {
+    for (auto width : {IS_U8, IS_U16, IS_U32, IS_U64, IS_VARINT}) {
         TypeExpr zeroData(TY_ARRAY, {}); TypeArray zeroDataImage;
         zeroData.arr = &zeroDataImage; zeroDataImage.sub = &tagOnly.variant;
         zeroDataImage.akind = A_VAR; zeroDataImage.lenstorage = width;

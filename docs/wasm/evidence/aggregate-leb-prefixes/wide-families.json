@@ -1,0 +1,16 @@
+[
+  {
+    "case": "guarded_width4",
+    "source_sha256": "f2d86b7159853489765d241d02e52e47b260846eccee4ac2777ac103836803e4",
+    "expected": "guarded_width4\n",
+    "persistent": 0,
+    "limit": "fill body is behind false runtime flag; no large fill executes"
+  },
+  {
+    "case": "guarded_width5",
+    "source_sha256": "cfce6d511eca4e246e0aef9f2a4c1e09f61f567a3ff372c556dd9096f190394c",
+    "expected": "guarded_width5\n",
+    "persistent": 0,
+    "limit": "fill body is behind false runtime flag; no large fill executes"
+  }
+]

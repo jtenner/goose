@@ -422,8 +422,7 @@ packed payload identity are captured once; prefix and memory32 size guards run
 before allocation. Fresh runtime capacity is the active length, while exact
 copies retain their original capacity path. Complete images cover caller-live
 owners, dynamic memories, spare bytes and failure effects. See
-[nonfixed source evidence](evidence/nonfixed-array-sources.md). Aggregate LEB
-prefixes and general nonfixed value transport remain guarded.
+[nonfixed source evidence](evidence/nonfixed-array-sources.md). General nonfixed value transport remains guarded.
 
 
 Fixed aggregate variable data arrays now also accept constant-count fill
@@ -431,8 +430,14 @@ literals with u8, u16, u32 or u64 prefixes. One complete element snapshot is
 evaluated even for an empty fill and stays live through the copy loop. Full
 images verify the reserved receiver during value evaluation, dynamic memory
 identity, sentinels and ordered cleanup. See
-[aggregate data fill evidence](evidence/aggregate-data-fills.md). Aggregate LEB
-prefixes, nonfixed fields and general nonfixed value transport remain separate.
+[aggregate data fill evidence](evidence/aggregate-data-fills.md). Nonfixed fields and general nonfixed value transport remain separate.
+
+Fixed aggregate data arrays now also use canonical unsigned LEB128 counts.
+Literal reservations use the actual encoded width; exact stored copies reuse
+the existing decoded-prefix copy path. Borrowed references, prefix adapters
+and copied iteration retain their existing memory identities. Full images
+cover both prefix transitions and repeated dynamic copies. Aggregate equality
+remains guarded. See [aggregate LEB evidence](evidence/aggregate-leb-prefixes.md).
 
 ## Host contract
 

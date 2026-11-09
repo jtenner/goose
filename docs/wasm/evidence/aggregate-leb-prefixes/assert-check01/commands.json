@@ -1,0 +1,1652 @@
+[
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_struct_fill-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_struct_fill.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_struct_fill-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_struct_fill-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "struct_fill\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_struct_fill-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_struct_fill.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_struct_fill-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_struct_fill-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "struct_fill\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_empty_effect-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_empty_effect.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_empty_effect-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_empty_effect-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "empty_effect\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_empty_effect-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_empty_effect.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_empty_effect-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_empty_effect-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "empty_effect\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_nested_fill-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_nested_fill.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_nested_fill-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_nested_fill-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "nested_fill\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_nested_fill-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_nested_fill.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_nested_fill-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_nested_fill-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "nested_fill\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_enum_fill-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_enum_fill.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_enum_fill-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_enum_fill-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "enum_fill\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_enum_fill-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_enum_fill.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_enum_fill-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_enum_fill-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "enum_fill\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_reference-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_reference.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_reference-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_reference-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "reference\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_reference-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_reference.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_reference-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_reference-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "reference\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_data_reference-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_data_reference.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_data_reference-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_data_reference-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "data_reference\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_data_reference-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_data_reference.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_data_reference-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_data_reference-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "data_reference\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_default_value-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_default_value.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_default_value-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_default_value-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "default_value\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_default_value-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_default_value.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_default_value-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_default_value-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "default_value\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_zero_exit-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_zero_exit.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_zero_exit-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_zero_exit-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "zero_exit\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_zero_exit-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_zero_exit.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_zero_exit-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_zero_exit-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "zero_exit\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_loop_exits-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_loop_exits.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_loop_exits-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_loop_exits-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "loop_exits\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_loop_exits-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_loop_exits.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_loop_exits-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_loop_exits-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "loop_exits\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_standalone_variant-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_standalone_variant.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_standalone_variant-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_standalone_variant-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "standalone_variant\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_standalone_variant-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_standalone_variant.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_standalone_variant-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_standalone_variant-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "standalone_variant\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count127-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_count127.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count127-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count127-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "fill_count127\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count127-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_count127.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count127-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count127-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "fill_count127\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count128-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_count128.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count128-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count128-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "fill_count128\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count128-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_count128.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count128-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count128-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "fill_count128\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count16383-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_count16383.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count16383-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count16383-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "fill_count16383\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count16383-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_count16383.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count16383-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count16383-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "fill_count16383\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count16384-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_count16384.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count16384-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count16384-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "fill_count16384\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count16384-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fill_count16384.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count16384-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fill_count16384-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "fill_count16384\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_literal_empty-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_literal_empty.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_literal_empty-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_literal_empty-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "literal_empty\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_literal_empty-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_literal_empty.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_literal_empty-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_literal_empty-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "literal_empty\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_literal128-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_literal128.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_literal128-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_literal128-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "literal128\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_literal128-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_literal128.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_literal128-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_literal128-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "literal128\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_copy128-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_copy128.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_copy128-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_copy128-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "copy128\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_copy128-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_copy128.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_copy128-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_copy128-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "copy128\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_convert-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_convert.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_convert-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_convert-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "convert\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_convert-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_convert.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_convert-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_convert-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "convert\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fixed_source-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fixed_source.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fixed_source-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fixed_source-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "fixed_source\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fixed_source-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_fixed_source.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fixed_source-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_fixed_source-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "fixed_source\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_limited_source-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_limited_source.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_limited_source-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_limited_source-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "limited_source\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_limited_source-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_limited_source.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_limited_source-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_limited_source-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "limited_source\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_borrow-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_borrow.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_borrow-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_borrow-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "borrow\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_borrow-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_borrow.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_borrow-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_borrow-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "borrow\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_reference_field-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_reference_field.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_reference_field-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_reference_field-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "reference_field\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_reference_field-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_reference_field.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_reference_field-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_reference_field-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "reference_field\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_global-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_global.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_global-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_global-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "global\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_global-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_global.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_global-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_global-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "global\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_iteration-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_iteration.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_iteration-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_iteration-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "iteration\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_iteration-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_iteration.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_iteration-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_iteration-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "iteration\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_guarded_width4-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_guarded_width4.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_guarded_width4-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_guarded_width4-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "guarded_width4\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_guarded_width4-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_guarded_width4.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_guarded_width4-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_guarded_width4-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "guarded_width4\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_guarded_width5-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_guarded_width5.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_guarded_width5-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_guarded_width5-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "guarded_width5\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_guarded_width5-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_guarded_width5.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_guarded_width5-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_guarded_width5-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "guarded_width5\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill0-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_image_fill0.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill0-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill0-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "before\neval\nafter\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill0-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_image_fill0.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill0-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill0-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "before\neval\nafter\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill127-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_image_fill127.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill127-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill127-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "before\neval\nafter\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill127-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_image_fill127.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill127-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill127-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "before\neval\nafter\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill128-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_image_fill128.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill128-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill128-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "before\neval\nafter\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill128-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_image_fill128.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill128-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill128-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "before\neval\nafter\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill16383-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_image_fill16383.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill16383-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill16383-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "before\neval\nafter\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill16383-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_image_fill16383.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill16383-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill16383-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "before\neval\nafter\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill16384-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_image_fill16384.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill16384-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill16384-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "before\neval\nafter\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill16384-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_image_fill16384.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill16384-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_fill16384-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "before\neval\nafter\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_copy0-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_image_copy0.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_copy0-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_copy0-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "before\nafter\nbetween\nbefore\nafter\ndone\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_copy0-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_image_copy0.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_copy0-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_copy0-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "before\nafter\nbetween\nbefore\nafter\ndone\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_copy128-O0.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_image_copy128.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_copy128-O0.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_copy128-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "before\nafter\nbetween\nbefore\nafter\ndone\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_copy128-O2.wasm",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_aggregate_leb_image_copy128.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_copy128-O2.wasm",
+      "/tmp/goose-wasm-aggregate-leb-20261109/assert-check01/wasm_aggregate_leb_image_copy128-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "before\nafter\nbetween\nbefore\nafter\ndone\n",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-aggregate-leb-20261109/parent_checks01.py", line 14, in <module>
+    assert a.returncode==0,(f.name,label,a.returncode,a.stderr)
+           ^^^^^^^^^^^^^^^
+AssertionError: ('iteration.goose', 'emit', 1, b'/tmp/goose-wasm-aggregate-leb-20261109/prepared/iteration.goose:1: error: expected \'in\' in for statement, found \'row\'\nstruct S{n:i64}fn main(){var a:S[varint]=[S{7};128];var sum:i64=0;for copy row in a{sum+=row.n;}assert(sum==896);print("iteration");}\n                                                                           ^~~\n')

@@ -1,0 +1,93 @@
+[
+  {
+    "case": "image_fill0",
+    "source_sha256": "3ad450ac2f2942a95cf4c1bc72c32eac2d4408dde8c0f6dd0bb4c03b887b3ee2",
+    "expected": "before\neval\nafter\n",
+    "commands": {
+      "emit": 1,
+      "cc": 2,
+      "native": 3,
+      "wasm": 4
+    },
+    "producer_phase": "parent04",
+    "status": "PASS native; parent Wasm LEB compound rejection"
+  },
+  {
+    "case": "image_fill127",
+    "source_sha256": "c8655e2c0c9616b80cd0268a9afed76aae3bfc947b548d0001a409df5fc73523",
+    "expected": "before\neval\nafter\n",
+    "commands": {
+      "emit": 5,
+      "cc": 6,
+      "native": 7,
+      "wasm": 8
+    },
+    "producer_phase": "parent04",
+    "status": "PASS native; parent Wasm LEB compound rejection"
+  },
+  {
+    "case": "image_fill128",
+    "source_sha256": "4fa4d0a2319c11f08505f65e4d25d89818014ca5bf361edb77db0bf08b2bbc7e",
+    "expected": "before\neval\nafter\n",
+    "commands": {
+      "emit": 9,
+      "cc": 10,
+      "native": 11,
+      "wasm": 12
+    },
+    "producer_phase": "parent04",
+    "status": "PASS native; parent Wasm LEB compound rejection"
+  },
+  {
+    "case": "image_fill16383",
+    "source_sha256": "ae992e2e3e8cecd1cba868ab932152bfa3a0a379450f2c99d9200742a6ab9c50",
+    "expected": "before\neval\nafter\n",
+    "commands": {
+      "emit": 13,
+      "cc": 14,
+      "native": 15,
+      "wasm": 16
+    },
+    "producer_phase": "parent04",
+    "status": "PASS native; parent Wasm LEB compound rejection"
+  },
+  {
+    "case": "image_fill16384",
+    "source_sha256": "f827cdee091c298061ea574291e20aaac821663c2ca92febedbe5a004c1fdf22",
+    "expected": "before\neval\nafter\n",
+    "commands": {
+      "emit": 17,
+      "cc": 18,
+      "native": 19,
+      "wasm": 20
+    },
+    "producer_phase": "parent04",
+    "status": "PASS native; parent Wasm LEB compound rejection"
+  },
+  {
+    "case": "image_copy0",
+    "source_sha256": "834802765136c4c4f1a075464db300bff99b13367a8206a25403efde3a9bfa73",
+    "expected": "before\nafter\nbetween\nbefore\nafter\ndone\n",
+    "commands": {
+      "emit": 21,
+      "cc": 22,
+      "native": 23,
+      "wasm": 24
+    },
+    "producer_phase": "parent04",
+    "status": "PASS native; parent Wasm LEB compound rejection"
+  },
+  {
+    "case": "image_copy128",
+    "source_sha256": "f3b724dfd8d5897aa0e3a4f291e7727780240a6545a063115840a6867db59a33",
+    "expected": "before\nafter\nbetween\nbefore\nafter\ndone\n",
+    "commands": {
+      "emit": 25,
+      "cc": 26,
+      "native": 27,
+      "wasm": 28
+    },
+    "producer_phase": "parent04",
+    "status": "PASS native; parent Wasm LEB compound rejection"
+  }
+]

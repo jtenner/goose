@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-aggregate-leb-20261109/parent_checks05.py", line 14, in <module>
+    assert a.returncode==0,(f.name,label,a.returncode,a.stderr)
+           ^^^^^^^^^^^^^^^
+AssertionError: ('zero.goose', 'emit', 1, b'/tmp/goose-wasm-aggregate-leb-20261109/guard-sources/zero.goose:1: error: an element cannot be a variant type with no fields: E.A (\xc2\xa73.4)\nenum E{A,B{n:u8}}fn main(){var a:E.A[varint]=[E.A;2];assert(a.len==2);print("guard");}\n                           ^\n  in fn main() instantiated from /tmp/goose-wasm-aggregate-leb-20261109/guard-sources/zero.goose:1\n')

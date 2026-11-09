@@ -1,0 +1,3 @@
+/tmp/goose-wasm-aggregate-leb-20261109/prepared/iteration.goose:1: error: expected 'in' in for statement, found 'row'
+struct S{n:i64}fn main(){var a:S[varint]=[S{7};128];var sum:i64=0;for copy row in a{sum+=row.n;}assert(sum==896);print("iteration");}
+                                                                           ^~~

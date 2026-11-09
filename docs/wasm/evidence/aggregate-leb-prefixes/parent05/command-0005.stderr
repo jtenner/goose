@@ -1,0 +1,4 @@
+/tmp/goose-wasm-aggregate-leb-20261109/guard-sources/zero.goose:1: error: an element cannot be a variant type with no fields: E.A (§3.4)
+enum E{A,B{n:u8}}fn main(){var a:E.A[varint]=[E.A;2];assert(a.len==2);print("guard");}
+                           ^
+  in fn main() instantiated from /tmp/goose-wasm-aggregate-leb-20261109/guard-sources/zero.goose:1

@@ -1,0 +1,24 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: LEB fill data image differs
+    at sameImage (file:///home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_leb_fill_image.mjs:6:49)
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_leb_fill_image.mjs:38:9
+    at print_end_v1 (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:105:13)
+    at main.0 (wasm://wasm/112b1f7a:wasm-function[11]:0x2b2)
+    at goose.start (wasm://wasm/112b1f7a:wasm-function[14]:0x3d1)
+    at Object.run (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:134:34)
+    at runCompleted (file:///home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs:10:13)
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_leb_fill_image.mjs:43:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.22.2

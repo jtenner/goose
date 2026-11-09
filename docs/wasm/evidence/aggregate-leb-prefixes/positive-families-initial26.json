@@ -1,0 +1,186 @@
+[
+  {
+    "case": "fill_struct_fill",
+    "source_sha256": "fe26e6ae7b6182ad4bde3eae38a9072b433dc97570857ec0e750897d191e30b4",
+    "expected": "struct_fill\n",
+    "persistent": 0,
+    "fixture": "wasm_aggregate_leb_fill_struct_fill"
+  },
+  {
+    "case": "fill_empty_effect",
+    "source_sha256": "c6d4ae142e8c5ed9383fff40c8ee683f8474d63eeb77a1ff6c7812ead58fc94f",
+    "expected": "empty_effect\n",
+    "persistent": 0,
+    "fixture": "wasm_aggregate_leb_fill_empty_effect"
+  },
+  {
+    "case": "fill_nested_fill",
+    "source_sha256": "a7d0fa59826eda7d596f7edc6a4897e3bba55db405e1079825c308bd386dad86",
+    "expected": "nested_fill\n",
+    "persistent": 0,
+    "fixture": "wasm_aggregate_leb_fill_nested_fill"
+  },
+  {
+    "case": "fill_enum_fill",
+    "source_sha256": "518e936ad34825ef8f2b57cb6aa14c01c8e83c8101145b3fe5a3f31cb2ceabdc",
+    "expected": "enum_fill\n",
+    "persistent": 0,
+    "fixture": "wasm_aggregate_leb_fill_enum_fill"
+  },
+  {
+    "case": "fill_reference",
+    "source_sha256": "895eb41561687b3aefcdfc500e9afdd5d0ec986daf1c93e7609a1407d615e145",
+    "expected": "reference\n",
+    "persistent": 0,
+    "fixture": "wasm_aggregate_leb_fill_reference"
+  },
+  {
+    "case": "fill_data_reference",
+    "source_sha256": "3352ca78694c7b90b9fea022b88f331dd0dd5e7eefffe5d816808f034dcb9e7c",
+    "expected": "data_reference\n",
+    "persistent": 0,
+    "fixture": "wasm_aggregate_leb_fill_data_reference"
+  },
+  {
+    "case": "fill_default_value",
+    "source_sha256": "9256af57eb8d4744eec91c591691ddaf4f0573370529f3bd4ee7fb50f7ab9706",
+    "expected": "default_value\n",
+    "persistent": 0,
+    "fixture": "wasm_aggregate_leb_fill_default_value"
+  },
+  {
+    "case": "fill_zero_exit",
+    "source_sha256": "885092237d0d7e620ee67306bc16601095f44fa58196bb98f5eb130b91828b39",
+    "expected": "zero_exit\n",
+    "persistent": 0,
+    "fixture": "wasm_aggregate_leb_fill_zero_exit"
+  },
+  {
+    "case": "fill_loop_exits",
+    "source_sha256": "7f461509229f3c3e18934b6cd13b2dee1e36792fd2c7e931c6aec0268c849c4a",
+    "expected": "loop_exits\n",
+    "persistent": 0,
+    "fixture": "wasm_aggregate_leb_fill_loop_exits"
+  },
+  {
+    "case": "fill_standalone_variant",
+    "source_sha256": "855626e2c13215f5c1ba8d48e946545dfa46b2a5ba34b0e9cab1432becf96462",
+    "expected": "standalone_variant\n",
+    "persistent": 0,
+    "fixture": "wasm_aggregate_leb_fill_standalone_variant"
+  },
+  {
+    "case": "fill_count127",
+    "source_sha256": "066242f2e596d7ff718b4fcdb8bbffa436ccaccb2c41ce4294dfd4b73f98dfcb",
+    "expected": "fill_count127\n",
+    "persistent": 0,
+    "fixture": "wasm_aggregate_leb_fill_count127"
+  },
+  {
+    "case": "fill_count128",
+    "source_sha256": "2d9d40c3500f22c12a363b3edc20fdee5395a14acb69abe362f8d30e3b923ba3",
+    "expected": "fill_count128\n",
+    "persistent": 0,
+    "fixture": "wasm_aggregate_leb_fill_count128"
+  },
+  {
+    "case": "fill_count16383",
+    "source_sha256": "de7c9d2a5a2c04fe60947fedf98d96330e99975dbbbe1e910ffb4f49e4b862e0",
+    "expected": "fill_count16383\n",
+    "persistent": 0,
+    "fixture": "wasm_aggregate_leb_fill_count16383"
+  },
+  {
+    "case": "fill_count16384",
+    "source_sha256": "f3474f81ab21288bc9626b61b03f52b26ba0bd7950804962a42f037bdd6640f3",
+    "expected": "fill_count16384\n",
+    "persistent": 0,
+    "fixture": "wasm_aggregate_leb_fill_count16384"
+  },
+  {
+    "case": "literal_empty",
+    "source_sha256": "556780f792016e36c1b9ecdbd1cf4c07e357040c4714f2d87c5ba1a94e099c89",
+    "expected": "literal_empty\n",
+    "persistent": 0,
+    "fixture": "wasm_aggregate_leb_literal_empty"
+  },
+  {
+    "case": "literal128",
+    "source_sha256": "6238d6f69f788b083cfbbae09e0678a25ac6d1795b4e13e46e2d83947ef2794e",
+    "expected": "literal128\n",
+    "persistent": 0,
+    "fixture": "wasm_aggregate_leb_literal128"
+  },
+  {
+    "case": "copy128",
+    "source_sha256": "08d4a01728aeb12130456d1b549ab13230e50e9c45194bdc30766a623e98bba1",
+    "expected": "copy128\n",
+    "persistent": 0,
+    "fixture": "wasm_aggregate_leb_copy128"
+  },
+  {
+    "case": "convert",
+    "source_sha256": "390ac0297d94cf9a5061ff40c5fdebc7f424f9b7f270e9ee8f43a74ed533570a",
+    "expected": "convert\n",
+    "persistent": 0,
+    "fixture": "wasm_aggregate_leb_convert"
+  },
+  {
+    "case": "fixed_source",
+    "source_sha256": "6217721ce8a5be5317bfd7023409298cfd5d724aa0ef6584d5df6397af9918af",
+    "expected": "fixed_source\n",
+    "persistent": 0,
+    "fixture": "wasm_aggregate_leb_fixed_source"
+  },
+  {
+    "case": "limited_source",
+    "source_sha256": "9ac19618d1f1d9e1c567988f6fe1060353beeb1e2397a223ec52a1f60edef0ec",
+    "expected": "limited_source\n",
+    "persistent": 0,
+    "fixture": "wasm_aggregate_leb_limited_source"
+  },
+  {
+    "case": "borrow",
+    "source_sha256": "4d9cfc4a8f3139022d34b184c51655b4a3c48a90e128c29f0f3d016bb4db988c",
+    "expected": "borrow\n",
+    "persistent": 0,
+    "fixture": "wasm_aggregate_leb_borrow"
+  },
+  {
+    "case": "reference_field",
+    "source_sha256": "3224d27ec9be1b73d613e87df4a14ad95209bfc214ae002469ea715b8b059253",
+    "expected": "reference_field\n",
+    "persistent": 0,
+    "fixture": "wasm_aggregate_leb_reference_field"
+  },
+  {
+    "case": "global",
+    "source_sha256": "a263a613112a9ad9b10fb3b56ee4a785a5c35b23f4d44f999a4e85f956ef9170",
+    "expected": "global\n",
+    "persistent": 1,
+    "fixture": "wasm_aggregate_leb_global"
+  },
+  {
+    "case": "iteration",
+    "source_sha256": "c868a7c0f3b2c7ce2ba8b318606f4a74a2a8a8e1baaeeec4db1e1f2a95944957",
+    "expected": "iteration\n",
+    "persistent": 0,
+    "fixture": "wasm_aggregate_leb_iteration"
+  },
+  {
+    "case": "guarded_width4",
+    "source_sha256": "f2d86b7159853489765d241d02e52e47b260846eccee4ac2777ac103836803e4",
+    "expected": "guarded_width4\n",
+    "persistent": 0,
+    "limit": "fill body is behind false runtime flag; no large fill executes",
+    "fixture": "wasm_aggregate_leb_guarded_width4"
+  },
+  {
+    "case": "guarded_width5",
+    "source_sha256": "cfce6d511eca4e246e0aef9f2a4c1e09f61f567a3ff372c556dd9096f190394c",
+    "expected": "guarded_width5\n",
+    "persistent": 0,
+    "limit": "fill body is behind false runtime flag; no large fill executes",
+    "fixture": "wasm_aggregate_leb_guarded_width5"
+  }
+]

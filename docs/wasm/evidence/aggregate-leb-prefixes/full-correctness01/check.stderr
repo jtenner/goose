@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-aggregate-leb-20261109/integrated.py", line 42, in <module>
+    try:m.main()
+        ~~~~~~^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_backend.py", line 415, in main
+    count += check_aggregate_admission(run, exe, args.cc, out, args.node, args.validator, args.wasmtime_python)
+             ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_admission.py", line 98, in check_admission
+    assert result.returncode and b'wasm target: ' in result.stderr, (name, opt, result.stderr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('data-varint', 0, b'')

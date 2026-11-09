@@ -1,0 +1,58 @@
+{
+  "status": "PASS",
+  "purpose": "correctness only",
+  "source_parent": "c727452fdf7c585e277b8bb3e19f2a91d4a19836",
+  "compiler_sha256": "9f833fad0aa896cec2b77e00cfd4338bf807eefb7f2cb34a5fea10a298fa14a4",
+  "assertion_compiler_sha256": "91c964a36e9c4859bc2b5f2d1c8bfc9f81345778ed7ad56c81823e0bf9854689",
+  "source_files": 85,
+  "validation_inputs": 6125,
+  "changed_source": [
+    "src/wasm_arrays.h",
+    "src/wasm_support.h"
+  ],
+  "selected_checks": [
+    "parent02",
+    "parent03",
+    "parent04",
+    "parent-proof01",
+    "build01",
+    "focused01",
+    "focused02",
+    "large-control01",
+    "images02",
+    "sizes01",
+    "assert-build01",
+    "assert-check01",
+    "identity01",
+    "exact01",
+    "admission01",
+    "full-correctness03"
+  ],
+  "native_valid_parent_compile_failures": 33,
+  "positive_families": 33,
+  "positive_native_node_wasmtime_completed_owner_pairs": 66,
+  "assertion_compiler_node_pairs_and_release_byte_identities": 66,
+  "image_and_retained_guard_checks": 126,
+  "malformed_header_product_and_sum_checks": 8,
+  "wasm_checks": 7991,
+  "total_fixture_pairs": 2044,
+  "byte_identical_old_fixture_modules": 1978,
+  "full_suite_basis": "full-correctness01 completed6243 checks including core/runtime/layout then stopped at obsolete data-varint rejection; full-correctness03 verifies that prefix and reruns corrected admission and all later helpers; all current fixture byte hashes verified, all new native/Node/Wasmtime/owner pairs execute",
+  "native_baseline": "prior full18-group baseline retained; this delta changes private Wasm headers only;33 current native differential families and52 native/Wasm exact comparisons pass",
+  "exact_comparisons": 52,
+  "no_measurements_timing_profiling": true,
+  "guarded_large_count_limits": "two cases compile four/five-byte prefix reservation paths behind false runtime flags; large payloads not executed",
+  "malformed_header_limits": "controlled memory corruption, not native-valid values; no terminal-trap unwind/reentry claim",
+  "preserved_failures": [
+    "invalid initial copied-binder syntax,23 valid parent cases reused",
+    "empty-variant element rejected by shared frontend; no native runtime claim",
+    "large Buffer assertion fault control timed out; concise full-Buffer.equals assertion passes unchanged mutant then full image unit reruns",
+    "old aggregate-admission data-varint rejection became supported; now native/Node/Wasmtime/owner positive",
+    "full-correctness02 continuation static name check omitted nested function and argument bindings; corrected setup03 ran remaining checks"
+  ],
+  "remaining_compile_limits": [
+    "aggregate array equality",
+    "nonfixed fields value transport and aggregate growable/runtime layouts",
+    "relative references slices pools native adapters and workers"
+  ]
+}

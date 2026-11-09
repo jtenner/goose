@@ -826,13 +826,17 @@ inline WasmCodeGen::FreshDataArrayDestination WasmCodeGen::ReserveFreshDataArray
         find(initialization->defs.begin(), initialization->defs.end(), owner) == initialization->defs.end() ||
         !storage.owners.count(owner) || !TEq(slot.type, array))
         Fail(owner->line, "aggregate data construction needs its checked fresh declaration");
-    auto stride = RequireFixed(array->arr->sub, owner->line), prefix = DataPrefix(array);
-    if (!stride || (prefix != 1 && prefix != 2 && prefix != 4 && prefix != 8))
-        Fail(owner->line, "aggregate data construction needs a positive fixed unsigned prefix layout");
+    auto varint = VarintPrefix(array);
+    if (varint && literalCount == NoLocal)
+        Fail(owner->line, "aggregate LEB copy needs its captured source prefix");
+    auto stride = RequireFixed(array->arr->sub, owner->line);
+    auto prefix = varint ? DataPrefix(array, literalCount) : DataPrefix(array);
+    if (!stride || (!varint && prefix != 1 && prefix != 2 && prefix != 4 && prefix != 8))
+        Fail(owner->line, "aggregate data construction needs a positive fixed element and supported count prefix");
     uint32_t ownerBytes = 0;
     auto bytes = NoLocal;
     if (literalCount != NoLocal) {
-        if (prefix < 8 && literalCount > ((1ull << (prefix * 8)) - 1))
+        if (!varint && prefix < 8 && literalCount > ((1ull << (prefix * 8)) - 1))
             Fail(owner->line, "array length exceeds its stored prefix");
         if (count != NoLocal || literalCount > (UINT32_MAX - prefix) / stride)
             Fail(owner->line, "aggregate data literal exceeds memory32");
@@ -911,6 +915,11 @@ inline void WasmCodeGen::InitAggregateDataArray(VarDef *owner, const Slot &slot,
     while (from && from->kind == TY_REF) from = from->ref->sub;
     if (!from || !TEq(owner->type, from))
         Fail(source->line, "aggregate data adaptation needs the pending destination lowering");
+    if (VarintPrefix(owner->type)) {
+        // The shared exact-copy path captures both count and decoded prefix
+        // width before checking the complete receiving reservation.
+        InitArrayCopy(owner, slot, source); return;
+    }
     auto captured = ResolveArray(source);
     auto count = Local(WasmModule::I64);
     ArrayLength(captured); code.Set(count);

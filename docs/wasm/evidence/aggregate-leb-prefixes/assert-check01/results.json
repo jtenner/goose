@@ -1,0 +1,398 @@
+[
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_struct_fill.goose",
+    "opt": 0,
+    "sha256": "c19236039f21ce01e990213a2af0cab9583a1be5e8036c4291e6b1ad38a2d3f7",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_struct_fill.goose",
+    "opt": 2,
+    "sha256": "c19236039f21ce01e990213a2af0cab9583a1be5e8036c4291e6b1ad38a2d3f7",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_empty_effect.goose",
+    "opt": 0,
+    "sha256": "7d70b81af638781c1a06ec64c59427c09d835508a9d91aa177fdf2b5ffb084d5",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_empty_effect.goose",
+    "opt": 2,
+    "sha256": "a251fc1e371e0b603a75da9f79d1b8604164ac83126b35726a1ef15b024fb455",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_nested_fill.goose",
+    "opt": 0,
+    "sha256": "84e2550190d788de5d72a1a1682c3356f0ba1c198561f9684f8642c1478f6f49",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_nested_fill.goose",
+    "opt": 2,
+    "sha256": "84e2550190d788de5d72a1a1682c3356f0ba1c198561f9684f8642c1478f6f49",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_enum_fill.goose",
+    "opt": 0,
+    "sha256": "6ca7e35da6d0a0a0802969e274d1002198c7e63a3d32b56e20585bf9042cdec2",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_enum_fill.goose",
+    "opt": 2,
+    "sha256": "6ca7e35da6d0a0a0802969e274d1002198c7e63a3d32b56e20585bf9042cdec2",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_reference.goose",
+    "opt": 0,
+    "sha256": "1574f240be74c513eb206857d9e8e2509add42d0bdf790a1d5bbb5a2610d0fcf",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_reference.goose",
+    "opt": 2,
+    "sha256": "1574f240be74c513eb206857d9e8e2509add42d0bdf790a1d5bbb5a2610d0fcf",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_data_reference.goose",
+    "opt": 0,
+    "sha256": "99c542771ca99c56f63abbaa5713fb68e0572697b0447b23e56aaa804b41b1f1",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_data_reference.goose",
+    "opt": 2,
+    "sha256": "99c542771ca99c56f63abbaa5713fb68e0572697b0447b23e56aaa804b41b1f1",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_default_value.goose",
+    "opt": 0,
+    "sha256": "b1da772c27e2e5fff05ea7ba8730a91b8a4d29fca9a0b33987c61b86c13e2196",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_default_value.goose",
+    "opt": 2,
+    "sha256": "b1da772c27e2e5fff05ea7ba8730a91b8a4d29fca9a0b33987c61b86c13e2196",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_zero_exit.goose",
+    "opt": 0,
+    "sha256": "be249433168b308218359cd56bb4a112248c48705e7bf89043262bf6b9bc9867",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_zero_exit.goose",
+    "opt": 2,
+    "sha256": "be249433168b308218359cd56bb4a112248c48705e7bf89043262bf6b9bc9867",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_loop_exits.goose",
+    "opt": 0,
+    "sha256": "0f781c4c2b836b2805124fe05324021c6bab42c5abb8312df8bd7c12a03b6341",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_loop_exits.goose",
+    "opt": 2,
+    "sha256": "0f781c4c2b836b2805124fe05324021c6bab42c5abb8312df8bd7c12a03b6341",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_standalone_variant.goose",
+    "opt": 0,
+    "sha256": "42112c9f6d54b90c1f7b8e3557bba281e9f8cee09d8acfec3784a57233ac5879",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_standalone_variant.goose",
+    "opt": 2,
+    "sha256": "42112c9f6d54b90c1f7b8e3557bba281e9f8cee09d8acfec3784a57233ac5879",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_count127.goose",
+    "opt": 0,
+    "sha256": "ca3655f337923f541fdec2e39baf027cc0a66bbadf7fca6408655b7a4b782ca4",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_count127.goose",
+    "opt": 2,
+    "sha256": "ca3655f337923f541fdec2e39baf027cc0a66bbadf7fca6408655b7a4b782ca4",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_count128.goose",
+    "opt": 0,
+    "sha256": "3d76990ac9bfffadd25355273e18508839eff4d5f359ec50859cb686b4080839",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_count128.goose",
+    "opt": 2,
+    "sha256": "3d76990ac9bfffadd25355273e18508839eff4d5f359ec50859cb686b4080839",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_count16383.goose",
+    "opt": 0,
+    "sha256": "3f8f78f1af93088198074af02bcc2eadb99f8beca6d73ccd255a77fe009d8e3d",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_count16383.goose",
+    "opt": 2,
+    "sha256": "3f8f78f1af93088198074af02bcc2eadb99f8beca6d73ccd255a77fe009d8e3d",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_count16384.goose",
+    "opt": 0,
+    "sha256": "d6a271d06f136bd6f285cc8e27b3d6ae8d13726bd86da826c6cf791f50682daa",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fill_count16384.goose",
+    "opt": 2,
+    "sha256": "d6a271d06f136bd6f285cc8e27b3d6ae8d13726bd86da826c6cf791f50682daa",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_literal_empty.goose",
+    "opt": 0,
+    "sha256": "5fac24c74b90bee9c5054a0812837a58eab97fe2cd5269e37dd53d26e93f8f50",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_literal_empty.goose",
+    "opt": 2,
+    "sha256": "5fac24c74b90bee9c5054a0812837a58eab97fe2cd5269e37dd53d26e93f8f50",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_literal128.goose",
+    "opt": 0,
+    "sha256": "9994a01c31f2f55b8a8dc760ffdad96b21a8e68b6e7469b5c7de80009e671761",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_literal128.goose",
+    "opt": 2,
+    "sha256": "9994a01c31f2f55b8a8dc760ffdad96b21a8e68b6e7469b5c7de80009e671761",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_copy128.goose",
+    "opt": 0,
+    "sha256": "5c5eb86a451c195bbb080c09327d3737a7cc3e59077e469e64bd4bb45127947b",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_copy128.goose",
+    "opt": 2,
+    "sha256": "5c5eb86a451c195bbb080c09327d3737a7cc3e59077e469e64bd4bb45127947b",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_convert.goose",
+    "opt": 0,
+    "sha256": "bfbb38e1ba41f1ed8a2e29fc5d156f213ddbd1bcdee7afc0fc259b91e902c1f0",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_convert.goose",
+    "opt": 2,
+    "sha256": "bfbb38e1ba41f1ed8a2e29fc5d156f213ddbd1bcdee7afc0fc259b91e902c1f0",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fixed_source.goose",
+    "opt": 0,
+    "sha256": "3fbcdbd8ab95a2c619c467a643ca5a41c05af448b895d772c85e52615bb52e01",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_fixed_source.goose",
+    "opt": 2,
+    "sha256": "3fbcdbd8ab95a2c619c467a643ca5a41c05af448b895d772c85e52615bb52e01",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_limited_source.goose",
+    "opt": 0,
+    "sha256": "8710e32264b7fbfc4612931db857cbe8d144cb977dd885f6e8aeace3cbdb1e44",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_limited_source.goose",
+    "opt": 2,
+    "sha256": "8710e32264b7fbfc4612931db857cbe8d144cb977dd885f6e8aeace3cbdb1e44",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_borrow.goose",
+    "opt": 0,
+    "sha256": "3c0223607b34ccfe83728141c44eaf8b909c0ed643af045bb5ba6666440e4b60",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_borrow.goose",
+    "opt": 2,
+    "sha256": "3c0223607b34ccfe83728141c44eaf8b909c0ed643af045bb5ba6666440e4b60",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_reference_field.goose",
+    "opt": 0,
+    "sha256": "fe7c17ace851b397564b33c6886d4758bc735b0577e5eaa242c256d2616b1e3e",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_reference_field.goose",
+    "opt": 2,
+    "sha256": "fe7c17ace851b397564b33c6886d4758bc735b0577e5eaa242c256d2616b1e3e",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_global.goose",
+    "opt": 0,
+    "sha256": "80c05bc47d4019be24d6f3fcd56a842c629019739db79800023159aa68d7efb3",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_global.goose",
+    "opt": 2,
+    "sha256": "80c05bc47d4019be24d6f3fcd56a842c629019739db79800023159aa68d7efb3",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_iteration.goose",
+    "opt": 0,
+    "sha256": "e1c02781576504973075e1b834db00269c466452bcc7f33f0b6455c9711dbacc",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_iteration.goose",
+    "opt": 2,
+    "sha256": "e1c02781576504973075e1b834db00269c466452bcc7f33f0b6455c9711dbacc",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_guarded_width4.goose",
+    "opt": 0,
+    "sha256": "21a9879d07b2ac38690670675c7e3e7572712bbdfac1c5d197d7db763ef5b36a",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_guarded_width4.goose",
+    "opt": 2,
+    "sha256": "21a9879d07b2ac38690670675c7e3e7572712bbdfac1c5d197d7db763ef5b36a",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_guarded_width5.goose",
+    "opt": 0,
+    "sha256": "b643f1f9f910bbfe9d138fa6bdc3c0c61a5ac47b45fe94b53228870db717a0ed",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_guarded_width5.goose",
+    "opt": 2,
+    "sha256": "b643f1f9f910bbfe9d138fa6bdc3c0c61a5ac47b45fe94b53228870db717a0ed",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_image_fill0.goose",
+    "opt": 0,
+    "sha256": "4a794bbb796495ae2f07a46bdd80849cc314af81d15c564749a1dd098b954d22",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_image_fill0.goose",
+    "opt": 2,
+    "sha256": "4a794bbb796495ae2f07a46bdd80849cc314af81d15c564749a1dd098b954d22",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_image_fill127.goose",
+    "opt": 0,
+    "sha256": "8343aae9d02daaf54d87a027ad7802aeca22b0031b11f5849b4fe49b4ce13325",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_image_fill127.goose",
+    "opt": 2,
+    "sha256": "8343aae9d02daaf54d87a027ad7802aeca22b0031b11f5849b4fe49b4ce13325",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_image_fill128.goose",
+    "opt": 0,
+    "sha256": "c3e136ba9506b16e1c634b4cfaf40674249d0c1b113079cd8141c57085e456da",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_image_fill128.goose",
+    "opt": 2,
+    "sha256": "c3e136ba9506b16e1c634b4cfaf40674249d0c1b113079cd8141c57085e456da",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_image_fill16383.goose",
+    "opt": 0,
+    "sha256": "5ffd637861f2e8ca84dbd0d1ed8a201e05c1a2c12aa688f5e77c778317590039",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_image_fill16383.goose",
+    "opt": 2,
+    "sha256": "5ffd637861f2e8ca84dbd0d1ed8a201e05c1a2c12aa688f5e77c778317590039",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_image_fill16384.goose",
+    "opt": 0,
+    "sha256": "7522dbe18837babd5428c5721c963d6360577f63c213f4cffe53ddfe17655938",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_image_fill16384.goose",
+    "opt": 2,
+    "sha256": "7522dbe18837babd5428c5721c963d6360577f63c213f4cffe53ddfe17655938",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_image_copy0.goose",
+    "opt": 0,
+    "sha256": "54568002b5c5485c85e89614e14a96533227f7c8520f187d33cccd610c22e4f9",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_image_copy0.goose",
+    "opt": 2,
+    "sha256": "54568002b5c5485c85e89614e14a96533227f7c8520f187d33cccd610c22e4f9",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_image_copy128.goose",
+    "opt": 0,
+    "sha256": "8f0f33086df27d3f77ada8304f839d0c1f106e057aed10d70a70539aaf776e56",
+    "status": "PASS assertions enabled and Release byte identity"
+  },
+  {
+    "source": "test/wasm/wasm_aggregate_leb_image_copy128.goose",
+    "opt": 2,
+    "sha256": "8f0f33086df27d3f77ada8304f839d0c1f106e057aed10d70a70539aaf776e56",
+    "status": "PASS assertions enabled and Release byte identity"
+  }
+]

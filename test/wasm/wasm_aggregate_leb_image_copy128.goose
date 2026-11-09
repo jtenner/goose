@@ -1,0 +1,1 @@
+struct S{mark:u8,n:i64,tail:u16}recursive fn receive(a:S[varint]&){print("before");var b:S[varint]=copy(a);print("after");assert(b.len==128);assert(b[127].n== -8&&b[0].tail==900);}fn main(){var a:S[varint]=[S{34,-8,900};128];receive(a);print("between");var keep:u8[]=[91];receive(a);print("done");assert(keep[0]==91);}

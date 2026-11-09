@@ -1,0 +1,1 @@
+struct S{n:i64}recursive fn check(a:S[varint]&)->i64{var b:S[varint]=copy(a);assert(b[127].n==7);return b.len;}fn main(){var a:S[varint]=[S{7};128];assert(check(a)==128);var keep:u8[]=[91];assert(check(a)==128&&keep[0]==91);print("borrow");}
