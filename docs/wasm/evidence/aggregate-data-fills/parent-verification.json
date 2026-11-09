@@ -1,0 +1,569 @@
+{
+  "status": "PASS",
+  "parent_commit": "d238b3a64b8d5a052cc48058854cf888260995fb",
+  "parent_compiler_sha256": "b70378cc7c0be14cb0651ac2842a2f82273e9a86834a40e9b9bd692e531850d8",
+  "committed_tested_source_files": 85,
+  "native_valid_wasm_compile_failures": 43,
+  "families": [
+    {
+      "case": "empty_effect",
+      "source_sha256": "9e84d7dfff21b0bc1f30894fe32cb8c49a7e922acdc19d9f7a9e823df338b952",
+      "expected": "empty_effect\n",
+      "commands": {
+        "emit": 1,
+        "cc": 2,
+        "native": 3,
+        "wasm": 4
+      },
+      "status": "PASS native; parent Wasm fill rejection",
+      "producer_phase": "parent02"
+    },
+    {
+      "case": "enum_fill",
+      "source_sha256": "56efb946707564c7d1a36e7151c77763f2497ccb9e816793c0ec82d3cd937a14",
+      "expected": "enum_fill\n",
+      "commands": {
+        "emit": 1,
+        "cc": 2,
+        "native": 3,
+        "wasm": 4
+      },
+      "producer_phase": "parent03",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "nested_fill",
+      "source_sha256": "cce70cb885fd839e5227597f9287cd5649fa85e3465de3b515f6b33baec6bb6e",
+      "expected": "nested_fill\n",
+      "commands": {
+        "emit": 5,
+        "cc": 6,
+        "native": 7,
+        "wasm": 8
+      },
+      "producer_phase": "parent03",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "struct_fill",
+      "source_sha256": "a5b0bcfd962f180ca3504ff38de50cbd6eeb7f3e56747e80706dfc17b188698f",
+      "expected": "struct_fill\n",
+      "commands": {
+        "emit": 1,
+        "cc": 2,
+        "native": 3,
+        "wasm": 4
+      },
+      "producer_phase": "parent04",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "block_value",
+      "source_sha256": "3ed73e363aee0160d031d0eca170ae8280cf7e0f5798d03dd0b06cb43d1b50c0",
+      "expected": "block_value\n",
+      "commands": {
+        "emit": 1,
+        "cc": 2,
+        "native": 3,
+        "wasm": 4
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "conditional_value",
+      "source_sha256": "7304fd8c874f4e7dc087ebedaaf8a4795b67205d563b7a882cfc9e24768dd489",
+      "expected": "conditional_value\n",
+      "commands": {
+        "emit": 5,
+        "cc": 6,
+        "native": 7,
+        "wasm": 8
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "data_reference",
+      "source_sha256": "a4d8299547947e48987b6066072cc1176fb5ccbdd70c40b4a2fd4c7abdcd403f",
+      "expected": "data_reference\n",
+      "commands": {
+        "emit": 9,
+        "cc": 10,
+        "native": 11,
+        "wasm": 12
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "default_value",
+      "source_sha256": "4db2a9c798e2890b1119e342c576a846f3638f4d846c4f426ea61f6133c44616",
+      "expected": "default_value\n",
+      "commands": {
+        "emit": 13,
+        "cc": 14,
+        "native": 15,
+        "wasm": 16
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "default_zero",
+      "source_sha256": "e1aa973b69071bdddaff871fdea6cc528765ba10a95a9f7c3525d7c5a5149006",
+      "expected": "default_zero\n",
+      "commands": {
+        "emit": 17,
+        "cc": 18,
+        "native": 19,
+        "wasm": 20
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "defer_exit",
+      "source_sha256": "970a59b9d0b8eb1e5c866a1f5e4998289b7c2718ccf1bc3cac46d161cd9c4069",
+      "expected": "defer_exit\n",
+      "commands": {
+        "emit": 21,
+        "cc": 22,
+        "native": 23,
+        "wasm": 24
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "dynamic",
+      "source_sha256": "1b8b6feba5eb8d563afbaf1708086ea59386edda5e06929e0fb7a915383a9acf",
+      "expected": "dynamic\n",
+      "commands": {
+        "emit": 25,
+        "cc": 26,
+        "native": 27,
+        "wasm": 28
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "fp_values",
+      "source_sha256": "828d318b8f0d6e1d1f81f17644d38ef58f256ff28a31eb0b9858d5d1486fb0c3",
+      "expected": "fp_values\n",
+      "commands": {
+        "emit": 29,
+        "cc": 30,
+        "native": 31,
+        "wasm": 32
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "function_value",
+      "source_sha256": "760fa24a22f548a26fc2a132fc7883c6ee12fe80ad00566e732bba76f6877d16",
+      "expected": "function_value\n",
+      "commands": {
+        "emit": 33,
+        "cc": 34,
+        "native": 35,
+        "wasm": 36
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "global",
+      "source_sha256": "52457974be91063c6d9368e4a15bd51901d8e40ea44d84ec039c091c9b2898d1",
+      "expected": "global\n",
+      "commands": {
+        "emit": 37,
+        "cc": 38,
+        "native": 39,
+        "wasm": 40
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "loop_exits",
+      "source_sha256": "fc9259b584f584f64a5d87f68f8c9ccebec37cf80ffc318b3a966f47c7948786",
+      "expected": "loop_exits\n",
+      "commands": {
+        "emit": 41,
+        "cc": 42,
+        "native": 43,
+        "wasm": 44
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "named_snapshot",
+      "source_sha256": "344a79dde0e99504d47617d5582adada71d3722622cd27a5eba297cdf23dfc14",
+      "expected": "named_snapshot\n",
+      "commands": {
+        "emit": 45,
+        "cc": 46,
+        "native": 47,
+        "wasm": 48
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "nested_enums",
+      "source_sha256": "15569bc024c98847da810c40b689c1c8e49b8d8d41e5dd9b72bab03c24566b7b",
+      "expected": "nested_enums\n",
+      "commands": {
+        "emit": 49,
+        "cc": 50,
+        "native": 51,
+        "wasm": 52
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "nested_snapshot",
+      "source_sha256": "4de933c3323b844354927e6300db46d805af7d613872218baf95965f275f95fa",
+      "expected": "nested_snapshot\n",
+      "commands": {
+        "emit": 53,
+        "cc": 54,
+        "native": 55,
+        "wasm": 56
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "optional_reference",
+      "source_sha256": "3d95c222ad69c52ed03f84a7446d6719f5af1a49b35d8631b42f336f22115e34",
+      "expected": "optional_reference\n",
+      "commands": {
+        "emit": 57,
+        "cc": 58,
+        "native": 59,
+        "wasm": 60
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "recursive",
+      "source_sha256": "b1e42d09055828e9bd7fc106d14d20888e1174b15c7ae4bf619d6ae469cca234",
+      "expected": "recursive\n",
+      "commands": {
+        "emit": 61,
+        "cc": 62,
+        "native": 63,
+        "wasm": 64
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "reference",
+      "source_sha256": "cb366270ae63c28604a2334b6e3a55dce5533c7ecb9b9c20583c578f33ecbdf3",
+      "expected": "reference\n",
+      "commands": {
+        "emit": 65,
+        "cc": 66,
+        "native": 67,
+        "wasm": 68
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "standalone_variant",
+      "source_sha256": "3fdad994eefad6c81f763e07afaa172fc98684f1cbef08afdbf4db098484cb5e",
+      "expected": "standalone_variant\n",
+      "commands": {
+        "emit": 69,
+        "cc": 70,
+        "native": 71,
+        "wasm": 72
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "u16_count0",
+      "source_sha256": "a7de9e5ded2280d0be2a81dcee6082b20049befddd10724729c8b8d0797cc8be",
+      "expected": "u16_count0\n",
+      "commands": {
+        "emit": 73,
+        "cc": 74,
+        "native": 75,
+        "wasm": 76
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "u16_count128",
+      "source_sha256": "b7a56b86352474c3471941174ab4d33baed27b591b70f63a11d8580263169623",
+      "expected": "u16_count128\n",
+      "commands": {
+        "emit": 77,
+        "cc": 78,
+        "native": 79,
+        "wasm": 80
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "u16_count256",
+      "source_sha256": "696193c84d8984ac51c0ec56cb61100a9d66ce8951500f6608055c35483731d6",
+      "expected": "u16_count256\n",
+      "commands": {
+        "emit": 81,
+        "cc": 82,
+        "native": 83,
+        "wasm": 84
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "u16_count3",
+      "source_sha256": "cc9a2e14af20539462ef4bd23f814412113ce645cb8bc9967d23de01223906f3",
+      "expected": "u16_count3\n",
+      "commands": {
+        "emit": 85,
+        "cc": 86,
+        "native": 87,
+        "wasm": 88
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "u32_count0",
+      "source_sha256": "732e79441714af42b435ff5569774186942639f4c1ffa8924af009cad650ebf7",
+      "expected": "u32_count0\n",
+      "commands": {
+        "emit": 89,
+        "cc": 90,
+        "native": 91,
+        "wasm": 92
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "u32_count128",
+      "source_sha256": "cc764e03155d3b69a4fb48e835bdb4cb072198037bc9391d7da677c1c0214e5d",
+      "expected": "u32_count128\n",
+      "commands": {
+        "emit": 93,
+        "cc": 94,
+        "native": 95,
+        "wasm": 96
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "u32_count3",
+      "source_sha256": "451b4bda619799934e84e8952773fb14771eff479658b5204a5709a13aa75286",
+      "expected": "u32_count3\n",
+      "commands": {
+        "emit": 97,
+        "cc": 98,
+        "native": 99,
+        "wasm": 100
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "u64_count0",
+      "source_sha256": "09cd21d8fb4f132a59adaab2d9d8e218ccf59f4cfb73524b08e583bae0aa670f",
+      "expected": "u64_count0\n",
+      "commands": {
+        "emit": 101,
+        "cc": 102,
+        "native": 103,
+        "wasm": 104
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "u64_count128",
+      "source_sha256": "da8e5d4fb7c1304d2e06d5097c6e9e687e17f9ed10e38667c38842097fabdfc0",
+      "expected": "u64_count128\n",
+      "commands": {
+        "emit": 105,
+        "cc": 106,
+        "native": 107,
+        "wasm": 108
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "u64_count3",
+      "source_sha256": "7d92a9606dba4d9064b90343f7a5452047f6dca9327ebb60b40457a02a08fdff",
+      "expected": "u64_count3\n",
+      "commands": {
+        "emit": 109,
+        "cc": 110,
+        "native": 111,
+        "wasm": 112
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "u8_count0",
+      "source_sha256": "229ccb4c4cfa87f67205e037c08863abe1d3b24afd43ee9f7c6eb71fbfeecf84",
+      "expected": "u8_count0\n",
+      "commands": {
+        "emit": 113,
+        "cc": 114,
+        "native": 115,
+        "wasm": 116
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "u8_count128",
+      "source_sha256": "c5e6efd7a923035e4697d6e774d01c2c7ab4b26e5e8768f078240fe2557dbb74",
+      "expected": "u8_count128\n",
+      "commands": {
+        "emit": 117,
+        "cc": 118,
+        "native": 119,
+        "wasm": 120
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "u8_count255",
+      "source_sha256": "1ba34b526f090feaa724fecbc49d148469d927ff9b09d748199233cdc029bb80",
+      "expected": "u8_count255\n",
+      "commands": {
+        "emit": 121,
+        "cc": 122,
+        "native": 123,
+        "wasm": 124
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "u8_count3",
+      "source_sha256": "68b448db5512a70171341445fe4d8990ce124b1a1bb936ca80e1a43d55d25f64",
+      "expected": "u8_count3\n",
+      "commands": {
+        "emit": 125,
+        "cc": 126,
+        "native": 127,
+        "wasm": 128
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "zero_exit",
+      "source_sha256": "9d5750adfab73df82c3581c7220dde50b45054e7e299f5611d133d9016e33aa5",
+      "expected": "zero_exit\n",
+      "commands": {
+        "emit": 129,
+        "cc": 130,
+        "native": 131,
+        "wasm": 132
+      },
+      "producer_phase": "parent05",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "image_u8_count3",
+      "source_sha256": "14dcb4e89834275670d5e996614af2e25ba7c2f9636f9a8e7e316893e320798c",
+      "expected": "before\neval\nafter\n",
+      "commands": {
+        "emit": 1,
+        "cc": 2,
+        "native": 3,
+        "wasm": 4
+      },
+      "producer_phase": "parent06",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "image_u16_count3",
+      "source_sha256": "7211eb90ea8ae69d548a2a0da43b7b4cd358f0b0f9d0b57252df6e811b44c4e7",
+      "expected": "before\neval\nafter\n",
+      "commands": {
+        "emit": 5,
+        "cc": 6,
+        "native": 7,
+        "wasm": 8
+      },
+      "producer_phase": "parent06",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "image_u32_count3",
+      "source_sha256": "a33894189f37ff1b1ac14cd5bf7b8606115dc44e1b541cb8a8bcd6826a5e2ef3",
+      "expected": "before\neval\nafter\n",
+      "commands": {
+        "emit": 9,
+        "cc": 10,
+        "native": 11,
+        "wasm": 12
+      },
+      "producer_phase": "parent06",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "image_u64_count3",
+      "source_sha256": "ea7b73a38a9e140766c034200c35dfe0595a67b66fca6186033a8db8218b378a",
+      "expected": "before\neval\nafter\n",
+      "commands": {
+        "emit": 13,
+        "cc": 14,
+        "native": 15,
+        "wasm": 16
+      },
+      "producer_phase": "parent06",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "image_u8_count0",
+      "source_sha256": "91361b3acfcba7c5cdf07f0ceb460c3d593603b20ca868d4ce763c7e508b4229",
+      "expected": "before\neval\nafter\n",
+      "commands": {
+        "emit": 17,
+        "cc": 18,
+        "native": 19,
+        "wasm": 20
+      },
+      "producer_phase": "parent06",
+      "status": "PASS native; parent Wasm fill rejection"
+    },
+    {
+      "case": "image_dynamic",
+      "source_sha256": "d162d81e5606607a20b92229009e2e6b20eb68b770b0bc33fe43c3f946eb90fb",
+      "expected": "before\neval\nafter\nbetween\nbefore\neval\nafter\ndone\n",
+      "commands": {
+        "emit": 21,
+        "cc": 22,
+        "native": 23,
+        "wasm": 24
+      },
+      "producer_phase": "parent06",
+      "status": "PASS native; parent Wasm fill rejection"
+    }
+  ],
+  "invalid_setup_attempts": "parent01 field delimiters, parent02 enum delimiter, parent03 overly broad source text replacement; completed native-valid cases reused only after source/status/output checks"
+}

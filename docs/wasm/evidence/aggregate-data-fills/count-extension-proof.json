@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "original_full_checks": 7651,
+  "added_limits_checks": 8,
+  "changed_inputs": [
+    "test/wasm_backend.py",
+    "test/wasm_aggregate_data_fill_checks.py"
+  ],
+  "basis": "final helper differs only by appended check_limits; main differs only by import and direct call of that helper; all previously executed code bytes unchanged",
+  "original_snapshot_inputs_sha256": "6b16f737d1dec067b65d5014b40b6a0ce5a260c93d2ece7ac72007b16ceb417e"
+}

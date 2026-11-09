@@ -870,8 +870,34 @@ inline WasmCodeGen::FreshDataArrayDestination WasmCodeGen::ReserveFreshDataArray
 inline void WasmCodeGen::InitAggregateDataArray(VarDef *owner, const Slot &slot,
                                               VarDecl *declaration, Node *source) {
     if (auto literal = Is<ArrayLit>(source)) {
-        if (literal->fillval || literal->capexpr)
+        if (literal->capexpr)
             Fail(source->line, "aggregate data fills need the pending snapshot lowering");
+        if (literal->fillval) {
+            auto count = Is<IntLit>(literal->fillcount);
+            if (!count || count->val < 0 || (uint64_t)count->val >= NoLocal)
+                Fail(source->line, "aggregate data fill needs a nonnegative memory32 count");
+            auto size = (uint32_t)count->val;
+            auto fresh = ReserveFreshDataArray(owner, slot, declaration, NoLocal, size);
+            InitArrayCount(fresh.image, size);
+            // Capture once even when empty. The complete receiving reservation
+            // remains live while the value calls code or owns temporary data.
+            WithFixedTemporary(owner->type->arr->sub, literal->fillval, [&](const FixedPlace &item) {
+                if (!size) return;
+                auto position = Local(WasmModule::I64), address = Local(WasmModule::I64);
+                code.I64(0); code.Set(position);
+                auto done = Open(), head = Open(0x03);
+                code.Get(position); code.I64(size); code.Byte(0x5a); Branch(done, true);
+                EmitPackedAddress(fresh.image.image, source->line);
+                code.Get(position); code.I64(fresh.stride); code.Byte(0x7e); code.Byte(0x7c);
+                code.I64(fresh.prefixBytes); code.Byte(0x7c); code.Set(address);
+                // Count and stride are bounded by the complete fresh owner.
+                CopyBytes({owner->type->arr->sub, address, 0, fresh.image.elementMemory, true, true},
+                          item, fresh.stride, source->line, true);
+                code.Get(position); code.I64(1); code.Byte(0x7c); code.Set(position);
+                Branch(head); Close(); Close();
+            });
+            return;
+        }
         if (literal->elems.size() >= NoLocal)
             Fail(source->line, "aggregate data literal exceeds memory32");
         auto fresh = ReserveFreshDataArray(owner, slot, declaration, NoLocal,

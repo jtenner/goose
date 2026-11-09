@@ -1,0 +1,41 @@
+[
+  {
+    "case": "empty_effect",
+    "source_sha256": "9e84d7dfff21b0bc1f30894fe32cb8c49a7e922acdc19d9f7a9e823df338b952",
+    "expected": "empty_effect\n",
+    "commands": {
+      "emit": 1,
+      "cc": 2,
+      "native": 3,
+      "wasm": 4
+    },
+    "status": "PASS native; parent Wasm fill rejection",
+    "producer_phase": "parent02"
+  },
+  {
+    "case": "enum_fill",
+    "source_sha256": "56efb946707564c7d1a36e7151c77763f2497ccb9e816793c0ec82d3cd937a14",
+    "expected": "enum_fill\n",
+    "commands": {
+      "emit": 1,
+      "cc": 2,
+      "native": 3,
+      "wasm": 4
+    },
+    "producer_phase": "parent03",
+    "status": "PASS native; parent Wasm fill rejection"
+  },
+  {
+    "case": "nested_fill",
+    "source_sha256": "cce70cb885fd839e5227597f9287cd5649fa85e3465de3b515f6b33baec6bb6e",
+    "expected": "nested_fill\n",
+    "commands": {
+      "emit": 5,
+      "cc": 6,
+      "native": 7,
+      "wasm": 8
+    },
+    "producer_phase": "parent03",
+    "status": "PASS native; parent Wasm fill rejection"
+  }
+]

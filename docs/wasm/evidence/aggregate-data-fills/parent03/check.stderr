@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-aggregate-data-fill-20261109/parent_checks03.py", line 20, in <module>
+    assert a.returncode==0,(f.name,label,a.returncode,a.stderr)
+           ^^^^^^^^^^^^^^^
+AssertionError: ('struct_fill.goose', 'emit', 1, b"/tmp/goose-wasm-aggregate-data-fill-20261109/prepared/struct_fill.goose:4: error: expected ')' in call arguments, found 'x'\n    assert(a.len==3 && a[0]x:=17 && a[2]y:=9);\n                           ^\n/tmp/goose-wasm-aggregate-data-fill-20261109/prepared/struct_fill.goose:5: error: ';' expected after expression, found 'x'\n    a[0]x:44;\n        ^\n/tmp/goose-wasm-aggregate-data-fill-20261109/prepared/struct_fill.goose:6: error: expected ')' in call arguments, found 'x'\n    assert(a[1]x:=17);\n               ^\n")

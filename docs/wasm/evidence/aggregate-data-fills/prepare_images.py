@@ -1,0 +1,6 @@
+from pathlib import Path
+import json,hashlib
+p=Path(__file__).parent;d=p/'image-sources';d.mkdir(exist_ok=True);rows=[]
+for width,count in [(8,3),(16,3),(32,3),(64,3),(8,0)]:
+ name=f'image_u{width}_count{count}';s=f'struct S{{mark:u8,n:i64,tail:u16}}recursive fn value()->i64{{print("eval");return -8;}}fn main(){{print("before");var a:S[u{width}]=[S{{34,value(),900}};{count}];print("after");assert(a.len=={count});'+(f'assert(a[0].mark==34&&a[{count-1}].n== -8&&a[{count-1}].tail==900);' if count else '')+'}\n';(d/(name+'.goose')).write_text(s);rows.append({'case':name,'source_sha256':hashlib.sha256(s.encode()).hexdigest(),'expected':'before\neval\nafter\n','persistent':0})
+name='image_dynamic';s='struct S{mark:u8,n:i64,tail:u16}recursive fn value()->i64{print("eval");return -8;}recursive fn produce(){print("before");var a:S[u16]=[S{34,value(),900};3];print("after");assert(a[2].n== -8&&a[1].tail==900);}fn main(){produce();print("between");var keep:u8[]=[91];produce();print("done");assert(keep[0]==91);}\n';(d/(name+'.goose')).write_text(s);rows.append({'case':name,'source_sha256':hashlib.sha256(s.encode()).hexdigest(),'expected':'before\neval\nafter\nbetween\nbefore\neval\nafter\ndone\n','persistent':0});(p/'image-families.json').write_text(json.dumps(rows,indent=2)+'\n');print('Prepared',len(rows),'image families; native validity pending')

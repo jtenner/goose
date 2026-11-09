@@ -1,0 +1,58 @@
+[
+  {
+    "case": "last_extent",
+    "count": 4294967287,
+    "source_sha256": "716f7031d2cc20ab8647b8197da7bce3392cc6e9253f71011effd3080bed90e4",
+    "expected_candidate_rejection": null,
+    "native_branch": "false; no large reservation executes",
+    "commands": {
+      "emit": 1,
+      "cc": 2,
+      "native": 3,
+      "wasm": 4
+    },
+    "status": "PASS native runtime-false path; parent Wasm fill guard"
+  },
+  {
+    "case": "extent_over",
+    "count": 4294967288,
+    "source_sha256": "2ae6d1e39d1fcb750b31aa42c68bb24f046c48ffc298b1effd345734ef9ebe7a",
+    "expected_candidate_rejection": "aggregate data literal exceeds memory32",
+    "native_branch": "false; no large reservation executes",
+    "commands": {
+      "emit": 5,
+      "cc": 6,
+      "native": 7,
+      "wasm": 8
+    },
+    "status": "PASS native runtime-false path; parent Wasm fill guard"
+  },
+  {
+    "case": "sentinel_count",
+    "count": 4294967295,
+    "source_sha256": "e8823dc9deda0bec9d8676bbccd707412a8352d4ecbf9aff045e5279747368fb",
+    "expected_candidate_rejection": "aggregate data fill needs a nonnegative memory32 count",
+    "native_branch": "false; no large reservation executes",
+    "commands": {
+      "emit": 9,
+      "cc": 10,
+      "native": 11,
+      "wasm": 12
+    },
+    "status": "PASS native runtime-false path; parent Wasm fill guard"
+  },
+  {
+    "case": "wide_count",
+    "count": 4294967296,
+    "source_sha256": "6e7b40a62505dded20c1b1ca53ca05c4a61fe1435e1b13bbd8481575893c0351",
+    "expected_candidate_rejection": "aggregate data fill needs a nonnegative memory32 count",
+    "native_branch": "false; no large reservation executes",
+    "commands": {
+      "emit": 13,
+      "cc": 14,
+      "native": 15,
+      "wasm": 16
+    },
+    "status": "PASS native runtime-false path; parent Wasm fill guard"
+  }
+]

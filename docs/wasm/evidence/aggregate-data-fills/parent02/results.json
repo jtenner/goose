@@ -1,0 +1,14 @@
+[
+  {
+    "case": "empty_effect",
+    "source_sha256": "9e84d7dfff21b0bc1f30894fe32cb8c49a7e922acdc19d9f7a9e823df338b952",
+    "expected": "empty_effect\n",
+    "commands": {
+      "emit": 1,
+      "cc": 2,
+      "native": 3,
+      "wasm": 4
+    },
+    "status": "PASS native; parent Wasm fill rejection"
+  }
+]

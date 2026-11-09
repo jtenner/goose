@@ -1,0 +1,6 @@
+{
+  "status": "setup failed before registration/input freeze",
+  "cause": "setup expected parenthesized wasm_nonfixed_source_checks import, actual import is one line",
+  "assertion_build": "shell continued to declared build after setup failure; compiler source unchanged and85 source hashes verified before completion",
+  "no_test_run_from_failed_setup": true
+}

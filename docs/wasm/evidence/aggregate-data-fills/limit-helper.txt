@@ -1,0 +1,28 @@
+
+
+def check_limits(run,exe,cc,node,validator,wasmtime_python,out):
+    count=0
+    cases=[('last-extent',4294967287,None),
+           ('extent-over',4294967288,b'aggregate data literal exceeds memory32'),
+           ('sentinel-count',4294967295,b'aggregate data fill needs a nonnegative memory32 count'),
+           ('wide-count',4294967296,b'aggregate data fill needs a nonnegative memory32 count')]
+    for name,length,reason in cases:
+        # Recursive prevents compile-time inlining of the false flag. No large
+        # allocation executes in native code or either Wasm engine.
+        text=f'struct S{{n:u8}}recursive fn gated(flag:bool){{if flag{{var a:S[u64]=[S{{7}};{length}];assert(a.len=={length});}}}}fn main(){{gated(false);print("guard");}}\n'
+        source=out/('data-fill-limit-'+name+'.goose');source.write_text(text)
+        for opt in (0,2):
+            prefix=out/f'data-fill-limit-{name}-O{opt}';c,native,module=[prefix.with_suffix(e) for e in ['.c','.native','.wasm']]
+            run([exe,f'-O{opt}','--standalone','-o',c,source]);run([cc,f'-O{opt}',c,'-pthread','-lm','-ldl','-o',native]);result=run([native]);assert result.stdout==b'guard\n' and not result.stderr
+            result=run([exe,f'-O{opt}','--target','wasm','-o',module,source],ok=False)
+            if reason:
+                assert result.returncode==1 and reason in result.stderr and not module.exists(),(name,opt,result.stderr)
+            else:
+                assert result.returncode==0 and not result.stderr,(name,opt,result.stderr)
+                run([validator,'validate',module])
+                result=run([node,ROOT/'test/wasm_reference_abi.mjs',module,out/f'data-fill-limit-{name}-O{opt}-instance']);assert result.stdout==b'guard\n' and not result.stderr
+                result=run([node,ROOT/'test/wasm_multimemory.mjs',module,'0']);assert result.stdout==b'guard\n' and not result.stderr
+                if wasmtime_python:
+                    result=run([wasmtime_python,ROOT/'test/wasmtime_host.py',module]);assert result.stdout==b'guard\n' and not result.stderr
+            count+=1
+    return count

@@ -1,0 +1,22 @@
+[
+  {
+    "case": "empty_effect",
+    "source_sha256": "a7b31d66bef4ad693b6d36c5ea72abc16d65bfdf4f40a059459b44cb1070e041",
+    "expected": "empty_effect\n"
+  },
+  {
+    "case": "enum_fill",
+    "source_sha256": "84dc1b9b142d936449024141dfa450334bf969cc10117a91df14f714fde652a4",
+    "expected": "enum_fill\n"
+  },
+  {
+    "case": "nested_fill",
+    "source_sha256": "8155b5a48c59ab461f0d8a398947e7226dfb485563f1e8714352c1c963d99577",
+    "expected": "nested_fill\n"
+  },
+  {
+    "case": "struct_fill",
+    "source_sha256": "2d6292224581741db2cfb55486fe7609a8a1b2b9f1455ed880ba433cf6f31a9f",
+    "expected": "struct_fill\n"
+  }
+]

@@ -1,0 +1,80 @@
+[
+  {
+    "case": "image_u8_count3",
+    "source_sha256": "14dcb4e89834275670d5e996614af2e25ba7c2f9636f9a8e7e316893e320798c",
+    "expected": "before\neval\nafter\n",
+    "commands": {
+      "emit": 1,
+      "cc": 2,
+      "native": 3,
+      "wasm": 4
+    },
+    "producer_phase": "parent06",
+    "status": "PASS native; parent Wasm fill rejection"
+  },
+  {
+    "case": "image_u16_count3",
+    "source_sha256": "7211eb90ea8ae69d548a2a0da43b7b4cd358f0b0f9d0b57252df6e811b44c4e7",
+    "expected": "before\neval\nafter\n",
+    "commands": {
+      "emit": 5,
+      "cc": 6,
+      "native": 7,
+      "wasm": 8
+    },
+    "producer_phase": "parent06",
+    "status": "PASS native; parent Wasm fill rejection"
+  },
+  {
+    "case": "image_u32_count3",
+    "source_sha256": "a33894189f37ff1b1ac14cd5bf7b8606115dc44e1b541cb8a8bcd6826a5e2ef3",
+    "expected": "before\neval\nafter\n",
+    "commands": {
+      "emit": 9,
+      "cc": 10,
+      "native": 11,
+      "wasm": 12
+    },
+    "producer_phase": "parent06",
+    "status": "PASS native; parent Wasm fill rejection"
+  },
+  {
+    "case": "image_u64_count3",
+    "source_sha256": "ea7b73a38a9e140766c034200c35dfe0595a67b66fca6186033a8db8218b378a",
+    "expected": "before\neval\nafter\n",
+    "commands": {
+      "emit": 13,
+      "cc": 14,
+      "native": 15,
+      "wasm": 16
+    },
+    "producer_phase": "parent06",
+    "status": "PASS native; parent Wasm fill rejection"
+  },
+  {
+    "case": "image_u8_count0",
+    "source_sha256": "91361b3acfcba7c5cdf07f0ceb460c3d593603b20ca868d4ce763c7e508b4229",
+    "expected": "before\neval\nafter\n",
+    "commands": {
+      "emit": 17,
+      "cc": 18,
+      "native": 19,
+      "wasm": 20
+    },
+    "producer_phase": "parent06",
+    "status": "PASS native; parent Wasm fill rejection"
+  },
+  {
+    "case": "image_dynamic",
+    "source_sha256": "d162d81e5606607a20b92229009e2e6b20eb68b770b0bc33fe43c3f946eb90fb",
+    "expected": "before\neval\nafter\nbetween\nbefore\neval\nafter\ndone\n",
+    "commands": {
+      "emit": 21,
+      "cc": 22,
+      "native": 23,
+      "wasm": 24
+    },
+    "producer_phase": "parent06",
+    "status": "PASS native; parent Wasm fill rejection"
+  }
+]

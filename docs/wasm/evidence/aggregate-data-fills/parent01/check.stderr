@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-aggregate-data-fill-20261109/parent_checks.py", line 13, in <module>
+    assert a.returncode==0,(f.name,label,a.returncode,a.stderr)
+           ^^^^^^^^^^^^^^^
+AssertionError: ('empty_effect.goose', 'emit', 1, b"/tmp/goose-wasm-aggregate-data-fill-20261109/prepared/empty_effect.goose:1: error: expected '}' in struct declaration, found ';'\nstruct Cell { x:i64; }\n                   ^\n")

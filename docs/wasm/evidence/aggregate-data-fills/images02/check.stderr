@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-aggregate-data-fill-20261109/images02/checks.py", line 9, in <module>
+    n+=check_dynamic(run,'node','wasm-tools',out);print('PASS',n,'complete fill image/snapshot/identity/cleanup controls')
+       ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_data_fill_checks.py", line 56, in check_dynamic
+    ('short',one(body,r'i32.const 11(?=\n\s*call \$goose.copy_memory\b)','i32.const 10'),b'data fill receiver image differs'),
+             ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_data_fill_checks.py", line 10, in one
+    text,n=re.subn(pattern,value,text,count=1);assert n==1,pattern
+                                                      ^^^^
+AssertionError: i32.const 11(?=\n\s*call \$goose.copy_memory\b)

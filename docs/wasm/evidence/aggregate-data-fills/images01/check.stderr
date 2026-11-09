@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-aggregate-data-fill-20261109/images01/checks.py", line 8, in <module>
+    n=check_images(run,'node','wasm-tools',out);print('Static',n,flush=True)
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_data_fill_checks.py", line 44, in check_images
+    assert result.returncode==1 and reason in result.stderr,(mode,label,result.stderr);count+=1
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('u8_count3', 'long', b'')

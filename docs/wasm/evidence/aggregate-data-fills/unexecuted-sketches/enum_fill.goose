@@ -1,0 +1,7 @@
+enum Choice { A { x:i64; } B { y:u8; } }
+fn main() {
+    var a:Choice[u32]=[Choice.A{.x=23};2];
+    assert(a.len==2);
+    match a[1] { Choice.A p: { assert(p.x==23); } Choice.B p: { assert(false); } }
+    print("enum_fill");
+}

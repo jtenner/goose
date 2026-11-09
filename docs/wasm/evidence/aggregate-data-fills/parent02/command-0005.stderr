@@ -1,0 +1,3 @@
+/tmp/goose-wasm-aggregate-data-fill-20261109/prepared/enum_fill.goose:1: error: expected '}' in enum declaration, found 'B'
+enum Choice { A { x:i64 } B { y:u8 } }
+                          ^

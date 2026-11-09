@@ -1,0 +1,1 @@
+var calls:i64=0;struct S{n:i64}recursive fn value()->S{calls++;var keep:u8[]=[3;70000];assert(keep[69999]==3);return S{calls};}fn main(){var a:S[u32]=[value();3];assert(calls==1&&a[2].n==1);print("function_value");}

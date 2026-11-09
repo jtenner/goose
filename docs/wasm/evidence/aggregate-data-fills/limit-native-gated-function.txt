@@ -1,0 +1,20 @@
+static void gated_g(uint8_t flag_g, int64_t gs_sp) {
+    S_g t0;
+    S_g t1;
+    if (flag_g) {
+        uint8_t *t3 = GS(gs_sp + 0)->top;
+        uint8_t *a_g = t3;
+        *(gs_u64 *)t3 = (gs_u64)(4294967287);
+        t3 += 8;
+        t0.n_g = 7;
+        t1 = t0;
+        for (int64_t t2 = 0; t2 < 4294967287; t2++) {
+            *(S_g *)t3 = t1;
+            t3 += 1;
+        }
+        if (!((uint8_t)((gs_i64)((gs_i64)(((int64_t)*(gs_u64 *)(a_g)))) == (gs_i64)(4294967287LL)))) gs_abort(GS_E_ASSERT, gs_file0, 1);
+        GS(gs_sp + 0)->top = t3;
+        GS(gs_sp + 0)->top = a_g;
+    }
+    return;
+}

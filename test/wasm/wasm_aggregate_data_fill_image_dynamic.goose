@@ -1,0 +1,1 @@
+struct S{mark:u8,n:i64,tail:u16}recursive fn value()->i64{print("eval");return -8;}recursive fn produce(){print("before");var a:S[u16]=[S{34,value(),900};3];print("after");assert(a[2].n== -8&&a[1].tail==900);}fn main(){produce();print("between");var keep:u8[]=[91];produce();print("done");assert(keep[0]==91);}

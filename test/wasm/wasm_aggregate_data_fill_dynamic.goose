@@ -1,0 +1,1 @@
+struct S{mark:u8,n:i64,tail:u16}recursive fn run(n:i64)->i64{var a:S[u16]=[S{7,n,900};3];return a[2].n;}fn main(){assert(run(-8)== -8);var keep:u8[]=[91];assert(run(17)==17);assert(keep[0]==91);print("dynamic");}

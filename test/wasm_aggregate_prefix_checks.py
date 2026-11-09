@@ -57,7 +57,7 @@ def check_guards(run,exe,cc,out):
     count=0
     programs={
         'leb':('struct S{n:i64}fn main(){var rows:S[varint]=[S{7}];assert(rows[0].n==7);print("guard");}\n',b'compound array elements need the pending layout lowering'),
-        'fill':('struct S{n:i64}fn main(){var rows:S[u8]=[S{7};2];assert(rows[1].n==7);print("guard");}\n',b'aggregate data fills need the pending snapshot lowering'),
+        'runtime-fill':('struct S{n:i64}fn main(){var rows:S[..]=[S{7};2];assert(rows[1].n==7);print("guard");}\n',b'compound array elements need the pending layout lowering'),
     }
     for name,(text,reason) in programs.items():
         path=out/f'aggregate-prefix-guard-{name}.goose';path.write_text(text)

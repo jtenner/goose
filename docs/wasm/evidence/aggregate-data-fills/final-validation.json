@@ -1,0 +1,57 @@
+{
+  "status": "PASS",
+  "purpose": "correctness only",
+  "source_parent": "d238b3a64b8d5a052cc48058854cf888260995fb",
+  "compiler_sha256": "8a807ab28e4e837c84d99199b015fb3159bd26432c5d43c3d8188f88f3a71f3f",
+  "assertion_compiler_sha256": "fa13d1b11c464f3ae8fa57882f0bf19d174b1d96ca3b57953ed634510ab2162b",
+  "source_files": 85,
+  "validation_inputs": 6055,
+  "changed_source": [
+    "src/wasm_arrays.h"
+  ],
+  "selected_checks": [
+    "parent04",
+    "parent05",
+    "parent06",
+    "parent-proof01",
+    "build01",
+    "focused01",
+    "focused02",
+    "images03",
+    "assert-build01",
+    "assert-check01",
+    "identity01",
+    "exact01",
+    "full-correctness01",
+    "parent-limits01",
+    "limits01",
+    "assert-limits01"
+  ],
+  "native_valid_parent_compile_failures": 43,
+  "positive_families": 43,
+  "positive_native_node_wasmtime_completed_owner_pairs": 86,
+  "assertion_compiler_node_pairs_and_release_byte_identities": 86,
+  "additional_boundary_assertion_compile_checks": 8,
+  "new_image_and_fault_control_checks": 114,
+  "wasm_checks": 7659,
+  "original_full_phase_checks": 7651,
+  "additional_count_boundary_checks": 8,
+  "total_fixture_pairs": 1978,
+  "byte_identical_old_fixture_modules": 1892,
+  "full_suite_basis": "7651-check core/runtime/layout and every then-registered suffix helper run fresh; final8 added boundary checks run separately, with exact code-extension proof; executed parent fixture pairs reused after current re-emission byte identity; all new fixtures execute native/Node/Wasmtime/owner checks afresh",
+  "native_baseline": "previous full18-group native baseline remains; this delta changes one private Wasm constructor function only;43 current native differential families and52 exact native/Wasm comparisons pass",
+  "exact_comparisons": 52,
+  "no_measurements_timing_profiling": true,
+  "preserved_setup_failures": [
+    "parent01/02/03 source sketch syntax errors; valid producers reused by hash",
+    "images01 matching source/destination sentinels masked long-copy control",
+    "images02 dynamic control assumed generic copy helper rather than existing CopyFromFrame",
+    "registration setup expected parenthesized import; test freeze repaired before checks on unchanged compiler"
+  ],
+  "remaining_compile_limits": [
+    "aggregate LEB prefixes",
+    "nonfixed fields value transport and constructors",
+    "nonfixed aggregate elements",
+    "relative references slices pools native adapters and workers"
+  ]
+}

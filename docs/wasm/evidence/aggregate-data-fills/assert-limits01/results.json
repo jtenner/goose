@@ -1,0 +1,50 @@
+[
+  {
+    "case": "last-extent",
+    "opt": 0,
+    "status": "PASS",
+    "kind": "Release byte-identical and Node PASS"
+  },
+  {
+    "case": "last-extent",
+    "opt": 2,
+    "status": "PASS",
+    "kind": "Release byte-identical and Node PASS"
+  },
+  {
+    "case": "extent-over",
+    "opt": 0,
+    "status": "PASS",
+    "kind": "matching exact rejection"
+  },
+  {
+    "case": "extent-over",
+    "opt": 2,
+    "status": "PASS",
+    "kind": "matching exact rejection"
+  },
+  {
+    "case": "sentinel-count",
+    "opt": 0,
+    "status": "PASS",
+    "kind": "matching exact rejection"
+  },
+  {
+    "case": "sentinel-count",
+    "opt": 2,
+    "status": "PASS",
+    "kind": "matching exact rejection"
+  },
+  {
+    "case": "wide-count",
+    "opt": 0,
+    "status": "PASS",
+    "kind": "matching exact rejection"
+  },
+  {
+    "case": "wide-count",
+    "opt": 2,
+    "status": "PASS",
+    "kind": "matching exact rejection"
+  }
+]

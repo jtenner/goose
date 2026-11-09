@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-aggregate-data-fill-20261109/parent_checks02.py", line 13, in <module>
+    assert a.returncode==0,(f.name,label,a.returncode,a.stderr)
+           ^^^^^^^^^^^^^^^
+AssertionError: ('enum_fill.goose', 'emit', 1, b"/tmp/goose-wasm-aggregate-data-fill-20261109/prepared/enum_fill.goose:1: error: expected '}' in enum declaration, found 'B'\nenum Choice { A { x:i64 } B { y:u8 } }\n                          ^\n")

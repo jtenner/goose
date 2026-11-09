@@ -1,0 +1,136 @@
+[
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/assert-limits01/data-fill-limit-last-extent-O0.wasm",
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/limits01/artifacts/data-fill-limit-last-extent.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/assert-limits01/data-fill-limit-last-extent-O0.wasm",
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/assert-limits01/last-extent-O0-instance"
+    ],
+    "exit": 0,
+    "stdout": "guard\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/assert-limits01/data-fill-limit-last-extent-O2.wasm",
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/limits01/artifacts/data-fill-limit-last-extent.goose"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "/home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs",
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/assert-limits01/data-fill-limit-last-extent-O2.wasm",
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/assert-limits01/last-extent-O2-instance"
+    ],
+    "exit": 0,
+    "stdout": "guard\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/assert-limits01/data-fill-limit-extent-over-O0.wasm",
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/limits01/artifacts/data-fill-limit-extent-over.goose"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "/tmp/goose-wasm-aggregate-data-fill-20261109/limits01/artifacts/data-fill-limit-extent-over.goose:1: error: wasm target: aggregate data literal exceeds memory32\n"
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/assert-limits01/data-fill-limit-extent-over-O2.wasm",
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/limits01/artifacts/data-fill-limit-extent-over.goose"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "/tmp/goose-wasm-aggregate-data-fill-20261109/limits01/artifacts/data-fill-limit-extent-over.goose:1: error: wasm target: aggregate data literal exceeds memory32\n"
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/assert-limits01/data-fill-limit-sentinel-count-O0.wasm",
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/limits01/artifacts/data-fill-limit-sentinel-count.goose"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "/tmp/goose-wasm-aggregate-data-fill-20261109/limits01/artifacts/data-fill-limit-sentinel-count.goose:1: error: wasm target: aggregate data fill needs a nonnegative memory32 count\n"
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/assert-limits01/data-fill-limit-sentinel-count-O2.wasm",
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/limits01/artifacts/data-fill-limit-sentinel-count.goose"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "/tmp/goose-wasm-aggregate-data-fill-20261109/limits01/artifacts/data-fill-limit-sentinel-count.goose:1: error: wasm target: aggregate data fill needs a nonnegative memory32 count\n"
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/assert-build01/goose-tested",
+      "-O0",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/assert-limits01/data-fill-limit-wide-count-O0.wasm",
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/limits01/artifacts/data-fill-limit-wide-count.goose"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "/tmp/goose-wasm-aggregate-data-fill-20261109/limits01/artifacts/data-fill-limit-wide-count.goose:1: error: wasm target: aggregate data fill needs a nonnegative memory32 count\n"
+  },
+  {
+    "command": [
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/assert-build01/goose-tested",
+      "-O2",
+      "--target",
+      "wasm",
+      "-o",
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/assert-limits01/data-fill-limit-wide-count-O2.wasm",
+      "/tmp/goose-wasm-aggregate-data-fill-20261109/limits01/artifacts/data-fill-limit-wide-count.goose"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "/tmp/goose-wasm-aggregate-data-fill-20261109/limits01/artifacts/data-fill-limit-wide-count.goose:1: error: wasm target: aggregate data fill needs a nonnegative memory32 count\n"
+  }
+]

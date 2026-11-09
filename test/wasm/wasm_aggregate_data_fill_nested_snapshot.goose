@@ -1,0 +1,1 @@
+var calls:i64=0;recursive fn next()->i64{calls++;return calls;}struct S{n:i64}struct H{rows:S[..3]}fn main(){var a:H[u16]=[H{rows:[S{next()};2]};3];assert(calls==1&&a[0].rows.len==2&&a[2].rows[1].n==1);a[0].rows[1].n=99;assert(a[2].rows[1].n==1);print("nested_snapshot");}

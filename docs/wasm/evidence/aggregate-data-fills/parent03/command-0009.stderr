@@ -1,0 +1,9 @@
+/tmp/goose-wasm-aggregate-data-fill-20261109/prepared/struct_fill.goose:4: error: expected ')' in call arguments, found 'x'
+    assert(a.len==3 && a[0]x:=17 && a[2]y:=9);
+                           ^
+/tmp/goose-wasm-aggregate-data-fill-20261109/prepared/struct_fill.goose:5: error: ';' expected after expression, found 'x'
+    a[0]x:44;
+        ^
+/tmp/goose-wasm-aggregate-data-fill-20261109/prepared/struct_fill.goose:6: error: expected ')' in call arguments, found 'x'
+    assert(a[1]x:=17);
+               ^
