@@ -20,6 +20,14 @@ performance measurements or measurement-lease rotation are part of this
 thread. Earlier cost notes and queued measurement plans below are historical;
 they are not gates for completing compilation support.
 
+On 2026-11-09 at 00:04 EST, Joshua ruled that Stage F is in scope.
+"Compiled to Wasm" includes supported native/WASI adapters, OS/program
+arguments, isolated worker instances, global snapshots, typed queues and
+worker lifecycle, as listed below. The sequence stays unchanged: finish the
+current conversion work and admitted C-E work first, then implement Stage F
+in the documented order. This ruling authorizes no measurements, timing or
+profiling.
+
 ## Implemented path
 
 - `src/main.cpp`: `--target wasm`, flag and build forms, frontend/BCE reuse,
