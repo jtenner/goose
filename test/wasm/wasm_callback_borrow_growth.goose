@@ -1,0 +1,1 @@
+struct S{n:i64} recursive fn make()->S{return S{7};}recursive fn noise()->i64{var a:i64[9000]=[-23;9000];assert(a[0]== -23&&a[8999]== -23);return 2;} fn apply<F>()->i64{F(make().n,noise())} fn main(){assert(apply(){p:i64&,x:i64=>p+x}==9);print("growth");}

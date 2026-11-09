@@ -1,0 +1,156 @@
+[
+  {
+    "case": "field",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/field.goose",
+    "expected": "field\n",
+    "source_sha256": "4d01d36b21ec8c4d4c7e915d03907868c94b78767bfad6f8ded72c8bbf37d117",
+    "fixture": "wasm_callback_borrow_field"
+  },
+  {
+    "case": "element",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/element.goose",
+    "expected": "element\n",
+    "source_sha256": "70e083e42b4f4025f5359afb5f644e24052ce4ab22c619b9c9b78a3094f60e08",
+    "fixture": "wasm_callback_borrow_element"
+  },
+  {
+    "case": "explicit_field",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/explicit_field.goose",
+    "expected": "explicit_field\n",
+    "source_sha256": "d75224f038b65b71a1286b86977633cb6049f0bdeffd390b0f56bd867264b8d5",
+    "fixture": "wasm_callback_borrow_explicit_field"
+  },
+  {
+    "case": "explicit_element",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/explicit_element.goose",
+    "expected": "explicit_element\n",
+    "source_sha256": "391a59e4532bb9c03b1b685c1bacfb12944f2716fe2f63a64f82f9839bf47102",
+    "fixture": "wasm_callback_borrow_explicit_element"
+  },
+  {
+    "case": "nested",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/nested.goose",
+    "expected": "nested\n",
+    "source_sha256": "236c58e9e0787f6a2497cc20a7c686b01608209d298fa55357559e76f28d8d01",
+    "fixture": "wasm_callback_borrow_nested"
+  },
+  {
+    "case": "array_field",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/array_field.goose",
+    "expected": "array_field\n",
+    "source_sha256": "0182bb9de58985c790c371110ff071705a3652c2933b4bfa60709772265b1409",
+    "fixture": "wasm_callback_borrow_array_field"
+  },
+  {
+    "case": "nominal_element",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/nominal_element.goose",
+    "expected": "nominal_element\n",
+    "source_sha256": "3d2be8982e0fc1be08484e062212f1c49c0b713029866be55d8253848dd254fc",
+    "fixture": "wasm_callback_borrow_nominal_element"
+  },
+  {
+    "case": "bool",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/bool.goose",
+    "expected": "bool\n",
+    "source_sha256": "5b4af56ceadef5a0704f2dfbc728caca6ae0f50be341b0c8a2060e8b5564d2cb",
+    "fixture": "wasm_callback_borrow_bool"
+  },
+  {
+    "case": "f32",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/f32.goose",
+    "expected": "f32\n",
+    "source_sha256": "b64e4c2fca95065e5a6167ef43e14739be6b8738bb9152a3b5fd45ad9924b1cb",
+    "fixture": "wasm_callback_borrow_f32"
+  },
+  {
+    "case": "f64",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/f64.goose",
+    "expected": "f64\n",
+    "source_sha256": "e7686251a7550f16f63062f51b15366b1e9d96dd7a7a556acdc9a28ce97dc6d0",
+    "fixture": "wasm_callback_borrow_f64"
+  },
+  {
+    "case": "void",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/void.goose",
+    "expected": "void\n",
+    "source_sha256": "90b965dc232e8dde29841e0cfca7ddf4b6d1257c3e0ca819a1ee99a411d8a70a",
+    "fixture": "wasm_callback_borrow_void"
+  },
+  {
+    "case": "packed",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/packed.goose",
+    "expected": "packed\n",
+    "source_sha256": "3a73e51e3bb23c69aa2b6e199cbcc1c989e2510f50d82ec1a1785561c7177a79",
+    "fixture": "wasm_callback_borrow_packed"
+  },
+  {
+    "case": "data_memory",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/data_memory.goose",
+    "expected": "data_memory\n",
+    "source_sha256": "e7fa45d913ab23fd04256fabe090aad7f6a22e4d2b4207bec2abf2af37a3546a",
+    "fixture": "wasm_callback_borrow_data_memory"
+  },
+  {
+    "case": "two_live",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/two_live.goose",
+    "expected": "two_live\n",
+    "source_sha256": "0481b17109277d0d0309d39b7b497ddcb65566e2b1e69c13ec15cd8b30ab8948",
+    "fixture": "wasm_callback_borrow_two_live"
+  },
+  {
+    "case": "mixed_value",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/mixed_value.goose",
+    "expected": "mixed_value\n",
+    "source_sha256": "952f2e118edc13bd5072d9d8ccc8da8214692ab06da80902a152dfbb5b510392",
+    "fixture": "wasm_callback_borrow_mixed_value"
+  },
+  {
+    "case": "growth",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/growth.goose",
+    "expected": "growth\n",
+    "source_sha256": "a8c753c8797566db5b68bdf14f60c6bd4b66b0fe8f05dc875fa4913467bdc8a7",
+    "fixture": "wasm_callback_borrow_growth"
+  },
+  {
+    "case": "later_return",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/later_return.goose",
+    "expected": "later_return\n",
+    "source_sha256": "922fdeeabc5998282468854b7373f901ffbd9b10a8118fc6cbe755b4f5d85a54",
+    "fixture": "wasm_callback_borrow_later_return"
+  },
+  {
+    "case": "binary_field",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/binary_field.goose",
+    "expected": "binary_field\n",
+    "source_sha256": "af783598eb640404c86d8b4cea6a74773499c105615525a792d874ba48b4abeb",
+    "fixture": "wasm_callback_borrow_binary_field"
+  },
+  {
+    "case": "binary_element",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/binary_element.goose",
+    "expected": "binary_element\n",
+    "source_sha256": "049264badfa976a5b011e84d34ff2d5f1c7692780c06276646d3ccb9f678bf11",
+    "fixture": "wasm_callback_borrow_binary_element"
+  },
+  {
+    "case": "owner",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/owner.goose",
+    "expected": "before\nargument-live\nbody-live\nafter\nargument-live\nbody-live\nafter\n",
+    "source_sha256": "df89dee29f6f85fc15b97e2849e22da15c02c454544730a6843cf33478b5f63b",
+    "fixture": "wasm_callback_borrow_owner"
+  },
+  {
+    "case": "later_continue",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/later_continue.goose",
+    "expected": "later_continue\n",
+    "source_sha256": "e682055f895999044250a2eed725d79c342baf126fec9d38b0a0bf7adcb8f602",
+    "fixture": "wasm_callback_borrow_later_continue"
+  },
+  {
+    "case": "later_break",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/later_break.goose",
+    "expected": "later_break\n",
+    "source_sha256": "bf86d37b9e53abcdc27e739ffb70beea1a6185da76e613822317581284326091",
+    "fixture": "wasm_callback_borrow_later_break"
+  }
+]

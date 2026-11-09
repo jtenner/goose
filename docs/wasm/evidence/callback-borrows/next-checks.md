@@ -1,0 +1,1 @@
+Correctness only. Parent cases first; preserve invalid sketches. Then fresh candidate native/Node/Wasmtime pairs, exact old-module identity, Memory 0 controls, full core/suffix suite and exact output comparisons. No timing or profiling.

@@ -1,0 +1,1 @@
+struct S{n:i64} recursive fn make()->S{return S{7};}var calls:i64=0;fn apply<F>(early:bool)->i64{F(make().n,{if early{return 9;}3})} recursive fn run(early:bool)->i64{apply(early){p:i64&,x:i64=>{calls++;p+x}}} fn main(){assert(run(true)==9&&run(false)==10&&calls==1);print("later_return");}

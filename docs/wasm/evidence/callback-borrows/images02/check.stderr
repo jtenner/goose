@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-callback-borrows-20261109/images02.py", line 13, in <module>
+    n=check_images(run,'node','wasm-tools',out);assert n==16,n;print('PASS',n,'complete Memory 0 owner/growth images and specific fault controls')
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_callback_borrow_checks.py", line 22, in check_images
+    a, z = function_span(text, 'apply'); body = text[a:z]
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_data_iteration_checks.py", line 10, in function_span
+    assert len(matches)==1,(prefix,'function not unique')
+           ^^^^^^^^^^^^^^^
+AssertionError: ('apply', 'function not unique')

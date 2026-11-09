@@ -1,0 +1,24 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: callback temporary borrow complete image differs
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_callback_borrow_owner.mjs:28:9
+    at print_end_v1 (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:105:13)
+    at noise.3 (wasm://wasm/eae71452:wasm-function[13]:0x2e8)
+    at main.0 (wasm://wasm/eae71452:wasm-function[11]:0x213)
+    at goose.start (wasm://wasm/eae71452:wasm-function[15]:0x30b)
+    at Object.run (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:134:34)
+    at runCompleted (file:///home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs:10:13)
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_callback_borrow_owner.mjs:34:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.22.2

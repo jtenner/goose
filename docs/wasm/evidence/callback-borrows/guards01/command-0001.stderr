@@ -1,0 +1,5 @@
+/tmp/goose-wasm-callback-borrows-20261109/guards01/callback-borrow-field-guard.goose:1: error: expected a value of type i64&, got i64
+struct S{n:i64} recursive fn make()->S{return S{7};} fn apply<F>()->i64&{F(make().n)} recursive fn read(p:i64&)->i64{return p;} fn main(){assert(read(apply(){p:i64& =>p})==7);print("guard");}
+                                                                         ^~~~~~~~~~~
+  in fn apply<F = {block at /tmp/goose-wasm-callback-borrows-20261109/guards01/callback-borrow-field-guard.goose:1:158}>() instantiated from /tmp/goose-wasm-callback-borrows-20261109/guards01/callback-borrow-field-guard.goose:1
+  in fn main() instantiated from /tmp/goose-wasm-callback-borrows-20261109/guards01/callback-borrow-field-guard.goose:1

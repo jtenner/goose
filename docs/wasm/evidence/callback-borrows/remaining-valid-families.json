@@ -1,0 +1,14 @@
+[
+  {
+    "case": "later_continue",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/later_continue.goose",
+    "expected": "later_continue\n",
+    "source_sha256": "e682055f895999044250a2eed725d79c342baf126fec9d38b0a0bf7adcb8f602"
+  },
+  {
+    "case": "later_break",
+    "source": "/tmp/goose-wasm-callback-borrows-20261109/sources/later_break.goose",
+    "expected": "later_break\n",
+    "source_sha256": "bf86d37b9e53abcdc27e739ffb70beea1a6185da76e613822317581284326091"
+  }
+]

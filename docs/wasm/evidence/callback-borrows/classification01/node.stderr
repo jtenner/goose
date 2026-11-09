@@ -1,0 +1,17 @@
+file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:116
+            throw new GooseFailure(`goose runtime error: ${messages[code] ?? 'unknown failure'}${source ? ` at ${source}:${line}` : ''}`);
+                  ^
+
+GooseFailure [Error]: goose runtime error: assert failed at /tmp/goose-wasm-callback-borrows-20261109/classification01/optional.goose:6
+    at fail_v1 (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:116:19)
+    at main.0 (wasm://wasm/d328a8b2:wasm-function[11]:0x1ca)
+    at goose.start (wasm://wasm/d328a8b2:wasm-function[17]:0x2a3)
+    at Object.run (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:134:34)
+    at runCompleted (file:///home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs:10:13)
+    at main (file:///home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs:29:24)
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs:46:90
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.22.2

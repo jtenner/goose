@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-callback-borrows-20261109/guards.py", line 10, in <module>
+    identity=json.loads((r/'compiler-identity.json').read_text());n=check_guards(run,identity['compiler'],'cc',out);assert n==4;print('PASS',n,'native-valid callback reference-result guards')
+                                                                    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_callback_borrow_checks.py", line 87, in check_guards
+    run([exe, f'-O{opt}', '--standalone', '-o', c, source])
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/goose-wasm-callback-borrows-20261109/guards.py", line 8, in run
+    if ok:assert not a.returncode,(args,a.returncode,a.stderr)
+                 ^^^^^^^^^^^^^^^^
+AssertionError: (['/tmp/goose-wasm-callback-borrows-20261109/build02/goose-tested', '-O0', '--standalone', '-o', '/tmp/goose-wasm-callback-borrows-20261109/guards01/callback-borrow-field-guard-O0.c', '/tmp/goose-wasm-callback-borrows-20261109/guards01/callback-borrow-field-guard.goose'], 1, b'/tmp/goose-wasm-callback-borrows-20261109/guards01/callback-borrow-field-guard.goose:1: error: expected a value of type i64&, got i64\nstruct S{n:i64} recursive fn make()->S{return S{7};} fn apply<F>()->i64&{F(make().n)} recursive fn read(p:i64&)->i64{return p;} fn main(){assert(read(apply(){p:i64& =>p})==7);print("guard");}\n                                                                         ^~~~~~~~~~~\n  in fn apply<F = {block at /tmp/goose-wasm-callback-borrows-20261109/guards01/callback-borrow-field-guard.goose:1:158}>() instantiated from /tmp/goose-wasm-callback-borrows-20261109/guards01/callback-borrow-field-guard.goose:1\n  in fn main() instantiated from /tmp/goose-wasm-callback-borrows-20261109/guards01/callback-borrow-field-guard.goose:1\n')

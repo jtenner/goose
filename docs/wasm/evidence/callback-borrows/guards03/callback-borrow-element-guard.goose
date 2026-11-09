@@ -1,0 +1,1 @@
+recursive fn make()->i64[2]{return [7,8];} recursive fn noise()->i64{var a:i64[2]=[99,100];return a[0];} recursive fn read(p:i64&?,x:i64)->i64{if p{return p;}return 0;} fn apply<F>()->i64{read(F(make()[0]),noise())} fn main(){assert(apply(){p:i64&? =>p}==7);print("guard");}

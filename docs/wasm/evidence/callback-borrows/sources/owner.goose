@@ -1,0 +1,1 @@
+struct S{m:u8,n:i64,t:u16} recursive fn make()->S{return S{17,700,4660};} recursive fn noise()->i64{var s:S=S{99,-77,88};print("argument-live");return s.n;} fn apply<F>()->i64{F(make().n,noise())} fn main(){print("before");for i in 0..2{assert(apply(){p:i64&,x:i64=>{print("body-live");p+x}}==623);print("after");}}

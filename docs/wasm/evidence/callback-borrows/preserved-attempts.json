@@ -1,0 +1,43 @@
+{
+  "purpose": "correctness only; no failed evidence replaced",
+  "attempts": [
+    {
+      "scope": "initial field/element sketches",
+      "classification": "shared parser rejection",
+      "reason": "missing space before callback arrow; corrected in probe02",
+      "candidate_defect": false
+    },
+    {
+      "scope": "parent01 later_continue/later_break",
+      "classification": "invalid source sketches",
+      "reason": "exit target outside callback loop; exact sketches saved in invalid-sources; corrected valid fixtures pass native and fail parent Wasm in parent02",
+      "candidate_defect": false
+    },
+    {
+      "scope": "guards01 and guards02",
+      "classification": "invalid guard sketches",
+      "reason": "plain reference callback tail decays to scalar; both native-emission failures retained",
+      "candidate_defect": false
+    },
+    {
+      "scope": "build02/classification01",
+      "classification": "reproduced error in uncommitted implementation",
+      "reason": "callback rettypes is empty; optional reference body wrongly accepted, owner freed before later argument; native result passes, Node assertion fails",
+      "candidate_defect": true,
+      "final_disposition": "final gate reads fvbody->exprtype; four native-valid optional-reference-result cases are rejected for exact pending-lifetime reason in guards03"
+    },
+    {
+      "scope": "images01",
+      "classification": "image-helper function assumption",
+      "reason": "healthy image passed; O0 owner is in specialized apply, not main",
+      "candidate_defect": false
+    },
+    {
+      "scope": "images02",
+      "classification": "image-helper optimization assumption",
+      "reason": "O0 eight checks and O2 healthy owner passed; O2 moves apply into main",
+      "candidate_defect": false,
+      "final_disposition": "images03 selects emitted function and passes all16 checks"
+    }
+  ]
+}

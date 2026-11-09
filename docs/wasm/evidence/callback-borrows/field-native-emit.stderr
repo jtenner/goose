@@ -1,0 +1,3 @@
+/tmp/goose-wasm-callback-borrows-20261109/sources/field.goose:4: error: ';' expected after expression, found ':'
+fn main(){assert(apply(){p:i64&=>p+3}==10);print("field");}
+                          ^

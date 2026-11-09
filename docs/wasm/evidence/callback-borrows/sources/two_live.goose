@@ -1,0 +1,1 @@
+struct S{n:i64} recursive fn make()->S{return S{7};}recursive fn noise()->i64{var s:S=S{-99};return s.n;} fn apply<F>()->i64{F(make().n,make().n,noise())} fn main(){assert(apply(){p:i64&,q:i64&,x:i64=>p+q+x}== -85);print("two_live");}

@@ -472,6 +472,15 @@ restores. The suite passes 8,108 checks, 50 fresh native/Node/Wasmtime pairs and
 and reference-carrying aggregate results still require longer lifetimes and
 remain guarded. This is a Stage C increment, not completion of the backend.
 
+Function-value callback bodies now also retain borrowed fixed temporary
+selections through later arguments and scalar/void body results. The result
+check uses the body's inferred type, so optional-reference results stay guarded.
+Complete Memory 0 models cover both retained and inlined callback bodies. The
+suite passes 8,260 checks, with 44 fresh native/Node/Wasmtime pairs and 52 exact
+comparisons; all 2,094 prior modules are byte-identical. See
+[callback borrow evidence](evidence/callback-borrows.md). Other inline argument
+bindings and reference-carrying results still need the remaining lifetime work.
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping
@@ -540,8 +549,9 @@ BigInt operation for other values.
   the remaining nonfixed destinations and temporary owners, and all remaining
   compound lifetime events. Fixed temporary and protected-assignment sites now
   have checked type/function plan records. Borrowed selections from fixed
-  temporaries work through ordinary scalar/void calls. Inline/callback paths,
-  escaping result borrows and general thin-reference propagation remain pending.
+  temporaries work through ordinary scalar/void calls and function-value callback
+  bodies. Remaining inline bindings, escaping result borrows and general
+  thin-reference propagation remain pending.
 - D: scalar/reference arrays now cover fixed, limited, variable and growable
   layouts, including same-layout copies and unsigned LEB count prefixes, plus
   fresh ordinary fixed structs in the admitted field subset. Complete signed

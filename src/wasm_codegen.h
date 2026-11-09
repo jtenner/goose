@@ -759,8 +759,21 @@ struct WasmCodeGen : ValueLayout {
         if (FixedResult(ActualType(c)))
             Fail(c->line, "aggregate call results need a checked destination");
         if (c->fvbody) {
-            BindCallParameters(c);
             auto wanted = resulttype ? resulttype : c->exprtype;
+            auto arguments = c->ValueArgNodes();
+            bool borrowed = false;
+            if (ScalarBorrowResult(c) && arguments.size() == c->fvparams.size())
+                for (size_t i = 0; i < arguments.size(); i++)
+                    borrowed |= TemporaryBorrowSource(arguments[i], c->fvparams[i]->type) != nullptr;
+            if (borrowed) {
+                for (auto parameter : c->fvparams) RequireCallValue(parameter->type, false, c->line);
+                for (auto type : c->rettypes) RequireCallValue(type, true, c->line);
+                auto result = Void(wanted) ? NoLocal : Temp(wanted);
+                BorrowedCallbackArguments(c, arguments, 0, wanted, result);
+                if (result != NoLocal) code.Get(result);
+                return;
+            }
+            BindCallParameters(c, arguments);
             BlockValue(c->fvbody, !Void(wanted), wanted); return;
         }
         if (!c->dispatch.empty()) Fail(c->line, "ADT dispatch is not implemented");
@@ -1291,6 +1304,8 @@ struct WasmCodeGen : ValueLayout {
     bool HasFixedTemporary(Node *n);
     Node *TemporaryBorrowSource(Node *expression, TypeExpr *parameter);
     bool ScalarBorrowResult(Call *call);
+    void BorrowedCallbackArguments(Call *call, const vector<Node *> &arguments,
+                                   size_t position, TypeExpr *resulttype, uint32_t result);
     Binary *FixedBinary(Node *n);
     bool FixedOperandEffects(Node *n, int &budget);
     bool CanCopyFixedArray(TypeExpr *to, TypeExpr *from);
@@ -1307,7 +1322,7 @@ struct WasmCodeGen : ValueLayout {
     FreshFixedDestination FreshOwner(VarDef *owner, Node *initialization);
     FreshFixedDestination FreshCallParameter(Call *call, size_t position);
     uint32_t FixedResultParameter(FnSpec *function);
-    void BindCallParameters(Call *call);
+    void BindCallParameters(Call *call, const vector<Node *> &arguments);
     void BlockInto(Block *body, FreshFixedDestination destination);
     void CallInto(FreshFixedDestination destination, Node *expression);
     void FixedCallArguments(Call *call, const vector<Node *> &arguments,

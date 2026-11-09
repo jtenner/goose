@@ -1,0 +1,49 @@
+{
+  "status": "PASS",
+  "purpose": "Stage C correctness only; no measurements/timing/profiling",
+  "parent": "ca3e6f45388abdbe483d200552c7b18d6c8fd4b1",
+  "compiler": {
+    "parent": "ca3e6f45388abdbe483d200552c7b18d6c8fd4b1",
+    "compiler": "/tmp/goose-wasm-callback-borrows-20261109/build03/goose-tested",
+    "sha256": "576b8ea5fb611013d9b5105c1c2b63b3d8039cd3d43c2980e99cbcf29b1b6aef"
+  },
+  "source_files": 85,
+  "validation_inputs": 6225,
+  "changed_source": [
+    "src/wasm_codegen.h",
+    "src/wasm_fixed.h"
+  ],
+  "passed_phases": [
+    "parent01",
+    "parent02",
+    "build03",
+    "guards03",
+    "focused01",
+    "images03",
+    "identity01",
+    "full-correctness01",
+    "exact01"
+  ],
+  "native_valid_families": 22,
+  "parent_native_valid_wasm_failures": 44,
+  "fresh_native_node_wasmtime_pairs": 44,
+  "complete_memory_image_and_fault_controls": 16,
+  "native_valid_reference_result_guards": 4,
+  "integrated_checks": 8260,
+  "fixture_pairs": 2138,
+  "byte_identical_prior_modules": 2094,
+  "exact_comparisons": 52,
+  "full_suite_basis": "fresh core and all suffix checks; 2094 executed parent fixtures reused only after exact hashes; 44 fresh pairs executed separately",
+  "scope": "function-value callback scalar/void calls borrow fixed temporary selections through later arguments and body",
+  "excluded": "escaping reference/aggregate results, remaining inline reference bindings, nonfixed temporary owners",
+  "runtime_cost_limit": "existing fixed temporary reservation/copy and ordered restore are required for new expressions; all 2094 prior modules byte-identical; no performance claim",
+  "compiler_cost_limit": "one existing argument vector is shared with binder; traversal is linear in arguments plus selection depth, recursion only per borrowed owner; no new compiler field or heap service; no measured compiler time/allocation/memory claim",
+  "preserved_attempts": "preserved-attempts.json",
+  "remaining_stage_c": [
+    "remaining inline temporary-reference bindings",
+    "nonfixed destinations and temporary owners",
+    "remaining compound lifetime events",
+    "general thin-reference propagation and reference-carrying results"
+  ],
+  "next": "finish C, then D, E and F in order; F is in scope"
+}

@@ -235,10 +235,9 @@ inline uint32_t WasmCodeGen::FixedResultParameter(FnSpec *function) {
     return (uint32_t)function->params.size() + (NeedsBase(function) ? 1u : 0u);
 }
 
-inline void WasmCodeGen::BindCallParameters(Call *call) {
+inline void WasmCodeGen::BindCallParameters(Call *call, const vector<Node *> &arguments) {
     for (auto parameter : call->fvparams) RequireCallValue(parameter->type, false, call->line);
     for (auto type : call->rettypes) RequireCallValue(type, true, call->line);
-    auto arguments = call->ValueArgNodes();
     if (arguments.size() != call->fvparams.size()) Fail(call->line, "function-value parameter mismatch");
     for (size_t i = 0; i < arguments.size(); i++) {
         auto parameter = call->fvparams[i];
@@ -247,6 +246,27 @@ inline void WasmCodeGen::BindCallParameters(Call *call) {
             Gen(arguments[i]); Convert(arguments[i]->exprtype, parameter->type); Write(Find(parameter));
         }
     }
+}
+
+inline void WasmCodeGen::BorrowedCallbackArguments(Call *call, const vector<Node *> &arguments,
+                                                 size_t position, TypeExpr *resulttype, uint32_t result) {
+    for (; position < arguments.size(); position++) {
+        auto parameter = call->fvparams[position];
+        auto expression = arguments[position];
+        if (auto source = TemporaryBorrowSource(expression, parameter->type)) {
+            WithReadPlace(source, [&](const FixedPlace &place) {
+                PlaceAddress(place, Type(parameter->type), expression->line);
+                Write(Find(parameter));
+                // The continuation includes every later argument and the body.
+                BorrowedCallbackArguments(call, arguments, position + 1, resulttype, result);
+            });
+            return;
+        }
+        if (FixedParameter(parameter->type)) ConstructFixed(FreshCallParameter(call, position), expression);
+        else { Gen(expression); Convert(expression->exprtype, parameter->type); Write(Find(parameter)); }
+    }
+    BlockValue(call->fvbody, !Void(resulttype), resulttype);
+    if (result != NoLocal) code.Set(result);
 }
 
 inline void WasmCodeGen::BlockInto(Block *body, FreshFixedDestination destination) {
@@ -321,7 +341,7 @@ inline void WasmCodeGen::CallInto(FreshFixedDestination destination, Node *expre
     if (!call || call->builtin >= 0)
         Fail(expression->line, "aggregate result needs its checked call producer");
     if (call->fvbody) {
-        BindCallParameters(call);
+        BindCallParameters(call, call->ValueArgNodes());
         BlockInto(call->fvbody, destination); return;
     }
     if (!call->dispatch.empty()) Fail(call->line, "ADT dispatch is not implemented");
@@ -557,11 +577,16 @@ inline Node *WasmCodeGen::TemporaryBorrowSource(Node *expression, TypeExpr *para
 }
 
 inline bool WasmCodeGen::ScalarBorrowResult(Call *call) {
-    if (!call->spec) return false;
-    auto &results = call->spec->rets;
-    if (results.empty()) return true;
-    if (results.size() != 1) return false;
-    auto kind = results[0]->kind;
+    TypeExpr *result = nullptr;
+    // Function-value calls keep their inferred result on the checked body;
+    // rettypes is empty even when the body returns an optional reference.
+    if (call->fvbody) result = call->fvbody->exprtype;
+    else if (call->spec) {
+        if (call->spec->rets.size() > 1) return false;
+        if (!call->spec->rets.empty()) result = call->spec->rets[0];
+    } else return false;
+    if (Void(result)) return true;
+    auto kind = result->kind;
     return kind == TY_BOOL || kind == TY_INT || kind == TY_FLT;
 }
 

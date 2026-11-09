@@ -1,0 +1,1 @@
+struct S{n:i64} recursive fn make()->S{return S{7};}fn apply<F>()->i64{var live:i64[]=[33];let n=F(make().n);assert(live[0]==33);n} fn main(){assert(apply(){p:i64& =>{var live:i64[]=[100];p+live[0]}}==107);print("data_memory");}
