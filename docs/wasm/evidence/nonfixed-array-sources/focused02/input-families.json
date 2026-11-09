@@ -1,0 +1,797 @@
+[
+  {
+    "case": "grow_to_u8",
+    "source_sha256": "c6f867652ac5879ea29851b738019f4c6afe2c2c2aa357289484bc6f7e8ec9b0",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 1,
+      "cc": 2,
+      "native": 3,
+      "wasm": 4
+    },
+    "status": "native PASS; parent Wasm classified",
+    "producer_phase": "parent02",
+    "fixture": "wasm_nonfixed_source_grow_to_u8",
+    "expected": "grow_to_u8\n"
+  },
+  {
+    "case": "grow_empty_to_u8",
+    "source_sha256": "fcdf076c1b5759287c8906439855ccc9d6fd66564eade653dfc09b4bbfaf375c",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 5,
+      "cc": 6,
+      "native": 7,
+      "wasm": 8
+    },
+    "status": "native PASS; parent Wasm classified",
+    "producer_phase": "parent02",
+    "fixture": "wasm_nonfixed_source_grow_empty_to_u8",
+    "expected": "grow_empty_to_u8\n"
+  },
+  {
+    "case": "grow_to_u16",
+    "source_sha256": "f202a948e93c513d6ba4abe46606f54a7d1121291e515eb0d01f2fa539f73fdf",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 9,
+      "cc": 10,
+      "native": 11,
+      "wasm": 12
+    },
+    "status": "native PASS; parent Wasm classified",
+    "producer_phase": "parent02",
+    "fixture": "wasm_nonfixed_source_grow_to_u16",
+    "expected": "grow_to_u16\n"
+  },
+  {
+    "case": "grow_empty_to_u16",
+    "source_sha256": "af651c00eadf7d9bbdd62bed0ab4b77dcaf9e154b0d8b8151ee89c145ce5b1ce",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 13,
+      "cc": 14,
+      "native": 15,
+      "wasm": 16
+    },
+    "status": "native PASS; parent Wasm classified",
+    "producer_phase": "parent02",
+    "fixture": "wasm_nonfixed_source_grow_empty_to_u16",
+    "expected": "grow_empty_to_u16\n"
+  },
+  {
+    "case": "grow_to_u64",
+    "source_sha256": "94412376d3cee98d5314205a23ba0759586d04f82a61b07f5b12ed909d951803",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 17,
+      "cc": 18,
+      "native": 19,
+      "wasm": 20
+    },
+    "status": "native PASS; parent Wasm classified",
+    "producer_phase": "parent02",
+    "fixture": "wasm_nonfixed_source_grow_to_u64",
+    "expected": "grow_to_u64\n"
+  },
+  {
+    "case": "grow_empty_to_u64",
+    "source_sha256": "dd504e59e6eb13cebe6175f200361fe94f7b181db06bdb1da6947f23faa0fbcf",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 21,
+      "cc": 22,
+      "native": 23,
+      "wasm": 24
+    },
+    "status": "native PASS; parent Wasm classified",
+    "producer_phase": "parent02",
+    "fixture": "wasm_nonfixed_source_grow_empty_to_u64",
+    "expected": "grow_empty_to_u64\n"
+  },
+  {
+    "case": "grow_to_leb",
+    "source_sha256": "eb5f7e5bb7d7e13f5247972e53fa63fec699bdaa8acde5eae3767d2f3eaab476",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 25,
+      "cc": 26,
+      "native": 27,
+      "wasm": 28
+    },
+    "status": "native PASS; parent Wasm classified",
+    "producer_phase": "parent02",
+    "fixture": "wasm_nonfixed_source_grow_to_leb",
+    "expected": "grow_to_leb\n"
+  },
+  {
+    "case": "grow_empty_to_leb",
+    "source_sha256": "227d1eff86f6a4152a7381cd80b58833ed89797d4b8746ae0318da4267f57f10",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 29,
+      "cc": 30,
+      "native": 31,
+      "wasm": 32
+    },
+    "status": "native PASS; parent Wasm classified",
+    "producer_phase": "parent02",
+    "fixture": "wasm_nonfixed_source_grow_empty_to_leb",
+    "expected": "grow_empty_to_leb\n"
+  },
+  {
+    "case": "grow_to_runtime",
+    "source_sha256": "a1ab889371e3c397ba050f39ad05078327bee21166ec1f472a06190d37eb8d67",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 33,
+      "cc": 34,
+      "native": 35,
+      "wasm": 36
+    },
+    "status": "native PASS; parent Wasm classified",
+    "producer_phase": "parent02",
+    "fixture": "wasm_nonfixed_source_grow_to_runtime",
+    "expected": "grow_to_runtime\n"
+  },
+  {
+    "case": "grow_empty_to_runtime",
+    "source_sha256": "a15c0c343b2e42369ab323694c2430c2593a9ff4b9ad32229327c9d137c82380",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 37,
+      "cc": 38,
+      "native": 39,
+      "wasm": 40
+    },
+    "status": "native PASS; parent Wasm classified",
+    "producer_phase": "parent02",
+    "fixture": "wasm_nonfixed_source_grow_empty_to_runtime",
+    "expected": "grow_empty_to_runtime\n"
+  },
+  {
+    "case": "grow_reference",
+    "source_sha256": "3478552b48bc82d7b92302c09f34063e034622dbc2042cc852ea2e49ef97ae4a",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 41,
+      "cc": 42,
+      "native": 43,
+      "wasm": 44
+    },
+    "status": "native PASS; parent Wasm classified",
+    "producer_phase": "parent02",
+    "fixture": "wasm_nonfixed_source_grow_reference",
+    "expected": "grow_reference\n"
+  },
+  {
+    "case": "grow_call_effect",
+    "source_sha256": "a6c9512fa758ca14b0934a8677d5b172a28d4028ef490742cff0e4a1bf52299c",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 49,
+      "cc": 50,
+      "native": 51,
+      "wasm": 52
+    },
+    "status": "native PASS; parent Wasm classified",
+    "producer_phase": "parent02",
+    "fixture": "wasm_nonfixed_source_grow_call_effect",
+    "expected": "grow_call_effect\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "grow_recursion",
+    "source_sha256": "a0d0efbc769a42fea8b300c5e501a06011daa5063b579d05260357f6e05a4f3f",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 1,
+      "cc": 2,
+      "native": 3,
+      "wasm": 4
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_grow_recursion",
+    "expected": "grow_recursion\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "grow_pop",
+    "source_sha256": "122b2fa30af9e188b2f707bdb14b13cc317a14234fbad62d9d32b4f45457da13",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 5,
+      "cc": 6,
+      "native": 7,
+      "wasm": 8
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_grow_pop",
+    "expected": "grow_pop\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "grow_refs",
+    "source_sha256": "18580caf28592f501da0c0139699a59e1a2952b67756f514d2acb20e88f55489",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 9,
+      "cc": 10,
+      "native": 11,
+      "wasm": 12
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_grow_refs",
+    "expected": "grow_refs\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "grow_loop",
+    "source_sha256": "b98859dc9933c0396c48566eeded1b1f22567ed8bd051c1f91b1d0686a61f553",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 13,
+      "cc": 14,
+      "native": 15,
+      "wasm": 16
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_grow_loop",
+    "expected": "grow_loop\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "grow_global",
+    "source_sha256": "e0d610bc61ce1a2daea73bcba47c6c55acb669159265d0f0114916a9cc25c74a",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 17,
+      "cc": 18,
+      "native": 19,
+      "wasm": 20
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_grow_global",
+    "expected": "grow_global\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "grow_u8",
+    "source_sha256": "6e181223b110894bf0aaa5b1753521654f252a6eb3141f089594d6557679df73",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 21,
+      "cc": 22,
+      "native": 23,
+      "wasm": 24
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_grow_u8",
+    "expected": "grow_u8\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "grow_i16",
+    "source_sha256": "4f539e1865b42bb7e447f659129247dafc90f2fbc4e68d9df207a47e441024ab",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 25,
+      "cc": 26,
+      "native": 27,
+      "wasm": 28
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_grow_i16",
+    "expected": "grow_i16\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "grow_u32",
+    "source_sha256": "35262c1206877e6682a3bf06153d8da547a414864a35135e3fe015c5d6198b6e",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 29,
+      "cc": 30,
+      "native": 31,
+      "wasm": 32
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_grow_u32",
+    "expected": "grow_u32\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "grow_u64",
+    "source_sha256": "93bf9738b61ca2e0c30f0ef9489c3f9d64e5823b8e60bebaa947bc0a7a51adc7",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 33,
+      "cc": 34,
+      "native": 35,
+      "wasm": 36
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_grow_u64",
+    "expected": "grow_u64\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "grow_f32",
+    "source_sha256": "ebb20c99d5bba34a6fdc0d185c3cc85bd3212f3a08802c7de307085db87d390f",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 37,
+      "cc": 38,
+      "native": 39,
+      "wasm": 40
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_grow_f32",
+    "expected": "grow_f32\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "grow_f64",
+    "source_sha256": "51173cd1dcc3154363242918bd53ac33276a5941ad926876022fb3809e37f361",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 41,
+      "cc": 42,
+      "native": 43,
+      "wasm": 44
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_grow_f64",
+    "expected": "grow_f64\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "grow_bool",
+    "source_sha256": "054260c80fa17931f825ad46f64e1ee7ba5af894106a864973eeb4b04e21bd76",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 45,
+      "cc": 46,
+      "native": 47,
+      "wasm": 48
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_grow_bool",
+    "expected": "grow_bool\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_to_u8",
+    "source_sha256": "22dd2b492f9e2701cfb688e8377088f8cae00d524eb089873c81a1ed4f09d059",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 49,
+      "cc": 50,
+      "native": 51,
+      "wasm": 52
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_to_u8",
+    "expected": "runtime_to_u8\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_empty_to_u8",
+    "source_sha256": "e9ce7c636d4cfe865faeb19ba520b7f40d43c596eb544956375e39e65d4b8b31",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 53,
+      "cc": 54,
+      "native": 55,
+      "wasm": 56
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_empty_to_u8",
+    "expected": "runtime_empty_to_u8\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_to_u16",
+    "source_sha256": "b31cc0ddf32f4da5aedc4ecd71a751fba114eaf10c0a650c241373c7cf9908f8",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 57,
+      "cc": 58,
+      "native": 59,
+      "wasm": 60
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_to_u16",
+    "expected": "runtime_to_u16\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_empty_to_u16",
+    "source_sha256": "c70d5ae9e2d2d2f23b243bf6386dcdf1344c02a78404663682977cefa0471eee",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 61,
+      "cc": 62,
+      "native": 63,
+      "wasm": 64
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_empty_to_u16",
+    "expected": "runtime_empty_to_u16\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_to_u64",
+    "source_sha256": "077e469d93a8eebe62e36a933c677c1b3397637424c459875ecb30c78914ad1d",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 65,
+      "cc": 66,
+      "native": 67,
+      "wasm": 68
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_to_u64",
+    "expected": "runtime_to_u64\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_empty_to_u64",
+    "source_sha256": "2d82c92d555bcad25ad22d5739cdda6780fdaaaf518720ee1ef621ea2343c664",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 69,
+      "cc": 70,
+      "native": 71,
+      "wasm": 72
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_empty_to_u64",
+    "expected": "runtime_empty_to_u64\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_to_leb",
+    "source_sha256": "d4692ebcdb1f7799fcee3ae977876a9b9d1525b84defac36a8baafaf812de691",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 73,
+      "cc": 74,
+      "native": 75,
+      "wasm": 76
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_to_leb",
+    "expected": "runtime_to_leb\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_empty_to_leb",
+    "source_sha256": "a81a49569173e1fd1a75b307122df323ec61cb5653f12083290c6d1846027513",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 77,
+      "cc": 78,
+      "native": 79,
+      "wasm": 80
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_empty_to_leb",
+    "expected": "runtime_empty_to_leb\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_to_grow",
+    "source_sha256": "51a02507f9cfa05a39da86846b34e509a2ec1ae4fa54e2ce897b631b32dbbe6e",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 81,
+      "cc": 82,
+      "native": 83,
+      "wasm": 84
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_to_grow",
+    "expected": "runtime_to_grow\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_empty_to_grow",
+    "source_sha256": "e54992e3c65c607cc082506008cb92e76069c04bc5e566b7fa5b8979b6dca7d5",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 85,
+      "cc": 86,
+      "native": 87,
+      "wasm": 88
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_empty_to_grow",
+    "expected": "runtime_empty_to_grow\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_reference",
+    "source_sha256": "69f5fcd041f42d786f9f17fb47631d549906e34b618e1ded1b39400a7dcd3ec6",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 89,
+      "cc": 90,
+      "native": 91,
+      "wasm": 92
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_reference",
+    "expected": "runtime_reference\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_indexed_reference",
+    "source_sha256": "8e47bbbe8196a108f26bcf9ed27d12d9d51b60502214d5a0f8956891447e617b",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 93,
+      "cc": 94,
+      "native": 95,
+      "wasm": 96
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_indexed_reference",
+    "expected": "runtime_indexed_reference\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_call_effect",
+    "source_sha256": "d2afc7b3ae3c529aa0d78c0ef823392e6f38c0e75aa5ea2ceea9ac766db66dc9",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 97,
+      "cc": 98,
+      "native": 99,
+      "wasm": 100
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_call_effect",
+    "expected": "runtime_call_effect\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_recursion",
+    "source_sha256": "7606604ec28e54831e029272e624037599b0569a028d45eda6a8ec20fe8bafd4",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 101,
+      "cc": 102,
+      "native": 103,
+      "wasm": 104
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_recursion",
+    "expected": "runtime_recursion\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_pop",
+    "source_sha256": "7b6de2166504d773f87b967f2535650139d02d3ce124de017c9ef1b092f07a2b",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 105,
+      "cc": 106,
+      "native": 107,
+      "wasm": 108
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_pop",
+    "expected": "runtime_pop\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_refs",
+    "source_sha256": "5daeaf0772c53146fcb3312efac6900ec64e1ef073878120231c814430c44fcf",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 109,
+      "cc": 110,
+      "native": 111,
+      "wasm": 112
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_refs",
+    "expected": "runtime_refs\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_loop",
+    "source_sha256": "43cbecf0095d04a33c19abb26c71d183bbb5dd9a6a410abb0f2d12b7a93fcf35",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 113,
+      "cc": 114,
+      "native": 115,
+      "wasm": 116
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_loop",
+    "expected": "runtime_loop\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_global",
+    "source_sha256": "8bace28deeb972e01c279b6a5016147e721166b52fa8b0522c6355ce17ed38a2",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 117,
+      "cc": 118,
+      "native": 119,
+      "wasm": 120
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_global",
+    "expected": "runtime_global\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_u8",
+    "source_sha256": "a07f868a4a56e103880593dd7cc3c3171fdcbf4736c0fa7a4753b359eac5735e",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 121,
+      "cc": 122,
+      "native": 123,
+      "wasm": 124
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_u8",
+    "expected": "runtime_u8\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_i16",
+    "source_sha256": "02f12fb63d4073b943d30aa624324d12b4640f3c2e356c74afca3897552bd36b",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 125,
+      "cc": 126,
+      "native": 127,
+      "wasm": 128
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_i16",
+    "expected": "runtime_i16\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_u32",
+    "source_sha256": "04a1ae48f54eb25243131c12cae64e6da2caff8126821e3b090e781facf86c60",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 129,
+      "cc": 130,
+      "native": 131,
+      "wasm": 132
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_u32",
+    "expected": "runtime_u32\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_u64",
+    "source_sha256": "6d1b3468ff09f5f92dc2f4012ee17cc9eca1612c554972b5b6d557cd27e7e2fb",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 133,
+      "cc": 134,
+      "native": 135,
+      "wasm": 136
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_u64",
+    "expected": "runtime_u64\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_f32",
+    "source_sha256": "544d738c7c5c8d9d77aa93ea52e72d84f560fd3a99c4186cf1c1fa4f98acb495",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 137,
+      "cc": 138,
+      "native": 139,
+      "wasm": 140
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_f32",
+    "expected": "runtime_f32\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_f64",
+    "source_sha256": "13186869dea63e15b65ceefd8e959bb400cf829985f47ef9a434ea405038e604",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 141,
+      "cc": 142,
+      "native": 143,
+      "wasm": 144
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_f64",
+    "expected": "runtime_f64\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_bool",
+    "source_sha256": "fb9c5900b44174088718473d34f26f2e9cc8bff65f65d5fe827f2289a1aadbbe",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 145,
+      "cc": 146,
+      "native": 147,
+      "wasm": 148
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_bool",
+    "expected": "runtime_bool\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_spare",
+    "source_sha256": "d2a46b0f889feab0b557fc8208ad7e5db06a1942f7356534c6b642b6ea3d3937",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 149,
+      "cc": 150,
+      "native": 151,
+      "wasm": 152
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_spare",
+    "expected": "runtime_spare\n"
+  },
+  {
+    "producer_phase": "parent03",
+    "case": "runtime_empty_spare",
+    "source_sha256": "59fbcd5f8add746af85cb18925f653fc6609be58646d247315304aa4a21b9b29",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 153,
+      "cc": 154,
+      "native": 155,
+      "wasm": 156
+    },
+    "status": "native PASS; parent Wasm classified",
+    "fixture": "wasm_nonfixed_source_runtime_empty_spare",
+    "expected": "runtime_empty_spare\n"
+  },
+  {
+    "case": "runtime_reference_field",
+    "source_sha256": "c0db822ec38f03de7da8098aa7c36d5a8fb0dafd49d6f917b10d39b3d6753d4e",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 1,
+      "cc": 2,
+      "native": 3,
+      "wasm": 4
+    },
+    "status": "native PASS; parent Wasm classified",
+    "producer_phase": "parent04",
+    "fixture": "wasm_nonfixed_source_runtime_reference_field",
+    "expected": "runtime_reference_field\n"
+  },
+  {
+    "case": "runtime_data_reference_field",
+    "source_sha256": "c6750c9bc35742a606be7a90a437ccb6eb3def384ce5585c6b6de589e87f985a",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 5,
+      "cc": 6,
+      "native": 7,
+      "wasm": 8
+    },
+    "status": "native PASS; parent Wasm classified",
+    "producer_phase": "parent04",
+    "fixture": "wasm_nonfixed_source_runtime_data_reference_field",
+    "expected": "runtime_data_reference_field\n"
+  }
+]

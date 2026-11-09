@@ -1,0 +1,26 @@
+[
+  {
+    "case": "exact_runtime",
+    "source_sha256": "d6714a8cf49992bcd365429c372763274a328ec50271db421ba2bb6eec8ca46f",
+    "kind": "parent-supported",
+    "commands": {
+      "emit": 1,
+      "cc": 2,
+      "native": 3,
+      "wasm": 4
+    },
+    "status": "native PASS; parent Wasm classified"
+  },
+  {
+    "case": "readonly_runtime",
+    "source_sha256": "5ab82ca7bde1849f91690d96d6efb3bbe74d312595252d6b8d9d3e5a060c202a",
+    "kind": "parent-supported",
+    "commands": {
+      "emit": 7,
+      "cc": 8,
+      "native": 9,
+      "wasm": 10
+    },
+    "status": "native PASS; parent Wasm classified"
+  }
+]

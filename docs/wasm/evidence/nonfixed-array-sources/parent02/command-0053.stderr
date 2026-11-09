@@ -1,0 +1,5 @@
+/tmp/goose-wasm-nonfixed-source-20261108/prepared/grow_recursion.goose:1: error: convert calls into its recursive cycle while non-fixed-size local b (declared at /tmp/goose-wasm-nonfixed-source-20261108/prepared/grow_recursion.goose:1) is in scope (§7.8): end its scope before the call
+recursive fn convert(a:i64[>..]&,depth:i64)->i64{var b:i64[u16]=copy(a);assert(b.len==2&&b[0]==7&&b[1]== -8);if depth==0{return b[0];}let n=convert(a,depth-1);assert(b[1]== -8);return n+b[1];}fn main(){var a:i64[>..]=[7,-8];assert(convert(a,2)== -9);print("grow_recursion");}
+                                                                                                                                            ^
+  in fn convert(i64[>..]&, i64) instantiated from /tmp/goose-wasm-nonfixed-source-20261108/prepared/grow_recursion.goose:1
+  in fn main() instantiated from /tmp/goose-wasm-nonfixed-source-20261108/prepared/grow_recursion.goose:1

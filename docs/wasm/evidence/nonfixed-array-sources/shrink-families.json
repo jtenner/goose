@@ -1,0 +1,32 @@
+[
+  {
+    "case": "shrink_variable",
+    "source_sha256": "7e74fcf6847393cf3ce1da236b966d706941602a6e0ef00bcdd5c83650394178",
+    "expected": "shrink_variable\n",
+    "status": "unrun grow/shrink coverage"
+  },
+  {
+    "case": "shrink_runtime",
+    "source_sha256": "b6ba3f9715b8e8d40726ff965d62feae810672d155908831e3873d3308e94c03",
+    "expected": "shrink_runtime\n",
+    "status": "unrun grow/shrink coverage"
+  },
+  {
+    "case": "runtime_shrink",
+    "source_sha256": "c3aa5bf101e429e96c2cd70f40e3bb8b4873a30ecd946181bf34e5abc2a5313b",
+    "expected": "runtime_shrink\n",
+    "status": "unrun grow/shrink coverage"
+  },
+  {
+    "case": "grow_shrink",
+    "source_sha256": "1a4901a817e22da897c1e772d233e1b48715afbbe80b92d7fd05de1191800031",
+    "expected": "grow_shrink\n",
+    "status": "unrun grow/shrink coverage"
+  },
+  {
+    "case": "shrink_grow",
+    "source_sha256": "e0179413191a4c72863bf47d458c9aa7cf3d8a7f1043e8a28e8c242c5a94f7df",
+    "expected": "shrink_grow\n",
+    "status": "unrun grow/shrink coverage"
+  }
+]

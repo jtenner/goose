@@ -1,0 +1,1 @@
+var calls=0;recursive fn select(a:i64[>..]&)->i64[>..]&{calls++;a.push(99);var scratch:u8[]=[1,2,3];assert(scratch[2]==3);return a;}fn main(){var a:i64[>..]=[7,-8];var b:i64[u16]=copy(select(a));assert(calls==1&&a.len==3&&b.len==3&&b[2]==99);print("grow_call_effect");}

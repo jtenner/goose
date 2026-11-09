@@ -1,0 +1,58 @@
+diff --git a/src/wasm_arrays.h b/src/wasm_arrays.h
+index 08c6634d7..363d43149 100644
+--- a/src/wasm_arrays.h
++++ b/src/wasm_arrays.h
+@@ -374,13 +374,14 @@ inline bool WasmCodeGen::InitCountedArrayValue(VarDef *owner, const Slot &slot,
+         if (!FindFixedArraySource(source, from) || !from) return false;
+         materialize = true;
+     }
+-    auto variable = from && VariableArray(from) && !TEq(array, from);
+-    if (!variable && (!from || !InlineArray(from) || from->arr->akind != A_LIMITED)) return false;
++    auto nonfixed = from && from->kind == TY_ARRAY &&
++                    (DataArray(from) || IsResz(from)) && !TEq(array, from);
++    if (!nonfixed && (!from || !InlineArray(from) || from->arr->akind != A_LIMITED)) return false;
+     if (!TEq(array->arr->sub, from->arr->sub))
+         Fail(source->line, "limited array construction needs matching element layouts");
+     if (!storage.owners.count(owner))
+         Fail(source->line, "nonfixed array construction needs its planned owner");
+-    if (!variable) RequireFixed(from, source->line);
++    if (!nonfixed) RequireFixed(from, source->line);
+     auto stride = RequireFixed(from->arr->sub, source->line);
+     if (!stride) Fail(source->line, "limited array construction needs a positive element layout");
+     auto ownerScope = scopes.size();
+@@ -392,7 +393,7 @@ inline bool WasmCodeGen::InitCountedArrayValue(VarDef *owner, const Slot &slot,
+         while (value.type->kind == TY_REF) value = DereferencePlace(value, source->line);
+         if (!TEq(from, value.type)) Fail(source->line, "limited array source has an inconsistent layout");
+         auto count = Local(WasmModule::I64), prefix = Local(WasmModule::I32);
+-        if (variable) {
++        if (nonfixed) {
+             auto place = ArrayFromPlace(value, source->line);
+             auto sourcePrefix = VarintPrefix(from) ? Local(WasmModule::I32) : NoLocal;
+             auto view = CaptureArrayView(place, count, sourcePrefix);
+@@ -413,14 +414,14 @@ inline bool WasmCodeGen::InitCountedArrayValue(VarDef *owner, const Slot &slot,
+         } else {
+             code.I32(DataArray(array) ? (int32_t)DataPrefix(array) : 0); code.Set(prefix);
+             auto width = DataArray(array) ? IntSize(ArrayPrefix(array->arr).storage) : 8;
+-            if (width < 8 && (variable || (uint64_t)ArrSize(from->arr) > ((1ull << (width * 8)) - 1))) {
++            if (width < 8 && (nonfixed || (uint64_t)ArrSize(from->arr) > ((1ull << (width * 8)) - 1))) {
+                 code.Get(count); code.I64((int64_t)((1ull << (width * 8)) - 1)); code.Byte(0x56);
+                 Open(0x04); Trap(15, source->line); Close();
+             }
+         }
+         auto payload = Local(WasmModule::I32), total = Local(WasmModule::I64), bytes = Local(WasmModule::I32);
+-        // Fixed sources already prove the product; stored variable counts need a check.
+-        if (variable) {
++        // Fixed sources already prove the product; stored nonfixed counts need a check.
++        if (nonfixed) {
+             code.Get(count); code.I64(UINT32_MAX / stride); code.Byte(0x56);
+             Open(0x04); Trap(6, source->line); Close();
+         }
+@@ -469,7 +470,7 @@ inline bool WasmCodeGen::InitCountedArrayValue(VarDef *owner, const Slot &slot,
+             PrepareArrayFieldStore(place, 0); code.Get(base); StoreArrayField(place, 0);
+             PrepareArrayLengthStore(place); code.Get(count); StoreArrayLength(place);
+         }
+-        if (!variable) {
++        if (!nonfixed) {
+             auto sourcePrefix = (uint32_t)IntSize(LenStore(from->arr));
+             if (sourcePrefix > UINT32_MAX - value.offset)
+                 Fail(source->line, "limited array source offset exceeds memory32");

@@ -1,0 +1,1 @@
+fn main(){var a:i64[..]=[..9];a.push(7);a.push(-8);var b:i64[>..<]=copy(a);assert(a.cap==9&&b.len==2&&b[0]==7&&b[1]== -8);assert(b.pop()== -8);b.push(99);assert(b[1]==99&&a[1]== -8);print("runtime_shrink");}

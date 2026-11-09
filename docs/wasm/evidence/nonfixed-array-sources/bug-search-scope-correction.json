@@ -1,0 +1,9 @@
+{
+  "status": "PASS reviewed proposed source matches frozen tested wasm_arrays.h",
+  "original_report_sha256": "d04fbc84cb803925ca95af1082c385098b5dc9cedf13139f7e7880da74b107c9",
+  "reviewed_proposed_sha256": "6a308a5a381df7baf982850ce83f7e4b1275cfce2402346b3da7532939cb76e5",
+  "actual_parent": "af5cc6b8c9107560a6ad9de1e4e5dbd38b89fbba",
+  "stale_label": "report scope repeated06ba2c50 from supplied thread history; actual proposed bytes include the committed aggregate-prefix checkpoint",
+  "original_report_unchanged": true,
+  "execution_evidence": "review was source-only; actual native and Wasm outcomes are separately recorded"
+}

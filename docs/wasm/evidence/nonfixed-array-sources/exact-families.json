@@ -1,0 +1,14 @@
+[
+  {
+    "case": "exact_runtime",
+    "source_sha256": "d6714a8cf49992bcd365429c372763274a328ec50271db421ba2bb6eec8ca46f",
+    "expected": "exact_runtime\n",
+    "status": "unrun exact-layout regression"
+  },
+  {
+    "case": "readonly_runtime",
+    "source_sha256": "5ab82ca7bde1849f91690d96d6efb3bbe74d312595252d6b8d9d3e5a060c202a",
+    "expected": "readonly_runtime\n",
+    "status": "unrun exact-layout regression"
+  }
+]

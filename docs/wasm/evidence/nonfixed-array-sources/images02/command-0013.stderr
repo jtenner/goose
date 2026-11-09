@@ -1,0 +1,98 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: nonfixed dynamic receiver image differs
++ actual - expected
+
+  Buffer(65536) [Uint8Array] [
+    0,
+    3,
+    0,
+-   7,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+-   248,
+-   255,
+-   255,
+-   255,
+-   255,
+-   255,
+-   255,
+-   255,
+-   132,
+-   3,
+    0,
++   47,
++   104,
++   111,
++   109,
++   101,
++   47,
++   100,
++   101,
++   118,
++   47,
++   80,
++   114,
++   111,
++   106,
++   101,
++   99,
+-   0,
+-   0,
+-   0,
+-   0,
+-   0,
+    108,
+    165,
+    165,
+    165,
+    165,
+
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_nonfixed_source_dynamic.mjs:46:36
+    at print_end_v1 (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:105:13)
+    at receive.1 (wasm://wasm/c7d15196:wasm-function[12]:0x6af)
+    at main.0 (wasm://wasm/c7d15196:wasm-function[11]:0x49b)
+    at goose.start (wasm://wasm/c7d15196:wasm-function[14]:0x7db)
+    at Object.run (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:134:34)
+    at runCompleted (file:///home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs:10:13)
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_nonfixed_source_dynamic.mjs:51:57
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: Buffer(65536) [Uint8Array] [
+      0,   3,   0,   0,   0,   0,   0,   0,   0,   0,   0,  47,
+    104, 111, 109, 101,  47, 100, 101, 118,  47,  80, 114, 111,
+    106, 101,  99, 108, 165, 165, 165, 165, 165, 165, 165, 165,
+    165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165,
+    165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165,
+    165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165,
+    165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165,
+    165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165,
+    165, 165, 165, 165,
+    ... 65436 more items
+  ],
+  expected: Buffer(65536) [Uint8Array] [
+      0,   3,   0,   7,   0,   0,   0,   0,   0,   0,   0, 248,
+    255, 255, 255, 255, 255, 255, 255, 132,   3,   0,   0,   0,
+      0,   0,   0, 108, 165, 165, 165, 165, 165, 165, 165, 165,
+    165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165,
+    165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165,
+    165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165,
+    165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165,
+    165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165,
+    165, 165, 165, 165,
+    ... 65436 more items
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.2

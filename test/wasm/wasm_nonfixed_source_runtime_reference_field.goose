@@ -1,0 +1,1 @@
+struct H{rows:i64[..]&}fn main(){var a:i64[..]=[..9];a.push(7);a.push(-8);var h=H{a};var b:i64[u16]=copy(h.rows);assert(a.cap==9&&a.len==2&&b.len==2&&b[0]==7&&b[1]== -8);b[0]=31;assert(a[0]==7);print("runtime_reference_field");}

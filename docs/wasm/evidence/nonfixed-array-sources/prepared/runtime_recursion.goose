@@ -1,0 +1,1 @@
+recursive fn convert(a:i64[..]&,depth:i64)->i64{var saved:i64[2]=[depth,17];var first:i64=0;{var b:i64[u16]=copy(a);assert(b.len==2&&b[0]==7&&b[1]== -8);first=b[0];}if depth==0{return first;}let n=convert(a,depth-1);assert(saved[0]==depth&&saved[1]==17);return n-8;}fn main(){var a:i64[..]=[7,-8];assert(convert(a,2)== -9);print("runtime_recursion");}

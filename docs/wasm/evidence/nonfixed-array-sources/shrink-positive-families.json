@@ -1,0 +1,77 @@
+[
+  {
+    "case": "shrink_variable",
+    "source_sha256": "7e74fcf6847393cf3ce1da236b966d706941602a6e0ef00bcdd5c83650394178",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 1,
+      "cc": 2,
+      "native": 3,
+      "wasm": 4
+    },
+    "status": "native PASS; parent Wasm classified",
+    "producer_phase": "parent05",
+    "fixture": "wasm_nonfixed_source_shrink_variable",
+    "expected": "shrink_variable\n"
+  },
+  {
+    "case": "shrink_runtime",
+    "source_sha256": "b6ba3f9715b8e8d40726ff965d62feae810672d155908831e3873d3308e94c03",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 5,
+      "cc": 6,
+      "native": 7,
+      "wasm": 8
+    },
+    "status": "native PASS; parent Wasm classified",
+    "producer_phase": "parent05",
+    "fixture": "wasm_nonfixed_source_shrink_runtime",
+    "expected": "shrink_runtime\n"
+  },
+  {
+    "case": "runtime_shrink",
+    "source_sha256": "c3aa5bf101e429e96c2cd70f40e3bb8b4873a30ecd946181bf34e5abc2a5313b",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 9,
+      "cc": 10,
+      "native": 11,
+      "wasm": 12
+    },
+    "status": "native PASS; parent Wasm classified",
+    "producer_phase": "parent05",
+    "fixture": "wasm_nonfixed_source_runtime_shrink",
+    "expected": "runtime_shrink\n"
+  },
+  {
+    "case": "grow_shrink",
+    "source_sha256": "1a4901a817e22da897c1e772d233e1b48715afbbe80b92d7fd05de1191800031",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 13,
+      "cc": 14,
+      "native": 15,
+      "wasm": 16
+    },
+    "status": "native PASS; parent Wasm classified",
+    "producer_phase": "parent05",
+    "fixture": "wasm_nonfixed_source_grow_shrink",
+    "expected": "grow_shrink\n"
+  },
+  {
+    "case": "shrink_grow",
+    "source_sha256": "e0179413191a4c72863bf47d458c9aa7cf3d8a7f1043e8a28e8c242c5a94f7df",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 17,
+      "cc": 18,
+      "native": 19,
+      "wasm": 20
+    },
+    "status": "native PASS; parent Wasm classified",
+    "producer_phase": "parent05",
+    "fixture": "wasm_nonfixed_source_shrink_grow",
+    "expected": "shrink_grow\n"
+  }
+]

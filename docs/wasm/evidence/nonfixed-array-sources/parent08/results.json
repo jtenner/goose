@@ -1,0 +1,14 @@
+[
+  {
+    "case": "size",
+    "source_sha256": "642fb099edf3ebce55890409be70e310beca3b9b2f701bc374fbabd84038a8da",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 1,
+      "cc": 2,
+      "native": 3,
+      "wasm": 4
+    },
+    "status": "native PASS; parent Wasm classified"
+  }
+]

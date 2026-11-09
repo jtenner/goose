@@ -1,0 +1,17 @@
+[
+  {
+    "case": "dynamic",
+    "source_sha256": "57e4629fd14644307300726e858133f9eb89acfa8111f45fc8bebb6bc336d9eb",
+    "kind": "missing-conversion",
+    "commands": {
+      "emit": 1,
+      "cc": 2,
+      "native": 3,
+      "wasm": 4
+    },
+    "status": "native PASS; parent Wasm classified",
+    "producer_phase": "parent07",
+    "fixture": "wasm_nonfixed_source_owner_dynamic",
+    "expected": "before\nafter\nbetween\nbefore\nafter\ndone\n"
+  }
+]

@@ -1,0 +1,14 @@
+wasm://wasm/eaacc652:1
+
+
+RuntimeError: memory access out of bounds
+    at goose.copy_memory (wasm://wasm/eaacc652:wasm-function[16]:0x719)
+    at main.0 (wasm://wasm/eaacc652:wasm-function[11]:0x3fa)
+    at goose.start (wasm://wasm/eaacc652:wasm-function[13]:0x572)
+    at Object.run (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:134:34)
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_nonfixed_source_failure.mjs:30:25
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.22.2

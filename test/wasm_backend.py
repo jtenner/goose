@@ -138,7 +138,7 @@ def main():
             if source.stem.startswith((
                     'wasm_inline_ref_abi_', 'wasm_data_aggregate_', 'wasm_constructor_assignment_',
                     'wasm_aggregate_construction_', 'wasm_array_assignment_', 'wasm_default_conversion_',
-                    'wasm_array_constructor_', 'wasm_fixed_argument_', 'wasm_fixed_result_', 'wasm_array_argument_', 'wasm_array_result_', 'wasm_temporary_read_', 'wasm_temporary_equality_', 'wasm_fixed_negation_', 'wasm_fixed_binary_', 'wasm_compound_math_', 'wasm_negation_discard_', 'wasm_zero_call_', 'wasm_fixed_array_conversion_', 'wasm_fixed_array_layout_', 'wasm_fixed_array_assignment_layout_', 'wasm_limited_array_layout_', 'wasm_limited_array_conversion_', 'wasm_array_expression_source_', 'wasm_array_prefix_conversion_', 'wasm_aggregate_prefix_')):
+                    'wasm_array_constructor_', 'wasm_fixed_argument_', 'wasm_fixed_result_', 'wasm_array_argument_', 'wasm_array_result_', 'wasm_temporary_read_', 'wasm_temporary_equality_', 'wasm_fixed_negation_', 'wasm_fixed_binary_', 'wasm_compound_math_', 'wasm_negation_discard_', 'wasm_zero_call_', 'wasm_fixed_array_conversion_', 'wasm_fixed_array_layout_', 'wasm_fixed_array_assignment_layout_', 'wasm_limited_array_layout_', 'wasm_limited_array_conversion_', 'wasm_array_expression_source_', 'wasm_array_prefix_conversion_', 'wasm_aggregate_prefix_', 'wasm_nonfixed_source_')):
                 actual = run([args.node, ROOT / 'test' / 'wasm_reference_abi.mjs', wasm,
                               out / f'{source.stem}-O{opt}-instance'])
             else:
@@ -250,6 +250,11 @@ def main():
                 restored = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm,
                                 '2' if source.stem.endswith('_global') else '0'])
                 assert restored.stdout == reference.stdout and not restored.stderr
+                count += 1
+            if source.stem.startswith('wasm_nonfixed_source_'):
+                checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm,
+                               '2' if source.stem.endswith('_global') else '0'])
+                assert checked.stdout == reference.stdout and not checked.stderr
                 count += 1
             if source.stem.startswith('wasm_aggregate_prefix_'):
                 checked = run([args.node, ROOT / 'test/wasm_multimemory.mjs', wasm,
@@ -484,6 +489,11 @@ def main():
     count += check_aggregate_images(run, args.node, args.validator, out)
     count += check_aggregate_dynamic(run, args.node, args.validator, out)
     count += check_aggregate_guards(run, exe, args.cc, out)
+    from wasm_nonfixed_source_checks import check_images as check_nonfixed_source_images, check_dynamic as check_nonfixed_source_dynamic, check_guard as check_nonfixed_source_guard, check_failures as check_nonfixed_source_failures
+    count += check_nonfixed_source_images(run, args.node, args.validator, out)
+    count += check_nonfixed_source_dynamic(run, args.node, args.validator, out)
+    count += check_nonfixed_source_guard(run, exe, args.cc, out)
+    count += check_nonfixed_source_failures(run, exe, args.cc, args.node, args.validator, args.wasmtime_python, out)
     from wasm_limited_array_conversion_checks import check_images as check_limited_conversion_images, check_zero as check_limited_conversion_zero, check_failures as check_limited_conversion_failures
     count += check_limited_conversion_images(run, args.node, args.validator, out)
     count += check_limited_conversion_zero(run, args.node, args.validator, out)

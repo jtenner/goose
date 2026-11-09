@@ -416,8 +416,14 @@ limited-array construction. Those suffix bytes are now cleared after successful
 construction, while stored whole-value copies preserve their source bytes.
 Complete Memory 0 and data-image checks cover fixed and dynamic memory
 identities. See [aggregate prefix evidence](evidence/aggregate-prefixes.md).
-Growable and runtime-limited source conversions remain the next confirmed
-compilation blocker. Aggregate LEB prefixes and data fills remain guarded.
+Stored growable, grow-shrink and runtime-limited arrays now also construct
+nonfixed receivers through the existing read-place path. The active count and
+packed payload identity are captured once; prefix and memory32 size guards run
+before allocation. Fresh runtime capacity is the active length, while exact
+copies retain their original capacity path. Complete images cover caller-live
+owners, dynamic memories, spare bytes and failure effects. See
+[nonfixed source evidence](evidence/nonfixed-array-sources.md). Aggregate LEB
+prefixes, data fills and general nonfixed value transport remain guarded.
 
 
 ## Host contract

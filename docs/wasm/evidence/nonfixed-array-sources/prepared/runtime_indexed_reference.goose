@@ -1,0 +1,1 @@
+fn main(){var a:i64[..]=[7,-8];var c:i64[..]=[9];var refs:i64[..]&[2]=[a,c];var b:i64[u16]=copy(refs[0]);assert(b.len==2&&b[0]==7&&b[1]== -8);refs[0].=c;assert(b[0]==7);print("runtime_indexed_reference");}

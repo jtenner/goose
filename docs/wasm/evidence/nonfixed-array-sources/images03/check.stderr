@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-nonfixed-source-20261108/images03/checks.py", line 13, in <module>
+    n=check_failures(run,p.parent/'build01/goose-tested','cc','node','wasm-tools','/tmp/goose-wasm-runtime-env/bin/python',p/'artifacts');print('PASS',n,'specific range/product/sum guard checks')
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_nonfixed_source_checks.py", line 122, in check_failures
+    else:assert result.returncode==1 and b'RuntimeError' in result.stderr and b'out of bounds' in result.stderr,result.stderr
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: b''

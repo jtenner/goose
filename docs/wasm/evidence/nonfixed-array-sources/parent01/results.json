@@ -1,0 +1,34 @@
+[
+  {
+    "case": "grow_variable",
+    "source_sha256": "5501e7d3872ee83190e0085cf474999978804ff229d33b84d3b878ca3336ff0a",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "grow_runtime",
+    "source_sha256": "007ca2f3b597e1e5940f4022ef6cef2cb7d44ac7b62549b364b6e724d8538023",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "runtime_variable",
+    "source_sha256": "c734c367c8246c60805726f8082c2608e979d0c95a0c904a0e1c2989f7a00b9c",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "runtime_grow",
+    "source_sha256": "3053385f56ae218bec96ffde696294401ac0caecf566de9ad64ec31c83c2977b",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  }
+]

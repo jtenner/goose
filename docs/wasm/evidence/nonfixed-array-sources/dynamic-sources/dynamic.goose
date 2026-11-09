@@ -1,0 +1,1 @@
+recursive fn receive(a:i64[..]&){print("before");var b:i64[u16]=copy(a);print("after");assert(b.len==3&&b[0]==7&&b[1]== -8&&b[2]==900);}fn main(){var a:i64[..]=[..5];a.push(7);a.push(-8);a.push(900);receive(a);print("between");var keep:u8[]=[91];receive(a);assert(keep[0]==91&&a.len==3);print("done");}
