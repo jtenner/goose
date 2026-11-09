@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-fixed-lifetime-plan-20261109/identity.py", line 17, in <module>
+    assert not a.returncode,rec
+           ^^^^^^^^^^^^^^^^
+AssertionError: {'source': 'test/wasm/wasm_array_expression_source_fixed_block.goose', 'source_sha256': 'dc82dfd228ca70259d31d3daea20698ccc8269b53de2151bd6cb68444505998d', 'opt': 0, 'parent': '/tmp/goose-wasm-aggregate-leb-20261109/full-correctness03/artifacts/wasm_array_expression_source_fixed_block-O0.wasm', 'parent_sha256': '5ae03b0ec022865d91642e87af412e8a5e79faf3d70d1398966cc4653711872e', 'command': ['/tmp/goose-wasm-fixed-lifetime-plan-20261109/build02/goose-tested', '-O0', '--target', 'wasm', '-o', '/tmp/goose-wasm-fixed-lifetime-plan-20261109/identity01/wasm_array_expression_source_fixed_block-O0.wasm', '/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_expression_source_fixed_block.goose'], 'exit': 1, 'stdout': '', 'stderr': '/home/dev/Projects/goose-wasm-backend/test/wasm/wasm_array_expression_source_fixed_block.goose:1: error: wasm target: fixed temporary needs its symbolic storage plan\n'}

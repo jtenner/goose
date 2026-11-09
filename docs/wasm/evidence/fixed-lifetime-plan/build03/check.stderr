@@ -1,0 +1,25 @@
+In file included from /home/dev/Projects/goose-wasm-backend/src/main.cpp:31:
+/home/dev/Projects/goose-wasm-backend/src/codegen.h: In constructor ‘goose::CodeGen::CodeGen(goose::Ast&, std::string_view, const std::vector<std::__cxx11::basic_string<char> >&, bool, bool, int64_t)’:
+/home/dev/Projects/goose-wasm-backend/src/codegen.h:1544:20: warning: unused variable ‘n’ [-Wunused-variable]
+ 1544 |             size_t n = 0;
+      |                    ^
+In file included from /home/dev/Projects/goose-wasm-backend/src/main.cpp:32:
+/home/dev/Projects/goose-wasm-backend/src/codegen_types.h: In member function ‘void goose::CodeGen::EmitDefaultInto(const std::string&, goose::TypeExpr*)’:
+/home/dev/Projects/goose-wasm-backend/src/codegen_types.h:1016:66: warning: unused parameter ‘t’ [-Wunused-parameter]
+ 1016 | inline void CodeGen::EmitDefaultInto(const string &lv, TypeExpr *t) {
+      |                                                        ~~~~~~~~~~^
+In file included from /home/dev/Projects/goose-wasm-backend/src/main.cpp:48:
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h: In member function ‘uint8_t goose::WasmCodeGen::Type(goose::TypeExpr*)’:
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h:226:51: warning: comparison of integer expressions of different signedness: ‘uint64_t’ {aka ‘long unsigned int’} and ‘long int’ [-Wsign-compare]
+  226 |                     if ((uint64_t)ArrSize(t->arr) > (UINT32_MAX - prefix) / FixedSize(element))
+      |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h: In member function ‘void goose::WasmCodeGen::Gen(goose::Node*, goose::TypeExpr*)’:
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h:874:66: warning: enumerated and non-enumerated type in conditional expression [-Wextra]
+  874 |                                       : s.type->kind == TY_ARRAY ? BorrowedArrayAddressType(s.type)
+      |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  875 |                                       : FatPointers() ? WasmModule::I64 : WasmModule::I32;
+      |                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h: In member function ‘std::string goose::WasmCodeGen::Run()’:
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h:1237:56: warning: enumerated and non-enumerated type in conditional expression [-Wextra]
+ 1237 |                 args.push_back(FixedParameter(p->type) ? WasmModule::I32 : Type(p->type));
+      |                                ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

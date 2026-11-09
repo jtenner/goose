@@ -47,6 +47,32 @@ inline bool WasmCodeGen::FindFixedArraySource(Node *n, TypeExpr *&common) {
     return true;
 }
 
+// Share the captured source type between the symbolic plan and emission.
+// Only a nonfixed declaration asks for this proof; ordinary AST nodes use
+// their checked stored types and do not trigger a second subtree scan.
+inline TypeExpr *WasmCodeGen::ArraySourceType(Node *source, bool &materialize) {
+    auto underlying = [&](Node *node) {
+        auto type = ActualType(node);
+        while (type && type->kind == TY_REF) type = type->ref->sub;
+        return type;
+    };
+    auto binary = Is<Binary>(source);
+    if (binary && binary->op != T_PLUS && binary->op != T_MINUS && binary->op != T_MUL &&
+        binary->op != T_DIV && binary->op != T_MOD) binary = nullptr;
+    auto unary = Is<Unary>(source);
+    if (unary && unary->op != T_MINUS) unary = nullptr;
+    auto from = unary ? underlying(unary->child) : binary ? underlying(binary->left) : underlying(source);
+    if (binary && from && from->kind != TY_ARRAY && from->kind != TY_STRUCT)
+        from = underlying(binary->right);
+    materialize = false;
+    if ((Is<Block>(source) || Is<IfExpr>(source)) && (!from || !InlineArray(from))) {
+        from = nullptr;
+        if (!FindFixedArraySource(source, from)) return nullptr;
+        materialize = from != nullptr;
+    }
+    return from;
+}
+
 inline WasmCodeGen::FixedPlace WasmCodeGen::OwnerPlace(VarDef *owner) {
     auto &slot = Find(owner);
     if (!slot.memory) Fail(owner->line, "fixed owner is missing planned storage");
@@ -117,6 +143,7 @@ inline void WasmCodeGen::CheckFreshDestination(const FreshFixedDestination &fres
     } else if (fresh.origin == FreshFixedOrigin::ReservedFrameTemporary) {
         auto owner = fresh.temporary;
         if (!owner || fresh.root || !owner->type || owner->scope >= scopes.size() ||
+            !owner->plan || owner->plan != storage.Temporary(owner->expression, owner->type, current) ||
             owner->expression != fresh.initialization || owner->bytes != fresh.ownerBytes ||
             owner->image != RequireFixed(owner->type, line) || owner->bytes != std::max(1u, owner->image) ||
             place.memory != 0 || place.packed || place.address != owner->baseLocal ||
@@ -142,6 +169,8 @@ inline void WasmCodeGen::WithFixedValue(TypeExpr *type, Node *expression,
     assert(expression);
     if (!Nominal(type) && !InlineArray(type))
         Fail(expression->line, "fixed temporary needs a fixed stored value");
+    auto plan = storage.Temporary(expression, type, current);
+    if (!plan) Fail(expression->line, "fixed temporary needs its symbolic storage plan");
     auto image = RequireFixed(type, expression->line);
     auto bytes = std::max(1u, image);
     auto scope = scopes.size(); scopes.emplace_back();
@@ -149,7 +178,7 @@ inline void WasmCodeGen::WithFixedValue(TypeExpr *type, Node *expression,
     code.I32((int32_t)bytes); code.Call(reservefn); code.Set(base);
     // reservefn returns the old top, also the base of this complete reservation.
     scopes.back().push_back({nullptr, 0, base, false});
-    FixedTemporaryOwner owner {type, expression, base, image, bytes, scope};
+    FixedTemporaryOwner owner {type, expression, base, image, bytes, scope, plan};
     FreshFixedDestination fresh {{type, base, 0, 0, false, true}, nullptr, 0, image,
                                  FreshFixedOrigin::ReservedFrameTemporary, expression, bytes, &owner};
     construct(fresh);
@@ -607,6 +636,11 @@ inline void WasmCodeGen::CompoundFixed(FixedPlace destination, Node *source, TTy
 }
 
 inline void WasmCodeGen::AssignFixed(FixedPlace destination, Node *source, TType op, Line line) {
+    if (!protectedfixed || protectedfixed->function != current ||
+        protectedfixed != storage.Protection(protectedfixed->assignment, current) ||
+        protectedfixed->assignment->rhs != source ||
+        AssignOp(protectedfixed->assignment->op) != op || !TEq(protectedfixed->type, destination.type))
+        Fail(line, "fixed assignment needs its planned protected destination");
     auto array = InlineArray(destination.type);
     auto fail = [&](const char *reason) {
         Fail(line, cat(array ? "whole-array assignment " : "whole-aggregate assignment ", reason));

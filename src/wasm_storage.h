@@ -21,6 +21,44 @@ struct WasmStoragePlan {
         bool argument = false, initialized = false;
     };
     unordered_map<VarDef *, FixedOwner> fixedvalues;
+    // Symbolic sites precede frame binding. One expression may need several
+    // stored types, for example a fixed source copied into a limited parameter.
+    struct FixedTemporary {
+        TypeExpr *type;
+        FnSpec *function;
+    };
+    unordered_map<Node *, vector<FixedTemporary>> fixedtemporaries;
+    struct ProtectedDestination {
+        Assign *assignment;
+        TypeExpr *type;
+        FnSpec *function;
+    };
+    unordered_map<Assign *, vector<ProtectedDestination>> protectedvalues;
+
+    void PlanTemporary(Node *expression, TypeExpr *type, FnSpec *function) {
+        if (!expression || !type) return;
+        while (type->kind == TY_REF) type = type->ref->sub;
+        if (!FixedParameter(type)) return;
+        auto &sites = fixedtemporaries[expression];
+        if (none_of(sites.begin(), sites.end(), [&](const FixedTemporary &site) {
+                return site.function == function && layout.TEq(site.type, type);
+            })) sites.push_back({type, function});
+    }
+
+    const FixedTemporary *Temporary(Node *expression, TypeExpr *type, FnSpec *function) const {
+        auto it = fixedtemporaries.find(expression);
+        if (it != fixedtemporaries.end())
+            for (auto &site : it->second)
+                if (site.function == function && layout.TEq(site.type, type)) return &site;
+        return nullptr;
+    }
+
+    const ProtectedDestination *Protection(Assign *assignment, FnSpec *function) const {
+        auto it = protectedvalues.find(assignment);
+        if (it != protectedvalues.end())
+            for (auto &site : it->second) if (site.function == function) return &site;
+        return nullptr;
+    }
     unordered_set<TypeExpr *> notedtypes;
     // -1 is dynamic, a missing entry is not yet reached. A concrete base is
     // valid only when every incoming call agrees on it.
@@ -67,26 +105,41 @@ struct WasmStoragePlan {
                 (t->arr->akind == A_LIMITED && layout.ArrSize(t->arr) >= 0)));
     }
 
-    void Walk(Node *n, FnSpec *function, int &next) {
+    template<class ActualType> void Walk(Node *n, FnSpec *function, int &next, ActualType &actual) {
         if (!n || Is<FnDecl>(n)) return;
         NoteType(n->exprtype);
+        PlanTemporary(n, actual(n), function);
+        if (auto assignment = Is<Assign>(n); assignment && assignment->op != T_DOTASSIGN) {
+            auto type = actual(assignment->lval);
+            if (type && assignment->pointee && type->kind == TY_REF) type = type->ref->sub;
+            if (FixedParameter(type)) {
+                auto &sites = protectedvalues[assignment];
+                if (none_of(sites.begin(), sites.end(), [&](const ProtectedDestination &site) {
+                        return site.function == function;
+                    })) sites.push_back({assignment, type, function});
+                // Compound operations can retain the old destination while a
+                // scalar or aggregate right operand runs. Its stored type is
+                // the destination type, not necessarily the operand's type.
+                PlanTemporary(assignment->rhs, type, function);
+            }
+        }
         if (auto b = Is<Block>(n)) {
             auto saved = next;
             vector<Defer *> deferred;
             for (auto statement : b->stmts) {
                 if (auto d = Is<Defer>(statement)) deferred.push_back(d);
-                else Walk(statement, function, next);
+                else Walk(statement, function, next, actual);
             }
-            Walk(b->tail, function, next);
+            Walk(b->tail, function, next, actual);
             // A deferred body can be emitted at several exits. Give it one
             // conservative index above all owners in its registering block,
             // so every emitted copy uses the same safe allocation/call plan.
             for (auto it = deferred.rbegin(); it != deferred.rend(); ++it)
-                Walk((*it)->body, function, next);
+                Walk((*it)->body, function, next, actual);
             next = saved;
             return;
         }
-        if (auto d = Is<Defer>(n)) { Walk(d->body, function, next); return; }
+        if (auto d = Is<Defer>(n)) { Walk(d->body, function, next, actual); return; }
         if (auto v = Is<VarDecl>(n)) {
             for (size_t i = 0; i < v->defs.size(); i++) {
                 auto d = v->defs[i];
@@ -98,6 +151,16 @@ struct WasmStoragePlan {
                     fixed.initialized = i < v->inits.size();
                 }
                 if (!Owns(d->type)) continue;
+                if (i < v->inits.size()) {
+                    auto source = v->inits[i];
+                    while (auto call = Is<Call>(source)) {
+                        if (call->builtin != B_COPY) break;
+                        source = call->ValueArgNodes().at(0);
+                    }
+                    // A nonfixed receiver can materialize a fixed source whose
+                    // outer expression already has the receiving array type.
+                    PlanTemporary(source, actual(source, true), function);
+                }
                 if (d->isglobal) {
                     if (owners.emplace(d, 0).second) globals.push_back(d);
                 } else {
@@ -105,7 +168,7 @@ struct WasmStoragePlan {
                     counts.own[function] = std::max(counts.own[function], next);
                 }
             }
-            for (auto init : v->inits) Walk(init, function, next);
+            for (auto init : v->inits) Walk(init, function, next, actual);
             return;
         }
         if (auto loop = Is<ForLoop>(n); loop && WasmValueSupport::Nominal(loop->vdef->type)) {
@@ -117,12 +180,12 @@ struct WasmStoragePlan {
                 fixed.initialized = true;
                 fixedvalues[loop->vdef] = fixed;
             }
-            Walk(loop->iter, function, next);
-            Walk(loop->body, function, next);
+            Walk(loop->iter, function, next, actual);
+            Walk(loop->body, function, next, actual);
             return;
         }
         if (auto match = Is<MatchExpr>(n)) {
-            Walk(match->scrutinee, function, next);
+            Walk(match->scrutinee, function, next, actual);
             auto incoming = next;
             for (auto &arm : match->arms) {
                 next = incoming;
@@ -133,13 +196,13 @@ struct WasmStoragePlan {
                     fixed.origin = FixedOrigin::MatchCopy;
                     fixed.initialized = true;
                 }
-                Walk(arm.body, function, next);
+                Walk(arm.body, function, next, actual);
             }
             next = incoming;
             return;
         }
         if (auto c = Is<Call>(n)) {
-            if (c->defaultinit) { Walk(c->defaultinit, function, next); return; }
+            if (c->defaultinit) { Walk(c->defaultinit, function, next, actual); return; }
             size_t argumentCount = 0;
             for (auto argument : c->ValueArgNodes()) {
                 argumentCount++;
@@ -149,7 +212,10 @@ struct WasmStoragePlan {
                     if (t && t->kind == TY_ARRAY && t->arr->sub->kind == TY_INT &&
                         t->arr->sub->intstorage == IS_U8) byteprints = true;
                 }
-                Walk(argument, function, next);
+                auto &parameters = c->spec ? c->spec->params : c->fvparams;
+                if (argumentCount <= parameters.size())
+                    PlanTemporary(argument, parameters[argumentCount - 1]->type, function);
+                Walk(argument, function, next, actual);
             }
             if (c->fvbody) {
                 for (size_t i = 0; i < c->fvparams.size(); i++) {
@@ -164,7 +230,7 @@ struct WasmStoragePlan {
                     fixed.initialized = i < argumentCount;
                     fixedvalues[parameter] = fixed;
                 }
-                Walk(c->fvbody, function, next); return;
+                Walk(c->fvbody, function, next, actual); return;
             }
             if (c->builtin < 0 && c->spec) {
                 calltops[c] = next;
@@ -172,10 +238,11 @@ struct WasmStoragePlan {
             }
             return;
         }
-        n->Children([&](Node *child) { Walk(child, function, next); });
+        n->Children([&](Node *child) { Walk(child, function, next, actual); });
     }
 
-    template<class Fail, class FixedSize> void Build(Fail fail, FixedSize fixedsize) {
+    template<class Fail, class FixedSize, class ActualType>
+    void Build(Fail fail, FixedSize fixedsize, ActualType actual) {
         vector<FnSpec *> functions;
         for (auto sp : ast.fnspecs) if (sp->live) {
             functions.push_back(sp);
@@ -191,11 +258,11 @@ struct WasmStoragePlan {
             }
             for (auto t : sp->rets) NoteType(t);
             int next = 0;
-            Walk(sp->body, sp, next);
+            Walk(sp->body, sp, next, actual);
         }
         for (auto declaration : ast.globals) {
             int next = 0;
-            Walk(declaration, nullptr, next);
+            Walk(declaration, nullptr, next, actual);
         }
         for (auto &[owner, plan] : fixedvalues) {
             if (plan.argument && plan.origin == FixedOrigin::Declaration) {

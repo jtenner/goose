@@ -447,6 +447,21 @@ and copied iteration retain their existing memory identities. Full images
 cover both prefix transitions and repeated dynamic copies. Aggregate equality
 remains guarded. See [aggregate LEB evidence](evidence/aggregate-leb-prefixes.md).
 
+
+Fixed temporaries and protected fixed assignments now have symbolic storage
+sites before frame binding. Each temporary records its stored type and function;
+argument adaptations and effectful arithmetic snapshots retain the required
+stored type. The emitter checks these records before reservation or value
+commit, and nested assignments restore their outer protection record.
+Nonfixed declarations share the existing captured-source type rule with the
+planner. All 2,044 existing fixture modules remain byte-identical. The fresh
+core, behavior and complete-image checks pass in the 7,992-check suite, and
+52 exact comparisons pass. See
+[fixed lifetime-plan evidence](evidence/fixed-lifetime-plan.md). This is a
+Stage C planning checkpoint; it adds no source-language admission and does not
+complete the remaining lifetime or reference work. Stage F remains in scope
+after C-E. No measurements, timing or profiling are authorized.
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping
@@ -512,8 +527,10 @@ BigInt operation for other values.
 
 - C: the growable scalar-array subset now has a symbolic storage plan, separate
   memories, checked growth/restores, and dynamic dispatch. Extend the plan to
-  protected destinations, remaining temporary owners, and all compound lifetime events.
-  General thin-reference propagation remains pending.
+  the remaining nonfixed destinations and temporary owners, and all remaining
+  compound lifetime events. Fixed temporary and protected-assignment sites now
+  have checked type/function plan records. General thin-reference propagation
+  remains pending.
 - D: scalar/reference arrays now cover fixed, limited, variable and growable
   layouts, including same-layout copies and unsigned LEB count prefixes, plus
   fresh ordinary fixed structs in the admitted field subset. Complete signed

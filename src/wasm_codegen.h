@@ -66,6 +66,7 @@ struct WasmCodeGen : ValueLayout {
         Node *expression;
         uint32_t baseLocal, image, bytes;
         size_t scope;
+        const WasmStoragePlan::FixedTemporary *plan;
     };
     struct FreshFixedDestination {
         FixedPlace place;
@@ -110,6 +111,7 @@ struct WasmCodeGen : ValueLayout {
         TypeExpr *type = nullptr;
         const FreshFixedDestination *destination = nullptr;
     };
+    const WasmStoragePlan::ProtectedDestination *protectedfixed = nullptr;
     vector<Target> targets;
     vector<int> labels;
     int nextlabel = 0;
@@ -1072,7 +1074,13 @@ struct WasmCodeGen : ValueLayout {
             }
             return;
         }
-        if (auto v = Is<goose::Assign>(n)) { Assign(v->lval, v->rhs, AssignOp(v->op), v->pointee, n->line); return; }
+        if (auto v = Is<goose::Assign>(n)) {
+            auto previous = protectedfixed;
+            protectedfixed = storage.Protection(v, current);
+            Assign(v->lval, v->rhs, AssignOp(v->op), v->pointee, n->line);
+            protectedfixed = previous;
+            return;
+        }
         if (auto v = Is<IncDec>(n)) { Assign(v->lval, nullptr, v->op == T_INC ? T_PLUS : T_MINUS,
                                                    v->lval->exprtype->kind == TY_REF, n->line); return; }
         if (auto v = Is<Return>(n)) {
@@ -1191,7 +1199,12 @@ struct WasmCodeGen : ValueLayout {
     }
     string Run() {
         storage.Build([&](Line l, const string &message) { Fail(l, message); },
-                      [&](TypeExpr *t, Line line) { return RequireFixed(t, line); });
+                      [&](TypeExpr *t, Line line) { return RequireFixed(t, line); },
+                      [&](Node *n, bool arraySource = false) {
+                          if (!arraySource) return ActualType(n);
+                          bool materialize = false;
+                          return ArraySourceType(n, materialize);
+                      });
         module.memories = storage.Memories();
         // Imports are versioned as a group. The adapter rejects reentry and runs
         // one program per instance. There is no implicit native extern bridge.
@@ -1270,6 +1283,7 @@ struct WasmCodeGen : ValueLayout {
 
     TypeExpr *ActualType(Node *n);
     bool FindFixedArraySource(Node *n, TypeExpr *&common);
+    TypeExpr *ArraySourceType(Node *source, bool &materialize);
     using FixedReadConsumer = void (*)(void *, const FixedPlace &);
     bool HasFixedTemporary(Node *n);
     Binary *FixedBinary(Node *n);

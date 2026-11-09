@@ -97,6 +97,12 @@ def main():
     if args.wasmtime_python:
         run([args.wasmtime_python, ROOT / 'test' / 'wasm_copy_matrix.py', copy_matrix])
         count += 1
+    # Bind fixed temporary and protected-assignment sites before emission.
+    storage_plan = out / 'storage-plan'
+    run([args.cxx, '-std=c++20', '-O0', ROOT / 'test' / 'wasm_storage_plan.cpp',
+         args.shader_library.resolve(), '-lm', '-pthread', '-ldl', '-o', storage_plan], timeout=180)
+    run([storage_plan])
+    count += 1
     # Exercise private place forms before widening source-language admission.
     # The real AST pass definitions use the normal compiler shader library.
     shader_library = args.shader_library.resolve()

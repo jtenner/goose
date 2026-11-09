@@ -1,0 +1,45 @@
+{
+  "status": "PASS",
+  "branch": "feat/wasm-multimemory-backend",
+  "parent": "d53da7837bdeaba05f58488a69458e04aec959d0",
+  "purpose": "Stage C correctness only; no measurements/timing/profiling",
+  "compiler": {
+    "parent": "d53da7837bdeaba05f58488a69458e04aec959d0",
+    "compiler": "/tmp/goose-wasm-fixed-lifetime-plan-20261109/build03/goose-tested",
+    "sha256": "ea81b203cb500f0c40d763805705abe00ff8a7f15e67785f973db31006157d10"
+  },
+  "source_files": 85,
+  "validation_inputs": 6126,
+  "changed_source": [
+    "src/wasm_arrays.h",
+    "src/wasm_codegen.h",
+    "src/wasm_fixed.h",
+    "src/wasm_storage.h"
+  ],
+  "passed_phases": [
+    "build03",
+    "identity02",
+    "full-correctness01",
+    "exact01",
+    "focused01"
+  ],
+  "integrated_checks": 7992,
+  "byte_identical_fixture_pairs": 2044,
+  "exact_comparisons": 52,
+  "fresh_native_node_wasmtime_pairs": 32,
+  "full_suite_basis": "fresh core and every later helper including complete memory images; executed parent fixture pairs reused after exact source and module hashes",
+  "compiler_storage_cost_limit": "private plan maps and per-site records; grows with relevant AST sites and requested types; no measured compiler-time/allocation/physical-memory claim",
+  "runtime_limit": "no byte difference in the 2044 checked modules; no general performance claim",
+  "remaining_stage_c": [
+    "nonfixed destinations and temporary owners",
+    "remaining compound lifetime events",
+    "general thin-reference propagation"
+  ],
+  "next_stages": "complete C, then D, E, F; Stage F is in scope",
+  "preserved_attempts": [
+    "build01 compile error in new shared-layout comparison",
+    "build02/identity01 incomplete temporary plan",
+    "admission-scan01 diagnostic 110 failing variants; final identity02 all pass"
+  ],
+  "new_source_admission": false
+}

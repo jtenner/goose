@@ -1,0 +1,1 @@
+Stage C symbolic fixed temporary and protected assignment sites. Existing source admission and emitted instructions are intended to stay unchanged. No timing, profiling or measurement commands. First build failed at unqualified layout type comparison; raw stderr retained.

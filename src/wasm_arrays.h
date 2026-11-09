@@ -285,24 +285,13 @@ inline bool WasmCodeGen::InitFixedArrayValue(VarDef *owner, const Slot &slot, No
     }
     // Direct literals already construct the receiving layout without a value copy.
     if (Is<ArrayLit>(source) || Is<StrLit>(source)) return false;
-    auto underlying = [&](Node *node) {
-        auto type = ActualType(node);
-        while (type->kind == TY_REF) type = type->ref->sub;
-        return type;
-    };
     auto binary = Is<Binary>(source);
     if (binary && binary->op != T_PLUS && binary->op != T_MINUS && binary->op != T_MUL &&
         binary->op != T_DIV && binary->op != T_MOD) binary = nullptr;
     auto unary = Is<Unary>(source);
     if (unary && unary->op != T_MINUS) unary = nullptr;
-    auto from = unary ? underlying(unary->child) : binary ? underlying(binary->left) : underlying(source);
-    if (binary && from->kind != TY_ARRAY && from->kind != TY_STRUCT) from = underlying(binary->right);
     bool materialize = false;
-    if ((Is<Block>(source) || Is<IfExpr>(source)) && (!from || !InlineArray(from))) {
-        from = nullptr;
-        if (!FindFixedArraySource(source, from) || !from) return false;
-        materialize = true;
-    }
+    auto from = ArraySourceType(source, materialize);
     if (!from || from->kind != TY_ARRAY || from->arr->akind != A_FIXED) return false;
     if (!TEq(array->arr->sub, from->arr->sub))
         Fail(source->line, "fixed array construction needs matching element layouts");
@@ -366,14 +355,8 @@ inline bool WasmCodeGen::InitCountedArrayValue(VarDef *owner, const Slot &slot, 
         if (call->builtin != B_COPY) break;
         source = call->ValueArgNodes().at(0);
     }
-    auto from = ActualType(source);
-    while (from && from->kind == TY_REF) from = from->ref->sub;
     bool materialize = false;
-    if ((Is<Block>(source) || Is<IfExpr>(source)) && (!from || !InlineArray(from))) {
-        from = nullptr;
-        if (!FindFixedArraySource(source, from) || !from) return false;
-        materialize = true;
-    }
+    auto from = ArraySourceType(source, materialize);
     auto nonfixed = from && from->kind == TY_ARRAY &&
                     (DataArray(from) || IsResz(from)) && !TEq(array, from);
     if (!nonfixed && (!from || !InlineArray(from) || from->arr->akind != A_LIMITED)) return false;
