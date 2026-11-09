@@ -600,23 +600,26 @@ inline void WasmCodeGen::InitByteString(VarDef *owner, const Slot *slot, StrLit 
             Fail(line, "string literal does not fit its static layout");
         auto place = FreshArrayPlace(*fresh, literal->line);
         if (array->arr->akind == A_LIMITED) InitArrayCount(place, count);
-        if (!count) return;
+        if (!count) { ZeroUnusedInlineArray(*destination, count, literal->line); return; }
         auto payload = *destination;
         payload.type = array->arr->sub;
         payload.offset += array->arr->akind == A_LIMITED ? (uint32_t)IntSize(LenStore(array->arr)) : 0u;
         auto source = module.Data(literal->val);
         CopyBytes(payload, {array->arr->sub, NoLocal, (uint32_t)source, 0, false, true},
                   (uint32_t)count, literal->line, true);
+        ZeroUnusedInlineArray(*destination, count, literal->line);
         return;
     }
     auto memory = ArrayAllocationMemory(owner, slot, destination, line);
     auto base = Local(WasmModule::I64);
+    FixedPlace inlineImage {array, NoLocal};
     if (InlineArray(array)) {
         auto packed = destination && (destination->packed || memory != 0);
         auto header = Local(packed ? WasmModule::I64 : WasmModule::I32);
         if (destination) PlaceAddress(*destination, packed ? WasmModule::I64 : WasmModule::I32, literal->line);
         else Address(*slot);
         code.Set(header);
+        inlineImage = {array, header, 0, memory, packed, true};
         if (array->arr->akind == A_LIMITED) {
             auto place = ArrayFromPlace({array, header, 0, memory, packed, true}, literal->line);
             PrepareArrayLengthStore(place); code.I64((int64_t)count); StoreArrayLength(place);
@@ -653,11 +656,12 @@ inline void WasmCodeGen::InitByteString(VarDef *owner, const Slot *slot, StrLit 
         }
         if (prefix) { code.Get(base); code.I64(prefix); code.Byte(0x7c); code.Set(base); }
     }
-    if (!count) return;
+    if (!count) { if (InlineArray(array)) ZeroUnusedInlineArray(inlineImage, count, literal->line); return; }
     auto source = module.Data(literal->val);
     CopyBytes({array->arr->sub, base, 0, memory, true, true},
               {array->arr->sub, NoLocal, (uint32_t)source, 0, false, true},
               (uint32_t)count, literal->line, true);
+    if (InlineArray(array)) ZeroUnusedInlineArray(inlineImage, count, literal->line);
 }
 
 inline void WasmCodeGen::InitFilledArray(VarDef *owner, const Slot *slot, ArrayLit *literal,
@@ -679,6 +683,7 @@ inline void WasmCodeGen::InitFilledArray(VarDef *owner, const Slot *slot, ArrayL
     auto memory = ArrayAllocationMemory(owner, slot, destination, line);
     if (destination && fixedfillbase == NoLocal) fixedfillbase = Local(WasmModule::I64);
     auto base = destination ? fixedfillbase : Local(WasmModule::I64);
+    FixedPlace inlineImage = destination ? *destination : FixedPlace {array, NoLocal};
     if (InlineArray(array)) {
         auto capacity = (uint64_t)ArrSize(array->arr);
         if (count > capacity || (array->arr->akind == A_FIXED && count != capacity))
@@ -689,6 +694,7 @@ inline void WasmCodeGen::InitFilledArray(VarDef *owner, const Slot *slot, ArrayL
         } else {
             auto header = Local(WasmModule::I32);
             Address(*slot); code.Set(header);
+            inlineImage = {array, header, 0, memory, false, true};
             if (array->arr->akind == A_LIMITED) {
                 auto place = ArrayFromPlace({array, header, 0, memory, false, true}, literal->line);
                 PrepareArrayLengthStore(place); code.I64((int64_t)count); StoreArrayLength(place);
@@ -732,7 +738,7 @@ inline void WasmCodeGen::InitFilledArray(VarDef *owner, const Slot *slot, ArrayL
         item = cached;
     } else item = Temp(element);
     Gen(literal->fillval); Convert(literal->fillval->exprtype, element); code.Set(item);
-    if (!count) return;
+    if (!count) { if (InlineArray(array)) ZeroUnusedInlineArray(inlineImage, count, literal->line); return; }
     if (destination) {
         // Nested initialization has finished before these shared loop locals are set.
         EmitPackedAddress(*destination, literal->line);
@@ -761,6 +767,7 @@ inline void WasmCodeGen::InitFilledArray(VarDef *owner, const Slot *slot, ArrayL
     }
     code.Get(position); code.I64(1); code.Byte(0x7c); code.Set(position);
     Branch(head); Close(); Close();
+    if (InlineArray(array)) ZeroUnusedInlineArray(inlineImage, count, literal->line);
 }
 
 inline void WasmCodeGen::InitDataArray(VarDef *owner, const Slot &slot, ArrayLit *literal) {
@@ -819,10 +826,13 @@ inline WasmCodeGen::FreshDataArrayDestination WasmCodeGen::ReserveFreshDataArray
         !storage.owners.count(owner) || !TEq(slot.type, array))
         Fail(owner->line, "aggregate data construction needs its checked fresh declaration");
     auto stride = RequireFixed(array->arr->sub, owner->line), prefix = DataPrefix(array);
-    if (!stride || prefix != 4) Fail(owner->line, "aggregate data construction needs a positive fixed u32 layout");
+    if (!stride || (prefix != 1 && prefix != 2 && prefix != 4 && prefix != 8))
+        Fail(owner->line, "aggregate data construction needs a positive fixed unsigned prefix layout");
     uint32_t ownerBytes = 0;
     auto bytes = NoLocal;
     if (literalCount != NoLocal) {
+        if (prefix < 8 && literalCount > ((1ull << (prefix * 8)) - 1))
+            Fail(owner->line, "array length exceeds its stored prefix");
         if (count != NoLocal || literalCount > (UINT32_MAX - prefix) / stride)
             Fail(owner->line, "aggregate data literal exceeds memory32");
         ownerBytes = prefix + literalCount * stride;

@@ -1,0 +1,200 @@
+[
+  {
+    "case": "wasm_aggregate_prefix_slot_numeric",
+    "source": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/numeric.goose",
+    "source_sha256": "1fc6b2a26fc7f4de656b4895c0ac184b11ceb9ed7097684ff7f2bf5e4687c638",
+    "native_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/numeric-native-run.stdout",
+    "native_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/numeric-native-run.exit",
+    "parent_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/numeric-parent-run.exit",
+    "parent_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/numeric-parent-run.stdout",
+    "parent_stderr": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/numeric-parent-run.stderr",
+    "kind": "wrong-result"
+  },
+  {
+    "case": "wasm_aggregate_prefix_slot_empty",
+    "source": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/empty.goose",
+    "source_sha256": "2a5063d9b0d4efb4ad2342bab79e01485c7df3cde562586080a5ace108d84d82",
+    "native_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/empty-native-run.stdout",
+    "native_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/empty-native-run.exit",
+    "parent_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/empty-parent-run.exit",
+    "parent_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/empty-parent-run.stdout",
+    "parent_stderr": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/empty-parent-run.stderr",
+    "kind": "wrong-result"
+  },
+  {
+    "case": "wasm_aggregate_prefix_slot_fill",
+    "source": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/fill.goose",
+    "source_sha256": "a0878b38eec4fb9307d3df543d78a78292497a20b182236b040ff2b7476920a5",
+    "native_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/fill-native-run.stdout",
+    "native_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/fill-native-run.exit",
+    "parent_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/fill-parent-run.exit",
+    "parent_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/fill-parent-run.stdout",
+    "parent_stderr": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/fill-parent-run.stderr",
+    "kind": "wrong-result"
+  },
+  {
+    "case": "wasm_aggregate_prefix_slot_default",
+    "source": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/default.goose",
+    "source_sha256": "61ac699d2e678be61a0994b0756cdaa682fb8df99d150d5fe6d1619bf4a96d57",
+    "native_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/default-native-run.stdout",
+    "native_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/default-native-run.exit",
+    "parent_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/default-parent-run.exit",
+    "parent_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/default-parent-run.stdout",
+    "parent_stderr": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/default-parent-run.stderr",
+    "kind": "wrong-result"
+  },
+  {
+    "case": "wasm_aggregate_prefix_slot_fill_zero",
+    "source": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/fill_zero.goose",
+    "source_sha256": "17ed0f06f9ae567fc6a1e1a3de1748a598dc1f4c30b9f295e2d9c80b7803d9ea",
+    "native_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/fill_zero-native-run.stdout",
+    "native_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/fill_zero-native-run.exit",
+    "parent_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/fill_zero-parent-run.exit",
+    "parent_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/fill_zero-parent-run.stdout",
+    "parent_stderr": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/fill_zero-parent-run.stderr",
+    "kind": "wrong-result"
+  },
+  {
+    "case": "wasm_aggregate_prefix_slot_text",
+    "source": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/text.goose",
+    "source_sha256": "0370b0d8d535af350cd8114cb2e48ef17c2d5bdea61b72c2e7c1aa76a5798c14",
+    "native_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/text-native-run.stdout",
+    "native_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/text-native-run.exit",
+    "parent_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/text-parent-run.exit",
+    "parent_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/text-parent-run.stdout",
+    "parent_stderr": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/text-parent-run.stderr",
+    "kind": "wrong-result"
+  },
+  {
+    "case": "wasm_aggregate_prefix_slot_text_empty",
+    "source": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/text_empty.goose",
+    "source_sha256": "4644fdb3a80c950ecb36ff3d8e3ad6e90ff9e2b284a7cf01d7fa02c846e6c287",
+    "native_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/text_empty-native-run.stdout",
+    "native_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/text_empty-native-run.exit",
+    "parent_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/text_empty-parent-run.exit",
+    "parent_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/text_empty-parent-run.stdout",
+    "parent_stderr": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/text_empty-parent-run.stderr",
+    "kind": "wrong-result"
+  },
+  {
+    "case": "wasm_aggregate_prefix_slot_nominal",
+    "source": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal.goose",
+    "source_sha256": "95ac0760646b97623a6321acaccc3ab03e2094d0dba37da5d7a68fdabc23c877",
+    "native_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal-native-run.stdout",
+    "native_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal-native-run.exit",
+    "parent_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal-parent-run.exit",
+    "parent_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal-parent-run.stdout",
+    "parent_stderr": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal-parent-run.stderr",
+    "kind": "wrong-result"
+  },
+  {
+    "case": "wasm_aggregate_prefix_slot_nominal_empty",
+    "source": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_empty.goose",
+    "source_sha256": "7677676ce82983e7b04801f02afeb2fad330c79278641b523640616c93f47caa",
+    "native_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_empty-native-run.stdout",
+    "native_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_empty-native-run.exit",
+    "parent_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_empty-parent-run.exit",
+    "parent_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_empty-parent-run.stdout",
+    "parent_stderr": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_empty-parent-run.stderr",
+    "kind": "wrong-result"
+  },
+  {
+    "case": "wasm_aggregate_prefix_slot_nominal_fill",
+    "source": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_fill.goose",
+    "source_sha256": "850c43d217e4cc3098d2773a5c32f21a2be44bf9002838d62196f6b26e9edf97",
+    "native_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_fill-native-run.stdout",
+    "native_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_fill-native-run.exit",
+    "parent_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_fill-parent-run.exit",
+    "parent_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_fill-parent-run.stdout",
+    "parent_stderr": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_fill-parent-run.stderr",
+    "kind": "wrong-result"
+  },
+  {
+    "case": "wasm_aggregate_prefix_slot_nominal_default",
+    "source": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_default.goose",
+    "source_sha256": "afc95824fd852b71ecc00a96b2d10b5223c1f15bb6d6cc888022c9a696fea266",
+    "native_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_default-native-run.stdout",
+    "native_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_default-native-run.exit",
+    "parent_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_default-parent-run.exit",
+    "parent_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_default-parent-run.stdout",
+    "parent_stderr": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_default-parent-run.stderr",
+    "kind": "wrong-result"
+  },
+  {
+    "case": "wasm_aggregate_prefix_slot_nominal_fill_zero",
+    "source": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_fill_zero.goose",
+    "source_sha256": "bca204129a89af3520b17b85b8882dc210f1f4be9e251471d1637333dbc2218e",
+    "native_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_fill_zero-native-run.stdout",
+    "native_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_fill_zero-native-run.exit",
+    "parent_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_fill_zero-parent-run.exit",
+    "parent_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_fill_zero-parent-run.stdout",
+    "parent_stderr": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/nominal_fill_zero-parent-run.stderr",
+    "kind": "wrong-result"
+  },
+  {
+    "case": "wasm_aggregate_prefix_slot_f32",
+    "source": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/f32.goose",
+    "source_sha256": "640e16e1d758766941c08131f174605245dfe6283c94545141fd7afbb6f2bc4c",
+    "native_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/f32-native-run.stdout",
+    "native_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/f32-native-run.exit",
+    "parent_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/f32-parent-run.exit",
+    "parent_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/f32-parent-run.stdout",
+    "parent_stderr": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/f32-parent-run.stderr",
+    "kind": "wrong-result"
+  },
+  {
+    "case": "wasm_aggregate_prefix_slot_f64",
+    "source": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/f64.goose",
+    "source_sha256": "d10022bf490227f5ea9fbcdb4f2d52b9e8607be819252e97738e90e16fdded89",
+    "native_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/f64-native-run.stdout",
+    "native_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/f64-native-run.exit",
+    "parent_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/f64-parent-run.exit",
+    "parent_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/f64-parent-run.stdout",
+    "parent_stderr": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/f64-parent-run.stderr",
+    "kind": "wrong-result"
+  },
+  {
+    "case": "wasm_aggregate_prefix_slot_bool",
+    "source": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/bool.goose",
+    "source_sha256": "a3035e2bf20d460a7eda9f18f7f3d6256d8897065cf7c62a6b4892e8ba6dc2fd",
+    "native_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/bool-native-run.stdout",
+    "native_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/bool-native-run.exit",
+    "parent_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/bool-parent-run.exit",
+    "parent_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/bool-parent-run.stdout",
+    "parent_stderr": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-forms01/bool-parent-run.stderr",
+    "kind": "wrong-result"
+  },
+  {
+    "case": "wasm_aggregate_prefix_slot_nominal_default_effect",
+    "source": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-more01/nominal_default_effect.goose",
+    "source_sha256": "a03a6d2da95030f322d028298e5b2793655bc39149b698bfb0f3d0c1dd4ce2bd",
+    "native_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-more01/nominal_default_effect-native-run.stdout",
+    "native_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-more01/nominal_default_effect-native-run.exit",
+    "parent_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-more01/nominal_default_effect-parent-run.exit",
+    "parent_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-more01/nominal_default_effect-parent-run.stdout",
+    "parent_stderr": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-more01/nominal_default_effect-parent-run.stderr",
+    "kind": "wrong-result"
+  },
+  {
+    "case": "wasm_aggregate_prefix_slot_frame",
+    "source": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-extra01/frame.goose",
+    "source_sha256": "3ce6c66834abef077c1f407111fbe58e8aa9ead31a94cb5fd70c94000e76c5c9",
+    "native_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-extra01/frame-native.stdout",
+    "native_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-extra01/frame-native.exit",
+    "parent_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-extra01/frame-node.exit",
+    "parent_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-extra01/frame-node.stdout",
+    "parent_stderr": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-extra01/frame-node.stderr",
+    "kind": "wrong-result"
+  },
+  {
+    "case": "wasm_aggregate_prefix_slot_stored_copy",
+    "source": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-extra01/stored_copy.goose",
+    "source_sha256": "e698adcdc912ea506cce9b696b4a140f53a614f8a9e355efe401de8ac423b475",
+    "native_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-extra01/stored_copy-native.stdout",
+    "native_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-extra01/stored_copy-native.exit",
+    "parent_exit": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-extra01/stored_copy-node.exit",
+    "parent_stdout": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-extra01/stored_copy-node.stdout",
+    "parent_stderr": "/tmp/goose-wasm-aggregate-prefix-20261108/slot-extra01/stored_copy-node.stderr",
+    "kind": "supported-copy"
+  }
+]

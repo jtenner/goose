@@ -1,0 +1,21 @@
+[
+  {
+    "case": "nominal_default_effect",
+    "source_sha256": "a03a6d2da95030f322d028298e5b2793655bc39149b698bfb0f3d0c1dd4ce2bd",
+    "native_emit_exit": 0,
+    "native_cc_exit": 0,
+    "native_run_exit": 0,
+    "native_stdout": "slot=0,calls=0\n",
+    "native_stderr": "",
+    "parent_emit_exit": 0,
+    "parent_validate_exit": 0,
+    "parent_run_exit": 1,
+    "parent_stdout": "slot=3,calls=0\n",
+    "parent_stderr": "goose runtime error: assert failed at /tmp/goose-wasm-aggregate-prefix-20261108/slot-more01/nominal_default_effect.goose:1\n",
+    "prototype_emit_exit": 0,
+    "prototype_validate_exit": 0,
+    "prototype_run_exit": 1,
+    "prototype_stdout": "slot=3,calls=0\n",
+    "prototype_stderr": "goose runtime error: assert failed at /tmp/goose-wasm-aggregate-prefix-20261108/slot-more01/nominal_default_effect.goose:1\n"
+  }
+]

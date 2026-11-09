@@ -23,6 +23,7 @@ runtime = instantiate(fs.readFileSync(file), bytes => {
         expected[0][offset + 1] = 2;
         expected[0].writeUInt16LE(rows[visits][1], offset + 2);
         expected[0].writeUInt16LE(rows[visits][2], offset + 4);
+        expected[0].fill(0, offset + 6, offset + 10); // Fresh unused u16 slots.
         expected[1].writeUInt32LE(1, initial[2]);
         expected[1].writeUInt16LE(rows[visits][1], initial[2] + 4);
     } else expected[0].writeUInt16LE(rows[field][3], initial[1] + 4 + field * 12 + 10);

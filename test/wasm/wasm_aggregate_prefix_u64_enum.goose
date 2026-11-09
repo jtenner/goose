@@ -1,0 +1,1 @@
+enum E{A{mark:u8,n:i64},B}fn main(){var a:E[u64]=[E.A{7,-8},E.B];var b:E[u64]=copy(a);match b[0]{A v=>{assert(v.mark==7&&v.n== -8);},B=>assert(false)}match b[1]{B=>{},A v=>assert(false)}print("u64_enum");}

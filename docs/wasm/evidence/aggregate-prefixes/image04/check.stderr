@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-aggregate-prefix-20261108/image04/checks.py", line 15, in <module>
+    n+=check_guards(run,p.parent/'build02/goose-tested','cc',p)
+       ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_prefix_checks.py", line 67, in check_guards
+    run([exe,f'-O{opt}','--standalone','-o',c,path]);run([cc,c,'-pthread','-lm','-ldl','-o',native]);result=run([native]);assert result.stdout==b'guard\n' and not result.stderr
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/goose-wasm-aggregate-prefix-20261108/image04/checks.py", line 11, in run
+    assert not ok or not a.returncode,(args,a.returncode,a.stderr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (['/tmp/goose-wasm-aggregate-prefix-20261108/build02/goose-tested', '-O0', '--standalone', '-o', '/tmp/goose-wasm-aggregate-prefix-20261108/image04/aggregate-prefix-guard-zero-O0.c', '/tmp/goose-wasm-aggregate-prefix-20261108/image04/aggregate-prefix-guard-zero.goose'], 1, b'/tmp/goose-wasm-aggregate-prefix-20261108/image04/aggregate-prefix-guard-zero.goose:1: error: field empty of struct S cannot be a zero-length array: u8[0] (\xc2\xa73.4)\nstruct S{empty:u8[0]}fn main(){var rows:S[u8]=[S{[]}];assert(rows.len==1);print("guard");}\n^\n')

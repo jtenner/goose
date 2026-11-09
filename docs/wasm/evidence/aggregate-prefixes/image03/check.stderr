@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-aggregate-prefix-20261108/image03/checks.py", line 15, in <module>
+    n+=check_guards(run,p.parent/'build02/goose-tested','cc',p)
+       ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_prefix_checks.py", line 69, in check_guards
+    assert result.returncode==1 and reason in result.stderr and not module.exists(),(name,result.stderr);count+=1
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('zero', b'')

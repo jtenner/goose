@@ -1,0 +1,1 @@
+struct S{n:i64}struct H{before:u8,rows:S[u16]&,after:u16}fn main(){var a:S[u16]=[S{7},S{8}];var holders:H[]=[H{77,a,900}];var b:S[u16]=copy(holders[0].rows);b[0].n=99;assert(a[0].n==7&&b[0].n==99&&holders[0].before==77&&holders[0].after==900);var total:i64=0;for s in holders[0].rows{total+=s.n;}assert(total==15);print("u16_ref_field");}

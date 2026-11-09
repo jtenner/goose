@@ -84,7 +84,7 @@ def check_admission(run, exe, node, validator, wasmtime_python, out):
                 if wasmtime_python:
                     assert run([wasmtime_python, root / 'test/wasmtime_host.py', module]).stdout == b'1\n'
             elif name in ('argument', 'inline-argument', 'function-value-argument',
-                           'result', 'inline-result', 'function-value-result', 'temporary', 'field-adaptation'):
+                           'result', 'inline-result', 'function-value-result', 'temporary', 'field-adaptation', 'wide-count-elements'):
                 assert not result.returncode and not result.stderr
                 run([validator, 'validate', module])
                 assert run([node, root / 'scripts/run_wasm.mjs', module]).stdout == b'1\n'

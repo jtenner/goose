@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-aggregate-prefix-20261108/image02/checks.py", line 14, in <module>
+    n+=check_dynamic(run,'node','wasm-tools',p.parent/'focused04')
+       ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_prefix_checks.py", line 46, in check_dynamic
+    a,z=function_span(text,'produce');body=text[a:z];changed=one(body,r'call \$goose.fill\b','drop\n      drop\n      drop')
+                                                             ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_prefix_checks.py", line 10, in one
+    text,n=re.subn(pattern,value,text,count=1);assert n==1,pattern
+                                                      ^^^^
+AssertionError: call \$goose.fill\b

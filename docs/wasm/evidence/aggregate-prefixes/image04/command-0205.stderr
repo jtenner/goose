@@ -1,0 +1,3 @@
+/tmp/goose-wasm-aggregate-prefix-20261108/image04/aggregate-prefix-guard-zero.goose:1: error: field empty of struct S cannot be a zero-length array: u8[0] (§3.4)
+struct S{empty:u8[0]}fn main(){var rows:S[u8]=[S{[]}];assert(rows.len==1);print("guard");}
+^

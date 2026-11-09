@@ -150,6 +150,10 @@ def check_data(run, node, validator, out):
         changed = [('width', wrong_width),
                    ('omitted', body[:last.start()] + 'drop\n    drop' + body[last.end():]),
                    ('namespace', body[:last.start()] + 'i64.store8 2 offset=5' + body[last.end():])]
+        suffix, n = re.subn(r'(?m)^(\s*)memory.fill 1\s*$',
+                             r'\1drop\n\1drop\n\1drop', body, count=1)
+        assert n == 1
+        changed.append(('suffix-zero', suffix))
         for name, modified in changed:
             damaged = emit(name, text[:a] + modified + text[z:])
             result = run([node, ROOT / 'test/wasm_array_result_data.mjs', damaged], ok=False)

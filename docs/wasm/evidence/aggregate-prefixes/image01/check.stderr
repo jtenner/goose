@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-aggregate-prefix-20261108/image01/checks.py", line 13, in <module>
+    n=check_images(run,'node','wasm-tools',p.parent/'focused03')
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_prefix_checks.py", line 25, in check_images
+    ('count',one(body,header,'i64.const 3'),b'aggregate prefix data image differs'),
+             ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_prefix_checks.py", line 10, in one
+    text,n=re.subn(pattern,value,text,count=1);assert n==1,pattern
+                                                      ^^^^
+AssertionError: i64.const 2(?=\n\s*local.set (\d+)\n\s*i32.wrap_i64\n\s*local.get \1\n\s*i64.store(?:8|16)? 1\n)

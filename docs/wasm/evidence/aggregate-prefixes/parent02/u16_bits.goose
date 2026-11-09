@@ -1,0 +1,1 @@
+struct S{flag:bool,small:f32,wide:f64,special:f64,bits:bool[2]}fn main(){var a:S[u16]=[S{true,-0.0,-2.5,0.0/0.0,[true,false]},S{false,1.25,3.5,0.0/0.0,[false,true]}];var b:S[u16]=copy(a);assert(b[0].flag&&!b[1].flag&&b[0].wide== -2.5&&b[1].small==1.25&&b[0].special!=b[0].special&&1.0/b[0].small<0.0&&b[1].bits[1]);b[0].wide=99.0;assert(a[0].wide== -2.5);print("u16_bits");}

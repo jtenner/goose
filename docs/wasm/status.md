@@ -402,6 +402,23 @@ source temporary lifetime, variable prefixes and failed range checks before
 allocation. Both host adapters report the specific stored-prefix error. See
 [limited array conversion evidence](evidence/limited-array-conversion.md).
 
+Stored variable-array values now construct receivers with a different count
+prefix or nonfixed layout. The source count and payload address are captured
+once; receiving count and byte extents are checked before allocation. Exact
+copies retain their prior path. Full images cover stored references, dynamic
+memory identities and failed range checks. See
+[stored prefix conversion evidence](evidence/array-prefix-conversion.md).
+
+Fixed aggregate data arrays now also accept u8, u16 and u64 count prefixes.
+Their nested fields, copied binders and references use the existing checked
+fixed layouts. Failing-first tests also exposed stale unused slots in fresh
+limited-array construction. Those suffix bytes are now cleared after successful
+construction, while stored whole-value copies preserve their source bytes.
+Complete Memory 0 and data-image checks cover fixed and dynamic memory
+identities. See [aggregate prefix evidence](evidence/aggregate-prefixes.md).
+Growable and runtime-limited source conversions remain the next confirmed
+compilation blocker. Aggregate LEB prefixes and data fills remain guarded.
+
 
 ## Host contract
 

@@ -1,0 +1,58 @@
+[
+  {
+    "compiler": "parent",
+    "opt": 0,
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "native_stdout": "slot=0\n",
+    "native_stderr": "",
+    "wasm_exit": 0,
+    "validate_exit": 0,
+    "node_exit": 1,
+    "node_stdout": "slot=3\n",
+    "node_stderr": "goose runtime error: assert failed at /tmp/goose-wasm-aggregate-prefix-20261108/reused-slot01/slot.goose:1\n"
+  },
+  {
+    "compiler": "parent",
+    "opt": 2,
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "native_stdout": "slot=0\n",
+    "native_stderr": "",
+    "wasm_exit": 0,
+    "validate_exit": 0,
+    "node_exit": 1,
+    "node_stdout": "slot=3\n",
+    "node_stderr": "goose runtime error: assert failed at /tmp/goose-wasm-aggregate-prefix-20261108/reused-slot01/slot.goose:1\n"
+  },
+  {
+    "compiler": "prototype",
+    "opt": 0,
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "native_stdout": "slot=0\n",
+    "native_stderr": "",
+    "wasm_exit": 0,
+    "validate_exit": 0,
+    "node_exit": 1,
+    "node_stdout": "slot=3\n",
+    "node_stderr": "goose runtime error: assert failed at /tmp/goose-wasm-aggregate-prefix-20261108/reused-slot01/slot.goose:1\n"
+  },
+  {
+    "compiler": "prototype",
+    "opt": 2,
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "native_stdout": "slot=0\n",
+    "native_stderr": "",
+    "wasm_exit": 0,
+    "validate_exit": 0,
+    "node_exit": 1,
+    "node_stdout": "slot=3\n",
+    "node_stderr": "goose runtime error: assert failed at /tmp/goose-wasm-aggregate-prefix-20261108/reused-slot01/slot.goose:1\n"
+  }
+]

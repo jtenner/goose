@@ -1,0 +1,26 @@
+[
+  {
+    "case": "u8_variant",
+    "source_sha256": "68a804aec9109f188647f4fb3e3f2add0c34805926a4e0b677df88df33176f57",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "u16_variant",
+    "source_sha256": "df48e2f7cc99b50441a2e0edd0a6c149f0151432e329ea028123a53a3c740734",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "u64_variant",
+    "source_sha256": "2e1f3b030b82140a10479d5d7055f05724bded7289e7048c81295969ebd3cd61",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  }
+]

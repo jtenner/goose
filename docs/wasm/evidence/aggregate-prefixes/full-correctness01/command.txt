@@ -1,0 +1,1 @@
+['python3', 'test/wasm_backend.py', '--correctness-only', '--exe', '/tmp/goose-wasm-aggregate-prefix-20261108/build02/goose-tested', '--out', '/tmp/goose-wasm-aggregate-prefix-20261108/full-correctness01/artifacts', '--wasmtime-python', '/tmp/goose-wasm-runtime-env/bin/python', '--shader-library', '/home/dev/Projects/goose-wasm-backend/build/libgoose_shaderc.a']

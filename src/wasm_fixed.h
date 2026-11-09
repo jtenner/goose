@@ -695,6 +695,22 @@ inline void WasmCodeGen::AssignField(Dot *field, Node *rhs, TType op, bool point
     StorePlace(place);
 }
 
+inline void WasmCodeGen::ZeroUnusedInlineArray(FixedPlace destination, uint64_t count, Line line) {
+    auto array = destination.type;
+    if (!InlineArray(array) || array->arr->akind != A_LIMITED) return;
+    auto capacity = (uint64_t)ArrSize(array->arr);
+    // A full literal has no suffix. An oversized push literal cannot complete.
+    if (count >= capacity) return;
+    auto image = RequireFixed(array, line), stride = RequireFixed(array->arr->sub, line);
+    auto begin = (uint64_t)IntSize(LenStore(array->arr)) + count * stride;
+    auto bytes = (capacity - count) * stride;
+    if (!destination.bounded || begin > image || bytes > image - begin ||
+        begin > UINT32_MAX - destination.offset)
+        Fail(line, "unused array slots exceed their fixed owner image");
+    destination.offset += (uint32_t)begin; destination.type = array->arr->sub;
+    ZeroFixed(destination, (uint32_t)bytes, line);
+}
+
 inline void WasmCodeGen::InlineArrayLiteral(const ArrayPlace &place, ArrayLit *literal, bool reuse) {
     auto array = place.layout.type;
     if (array->arr->akind == A_FIXED) {
@@ -732,6 +748,7 @@ inline void WasmCodeGen::InlineArrayLiteral(const ArrayPlace &place, ArrayLit *l
             if (ExitingFixedInitializer(value)) return;
             PushArray(place, value, nullptr, value->line, scratch);
         }
+        ZeroUnusedInlineArray(place.image, literal->elems.size(), literal->line);
     }
 }
 
@@ -781,7 +798,7 @@ inline void WasmCodeGen::ConstructRepeatedAggregate(FreshFixedDestination destin
         prefix > destination.image || count > (destination.image - prefix) / stride)
         Fail(line, "aggregate fill exceeds its checked array extent");
     if (prefix) InitArrayCount(FreshArrayPlace(destination, line), count);
-    if (each && !count) return;
+    if (each && !count) { ZeroUnusedInlineArray(destination.place, count, line); return; }
     if (!value) Fail(line, "aggregate construction needs its checked element initializer");
     auto base = Local(WasmModule::I64), position = Local(WasmModule::I64);
     auto address = Local(WasmModule::I64);
@@ -810,6 +827,7 @@ inline void WasmCodeGen::ConstructRepeatedAggregate(FreshFixedDestination destin
             if (count) loop([&] { copy(item); });
         });
     }
+    ZeroUnusedInlineArray(destination.place, count, line);
 }
 
 inline void WasmCodeGen::ConstructAggregateArray(FreshFixedDestination destination, ArrayLit *literal) {
@@ -854,6 +872,7 @@ inline void WasmCodeGen::ConstructAggregateArray(FreshFixedDestination destinati
                       stride, init->line, true);
         } else ConstructFixed(child, init);
     }
+    ZeroUnusedInlineArray(destination.place, literal->elems.size(), literal->line);
 }
 
 inline void WasmCodeGen::CopyFixed(FreshFixedDestination destination, FixedPlace source, Line line) {
@@ -1112,6 +1131,7 @@ inline void WasmCodeGen::ConstructFixed(FreshFixedDestination fresh, Node *sourc
             else {
                 auto place = FreshArrayPlace(fresh, source->line);
                 PrepareArrayLengthStore(place); code.I64(0); StoreArrayLength(place);
+                ZeroUnusedInlineArray(destination, 0, source->line);
             }
             return;
         }

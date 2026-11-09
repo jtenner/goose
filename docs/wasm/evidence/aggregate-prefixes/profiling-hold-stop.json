@@ -1,0 +1,69 @@
+{
+  "time_utc": "2026-11-08T16:53:24.634375+00:00",
+  "purpose": "user-requested profiling quiet hold",
+  "roots": [
+    813245
+  ],
+  "owned_before": {
+    "813245": {
+      "ppid": 819733,
+      "state": "S",
+      "args": [
+        "/usr/bin/python3",
+        "/tmp/goose-wasm-aggregate-prefix-20261108/run_suite.py",
+        "full-correctness02",
+        "python3",
+        "test/wasm_backend.py",
+        "--correctness-only",
+        "--exe",
+        "/tmp/goose-wasm-aggregate-prefix-20261108/build02/goose-tested",
+        "--out",
+        "/tmp/goose-wasm-aggregate-prefix-20261108/full-correctness02/artifacts",
+        "--wasmtime-python",
+        "/tmp/goose-wasm-runtime-env/bin/python",
+        "--shader-library",
+        "/home/dev/Projects/goose-wasm-backend/build/libgoose_shaderc.a"
+      ]
+    },
+    "813290": {
+      "ppid": 813245,
+      "state": "S",
+      "args": [
+        "python3",
+        "test/wasm_backend.py",
+        "--correctness-only",
+        "--exe",
+        "/tmp/goose-wasm-aggregate-prefix-20261108/build02/goose-tested",
+        "--out",
+        "/tmp/goose-wasm-aggregate-prefix-20261108/full-correctness02/artifacts",
+        "--wasmtime-python",
+        "/tmp/goose-wasm-runtime-env/bin/python",
+        "--shader-library",
+        "/home/dev/Projects/goose-wasm-backend/build/libgoose_shaderc.a"
+      ]
+    },
+    "874282": {
+      "ppid": 813290,
+      "state": "R",
+      "args": [
+        "/tmp/goose-wasm-runtime-env/bin/python",
+        "/home/dev/Projects/goose-wasm-backend/test/wasmtime_host.py",
+        "/tmp/goose-wasm-aggregate-prefix-20261108/full-correctness02/artifacts/wasm_compound_math_early_continue-O2.wasm"
+      ]
+    }
+  },
+  "sigterm_sent": [
+    874282,
+    813290
+  ],
+  "partial_full_suite_preserved": true,
+  "verified_at_utc": "2026-11-08T16:53:35.647609+00:00",
+  "owned_final_states": {
+    "813245": "absent",
+    "813290": "absent",
+    "874282": "absent"
+  },
+  "remaining_stage_jobs": [],
+  "status": "HOLD CONFIRMED",
+  "no_more_commands_until_release": true
+}

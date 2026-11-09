@@ -1,0 +1,1 @@
+struct Cell{n:u16}struct S{xs:Cell[..3]}fn main(){var a:S[]=[S{[Cell{1},Cell{2},Cell{3}]}];var r:Cell& =a[0].xs[2];for i in 2{if i==0{a[0]=S{[Cell{1},Cell{2},Cell{3}]};}else{a[0]=S{[]};}}print("slot=",r.n);assert(r.n==0);}

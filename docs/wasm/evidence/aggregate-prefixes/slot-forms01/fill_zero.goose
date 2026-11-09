@@ -1,0 +1,1 @@
+var calls:i64=0;recursive fn value()->u16{calls++;return 4;}struct S{xs:u16[..3]}fn main(){var a:S[]=[S{[1,2,3]}];var r:u16& =a[0].xs[2];for i in 2{if i==0{a[0]=S{[1,2,3]};}else{a[0]=S{[value();0]};}}print("slot=",r,",calls=",calls);assert(r==0&&calls==1);}

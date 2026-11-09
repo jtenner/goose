@@ -1371,6 +1371,7 @@ struct WasmCodeGen : ValueLayout {
     void CopyBytes(const FixedPlace &destination, const FixedPlace &source, uint32_t bytes,
                    Line line, bool immediate = false);
     void ZeroFixed(const FixedPlace &destination, uint32_t bytes, Line line);
+    void ZeroUnusedInlineArray(FixedPlace destination, uint64_t count, Line line);
     void InitFilledArray(VarDef *owner, const Slot *slot, ArrayLit *literal,
                          const FreshFixedDestination *fresh = nullptr);
     void InitByteString(VarDef *owner, const Slot *slot, StrLit *literal,

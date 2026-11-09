@@ -1,0 +1,1 @@
+struct S{before:u8,cells:u16[2],limited:i64[..3],after:u16}fn main(){var a:S[u16]=[S{7,[100,200],[7,-8],900},S{9,[300,400],[],800}];var b:S[u16]=copy(a);b[0].cells[1]=31;b[0].limited.push(9);assert(a[0].cells[1]==200&&a[0].limited.len==2&&b[0].cells[1]==31&&b[0].limited.len==3&&b[0].limited[2]==9&&b[1].after==800);print("u16_nested");}

@@ -1,0 +1,1 @@
+enum E{A{n:i64,cells:u16[2]},B}fn main(){var a:E.A[u16]=[E.A{7,[100,200]},E.A{8,[300,400]}];var b:E.A[u16]=copy(a);b[0].cells[1]=31;var total:i64=0;for v,i in a{assert(&v .!= &a[i]);total+=v.n;}assert(total==15&&a[0].cells[1]==200&&b[0].cells[1]==31&&b[1].n==8);print("u16_variant");}

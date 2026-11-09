@@ -1,0 +1,26 @@
+[
+  {
+    "case": "owner_u8",
+    "source_sha256": "af7bfbdad31b18f53fd8221d8ce1e2077f7d389400f1f70e02033958b19e114c",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "owner_u16",
+    "source_sha256": "68cc15905046c3b086db4500f30697640722ade1fba8d0672088ff988ca3d880",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "owner_u64",
+    "source_sha256": "8ddae3f63a5138417d6f3d85004cb8c21e11cc7417f532d7fb746385174dce51",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  }
+]

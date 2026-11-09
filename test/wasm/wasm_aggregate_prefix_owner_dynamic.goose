@@ -1,0 +1,1 @@
+struct S{mark:u8,cells:u16[2],limited:u16[..3],tail:u8}recursive fn produce(seed:i64)->i64{print("before");var rows:S[]=[S{1,[11,22],[33,44],2},S{3,[55,66],[],4}];print("after");assert(rows[0].limited[1]==44&&rows[1].tail==4);return seed+7;}fn main(){assert(produce(0)==7);var keep:u8[]=[91];assert(produce(1)==8&&keep[0]==91);print("done");}

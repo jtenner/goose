@@ -1,0 +1,1 @@
+struct S{mark:u8,n:i64,tail:u16}recursive fn take(a:S[u16]&)->i64{return a[0].n+a[1].n;}fn main(){var a:S[u16]=[S{7,10,900},S{9,20,800}];var b:S[u16]=[S{7,30,900},S{9,40,800}];assert(take(a)==30&&take(b)==70);print("u16_reference");}

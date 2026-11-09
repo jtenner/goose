@@ -1,0 +1,1 @@
+struct S{a:u8,b:i64,c:u16}fn main(){var a:S[u8]=[S{7,-8,900},S{9,10,800}];var b:S[u16]=copy(a);assert(b.len==2&&b[0].a==7&&b[0].b== -8&&b[0].c==900&&b[1].c==800);b[0].a=99;assert(a[0].a==7);print("padded_cross");}

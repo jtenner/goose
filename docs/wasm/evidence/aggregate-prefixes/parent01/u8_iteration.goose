@@ -1,0 +1,1 @@
+struct S{mark:u8,n:i64,tail:u16}fn main(){var a:S[u8]=[S{7,10,900},S{9,20,800}];var total:i64=0;for s,i in a{assert(&s .!= &a[i]);a[i].n+=100;assert(s.n==(i+1)*10);total+=s.n;}assert(total==30&&a[0].n==110&&a[1].n==120);print("u8_iteration");}

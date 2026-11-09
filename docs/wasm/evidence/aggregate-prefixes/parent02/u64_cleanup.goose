@@ -1,0 +1,1 @@
+struct S{n:i64}recursive fn probe(yes:bool)->i64{var a:S[u64]=[S{7},S{8}];var total:i64=0;for s in a{var copy:S[u64]=copy(a);assert(copy[1].n==8);if yes{return s.n;}defer total+=s.n;}return total;}fn main(){assert(probe(true)==7&&probe(false)==15);print("u64_cleanup");}

@@ -22,7 +22,7 @@ struct WasmValueSupport {
     }
     bool DataNominalArray(TypeExpr *t) {
         return t->kind == TY_ARRAY && t->arr->akind == A_VAR &&
-               layout.LenStore(t->arr) == IS_U32 && Nominal(t->arr->sub);
+               layout.LenStore(t->arr) != IS_VARINT && Nominal(t->arr->sub);
     }
     const char *Check(TypeExpr *root) {
         if (validated.count(root)) return nullptr;

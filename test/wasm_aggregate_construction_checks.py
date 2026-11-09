@@ -37,7 +37,7 @@ def check_modules(run, node, validator, out):
         length = r'i32.const 3(?=\s+memory.copy(?: 0 0)?\s)'
         assert len(re.findall(length, body)) == 1
         changed = [('short', re.sub(length, 'i32.const 2', body)),
-                   ('long', re.sub(length, 'i32.const 4', body))]
+                   ('long', re.sub(length, 'i32.const 12', body))]
         stride = r'i64.const 3(?=\s+i64.mul)'
         copy_start = re.search(length, body).start()
         assert len(re.findall(stride, body[:copy_start])) == 1
@@ -46,6 +46,10 @@ def check_modules(run, node, validator, out):
                               r'\1drop\n\1drop\n\1drop', body, count=1)
         assert n == 1
         changed.append(('omitted', omitted))
+        suffix, n = re.subn(r'(?m)^(\s*)memory.fill(?: 0)?\s*$',
+                              r'\1drop\n\1drop\n\1drop', body, count=1)
+        assert n == 1
+        changed.append(('suffix-zero', suffix))
         for name, wrong in changed:
             damaged = emit(f'aggregate-construction-image-{name}-O{opt}', text[:a] + wrong + text[z:])
             result = run([node, ROOT / 'test/wasm_aggregate_construction_image.mjs', damaged], ok=False)

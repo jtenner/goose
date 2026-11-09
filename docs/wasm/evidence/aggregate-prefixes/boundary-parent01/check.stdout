@@ -1,0 +1,42 @@
+[
+  {
+    "case": "u8_255",
+    "source_sha256": "8e410783f9cba0239f0a007591a6f0830ba9824092bb1f0530b48b8d12947b83",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "u16_256",
+    "source_sha256": "520dc20e9c9360e23ac091d2c3508f26e5190f103217e0136369c4ec1cb9d244",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "guard_leb",
+    "source_sha256": "6d1527af89e791b8f5fccbb536180c0ac835f911d07055d103f1982edc37953b",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "guard_fill",
+    "source_sha256": "012f2e882e0e4385ab063d89cc19ce1731291983d9dd555ce06c105c613e7ea7",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  },
+  {
+    "case": "guard_zero",
+    "source_sha256": "ca8cda3a93e007da1151357dc67585129f3b3a0c922aa9e44fb093ddbd7ed1f4",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "wasm_exit": 1
+  }
+]

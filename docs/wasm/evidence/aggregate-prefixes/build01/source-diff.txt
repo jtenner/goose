@@ -1,0 +1,32 @@
+diff --git a/src/wasm_arrays.h b/src/wasm_arrays.h
+index c461e0b5..8f9d69ad 100644
+--- a/src/wasm_arrays.h
++++ b/src/wasm_arrays.h
+@@ -819,10 +819,13 @@ inline WasmCodeGen::FreshDataArrayDestination WasmCodeGen::ReserveFreshDataArray
+         !storage.owners.count(owner) || !TEq(slot.type, array))
+         Fail(owner->line, "aggregate data construction needs its checked fresh declaration");
+     auto stride = RequireFixed(array->arr->sub, owner->line), prefix = DataPrefix(array);
+-    if (!stride || prefix != 4) Fail(owner->line, "aggregate data construction needs a positive fixed u32 layout");
++    if (!stride || (prefix != 1 && prefix != 2 && prefix != 4 && prefix != 8))
++        Fail(owner->line, "aggregate data construction needs a positive fixed unsigned prefix layout");
+     uint32_t ownerBytes = 0;
+     auto bytes = NoLocal;
+     if (literalCount != NoLocal) {
++        if (prefix < 8 && literalCount > ((1ull << (prefix * 8)) - 1))
++            Fail(owner->line, "array length exceeds its stored prefix");
+         if (count != NoLocal || literalCount > (UINT32_MAX - prefix) / stride)
+             Fail(owner->line, "aggregate data literal exceeds memory32");
+         ownerBytes = prefix + literalCount * stride;
+diff --git a/src/wasm_support.h b/src/wasm_support.h
+index 9e0c37f6..9bbe8243 100644
+--- a/src/wasm_support.h
++++ b/src/wasm_support.h
+@@ -22,7 +22,7 @@ struct WasmValueSupport {
+     }
+     bool DataNominalArray(TypeExpr *t) {
+         return t->kind == TY_ARRAY && t->arr->akind == A_VAR &&
+-               layout.LenStore(t->arr) == IS_U32 && Nominal(t->arr->sub);
++               layout.LenStore(t->arr) != IS_VARINT && Nominal(t->arr->sub);
+     }
+     const char *Check(TypeExpr *root) {
+         if (validated.count(root)) return nullptr;

@@ -1,0 +1,30 @@
+[
+  {
+    "case": "frame",
+    "source_sha256": "3ce6c66834abef077c1f407111fbe58e8aa9ead31a94cb5fd70c94000e76c5c9",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "native_stdout": "slot=0\n",
+    "native_stderr": "",
+    "wasm_exit": 0,
+    "validate_exit": 0,
+    "node_exit": 1,
+    "node_stdout": "slot=3\n",
+    "node_stderr": "goose runtime error: assert failed at /tmp/goose-wasm-aggregate-prefix-20261108/slot-extra01/frame.goose:1\n"
+  },
+  {
+    "case": "stored_copy",
+    "source_sha256": "e698adcdc912ea506cce9b696b4a140f53a614f8a9e355efe401de8ac423b475",
+    "emit_exit": 0,
+    "cc_exit": 0,
+    "native_exit": 0,
+    "native_stdout": "slot=99\n",
+    "native_stderr": "",
+    "wasm_exit": 0,
+    "validate_exit": 0,
+    "node_exit": 0,
+    "node_stdout": "slot=99\n",
+    "node_stderr": ""
+  }
+]

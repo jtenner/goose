@@ -1,0 +1,1 @@
+struct S{xs:u16[..3]}fn main(){var source=S{[1,2,3]};var sr:u16& =source.xs[2];source.xs.pop();sr=99;var a:S[]=[S{[1,2,3]}];var r:u16& =a[0].xs[2];a[0]=copy(source);print("slot=",r);assert(r==99&&a[0].xs.len==2);}

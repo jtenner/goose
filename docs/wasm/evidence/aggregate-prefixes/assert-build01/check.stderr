@@ -1,0 +1,15 @@
+In file included from /home/dev/Projects/goose-wasm-backend/src/main.cpp:48:
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h: In member function ‘uint8_t goose::WasmCodeGen::Type(goose::TypeExpr*)’:
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h:224:51: warning: comparison of integer expressions of different signedness: ‘uint64_t’ {aka ‘long unsigned int’} and ‘long int’ [-Wsign-compare]
+  224 |                     if ((uint64_t)ArrSize(t->arr) > (UINT32_MAX - prefix) / FixedSize(element))
+      |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h: In member function ‘void goose::WasmCodeGen::Gen(goose::Node*, goose::TypeExpr*)’:
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h:872:66: warning: enumerated and non-enumerated type in conditional expression [-Wextra]
+  872 |                                       : s.type->kind == TY_ARRAY ? BorrowedArrayAddressType(s.type)
+      |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  873 |                                       : FatPointers() ? WasmModule::I64 : WasmModule::I32;
+      |                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h: In member function ‘std::string goose::WasmCodeGen::Run()’:
+/home/dev/Projects/goose-wasm-backend/src/wasm_codegen.h:1224:56: warning: enumerated and non-enumerated type in conditional expression [-Wextra]
+ 1224 |                 args.push_back(FixedParameter(p->type) ? WasmModule::I32 : Type(p->type));
+      |                                ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -1,0 +1,66 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: aggregate dynamic data image differs
++ actual - expected
+... Skipped lines
+
+  Buffer(65536) [Uint8Array] [
+    0,
+    2,
+    0,
+    0,
+...
+    0,
++   165,
++   165,
+-   0,
+-   0,
+    2,
+    3,
+    55,
+    0,
+    66,
+
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_prefix_dynamic.mjs:30:16
+    at print_end_v1 (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:105:13)
+    at produce.1 (wasm://wasm/49db231e:wasm-function[12]:0x6ed)
+    at main.0 (wasm://wasm/49db231e:wasm-function[11]:0x24c)
+    at goose.start (wasm://wasm/49db231e:wasm-function[14]:0x886)
+    at Object.run (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:134:34)
+    at runCompleted (file:///home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs:10:13)
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_prefix_dynamic.mjs:36:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: Buffer(65536) [Uint8Array] [
+      0,   2,   0,   0,   0,   1,  11,   0,  22,   0,   2,  33,
+      0,  44,   0, 165, 165,   2,   3,  55,   0,  66,   0,   0,
+      0,   0,   0,   0,   0,   0,   4, 197, 165, 165, 165, 165,
+    165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165,
+    165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165,
+    165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165,
+    165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165,
+    165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165,
+    165, 165, 165, 165,
+    ... 65436 more items
+  ],
+  expected: Buffer(65536) [Uint8Array] [
+      0,   2,   0,   0,   0,   1,  11,   0,  22,   0,   2,  33,
+      0,  44,   0,   0,   0,   2,   3,  55,   0,  66,   0,   0,
+      0,   0,   0,   0,   0,   0,   4, 197, 165, 165, 165, 165,
+    165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165,
+    165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165,
+    165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165,
+    165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165,
+    165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165,
+    165, 165, 165, 165,
+    ... 65436 more items
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.2

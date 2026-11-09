@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/tmp/goose-wasm-aggregate-prefix-20261108/full-correctness05/continue.py", line 58, in <module>
+    sys.argv=[str(r/'test/wasm_backend.py'),*sys.argv[1:]];m.main()
+                                                           ~~~~~~^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_backend.py", line 444, in main
+    count += check_aggregate_construction(run, args.node, args.validator, out)
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dev/Projects/goose-wasm-backend/test/wasm_aggregate_construction_checks.py", line 56, in check_modules
+    assert result.returncode == 1 and b'aggregate fill complete Memory 0 image differs' in result.stderr, (name, result.stderr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('long', b'')

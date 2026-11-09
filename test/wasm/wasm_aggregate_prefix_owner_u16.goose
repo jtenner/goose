@@ -1,0 +1,1 @@
+struct S{mark:u8,cells:u16[2],limited:u16[..3],tail:u8}recursive fn check(rows:S[u16]&)->bool{return rows.len==2&&rows[0].mark==1&&rows[0].cells[1]==22&&rows[0].limited.len==2&&rows[0].limited[1]==44&&rows[1].limited.len==0&&rows[1].tail==4;}fn main(){print("before");var rows:S[u16]=[S{1,[11,22],[33,44],2},S{3,[55,66],[],4}];print("after");assert(check(rows));}

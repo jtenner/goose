@@ -71,12 +71,14 @@ def check_failures(run,exe,cc,node,validator,wasmtime_python,out):
     return count
 
 
-def check_pending_aggregate(run,exe,cc,out):
+def check_aggregate_prefix(run,exe,cc,node,validator,wasmtime_python,out):
     source='struct S{a:u8,b:i64,c:u16}fn main(){var a:S[u8]=[S{7,-8,900},S{9,10,800}];var b:S[u16]=copy(a);assert(b.len==2&&b[0].a==7&&b[0].b== -8&&b[0].c==900&&b[1].c==800);b[0].a=99;assert(a[0].a==7);print("padded");}\n'
-    path=out/'prefix-conversion-pending-aggregate.goose';path.write_text(source)
+    path=out/'prefix-conversion-aggregate.goose';path.write_text(source)
     for opt in (0,2):
-        prefix=out/f'prefix-conversion-pending-aggregate-O{opt}';c,native,module=(prefix.with_suffix(ext) for ext in ('.c','.native','.wasm'))
+        prefix=out/f'prefix-conversion-aggregate-O{opt}';c,native,module=(prefix.with_suffix(ext) for ext in ('.c','.native','.wasm'))
         run([exe,f'-O{opt}','--standalone','-o',c,path]);run([cc,f'-O{opt}',c,'-pthread','-lm','-ldl','-o',native]);result=run([native]);assert result.stdout==b'padded\n' and not result.stderr
-        result=run([exe,f'-O{opt}','--target','wasm','-o',module,path],ok=False)
-        assert result.returncode==1 and b'compound array elements need the pending layout lowering' in result.stderr and not module.exists(),result.stderr
+        run([exe,f'-O{opt}','--target','wasm','-o',module,path]);run([validator,'validate',module])
+        result=run([node,ROOT/'scripts/run_wasm.mjs',module]);assert result.stdout==b'padded\n' and not result.stderr
+        if wasmtime_python:
+            result=run([wasmtime_python,ROOT/'test/wasmtime_host.py',module]);assert result.stdout==b'padded\n' and not result.stderr
     return 2

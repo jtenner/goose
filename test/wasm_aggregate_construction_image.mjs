@@ -31,11 +31,14 @@ runtime = instantiate(fs.readFileSync(file), bytes => {
         assert.equal(view[initial + 13], 34);
         // These are valid reserved, not yet initialized payload bytes.
         view.fill(167, initial + 2, initial + 11);
+        view[initial + 16] = 108; // Sentinel immediately beyond the live temporary.
         expected = snapshotMemory(memory);
         const cell = Buffer.from([34, 103, 69]);
         cell.copy(expected, initial + 13);
         cell.copy(expected, initial + 2);
         cell.copy(expected, initial + 5);
+        // Native fresh literals zero the one unused Cell, including its bytes.
+        expected.fill(0, initial + 8, initial + 11);
         expected.writeUInt16LE(31355, initial + 11);
         expected.subarray(initial, initial + 13).copy(expected, target);
     } else {
