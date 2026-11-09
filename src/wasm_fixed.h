@@ -211,6 +211,17 @@ inline void WasmCodeGen::FixedCallArguments(Call *call, const vector<Node *> &ar
             values[position] = value.address;
             FixedCallArguments(call, arguments, values, position + 1, result, destination);
         });
+    } else if (auto source = ScalarBorrowResult(call) ? TemporaryBorrowSource(expression, type) : nullptr) {
+        // Keep every temporary owner on the read path through all later
+        // arguments and the call. Only a scalar or void result can leave this
+        // scope; a returned reference needs the longer statement lifetime.
+        WithReadPlace(source, [&](const FixedPlace &place) {
+            if (!TEq(place.type, type->ref->sub))
+                Fail(expression->line, "temporary argument needs its exact stored pointee");
+            PlaceAddress(place, Type(type), expression->line);
+            values[position] = Temp(type); code.Set(values[position]);
+            FixedCallArguments(call, arguments, values, position + 1, result, destination);
+        });
     } else {
         Gen(expression); Convert(expression->exprtype, type);
         values[position] = Temp(type); code.Set(values[position]);
@@ -533,6 +544,25 @@ inline bool WasmCodeGen::HasFixedTemporary(Node *n) {
                     Is<InlineBlock>(n) || Is<StructLit>(n) || Is<ArrayLit>(n) || Is<Block>(n) || Is<IfExpr>(n) ||
                     (variant && variant->variantconst);
     return producer && FixedResult(ActualType(n));
+}
+
+inline Node *WasmCodeGen::TemporaryBorrowSource(Node *expression, TypeExpr *parameter) {
+    if (!parameter || parameter->kind != TY_REF) return nullptr;
+    auto source = expression;
+    if (auto address = Is<Unary>(source); address && address->op == T_BITAND) source = address->child;
+    // Only a stored selection is a source-language addressable temporary.
+    auto field = Is<Dot>(source);
+    if ((!field || !field->IsField()) && !Is<Index>(source)) return nullptr;
+    return HasFixedTemporary(source) && TEq(ActualType(source), parameter->ref->sub) ? source : nullptr;
+}
+
+inline bool WasmCodeGen::ScalarBorrowResult(Call *call) {
+    if (!call->spec) return false;
+    auto &results = call->spec->rets;
+    if (results.empty()) return true;
+    if (results.size() != 1) return false;
+    auto kind = results[0]->kind;
+    return kind == TY_BOOL || kind == TY_INT || kind == TY_FLT;
 }
 
 template<class Consume>

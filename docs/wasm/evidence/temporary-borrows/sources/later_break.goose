@@ -1,0 +1,1 @@
+struct S{n:i64}recursive fn make()->S{return S{n:7};}var calls:i64=0;recursive fn use(p:i64&,x:i64)->i64{calls++;return p+x;}fn main(){var total:i64=0;for i in 0..3{total+=use(make().n,{if i==1{break;}i});}assert(total==7&&calls==1);print("later_break");}

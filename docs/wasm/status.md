@@ -462,6 +462,16 @@ Stage C planning checkpoint; it adds no source-language admission and does not
 complete the remaining lifetime or reference work. Stage F remains in scope
 after C-E. No measurements, timing or profiling are authorized.
 
+Ordinary direct scalar/void calls now retain fixed temporary owners while a
+selected field or element is borrowed. Later arguments, nested value arguments,
+early exits and memory growth keep the owner live; cleanup follows the call
+after its result is saved. Full Memory 0 controls verify owner boundaries and
+restores. The suite passes 8,108 checks, 50 fresh native/Node/Wasmtime pairs and
+52 exact comparisons. All 2,044 prior modules are byte-identical. See
+[temporary borrow evidence](evidence/temporary-borrows.md). Returned references
+and reference-carrying aggregate results still require longer lifetimes and
+remain guarded. This is a Stage C increment, not completion of the backend.
+
 ## Host contract
 
 `scripts/run_wasm.mjs` provides versioned print, failure, exit, fmod, and wrapping
@@ -529,8 +539,9 @@ BigInt operation for other values.
   memories, checked growth/restores, and dynamic dispatch. Extend the plan to
   the remaining nonfixed destinations and temporary owners, and all remaining
   compound lifetime events. Fixed temporary and protected-assignment sites now
-  have checked type/function plan records. General thin-reference propagation
-  remains pending.
+  have checked type/function plan records. Borrowed selections from fixed
+  temporaries work through ordinary scalar/void calls. Inline/callback paths,
+  escaping result borrows and general thin-reference propagation remain pending.
 - D: scalar/reference arrays now cover fixed, limited, variable and growable
   layouts, including same-layout copies and unsigned LEB count prefixes, plus
   fresh ordinary fixed structs in the admitted field subset. Complete signed

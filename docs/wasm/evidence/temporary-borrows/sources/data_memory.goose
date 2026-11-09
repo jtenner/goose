@@ -1,0 +1,1 @@
+struct S{n:i64}recursive fn make()->S{return S{n:7};}recursive fn read(p:i64&)->i64{var a:i64[]=[100,200];return p+a[0];}fn main(){var live:i64[]=[33];assert(read(make().n)==107&&live[0]==33);print("data_memory");}

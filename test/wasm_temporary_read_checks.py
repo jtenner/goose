@@ -44,11 +44,13 @@ def check_images(run, node, validator, out):
 def check_guards(run, exe, cc, out):
     cases = {
         'field': 'struct S{n:i64}\nrecursive fn make()->S{return S{n:7};}\n'
+                 'recursive fn borrow(p:i64&)->i64&{return p;}\n'
                  'recursive fn read(p:i64&)->i64{return p;}\n'
-                 'fn main(){assert(read(make().n)==7);print("borrow_guard");}\n',
+                 'fn main(){assert(read(borrow(make().n))==7);print("borrow_guard");}\n',
         'element': 'recursive fn make()->i64[2]{return[7,8];}\n'
+                   'recursive fn borrow(p:i64&)->i64&{return p;}\n'
                    'recursive fn read(p:i64&)->i64{return p;}\n'
-                   'fn main(){assert(read(make()[1])==8);print("borrow_guard");}\n',
+                   'fn main(){assert(read(borrow(make()[1]))==8);print("borrow_guard");}\n',
     }
     count = 0
     for name, source_text in cases.items():

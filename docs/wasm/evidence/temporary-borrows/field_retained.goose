@@ -1,0 +1,1 @@
+struct S{n:i64}recursive fn make()->S{return S{n:7};}recursive fn borrow(p:i64&)->i64&{return p;}recursive fn read(p:i64&)->i64{return p;}fn main(){assert(read(borrow(make().n))==7);print("borrow_guard");}

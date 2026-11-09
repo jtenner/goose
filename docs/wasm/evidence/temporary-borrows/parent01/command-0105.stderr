@@ -1,0 +1,5 @@
+/tmp/goose-wasm-temporary-borrows-20261109/sources/write.goose:1: error: cannot write through this reference: non-writable provenance (§9.5)
+struct S{n:i64}recursive fn make()->S{return S{n:7};}var calls:i64=0;recursive fn set(p:i64&){assert(p==7);p=99;assert(p==99);calls++;}fn main(){set(make().n);assert(calls==1);print("write");}
+                                                                                                           ^~~~~
+  in fn set(i64&) instantiated from /tmp/goose-wasm-temporary-borrows-20261109/sources/write.goose:1
+  in fn main() instantiated from /tmp/goose-wasm-temporary-borrows-20261109/sources/write.goose:1

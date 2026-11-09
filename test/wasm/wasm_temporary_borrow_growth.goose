@@ -1,0 +1,1 @@
+struct S{n:i64}recursive fn make()->S{return S{n:7};}recursive fn noise()->i64{var a:i64[9000]=[-23;9000];assert(a[0]== -23&&a[8999]== -23);return 2;}recursive fn sum(p:i64&,x:i64)->i64{return p+x;}fn main(){assert(sum(make().n,noise())==9);print("growth");}

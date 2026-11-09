@@ -1,0 +1,27 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: temporary borrow live frame top differs
+
+379 !== 390
+
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_temporary_borrow_owner.mjs:15:12
+    at print_end_v1 (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:105:13)
+    at noise.2 (wasm://wasm/439932d2:wasm-function[13]:0x2bf)
+    at main.0 (wasm://wasm/439932d2:wasm-function[11]:0x21a)
+    at goose.start (wasm://wasm/439932d2:wasm-function[16]:0x322)
+    at Object.run (file:///home/dev/Projects/goose-wasm-backend/scripts/run_wasm.mjs:134:34)
+    at runCompleted (file:///home/dev/Projects/goose-wasm-backend/test/wasm_reference_abi.mjs:10:13)
+    at file:///home/dev/Projects/goose-wasm-backend/test/wasm_temporary_borrow_owner.mjs:34:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 379,
+  expected: 390,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.2

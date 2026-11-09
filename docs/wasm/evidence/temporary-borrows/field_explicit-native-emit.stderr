@@ -1,0 +1,3 @@
+/tmp/goose-wasm-temporary-borrows-20261109/field_explicit.goose:1: warning: redundant &: make().n is passed by reference without it (§4.1)
+struct S{n:i64}recursive fn make()->S{return S{n:7};}recursive fn read(p:i64&)->i64{return p;}fn main(){assert(read(&make().n)==7);print("explicit");}
+                                                                                                                    ^~~~~~~~~

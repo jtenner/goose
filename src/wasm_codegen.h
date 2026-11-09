@@ -768,8 +768,11 @@ struct WasmCodeGen : ValueLayout {
         if (it == functions.end()) Fail(c->line, "missing direct function specialization");
         auto args = c->ValueArgNodes();
         if (args.size() != c->spec->params.size()) Fail(c->line, "call parameter mismatch");
-        if (any_of(c->spec->params.begin(), c->spec->params.end(),
-                   [&](VarDef *parameter) { return FixedParameter(parameter->type); })) {
+        bool storedArguments = false;
+        for (size_t i = 0; i < args.size(); i++)
+            storedArguments |= FixedParameter(c->spec->params[i]->type) ||
+                               (ScalarBorrowResult(c) && TemporaryBorrowSource(args[i], c->spec->params[i]->type));
+        if (storedArguments) {
             auto result = c->spec->rets.empty() ? NoLocal : Temp(c->spec->rets[0]);
             vector<uint32_t> values(args.size(), NoLocal);
             FixedCallArguments(c, args, values, 0, result);
@@ -1286,6 +1289,8 @@ struct WasmCodeGen : ValueLayout {
     TypeExpr *ArraySourceType(Node *source, bool &materialize);
     using FixedReadConsumer = void (*)(void *, const FixedPlace &);
     bool HasFixedTemporary(Node *n);
+    Node *TemporaryBorrowSource(Node *expression, TypeExpr *parameter);
+    bool ScalarBorrowResult(Call *call);
     Binary *FixedBinary(Node *n);
     bool FixedOperandEffects(Node *n, int &budget);
     bool CanCopyFixedArray(TypeExpr *to, TypeExpr *from);

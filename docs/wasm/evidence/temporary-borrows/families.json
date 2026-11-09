@@ -1,0 +1,127 @@
+[
+  {
+    "case": "field",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/field.goose",
+    "expected": "field\n"
+  },
+  {
+    "case": "element",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/element.goose",
+    "expected": "element\n"
+  },
+  {
+    "case": "explicit_field",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/explicit_field.goose",
+    "expected": "explicit_field\n"
+  },
+  {
+    "case": "explicit_element",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/explicit_element.goose",
+    "expected": "explicit_element\n"
+  },
+  {
+    "case": "constructor_field",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/constructor_field.goose",
+    "expected": "constructor_field\n"
+  },
+  {
+    "case": "literal_element",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/literal_element.goose",
+    "expected": "literal_element\n"
+  },
+  {
+    "case": "nested_field",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/nested_field.goose",
+    "expected": "nested_field\n"
+  },
+  {
+    "case": "array_field",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/array_field.goose",
+    "expected": "array_field\n"
+  },
+  {
+    "case": "nominal_element",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/nominal_element.goose",
+    "expected": "nominal_element\n"
+  },
+  {
+    "case": "bool",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/bool.goose",
+    "expected": "bool\n"
+  },
+  {
+    "case": "f32",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/f32.goose",
+    "expected": "f32\n"
+  },
+  {
+    "case": "f64_zero",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/f64_zero.goose",
+    "expected": "f64_zero\n"
+  },
+  {
+    "case": "packed_field",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/packed_field.goose",
+    "expected": "packed_field\n"
+  },
+  {
+    "case": "write",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/write.goose",
+    "expected": "write\n"
+  },
+  {
+    "case": "two_live",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/two_live.goose",
+    "expected": "two_live\n"
+  },
+  {
+    "case": "mixed_value",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/mixed_value.goose",
+    "expected": "mixed_value\n"
+  },
+  {
+    "case": "data_memory",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/data_memory.goose",
+    "expected": "data_memory\n"
+  },
+  {
+    "case": "growth",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/growth.goose",
+    "expected": "growth\n"
+  },
+  {
+    "case": "later_return",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/later_return.goose",
+    "expected": "later_return\n"
+  },
+  {
+    "case": "later_continue",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/later_continue.goose",
+    "expected": "later_continue\n"
+  },
+  {
+    "case": "later_break",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/later_break.goose",
+    "expected": "later_break\n"
+  },
+  {
+    "case": "stored_reference",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/stored_reference.goose",
+    "expected": "stored_reference\n"
+  },
+  {
+    "case": "binary_field",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/binary_field.goose",
+    "expected": "binary_field\n"
+  },
+  {
+    "case": "binary_element",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/binary_element.goose",
+    "expected": "binary_element\n"
+  },
+  {
+    "case": "owner",
+    "source": "/tmp/goose-wasm-temporary-borrows-20261109/sources/owner.goose",
+    "expected": "before\nargument-live\ncallee-live\nafter\nargument-live\ncallee-live\nafter\n"
+  }
+]

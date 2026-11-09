@@ -1,0 +1,5 @@
+/tmp/goose-wasm-temporary-borrows-20261109/whole.goose:1: error: no matching overload for call to read
+  candidate read at /tmp/goose-wasm-temporary-borrows-20261109/whole.goose:1: argument 1: cannot pass S as S&
+struct S{n:i64}recursive fn make()->S{return S{n:7};}recursive fn read(p:S&)->i64{return p.n;}fn main(){assert(read(make())==7);print("borrow_whole");}
+                                                                                                               ^~~~~~~~~~~~
+  in fn main() instantiated from /tmp/goose-wasm-temporary-borrows-20261109/whole.goose:1

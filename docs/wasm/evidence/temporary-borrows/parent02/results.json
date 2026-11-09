@@ -1,0 +1,16 @@
+[
+  {
+    "case": "void",
+    "opt": 0,
+    "native_valid": true,
+    "wasm_exit": 1,
+    "stderr": "/tmp/goose-wasm-temporary-borrows-20261109/parent02/void.goose:1: error: wasm target: aggregate results need the pending destination lowering\n"
+  },
+  {
+    "case": "void",
+    "opt": 2,
+    "native_valid": true,
+    "wasm_exit": 1,
+    "stderr": "/tmp/goose-wasm-temporary-borrows-20261109/parent02/void.goose:1: error: wasm target: aggregate results need the pending destination lowering\n"
+  }
+]

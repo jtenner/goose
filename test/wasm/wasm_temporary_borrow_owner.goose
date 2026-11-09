@@ -1,0 +1,1 @@
+struct S{m:u8,n:i64,t:u16}recursive fn make()->S{return S{17,700,4660};}recursive fn noise()->i64{var s:S=S{99,-77,88};print("argument-live");return s.n;}recursive fn use(p:i64&,x:i64)->i64{print("callee-live");return p+x;}fn main(){print("before");for i in 0..2{assert(use(make().n,noise())==623);print("after");}}

@@ -1,0 +1,1 @@
+struct S{n:i64}recursive fn make()->S{return S{n:7};}var calls:i64=0;recursive fn noise()->i64{var a:i64[2]=[-99;2];calls++;return a[1];}recursive fn sum(p:i64&,q:i64&,x:i64)->i64{return p+q+x;}fn main(){assert(sum(make().n,make().n,noise())== -85&&calls==1);print("two_live");}

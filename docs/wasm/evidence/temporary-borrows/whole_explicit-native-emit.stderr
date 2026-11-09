@@ -1,0 +1,4 @@
+/tmp/goose-wasm-temporary-borrows-20261109/whole_explicit.goose:1: error: not an assignable location
+struct S{n:i64}recursive fn make()->S{return S{n:7};}recursive fn read(p:S&)->i64{return p.n;}fn main(){assert(read(&make())==7);print("whole_explicit");}
+                                                                                                                     ^~~~~~
+  in fn main() instantiated from /tmp/goose-wasm-temporary-borrows-20261109/whole_explicit.goose:1

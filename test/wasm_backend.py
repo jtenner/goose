@@ -144,7 +144,7 @@ def main():
             if source.stem.startswith((
                     'wasm_inline_ref_abi_', 'wasm_data_aggregate_', 'wasm_constructor_assignment_',
                     'wasm_aggregate_construction_', 'wasm_array_assignment_', 'wasm_default_conversion_',
-                    'wasm_array_constructor_', 'wasm_fixed_argument_', 'wasm_fixed_result_', 'wasm_array_argument_', 'wasm_array_result_', 'wasm_temporary_read_', 'wasm_temporary_equality_', 'wasm_fixed_negation_', 'wasm_fixed_binary_', 'wasm_compound_math_', 'wasm_negation_discard_', 'wasm_zero_call_', 'wasm_fixed_array_conversion_', 'wasm_fixed_array_layout_', 'wasm_fixed_array_assignment_layout_', 'wasm_limited_array_layout_', 'wasm_limited_array_conversion_', 'wasm_array_expression_source_', 'wasm_array_prefix_conversion_', 'wasm_aggregate_prefix_', 'wasm_nonfixed_source_', 'wasm_aggregate_data_fill_', 'wasm_aggregate_leb_')):
+                    'wasm_array_constructor_', 'wasm_fixed_argument_', 'wasm_fixed_result_', 'wasm_array_argument_', 'wasm_array_result_', 'wasm_temporary_read_', 'wasm_temporary_equality_', 'wasm_fixed_negation_', 'wasm_fixed_binary_', 'wasm_compound_math_', 'wasm_negation_discard_', 'wasm_zero_call_', 'wasm_fixed_array_conversion_', 'wasm_fixed_array_layout_', 'wasm_fixed_array_assignment_layout_', 'wasm_limited_array_layout_', 'wasm_limited_array_conversion_', 'wasm_array_expression_source_', 'wasm_array_prefix_conversion_', 'wasm_aggregate_prefix_', 'wasm_nonfixed_source_', 'wasm_aggregate_data_fill_', 'wasm_aggregate_leb_', 'wasm_temporary_borrow_')):
                 actual = run([args.node, ROOT / 'test' / 'wasm_reference_abi.mjs', wasm,
                               out / f'{source.stem}-O{opt}-instance'])
             else:
@@ -553,6 +553,8 @@ def main():
     from wasm_temporary_read_checks import check_images as check_temporary_read_images, check_guards as check_temporary_read_guards
     count += check_temporary_read_images(run, args.node, args.validator, out)
     count += check_temporary_read_guards(run, exe, args.cc, out)
+    from wasm_temporary_borrow_checks import check_images as check_temporary_borrow_images
+    count += check_temporary_borrow_images(run, args.node, args.validator, out)
     from wasm_array_result_checks import check_images as check_array_result_images, check_guards as check_array_result_guards, check_failures as check_array_result_failures, check_data as check_array_result_data
     count += check_array_result_images(run, args.node, args.validator, out)
     count += check_array_result_guards(run, exe, args.cc, out, args.node, args.validator, args.wasmtime_python)
